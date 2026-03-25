@@ -1,0 +1,14 @@
+{
+    "prefix": "design",
+    "name": "frontend-test-generation",
+    "version": "1.0.0",
+    "tags": [
+        "ui",
+        "frontend",
+        "design"
+    ],
+    "difficulty": "intermediate",
+    "status": "stable",
+    "last_audit": "2026-02-28",
+    "validation_status": "passed"
+}

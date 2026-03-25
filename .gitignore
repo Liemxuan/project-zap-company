@@ -1,0 +1,72 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Build artifacts
+.next/
+out/
+dist/
+build/
+*.tsbuildinfo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
+server.log
+stdout.log
+
+# Test results
+test-results/
+playwright-report/
+
+# Temp files
+tmp/
+tmp_migrate.py
+tmp-screenshot.js
+
+# Screenshots & one-off scripts
+screenshot.js
+screenshot-textarea.js
+screenshot_typography.js
+screenshot_typography.py
+fix_draggable.js
+fix_uuid.js
+fix_wild_preview.js
+generate_hr_diagram.js
+rename_prisma.js
+update_library.js
+extract_colors.py
+test-auth.ts
+test-logout.ts
+test-nav.mjs
+test_mongo.mjs
+
+# Docker local
+Dockerfile.zap-claw
+.dockerignore
+
+# Patches
+package.json.patch
+patch_alert.sh
+
+# System
+.playwright-cli/
+superclaude_install/
+web_locked/
+login_gate.png
+links.csv
+
+# Gemini brain (agent artifacts)
+.gemini/

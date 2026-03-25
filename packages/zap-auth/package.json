@@ -1,0 +1,13 @@
+{
+  "name": "@olympus/zap-auth",
+  "version": "0.1.0",
+  "private": true,
+  "main": "index.ts",
+  "dependencies": {
+    "@olympus/zap-db": "workspace:^",
+    "next-auth": "5.0.0-beta.19"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}

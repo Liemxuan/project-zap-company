@@ -1,0 +1,15 @@
+/Users/zap/Workspace/Olympus/app/src/Olympus.Data/bin/Debug/net10.0/Olympus.Data.deps.json
+/Users/zap/Workspace/Olympus/app/src/Olympus.Data/bin/Debug/net10.0/Olympus.Data.dll
+/Users/zap/Workspace/Olympus/app/src/Olympus.Data/bin/Debug/net10.0/Olympus.Data.pdb
+/Users/zap/Workspace/Olympus/app/src/Olympus.Data/bin/Debug/net10.0/Olympus.Core.dll
+/Users/zap/Workspace/Olympus/app/src/Olympus.Data/bin/Debug/net10.0/Olympus.Core.pdb
+/Users/zap/Workspace/Olympus/app/src/Olympus.Data/obj/Debug/net10.0/Olympus.Data.csproj.AssemblyReference.cache
+/Users/zap/Workspace/Olympus/app/src/Olympus.Data/obj/Debug/net10.0/Olympus.Data.GeneratedMSBuildEditorConfig.editorconfig
+/Users/zap/Workspace/Olympus/app/src/Olympus.Data/obj/Debug/net10.0/Olympus.Data.AssemblyInfoInputs.cache
+/Users/zap/Workspace/Olympus/app/src/Olympus.Data/obj/Debug/net10.0/Olympus.Data.AssemblyInfo.cs
+/Users/zap/Workspace/Olympus/app/src/Olympus.Data/obj/Debug/net10.0/Olympus.Data.csproj.CoreCompileInputs.cache
+/Users/zap/Workspace/Olympus/app/src/Olympus.Data/obj/Debug/net10.0/Olympus..D4D7D763.Up2Date
+/Users/zap/Workspace/Olympus/app/src/Olympus.Data/obj/Debug/net10.0/Olympus.Data.dll
+/Users/zap/Workspace/Olympus/app/src/Olympus.Data/obj/Debug/net10.0/refint/Olympus.Data.dll
+/Users/zap/Workspace/Olympus/app/src/Olympus.Data/obj/Debug/net10.0/Olympus.Data.pdb
+/Users/zap/Workspace/Olympus/app/src/Olympus.Data/obj/Debug/net10.0/ref/Olympus.Data.dll

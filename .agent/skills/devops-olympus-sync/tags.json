@@ -1,0 +1,17 @@
+{
+    "prefix": "infra",
+    "name": "olympus-sync",
+    "version": "1.0.0",
+    "tags": [
+        "backup",
+        "git",
+        "automation",
+        "olympus",
+        "sync",
+        "bash"
+    ],
+    "difficulty": "intermediate",
+    "status": "stable",
+    "last_audit": "2026-02-27",
+    "validation_status": "passed"
+}

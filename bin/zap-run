@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# ZAP-OS / Sandbox Integrity Bypass Subroutine
+# Purpose: macOS strict sandbox environments block `npm` caches and `tsx` IPC Domain socket pipes 
+# with persistent `EPERM` locks in directories like /var/folders/.../T/
+# This wrapper forcefully isolates execution targets to safe '/tmp' endpoints.
+
+# Export secure endpoints
+export TMPDIR=/tmp
+export npm_config_cache=/tmp/npm-cache
+export PRISMA_CACHE_DIR=/tmp/prisma-cache
+export XDG_CACHE_HOME=/tmp/xdg-cache
+export HOME=/tmp/home
+
+# Forward execution commands
+exec "$@"

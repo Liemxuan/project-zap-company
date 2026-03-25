@@ -1,0 +1,8 @@
+/Users/zap/Workspace/Olympus/app/src/Olympus.Api/obj/Debug/net10.0/Olympus.Api.csproj.AssemblyReference.cache
+/Users/zap/Workspace/Olympus/app/src/Olympus.Api/obj/Debug/net10.0/rpswa.dswa.cache.json
+/Users/zap/Workspace/Olympus/app/src/Olympus.Api/obj/Debug/net10.0/Olympus.Api.GeneratedMSBuildEditorConfig.editorconfig
+/Users/zap/Workspace/Olympus/app/src/Olympus.Api/obj/Debug/net10.0/Olympus.Api.AssemblyInfoInputs.cache
+/Users/zap/Workspace/Olympus/app/src/Olympus.Api/obj/Debug/net10.0/Olympus.Api.AssemblyInfo.cs
+/Users/zap/Workspace/Olympus/app/src/Olympus.Api/obj/Debug/net10.0/Olympus.Api.csproj.CoreCompileInputs.cache
+/Users/zap/Workspace/Olympus/app/src/Olympus.Api/obj/Debug/net10.0/Olympus.Api.MvcApplicationPartsAssemblyInfo.cs
+/Users/zap/Workspace/Olympus/app/src/Olympus.Api/obj/Debug/net10.0/Olympus.Api.MvcApplicationPartsAssemblyInfo.cache

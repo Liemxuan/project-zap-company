@@ -1,0 +1,15 @@
+{
+    "prefix": "design",
+    "name": "frontend-testing",
+    "version": "1.0.0",
+    "tags": [
+        "ui",
+        "frontend",
+        "design",
+        "testing"
+    ],
+    "difficulty": "intermediate",
+    "status": "stable",
+    "last_audit": "2026-02-28",
+    "validation_status": "passed"
+}

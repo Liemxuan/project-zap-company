@@ -1,0 +1,91 @@
+generator client {
+  provider      = "prisma-client-js"
+  output        = "../../node_modules/@prisma/zap-db-client"
+  binaryTargets = ["native", "rhel-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String    @id @default(cuid())
+  email     String    @unique
+  password  String?
+  name      String?
+  avatarUrl String?
+  role      String    @default("USER") // USER, ADMIN, MANAGER, SUPERADMIN
+  employee  Employee?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+// LEVEL 1: Organization (Holding/Person)
+model Organization {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  brands    Brand[]
+  employees Employee[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// LEVEL 2: Brand
+model Brand {
+  id             String       @id @default(cuid())
+  name           String       @unique
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  locations      Location[]
+  employees      Employee[]
+  shareCustomers Boolean      @default(false)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+}
+
+// LEVEL 6: Location / Physical Store / Operational Node
+model Location {
+  id        String     @id @default(cuid())
+  name      String     @unique
+  brandId   String
+  brand     Brand      @relation(fields: [brandId], references: [id])
+  employees Employee[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+// Omni-Tier Employee Context structure 
+model Employee {
+  id             String    @id @default(cuid())
+  userId         String    @unique
+  user           User      @relation(fields: [userId], references: [id])
+  
+  // The Omni-Tier Assignment Indicator (0 - 10)
+  assignedLevel  Int       @default(10)
+  
+  // Optional hierarchical relations based on what scalar Level they sit at
+  organizationId String?
+  organization   Organization? @relation(fields: [organizationId], references: [id])
+  
+  brandId        String?
+  brand          Brand?        @relation(fields: [brandId], references: [id])
+  
+  locationId     String?
+  location       Location?     @relation(fields: [locationId], references: [id])
+
+  department     String
+  position       String?
+  pinCode        String?   // Fast POS login pin
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+}
+
+model SystemLog {
+  id        String   @id @default(cuid())
+  level     String   // INFO, WARN, ERROR, CRITICAL
+  source    String   // e.g. "PORTAL", "POS", "KIOSK", "ZAP-AI", "AUTH"
+  message   String
+  metadata  Json?
+  createdAt DateTime @default(now())
+}

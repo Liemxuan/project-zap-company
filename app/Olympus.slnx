@@ -1,0 +1,7 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Olympus.Api/Olympus.Api.csproj" />
+    <Project Path="src/Olympus.Core/Olympus.Core.csproj" />
+    <Project Path="src/Olympus.Data/Olympus.Data.csproj" />
+  </Folder>
+</Solution>

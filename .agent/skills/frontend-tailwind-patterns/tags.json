@@ -1,0 +1,17 @@
+{
+    "prefix": "design",
+    "name": "tailwind-patterns",
+    "version": "4.0.0",
+    "tags": [
+        "tailwindcss",
+        "v4",
+        "design-tokens",
+        "neobrutalism",
+        "css",
+        "styling"
+    ],
+    "difficulty": "intermediate",
+    "status": "stable",
+    "last_audit": "2026-02-27",
+    "validation_status": "passed"
+}

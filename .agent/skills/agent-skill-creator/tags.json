@@ -1,0 +1,13 @@
+{
+    "prefix": "logic",
+    "name": "skill-creator",
+    "version": "1.0.0",
+    "tags": [
+        "logic",
+        "workflow"
+    ],
+    "difficulty": "intermediate",
+    "status": "stable",
+    "last_audit": "2026-02-28",
+    "validation_status": "passed"
+}

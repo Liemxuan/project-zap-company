@@ -1,0 +1,28 @@
+{
+    "name": "olympus-monorepo",
+    "private": true,
+    "packageManager": "pnpm@9.15.4",
+    "scripts": {
+        "clean:pipe": "lsof +D ./node_modules | awk 'NR>1 {print $2}' | xargs kill -9 2>/dev/null || true",
+        "purge:locks": "killall node ; rm -rf node_modules/.cache ; pnpm store prune || true",
+        "prebuild": "pnpm run clean:pipe",
+        "verify": "pnpm run prebuild && pnpm run build",
+        "dev": "TMPDIR=/tmp/next-tmp pnpm run -r --parallel dev",
+        "build": "TMPDIR=/tmp/next-tmp turbo run build --log-order=stream",
+        "lint": "TMPDIR=/tmp/next-tmp turbo run lint --log-order=stream"
+    },
+    "devDependencies": {
+        "prisma": "^6.19.2",
+        "puppeteer": "^24.38.0",
+        "tsx": "^4.21.0",
+        "turbo": "^2.8.13"
+    },
+    "dependencies": {
+        "@hookform/resolvers": "^5.2.2",
+        "@prisma/client": "^6.19.2",
+        "lightningcss-darwin-arm64": "^1.32.0",
+        "mongodb": "^7.1.0",
+        "react-hook-form": "^7.71.2",
+        "zod": "^3.23.8"
+    }
+}
