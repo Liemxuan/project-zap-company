@@ -27,6 +27,7 @@ import { getMoleculesForTheme, getMoleculesByCategory } from '../../../themes/mo
 import { getAtomsForTheme, getAtomsByCategory } from '../../../themes/atom-registry';
 import { getFoundationsForTheme, getFoundationsByCategory } from '../../../themes/foundation-registry';
 import { useWorkspaceStore } from '../../../store/workspace-store';
+import { WORKSPACE_REGISTRY } from '../../../config/workspace-registry';
 
 type NavItem = string | { title: string; items: string[] };
 
@@ -229,78 +230,104 @@ const buildMoleculeHrefs = (theme: string): Record<string, string> => {
     return hrefs;
 };
 
-const getHref = (item: string, theme: string, activeWorkspaceId?: string | null) => {
+const getHref = (item: string, theme: string, activeWorkspaceId?: string | null, currentPort?: string | null) => {
+    let finalPath = '';
+
     // Check dynamic registries first (theme-aware)
     const foundationHrefs = buildFoundationHrefs(theme);
-    if (foundationHrefs[item]) return foundationHrefs[item];
+    if (foundationHrefs[item]) finalPath = foundationHrefs[item];
 
     const atomHrefs = buildAtomHrefs(theme);
-    if (atomHrefs[item]) return atomHrefs[item];
+    if (!finalPath && atomHrefs[item]) finalPath = atomHrefs[item];
 
     const moleculeHrefs = buildMoleculeHrefs(theme);
-    if (moleculeHrefs[item]) return moleculeHrefs[item];
+    if (!finalPath && moleculeHrefs[item]) finalPath = moleculeHrefs[item];
 
-    const map: Record<string, string> = {
-        // L1 Virtual
-        'Materials': `/design/${theme}`,
+    if (!finalPath) {
+        const map: Record<string, string> = {
+            // L1 Virtual
+            'Materials': `/design/${theme}`,
 
-        // System
-        'Design Audit': '/design/audit',
-        'Typography Architect': `/design/${theme}/labs/typography-architect`,
+            // System
+            'Design Audit': '/design/audit',
+            'Typography Architect': `/design/${theme}/labs/typography-architect`,
 
-        // Static fallbacks
-        'Wireframe': `/design/${theme}/template`,
-        'Component Registry': '/design/swarm/registry',
+            // Static fallbacks
+            'Wireframe': `/design/${theme}/template`,
+            'Component Registry': '/design/swarm/registry',
 
-        // L5 Organisms — use theme path
-        'Data Grid': `/design/${theme}/organisms/data-grid`,
-        'Kanban Board': `/design/${theme}/organisms/kanban-board`,
-        'Navigation Menu': `/design/${theme}/organisms/navigation-menu`,
-        'Interactive Elements Gallery': `/design/${theme}/organisms/interactive-gallery`,
-        'User Profile Header': `/design/${theme}/organisms/user-profile-header`,
-        'Authentication Scaffolds': `/design/${theme}/organisms/auth-scaffold`,
+            // L5 Organisms — use theme path
+            'Data Grid': `/design/${theme}/organisms/data-grid`,
+            'Kanban Board': `/design/${theme}/organisms/kanban-board`,
+            'Navigation Menu': `/design/${theme}/organisms/navigation-menu`,
+            'Interactive Elements Gallery': `/design/${theme}/organisms/interactive-gallery`,
+            'User Profile Header': `/design/${theme}/organisms/user-profile-header`,
+            'Authentication Scaffolds': `/design/${theme}/organisms/auth-scaffold`,
 
-        // L7 Pages
-        'Signin': `/design/${theme}/signin`,
-        'Infrastructure': '/admin/infrastructure',
-        'System Logs': `/design/${theme}/organisms/system-logs`,
-        'User Management': `/design/${theme}/organisms/user-management`,
+            // L7 Pages
+            'Signin': `/auth/${theme}/signin`,
+            'Infrastructure': '/admin/infrastructure',
+            'System Logs': `/design/${theme}/organisms/system-logs`,
+            'User Management': `/auth/${theme}/user-management`,
 
-        // Pos/Kiosk/Web
-        'Terminal': '/kiosk',
-        'Orders': '/kiosk/orders',
-        'Overview': '/storefront',
-        'Products': '/storefront/products',
-        'Customers': '/storefront/customers',
+            // Pos/Kiosk/Web
+            'Terminal': '/kiosk',
+            'Orders': '/kiosk/orders',
+            'Overview': '/storefront',
+            'Products': '/storefront/products',
+            'Customers': '/storefront/customers',
 
-        // Ops
-        'Master Data': '/inventory/master',
-        'Receive Goods': '/inventory/receive',
-        'Waste Logging': '/inventory/waste',
-        'Daily Ops': '/ops',
-        'Shifts': '/ops/shifts',
+            // Ops
+            'Master Data': '/inventory/master',
+            'Receive Goods': '/inventory/receive',
+            'Waste Logging': '/inventory/waste',
+            'Daily Ops': '/ops',
+            'Shifts': '/ops/shifts',
 
-        // Settings
-        'General': '/settings',
-        'Security': '/settings/security',
-        'Devices': '/provisioning',
-        'Fleet': '/provisioning/fleet',
-        'Telemetry': '/infrastructure',
-        'Database': '/infrastructure/db',
+            // Settings
+            'General': '/settings',
+            'Security': '/settings/security',
+            'Devices': '/provisioning',
+            'Fleet': '/provisioning/fleet',
+            'Telemetry': '/infrastructure',
+            'Database': '/infrastructure/db',
 
-        // Mission Control
-        'Radar': '/mission-control',
-        'Fleet Status': '/mission-control/fleet',
-        'Jobs': '/mission-control/jobs',
-        'Agents': '/mission-control/agents',
-        'Registry': '/mission-control/swarm/registry',
-    };
-
-    if (activeWorkspaceId === 'zap-auth' && item === 'User Management') {
-        return `/auth/${theme}/user-management`;
+            // Mission Control
+            'Radar': '/mission-control',
+            'Fleet Status': '/mission-control/fleet',
+            'Jobs': '/mission-control/jobs',
+            'Agents': '/mission-control/agents',
+            'Registry': '/mission-control/swarm/registry',
+        };
+        finalPath = map[item] || '';
     }
 
-    return map[item] || '#';
+    if (!finalPath) return '';
+
+    // If already fully qualified
+    if (finalPath.startsWith('http')) return finalPath;
+
+    let targetPort = 3000;
+    if (finalPath.startsWith('/kiosk')) targetPort = 3100;
+    if (finalPath.startsWith('/storefront')) targetPort = 3300;
+    if (finalPath.startsWith('/inventory') || finalPath.startsWith('/ops')) targetPort = 4000;
+    if (finalPath.startsWith('/settings') || finalPath.startsWith('/provisioning')) targetPort = 4100;
+    if (finalPath.startsWith('/infrastructure') || finalPath.startsWith('/admin')) targetPort = 4500;
+    if (finalPath.startsWith('/auth/')) targetPort = 4700;
+    if (finalPath.startsWith('/mission-control')) targetPort = 3600;
+    if (finalPath.startsWith('/reports')) targetPort = 4200;
+
+    // Use actual browser port post-hydration, fallback to registry port otherwise
+    // LocalStorage (which populates activeWorkspaceId) leaks across localhost ports, so we cannot trust it blindly.
+    const activeWs = WORKSPACE_REGISTRY.find(w => w.id === activeWorkspaceId);
+    const assumedPort = activeWs ? activeWs.port : 3000;
+    const evaluatingPort = currentPort ? parseInt(currentPort, 10) : assumedPort;
+
+    if (evaluatingPort !== targetPort) {
+        return `http://localhost:${targetPort}${finalPath}`;
+    }
+
+    return finalPath;
 };
 
 export interface SideNavProps {
@@ -312,6 +339,11 @@ export const SideNav: React.FC<SideNavProps> = ({ showDevWrapper = false }) => {
     const isDev = showDevWrapper && devMode;
     const pathname = usePathname();
     const router = useRouter();
+
+    const [currentPort, setCurrentPort] = React.useState<string | null>(null);
+    React.useEffect(() => {
+        setCurrentPort(window.location.port);
+    }, []);
 
     // Build dynamic categories from registries
     const dynamicL1 = React.useMemo(() => buildDynamicFoundations(theme, 'L1: Tokens'), [theme]);
@@ -389,13 +421,13 @@ export const SideNav: React.FC<SideNavProps> = ({ showDevWrapper = false }) => {
         for (const category of EFFECTIVE_NAV) {
             for (const item of category.items) {
                 if (typeof item === 'string') {
-                    const href = getHref(item, theme, activeWorkspaceId);
+                    const href = getHref(item, theme, activeWorkspaceId, currentPort);
                     if (href && (pathname === href || pathname.startsWith(href + '/'))) {
                         if (href.length > bestMatch.length) bestMatch = href;
                     }
                 } else {
                     for (const subItem of item.items) {
-                        const href = getHref(subItem, theme, activeWorkspaceId);
+                        const href = getHref(subItem, theme, activeWorkspaceId, currentPort);
                         if (href && (pathname === href || pathname.startsWith(href + '/'))) {
                             if (href.length > bestMatch.length) bestMatch = href;
                         }
@@ -435,14 +467,14 @@ export const SideNav: React.FC<SideNavProps> = ({ showDevWrapper = false }) => {
         for (const category of EFFECTIVE_NAV) {
             for (const item of category.items) {
                 if (typeof item === 'string') {
-                    const href = getHref(item, theme, activeWorkspaceId);
+                    const href = getHref(item, theme, activeWorkspaceId, currentPort);
                     if (href !== '' && href === activeHref) {
                         activeCategoryId = category.id;
                         break;
                     }
                 } else {
                     for (const subItem of item.items) {
-                        const href = getHref(subItem, theme, activeWorkspaceId);
+                        const href = getHref(subItem, theme, activeWorkspaceId, currentPort);
                         if (href !== '' && href === activeHref) {
                             activeCategoryId = category.id;
                             activeSubGroupKey = `${category.id}-${item.title}`;
@@ -601,7 +633,7 @@ export const SideNav: React.FC<SideNavProps> = ({ showDevWrapper = false }) => {
                                     >
                                         {category.items.map((item, itemIdx) => {
                                             if (typeof item === 'string') {
-                                                const href = getHref(item, theme, activeWorkspaceId);
+                                                const href = getHref(item, theme, activeWorkspaceId, currentPort);
                                                 const isItemActive = mounted && href !== '' && href === activeHref;
 
                                                 return (
@@ -672,7 +704,7 @@ export const SideNav: React.FC<SideNavProps> = ({ showDevWrapper = false }) => {
                                                                     className="flex flex-col border-l border-primary/20 ml-2 pl-3 space-y-0.5 overflow-hidden"
                                                                 >
                                                                     {item.items.map((subItem) => {
-                                                                        const href = getHref(subItem, theme, activeWorkspaceId);
+                                                                        const href = getHref(subItem, theme, activeWorkspaceId, currentPort);
                                                                         const isItemActive = mounted && href !== '' && href === activeHref;
                                                                         return (
                                                                             <Link

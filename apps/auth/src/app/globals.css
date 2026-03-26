@@ -1,0 +1,3 @@
+@import "tailwindcss";
+@import "../../../../packages/zap-design/src/app/globals.css";
+@source "../../../../packages/zap-design/src";
