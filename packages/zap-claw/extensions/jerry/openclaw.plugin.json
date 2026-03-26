@@ -1,0 +1,11 @@
+{
+    "id": "zap-jerry",
+    "name": "Jerry ACP Plugin",
+    "description": "Native ACP bridge to Jerry",
+    "skills": [],
+    "configSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+    }
+}

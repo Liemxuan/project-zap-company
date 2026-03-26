@@ -1,0 +1,24 @@
+{
+    "lab_zone": true,
+    "description": "Registry for all experimental, unstructured, or prototype projects. DO NOT commit unapproved projects.",
+    "projects": [
+        {
+            "name": "ZAP-Design-old",
+            "status": "Archived",
+            "promoted_to_core": false,
+            "docs": "Legacy Metro components."
+        },
+        {
+            "name": "mission-control",
+            "status": "In Development",
+            "promoted_to_core": false,
+            "docs": "Initial prototype for multi-agent console."
+        },
+        {
+            "name": "Open-Claw",
+            "status": "External Collaboration",
+            "promoted_to_core": false,
+            "docs": "Tommy's external agentic wrapper."
+        }
+    ]
+}

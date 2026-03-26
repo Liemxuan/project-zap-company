@@ -1,0 +1,261 @@
+/* Genesis Button — Theme-Driven Visual Resolution
+ *
+ * The theme publishes --button-resolved-* variables for each visualStyle x color combo.
+ * The Button atom applies a data-visual and data-color attribute based on props (or theme defaults).
+ * CSS selectors match the attribute combo and apply the resolved variables.
+ *
+ * Fallback chain: data-attribute match -> theme defaults -> hardcoded M3 baseline
+ */
+
+/* ── Base Reset & Theme-Resolved Defaults ──────────────────────────────── */
+/* When the theme publishes --button-resolved-* variables, all buttons pick
+   them up automatically. Data-attribute selectors below override these when
+   a button explicitly passes visualStyle/color props. */
+.genesis-btn {
+  transition: all 150ms ease;
+  background: var(--button-resolved-bg);
+  color: var(--button-resolved-text);
+  border-color: var(--button-resolved-border);
+  box-shadow: var(--button-resolved-shadow);
+}
+.genesis-btn:hover:not(:disabled) {
+  background: var(--button-resolved-bg-hover, var(--button-resolved-bg));
+}
+
+/* ── Solid ──────────────────────────────────────────────────────────────── */
+.genesis-btn[data-visual="solid"][data-color="primary"] {
+  background: var(--button-solid-primary-bg, var(--color-primary));
+  color: var(--button-solid-primary-text, var(--color-on-primary));
+  border-color: var(--button-solid-primary-border, transparent);
+}
+.genesis-btn[data-visual="solid"][data-color="primary"]:hover:not(:disabled) {
+  background: var(--button-solid-primary-bg-hover, color-mix(in srgb, var(--color-primary) 90%, transparent));
+}
+
+.genesis-btn[data-visual="solid"][data-color="secondary"] {
+  background: var(--button-solid-secondary-bg, var(--color-secondary));
+  color: var(--button-solid-secondary-text, var(--color-on-secondary));
+  border-color: var(--button-solid-secondary-border, transparent);
+}
+.genesis-btn[data-visual="solid"][data-color="secondary"]:hover:not(:disabled) {
+  background: var(--button-solid-secondary-bg-hover, color-mix(in srgb, var(--color-secondary) 90%, transparent));
+}
+
+.genesis-btn[data-visual="solid"][data-color="tertiary"] {
+  background: var(--button-solid-tertiary-bg, var(--color-tertiary));
+  color: var(--button-solid-tertiary-text, var(--color-on-tertiary));
+  border-color: var(--button-solid-tertiary-border, transparent);
+}
+.genesis-btn[data-visual="solid"][data-color="tertiary"]:hover:not(:disabled) {
+  background: var(--button-solid-tertiary-bg-hover, color-mix(in srgb, var(--color-tertiary) 90%, transparent));
+}
+
+.genesis-btn[data-visual="solid"][data-color="destructive"] {
+  background: var(--button-solid-destructive-bg, var(--color-error));
+  color: var(--button-solid-destructive-text, var(--color-on-error));
+  border-color: var(--button-solid-destructive-border, transparent);
+}
+.genesis-btn[data-visual="solid"][data-color="destructive"]:hover:not(:disabled) {
+  background: var(--button-solid-destructive-bg-hover, color-mix(in srgb, var(--color-error) 90%, transparent));
+}
+
+/* ── Outline ────────────────────────────────────────────────────────────── */
+.genesis-btn[data-visual="outline"][data-color="primary"] {
+  background: var(--button-outline-primary-bg, transparent);
+  color: var(--button-outline-primary-text, var(--color-primary));
+  border-color: var(--button-outline-primary-border, var(--color-primary));
+}
+.genesis-btn[data-visual="outline"][data-color="primary"]:hover:not(:disabled) {
+  background: var(--button-outline-primary-bg-hover, color-mix(in srgb, var(--color-primary) 10%, transparent));
+}
+
+.genesis-btn[data-visual="outline"][data-color="secondary"] {
+  background: var(--button-outline-secondary-bg, transparent);
+  color: var(--button-outline-secondary-text, var(--color-secondary));
+  border-color: var(--button-outline-secondary-border, var(--color-secondary));
+}
+.genesis-btn[data-visual="outline"][data-color="secondary"]:hover:not(:disabled) {
+  background: var(--button-outline-secondary-bg-hover, color-mix(in srgb, var(--color-secondary) 10%, transparent));
+}
+
+.genesis-btn[data-visual="outline"][data-color="tertiary"] {
+  background: var(--button-outline-tertiary-bg, transparent);
+  color: var(--button-outline-tertiary-text, var(--color-tertiary));
+  border-color: var(--button-outline-tertiary-border, var(--color-tertiary));
+}
+.genesis-btn[data-visual="outline"][data-color="tertiary"]:hover:not(:disabled) {
+  background: var(--button-outline-tertiary-bg-hover, color-mix(in srgb, var(--color-tertiary) 10%, transparent));
+}
+
+.genesis-btn[data-visual="outline"][data-color="destructive"] {
+  background: var(--button-outline-destructive-bg, transparent);
+  color: var(--button-outline-destructive-text, var(--color-error));
+  border-color: var(--button-outline-destructive-border, var(--color-error));
+}
+.genesis-btn[data-visual="outline"][data-color="destructive"]:hover:not(:disabled) {
+  background: var(--button-outline-destructive-bg-hover, color-mix(in srgb, var(--color-error) 10%, transparent));
+}
+
+/* ── Ghost ──────────────────────────────────────────────────────────────── */
+.genesis-btn[data-visual="ghost"][data-color="primary"] {
+  background: transparent;
+  color: var(--button-ghost-primary-text, var(--color-primary));
+  border-color: transparent;
+}
+.genesis-btn[data-visual="ghost"][data-color="primary"]:hover:not(:disabled) {
+  background: var(--button-ghost-primary-bg-hover, color-mix(in srgb, var(--color-primary) 10%, transparent));
+}
+
+.genesis-btn[data-visual="ghost"][data-color="secondary"] {
+  background: transparent;
+  color: var(--button-ghost-secondary-text, var(--color-secondary));
+  border-color: transparent;
+}
+.genesis-btn[data-visual="ghost"][data-color="secondary"]:hover:not(:disabled) {
+  background: var(--button-ghost-secondary-bg-hover, color-mix(in srgb, var(--color-secondary) 10%, transparent));
+}
+
+.genesis-btn[data-visual="ghost"][data-color="tertiary"] {
+  background: transparent;
+  color: var(--button-ghost-tertiary-text, var(--color-tertiary));
+  border-color: transparent;
+}
+.genesis-btn[data-visual="ghost"][data-color="tertiary"]:hover:not(:disabled) {
+  background: var(--button-ghost-tertiary-bg-hover, color-mix(in srgb, var(--color-tertiary) 10%, transparent));
+}
+
+.genesis-btn[data-visual="ghost"][data-color="destructive"] {
+  background: transparent;
+  color: var(--button-ghost-destructive-text, var(--color-error));
+  border-color: transparent;
+}
+.genesis-btn[data-visual="ghost"][data-color="destructive"]:hover:not(:disabled) {
+  background: var(--button-ghost-destructive-bg-hover, color-mix(in srgb, var(--color-error) 10%, transparent));
+}
+
+/* ── Elevated ───────────────────────────────────────────────────────────── */
+.genesis-btn[data-visual="elevated"][data-color="primary"] {
+  background: var(--button-elevated-primary-bg, var(--color-layer-panel));
+  color: var(--button-elevated-primary-text, var(--color-primary));
+  border-color: transparent;
+  box-shadow: var(--elevation-md, 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1));
+}
+.genesis-btn[data-visual="elevated"][data-color="primary"]:hover:not(:disabled) {
+  background: var(--button-elevated-primary-bg-hover, var(--color-layer-dialog));
+  box-shadow: var(--elevation-lg, 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1));
+}
+
+.genesis-btn[data-visual="elevated"][data-color="secondary"] {
+  background: var(--button-elevated-secondary-bg, var(--color-layer-panel));
+  color: var(--button-elevated-secondary-text, var(--color-secondary));
+  border-color: transparent;
+  box-shadow: var(--elevation-md, 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1));
+}
+.genesis-btn[data-visual="elevated"][data-color="secondary"]:hover:not(:disabled) {
+  background: var(--button-elevated-secondary-bg-hover, var(--color-layer-dialog));
+  box-shadow: var(--elevation-lg, 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1));
+}
+
+.genesis-btn[data-visual="elevated"][data-color="tertiary"] {
+  background: var(--button-elevated-tertiary-bg, var(--color-layer-panel));
+  color: var(--button-elevated-tertiary-text, var(--color-tertiary));
+  border-color: transparent;
+  box-shadow: var(--elevation-md, 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1));
+}
+.genesis-btn[data-visual="elevated"][data-color="tertiary"]:hover:not(:disabled) {
+  background: var(--button-elevated-tertiary-bg-hover, var(--color-layer-dialog));
+  box-shadow: var(--elevation-lg, 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1));
+}
+
+.genesis-btn[data-visual="elevated"][data-color="destructive"] {
+  background: var(--button-elevated-destructive-bg, var(--color-layer-panel));
+  color: var(--button-elevated-destructive-text, var(--color-error));
+  border-color: transparent;
+  box-shadow: var(--elevation-md, 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1));
+}
+.genesis-btn[data-visual="elevated"][data-color="destructive"]:hover:not(:disabled) {
+  background: var(--button-elevated-destructive-bg-hover, var(--color-layer-dialog));
+  box-shadow: var(--elevation-lg, 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1));
+}
+
+/* ── Tonal ──────────────────────────────────────────────────────────────── */
+.genesis-btn[data-visual="tonal"][data-color="primary"] {
+  background: var(--button-tonal-primary-bg, var(--color-primary-container));
+  color: var(--button-tonal-primary-text, var(--color-on-primary-container));
+  border-color: transparent;
+}
+.genesis-btn[data-visual="tonal"][data-color="primary"]:hover:not(:disabled) {
+  background: var(--button-tonal-primary-bg-hover, color-mix(in srgb, var(--color-primary-container) 80%, transparent));
+}
+
+.genesis-btn[data-visual="tonal"][data-color="secondary"] {
+  background: var(--button-tonal-secondary-bg, var(--color-secondary-container));
+  color: var(--button-tonal-secondary-text, var(--color-on-secondary-container));
+  border-color: transparent;
+}
+.genesis-btn[data-visual="tonal"][data-color="secondary"]:hover:not(:disabled) {
+  background: var(--button-tonal-secondary-bg-hover, color-mix(in srgb, var(--color-secondary-container) 80%, transparent));
+}
+
+.genesis-btn[data-visual="tonal"][data-color="tertiary"] {
+  background: var(--button-tonal-tertiary-bg, var(--color-tertiary-container));
+  color: var(--button-tonal-tertiary-text, var(--color-on-tertiary-container));
+  border-color: transparent;
+}
+.genesis-btn[data-visual="tonal"][data-color="tertiary"]:hover:not(:disabled) {
+  background: var(--button-tonal-tertiary-bg-hover, color-mix(in srgb, var(--color-tertiary-container) 80%, transparent));
+}
+
+.genesis-btn[data-visual="tonal"][data-color="destructive"] {
+  background: var(--button-tonal-destructive-bg, color-mix(in srgb, var(--color-error) 10%, transparent));
+  color: var(--button-tonal-destructive-text, var(--color-error));
+  border-color: transparent;
+}
+.genesis-btn[data-visual="tonal"][data-color="destructive"]:hover:not(:disabled) {
+  background: var(--button-tonal-destructive-bg-hover, color-mix(in srgb, var(--color-error) 20%, transparent));
+}
+
+/* ── Variant Effects (structural — uses currentColor from resolved text) ── */
+.genesis-btn[data-variant="flat"] {
+  /* No additional effects */
+}
+
+.genesis-btn[data-variant="soft"] {
+  box-shadow: 0 25px 50px -12px currentColor;
+}
+
+.genesis-btn[data-variant="neo"] {
+  box-shadow: 4px 4px 0px 0px currentColor;
+  border-color: currentColor !important;
+  border-width: 2px !important;
+}
+.genesis-btn[data-variant="neo"]:hover:not(:disabled) {
+  transform: translate(-1px, -1px);
+  box-shadow: 5px 5px 0px 0px currentColor;
+}
+.genesis-btn[data-variant="neo"]:active:not(:disabled) {
+  transform: translate(4px, 4px);
+  box-shadow: none;
+}
+
+.genesis-btn[data-variant="glow"] {
+  box-shadow: 0 0 30px -5px currentColor;
+  outline: 2px solid currentColor;
+  outline-offset: -2px;
+}
+
+/* ── Active State (universal) ───────────────────────────────────────────── */
+.genesis-btn:active:not(:disabled):not([data-variant="neo"]) {
+  transform: scale(0.98);
+}
+
+/* ── Disabled State ─────────────────────────────────────────────────────── */
+.genesis-btn:disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+/* ── Text Shadow for Solid (readability on colored bg) ──────────────────── */
+.genesis-btn[data-visual="solid"] {
+  text-shadow: 0 0.5px 1px rgba(0,0,0,0.1);
+}

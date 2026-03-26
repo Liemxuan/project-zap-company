@@ -1,0 +1,11 @@
+{
+    "id": "zap-spike",
+    "name": "Spike ACP Plugin",
+    "description": "Native ACP bridge to Spike",
+    "skills": [],
+    "configSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+    }
+}

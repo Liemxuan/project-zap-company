@@ -1,0 +1,2620 @@
+[
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/capture-fix.js",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 15,
+        "column": 11,
+        "message": "'timestamp' is assigned a value but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/fix-foundations-publish.js",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 4,
+        "column": 7,
+        "message": "'crypto' is assigned a value but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-expressions",
+        "line": 10,
+        "column": 9,
+        "message": "Expected an assignment or function call and instead saw an expression."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/scripts/blast.ts",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 17,
+        "column": 10,
+        "message": "'execSync' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 84,
+        "column": 15,
+        "message": "'payload' is assigned a value but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/app/admin/inventory/BomBuilderModal.tsx",
+    "messages": [
+      {
+        "ruleId": "react-hooks/exhaustive-deps",
+        "line": 41,
+        "column": 6,
+        "message": "React Hook useEffect has a missing dependency: 'fetchData'. Either include it or remove the dependency array."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-explicit-any",
+        "line": 57,
+        "column": 31,
+        "message": "Unexpected any. Specify a different type."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-explicit-any",
+        "line": 61,
+        "column": 90,
+        "message": "Unexpected any. Specify a different type."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-explicit-any",
+        "line": 68,
+        "column": 36,
+        "message": "Unexpected any. Specify a different type."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-explicit-any",
+        "line": 72,
+        "column": 86,
+        "message": "Unexpected any. Specify a different type."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/app/admin/inventory/ItemMasterDataGrid.tsx",
+    "messages": [
+      {
+        "ruleId": "react-hooks/exhaustive-deps",
+        "line": 31,
+        "column": 6,
+        "message": "React Hook useEffect has a missing dependency: 'fetchItems'. Either include it or remove the dependency array."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/app/admin/inventory/page.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 5,
+        "column": 10,
+        "message": "'BomBuilderModal' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 6,
+        "column": 10,
+        "message": "'LedgerDataGrid' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/app/admin/tracker/page.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 18,
+        "column": 56,
+        "message": "'users' is assigned a value but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/app/api/assets/lock/route.ts",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-explicit-any",
+        "line": 21,
+        "column": 21,
+        "message": "Unexpected any. Specify a different type."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/app/api/assets/route.ts",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-explicit-any",
+        "line": 18,
+        "column": 31,
+        "message": "Unexpected any. Specify a different type."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-explicit-any",
+        "line": 59,
+        "column": 21,
+        "message": "Unexpected any. Specify a different type."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/app/api/image/route.ts",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 62,
+        "column": 14,
+        "message": "'e' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/app/api/swarm/registry/route.ts",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-explicit-any",
+        "line": 10,
+        "column": 45,
+        "message": "Unexpected any. Specify a different type."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/app/api/swarm/route.ts",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-explicit-any",
+        "line": 16,
+        "column": 44,
+        "message": "Unexpected any. Specify a different type."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/app/api/theme/settings/route.ts",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-explicit-any",
+        "line": 237,
+        "column": 22,
+        "message": "Unexpected any. Specify a different type."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-explicit-any",
+        "line": 238,
+        "column": 43,
+        "message": "Unexpected any. Specify a different type."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/app/design/[theme]/combat-signin/page.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 15,
+        "column": 10,
+        "message": "'Icon' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/app/design/swarm/page.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-explicit-any",
+        "line": 153,
+        "column": 45,
+        "message": "Unexpected any. Specify a different type."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-explicit-any",
+        "line": 162,
+        "column": 62,
+        "message": "Unexpected any. Specify a different type."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/app/design/zap/atoms/button/page.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-explicit-any",
+        "line": 109,
+        "column": 75,
+        "message": "Unexpected any. Specify a different type."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/app/design/zap/labs/stitch-playful-test/page.tsx",
+    "messages": [
+      {
+        "ruleId": "@next/next/no-img-element",
+        "line": 86,
+        "column": 41,
+        "message": "Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element"
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/app/design/zap/m3-preview/m3-preview-dashboard.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-explicit-any",
+        "line": 18,
+        "column": 44,
+        "message": "Unexpected any. Specify a different type."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-explicit-any",
+        "line": 130,
+        "column": 65,
+        "message": "Unexpected any. Specify a different type."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/app/design/zap/mission-control/page.tsx",
+    "messages": [
+      {
+        "ruleId": "react/jsx-no-undef",
+        "line": 156,
+        "column": 42,
+        "message": "'Icon' is not defined."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/app/design/zap/molecules/card-number/page.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 5,
+        "column": 10,
+        "message": "'Icon' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/app/design/zap/molecules/dropzone/page.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-explicit-any",
+        "line": 39,
+        "column": 55,
+        "message": "Unexpected any. Specify a different type."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/app/design/zap/molecules/forms/page.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 52,
+        "column": 11,
+        "message": "'triggerErrors' is assigned a value but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/app/design/zap/molecules/quick-navigate/page.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 25,
+        "column": 3,
+        "message": "'CommandEmpty' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 27,
+        "column": 3,
+        "message": "'CommandInput' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/app/design/zap/molecules/radio-group/page.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 5,
+        "column": 10,
+        "message": "'Icon' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/app/design/zap/molecules/service-selection/page.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 22,
+        "column": 3,
+        "message": "'CommandEmpty' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 24,
+        "column": 3,
+        "message": "'CommandInput' is defined but never used."
+      },
+      {
+        "ruleId": "react/no-unescaped-entities",
+        "line": 176,
+        "column": 66,
+        "message": "`\"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`."
+      },
+      {
+        "ruleId": "react/no-unescaped-entities",
+        "line": 176,
+        "column": 80,
+        "message": "`\"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/app/design/zap/organisms/auth-scaffold/page.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 7,
+        "column": 10,
+        "message": "'useTheme' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/app/design/zap/organisms/data-grid/page.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 21,
+        "column": 10,
+        "message": "'useTheme' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/app/design/zap/organisms/interactive-gallery/page.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 7,
+        "column": 10,
+        "message": "'useTheme' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/app/design/zap/organisms/kanban-board/page.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 10,
+        "column": 10,
+        "message": "'useTheme' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/app/design/zap/organisms/navigation-menu/page.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 7,
+        "column": 10,
+        "message": "'useTheme' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/app/design/zap/organisms/user-profile-header/page.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 7,
+        "column": 10,
+        "message": "'useTheme' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/app/tenant/kiosk/page.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 12,
+        "column": 3,
+        "message": "'ArrowLeft' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 13,
+        "column": 3,
+        "message": "'Settings' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/app/tenant/ops/page.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 11,
+        "column": 3,
+        "message": "'Package' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 94,
+        "column": 9,
+        "message": "'getStatusColor' is assigned a value but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/app/tenant/storefront/page.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 6,
+        "column": 10,
+        "message": "'Card' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 6,
+        "column": 16,
+        "message": "'CardContent' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/examples/i18n-example.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 11,
+        "column": 10,
+        "message": "'cn' is defined but never used."
+      },
+      {
+        "ruleId": "react/no-unescaped-entities",
+        "line": 28,
+        "column": 32,
+        "message": "`'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`."
+      },
+      {
+        "ruleId": "react/no-unescaped-entities",
+        "line": 28,
+        "column": 47,
+        "message": "`'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/management/management-table.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-explicit-any",
+        "line": 16,
+        "column": 10,
+        "message": "Unexpected any. Specify a different type."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-explicit-any",
+        "line": 17,
+        "column": 13,
+        "message": "Unexpected any. Specify a different type."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 28,
+        "column": 3,
+        "message": "'table' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 29,
+        "column": 3,
+        "message": "'isLoading' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 32,
+        "column": 3,
+        "message": "'title' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 34,
+        "column": 3,
+        "message": "'onRowClick' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/pages/account/billing/account-billing-enterprise-content.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 9,
+        "column": 3,
+        "message": "'CardFooter' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 13,
+        "column": 10,
+        "message": "'Grid' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 13,
+        "column": 27,
+        "message": "'TrendingUp' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/pages/account/billing/account-billing-history-content.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 13,
+        "column": 10,
+        "message": "'ManagementTable' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 14,
+        "column": 45,
+        "message": "'MoreVertical' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-explicit-any",
+        "line": 57,
+        "column": 50,
+        "message": "Unexpected any. Specify a different type."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/pages/account/members/account-import-members-content.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 4,
+        "column": 29,
+        "message": "'CardHeader' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 4,
+        "column": 41,
+        "message": "'CardTitle' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 6,
+        "column": 10,
+        "message": "'Badge' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 7,
+        "column": 18,
+        "message": "'Users' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 7,
+        "column": 42,
+        "message": "'CheckCircle2' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 7,
+        "column": 56,
+        "message": "'AlertCircle' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/pages/account/members/account-members-starter-content.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 6,
+        "column": 29,
+        "message": "'Rocket' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/pages/account/members/account-teams-starter-content.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 4,
+        "column": 10,
+        "message": "'Card' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 4,
+        "column": 16,
+        "message": "'CardContent' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 6,
+        "column": 18,
+        "message": "'Users' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 6,
+        "column": 37,
+        "message": "'CheckCircle2' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 6,
+        "column": 51,
+        "message": "'Zap' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/pages/account/security/account-backup-and-recovery-content.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 11,
+        "column": 48,
+        "message": "'ArrowRight' is defined but never used."
+      },
+      {
+        "ruleId": "react/no-unescaped-entities",
+        "line": 73,
+        "column": 110,
+        "message": "`\"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`."
+      },
+      {
+        "ruleId": "react/no-unescaped-entities",
+        "line": 73,
+        "column": 119,
+        "message": "`\"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/pages/account/security/account-company-profile-content.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 11,
+        "column": 30,
+        "message": "'ChartNoAxesCombined' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/pages/account/security/account-current-sessions-content.tsx",
+    "messages": [
+      {
+        "ruleId": "react/no-unescaped-entities",
+        "line": 74,
+        "column": 41,
+        "message": "`'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/pages/account/security/account-device-management-content.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 10,
+        "column": 10,
+        "message": "'EntityList' is defined but never used."
+      },
+      {
+        "ruleId": "react/no-unescaped-entities",
+        "line": 95,
+        "column": 132,
+        "message": "`\"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`."
+      },
+      {
+        "ruleId": "react/no-unescaped-entities",
+        "line": 95,
+        "column": 146,
+        "message": "`\"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`."
+      },
+      {
+        "ruleId": "react/no-unescaped-entities",
+        "line": 104,
+        "column": 65,
+        "message": "`'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/pages/account/security/account-home-get-started-content.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 19,
+        "column": 3,
+        "message": "'MonitorSmartphone' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 20,
+        "column": 3,
+        "message": "'Palette' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/pages/account/security/account-notifications-content.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 11,
+        "column": 48,
+        "message": "'Info' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/pages/account/security/account-overview-content.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 12,
+        "column": 10,
+        "message": "'cn' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/pages/account/security/account-permissions-check-content.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 4,
+        "column": 29,
+        "message": "'CardHeader' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 4,
+        "column": 41,
+        "message": "'CardTitle' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 5,
+        "column": 10,
+        "message": "'Badge' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 6,
+        "column": 20,
+        "message": "'Shield' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 6,
+        "column": 28,
+        "message": "'Search' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/pages/account/security/account-permissions-toggle-content.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 4,
+        "column": 29,
+        "message": "'CardHeader' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 4,
+        "column": 41,
+        "message": "'CardTitle' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 5,
+        "column": 10,
+        "message": "'Button' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/pages/account/security/account-privacy-settings-content.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 11,
+        "column": 33,
+        "message": "'ShieldCheck' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 11,
+        "column": 46,
+        "message": "'ArrowRight' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/pages/account/security/account-security-get-started-content.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 19,
+        "column": 10,
+        "message": "'cn' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/pages/account/security/account-team-info-content.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 11,
+        "column": 32,
+        "message": "'TableProperties' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/pages/account/security/account-team-members-content.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 12,
+        "column": 38,
+        "message": "'Users' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 12,
+        "column": 45,
+        "message": "'Mail' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 12,
+        "column": 51,
+        "message": "'Shield' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/pages/account/security/account-user-connections-content.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 12,
+        "column": 10,
+        "message": "'EntityList' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/pages/account/security/account-user-profile-content.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 11,
+        "column": 10,
+        "message": "'User' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 11,
+        "column": 16,
+        "message": "'Shield' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 11,
+        "column": 35,
+        "message": "'Award' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 11,
+        "column": 42,
+        "message": "'Calendar' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/pages/account/security/account-user-work-content.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 14,
+        "column": 10,
+        "message": "'Briefcase' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 14,
+        "column": 21,
+        "message": "'Clock' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/pages/account/settings/account-api-keys-content.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 4,
+        "column": 29,
+        "message": "'CardHeader' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 4,
+        "column": 41,
+        "message": "'CardTitle' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 7,
+        "column": 35,
+        "message": "'Eye' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 7,
+        "column": 40,
+        "message": "'EyeOff' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 7,
+        "column": 48,
+        "message": "'Shield' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/pages/account/settings/account-appearance-content.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 5,
+        "column": 10,
+        "message": "'Button' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/pages/account/settings/account-integrations-content.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 4,
+        "column": 29,
+        "message": "'CardHeader' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 4,
+        "column": 41,
+        "message": "'CardTitle' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 7,
+        "column": 25,
+        "message": "'ExternalLink' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/pages/account/settings/account-invite-a-friend-content.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 4,
+        "column": 29,
+        "message": "'CardHeader' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 4,
+        "column": 41,
+        "message": "'CardTitle' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 6,
+        "column": 22,
+        "message": "'Users' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/pages/account/settings/account-settings-enterprise-content.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 4,
+        "column": 29,
+        "message": "'CardHeader' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 4,
+        "column": 41,
+        "message": "'CardTitle' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 5,
+        "column": 10,
+        "message": "'Button' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 6,
+        "column": 10,
+        "message": "'Badge' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/pages/campaigns/campaigns-content.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 4,
+        "column": 29,
+        "message": "'CardHeader' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 4,
+        "column": 41,
+        "message": "'CardTitle' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 7,
+        "column": 32,
+        "message": "'Users' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 7,
+        "column": 56,
+        "message": "'Search' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 7,
+        "column": 84,
+        "message": "'Calendar' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/pages/network/network-app-roster-content.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 4,
+        "column": 29,
+        "message": "'CardHeader' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 4,
+        "column": 41,
+        "message": "'CardTitle' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 7,
+        "column": 10,
+        "message": "'Users' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 7,
+        "column": 37,
+        "message": "'List' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 7,
+        "column": 43,
+        "message": "'MoreVertical' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 7,
+        "column": 57,
+        "message": "'Mail' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 7,
+        "column": 63,
+        "message": "'Shield' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/pages/network/network-author-content.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 4,
+        "column": 29,
+        "message": "'CardHeader' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 4,
+        "column": 41,
+        "message": "'CardTitle' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 5,
+        "column": 10,
+        "message": "'Button' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 7,
+        "column": 10,
+        "message": "'BookOpen' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 7,
+        "column": 20,
+        "message": "'Star' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 7,
+        "column": 26,
+        "message": "'Users' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 7,
+        "column": 33,
+        "message": "'ExternalLink' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/pages/network/network-get-started-content.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 5,
+        "column": 10,
+        "message": "'Button' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/pages/network/network-market-authors-content.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 6,
+        "column": 10,
+        "message": "'BookOpen' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 6,
+        "column": 34,
+        "message": "'ExternalLink' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/pages/network/network-mini-cards-content.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 5,
+        "column": 10,
+        "message": "'Badge' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 7,
+        "column": 20,
+        "message": "'Mail' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 7,
+        "column": 26,
+        "message": "'MapPin' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/pages/network/network-nft-content.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 4,
+        "column": 10,
+        "message": "'Card' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 4,
+        "column": 16,
+        "message": "'CardContent' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 5,
+        "column": 10,
+        "message": "'Badge' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 7,
+        "column": 22,
+        "message": "'ExternalLink' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/pages/network/network-saas-users-content.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 6,
+        "column": 10,
+        "message": "'Button' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 7,
+        "column": 10,
+        "message": "'Users' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 7,
+        "column": 17,
+        "message": "'Cloud' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 7,
+        "column": 32,
+        "message": "'UserPlus' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 7,
+        "column": 42,
+        "message": "'Globe' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 7,
+        "column": 49,
+        "message": "'BarChart3' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/pages/network/network-social-content.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 5,
+        "column": 10,
+        "message": "'Badge' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 7,
+        "column": 25,
+        "message": "'Heart' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 7,
+        "column": 32,
+        "message": "'Share2' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 7,
+        "column": 47,
+        "message": "'Globe' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/pages/network/network-store-clients-content.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 6,
+        "column": 10,
+        "message": "'Button' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 7,
+        "column": 33,
+        "message": "'Star' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 7,
+        "column": 39,
+        "message": "'ExternalLink' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/pages/network/network-user-cards-team-crew-content.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 7,
+        "column": 10,
+        "message": "'Users' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 7,
+        "column": 27,
+        "message": "'Shield' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/pages/network/network-user-table-team-crew-content.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 4,
+        "column": 29,
+        "message": "'CardHeader' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 4,
+        "column": 41,
+        "message": "'CardTitle' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 7,
+        "column": 10,
+        "message": "'Users' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 7,
+        "column": 39,
+        "message": "'Mail' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/pages/network/network-visitors-content.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 5,
+        "column": 10,
+        "message": "'Badge' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 6,
+        "column": 10,
+        "message": "'Button' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 7,
+        "column": 29,
+        "message": "'BarChart3' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 7,
+        "column": 40,
+        "message": "'Search' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/pages/public-profile/profiles/profile-activity-content.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 16,
+        "column": 3,
+        "message": "'Settings2' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 17,
+        "column": 3,
+        "message": "'History' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 18,
+        "column": 3,
+        "message": "'Calendar' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 20,
+        "column": 3,
+        "message": "'FileText' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 23,
+        "column": 3,
+        "message": "'Video' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 24,
+        "column": 3,
+        "message": "'ChevronRight' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 26,
+        "column": 3,
+        "message": "'Truck' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/pages/public-profile/profiles/profile-blogger-content.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 9,
+        "column": 3,
+        "message": "'CardFooter' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 14,
+        "column": 3,
+        "message": "'FileText' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 18,
+        "column": 3,
+        "message": "'Flame' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 21,
+        "column": 3,
+        "message": "'UserPlus' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 22,
+        "column": 3,
+        "message": "'LayoutGrid' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 23,
+        "column": 3,
+        "message": "'Zap' is defined but never used."
+      },
+      {
+        "ruleId": "react/no-unescaped-entities",
+        "line": 48,
+        "column": 129,
+        "message": "`'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/pages/public-profile/profiles/profile-company-content.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 9,
+        "column": 3,
+        "message": "'CardFooter' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 18,
+        "column": 3,
+        "message": "'Briefcase' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 19,
+        "column": 3,
+        "message": "'Mail' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 20,
+        "column": 3,
+        "message": "'Facebook' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 21,
+        "column": 3,
+        "message": "'Twitter' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 22,
+        "column": 3,
+        "message": "'Youtube' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 23,
+        "column": 3,
+        "message": "'Dribbble' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/pages/public-profile/profiles/profile-creator-content.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 9,
+        "column": 3,
+        "message": "'CardFooter' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 15,
+        "column": 3,
+        "message": "'Users' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 16,
+        "column": 3,
+        "message": "'Briefcase' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 18,
+        "column": 11,
+        "message": "'TagsIcon' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 19,
+        "column": 3,
+        "message": "'Calendar' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 20,
+        "column": 3,
+        "message": "'MessageSquare' is defined but never used."
+      },
+      {
+        "ruleId": "@next/next/no-img-element",
+        "line": 92,
+        "column": 24,
+        "message": "Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element"
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/pages/public-profile/profiles/profile-crm-content.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 14,
+        "column": 3,
+        "message": "'Database' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 20,
+        "column": 3,
+        "message": "'AlertCircle' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 22,
+        "column": 3,
+        "message": "'Search' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-explicit-any",
+        "line": 90,
+        "column": 59,
+        "message": "Unexpected any. Specify a different type."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/pages/public-profile/profiles/profile-default-content.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 9,
+        "column": 3,
+        "message": "'CardFooter' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 15,
+        "column": 3,
+        "message": "'User' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 18,
+        "column": 3,
+        "message": "'FileText' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 20,
+        "column": 3,
+        "message": "'Users' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/pages/public-profile/profiles/profile-feeds-content.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 9,
+        "column": 3,
+        "message": "'CardFooter' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 14,
+        "column": 3,
+        "message": "'History' is defined but never used."
+      },
+      {
+        "ruleId": "react/no-unescaped-entities",
+        "line": 50,
+        "column": 16,
+        "message": "`\"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`."
+      },
+      {
+        "ruleId": "react/no-unescaped-entities",
+        "line": 50,
+        "column": 74,
+        "message": "`'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`."
+      },
+      {
+        "ruleId": "react/no-unescaped-entities",
+        "line": 50,
+        "column": 100,
+        "message": "`\"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/pages/public-profile/profiles/profile-gamer-content.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 9,
+        "column": 3,
+        "message": "'CardFooter' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 18,
+        "column": 3,
+        "message": "'Users' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 24,
+        "column": 3,
+        "message": "'MoreVertical' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/pages/public-profile/profiles/profile-modal-content.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 10,
+        "column": 3,
+        "message": "'DialogFooter' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/pages/public-profile/profiles/profile-nft-content.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 9,
+        "column": 3,
+        "message": "'CardFooter' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 17,
+        "column": 12,
+        "message": "'ImageIcon' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 18,
+        "column": 3,
+        "message": "'Network' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 20,
+        "column": 3,
+        "message": "'MoreHorizontal' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/pages/public-profile/profiles/profile-plain-content.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 9,
+        "column": 3,
+        "message": "'CardFooter' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 12,
+        "column": 10,
+        "message": "'Badge' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 15,
+        "column": 3,
+        "message": "'ThumbsUp' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 16,
+        "column": 3,
+        "message": "'Share2' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 17,
+        "column": 3,
+        "message": "'Clock' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 25,
+        "column": 3,
+        "message": "'MoreVertical' is defined but never used."
+      },
+      {
+        "ruleId": "react/no-unescaped-entities",
+        "line": 98,
+        "column": 22,
+        "message": "`\"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`."
+      },
+      {
+        "ruleId": "react/no-unescaped-entities",
+        "line": 98,
+        "column": 155,
+        "message": "`\"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/pages/search/search-results-grid-content.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 7,
+        "column": 10,
+        "message": "'Search' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 7,
+        "column": 67,
+        "message": "'ChevronRight' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/pages/search/search-results-list-content.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 7,
+        "column": 10,
+        "message": "'Search' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/pages/store/checkout/order-placed-content.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 4,
+        "column": 29,
+        "message": "'CardFooter' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 4,
+        "column": 41,
+        "message": "'CardHeader' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 4,
+        "column": 53,
+        "message": "'CardTitle' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 6,
+        "column": 24,
+        "message": "'Package' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/pages/store/checkout/order-receipt-content.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 4,
+        "column": 52,
+        "message": "'CardFooter' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 7,
+        "column": 10,
+        "message": "'Receipt' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 7,
+        "column": 47,
+        "message": "'CreditCard' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 7,
+        "column": 59,
+        "message": "'MapPin' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 7,
+        "column": 67,
+        "message": "'Calendar' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/pages/store/checkout/order-summary-content.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 6,
+        "column": 10,
+        "message": "'Badge' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/pages/store/checkout/payment-method-content.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 13,
+        "column": 10,
+        "message": "'Badge' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 14,
+        "column": 55,
+        "message": "'Trash2' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/pages/store/my-orders-content.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 4,
+        "column": 29,
+        "message": "'CardHeader' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 4,
+        "column": 41,
+        "message": "'CardTitle' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 5,
+        "column": 10,
+        "message": "'Button' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 7,
+        "column": 19,
+        "message": "'MapPin' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 7,
+        "column": 27,
+        "message": "'Truck' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-explicit-any",
+        "line": 33,
+        "column": 50,
+        "message": "Unexpected any. Specify a different type."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/pages/store/product-details-content.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 5,
+        "column": 3,
+        "message": "'Card' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 6,
+        "column": 3,
+        "message": "'CardHeader' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 7,
+        "column": 3,
+        "message": "'CardTitle' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 8,
+        "column": 3,
+        "message": "'CardContent' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 9,
+        "column": 3,
+        "message": "'CardFooter' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 18,
+        "column": 3,
+        "message": "'ChevronRight' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/pages/store/store-client-content.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 6,
+        "column": 3,
+        "message": "'CardHeader' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 7,
+        "column": 3,
+        "message": "'CardTitle' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 20,
+        "column": 3,
+        "message": "'ChevronRight' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 22,
+        "column": 3,
+        "message": "'List' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/pages/store/wishlist-content.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 7,
+        "column": 10,
+        "message": "'Heart' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/ui/ai-prompt-box.tsx",
+    "messages": [
+      {
+        "ruleId": "react-hooks/exhaustive-deps",
+        "line": 386,
+        "column": 6,
+        "message": "React Hook React.useCallback has a missing dependency: 'processFile'. Either include it or remove the dependency array."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/ui/command.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 41,
+        "column": 3,
+        "message": "'showCloseButton' is assigned a value but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/ui/dialogs/welcome-message-dialog.tsx",
+    "messages": [
+      {
+        "ruleId": "react/no-unescaped-entities",
+        "line": 31,
+        "column": 15,
+        "message": "`'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/ui/empty-state.tsx",
+    "messages": [
+      {
+        "ruleId": "@next/next/no-img-element",
+        "line": 38,
+        "column": 13,
+        "message": "Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element"
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/ui/password-input-group.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 7,
+        "column": 10,
+        "message": "'Button' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-empty-object-type",
+        "line": 10,
+        "column": 11,
+        "message": "An interface declaring no members is equivalent to its supertype."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/ui/stepper.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 4,
+        "column": 69,
+        "message": "'useRef' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 6,
+        "column": 17,
+        "message": "'Loader2' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/ui/toggle-group.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-explicit-any",
+        "line": 59,
+        "column": 54,
+        "message": "Unexpected any. Specify a different type."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-explicit-any",
+        "line": 94,
+        "column": 47,
+        "message": "Unexpected any. Specify a different type."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/components/ui/toggle.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-explicit-any",
+        "line": 47,
+        "column": 74,
+        "message": "Unexpected any. Specify a different type."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/genesis/atoms/formatters/currency.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-explicit-any",
+        "line": 19,
+        "column": 31,
+        "message": "Unexpected any. Specify a different type."
+      },
+      {
+        "ruleId": "@typescript-eslint/ban-ts-comment",
+        "line": 20,
+        "column": 9,
+        "message": "Use \"@ts-expect-error\" instead of \"@ts-ignore\", as \"@ts-ignore\" will do nothing if the following line is error-free."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/genesis/atoms/formatters/phone.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-explicit-any",
+        "line": 18,
+        "column": 31,
+        "message": "Unexpected any. Specify a different type."
+      },
+      {
+        "ruleId": "@typescript-eslint/ban-ts-comment",
+        "line": 19,
+        "column": 9,
+        "message": "Use \"@ts-expect-error\" instead of \"@ts-ignore\", as \"@ts-ignore\" will do nothing if the following line is error-free."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/genesis/templates/activities/ActivitiesTemplate.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 14,
+        "column": 13,
+        "message": "'theme' is assigned a value but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/genesis/templates/auth/auth-scaffold.tsx",
+    "messages": [
+      {
+        "ruleId": "react/no-unescaped-entities",
+        "line": 52,
+        "column": 36,
+        "message": "`'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/genesis/templates/billing/BillingTemplate.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 4,
+        "column": 32,
+        "message": "'ExternalLink' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 13,
+        "column": 13,
+        "message": "'theme' is assigned a value but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/genesis/templates/kanban/KanbanTemplate.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 36,
+        "column": 13,
+        "message": "'theme' is assigned a value but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/genesis/templates/login/LoginTemplate.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 11,
+        "column": 13,
+        "message": "'theme' is assigned a value but never used."
+      },
+      {
+        "ruleId": "react/no-unescaped-entities",
+        "line": 54,
+        "column": 36,
+        "message": "`'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/genesis/templates/settings/SettingsTemplate.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 4,
+        "column": 24,
+        "message": "'Key' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 4,
+        "column": 35,
+        "message": "'CreditCard' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 4,
+        "column": 47,
+        "message": "'Laptop' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 4,
+        "column": 55,
+        "message": "'Smartphone' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 13,
+        "column": 13,
+        "message": "'theme' is assigned a value but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/lib/memory.ts",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 10,
+        "column": 37,
+        "message": "'Collection' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/scripts/migrate_css_to_json.mjs",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 61,
+        "column": 18,
+        "message": "'e' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/themes/organism-registry.ts",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-explicit-any",
+        "line": 28,
+        "column": 30,
+        "message": "Unexpected any. Specify a different type."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/zap/foundations/activities/index.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 14,
+        "column": 13,
+        "message": "'theme' is assigned a value but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/zap/foundations/billing/index.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 4,
+        "column": 32,
+        "message": "'ExternalLink' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 13,
+        "column": 13,
+        "message": "'theme' is assigned a value but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/zap/foundations/colors/page_backup.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 18,
+        "column": 10,
+        "message": "'Card' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 18,
+        "column": 16,
+        "message": "'CardHeader' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 18,
+        "column": 28,
+        "message": "'CardTitle' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 18,
+        "column": 39,
+        "message": "'CardContent' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 18,
+        "column": 52,
+        "message": "'CardFooter' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 69,
+        "column": 55,
+        "message": "'e' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/zap/foundations/combat-signin/index.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 7,
+        "column": 10,
+        "message": "'RiErrorWarningFill' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 27,
+        "column": 13,
+        "message": "'theme' is assigned a value but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/zap/foundations/diagrams/index.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 192,
+        "column": 13,
+        "message": "'theme' is assigned a value but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/zap/foundations/geometry/index.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 7,
+        "column": 13,
+        "message": "'theme' is assigned a value but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/zap/layout/EmptyStateContainer.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 4,
+        "column": 10,
+        "message": "'cn' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 15,
+        "column": 27,
+        "message": "'setSidebarState' is assigned a value but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 16,
+        "column": 11,
+        "message": "'isSidebarCollapsed' is assigned a value but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/zap/layout/MasterVerticalShell.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 35,
+        "column": 5,
+        "message": "'showInspector' is assigned a value but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 80,
+        "column": 9,
+        "message": "'isInspectorCollapsed' is assigned a value but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/zap/organisms/color_factory/DevicePreviewStage.tsx",
+    "messages": [
+      {
+        "ruleId": "react/no-unescaped-entities",
+        "line": 269,
+        "column": 133,
+        "message": "`'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/zap/organisms/typography_factory/FontInspectorPanel.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 4,
+        "column": 10,
+        "message": "'Icon' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/zap/sections/atoms/border_radius/body.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 8,
+        "column": 42,
+        "message": "'PerComponentOverride' is defined but never used."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 15,
+        "column": 55,
+        "message": "'universal' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/zap/sections/atoms/border_radius/inspector.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 5,
+        "column": 80,
+        "message": "'ComponentBorderMapping' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/zap/sections/atoms/border_radius/use-border-properties.ts",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 93,
+        "column": 15,
+        "message": "'defaults' is assigned a value but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/zap/sections/atoms/layout-grid/core-body.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 14,
+        "column": 44,
+        "message": "'_platform' is defined but never used."
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/zap/Workspace/olympus/packages/zap-design/src/zap/sections/molecules/email/atoms/EmailAtoms.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "line": 6,
+        "column": 11,
+        "message": "'EmailAtomProps' is defined but never used."
+      },
+      {
+        "ruleId": "@next/next/no-img-element",
+        "line": 27,
+        "column": 21,
+        "message": "Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element"
+      }
+    ]
+  }
+]

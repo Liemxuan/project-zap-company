@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal AI Configuration - BYOK</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #f8fafc;
+            --surface: #ffffff;
+            --border: #e2e8f0;
+            --text-main: #0f172a;
+            --text-dim: #64748b;
+            --accent: #2563eb;
+            --accent-glow: rgba(37, 99, 235, 0.4);
+            --success: #10b981;
+            --error: #ef4444;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-image:
+                radial-gradient(circle at top right, rgba(37, 99, 235, 0.05), transparent 40%),
+                radial-gradient(circle at bottom left, rgba(168, 85, 247, 0.05), transparent 40%);
+            padding: 1rem;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.08);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #3b82f6, #a855f7, #ec4899);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .icon {
+            width: 56px;
+            height: 56px;
+            background: #eff6ff;
+            color: var(--accent);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.25rem auto;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);
+        }
+
+        .icon svg {
+            width: 28px;
+            height: 28px;
+            stroke-width: 2;
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            color: #0f172a;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            color: var(--text-dim);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #334155;
+        }
+
+        .form-control {
+            width: 100%;
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            color: var(--text-main);
+            padding: 0.875rem 1rem;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            outline: none;
+        }
+
+        .form-control:focus {
+            background: var(--surface);
+            border-color: var(--accent);
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+        }
+
+        select.form-control {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1.2em;
+        }
+
+        .helper-text {
+            display: block;
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            margin-top: 0.5rem;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            margin-top: 1rem;
+            box-shadow: 0 4px 12px var(--accent-glow);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px var(--accent-glow);
+            background: #1e40af;
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .submit-btn.loading {
+            color: transparent;
+        }
+
+        .submit-btn.loading::after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 1.25rem;
+            height: 1.25rem;
+            border: 2px solid white;
+            border-radius: 50%;
+            border-top-color: transparent;
+            transform: translate(-50%, -50%) rotate(0deg);
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: translate(-50%, -50%) rotate(360deg);
+            }
+        }
+
+        .toast {
+            position: fixed;
+            top: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(-150%);
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 1rem 1.5rem;
+            border-radius: 16px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.15);
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            opacity: 0;
+            z-index: 50;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="toast" id="toast"></div>
+
+    <div class="container">
+        <div class="card">
+            <div class="header">
+                <div class="icon">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z">
+                        </path>
+                    </svg>
+                </div>
+                <h1>Bring Your Own Key</h1>
+                <p>Connect your personal AI models securely to ZAP Claw by providing your customized API credentials.
+                </p>
+            </div>
+
+            <form id="byokForm">
+                <div class="form-group">
+                    <label for="agentId">Your Assigned Agent ID</label>
+                    <input type="text" id="agentId" class="form-control" placeholder="e.g., AGNT-ZVN-TOM" required
+                        autocomplete="off">
+                    <span class="helper-text">You can find this in your welcome briefing or ask your
+                        administrator.</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="provider">Select AI Provider</label>
+                    <select id="provider" class="form-control" required>
+                        <option value="GOOGLE">Google GenAI (Gemini)</option>
+                        <option value="OPENROUTER">OpenRouter (Claude, Llama, etc.)</option>
+                        <option value="OLLAMA">Ollama (Local Privacy Mode)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="defaultModel">Preferred Starting Model</label>
+                    <select id="defaultModel" class="form-control" required>
+                        <!-- Dynamic options injected by JS -->
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="apiKey">Personal API Key</label>
+                    <input type="password" id="apiKey" class="form-control" placeholder="Paste your secure token here"
+                        autocomplete="new-password">
+                    <span class="helper-text">Your key is encrypted and stored securely within your tenant
+                        database.</span>
+                </div>
+
+                <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                    <button type="button" id="testBtn" class="submit-btn"
+                        style="margin-top: 0; background: #e2e8f0; color: #334155; box-shadow: none;">Verify
+                        Key</button>
+                    <button type="submit" id="submitBtn" class="submit-btn" style="margin-top: 0;">Save
+                        Configuration</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('byokForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const providerSelect = document.getElementById('provider');
+        const defaultModelSelect = document.getElementById('defaultModel');
+
+        let SUPPORTED_MODELS = {
+            'GOOGLE': [],
+            'OPENROUTER': [],
+            'OLLAMA': []
+        };
+
+        async function initModels() {
+            try {
+                const res = await fetch('/api/models');
+                if (res.ok) {
+                    SUPPORTED_MODELS = await res.json();
+                }
+            } catch (err) {
+                console.error("Failed to load global model registry:", err);
+            }
+            updateModels();
+        }
+
+        function updateModels() {
+            const provider = providerSelect.value;
+            defaultModelSelect.innerHTML = '';
+            const models = SUPPORTED_MODELS[provider] || [];
+
+            models.forEach(model => {
+                const opt = document.createElement('option');
+                opt.value = model.id;
+                opt.textContent = model.name;
+                defaultModelSelect.appendChild(opt);
+            });
+        }
+
+        providerSelect.addEventListener('change', updateModels);
+        initModels(); // Fetch from API and format UI
+
+        function showToast(message, isSuccess = true) {
+            toast.innerHTML = isSuccess
+                ? `<span style="color: var(--success); font-size: 1.25rem;">●</span> ${message}`
+                : `<span style="color: var(--error); font-size: 1.25rem;">●</span> ${message}`;
+
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3500);
+        }
+
+        testBtn.addEventListener('click', async () => {
+            testBtn.classList.add('loading');
+            testBtn.disabled = true;
+
+            const payload = {
+                provider: providerSelect.value,
+                defaultModel: defaultModelSelect.value,
+                apiKey: document.getElementById('apiKey').value.trim()
+            };
+
+            try {
+                const response = await fetch('/api/test-key', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    showToast(`Test Successful! Connected to ${data.modelId}`);
+                } else {
+                    showToast(`Test Failed: ${data.error || 'Connection refused.'}`, false);
+                }
+            } catch (err) {
+                showToast(`Network error occurred. Cannot reach server.`, false);
+            } finally {
+                testBtn.classList.remove('loading');
+                testBtn.disabled = false;
+            }
+        });
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            submitBtn.classList.add('loading');
+            submitBtn.disabled = true;
+
+            const payload = {
+                agentId: document.getElementById('agentId').value.trim().toUpperCase(),
+                llmConfig: {
+                    provider: document.getElementById('provider').value,
+                    defaultModel: document.getElementById('defaultModel').value.trim(),
+                    apiKey: document.getElementById('apiKey').value.trim()
+                }
+            };
+
+            try {
+                const response = await fetch('/api/customer/byok', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    showToast(data.message);
+                    form.reset();
+                } else {
+                    showToast(data.error || 'Failed to authorize key. Check your Agent ID.', false);
+                }
+            } catch (err) {
+                showToast('Network error occurred.', false);
+            } finally {
+                submitBtn.classList.remove('loading');
+                submitBtn.disabled = false;
+            }
+        });
+    </script>
+    <style>
+        .zap-form-badge {
+            position: fixed;
+            bottom: 16px;
+            right: 16px;
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            color: #94a3b8;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            z-index: 9999;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            pointer-events: none;
+        }
+    </style>
+    <div class="zap-form-badge">FRM-BYOK-01 (102) &bull; Status: Working &bull; QC: Human</div>
+</body>
+
+</html>

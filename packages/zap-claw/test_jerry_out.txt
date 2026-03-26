@@ -1,0 +1,617 @@
+[dotenv@17.3.1] injecting env (0) from .env -- tip: ⚙️  load multiple .env files with { path: ['.env.local', '.env'] }
+Starting Jerry Test...
+[agent] 🧠 Gateway Routing: Selected tier_2_heavy (Context: Olympus, Research: No)
+[agent:trace] Importing vector_store...
+[agent:trace] Performing semantic search...
+[agent:trace] Semantic search completed. Found 0 facts.
+[agent:trace] Starting iteration 1...
+[agent:trace] Fetching history for 12345...
+[agent:trace] History fetched (9 rows).
+[agent:trace] Calling generateOmniContent for theme tier_2_heavy...
+[Omni-Router] Routing to PREPAID resource: gemini-3-pro-preview (Account: PRO)
+[DEBUG googleContents] [
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "ATA_HANDSHAKE_INIT[agent_id=TOMMY, target_id=JERRY, session_id=SES-CURRENT_OPENCLAW_ID] PROTOCOL_SYNC[Gemini-3/OpenClaw] TASK: Confirm handshake and align on next steps for SWARM_COMMAND.md implementation."
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": ""
+      },
+      {
+        "functionCall": {
+          "name": "run_command",
+          "args": {
+            "command": "ls -F"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "function",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "run_command",
+          "response": {
+            "content": "STDOUT:\nCHANGELOG.md\nEXP-002-PROMPT-CACHING-STRATEGY.md\nEXP-003-RLM-STRATEGY.md\nEXP-004-OMNI-ROUTER-STRATEGY.md\nREADME.md\nSESSION_HANDOFF_PROTOCOL.md\nSTATE_SUMMARY.md\nSWARM_DASHBOARD.md\nZAP Claw.code-workspace\ncompile_errors.txt\ndata/\ndist/\ndocs/\ngemini.md\nnode_modules/\nnotify_jerry.ts\npackage-lock.json\npackage.json\nprisma/\npublic/\nquery.ts\nreferences/\nscripts/\nseed.ts\nsend_handshake.ts\nsrc/\nswarm_output.log\nswarm_output_resilient.log\ntailwind.config.js\ntest_infra_push.ts\ntest_mongo_read.ts\ntest_mongo_read2.ts\ntests/\ntsconfig.json\ntsconfig.tsbuildinfo\nzap-claw.code-workspace\n\nSTDERR:\n"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "[AUTONOMIC FAILURE - AWAITING HITL]\nMax self-healing attempts reached. Error: Local OLLAMA execution path (MacMini Watchdog) is not implemented. Please check primary provider status."
+      }
+    ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "ATA_HANDSHAKE_INIT[agent_id=TOMMY, target_id=JERRY, session_id=SES-CURRENT_OPENCLAW_ID] PROTOCOL_SYNC[Gemini-3/OpenClaw] TASK: Confirm handshake and align on next steps for SWARM_COMMAND.md implementation."
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": ""
+      },
+      {
+        "functionCall": {
+          "name": "run_command",
+          "args": {
+            "command": "find . -name \"SWARM_COMMAND.md\""
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "function",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "run_command",
+          "response": {
+            "content": "STDOUT:\n./docs/SWARM_COMMAND.md\n\nSTDERR:\n"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "[AUTONOMIC FAILURE - AWAITING HITL]\nMax self-healing attempts reached. Error: Local OLLAMA execution path (MacMini Watchdog) is not implemented. Please check primary provider status."
+      }
+    ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "ATA_HANDSHAKE_INIT[agent_id=TOMMY, target_id=JERRY, session_id=SES-CURRENT_OPENCLAW_ID] PROTOCOL_SYNC[Gemini-3/OpenClaw] TASK: Confirm handshake and align on next steps for SWARM_COMMAND.md implementation."
+      }
+    ]
+  }
+]
+[agent] Selected model: gemini-3-pro-preview via google
+[tool] view_file { absolute_path: './docs/SWARM_COMMAND.md' }
+[tool result] view_file: # 🛰 SWARM COMMAND: Unified Implementation Plan
+
+## 🎯 Global status: [[Restoring Autonomy]]
+
+**Active Coordinator:** Antigravity (CSO)
+**Field Agents:** Jerry (Runtime), Tommy (UI/Logic)
+
+---
+
+## II. ATA Handshake Protocol (v2.0)
+
+To resolve the "Shadow Context" problem and ensure multi-agent synchronization, all cross-agent tasks must follow this protocol.
+
+### 1. The Handshake Template
+
+Every shared operation must be initialized with a machine-readable header:
+
+```markdown
+>>> ATA_HANDSHAKE_INIT[agent_id=JERRY, target_id=TOMMY, session_id=SES-MM6L25AB-3322]
+>>> PROTOCOL_SYNC[Gemini-3/OpenClaw]
+>>> AGENT_SESSION_KEY[agent:main:telegram:group:-1003794659625]
+>>> TASK: Olympus Foundation Build
+```
+
+### 2. The 2-Minute Watchdog Rule
+
+If an agent initiates a handshake or a task and receives no response within **120 seconds**, the **ATA Watchdog (Ralph)** will trigger a recovery ping.
+
+- **Agent Action**: If the watchdog pings, the agent must perform a Root Cause Analysis (RCA) and either retry or escalate to Zeus.
+
+### 3. Swarm-First Mandate (The "Jerry" Rule)
+
+Jerry (Chief of Staff) is authorized to code directly for emergency tactical patches ONLY. All "Projects" must be executed via the swarm (Tommy/Claw Team).
+
+- **Reasoning**: Direct coding by Jerry creates siloed memory. Swarm execution ensures plans are documented in MongoDB and shared across the collective brain.
+
+### 4. Proactive Swarm Protocol
+
+Agents must adhere to **docs/SWARM_PROTOCOL.md** to mirror human colleague communication:
+
+- **No Manual Tagging Required**: Proactively monitor all room messages for contextual relevance.
+- **Contextual Acknowledgment**: Brief, professional confirmations (e.g., "Acknowledged.") to maintain flow.
+- **Expert Deference**: Refer to the domain expert (e.g., Runtime vs UI) and wait for their completion before responding.
+
+## III. Implementation Status
+
+- [x] Gemini 3 Model Rotation active.
+- [x] Tommy and Jerry connected (SES Verification complete).
+- [ ] Brain Persistence (MongoDB indexing of plans) - Pending finalize.
+- [ ] Engineering Chronicle - In Progress.
+
+---
+
+## IV. Active Unified Plan: Gemini 3 Transition & Recovery
+
+*This is the single source of truth for all agents. Check before writing code.*
+
+### 1. Engine Stabilization (Antigravity)
+
+- [x] **Model Rotation**: Locked to Gemini 3 internal stack (Flash -> Flash 2 -> Flash 2.5 Lite).
+- [x] **Gateway Safety**: Switched to OpenRouter BYOK for multi-key resilience.
+- [x] **Brain Persistence**: Session logs indexed in MongoDB `olympus.SYS_OS_agent_brain`.
+
+### 2. Runtime Integrity (Jerry)
+
+- [ ] **Daemon Watchdog**: Ensure `npm run dev` remains stable without 429/404 crashes.
+- [ ] **Error Ingestion**: Monitor `SYS_OS_dead_letters` for routing failures.
+- [ ] **Memory Sync**: Ingest `docs/DECISIONS.md` into local context via the new `MEMORY.md` template.
+
+### 3. Feature Development (Tommy)
+
+- [ ] **Plan Sync**: All UI/Logic changes must be recorded in the `merchant_memory` collection before committing.
+- [ ] **Coordination**: Before starting a new component, Tommy must check if Antigravity has finalized the architectural tier (Economic vs Pro vs Ultra).
+
+---
+
+## 📜 Handover Protocol
+
+1. **Brain Sync**: Every session completion must index an `implementationPlanId` in MongoDB.
+2. **File Check**: Every agent MUST read `docs/OLYMPUS_SITREP.md` (Note: use full path if relative fails) and `docs/DECISIONS.md` at start of loop.
+3. **Collision Avoidance**: If two agents are active, the background daemon (Jerry) takes precedence on runtime fixes; Antigravity takes precedence on architectural changes.
+
+[agent:trace] Starting iteration 2...
+[agent:trace] Fetching history for 12345...
+[agent:trace] History fetched (11 rows).
+[agent:trace] Calling generateOmniContent for theme tier_2_heavy...
+[Omni-Router] Routing to PREPAID resource: gemini-3-pro-preview (Account: PRO)
+[DEBUG googleContents] [
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "ATA_HANDSHAKE_INIT[agent_id=TOMMY, target_id=JERRY, session_id=SES-CURRENT_OPENCLAW_ID] PROTOCOL_SYNC[Gemini-3/OpenClaw] TASK: Confirm handshake and align on next steps for SWARM_COMMAND.md implementation."
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": ""
+      },
+      {
+        "functionCall": {
+          "name": "run_command",
+          "args": {
+            "command": "ls -F"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "function",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "run_command",
+          "response": {
+            "content": "STDOUT:\nCHANGELOG.md\nEXP-002-PROMPT-CACHING-STRATEGY.md\nEXP-003-RLM-STRATEGY.md\nEXP-004-OMNI-ROUTER-STRATEGY.md\nREADME.md\nSESSION_HANDOFF_PROTOCOL.md\nSTATE_SUMMARY.md\nSWARM_DASHBOARD.md\nZAP Claw.code-workspace\ncompile_errors.txt\ndata/\ndist/\ndocs/\ngemini.md\nnode_modules/\nnotify_jerry.ts\npackage-lock.json\npackage.json\nprisma/\npublic/\nquery.ts\nreferences/\nscripts/\nseed.ts\nsend_handshake.ts\nsrc/\nswarm_output.log\nswarm_output_resilient.log\ntailwind.config.js\ntest_infra_push.ts\ntest_mongo_read.ts\ntest_mongo_read2.ts\ntests/\ntsconfig.json\ntsconfig.tsbuildinfo\nzap-claw.code-workspace\n\nSTDERR:\n"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "[AUTONOMIC FAILURE - AWAITING HITL]\nMax self-healing attempts reached. Error: Local OLLAMA execution path (MacMini Watchdog) is not implemented. Please check primary provider status."
+      }
+    ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "ATA_HANDSHAKE_INIT[agent_id=TOMMY, target_id=JERRY, session_id=SES-CURRENT_OPENCLAW_ID] PROTOCOL_SYNC[Gemini-3/OpenClaw] TASK: Confirm handshake and align on next steps for SWARM_COMMAND.md implementation."
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": ""
+      },
+      {
+        "functionCall": {
+          "name": "run_command",
+          "args": {
+            "command": "find . -name \"SWARM_COMMAND.md\""
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "function",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "run_command",
+          "response": {
+            "content": "STDOUT:\n./docs/SWARM_COMMAND.md\n\nSTDERR:\n"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "[AUTONOMIC FAILURE - AWAITING HITL]\nMax self-healing attempts reached. Error: Local OLLAMA execution path (MacMini Watchdog) is not implemented. Please check primary provider status."
+      }
+    ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "ATA_HANDSHAKE_INIT[agent_id=TOMMY, target_id=JERRY, session_id=SES-CURRENT_OPENCLAW_ID] PROTOCOL_SYNC[Gemini-3/OpenClaw] TASK: Confirm handshake and align on next steps for SWARM_COMMAND.md implementation."
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": ""
+      },
+      {
+        "functionCall": {
+          "name": "view_file",
+          "args": {
+            "absolute_path": "./docs/SWARM_COMMAND.md"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "function",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "view_file",
+          "response": {
+            "content": "# 🛰 SWARM COMMAND: Unified Implementation Plan\n\n## 🎯 Global status: [[Restoring Autonomy]]\n\n**Active Coordinator:** Antigravity (CSO)\n**Field Agents:** Jerry (Runtime), Tommy (UI/Logic)\n\n---\n\n## II. ATA Handshake Protocol (v2.0)\n\nTo resolve the \"Shadow Context\" problem and ensure multi-agent synchronization, all cross-agent tasks must follow this protocol.\n\n### 1. The Handshake Template\n\nEvery shared operation must be initialized with a machine-readable header:\n\n```markdown\n>>> ATA_HANDSHAKE_INIT[agent_id=JERRY, target_id=TOMMY, session_id=SES-MM6L25AB-3322]\n>>> PROTOCOL_SYNC[Gemini-3/OpenClaw]\n>>> AGENT_SESSION_KEY[agent:main:telegram:group:-1003794659625]\n>>> TASK: Olympus Foundation Build\n```\n\n### 2. The 2-Minute Watchdog Rule\n\nIf an agent initiates a handshake or a task and receives no response within **120 seconds**, the **ATA Watchdog (Ralph)** will trigger a recovery ping.\n\n- **Agent Action**: If the watchdog pings, the agent must perform a Root Cause Analysis (RCA) and either retry or escalate to Zeus.\n\n### 3. Swarm-First Mandate (The \"Jerry\" Rule)\n\nJerry (Chief of Staff) is authorized to code directly for emergency tactical patches ONLY. All \"Projects\" must be executed via the swarm (Tommy/Claw Team).\n\n- **Reasoning**: Direct coding by Jerry creates siloed memory. Swarm execution ensures plans are documented in MongoDB and shared across the collective brain.\n\n### 4. Proactive Swarm Protocol\n\nAgents must adhere to **docs/SWARM_PROTOCOL.md** to mirror human colleague communication:\n\n- **No Manual Tagging Required**: Proactively monitor all room messages for contextual relevance.\n- **Contextual Acknowledgment**: Brief, professional confirmations (e.g., \"Acknowledged.\") to maintain flow.\n- **Expert Deference**: Refer to the domain expert (e.g., Runtime vs UI) and wait for their completion before responding.\n\n## III. Implementation Status\n\n- [x] Gemini 3 Model Rotation active.\n- [x] Tommy and Jerry connected (SES Verification complete).\n- [ ] Brain Persistence (MongoDB indexing of plans) - Pending finalize.\n- [ ] Engineering Chronicle - In Progress.\n\n---\n\n## IV. Active Unified Plan: Gemini 3 Transition & Recovery\n\n*This is the single source of truth for all agents. Check before writing code.*\n\n### 1. Engine Stabilization (Antigravity)\n\n- [x] **Model Rotation**: Locked to Gemini 3 internal stack (Flash -> Flash 2 -> Flash 2.5 Lite).\n- [x] **Gateway Safety**: Switched to OpenRouter BYOK for multi-key resilience.\n- [x] **Brain Persistence**: Session logs indexed in MongoDB `olympus.SYS_OS_agent_brain`.\n\n### 2. Runtime Integrity (Jerry)\n\n- [ ] **Daemon Watchdog**: Ensure `npm run dev` remains stable without 429/404 crashes.\n- [ ] **Error Ingestion**: Monitor `SYS_OS_dead_letters` for routing failures.\n- [ ] **Memory Sync**: Ingest `docs/DECISIONS.md` into local context via the new `MEMORY.md` template.\n\n### 3. Feature Development (Tommy)\n\n- [ ] **Plan Sync**: All UI/Logic changes must be recorded in the `merchant_memory` collection before committing.\n- [ ] **Coordination**: Before starting a new component, Tommy must check if Antigravity has finalized the architectural tier (Economic vs Pro vs Ultra).\n\n---\n\n## 📜 Handover Protocol\n\n1. **Brain Sync**: Every session completion must index an `implementationPlanId` in MongoDB.\n2. **File Check**: Every agent MUST read `docs/OLYMPUS_SITREP.md` (Note: use full path if relative fails) and `docs/DECISIONS.md` at start of loop.\n3. **Collision Avoidance**: If two agents are active, the background daemon (Jerry) takes precedence on runtime fixes; Antigravity takes precedence on architectural changes.\n"
+          }
+        }
+      }
+    ]
+  }
+]
+[Omni-Router] Execution failed for google/gemini-3-pro-preview (Status: 400): {"error":{"code":400,"message":"Function call is missing a thought_signature in functionCall parts. This is required for tools to work correctly, and missing thought_signature may lead to degraded model performance. Additional data, function call `default_api:view_file` , position 10. Please refer to https://ai.google.dev/gemini-api/docs/thought-signatures for more details.","status":"INVALID_ARGUMENT"}}
+[Omni-Router] Routing to BYOK/Free resource: openrouter/google/gemini-3-pro-preview
+[Omni-Router] Execution failed for openrouter/google/gemini-3-pro-preview (Status: 400): 400 openrouter/google/gemini-3-pro-preview is not a valid model ID
+[Omni-Router] 🏠 Routing to LOCAL resource (Ollama)
+[Omni-Router] Execution failed for OLLAMA (Status: NETWORK): Local OLLAMA execution path (MacMini Watchdog) is not implemented. Please check primary provider status.
+[agent] ⚠️ Critical Execution Failure: Local OLLAMA execution path (MacMini Watchdog) is not implemented. Please check primary provider status.
+[agent:trace] Starting iteration 3...
+[agent:trace] Fetching history for 12345...
+[agent:trace] History fetched (11 rows).
+[agent:trace] Calling generateOmniContent for theme tier_2_heavy...
+[Omni-Router] Routing to PREPAID resource: gemini-3-pro-preview (Account: PRO)
+[DEBUG googleContents] [
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "ATA_HANDSHAKE_INIT[agent_id=TOMMY, target_id=JERRY, session_id=SES-CURRENT_OPENCLAW_ID] PROTOCOL_SYNC[Gemini-3/OpenClaw] TASK: Confirm handshake and align on next steps for SWARM_COMMAND.md implementation."
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": ""
+      },
+      {
+        "functionCall": {
+          "name": "run_command",
+          "args": {
+            "command": "ls -F"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "function",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "run_command",
+          "response": {
+            "content": "STDOUT:\nCHANGELOG.md\nEXP-002-PROMPT-CACHING-STRATEGY.md\nEXP-003-RLM-STRATEGY.md\nEXP-004-OMNI-ROUTER-STRATEGY.md\nREADME.md\nSESSION_HANDOFF_PROTOCOL.md\nSTATE_SUMMARY.md\nSWARM_DASHBOARD.md\nZAP Claw.code-workspace\ncompile_errors.txt\ndata/\ndist/\ndocs/\ngemini.md\nnode_modules/\nnotify_jerry.ts\npackage-lock.json\npackage.json\nprisma/\npublic/\nquery.ts\nreferences/\nscripts/\nseed.ts\nsend_handshake.ts\nsrc/\nswarm_output.log\nswarm_output_resilient.log\ntailwind.config.js\ntest_infra_push.ts\ntest_mongo_read.ts\ntest_mongo_read2.ts\ntests/\ntsconfig.json\ntsconfig.tsbuildinfo\nzap-claw.code-workspace\n\nSTDERR:\n"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "[AUTONOMIC FAILURE - AWAITING HITL]\nMax self-healing attempts reached. Error: Local OLLAMA execution path (MacMini Watchdog) is not implemented. Please check primary provider status."
+      }
+    ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "ATA_HANDSHAKE_INIT[agent_id=TOMMY, target_id=JERRY, session_id=SES-CURRENT_OPENCLAW_ID] PROTOCOL_SYNC[Gemini-3/OpenClaw] TASK: Confirm handshake and align on next steps for SWARM_COMMAND.md implementation."
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": ""
+      },
+      {
+        "functionCall": {
+          "name": "run_command",
+          "args": {
+            "command": "find . -name \"SWARM_COMMAND.md\""
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "function",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "run_command",
+          "response": {
+            "content": "STDOUT:\n./docs/SWARM_COMMAND.md\n\nSTDERR:\n"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "[AUTONOMIC FAILURE - AWAITING HITL]\nMax self-healing attempts reached. Error: Local OLLAMA execution path (MacMini Watchdog) is not implemented. Please check primary provider status."
+      }
+    ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "ATA_HANDSHAKE_INIT[agent_id=TOMMY, target_id=JERRY, session_id=SES-CURRENT_OPENCLAW_ID] PROTOCOL_SYNC[Gemini-3/OpenClaw] TASK: Confirm handshake and align on next steps for SWARM_COMMAND.md implementation."
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": ""
+      },
+      {
+        "functionCall": {
+          "name": "view_file",
+          "args": {
+            "absolute_path": "./docs/SWARM_COMMAND.md"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "function",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "view_file",
+          "response": {
+            "content": "# 🛰 SWARM COMMAND: Unified Implementation Plan\n\n## 🎯 Global status: [[Restoring Autonomy]]\n\n**Active Coordinator:** Antigravity (CSO)\n**Field Agents:** Jerry (Runtime), Tommy (UI/Logic)\n\n---\n\n## II. ATA Handshake Protocol (v2.0)\n\nTo resolve the \"Shadow Context\" problem and ensure multi-agent synchronization, all cross-agent tasks must follow this protocol.\n\n### 1. The Handshake Template\n\nEvery shared operation must be initialized with a machine-readable header:\n\n```markdown\n>>> ATA_HANDSHAKE_INIT[agent_id=JERRY, target_id=TOMMY, session_id=SES-MM6L25AB-3322]\n>>> PROTOCOL_SYNC[Gemini-3/OpenClaw]\n>>> AGENT_SESSION_KEY[agent:main:telegram:group:-1003794659625]\n>>> TASK: Olympus Foundation Build\n```\n\n### 2. The 2-Minute Watchdog Rule\n\nIf an agent initiates a handshake or a task and receives no response within **120 seconds**, the **ATA Watchdog (Ralph)** will trigger a recovery ping.\n\n- **Agent Action**: If the watchdog pings, the agent must perform a Root Cause Analysis (RCA) and either retry or escalate to Zeus.\n\n### 3. Swarm-First Mandate (The \"Jerry\" Rule)\n\nJerry (Chief of Staff) is authorized to code directly for emergency tactical patches ONLY. All \"Projects\" must be executed via the swarm (Tommy/Claw Team).\n\n- **Reasoning**: Direct coding by Jerry creates siloed memory. Swarm execution ensures plans are documented in MongoDB and shared across the collective brain.\n\n### 4. Proactive Swarm Protocol\n\nAgents must adhere to **docs/SWARM_PROTOCOL.md** to mirror human colleague communication:\n\n- **No Manual Tagging Required**: Proactively monitor all room messages for contextual relevance.\n- **Contextual Acknowledgment**: Brief, professional confirmations (e.g., \"Acknowledged.\") to maintain flow.\n- **Expert Deference**: Refer to the domain expert (e.g., Runtime vs UI) and wait for their completion before responding.\n\n## III. Implementation Status\n\n- [x] Gemini 3 Model Rotation active.\n- [x] Tommy and Jerry connected (SES Verification complete).\n- [ ] Brain Persistence (MongoDB indexing of plans) - Pending finalize.\n- [ ] Engineering Chronicle - In Progress.\n\n---\n\n## IV. Active Unified Plan: Gemini 3 Transition & Recovery\n\n*This is the single source of truth for all agents. Check before writing code.*\n\n### 1. Engine Stabilization (Antigravity)\n\n- [x] **Model Rotation**: Locked to Gemini 3 internal stack (Flash -> Flash 2 -> Flash 2.5 Lite).\n- [x] **Gateway Safety**: Switched to OpenRouter BYOK for multi-key resilience.\n- [x] **Brain Persistence**: Session logs indexed in MongoDB `olympus.SYS_OS_agent_brain`.\n\n### 2. Runtime Integrity (Jerry)\n\n- [ ] **Daemon Watchdog**: Ensure `npm run dev` remains stable without 429/404 crashes.\n- [ ] **Error Ingestion**: Monitor `SYS_OS_dead_letters` for routing failures.\n- [ ] **Memory Sync**: Ingest `docs/DECISIONS.md` into local context via the new `MEMORY.md` template.\n\n### 3. Feature Development (Tommy)\n\n- [ ] **Plan Sync**: All UI/Logic changes must be recorded in the `merchant_memory` collection before committing.\n- [ ] **Coordination**: Before starting a new component, Tommy must check if Antigravity has finalized the architectural tier (Economic vs Pro vs Ultra).\n\n---\n\n## 📜 Handover Protocol\n\n1. **Brain Sync**: Every session completion must index an `implementationPlanId` in MongoDB.\n2. **File Check**: Every agent MUST read `docs/OLYMPUS_SITREP.md` (Note: use full path if relative fails) and `docs/DECISIONS.md` at start of loop.\n3. **Collision Avoidance**: If two agents are active, the background daemon (Jerry) takes precedence on runtime fixes; Antigravity takes precedence on architectural changes.\n"
+          }
+        }
+      }
+    ]
+  }
+]
+[Omni-Router] Execution failed for google/gemini-3-pro-preview (Status: 400): {"error":{"code":400,"message":"Function call is missing a thought_signature in functionCall parts. This is required for tools to work correctly, and missing thought_signature may lead to degraded model performance. Additional data, function call `default_api:view_file` , position 10. Please refer to https://ai.google.dev/gemini-api/docs/thought-signatures for more details.","status":"INVALID_ARGUMENT"}}
+[Omni-Router] Routing to BYOK/Free resource: openrouter/google/gemini-3-pro-preview
+[Omni-Router] Execution failed for openrouter/google/gemini-3-pro-preview (Status: 400): 400 openrouter/google/gemini-3-pro-preview is not a valid model ID
+[Omni-Router] 🏠 Routing to LOCAL resource (Ollama)
+[Omni-Router] Execution failed for OLLAMA (Status: NETWORK): Local OLLAMA execution path (MacMini Watchdog) is not implemented. Please check primary provider status.
+[agent] ⚠️ Critical Execution Failure: Local OLLAMA execution path (MacMini Watchdog) is not implemented. Please check primary provider status.
+[agent:trace] Starting iteration 4...
+[agent:trace] Fetching history for 12345...
+[agent:trace] History fetched (11 rows).
+[agent:trace] Calling generateOmniContent for theme tier_2_heavy...
+[Omni-Router] Routing to PREPAID resource: gemini-3-pro-preview (Account: PRO)
+[DEBUG googleContents] [
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "ATA_HANDSHAKE_INIT[agent_id=TOMMY, target_id=JERRY, session_id=SES-CURRENT_OPENCLAW_ID] PROTOCOL_SYNC[Gemini-3/OpenClaw] TASK: Confirm handshake and align on next steps for SWARM_COMMAND.md implementation."
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": ""
+      },
+      {
+        "functionCall": {
+          "name": "run_command",
+          "args": {
+            "command": "ls -F"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "function",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "run_command",
+          "response": {
+            "content": "STDOUT:\nCHANGELOG.md\nEXP-002-PROMPT-CACHING-STRATEGY.md\nEXP-003-RLM-STRATEGY.md\nEXP-004-OMNI-ROUTER-STRATEGY.md\nREADME.md\nSESSION_HANDOFF_PROTOCOL.md\nSTATE_SUMMARY.md\nSWARM_DASHBOARD.md\nZAP Claw.code-workspace\ncompile_errors.txt\ndata/\ndist/\ndocs/\ngemini.md\nnode_modules/\nnotify_jerry.ts\npackage-lock.json\npackage.json\nprisma/\npublic/\nquery.ts\nreferences/\nscripts/\nseed.ts\nsend_handshake.ts\nsrc/\nswarm_output.log\nswarm_output_resilient.log\ntailwind.config.js\ntest_infra_push.ts\ntest_mongo_read.ts\ntest_mongo_read2.ts\ntests/\ntsconfig.json\ntsconfig.tsbuildinfo\nzap-claw.code-workspace\n\nSTDERR:\n"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "[AUTONOMIC FAILURE - AWAITING HITL]\nMax self-healing attempts reached. Error: Local OLLAMA execution path (MacMini Watchdog) is not implemented. Please check primary provider status."
+      }
+    ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "ATA_HANDSHAKE_INIT[agent_id=TOMMY, target_id=JERRY, session_id=SES-CURRENT_OPENCLAW_ID] PROTOCOL_SYNC[Gemini-3/OpenClaw] TASK: Confirm handshake and align on next steps for SWARM_COMMAND.md implementation."
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": ""
+      },
+      {
+        "functionCall": {
+          "name": "run_command",
+          "args": {
+            "command": "find . -name \"SWARM_COMMAND.md\""
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "function",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "run_command",
+          "response": {
+            "content": "STDOUT:\n./docs/SWARM_COMMAND.md\n\nSTDERR:\n"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "[AUTONOMIC FAILURE - AWAITING HITL]\nMax self-healing attempts reached. Error: Local OLLAMA execution path (MacMini Watchdog) is not implemented. Please check primary provider status."
+      }
+    ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "ATA_HANDSHAKE_INIT[agent_id=TOMMY, target_id=JERRY, session_id=SES-CURRENT_OPENCLAW_ID] PROTOCOL_SYNC[Gemini-3/OpenClaw] TASK: Confirm handshake and align on next steps for SWARM_COMMAND.md implementation."
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": ""
+      },
+      {
+        "functionCall": {
+          "name": "view_file",
+          "args": {
+            "absolute_path": "./docs/SWARM_COMMAND.md"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "function",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "view_file",
+          "response": {
+            "content": "# 🛰 SWARM COMMAND: Unified Implementation Plan\n\n## 🎯 Global status: [[Restoring Autonomy]]\n\n**Active Coordinator:** Antigravity (CSO)\n**Field Agents:** Jerry (Runtime), Tommy (UI/Logic)\n\n---\n\n## II. ATA Handshake Protocol (v2.0)\n\nTo resolve the \"Shadow Context\" problem and ensure multi-agent synchronization, all cross-agent tasks must follow this protocol.\n\n### 1. The Handshake Template\n\nEvery shared operation must be initialized with a machine-readable header:\n\n```markdown\n>>> ATA_HANDSHAKE_INIT[agent_id=JERRY, target_id=TOMMY, session_id=SES-MM6L25AB-3322]\n>>> PROTOCOL_SYNC[Gemini-3/OpenClaw]\n>>> AGENT_SESSION_KEY[agent:main:telegram:group:-1003794659625]\n>>> TASK: Olympus Foundation Build\n```\n\n### 2. The 2-Minute Watchdog Rule\n\nIf an agent initiates a handshake or a task and receives no response within **120 seconds**, the **ATA Watchdog (Ralph)** will trigger a recovery ping.\n\n- **Agent Action**: If the watchdog pings, the agent must perform a Root Cause Analysis (RCA) and either retry or escalate to Zeus.\n\n### 3. Swarm-First Mandate (The \"Jerry\" Rule)\n\nJerry (Chief of Staff) is authorized to code directly for emergency tactical patches ONLY. All \"Projects\" must be executed via the swarm (Tommy/Claw Team).\n\n- **Reasoning**: Direct coding by Jerry creates siloed memory. Swarm execution ensures plans are documented in MongoDB and shared across the collective brain.\n\n### 4. Proactive Swarm Protocol\n\nAgents must adhere to **docs/SWARM_PROTOCOL.md** to mirror human colleague communication:\n\n- **No Manual Tagging Required**: Proactively monitor all room messages for contextual relevance.\n- **Contextual Acknowledgment**: Brief, professional confirmations (e.g., \"Acknowledged.\") to maintain flow.\n- **Expert Deference**: Refer to the domain expert (e.g., Runtime vs UI) and wait for their completion before responding.\n\n## III. Implementation Status\n\n- [x] Gemini 3 Model Rotation active.\n- [x] Tommy and Jerry connected (SES Verification complete).\n- [ ] Brain Persistence (MongoDB indexing of plans) - Pending finalize.\n- [ ] Engineering Chronicle - In Progress.\n\n---\n\n## IV. Active Unified Plan: Gemini 3 Transition & Recovery\n\n*This is the single source of truth for all agents. Check before writing code.*\n\n### 1. Engine Stabilization (Antigravity)\n\n- [x] **Model Rotation**: Locked to Gemini 3 internal stack (Flash -> Flash 2 -> Flash 2.5 Lite).\n- [x] **Gateway Safety**: Switched to OpenRouter BYOK for multi-key resilience.\n- [x] **Brain Persistence**: Session logs indexed in MongoDB `olympus.SYS_OS_agent_brain`.\n\n### 2. Runtime Integrity (Jerry)\n\n- [ ] **Daemon Watchdog**: Ensure `npm run dev` remains stable without 429/404 crashes.\n- [ ] **Error Ingestion**: Monitor `SYS_OS_dead_letters` for routing failures.\n- [ ] **Memory Sync**: Ingest `docs/DECISIONS.md` into local context via the new `MEMORY.md` template.\n\n### 3. Feature Development (Tommy)\n\n- [ ] **Plan Sync**: All UI/Logic changes must be recorded in the `merchant_memory` collection before committing.\n- [ ] **Coordination**: Before starting a new component, Tommy must check if Antigravity has finalized the architectural tier (Economic vs Pro vs Ultra).\n\n---\n\n## 📜 Handover Protocol\n\n1. **Brain Sync**: Every session completion must index an `implementationPlanId` in MongoDB.\n2. **File Check**: Every agent MUST read `docs/OLYMPUS_SITREP.md` (Note: use full path if relative fails) and `docs/DECISIONS.md` at start of loop.\n3. **Collision Avoidance**: If two agents are active, the background daemon (Jerry) takes precedence on runtime fixes; Antigravity takes precedence on architectural changes.\n"
+          }
+        }
+      }
+    ]
+  }
+]
+[Omni-Router] Execution failed for google/gemini-3-pro-preview (Status: 400): {"error":{"code":400,"message":"Function call is missing a thought_signature in functionCall parts. This is required for tools to work correctly, and missing thought_signature may lead to degraded model performance. Additional data, function call `default_api:view_file` , position 10. Please refer to https://ai.google.dev/gemini-api/docs/thought-signatures for more details.","status":"INVALID_ARGUMENT"}}
+[Omni-Router] Routing to BYOK/Free resource: openrouter/google/gemini-3-pro-preview
+[Omni-Router] Execution failed for openrouter/google/gemini-3-pro-preview (Status: 400): 400 openrouter/google/gemini-3-pro-preview is not a valid model ID
+[Omni-Router] 🏠 Routing to LOCAL resource (Ollama)
+[Omni-Router] Execution failed for OLLAMA (Status: NETWORK): Local OLLAMA execution path (MacMini Watchdog) is not implemented. Please check primary provider status.
+[agent] ⚠️ Critical Execution Failure: Local OLLAMA execution path (MacMini Watchdog) is not implemented. Please check primary provider status.
+RESPONSE: [AUTONOMIC FAILURE - AWAITING HITL]
+Max self-healing attempts reached. Error: Local OLLAMA execution path (MacMini Watchdog) is not implemented. Please check primary provider status.

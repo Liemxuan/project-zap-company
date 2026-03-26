@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ZAP Molecules: Deep Navigation &amp; Inspector</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Public+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f9e54e",
+                        "acid-yellow": "#D4FF00",
+                        "neon-green": "#39FF14",
+                        "error-red": "#FF4500",
+                        "background-light": "#f5f5f0",
+                        "panel-white": "#ffffff",
+                        "zap-black": "#1c1a0d",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"],
+                        "body": ["Public Sans", "sans-serif"]
+                    },
+                    keyframes: {
+                        shimmer: {
+                            '0%': { transform: 'translateX(-100%)' },
+                            '100%': { transform: 'translateX(100%)' }
+                        }
+                    },
+                    animation: {
+                        shimmer: 'shimmer 1.5s infinite linear'
+                    }
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        @layer components {
+            .neo-border {
+                @apply border border-zap-black;
+            }
+            .neo-shadow {
+                box-shadow: 4px 4px 0px 0px #1c1a0d;
+            }
+            .stretcher-handle {
+                @apply absolute top-1/2 -translate-y-1/2 w-1.5 h-12 bg-neon-green neo-border rounded-full cursor-col-resize z-30 hover:bg-zap-black hover:scale-110 transition-transform;
+            }
+            .collapse-btn {
+                @apply absolute top-3 size-8 neo-border bg-panel-white flex items-center justify-center hover:bg-primary transition-colors z-30 shadow-sm hover:shadow-md;
+            }
+            .tree-line {
+                @apply absolute left-2.5 top-0 bottom-0 w-px bg-slate-300;
+            }
+        }
+    </style>
+</head>
+<body class="bg-background-light font-body text-zap-black antialiased overflow-hidden">
+<div class="relative flex h-screen w-full flex-col">
+<header class="h-16 shrink-0 flex items-center justify-between border-b neo-border bg-panel-white px-6 z-50">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-4">
+<div class="size-6 bg-primary flex items-center justify-center neo-border">
+<span class="material-symbols-outlined text-lg">bolt</span>
+</div>
+<h2 class="font-display text-lg font-bold tracking-tight uppercase">ZAP Beta</h2>
+</div>
+<div class="h-6 w-px bg-slate-200"></div>
+<div class="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
+<span>Systems</span>
+<span class="material-symbols-outlined text-[10px]">chevron_right</span>
+<span>Core</span>
+<span class="material-symbols-outlined text-[10px]">chevron_right</span>
+<span class="text-zap-black">Molecules</span>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<nav class="hidden md:flex items-center gap-6 mr-4">
+<a class="text-xs font-bold uppercase hover:underline" href="#">Docs</a>
+<a class="text-xs font-bold uppercase hover:underline" href="#">Components</a>
+<a class="text-xs font-bold uppercase hover:underline" href="#">Tokens</a>
+</nav>
+<div class="flex gap-2">
+<button class="flex items-center justify-center neo-border size-10 bg-panel-white hover:bg-primary transition-colors">
+<span class="material-symbols-outlined text-lg">search</span>
+</button>
+<div class="neo-border aspect-square bg-cover size-10" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBWLTmQiwAHMA3lvmxckR7baWxKpXyv34YSYyIshA_eqYNbf06sZB0KgcSIwp6cgO8XYUIjqhgvowEbXPlsA0JOhPQo0-lSrhAyCx7hjcGBbCoW1JTWgElse_aDh2ieDNQ24gLMcAsb-NHqb9PPnmH3wEs-LfDcGbopcfmDFKPeeT6ZsdAXvbP7Ds25tUbaYmnRn_PGxbJCsM0vd2_3wWy5Z1XIvxRoJZbK1QVC60KlgJM_lys3GUZkLbf9QkSPeClzCYGvuapCu6w");'></div>
+</div>
+</div>
+</header>
+<main class="flex flex-1 overflow-hidden relative">
+<aside class="relative w-72 shrink-0 border-r neo-border bg-panel-white flex flex-col hidden md:flex">
+<button class="collapse-btn right-2">
+<span class="material-symbols-outlined text-sm">chevron_left</span>
+</button>
+<div class="stretcher-handle -right-1"></div>
+<div class="p-6 overflow-y-auto flex-1">
+<h3 class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-6">Architecture Tree</h3>
+<div class="space-y-1">
+<div class="flex items-center gap-3 px-3 py-2 text-slate-400 grayscale opacity-50">
+<span class="material-symbols-outlined text-sm">circle</span>
+<span class="text-xs font-bold uppercase">1. Atoms</span>
+</div>
+<div class="group relative">
+<div class="flex items-center gap-3 px-3 py-2 bg-primary neo-border mb-2 cursor-pointer">
+<span class="material-symbols-outlined text-sm">widgets</span>
+<span class="text-xs font-bold uppercase">2. Molecules</span>
+<span class="material-symbols-outlined ml-auto text-sm">expand_less</span>
+</div>
+<div class="ml-4 pl-4 relative space-y-1">
+<div class="tree-line"></div>
+<a class="flex items-center gap-2 py-1.5 text-xs font-medium text-slate-500 hover:text-zap-black pl-2 relative group-hover/item:text-zap-black" href="#">
+<span class="material-symbols-outlined text-[10px] text-slate-300">chevron_right</span>
+                            Email Input
+                        </a>
+<a class="flex items-center gap-2 py-1.5 text-xs font-medium text-slate-500 hover:text-zap-black pl-2 relative" href="#">
+<span class="material-symbols-outlined text-[10px] text-slate-300">chevron_right</span>
+                            Search Bar
+                        </a>
+<div class="relative">
+<div class="flex items-center gap-2 py-1.5 text-xs font-bold text-zap-black pl-2 bg-slate-50 border-l-2 border-zap-black -ml-[1px]">
+<span class="material-symbols-outlined text-[10px]">expand_more</span>
+                                Navigation Bars
+                            </div>
+<div class="ml-3 pl-3 relative space-y-1 mt-1 border-l border-dashed border-slate-300">
+<a class="block py-1 text-[11px] font-medium text-zap-black hover:underline pl-2 bg-neon-green/20" href="#">Top Bar Variants</a>
+<a class="block py-1 text-[11px] font-medium text-slate-500 hover:text-zap-black pl-2" href="#">Side Rail</a>
+<a class="block py-1 text-[11px] font-medium text-slate-500 hover:text-zap-black pl-2" href="#">Inspector Panel</a>
+</div>
+</div>
+<a class="flex items-center gap-2 py-1.5 text-xs font-medium text-slate-500 hover:text-zap-black pl-2 relative" href="#">
+<span class="material-symbols-outlined text-[10px] text-slate-300">chevron_right</span>
+                            Modals
+                        </a>
+</div>
+</div>
+<div class="pt-2 space-y-1 opacity-50">
+<div class="flex items-center gap-3 px-3 py-2 text-slate-400">
+<span class="material-symbols-outlined text-sm">category</span>
+<span class="text-xs font-bold uppercase">3. Organisms</span>
+</div>
+<div class="flex items-center gap-3 px-3 py-2 text-slate-400">
+<span class="material-symbols-outlined text-sm">dashboard</span>
+<span class="text-xs font-bold uppercase">4. Templates</span>
+</div>
+</div>
+</div>
+</div>
+</aside>
+<section class="flex-1 overflow-y-auto bg-background-light p-10">
+<div class="max-w-4xl mx-auto">
+<header class="mb-12">
+<h1 class="font-display text-6xl font-black uppercase tracking-tighter text-zap-black mb-4">
+                        Navigation <span class="text-primary italic">L2</span>
+</h1>
+<p class="text-xl font-medium text-slate-600 leading-relaxed">
+                        Navigation bars act as the primary interface anchor, housing critical atoms like the logo, search triggers, and user profile molecules.
+                    </p>
+</header>
+<div class="mb-20">
+<div class="flex items-center gap-4 mb-8">
+<div class="size-8 bg-zap-black text-white flex items-center justify-center font-display font-bold">01</div>
+<h2 class="font-display text-3xl font-black uppercase">Main Navigation Bar</h2>
+</div>
+<div class="space-y-4 mb-12">
+<span class="text-[10px] font-black uppercase tracking-widest text-slate-400">Molecule Preview</span>
+<div class="bg-panel-white p-8 neo-border neo-shadow">
+<div class="neo-border bg-white/90 backdrop-blur-sm h-16 w-full px-6 flex items-center justify-between shadow-sm">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-2">
+<div class="size-6 bg-primary flex items-center justify-center neo-border">
+<span class="material-symbols-outlined text-lg">bolt</span>
+</div>
+<span class="font-display font-bold uppercase tracking-tight">ZAP BETA</span>
+</div>
+<div class="h-6 w-px bg-slate-200"></div>
+<button class="flex items-center gap-2 text-xs font-bold uppercase hover:bg-slate-50 px-2 py-1 -ml-2 rounded">
+                                            Site
+                                            <span class="material-symbols-outlined text-sm">expand_more</span>
+</button>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative group cursor-pointer hidden sm:block">
+<div class="flex items-center neo-border bg-white h-9 px-3 gap-2 w-64 group-hover:border-zap-black transition-colors">
+<span class="material-symbols-outlined text-slate-400 text-sm">search</span>
+<span class="text-[11px] text-slate-400 font-medium uppercase tracking-wide">Search workspace...</span>
+<span class="ml-auto text-[9px] font-mono border border-slate-200 px-1 rounded text-slate-400">/</span>
+</div>
+</div>
+<button class="h-9 px-4 bg-zap-black text-neon-green neo-border flex items-center gap-2 hover:bg-zinc-800 transition-colors">
+<span class="material-symbols-outlined text-sm">diamond</span>
+<span class="text-[11px] font-bold uppercase tracking-wide">Upgrade</span>
+</button>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+<div class="neo-border bg-panel-white p-4">
+<span class="text-[9px] uppercase font-bold text-slate-400 block mb-2">Atom</span>
+<h4 class="font-display font-bold text-sm">Logo Mark</h4>
+<p class="text-[10px] mt-1 text-slate-600">Fixed 24x24px container.</p>
+</div>
+<div class="neo-border bg-panel-white p-4">
+<span class="text-[9px] uppercase font-bold text-slate-400 block mb-2">Molecule</span>
+<h4 class="font-display font-bold text-sm">Context Selector</h4>
+<p class="text-[10px] mt-1 text-slate-600">Dropdown with chevron.</p>
+</div>
+<div class="neo-border bg-panel-white p-4">
+<span class="text-[9px] uppercase font-bold text-slate-400 block mb-2">Molecule</span>
+<h4 class="font-display font-bold text-sm">Global Search</h4>
+<p class="text-[10px] mt-1 text-slate-600">Icon + Label + Shortcut.</p>
+</div>
+<div class="neo-border bg-panel-white p-4">
+<span class="text-[9px] uppercase font-bold text-slate-400 block mb-2">Atom</span>
+<h4 class="font-display font-bold text-sm">Action Button</h4>
+<p class="text-[10px] mt-1 text-slate-600">High contrast primary.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="mb-12">
+<div class="flex items-center gap-4 mb-8">
+<div class="size-8 bg-zap-black text-white flex items-center justify-center font-display font-bold">02</div>
+<h2 class="font-display text-3xl font-black uppercase">Breadcrumb Navigation</h2>
+</div>
+<div class="space-y-4">
+<span class="text-[10px] font-black uppercase tracking-widest text-slate-400">Structural Flow</span>
+<div class="bg-panel-white p-12 neo-border neo-shadow">
+<div class="flex items-center gap-3">
+<div class="flex items-center gap-2 text-[12px] font-medium tracking-wide font-body">
+<span class="text-slate-400 hover:text-zap-black cursor-pointer transition-colors uppercase">Root</span>
+<span class="text-slate-300 text-[10px] mx-1">/</span>
+<span class="text-slate-400 hover:text-zap-black cursor-pointer transition-colors uppercase">Category</span>
+<span class="text-slate-300 text-[10px] mx-1">/</span>
+<span class="text-zap-black font-bold uppercase bg-primary px-1">Page Title</span>
+</div>
+</div>
+<div class="mt-8 border-t border-slate-100 pt-4 flex gap-8">
+<div>
+<span class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Typography</span>
+<span class="text-xs font-mono">SuisseIntl 12px</span>
+</div>
+<div>
+<span class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Spacing</span>
+<span class="text-xs font-mono">8px Gap</span>
+</div>
+<div>
+<span class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Separator</span>
+<span class="text-xs font-mono">Forward Slash (/)</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="mb-12">
+<div class="flex items-center gap-4 mb-8">
+<div class="size-8 bg-zap-black text-white flex items-center justify-center font-display font-bold">03</div>
+<h2 class="font-display text-3xl font-black uppercase">Side Navigation Molecules</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="space-y-4">
+<span class="text-[10px] font-black uppercase tracking-widest text-slate-400">State: Expanded</span>
+<div class="bg-panel-white p-8 neo-border neo-shadow h-64 flex flex-col">
+<div class="w-full max-w-[200px] border-r border-slate-100 h-full py-4 pr-4">
+<div class="flex items-center gap-3 px-3 py-2 bg-slate-50 rounded-sm mb-1 cursor-pointer">
+<span class="material-symbols-outlined text-sm">home</span>
+<span class="text-xs font-bold uppercase">Dashboard</span>
+</div>
+<div class="flex items-center gap-3 px-3 py-2 bg-white hover:bg-slate-50 transition-colors rounded-sm mb-1 cursor-pointer relative overflow-hidden group">
+<div class="absolute left-0 top-0 bottom-0 w-[3px] bg-neon-green"></div>
+<span class="material-symbols-outlined text-sm text-zap-black">layers</span>
+<span class="text-xs font-bold uppercase text-zap-black">Projects</span>
+</div>
+<div class="ml-4 border-l border-dashed border-slate-300 pl-3 mt-1 mb-2">
+<div class="text-[10px] font-medium text-slate-500 py-1 hover:text-zap-black cursor-pointer">Active Project A</div>
+<div class="text-[10px] font-bold text-zap-black py-1 cursor-pointer bg-neon-green/20 -ml-1 pl-1">Project Details</div>
+<div class="text-[10px] font-medium text-slate-500 py-1 hover:text-zap-black cursor-pointer">Archive</div>
+</div>
+<div class="flex items-center gap-3 px-3 py-2 bg-white hover:bg-slate-50 transition-colors rounded-sm mb-1 cursor-pointer text-slate-400 hover:text-zap-black">
+<span class="material-symbols-outlined text-sm">settings</span>
+<span class="text-xs font-bold uppercase">Settings</span>
+</div>
+</div>
+</div>
+</div>
+<div class="space-y-4">
+<span class="text-[10px] font-black uppercase tracking-widest text-slate-400">State: Collapsed</span>
+<div class="bg-panel-white p-8 neo-border neo-shadow h-64 flex flex-col items-center">
+<div class="w-16 border-r border-slate-100 h-full py-4 flex flex-col items-center gap-2">
+<div class="size-8 flex items-center justify-center hover:bg-slate-50 rounded cursor-pointer text-slate-400">
+<span class="material-symbols-outlined text-lg">home</span>
+</div>
+<div class="size-8 flex items-center justify-center bg-white neo-border cursor-pointer relative text-zap-black shadow-[2px_2px_0px_0px_#39FF14]">
+<span class="material-symbols-outlined text-lg">layers</span>
+</div>
+<div class="size-8 flex items-center justify-center hover:bg-slate-50 rounded cursor-pointer text-slate-400">
+<span class="material-symbols-outlined text-lg">settings</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="mb-12">
+<div class="flex items-center gap-4 mb-8">
+<div class="size-8 bg-zap-black text-white flex items-center justify-center font-display font-bold">04</div>
+<h2 class="font-display text-3xl font-black uppercase">Side Inspector Molecule</h2>
+</div>
+<div class="grid grid-cols-1 gap-8">
+<div class="space-y-4">
+<span class="text-[10px] font-black uppercase tracking-widest text-slate-400">Inspector Structure</span>
+<div class="bg-panel-white p-8 neo-border neo-shadow flex gap-8 items-start">
+<div class="w-80 shrink-0 neo-border bg-panel-white flex flex-col h-[400px]">
+<div class="h-12 border-b border-zap-black flex items-center justify-between px-4 bg-slate-50">
+<span class="text-xs font-bold uppercase tracking-wide">Properties</span>
+<button class="hover:bg-slate-200 p-1 rounded">
+<span class="material-symbols-outlined text-sm">close</span>
+</button>
+</div>
+<div class="flex-1 overflow-y-auto p-4 space-y-4 bg-white">
+<div class="neo-border p-3">
+<div class="text-[10px] font-bold uppercase text-slate-400 mb-2">Information</div>
+<div class="h-2 w-3/4 bg-slate-100 mb-2"></div>
+<div class="h-2 w-1/2 bg-slate-100"></div>
+</div>
+<div class="neo-border p-3">
+<div class="text-[10px] font-bold uppercase text-slate-400 mb-2">Settings</div>
+<div class="flex items-center justify-between mb-2">
+<span class="text-[10px] font-mono">Visible</span>
+<div class="w-8 h-4 bg-neon-green neo-border rounded-full relative">
+<div class="absolute right-0.5 top-0.5 size-2.5 bg-white border border-black rounded-full"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="border-t border-zap-black p-4 bg-slate-50">
+<button class="w-full py-2 bg-zap-black text-white text-xs font-bold uppercase hover:bg-primary hover:text-zap-black neo-border transition-colors">
+                                            Save Changes
+                                        </button>
+</div>
+</div>
+<div class="flex-1 space-y-6">
+<div>
+<h4 class="font-display font-bold text-lg mb-2">Anatomy</h4>
+<p class="text-sm text-slate-600 mb-4">The inspector panel provides contextual details for the selected item. It floats over the content or pushes it, depending on the viewport size.</p>
+<ul class="list-disc pl-5 space-y-2 text-xs font-medium text-slate-700">
+<li><strong class="uppercase text-zap-black">Header:</strong> Fixed height (48px), contains title and close action.</li>
+<li><strong class="uppercase text-zap-black">Body:</strong> Scrollable area with bento-style cards for grouping properties.</li>
+<li><strong class="uppercase text-zap-black">Footer:</strong> Sticky bottom area for primary actions (Save, Apply).</li>
+</ul>
+</div>
+<div class="pt-6 border-t border-slate-200">
+<h4 class="font-display font-bold text-lg mb-2">3-Level Deep Logic</h4>
+<div class="bg-slate-100 p-4 neo-border border-dashed">
+<div class="flex items-start gap-4">
+<div class="space-y-2 text-[10px] font-mono">
+<div class="text-zap-black font-bold">Level 1 (Root)</div>
+<div class="text-slate-600 pl-2 border-l border-slate-300">Level 2 (Category)</div>
+<div class="text-slate-400 pl-4 border-l border-slate-300">Level 3 (Item)</div>
+</div>
+<div class="text-xs text-slate-600">
+                                            As depth increases, visual weight decreases. Level 1 items use bold uppercase. Level 2 introduces indentation. Level 3 uses lighter font weights and additional indentation lines.
+                                        </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<aside class="relative w-80 shrink-0 border-l neo-border bg-panel-white flex flex-col hidden lg:flex">
+<button class="collapse-btn left-2">
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+</button>
+<div class="stretcher-handle -left-1"></div>
+<div class="p-6 overflow-y-auto space-y-6">
+<h3 class="text-[10px] font-black uppercase tracking-widest text-zap-black mb-4">Technical Specs</h3>
+<div class="neo-border bg-background-light p-4 neo-shadow">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-lg">tune</span>
+<h4 class="font-display font-bold uppercase text-xs">ZAP Nav Constraints</h4>
+</div>
+<p class="text-[11px] text-slate-600 leading-relaxed mb-4">
+                        The top navigation bar is the only element with a fixed z-index higher than modal backdrops in the ZAP ecosystem.
+                    </p>
+<div class="space-y-2">
+<div class="flex items-center justify-between text-[10px] font-bold uppercase border-b border-slate-200 pb-2">
+<span>Positioning</span>
+<span class="text-neon-green">Fixed Top</span>
+</div>
+<div class="flex items-center justify-between text-[10px] font-bold uppercase border-b border-slate-200 pb-2">
+<span>Z-Index</span>
+<span>1000 (Sticky)</span>
+</div>
+<div class="flex items-center justify-between text-[10px] font-bold uppercase border-b border-slate-200 pb-2">
+<span>Height</span>
+<span>64px Fixed</span>
+</div>
+</div>
+</div>
+<div class="neo-border p-4 bg-zap-black text-white neo-shadow">
+<h4 class="font-display font-bold uppercase text-xs mb-4 text-primary">Behavior Rules</h4>
+<div class="grid grid-cols-2 gap-2 mb-4">
+<div class="neo-border border-slate-700 bg-slate-800 aspect-square flex flex-col items-center justify-center p-2 text-center">
+<span class="material-symbols-outlined text-lg mb-1">width_full</span>
+<span class="text-[8px] font-bold uppercase">Horizontal<br/>Stretch</span>
+</div>
+<div class="neo-border border-slate-700 bg-slate-800 aspect-square flex flex-col items-center justify-center p-2 text-center">
+<span class="material-symbols-outlined text-lg mb-1">dock_to_right</span>
+<span class="text-[8px] font-bold uppercase">Collapsible<br/>Panels</span>
+</div>
+</div>
+<p class="text-[10px] font-medium leading-relaxed opacity-70">
+                        Top navigation must always remain visible. Side panels push content, they do not overlay.
+                    </p>
+</div>
+<div class="space-y-4 pt-4 border-t border-slate-100">
+<div class="flex gap-3">
+<span class="material-symbols-outlined text-primary text-sm">bolt</span>
+<p class="text-[10px] font-bold leading-tight uppercase">Side Nav items must include active state indicators (neon green).</p>
+</div>
+<div class="flex gap-3">
+<span class="material-symbols-outlined text-primary text-sm">link</span>
+<p class="text-[10px] font-bold leading-tight uppercase">Breadcrumbs are mandatory for deep-link navigation.</p>
+</div>
+</div>
+</div>
+</aside>
+</main>
+</div>
+</body></html>

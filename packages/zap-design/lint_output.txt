@@ -1,0 +1,106 @@
+
+> zap-design@0.1.0 lint
+> eslint
+
+
+/Users/zap/Workspace/olympus/packages/zap-design/bbox.js
+  1:22  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+/Users/zap/Workspace/olympus/packages/zap-design/capture_inspector.js
+  1:22  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+/Users/zap/Workspace/olympus/packages/zap-design/capture_sidenav_deep.js
+  1:22  error    A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+  2:7   warning  'fs' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  2:12  error    A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+/Users/zap/Workspace/olympus/packages/zap-design/debug-border-style.js
+  1:22  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+/Users/zap/Workspace/olympus/packages/zap-design/debug-border-var.js
+  1:22  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+/Users/zap/Workspace/olympus/packages/zap-design/debug-border.js
+  1:22  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+/Users/zap/Workspace/olympus/packages/zap-design/get_switch_style.js
+  1:22  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+/Users/zap/Workspace/olympus/packages/zap-design/screenshot-textarea.js
+  1:22  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+/Users/zap/Workspace/olympus/packages/zap-design/screenshot-width.js
+  1:22  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+/Users/zap/Workspace/olympus/packages/zap-design/screenshot.js
+  1:22  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+/Users/zap/Workspace/olympus/packages/zap-design/src/app/api/admin/infrastructure/route.ts
+  62:17  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  81:43  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/zap/Workspace/olympus/packages/zap-design/src/app/api/theme/publish/route.ts
+  104:22  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/zap/Workspace/olympus/packages/zap-design/src/app/design/zap/atoms/avatar/page.tsx
+  16:7  warning  'Object_assign' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/zap/Workspace/olympus/packages/zap-design/src/app/design/zap/atoms/indicator/page.tsx
+  16:7  warning  'Object_assign' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/zap/Workspace/olympus/packages/zap-design/src/app/design/zap/atoms/input/page.tsx
+  26:7  warning  'Object_assign' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/zap/Workspace/olympus/packages/zap-design/src/app/design/zap/atoms/panel/page.tsx
+  11:7  warning  'Object_assign' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/zap/Workspace/olympus/packages/zap-design/src/app/design/zap/atoms/scroll-area/page.tsx
+  16:7  warning  'Object_assign' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/zap/Workspace/olympus/packages/zap-design/src/app/design/zap/atoms/toggle/page.tsx
+  7:18  warning  'toggleVariants' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/zap/Workspace/olympus/packages/zap-design/src/app/design/zap/molecules/alert/page.tsx
+  58:29  warning  'setSelectedVariant' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/zap/Workspace/olympus/packages/zap-design/src/components/dev/Wrapper.tsx
+   18:10  warning  'generateJsxSnippet' is defined but never used                                                                        @typescript-eslint/no-unused-vars
+  101:8   warning  React Hook React.useMemo has an unnecessary dependency: 'children'. Either exclude it or remove the dependency array  react-hooks/exhaustive-deps
+
+/Users/zap/Workspace/olympus/packages/zap-design/src/components/ui/FoundationLogin.tsx
+  39:23  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/zap/Workspace/olympus/packages/zap-design/src/genesis/atoms/interactive/NavLink.tsx
+  75:27  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/zap/Workspace/olympus/packages/zap-design/src/hooks/use-recaptcha-v2.ts
+  4:8  warning  'React' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/zap/Workspace/olympus/packages/zap-design/src/lib/flutter-compiler.ts
+  45:59  warning  '_radiusState' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/zap/Workspace/olympus/packages/zap-design/src/zap/foundations/colors/index.tsx
+  14:10  warning  'Badge' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/zap/Workspace/olympus/packages/zap-design/src/zap/foundations/dashboard/index.tsx
+  3:27  warning  'useEffect' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/zap/Workspace/olympus/packages/zap-design/src/zap/layout/MasterVerticalShell.tsx
+  67:43  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/zap/Workspace/olympus/packages/zap-design/src/zap/layout/MetroPageHeader.tsx
+  19:16  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  20:30  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/zap/Workspace/olympus/packages/zap-design/src/zap/layout/PageHeader.tsx
+  23:16  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  24:30  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/zap/Workspace/olympus/packages/zap-design/src/zap/sections/atoms/foundations/body.tsx
+  6:10  warning  'Platform' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/zap/Workspace/olympus/packages/zap-design/trace.js
+  1:12  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+✖ 37 problems (22 errors, 15 warnings)
+

@@ -1,0 +1,259 @@
+/*
+ * ═══════════════════════════════════════════════════════════════════════════════
+ * ZAP Design Engine — Excalidraw Theme Bridge
+ * ═══════════════════════════════════════════════════════════════════════════════
+ *
+ * PURPOSE: Maps Excalidraw's internal CSS variables to ZAP's M3 design tokens.
+ *
+ * ⚠️  SOP: ZERO HARDCODED VALUES
+ *     Every color, font, radius, and shadow MUST reference a CSS variable
+ *     from the token chain. Never use raw hex (#XXXXXX) or px values.
+ *
+ * TOKEN CHAIN (source of truth):
+ *     m3_tokens.css       → --md-sys-color-*     (M3 generated)
+ *     globals.css @theme  → --color-*             (Tailwind bridge)
+ *     m3_mapping.css      → --primary, --border   (Shadcn bridge)
+ *     theme-metro.css     → --card-radius, etc.   (Theme physics)
+ *
+ * FONT CHAIN:
+ *     layout.tsx next/font → --font-inter, --font-space-grotesk
+ *     globals.css @theme   → --font-body, --font-display, --font-mono
+ *     globals.css @theme   → --font-m3-body, --font-m3-title, etc.
+ *
+ * When the M3 seed color or theme changes, this file auto-inherits.
+ * ═══════════════════════════════════════════════════════════════════════════════
+ */
+
+/* ─── LIGHT THEME ─────────────────────────────────────────────────────────────── */
+.excalidraw {
+    /* === PRIMARY (Excalidraw purple → M3 primary) === */
+    --color-primary: var(--md-sys-color-primary) !important;
+    --color-primary-darker: var(--md-sys-color-primary) !important;
+    --color-primary-darkest: var(--md-sys-color-primary) !important;
+    --color-primary-hover: var(--md-sys-color-primary) !important;
+    --color-primary-light: var(--md-sys-color-primary-container) !important;
+    --color-primary-light-darker: var(--md-sys-color-primary-container) !important;
+
+    /* === BRAND INTERACTIONS === */
+    --color-brand-hover: var(--md-sys-color-primary) !important;
+    --color-brand-active: var(--md-sys-color-primary) !important;
+
+    /* === SURFACE LAYERS (M3 Surface Container hierarchy) === */
+    --color-surface-lowest: var(--md-sys-color-surface-container-lowest) !important;
+    --color-surface-low: var(--md-sys-color-surface-container-low) !important;
+    --color-surface-mid: var(--md-sys-color-surface-container) !important;
+    --color-surface-high: var(--md-sys-color-surface-container-high) !important;
+    --color-surface-primary-container: var(--md-sys-color-primary-container) !important;
+
+    /* === ON-SURFACE TEXT === */
+    --color-on-surface: var(--md-sys-color-on-surface) !important;
+    --color-on-primary-container: var(--md-sys-color-on-primary-container) !important;
+
+    /* === BORDER / OUTLINE === */
+    --color-border-outline: var(--md-sys-color-outline) !important;
+    --color-border-outline-variant: var(--md-sys-color-outline-variant) !important;
+
+    /* === BACKGROUNDS === */
+    --default-bg-color: var(--md-sys-color-surface) !important;
+    --island-bg-color: var(--md-sys-color-surface-container-lowest) !important;
+    --input-bg-color: var(--md-sys-color-surface-container-lowest) !important;
+    --input-hover-bg-color: var(--md-sys-color-surface-container-low) !important;
+    --input-border-color: var(--md-sys-color-outline-variant) !important;
+    --input-label-color: var(--md-sys-color-on-surface-variant) !important;
+
+    /* === POPUPS & PANELS === */
+    --popup-bg-color: var(--md-sys-color-surface-container-lowest) !important;
+    --popup-secondary-bg-color: var(--md-sys-color-surface-container-low) !important;
+    --popup-text-color: var(--md-sys-color-on-surface) !important;
+    --popup-text-inverted-color: var(--md-sys-color-on-primary) !important;
+
+    /* === BUTTONS === */
+    --button-hover-bg: var(--md-sys-color-surface-container-high) !important;
+    --button-active-bg: var(--md-sys-color-surface-container-high) !important;
+    --button-active-border: var(--md-sys-color-primary) !important;
+
+    /* === ICON === */
+    --icon-fill-color: var(--md-sys-color-on-surface) !important;
+
+    /* === FOCUS / SELECTION === */
+    --focus-highlight-color: var(--md-sys-color-primary-container) !important;
+    --select-highlight-color: var(--md-sys-color-primary) !important;
+    --color-selection: var(--md-sys-color-primary-container) !important;
+
+    /* === DANGER / ERROR (M3 error palette) === */
+    --color-danger: var(--md-sys-color-error) !important;
+    --color-danger-background: var(--md-sys-color-error-container) !important;
+    --color-danger-text: var(--md-sys-color-on-error-container) !important;
+
+    /* === SUCCESS (from globals.css state tokens) === */
+    --color-success: var(--color-state-success) !important;
+    --color-success-text: var(--color-state-success) !important;
+
+    /* === LINK COLOR === */
+    --link-color: var(--md-sys-color-primary) !important;
+
+    /* === SHADOW (from theme physics) === */
+    --shadow-island: var(--card-shadow, none) !important;
+
+    /* === BORDERS (from theme physics) === */
+    --border-radius-md: var(--card-radius, 4px) !important;
+    --border-radius-lg: var(--card-radius, 4px) !important;
+
+    /* === TYPOGRAPHY (from font chain) === */
+    --ui-font: var(--font-m3-body, var(--font-body, system-ui, sans-serif)) !important;
+
+    /* === SCROLLBAR === */
+    --scrollbar-thumb: var(--md-sys-color-outline-variant) !important;
+    --scrollbar-thumb-hover: var(--md-sys-color-outline) !important;
+}
+
+/* ─── TOOLBAR ISLANDS ──────────────────────────────────────────────────────────── */
+.excalidraw .Island {
+    background-color: var(--md-sys-color-surface-container-lowest) !important;
+    border: var(--card-border-width, 1px) solid var(--md-sys-color-outline-variant) !important;
+    border-radius: var(--card-radius, 4px) !important;
+    box-shadow: var(--card-shadow, none) !important;
+}
+
+/* ─── ICON SIZING (match horizontal nav: 16px icons in 28px containers) ────── */
+/* Excalidraw defaults to 20px SVGs in 32px containers — too large vs our nav */
+.excalidraw .ToolIcon__icon {
+    width: 1.75rem !important;   /* 28px — matches nav button feel */
+    height: 1.75rem !important;
+}
+
+.excalidraw .ToolIcon__icon svg {
+    width: 16px !important;      /* Same as our <Icon size={16} /> */
+    height: 16px !important;
+}
+
+/* Active tool — M3 primary container */
+.excalidraw .ToolIcon__icon--selected {
+    background-color: var(--md-sys-color-primary-container) !important;
+    color: var(--md-sys-color-on-primary-container) !important;
+}
+
+/* Toolbar button hover */
+.excalidraw .ToolIcon__icon:hover {
+    background-color: var(--md-sys-color-surface-container-high) !important;
+}
+
+/* Hamburger menu button */
+.excalidraw .ToolIcon_type_floating .ToolIcon__icon {
+    background-color: var(--md-sys-color-surface-container-lowest) !important;
+    border: var(--card-border-width, 1px) solid var(--md-sys-color-outline-variant) !important;
+    box-shadow: var(--card-shadow, none) !important;
+}
+
+/* Menu dropdown */
+.excalidraw .dropdown-menu-container {
+    border-radius: var(--card-radius, 4px) !important;
+}
+
+/* Color picker */
+.excalidraw .color-picker-trigger .color-picker-label-swatch {
+    border-radius: var(--card-radius, 4px) !important;
+}
+
+/* ─── TYPOGRAPHY ───────────────────────────────────────────────────────────────── */
+.excalidraw,
+.excalidraw * {
+    font-family: var(--font-m3-body, var(--font-body, system-ui, sans-serif)) !important;
+}
+
+/* Headings use display font */
+.excalidraw h1,
+.excalidraw h2,
+.excalidraw h3,
+.excalidraw h4 {
+    font-family: var(--font-m3-display, var(--font-display, system-ui, sans-serif)) !important;
+}
+
+/* Preserve hand-drawn canvas font (this is Excalidraw's core identity) */
+.excalidraw .excalifont,
+.excalidraw text {
+    font-family: Excalifont, Xiaolai !important;
+}
+
+/* ─── SIDEBAR / LIBRARY ───────────────────────────────────────────────────────── */
+.excalidraw .layer-ui__sidebar {
+    background: var(--md-sys-color-surface-container-lowest) !important;
+    border-left: var(--card-border-width, 1px) solid var(--md-sys-color-outline-variant) !important;
+    font-family: var(--font-m3-body, var(--font-body, system-ui, sans-serif)) !important;
+}
+
+.excalidraw .layer-ui__sidebar .sidebar-trigger {
+    background: var(--md-sys-color-surface-container-high) !important;
+}
+
+.excalidraw .library-actions-counter {
+    background-color: var(--md-sys-color-primary) !important;
+    color: var(--md-sys-color-on-primary) !important;
+}
+
+/* Bottom zoom bar */
+.excalidraw .footer-center {
+    font-family: var(--font-m3-body, var(--font-body, system-ui, sans-serif)) !important;
+}
+
+/* ─── ICON / BUTTON SHAPE CONSISTENCY ──────────────────────────────────────────
+ * Excalidraw's property panel buttons default to square (border-radius: 0).
+ * Our navigation uses rounded-lg. Force all interactive icon containers
+ * to use M3 shape-small token for visual consistency with rounded nav items.
+ *
+ * We use --radius-shape-small (4px) rather than --btn-radius (2px in Metro)
+ * because these are icon-bearing containers — closer to M3 "small chips".
+ * ──────────────────────────────────────────────────────────────────────────── */
+
+/* All tool icon containers — toolbar AND property panel */
+.excalidraw .ToolIcon__icon {
+    border-radius: var(--radius-shape-small, 4px) !important;
+}
+
+/* Property panel option buttons (Stroke width, Stroke style, Sloppiness, Edges) */
+.excalidraw .buttonList label .ToolIcon__icon,
+.excalidraw .panelColumn .buttonList .ToolIcon__icon {
+    border-radius: var(--radius-shape-small, 4px) !important;
+}
+
+/* Radio group containers (used by some Excalidraw property selectors) */
+.excalidraw .RadioGroup {
+    border-radius: var(--radius-shape-small, 4px) !important;
+}
+
+.excalidraw .RadioGroup-choice {
+    border-radius: var(--radius-shape-small, 4px) !important;
+}
+
+/* Generic buttons inside Excalidraw panels */
+.excalidraw button {
+    border-radius: var(--radius-shape-small, 4px) !important;
+}
+
+/* Standalone action buttons (layers, actions row) */
+.excalidraw button.standalone {
+    border-radius: var(--radius-shape-small, 4px) !important;
+}
+
+/* Color swatches — slightly rounded */
+.excalidraw .color-picker-swatch {
+    border-radius: var(--radius-shape-small, 4px) !important;
+}
+
+/* Input fields */
+.excalidraw input[type="text"],
+.excalidraw input[type="number"],
+.excalidraw select {
+    border-radius: var(--input-radius, 4px) !important;
+}
+
+/* Popup/dialog panels */
+.excalidraw .Modal,
+.excalidraw .Dialog {
+    border-radius: var(--card-radius, 4px) !important;
+}
+
+/* Tooltip containers */
+.excalidraw .Tooltip {
+    border-radius: var(--radius-shape-small, 4px) !important;
+}

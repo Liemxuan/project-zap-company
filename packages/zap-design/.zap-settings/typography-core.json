@@ -1,0 +1,11 @@
+{
+  "theme": "core",
+  "primaryFont": "var(--font-jetbrains), monospace",
+  "primaryTransform": "uppercase",
+  "secondaryFont": "var(--font-jetbrains), monospace",
+  "secondaryTransform": "lowercase",
+  "tertiaryFont": "var(--font-jetbrains), monospace",
+  "tertiaryTransform": "lowercase",
+  "components": {},
+  "updatedAt": "2026-03-20T09:35:45.080Z"
+}

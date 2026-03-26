@@ -1,0 +1,49 @@
+{
+  "version": "1.0",
+  "theme": "wix",
+  "tokens": {
+    "colors": {
+      "brand": {
+        "midnight": "#111111",
+        "teal": "#0055FF",
+        "yellow": "#FFFFFF",
+        "magenta": "#BB00FF",
+        "cream": "#F9F9F9"
+      },
+      "layers": {
+        "canvas": "#111111",
+        "cover": "#F9F9F9",
+        "panel": "#FFFFFF"
+      }
+    },
+    "physics": {
+      "borderRadius": "8px",
+      "borderWidth": "1px",
+      "shadows": {
+        "offset": "2px",
+        "color": "#D3D3D3"
+      }
+    }
+  },
+  "metrics": {
+    "colorBrandMidnight": "#FFFFFF !important",
+    "colorBrandTeal": "#00F0FF !important",
+    "colorBrandYellow": "#FF007F !important",
+    "colorBrandMagenta": "#B026FF !important",
+    "colorCreamWhite": "#1A0B2E !important",
+    "colorLayerCanvas": "#090014 !important",
+    "colorLayerCover": "#1A0B2E !important",
+    "colorLayerPanel": "#2D1445 !important",
+    "cardRadius": "16px !important",
+    "btnRadius": "9999px !important",
+    "inputRadius": "8px !important",
+    "cardBorderWidth": "2px !important",
+    "cardBorder": "#FF007F !important",
+    "inputBorder": "#00F0FF !important",
+    "cardShadow": "4px 4px 0px 0px #00F0FF !important",
+    "navGapCategory": "10px !important",
+    "navGapItem": "6px !important",
+    "navExpansionPad": "10px !important"
+  },
+  "name": "WIX"
+}

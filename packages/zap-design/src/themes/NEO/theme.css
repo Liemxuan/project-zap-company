@@ -1,0 +1,28 @@
+/* AUTO-GENERATED ZAP THEME OVERRIDE: NEO */
+/* Do not edit directly. Edit theme.json and run the compiler. */
+
+.theme-neo {
+    --color-brand-midnight: #1e293b !important;
+    --color-brand-teal: #bdf2d5 !important;
+    --color-brand-yellow: #fdf6b0 !important;
+    --color-brand-magenta: #ff577f !important;
+    --color-cream-white: #ffffff !important;
+    --color-layer-canvas: #bdf2d5 !important;
+    --color-layer-cover: #ffffff !important;
+    --color-layer-panel: #fdf6b0 !important;
+    --card-radius: 24px !important;
+    --btn-radius: 24px !important;
+    --input-radius: 24px !important;
+    --card-border-width: 4px !important;
+    --card-border: #1e293b !important;
+    --input-border: #1e293b !important;
+    --color-state-success: #39ff14 !important;
+    --color-state-error: #FF0000 !important;
+    --color-state-warning: #FFA500 !important;
+    --color-state-info: #bdf2d5 !important;
+    --color-state-focus: #fdf6b0 !important;
+    --card-shadow: 4px 4px 0px 0px #1e293b !important;
+    --nav-gap-category: 10px !important;
+    --nav-gap-item: 6px !important;
+    --nav-expansion-pad: 6px !important;
+}

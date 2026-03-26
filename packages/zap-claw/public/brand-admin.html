@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Olympus - Brand Guidelines Hub</title>
+    <!-- ZAP Design System Tokens -->
+    <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700,900&f[]=cabinet-grotesk@800,900&display=swap"
+        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@500;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            /* Titan Base Settings (used for the Admin UI itself) */
+            --bg-titan: #09090b;
+            --surface-titan: #18181b;
+            --surface-titan-hover: #27272a;
+            --border-titan: #3f3f46;
+            --text-titan: #fafafa;
+            --text-muted-titan: #a1a1aa;
+
+            --accent-primary: #facc15;
+            /* Yellow */
+            --accent-primary-hover: #ca8a04;
+
+            --status-success: #22c55e;
+            --status-error: #ef4444;
+
+            --font-sans: 'Satoshi', sans-serif;
+            --font-display: 'Cabinet Grotesk', sans-serif;
+            --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-titan);
+            color: var(--text-titan);
+            font-family: var(--font-sans);
+            line-height: 1.5;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ------------------------------------------------------------------ */
+        /* Titan Topbar */
+        /* ------------------------------------------------------------------ */
+        .titan-topbar {
+            background-color: var(--surface-titan);
+            border-bottom: 1px solid var(--border-titan);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            background-color: rgba(24, 24, 27, 0.8);
+        }
+
+        .titan-logo-area {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .titan-logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--accent-primary) 0%, #fff 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--bg-titan);
+            font-weight: 900;
+            font-family: var(--font-display);
+        }
+
+        .titan-logo-text {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 800;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        /* ------------------------------------------------------------------ */
+        /* Main Layout */
+        /* ------------------------------------------------------------------ */
+        .admin-container {
+            flex: 1;
+            padding: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* Background Grid purely for aesthetics */
+        .admin-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: linear-gradient(var(--border-titan) 1px, transparent 1px),
+                linear-gradient(90deg, var(--border-titan) 1px, transparent 1px);
+            background-size: 100px 100px;
+            background-position: center center;
+            opacity: 0.05;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .header-section {
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .header-section h1 {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .header-section p {
+            color: var(--text-muted-titan);
+            font-size: 0.95rem;
+        }
+
+        /* ------------------------------------------------------------------ */
+        /* Badge Registry */
+        /* ------------------------------------------------------------------ */
+        .registry-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 0.75rem;
+            background-color: rgba(250, 204, 21, 0.1);
+            border: 1px solid rgba(250, 204, 21, 0.2);
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+            font-family: var(--font-mono);
+            letter-spacing: 0.05em;
+        }
+
+        .registry-badge i {
+            font-size: 1rem;
+        }
+
+        /* ------------------------------------------------------------------ */
+        /* Form Elements */
+        /* ------------------------------------------------------------------ */
+        .titan-card {
+            background-color: rgba(24, 24, 27, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-titan);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        .titan-form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .titan-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-muted-titan);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .titan-input,
+        .titan-select,
+        .titan-textarea {
+            width: 100%;
+            background-color: rgba(9, 9, 11, 0.5);
+            border: 1px solid var(--border-titan);
+            color: var(--text-titan);
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            font-family: var(--font-sans);
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+        }
+
+        .titan-textarea {
+            resize: vertical;
+            min-height: 150px;
+        }
+
+        .titan-input:focus,
+        .titan-select:focus,
+        .titan-textarea:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 2px rgba(250, 204, 21, 0.2);
+        }
+
+        /* ------------------------------------------------------------------ */
+        /* Dynamic Arrays (Colors & Fonts) */
+        /* ------------------------------------------------------------------ */
+        .dynamic-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .dynamic-row {
+            display: grid;
+            gap: 1rem;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.02);
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px dashed var(--border-titan);
+        }
+
+        .color-row {
+            grid-template-columns: 1fr 1fr 1fr 2fr auto;
+        }
+
+        .font-row {
+            grid-template-columns: 1.5fr 1fr 1.5fr auto;
+        }
+
+        .remove-btn {
+            background: none;
+            border: none;
+            color: var(--status-error);
+            font-size: 1.25rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 6px;
+            transition: background 0.2s;
+        }
+
+        .remove-btn:hover {
+            background-color: rgba(239, 68, 68, 0.1);
+        }
+
+        .add-row-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background-color: transparent;
+            color: var(--text-titan);
+            border: 1px dashed var(--border-titan);
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-family: var(--font-sans);
+            font-weight: 500;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .add-row-btn:hover {
+            border-color: var(--text-muted-titan);
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        /* ------------------------------------------------------------------ */
+        /* Buttons & Footer */
+        /* ------------------------------------------------------------------ */
+        .form-footer {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-titan);
+            gap: 1rem;
+        }
+
+        .btn-primary {
+            background-color: var(--accent-primary);
+            color: var(--bg-titan);
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            font-family: var(--font-sans);
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent-primary-hover);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--text-titan);
+            border: 1px solid var(--border-titan);
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            font-family: var(--font-sans);
+            font-weight: 500;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--surface-titan-hover);
+        }
+
+        /* ------------------------------------------------------------------ */
+        /* Toast Notification */
+        /* ------------------------------------------------------------------ */
+        #toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            padding: 1rem 1.5rem;
+            background-color: var(--surface-titan);
+            border-left: 4px solid var(--status-success);
+            color: white;
+            border-radius: 4px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            font-weight: 500;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 1000;
+            pointer-events: none;
+        }
+
+        #toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        #toast.error {
+            border-left-color: var(--status-error);
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-family: var(--font-display);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border-titan);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-title i {
+            color: var(--text-muted-titan);
+        }
+
+        .macro-hint {
+            display: block;
+            font-size: 0.8rem;
+            color: var(--text-muted-titan);
+            margin-top: 0.25rem;
+            font-style: italic;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="titan-topbar">
+        <div class="titan-logo-area">
+            <div class="titan-logo-icon"><i class="ri-palette-line"></i></div>
+            <div class="titan-logo-text">OLYMPUS BRANDING</div>
+        </div>
+        <div>
+            <a href="/"
+                style="color: var(--text-muted-titan); text-decoration: none; font-size: 0.9rem; font-weight: 500;"><i
+                    class="ri-home-line"></i> Back to Dashboard</a>
+        </div>
+    </header>
+
+    <main class="admin-container">
+        <div class="header-section">
+            <div>
+                <h1>Brand Guidelines Hub</h1>
+                <p>Define the core aesthetic, tone, and visual language for specific tenants.</p>
+            </div>
+            <div class="registry-badge">
+                <i class="ri-shield-check-fill"></i> FRM-BRND-01 (105)
+            </div>
+        </div>
+
+        <form id="brandForm">
+            <!-- Core Settings -->
+            <div class="titan-card">
+                <h2 class="section-title"><i class="ri-settings-4-line"></i> Configuration</h2>
+
+                <div class="titan-form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                    <div>
+                        <label class="titan-label">Tenant ID (Target)</label>
+                        <input type="text" id="tenantId" class="titan-input" placeholder="e.g., GLOBAL, ZVN, PHO24"
+                            required>
+                    </div>
+                    <div>
+                        <label class="titan-label">Status</label>
+                        <select id="status" class="titan-select">
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vibe & Persona -->
+            <div class="titan-card">
+                <h2 class="section-title"><i class="ri-sparkling-fill"></i> Vibe & Persona</h2>
+                <div class="titan-form-group">
+                    <label class="titan-label">Brand Voice & Stylistic Approach</label>
+                    <textarea id="vibe" class="titan-textarea"
+                        placeholder="Describe the brand's tone. E.g., 'Industrial Elegance. Balances cold reality of construction with warmth of human-centric design...'"
+                        required></textarea>
+                </div>
+                <div class="titan-form-group">
+                    <label class="titan-label">Design Principles (Overrides)</label>
+                    <textarea id="principles" class="titan-textarea"
+                        placeholder="E.g., The Grid: 12-column ghost grid. Translucency: Glassmorphism effects. High Contrast: Dark backgrounds, bright primary actions..."
+                        style="min-height: 100px;"></textarea>
+                </div>
+            </div>
+
+            <!-- Colors Array -->
+            <div class="titan-card">
+                <h2 class="section-title"><i class="ri-paint-brush-line"></i> Color Palette</h2>
+                <div class="dynamic-list" id="colorsList">
+                    <!-- Color Rows will be injected here -->
+                </div>
+                <button type="button" class="add-row-btn" onclick="addColorRow()">
+                    <i class="ri-add-line"></i> Add Color Definition
+                </button>
+            </div>
+
+            <!-- Fonts Array -->
+            <div class="titan-card">
+                <h2 class="section-title"><i class="ri-font-size"></i> Typography</h2>
+                <div class="dynamic-list" id="fontsList">
+                    <!-- Font Rows will be injected here -->
+                </div>
+                <button type="button" class="add-row-btn" onclick="addFontRow()">
+                    <i class="ri-add-line"></i> Add Font Definition
+                </button>
+            </div>
+
+            <div class="form-footer">
+                <button type="button" class="btn-secondary" onclick="loadTenantGuideline()">Load Active Tenant</button>
+                <button type="button" class="btn-secondary" onclick="demoZapTheme()"
+                    style="background-color: rgba(46, 229, 211, 0.1); color: #2EE5D3; border-color: #2EE5D3;">Load ZAP
+                    Theme Demo</button>
+                <button type="submit" class="btn-primary" id="submitBtn">Save Guidelines</button>
+            </div>
+        </form>
+    </main>
+
+    <div id="toast">Settings saved successfully.</div>
+
+    <script>
+        // Store the state of rows
+        let colorIndex = 0;
+        let fontIndex = 0;
+
+        // Initialize with one empty row each
+        document.addEventListener('DOMContentLoaded', () => {
+            addColorRow();
+            addFontRow();
+        });
+
+        function addColorRow(role = '', name = '', hex = '', usage = '') {
+            const list = document.getElementById('colorsList');
+            const rowId = `color-${colorIndex++}`;
+
+            const div = document.createElement('div');
+            div.className = 'dynamic-row color-row';
+            div.id = rowId;
+
+            div.innerHTML = `
+                <div>
+                    <label class="titan-label" style="font-size: 0.75rem;">Role</label>
+                    <select class="titan-select color-role">
+                        <option value="Primary" ${role === 'Primary' ? 'selected' : ''}>Primary Foundation</option>
+                        <option value="Accent" ${role === 'Accent' ? 'selected' : ''}>Accent</option>
+                        <option value="Contrast" ${role === 'Contrast' ? 'selected' : ''}>Contrast</option>
+                        <option value="Secondary" ${role === 'Secondary' ? 'selected' : ''}>Secondary</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="titan-label" style="font-size: 0.75rem;">Color Name</label>
+                    <input type="text" class="titan-input color-name" placeholder="E.g. Obsidian Steel" value="${name}" required>
+                </div>
+                <div>
+                    <label class="titan-label" style="font-size: 0.75rem;">Hex Code</label>
+                    <div style="display: flex; gap: 0.5rem; align-items: center;">
+                        <input type="color" class="color-picker" style="padding: 0; width: 32px; height: 32px; border: none; background: none; cursor: pointer;" value="${hex || '#facc15'}" onchange="this.nextElementSibling.value = this.value; this.parentElement.nextElementSibling.style.backgroundColor = this.value;">
+                        <input type="text" class="titan-input color-hex" style="flex: 1;" placeholder="#HEX" value="${hex}" required onchange="this.previousElementSibling.value = this.value; this.parentElement.nextElementSibling.style.backgroundColor = this.value;">
+                    </div>
+                </div>
+                <div>
+                    <label class="titan-label" style="font-size: 0.75rem;">Vibe / Usage Context</label>
+                    <input type="text" class="titan-input color-usage" placeholder="E.g. Professional, deep, and structural." value="${usage}" required>
+                </div>
+                <button type="button" class="remove-btn" onclick="removeRow('${rowId}')" style="margin-top: 20px;"><i class="ri-delete-bin-line"></i></button>
+            `;
+            list.appendChild(div);
+        }
+
+        function addFontRow(name = '', type = 'Primary Heading', weights = '') {
+            const list = document.getElementById('fontsList');
+            const rowId = `font-${fontIndex++}`;
+
+            const div = document.createElement('div');
+            div.className = 'dynamic-row font-row';
+            div.id = rowId;
+
+            div.innerHTML = `
+                <div>
+                    <label class="titan-label" style="font-size: 0.75rem;">Font Family</label>
+                    <input type="text" class="titan-input font-name" placeholder="e.g., Montserrat" value="${name}" required>
+                </div>
+                <div>
+                    <label class="titan-label" style="font-size: 0.75rem;">Type/Role</label>
+                    <select class="titan-select font-type">
+                        <option value="Primary Font" ${type === 'Primary Font' ? 'selected' : ''}>Primary Font</option>
+                        <option value="Secondary Font" ${type === 'Secondary Font' ? 'selected' : ''}>Secondary Font</option>
+                        <option value="Monospace" ${type === 'Monospace' ? 'selected' : ''}>Monospace</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="titan-label" style="font-size: 0.75rem;">Usage & Styling</label>
+                    <input type="text" class="titan-input font-weights" placeholder="e.g., Use Bold (700) for H1s..." value="${weights}" required>
+                </div>
+                <button type="button" class="remove-btn" onclick="removeRow('${rowId}')" style="margin-top: 20px;"><i class="ri-delete-bin-line"></i></button>
+            `;
+            list.appendChild(div);
+        }
+
+        function removeRow(rowId) {
+            document.getElementById(rowId).remove();
+        }
+
+        function demoZapTheme() {
+            document.getElementById('tenantId').value = "ZAP";
+            document.getElementById('status').value = "active";
+
+            document.getElementById('vibe').value = "The palette is designed to reflect 'Industrial Elegance.' It balances the cold, hard reality of construction with the warmth of human-centric design.";
+
+            document.getElementById('principles').value = "- The Grid: Use a visible or 'ghost' 12-column grid. Let some elements break the grid slightly to represent 'organic' structure.\n- Translucency: Use glassmorphism effects (blurred backgrounds) on navigation bars.\n- High Contrast: Keep backgrounds dark (Obsidian Steel) and primary actions bright (Kinetic Teal).";
+
+            document.getElementById('colorsList').innerHTML = '';
+            addColorRow('Primary', 'Obsidian Steel', '#1A1A1B', 'Professional, deep, structural. Dominates background.');
+            addColorRow('Accent', 'Kinetic Teal', '#2EE5D3', 'Innovation, energy, digital precision. Primary actions.');
+            addColorRow('Contrast', 'Pure Alabaster', '#F5F5F5', 'Clean space, breathable layouts.');
+            addColorRow('Secondary', 'Concrete Gray', '#8E8E93', 'Neutral ground for secondary text and wireframe lines.');
+            addColorRow('Secondary', 'Copper Filament', '#D97757', 'Warm earth tone to represent raw materials and human elements.');
+
+            document.getElementById('fontsList').innerHTML = '';
+            addFontRow('Montserrat', 'Primary Font', 'Usage: Headlines, Nav, CTAs. Bold (700) for H1s, Medium (500) for subheaders. Mimics architectural blueprints.');
+            addFontRow('Inter', 'Secondary Font', 'Usage: Body copy, captions. Regular (400) with 1.5/1.6 line height. Engineered & legible.');
+
+            showToast("Loaded ZAP Theme Demo Data!");
+        }
+
+        // Search / Load functionality
+        async function loadTenantGuideline() {
+            const tenantId = document.getElementById('tenantId').value.trim();
+            if (!tenantId) {
+                showToast("Please enter a Tenant ID first", true);
+                return;
+            }
+
+            try {
+                const res = await fetch(`/api/admin/brand?tenantId=${tenantId}`);
+                if (res.status === 404) {
+                    showToast(`No existing guidelines found for ${tenantId}. Creating new.`, false);
+                    return;
+                }
+                if (!res.ok) throw new Error("Failed to fetch");
+
+                const data = await res.json();
+
+                // Populate base fields
+                document.getElementById('status').value = data.status || 'active';
+                document.getElementById('vibe').value = data.vibe || '';
+                document.getElementById('principles').value = data.principles || '';
+
+                // Clear existing dynamic rows
+                document.getElementById('colorsList').innerHTML = '';
+                document.getElementById('fontsList').innerHTML = '';
+
+                // Populate colors
+                if (data.colors && data.colors.length > 0) {
+                    data.colors.forEach(c => addColorRow(c.role, c.name, c.hex, c.usage));
+                } else { addColorRow(); }
+
+                // Populate fonts
+                if (data.fonts && data.fonts.length > 0) {
+                    data.fonts.forEach(f => addFontRow(f.name, f.type, f.weights));
+                } else { addFontRow(); }
+
+                showToast(`Loaded ${tenantId} guidelines successfully!`);
+            } catch (err) {
+                showToast("Network Error or Invalid Data", true);
+            }
+        }
+
+        // Save functionality
+        document.getElementById('brandForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            btn.textContent = "Saving...";
+            btn.disabled = true;
+
+            // Extract Colors Array
+            const colors = [];
+            document.querySelectorAll('.color-row').forEach(row => {
+                colors.push({
+                    role: row.querySelector('.color-role').value,
+                    name: row.querySelector('.color-name').value,
+                    hex: row.querySelector('.color-hex').value,
+                    usage: row.querySelector('.color-usage').value
+                });
+            });
+
+            // Extract Fonts Array
+            const fonts = [];
+            document.querySelectorAll('.font-row').forEach(row => {
+                fonts.push({
+                    name: row.querySelector('.font-name').value,
+                    type: row.querySelector('.font-type').value,
+                    weights: row.querySelector('.font-weights').value
+                });
+            });
+
+            const payload = {
+                tenantId: document.getElementById('tenantId').value.trim(),
+                status: document.getElementById('status').value,
+                vibe: document.getElementById('vibe').value,
+                principles: document.getElementById('principles').value,
+                colors: colors,
+                fonts: fonts
+            };
+
+            try {
+                const res = await fetch('/api/admin/brand', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await res.json();
+
+                if (res.ok) {
+                    showToast(data.message);
+                } else {
+                    showToast(data.error || "Failed to save guidelines", true);
+                }
+            } catch (err) {
+                showToast("Network Error", true);
+            } finally {
+                btn.textContent = "Save Guidelines";
+                btn.disabled = false;
+            }
+        });
+
+        function showToast(msg, isError = false) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            if (isError) {
+                toast.classList.add('error');
+            } else {
+                toast.classList.remove('error');
+            }
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+    </script>
+</body>
+
+</html>

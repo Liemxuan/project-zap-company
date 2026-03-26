@@ -1,0 +1,6 @@
+// Add this below the RawIngredient model temporarily to see how it looks
+enum InventoryTrackingType {
+  RAW_MATERIAL
+  SEMI_PRODUCT
+  FINISHED_GOOD
+}

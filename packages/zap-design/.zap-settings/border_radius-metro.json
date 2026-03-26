@@ -1,0 +1,38 @@
+{
+  "theme": "metro",
+  "state": {
+    "universal": {
+      "radius": "rounded-none",
+      "width": "border-0",
+      "style": "border-none",
+      "opacity": "100%"
+    },
+    "components": {
+      "Cover (L2)": {},
+      "Input Field": {},
+      "Badge": {},
+      "Skeleton": {
+        "width": "border-2",
+        "radius": "rounded-lg"
+      },
+      "Select": {},
+      "Toggle": {},
+      "Canvas (L1)": {},
+      "Checkbox": {},
+      "Radio": {
+        "width": "border"
+      },
+      "Input": {
+        "width": "border"
+      },
+      "Textarea": {},
+      "Switch": {
+        "width": "border-2",
+        "radius": "rounded-lg"
+      },
+      "Table": {},
+      "Panel (L3)": {}
+    }
+  },
+  "updatedAt": "2026-03-25T22:46:03.360Z"
+}

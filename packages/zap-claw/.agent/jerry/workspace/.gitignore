@@ -1,0 +1,10 @@
+node_modules/
+.next/
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# Ignore environment variables agents might use for test projects
+.env
+.env.local

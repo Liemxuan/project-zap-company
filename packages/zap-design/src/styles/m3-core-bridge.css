@@ -1,0 +1,72 @@
+/* 
+ * ZAP M3 -> Metro Token Bridge
+ * This file dynamically overwrites Metro's proprietary root variables
+ * with ZAP's standardized Material 3 (M3) design tokens.
+ * Metro Tailwind React uses Shadcn-like CSS structure (config.reui.css).
+ */
+
+:root {
+  /* ==========================================================================
+     M3 TOON MAP (Strict Mathematical Enforcement)
+     ========================================================================== */
+
+  --primary: var(--md-sys-color-primary);
+  --primary-foreground: var(--md-sys-color-on-primary);
+  --primary-container: var(--md-sys-color-primary-container);
+  --primary-container-foreground: var(--md-sys-color-on-primary-container);
+
+  --secondary: var(--md-sys-color-secondary);
+  --secondary-foreground: var(--md-sys-color-on-secondary);
+  --secondary-container: var(--md-sys-color-secondary-container);
+  --secondary-container-foreground: var(--md-sys-color-on-secondary-container);
+
+  --destructive: var(--md-sys-color-error);
+  --destructive-foreground: var(--md-sys-color-on-error);
+  --destructive-container: var(--md-sys-color-error-container);
+  --destructive-container-foreground: var(--md-sys-color-on-error-container);
+
+  /* Semantic Extended Tokens - Map to custom M3 generated colors or closest equivalents if no dedicated M3 semantic exists */
+  --success: #10B981;
+  /* Placeholder: Add proper custom colors to generator if strictly needed */
+  --success-foreground: #FFFFFF;
+  --warning: #F59E0B;
+  --warning-foreground: #000000;
+  --info: #3B82F6;
+  --info-foreground: #FFFFFF;
+
+  --background: var(--md-sys-color-background);
+  --foreground: var(--md-sys-color-on-background);
+
+  --card: var(--md-sys-color-surface);
+  --card-foreground: var(--md-sys-color-on-surface);
+
+  --popover: var(--md-sys-color-surface-container-highest);
+  --popover-foreground: var(--md-sys-color-on-surface);
+
+  --muted: var(--md-sys-color-surface-variant);
+  --muted-foreground: var(--md-sys-color-on-surface-variant);
+
+  --accent: var(--md-sys-color-secondary-container);
+  --accent-foreground: var(--md-sys-color-on-secondary-container);
+
+  --border: var(--md-sys-color-outline-variant);
+  --input: var(--md-sys-color-outline-variant);
+  --ring: var(--md-sys-color-primary);
+}
+
+/* 
+ * Dark Mode Overrides
+ */
+.dark,
+[data-theme="dark"] {
+  --background: var(--md-sys-color-background);
+  --foreground: var(--md-sys-color-on-background);
+  --card: var(--md-sys-color-surface);
+  --card-foreground: var(--md-sys-color-on-surface);
+  --popover: var(--md-sys-color-surface-container-highest);
+  --popover-foreground: var(--md-sys-color-on-surface);
+  --muted: var(--md-sys-color-surface-variant);
+  --muted-foreground: var(--md-sys-color-on-surface-variant);
+  --border: var(--md-sys-color-outline-variant);
+  --input: var(--md-sys-color-outline-variant);
+}

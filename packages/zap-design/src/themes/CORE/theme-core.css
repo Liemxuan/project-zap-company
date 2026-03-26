@@ -1,0 +1,44 @@
+/* Auto-generated core Theme */
+.theme-core {
+    --avatar-size-sm: 30px !important;
+    --avatar-size-md: 40px !important;
+    --avatar-size-lg: 60px !important;
+    --avatar-size-xl: 80px !important;
+    --avatar-border-width: 1px !important;
+    --avatar-border-radius: 37px !important;
+    --button-padding-x: 24px !important;
+    --button-padding-y: 12px !important;
+    --button-icon-gap: 8px !important;
+    --button-border-width: 1px;
+    --button-border-radius: 0px;
+    --button-variant-style: soft !important;
+    --button-visual-style: outline !important;
+    --button-color: primary !important;
+    --button-size: medium !important;
+    --button-icon-position: left !important;
+    --radius-shape-small: 0px;
+    --radius-shape-medium: 0px;
+    --radius-shape-large: 0px;
+    --card-radius: 0px;
+    --input-border-radius: 0px;
+    --card-border-width: 1px;
+    --input-border-width: 1px;
+    --layer-border-width: 1px;
+    --layer-border-radius: 0px;
+    --badge-border-radius: 0px;
+    --badge-border-width: 1px;
+    --pill-border-radius: 0px;
+    --pill-border-width: 1px;
+    --skeleton-border-radius: 0px;
+    --skeleton-border-width: 1px;
+    --checkbox-border-radius: 0px;
+    --checkbox-border-width: 1px;
+    --search-input-border-radius: 0px;
+    --search-input-border-width: 1px;
+    --select-border-radius: 0px;
+    --select-border-width: 1px;
+    --textarea-border-radius: 0px;
+    --textarea-border-width: 1px;
+    --toggle-border-radius: 0px;
+    --toggle-border-width: 1px;
+}

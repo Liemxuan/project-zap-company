@@ -1,0 +1,212 @@
+services:
+  gateway:
+    image: zap-claw-agent:latest
+    build: .
+    container_name: zap-claw-gateway
+    ports:
+      - "3001:3001"
+    env_file: .env
+    command: ["npm", "run", "gateway"]
+    restart: unless-stopped
+    networks:
+      - default
+      - zap-net
+
+  daemon:
+    image: zap-claw-agent:latest
+    build: .
+    container_name: zap-claw-daemon
+    ports:
+      - "8000:8000"
+    env_file: .env
+    command: ["npm", "run", "daemon"]
+    restart: unless-stopped
+    networks:
+      - default
+      - zap-net
+
+  jerry:
+    image: zap-claw-agent:latest
+    build: .
+    container_name: zap-claw-jerry
+    ports:
+      - "3300:3300"
+    env_file: .env
+    command: ["npm", "run", "jerry"]
+    restart: unless-stopped
+    depends_on:
+      - daemon
+    networks:
+      - default
+      - zap-net
+
+  spike:
+    image: zap-claw-agent:latest
+    build: .
+    container_name: zap-claw-spike
+    ports:
+      - "3301:3301"
+    env_file: .env
+    command: ["npm", "run", "spike"]
+    restart: unless-stopped
+    depends_on:
+      - daemon
+    networks:
+      - default
+      - zap-net
+
+  thomas:
+    image: zap-claw-agent:latest
+    build: .
+    container_name: zap-claw-thomas
+    ports:
+      - "3302:3302"
+    env_file: .env
+    command: ["npm", "run", "tommy"]
+    restart: unless-stopped
+    depends_on:
+      - daemon
+    networks:
+      - default
+      - zap-net
+
+  athena:
+    image: zap-claw-agent:latest
+    build: .
+    container_name: zap-claw-athena
+    ports:
+      - "3303:3303"
+    env_file: .env
+    volumes:
+      - /Users/zap/.notebooklm:/root/.notebooklm
+    command: ["npm", "run", "athena"]
+    restart: unless-stopped
+    depends_on:
+      - daemon
+    networks:
+      - default
+      - zap-net
+
+  hermes:
+    image: zap-claw-agent:latest
+    build: .
+    container_name: zap-claw-hermes
+    ports:
+      - "3304:3304"
+    env_file: .env
+    command: ["npm", "run", "hermes"]
+    restart: unless-stopped
+    depends_on:
+      - daemon
+    networks:
+      - default
+      - zap-net
+
+  hawk:
+    image: zap-claw-agent:latest
+    build: .
+    container_name: zap-claw-hawk
+    ports:
+      - "3305:3305"
+    env_file: .env
+    command: ["npm", "run", "hawk"]
+    restart: unless-stopped
+    depends_on:
+      - daemon
+    networks:
+      - default
+      - zap-net
+
+  nova:
+    image: zap-claw-agent:latest
+    build: .
+    container_name: zap-claw-nova
+    ports:
+      - "3306:3306"
+    env_file: .env
+    command: ["npm", "run", "nova"]
+    restart: unless-stopped
+    depends_on:
+      - daemon
+    networks:
+      - default
+      - zap-net
+
+  raven:
+    image: zap-claw-agent:latest
+    build: .
+    container_name: zap-claw-raven
+    ports:
+      - "3307:3307"
+    env_file: .env
+    command: ["npm", "run", "raven"]
+    restart: unless-stopped
+    depends_on:
+      - daemon
+    networks:
+      - default
+      - zap-net
+
+  scout:
+    image: zap-claw-agent:latest
+    build: .
+    container_name: zap-claw-scout
+    ports:
+      - "3308:3308"
+    env_file: .env
+    command: ["npm", "run", "scout"]
+    restart: unless-stopped
+    depends_on:
+      - daemon
+    networks:
+      - default
+      - zap-net
+
+  coder:
+    image: zap-claw-agent:latest
+    build: .
+    container_name: zap-claw-coder
+    ports:
+      - "3309:3309"
+    env_file: .env
+    command: ["npm", "run", "coder"]
+    restart: unless-stopped
+    depends_on:
+      - daemon
+    networks:
+      - default
+      - zap-net
+
+  architect:
+    image: zap-claw-agent:latest
+    build: .
+    container_name: zap-claw-architect
+    ports:
+      - "3310:3310"
+    env_file: .env
+    command: ["npm", "run", "architect"]
+    restart: unless-stopped
+    depends_on:
+      - daemon
+    networks:
+      - default
+      - zap-net
+
+  cleo:
+    image: zap-claw-agent:latest
+    build: .
+    container_name: zap-claw-cleo
+    ports:
+      - "3311:3311"
+    env_file: .env
+    command: ["npm", "run", "cleo"]
+    restart: unless-stopped
+    depends_on:
+      - daemon
+    networks:
+      - default
+      - zap-net
+
+networks:
+  zap-net:
+    external: true

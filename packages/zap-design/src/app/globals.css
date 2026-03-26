@@ -1,0 +1,402 @@
+@import "tailwindcss";
+@import "../themes/CORE/theme.css";
+@import "../themes/NEO/theme.css";
+@import "../themes/WIX/theme.css";
+/* @import "../themes/METRO/theme.css"; (Archived) */
+
+/* ZAP Dynamic Publisher CSS Payloads */
+@import "../themes/CORE/theme-core.css";
+@import "../themes/METRO/theme-metro.css";
+
+@import "../styles/m3_tokens.css";
+@import "../styles/genesis-button.css";
+
+@theme {
+  --radius: 0.5rem;
+
+  /* ZAP Core Identity (ZAP BRAND GUIDELINES) - WIREFRAME DEFAULTS */
+  --color-brand-midnight: #1A1A14;
+  /* Slate 900 */
+  --color-brand-teal: #94A3B8;
+  /* Slate 400 */
+  --color-brand-yellow: #F1F5F9;
+  /* Slate 100 */
+  --color-brand-magenta: #CBD5E1;
+  /* Slate 300 */
+
+  --color-off-white: #F4F4F5;
+  --color-cream-white: #FDFDFD;
+  --color-zinc-cream: #F5F5F0;
+
+  /* TECHNICAL FEEL / SEMANTIC MAPPING */
+  --color-brand-primary: var(--color-brand-yellow);
+  --color-brand-secondary: var(--color-brand-teal);
+  --color-brand-tertiary: var(--color-brand-magenta);
+
+  /* LAYER ARCHITECTURE (L0-L5) — M3 Surface Containers
+     Debug colors are applied dynamically via [data-devmode="true"] rules below. */
+  --color-layer-base: var(--md-sys-color-surface-container-lowest);
+  --color-layer-canvas: var(--md-sys-color-surface-container-low);
+  --color-layer-cover: var(--md-sys-color-surface-container);
+  --color-layer-panel: var(--md-sys-color-surface-container-high);
+  --color-layer-dialog: var(--md-sys-color-surface-container-highest);
+  --color-layer-modal: var(--md-sys-color-surface-container-highest);
+
+  /* M3 STRUCTURAL OVERRIDES - Bind Tailwind utility classes directly to fundamental M3 variables */
+  --color-surface-container-lowest: var(--md-sys-color-surface-container-lowest);
+  --color-surface-container-low: var(--md-sys-color-surface-container-low);
+  --color-surface-container: var(--md-sys-color-surface-container);
+  --color-surface-container-high: var(--md-sys-color-surface-container-high);
+  --color-surface-container-highest: var(--md-sys-color-surface-container-highest);
+
+  /* M3 TRANSLATION TOKENS (Wash Protocol - Auto-generated from TOON) */
+  --color-primary: var(--md-sys-color-primary);
+  --color-on-primary: var(--md-sys-color-on-primary);
+  --color-primary-container: var(--md-sys-color-primary-container);
+  --color-on-primary-container: var(--md-sys-color-on-primary-container);
+  --color-secondary: var(--md-sys-color-secondary);
+  --color-on-secondary: var(--md-sys-color-on-secondary);
+  --color-secondary-container: var(--md-sys-color-secondary-container);
+  --color-on-secondary-container: var(--md-sys-color-on-secondary-container);
+  --color-tertiary: var(--md-sys-color-tertiary);
+  --color-on-tertiary: var(--md-sys-color-on-tertiary);
+  --color-tertiary-container: var(--md-sys-color-tertiary-container);
+  --color-on-tertiary-container: var(--md-sys-color-on-tertiary-container);
+  --color-error: var(--md-sys-color-error);
+  --color-on-error: var(--md-sys-color-on-error);
+  --color-background: var(--md-sys-color-background);
+  --color-on-background: var(--md-sys-color-on-background);
+  --color-surface: var(--md-sys-color-surface);
+  --color-on-surface: var(--md-sys-color-on-surface);
+  --color-surface-variant: var(--md-sys-color-surface-variant);
+  --color-on-surface-variant: var(--md-sys-color-on-surface-variant);
+  --color-outline: var(--md-sys-color-outline);
+  --color-outline-variant: var(--md-sys-color-outline-variant);
+
+  /* SHADCN OVERRIDES (Native Tailwind v4) */
+  --color-popover: var(--color-layer-dialog);
+  --color-popover-foreground: var(--color-on-surface);
+
+  /* M3 SHAPE TOKENS */
+  --radius-shape-small: 4px;
+  --radius-shape-medium: var(--card-radius);
+  --radius-shape-large: 24px;
+
+  /* FUNCTIONAL STATES: M3 BASELINE */
+  --color-state-success: #2E7D32;
+  --color-state-error: #B3261E;
+  --color-state-warning: #FF8F00;
+  --color-state-info: #0288D1;
+  --color-state-focus: #0288D1;
+
+  /* NEUTRAL SCALE (ISO STANDARD) */
+  --color-iso-black: #000000;
+  --color-iso-white: #FFFFFF;
+  --color-iso-gray-900: #1A1A14;
+  --color-iso-gray-600: #475569;
+  --color-iso-gray-400: #94A3B8;
+  --color-iso-gray-100: #F1F5F9;
+
+  /* Fonts injected via layout.tsx next/font */
+  --font-display: var(--font-space-grotesk);
+  --font-body: var(--font-inter);
+  --font-mono: var(--font-jetbrains);
+
+  /* M3 TYPOGRAPHY SCALE (Semantic Mapping) */
+  --font-m3-display: var(--font-display);
+  --font-m3-headline: var(--font-display);
+  --font-m3-title: var(--font-body);
+  --font-m3-body: var(--font-body);
+  --font-m3-label: var(--font-body);
+
+  /* DYNAMIC PHYSICS & COMPONENT BINDINGS */
+  --radius-card: var(--card-radius);
+  --radius-btn: var(--btn-radius);
+  --radius-input: var(--input-radius);
+
+  --color-card-border: var(--card-border);
+  --color-input-border: var(--input-border);
+
+  --shadow-card: var(--card-shadow);
+}
+
+@layer base {
+  :root {
+    /* Baseline Core Fallbacks */
+    --card-radius: 4px;
+    --btn-radius: 4px;
+    --input-radius: 8px;
+    --card-border-width: 1px;
+    --card-border: #E5E5E5;
+    --input-border: #E5E5E5;
+    --card-shadow: 0px 4px 6px rgba(0, 0, 0, 0.05);
+    text-shadow: 0 0.5px 1px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.05); /* Clean high-end shadow */
+
+    /* Navigation Spacing Baselined to 4px/8px */
+    --nav-gap-category: 8px;
+    --nav-gap-item: 4px;
+    --nav-expansion-pad: 8px;
+
+    /* Form & Layout Spacing Fallbacks */
+    --spacing-form-gap: 24px;
+    --spacing-element-gap: 16px;
+    --spacing-card-pad: 24px;
+
+    /* Form & UI Element Dimensions Fallbacks */
+    --input-height: 34px;
+    --button-height: 34px;
+    --button-height-large: 34px;
+    --card-max-width: 400px;
+  }
+
+  html {
+    @apply font-sans;
+  }
+}
+
+@layer base {
+  body {
+    font-family: var(--font-body);
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-display);
+    @apply font-bold tracking-tight;
+    text-transform: var(--heading-transform, none);
+  }
+
+  .font-display {
+    font-family: var(--font-display, var(--font-space-grotesk));
+    text-transform: var(--heading-transform, none);
+  }
+
+  .font-body {
+    font-family: var(--font-body, var(--font-inter));
+    text-transform: var(--body-transform, none);
+  }
+
+  .font-dev {
+    font-family: var(--font-dev, var(--font-jetbrains));
+    text-transform: var(--dev-transform, none);
+  }
+
+  /* Semantic aliases for role-based font access */
+  .font-secondary {
+    font-family: var(--font-body, var(--font-inter));
+  }
+
+  .font-tertiary {
+    font-family: var(--font-dev, var(--font-jetbrains));
+  }
+
+  /* Universal Neo-Brutal reset for focus states */
+  *:focus-visible {
+    outline: 2px solid var(--color-acid-yellow);
+    outline-offset: 2px;
+  }
+}
+
+@font-face {
+  font-family: "Material Symbols Outlined";
+  font-style: normal;
+  font-weight: 100 700;
+  font-display: block;
+  /* Variable font — full axis support: FILL 0..1, wght 100..700 */
+  src: url("/icons/material-symbols-outlined-variable.woff2") format("woff2");
+}
+
+.material-symbols-outlined {
+  @apply inline-block;
+  font-family: "Material Symbols Outlined";
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  /* Default variation — Icon primitive overrides per instance */
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Scrollbar styling matched to M3 Aesthetic - 1px minimalist line */
+::-webkit-scrollbar {
+  width: 1px;
+  height: 1px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--md-sys-color-outline-variant);
+  border-radius: 0px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--md-sys-color-outline);
+}
+
+@layer utilities {
+  .text-transform-primary {
+    text-transform: var(--heading-transform, none);
+  }
+
+  .text-transform-secondary {
+    text-transform: var(--body-transform, none);
+  }
+
+  .text-transform-tertiary {
+    text-transform: var(--dev-transform, none);
+  }
+
+  /* Neo-Brutal text stroke — used on page-level "(Level 1)" accent spans */
+  .text-stroke-black {
+    -webkit-text-stroke: 1px black;
+    text-stroke: 1px black;
+  }
+
+
+
+  /* ── L0 CAD Grid Debug — document root dot pattern */
+  .bg-grid-pattern {
+    background-color: #f0f0f0;
+    background-image:
+      radial-gradient(circle, #9ca3af 1.2px, transparent 1.2px);
+    background-size: 20px 20px;
+  }
+
+  /* Page-load enter animation — applied at shell level, all pages inherit */
+  .animate-page-enter {
+    animation: page-enter 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  /* Dynamic pure component borders */
+  .btn-border-width {
+    border-width: max(var(--button-border-width, 1px), 1px);
+  }
+}
+
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import '../styles/m3-core-bridge.css';
+
+/* ── ZAP Layer Debug System ──────────────────────────────────────────────────
+ * Unlayered CSS — wins over ALL @layer rules unconditionally.
+ * Targets bg-layer-* token classes DIRECTLY — already on every surface.
+ *
+ *   L0  #e5e7eb  gray-200   → .bg-layer-base
+ *   L1  #f87171  red-400    → .bg-layer-canvas
+ *   L2  #facc15  yellow-400 → .bg-layer-cover
+ *   L3  #22c55e  green-500  → .bg-layer-panel
+ *   L4  #a855f7  purple-500 → .bg-layer-dialog
+ *   L5  #ec4899  pink-500   → .bg-layer-modal
+ * ────────────────────────────────────────────────────────────────────────── */
+/* stylelint-disable plugin/no-unsupported-browser-features, color-function-notation */
+[data-devmode="true"] .bg-layer-base   { background-color: #e5e7eb !important; background-color: color-mix(in srgb, #e5e7eb calc(var(--layer-0-bg-opacity, var(--layer-bg-opacity, 1)) * 100%), transparent) !important; }
+[data-devmode="true"] .bg-layer-canvas { background-color: #f87171 !important; background-color: color-mix(in srgb, #f87171 calc(var(--layer-1-bg-opacity, var(--layer-bg-opacity, 1)) * 100%), transparent) !important; }
+[data-devmode="true"] .bg-layer-cover  { background-color: #facc15 !important; background-color: color-mix(in srgb, #facc15 calc(var(--layer-2-bg-opacity, var(--layer-bg-opacity, 1)) * 100%), transparent) !important; }
+[data-devmode="true"] .bg-layer-panel  { background-color: #22c55e !important; background-color: color-mix(in srgb, #22c55e calc(var(--layer-3-bg-opacity, var(--layer-bg-opacity, 1)) * 100%), transparent) !important; }
+[data-devmode="true"] .bg-layer-dialog { background-color: #a855f7 !important; background-color: color-mix(in srgb, #a855f7 calc(var(--layer-4-bg-opacity, var(--layer-bg-opacity, 1)) * 100%), transparent) !important; }
+[data-devmode="true"] .bg-layer-modal  { background-color: #ec4899 !important; background-color: color-mix(in srgb, #ec4899 calc(var(--layer-5-bg-opacity, var(--layer-bg-opacity, 1)) * 100%), transparent) !important; }
+
+/* ── ZAP Dynamic Layer Properties ────────────────────────────────────────────
+ * Inspector-driven CSS custom properties for live control of layer visuals.
+ * Per-layer vars (--layer-{N}-*) cascade to universal vars (--layer-*),
+ * which cascade to sensible defaults.
+ *
+ * Uses color-mix() for bg opacity so only background fades — content stays visible.
+ * Set by: src/zap/sections/atoms/elevation/use-layer-properties.ts
+ * ────────────────────────────────────────────────────────────────────────── */
+
+/* BG Opacity control — uses color-mix to fade background only, NOT children.
+ * Converts --layer-bg-opacity (0-1 float) to a percentage for color-mix.
+ * Each layer checks per-layer override first, then universal, then defaults to 100%.
+ * SCOPED to main so sidebar/header/inspector keep their theme BG intact. */
+main .bg-layer-base {
+  background-color: var(--layer-0-bg-token, var(--color-layer-base));
+  background-color: color-mix(in srgb, var(--layer-0-bg-token, var(--color-layer-base)) calc(var(--layer-0-bg-opacity, var(--layer-bg-opacity, 1)) * 100%), transparent);
+}
+main .bg-layer-canvas {
+  background-color: var(--layer-1-bg-token, var(--color-layer-canvas));
+  background-color: color-mix(in srgb, var(--layer-1-bg-token, var(--color-layer-canvas)) calc(var(--layer-1-bg-opacity, var(--layer-bg-opacity, 1)) * 100%), transparent);
+}
+main .bg-layer-cover {
+  background-color: var(--layer-2-bg-token, var(--color-layer-cover));
+  background-color: color-mix(in srgb, var(--layer-2-bg-token, var(--color-layer-cover)) calc(var(--layer-2-bg-opacity, var(--layer-bg-opacity, 1)) * 100%), transparent);
+}
+main .bg-layer-panel {
+  background-color: var(--layer-3-bg-token, var(--color-layer-panel));
+  background-color: color-mix(in srgb, var(--layer-3-bg-token, var(--color-layer-panel)) calc(var(--layer-3-bg-opacity, var(--layer-bg-opacity, 1)) * 100%), transparent);
+}
+main .bg-layer-dialog {
+  background-color: var(--layer-4-bg-token, var(--color-layer-dialog));
+  background-color: color-mix(in srgb, var(--layer-4-bg-token, var(--color-layer-dialog)) calc(var(--layer-4-bg-opacity, var(--layer-bg-opacity, 1)) * 100%), transparent);
+}
+main .bg-layer-modal {
+  background-color: var(--layer-5-bg-token, var(--color-layer-modal));
+  background-color: color-mix(in srgb, var(--layer-5-bg-token, var(--color-layer-modal)) calc(var(--layer-5-bg-opacity, var(--layer-bg-opacity, 1)) * 100%), transparent);
+}
+
+/* Border control — universal applies to all layers, per-layer overrides available.
+ * Also scoped to main for the same reason. */
+main .bg-layer-base,
+main .bg-layer-canvas,
+main .bg-layer-cover,
+main .bg-layer-panel,
+main .bg-layer-dialog,
+main .bg-layer-modal {
+  border-width: var(--layer-border-width, 0px);
+  border-style: var(--layer-border-style, solid);
+  border-color: var(--color-outline-variant);
+  border-radius: var(--layer-border-radius, inherit);
+}
+
+/* Per-layer border overrides */
+main .bg-layer-base   { 
+  border-width: var(--layer-0-border-width, var(--layer-border-width, 0px)); 
+  border-style: var(--layer-0-border-style, var(--layer-border-style, solid)); 
+  border-color: var(--layer-0-border-color, var(--color-outline-variant));
+  border-radius: var(--layer-0-border-radius, var(--layer-border-radius, inherit)); 
+}
+main .bg-layer-canvas { 
+  border-width: var(--layer-1-border-width, var(--layer-border-width, 0px)); 
+  border-style: var(--layer-1-border-style, var(--layer-border-style, solid)); 
+  border-color: var(--layer-1-border-color, var(--color-outline-variant));
+  border-radius: var(--layer-1-border-radius, var(--layer-border-radius, inherit)); 
+}
+main .bg-layer-cover  { 
+  border-width: var(--layer-2-border-width, var(--layer-border-width, 0px)); 
+  border-style: var(--layer-2-border-style, var(--layer-border-style, solid)); 
+  border-color: var(--layer-2-border-color, var(--color-outline-variant));
+  border-radius: var(--layer-2-border-radius, var(--layer-border-radius, inherit)); 
+}
+main .bg-layer-panel  { 
+  border-width: var(--layer-3-border-width, var(--layer-border-width, 0px)); 
+  border-style: var(--layer-3-border-style, var(--layer-border-style, solid)); 
+  border-color: var(--layer-3-border-color, var(--color-outline-variant));
+  border-radius: var(--layer-3-border-radius, var(--layer-border-radius, inherit)); 
+}
+main .bg-layer-dialog { 
+  border-width: var(--layer-4-border-width, var(--layer-border-width, 0px)); 
+  border-style: var(--layer-4-border-style, var(--layer-border-style, solid)); 
+  border-color: var(--layer-4-border-color, var(--color-outline-variant));
+  border-radius: var(--layer-4-border-radius, var(--layer-border-radius, inherit)); 
+}
+main .bg-layer-modal  { 
+  border-width: var(--layer-5-border-width, var(--layer-border-width, 0px)); 
+  border-style: var(--layer-5-border-style, var(--layer-border-style, solid)); 
+  border-color: var(--layer-5-border-color, var(--color-outline-variant));
+  border-radius: var(--layer-5-border-radius, var(--layer-border-radius, inherit)); 
+}

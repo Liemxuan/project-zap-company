@@ -1,0 +1,40 @@
+src/cron/ata_watchdog.ts(78,34): error TS18047: 'replyText' is possibly 'null'.
+src/cron/ata_watchdog.ts(80,88): error TS2345: Argument of type 'string | null' is not assignable to parameter of type 'string'.
+  Type 'null' is not assignable to type 'string'.
+src/cron/heartbeat.ts(49,25): error TS18047: 'replyText' is possibly 'null'.
+src/cron/heartbeat.ts(49,62): error TS18047: 'replyText' is possibly 'null'.
+src/cron/heartbeat.ts(61,64): error TS2345: Argument of type 'string | null' is not assignable to parameter of type 'string'.
+  Type 'null' is not assignable to type 'string'.
+src/cron/heartbeat.ts(63,64): error TS2345: Argument of type 'string | null' is not assignable to parameter of type 'string'.
+  Type 'null' is not assignable to type 'string'.
+src/gateway/egress.ts(118,38): error TS2345: Argument of type 'string | null' is not assignable to parameter of type 'string'.
+  Type 'null' is not assignable to type 'string'.
+src/gateway/egress.ts(120,42): error TS2345: Argument of type 'string | null' is not assignable to parameter of type 'string'.
+  Type 'null' is not assignable to type 'string'.
+src/gateway/egress.ts(124,34): error TS2345: Argument of type 'string | null' is not assignable to parameter of type 'string'.
+  Type 'null' is not assignable to type 'string'.
+src/gateway/egress.ts(127,13): error TS2322: Type 'string | null' is not assignable to type 'string'.
+  Type 'null' is not assignable to type 'string'.
+src/gateway/egress.ts(129,13): error TS2322: Type 'string | null' is not assignable to type 'string'.
+  Type 'null' is not assignable to type 'string'.
+src/gateway/egress.ts(137,11): error TS2741: Property 'toolCalls' is missing in type '{ text: string; modelId: string; providerRef: "GOOGLE"; apiKeyTail: string; tokensUsed: { prompt: number; completion: number; total: number; cached: number; }; }' but required in type 'OmniResponse'.
+src/gateway_empirical_test.ts(26,30): error TS2741: Property 'toolCalls' is missing in type '{ text: string; modelId: string; providerRef: "GOOGLE"; apiKeyTail: string; tokensUsed: { prompt: number; completion: number; total: number; cached: number; }; }' but required in type 'OmniResponse'.
+src/gateway_empirical_test.ts(36,30): error TS2741: Property 'toolCalls' is missing in type '{ text: string; modelId: string; providerRef: "OPENROUTER"; apiKeyTail: string; tokensUsed: { prompt: number; completion: number; total: number; cached: number; }; }' but required in type 'OmniResponse'.
+src/platforms/telegram.ts(251,17): error TS2322: Type 'string | null' is not assignable to type 'string'.
+  Type 'null' is not assignable to type 'string'.
+src/scripts/check_identities.ts(22,46): error TS18046: 'e' is of type 'unknown'.
+src/scripts/spawn_team.ts(70,63): error TS18047: 'res.text' is possibly 'null'.
+src/scripts/test_hydra_chain.ts(60,69): error TS2532: Object is possibly 'undefined'.
+src/scripts/test_hydra_chain.ts(75,55): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/scripts/test_hydra_chain.ts(78,50): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/scripts/test_llm_ping.ts(1,36): error TS2307: Cannot find module '@google/generative-ai' or its corresponding type declarations.
+src/scripts/test_llm_ping.ts(44,73): error TS2532: Object is possibly 'undefined'.
+src/scripts/verify_permissions.ts(11,49): error TS2339: Property 'function' does not exist on type 'ChatCompletionTool'.
+  Property 'function' does not exist on type 'ChatCompletionCustomTool'.
+src/server.ts(376,58): error TS2345: Argument of type '{ systemPrompt: string; messages: { role: "user"; text: string; }[]; theme: "A_ECONOMIC"; intent: "FAST_CHAT"; }' is not assignable to parameter of type 'OmniPayload'.
+  Types of property 'messages' are incompatible.
+    Type '{ role: "user"; text: string; }[]' is not assignable to type 'ChatCompletionMessageParam[]'.
+      Type '{ role: "user"; text: string; }' is not assignable to type 'ChatCompletionMessageParam'.
+        Property 'content' is missing in type '{ role: "user"; text: string; }' but required in type 'ChatCompletionUserMessageParam'.

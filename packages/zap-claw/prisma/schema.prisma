@@ -1,0 +1,1176 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ── THE 5 CARDINAL OLYMPUS SECTORS ──
+enum IndustrySector {
+  FOOD_AND_BEVERAGE // 1. F&B
+  BEAUTY_AND_WELLNESS // 2. Spa, Nail, Hair
+  HOSPITALITY // 3. Hotels, Airbnb
+  COMMERCE // 4. Online/Offline Retail
+  PROFESSIONAL_SERVICES // 5. Doctors, Lawyers, CPAs
+}
+
+model accounts {
+  id             String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenant_id      String    @db.Uuid
+  wallet_id      String    @db.Uuid
+  account_number String    @db.VarChar(64)
+  routing_number String?   @db.VarChar(32)
+  account_type   String    @db.VarChar(32)
+  institution    String?   @db.VarChar(128)
+  institution_id String?   @db.VarChar(128)
+  external_ref   String?   @db.VarChar(255)
+  mask           String?   @db.VarChar(8)
+  iban           String?   @db.VarChar(34)
+  swift          String?   @db.VarChar(11)
+  status         String    @default("active") @db.VarChar(32)
+  verified_at    DateTime? @db.Timestamptz(6)
+  created_at     DateTime  @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  updated_at     DateTime  @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  tenants        tenants   @relation(fields: [tenant_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  wallets        wallets   @relation(fields: [wallet_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([tenant_id, account_number, institution_id])
+  @@index([tenant_id], map: "idx_accounts_merchant_id")
+  @@index([status], map: "idx_accounts_status")
+  @@index([account_type], map: "idx_accounts_type")
+  @@index([wallet_id], map: "idx_accounts_wallet_id")
+}
+
+model api_keys {
+  id             String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenant_id      String    @db.Uuid
+  created_by     String?   @db.Uuid
+  name           String    @db.VarChar(128)
+  key_prefix     String    @db.VarChar(16)
+  key_hash       String    @unique
+  scopes         String[]  @default([])
+  environment    String    @default("live") @db.VarChar(16)
+  ip_whitelist   String[]  @default([]) @db.Inet
+  rate_limit_rpm Int       @default(1000)
+  last_used_at   DateTime? @db.Timestamptz(6)
+  expires_at     DateTime? @db.Timestamptz(6)
+  status         String    @default("active") @db.VarChar(32)
+  created_at     DateTime  @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  updated_at     DateTime  @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  users          users?    @relation(fields: [created_by], references: [id], onUpdate: NoAction)
+  tenants        tenants   @relation(fields: [tenant_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([environment], map: "idx_api_keys_environment")
+  @@index([expires_at], map: "idx_api_keys_expires_at")
+  @@index([key_prefix], map: "idx_api_keys_key_prefix")
+  @@index([tenant_id], map: "idx_api_keys_merchant_id")
+  @@index([status], map: "idx_api_keys_status")
+}
+
+model workspaces {
+  id         String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenant_id  String       @db.Uuid
+  name       String       @db.VarChar(255)
+  legal_name String?      @db.VarChar(255)
+  tax_id     String?      @db.VarChar(64)
+  country    String       @default("US") @db.Char(2)
+  currency   String       @default("USD") @db.Char(3)
+  address    Json         @default("{}")
+  status     String       @default("active") @db.VarChar(32)
+  created_at DateTime     @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  updated_at DateTime     @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  tenants    tenants      @relation(fields: [tenant_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  financials financials[]
+  users      users[]
+  clients    clients[]
+  orders     orders[]
+
+  @@unique([tenant_id, name])
+  @@index([tenant_id], map: "idx_companies_merchant_id")
+  @@index([status], map: "idx_companies_status")
+}
+
+model financials {
+  id              String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenant_id       String      @db.Uuid
+  workspace_id    String?     @db.Uuid
+  wallet_id       String?     @db.Uuid
+  period_start    DateTime    @db.Date
+  period_end      DateTime    @db.Date
+  total_income    Decimal     @default(0) @db.Decimal(20, 8)
+  total_expenses  Decimal     @default(0) @db.Decimal(20, 8)
+  net_cash_flow   Decimal?    @db.Decimal(20, 8)
+  opening_balance Decimal     @default(0) @db.Decimal(20, 8)
+  closing_balance Decimal     @default(0) @db.Decimal(20, 8)
+  currency        String      @default("USD") @db.Char(3)
+  notes           String?
+  generated_at    DateTime    @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  created_at      DateTime    @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  workspaces      workspaces? @relation(fields: [workspace_id], references: [id], onUpdate: NoAction)
+  tenants         tenants     @relation(fields: [tenant_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  wallets         wallets?    @relation(fields: [wallet_id], references: [id], onUpdate: NoAction)
+
+  @@unique([tenant_id, wallet_id, period_start, period_end])
+  @@index([workspace_id], map: "idx_financials_company_id")
+  @@index([tenant_id], map: "idx_financials_merchant_id")
+  @@index([period_start, period_end], map: "idx_financials_period")
+  @@index([wallet_id], map: "idx_financials_wallet_id")
+}
+
+// ── NEW COMPARTMENT 3: FINANCIAL TENDERS ──
+model payment_gateways {
+  id            Int      @id // STATIC ID INHERITANCE MODEL (1 = Cash, 2 = Square, etc.)
+  gateway_name  String   @db.VarChar(128)
+  tender_origin String   @db.VarChar(128) // 'Card Present (Terminal)', 'Card Not Present (Web)'
+  is_active     Boolean  @default(true) // Inherited global master toggle
+  metadata      Json     @default("{}")
+  created_at    DateTime @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  updated_at    DateTime @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  orders        orders[]
+}
+
+model gateways {
+  id                   String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenant_id            String         @db.Uuid
+  name                 String         @db.VarChar(128)
+  provider             String         @db.VarChar(64)
+  environment          String         @default("live") @db.VarChar(16)
+  credentials          Json           @default("{}")
+  webhook_secret       String?
+  webhook_url          String?
+  supported_currencies String[]       @default(["USD"])
+  supported_methods    String[]       @default([])
+  fee_structure        Json           @default("{}")
+  priority             Int            @default(1) @db.SmallInt
+  is_default           Boolean        @default(false)
+  status               String         @default("active") @db.VarChar(32)
+  last_health_check    DateTime?      @db.Timestamptz(6)
+  health_status        String?        @default("unknown") @db.VarChar(16)
+  created_at           DateTime       @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  updated_at           DateTime       @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  tenants              tenants        @relation(fields: [tenant_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  transactions         transactions[]
+
+  @@unique([tenant_id, provider, environment])
+  @@index([environment], map: "idx_gateways_environment")
+  @@index([tenant_id], map: "idx_gateways_merchant_id")
+  @@index([tenant_id, priority], map: "idx_gateways_priority")
+  @@index([provider], map: "idx_gateways_provider")
+  @@index([status], map: "idx_gateways_status")
+}
+
+model google_workspaces {
+  id                  String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenant_id           String    @db.Uuid
+  customer_id         String    @unique @db.VarChar(64)
+  primary_domain      String    @db.VarChar(255)
+  admin_email         String    @db.VarChar(255)
+  oauth_access_token  String?
+  oauth_refresh_token String?
+  token_expires_at    DateTime? @db.Timestamptz(6)
+  scopes              String[]  @default([])
+  edition             String?   @default("Business Starter") @db.VarChar(64)
+  seat_count          Int       @default(0)
+  verified_domain     Boolean   @default(false)
+  sync_enabled        Boolean   @default(true)
+  last_synced_at      DateTime? @db.Timestamptz(6)
+  status              String    @default("active") @db.VarChar(32)
+  metadata            Json      @default("{}")
+  created_at          DateTime  @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  updated_at          DateTime  @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  tenants             tenants   @relation(fields: [tenant_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([customer_id], map: "idx_gws_customer_id")
+  @@index([tenant_id], map: "idx_gws_merchant_id")
+  @@index([primary_domain], map: "idx_gws_primary_domain")
+  @@index([status], map: "idx_gws_status")
+}
+
+model tenants {
+  id                      String                    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name                    String                    @db.VarChar(255)
+  slug                    String                    @unique @db.VarChar(128)
+  email                   String                    @unique @db.VarChar(255)
+  phone                   String?                   @db.VarChar(32)
+  website                 String?                   @db.VarChar(512)
+  logo_url                String?
+  industry                String?                   @db.VarChar(128) // Legacy unstructured industry
+  sector                  IndustrySector? // The absolute Cardinal Sector mapping
+  plan                    String                    @default("starter") @db.VarChar(32)
+  status                  String                    @default("active") @db.VarChar(32)
+  trial_ends_at           DateTime?                 @db.Timestamptz(6)
+  settings                Json                      @default("{}")
+  preferred_language      String                    @default("en") @db.VarChar(10) // The Admin UI viewing language
+  data_language           String                    @default("en") @db.VarChar(10) // The immutable dataset language established on Day 1
+  created_at              DateTime                  @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  updated_at              DateTime                  @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  accounts                accounts[]
+  api_keys                api_keys[]
+  workspaces              workspaces[]
+  financials              financials[]
+  gateways                gateways[]
+  google_workspaces       google_workspaces[]
+  transactions            transactions[]
+  user_sessions           user_sessions[]
+  users                   users[]
+  wallets                 wallets[]
+  tenant_subscriptions    tenant_subscriptions[]
+  tenant_modules          tenant_modules[]
+  products                products[]
+  orders                  orders[]
+  fulfillment_tickets     fulfillment_tickets[]
+  productCategories       product_categories[]
+  productVariants         product_variants[]
+  modifierLists           modifier_lists[]
+  modifierOptions         modifier_options[]
+  menuPresentations       menu_presentations[]
+  pre_modifiers           pre_modifiers[]
+  pricing_rules           pricing_rules[]
+  raw_ingredients         raw_ingredients[]
+  bom_recipes             bom_recipes[]
+  inventory_counts        inventory_counts[]
+  inventory_movements     inventory_movements[]
+  locations               locations[]
+  vendors                 vendors[]
+  purchase_orders         purchase_orders[]
+  purchase_order_receipts purchase_order_receipts[]
+
+  @@index([plan], map: "idx_merchants_plan")
+  @@index([slug], map: "idx_merchants_slug")
+  @@index([status], map: "idx_merchants_status")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model transactions {
+  id                                           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenant_id                                    String    @db.Uuid
+  initiated_by                                 String?   @db.Uuid
+  from_wallet_id                               String?   @db.Uuid
+  to_wallet_id                                 String?   @db.Uuid
+  type                                         String    @db.VarChar(32)
+  category                                     String?   @db.VarChar(64)
+  amount                                       Decimal   @db.Decimal(20, 8)
+  currency                                     String    @default("USD") @db.Char(3)
+  exchange_rate                                Decimal   @default(1) @db.Decimal(18, 8)
+  fee                                          Decimal   @default(0) @db.Decimal(20, 8)
+  description                                  String?
+  reference                                    String?   @db.VarChar(255)
+  gateway_id                                   String?   @db.Uuid
+  status                                       String    @default("pending") @db.VarChar(32)
+  metadata                                     Json      @default("{}")
+  executed_at                                  DateTime? @db.Timestamptz(6)
+  created_at                                   DateTime  @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  updated_at                                   DateTime  @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  gateways                                     gateways? @relation(fields: [gateway_id], references: [id], onUpdate: NoAction, map: "fk_transactions_gateway")
+  wallets_transactions_from_wallet_idTowallets wallets?  @relation("transactions_from_wallet_idTowallets", fields: [from_wallet_id], references: [id], onUpdate: NoAction)
+  users                                        users?    @relation(fields: [initiated_by], references: [id], onUpdate: NoAction)
+  tenants                                      tenants   @relation(fields: [tenant_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  wallets_transactions_to_wallet_idTowallets   wallets?  @relation("transactions_to_wallet_idTowallets", fields: [to_wallet_id], references: [id], onUpdate: NoAction)
+
+  @@index([executed_at(sort: Desc)], map: "idx_transactions_executed_at")
+  @@index([from_wallet_id], map: "idx_transactions_from_wallet")
+  @@index([gateway_id], map: "idx_transactions_gateway_id")
+  @@index([initiated_by], map: "idx_transactions_initiated_by")
+  @@index([tenant_id], map: "idx_transactions_merchant_id")
+  @@index([metadata], map: "idx_transactions_metadata", type: Gin)
+  @@index([status], map: "idx_transactions_status")
+  @@index([to_wallet_id], map: "idx_transactions_to_wallet")
+  @@index([type], map: "idx_transactions_type")
+}
+
+model user_sessions {
+  id                 String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenant_id          String    @db.Uuid
+  user_id            String    @db.Uuid
+  token_hash         String    @unique
+  ip_address         String    @db.Inet
+  user_agent         String?
+  device_type        String?   @db.VarChar(32)
+  device_name        String?   @db.VarChar(128)
+  device_fingerprint String?
+  browser            String?   @db.VarChar(64)
+  os                 String?   @db.VarChar(64)
+  country            String?   @db.Char(2)
+  cookies            Json      @default("{}")
+  is_active          Boolean   @default(true)
+  revoked_at         DateTime? @db.Timestamptz(6)
+  revoked_reason     String?   @db.VarChar(128)
+  expires_at         DateTime  @db.Timestamptz(6)
+  created_at         DateTime  @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  updated_at         DateTime  @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  tenants            tenants   @relation(fields: [tenant_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  users              users     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([expires_at], map: "idx_emp_sessions_expires_at")
+  @@index([ip_address], map: "idx_emp_sessions_ip")
+  @@index([is_active], map: "idx_emp_sessions_is_active")
+  @@index([tenant_id], map: "idx_emp_sessions_merchant_id")
+  @@index([token_hash], map: "idx_emp_sessions_token_hash")
+  @@index([user_id], map: "idx_emp_sessions_employee_id")
+}
+
+model users {
+  id                  String                @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenant_id           String                @db.Uuid
+  workspace_id        String                @db.Uuid
+  username            String                @db.VarChar(64)
+  email               String                @db.VarChar(255)
+  password_hash       String
+  passcode            String?               @db.VarChar(16)
+  display_name        String?               @db.VarChar(128)
+  avatar_url          String?
+  role                String                @default("user") @db.VarChar(32)
+  position            String?               @db.VarChar(128)
+  department          String?               @db.VarChar(128)
+  status              String                @default("active") @db.VarChar(32)
+  preferred_language  String                @default("en") @db.VarChar(10) // The User's UI viewing language
+  restrictions        String[]              @default([])
+  byok_key            String?               @db.VarChar(255)
+  companion_id        String?               @db.VarChar(128)
+  verified_at         DateTime?             @db.Timestamptz(6)
+  last_login_at       DateTime?             @db.Timestamptz(6)
+  metadata            Json                  @default("{}")
+  created_at          DateTime              @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  updated_at          DateTime              @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  api_keys            api_keys[]
+  transactions        transactions[]
+  user_sessions       user_sessions[]
+  workspaces          workspaces            @relation(fields: [workspace_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  tenants             tenants               @relation(fields: [tenant_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  user_interactions   user_interactions[]
+  fulfillment_tickets fulfillment_tickets[]
+
+  @@unique([tenant_id, email])
+  @@unique([tenant_id, username])
+  @@index([workspace_id], map: "idx_employees_company_id")
+  @@index([email], map: "idx_employees_email")
+  @@index([tenant_id], map: "idx_employees_merchant_id")
+  @@index([role], map: "idx_employees_role")
+  @@index([status], map: "idx_employees_status")
+  @@index([username], map: "idx_employees_username")
+}
+
+model system_admins {
+  id              String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  username        String    @unique @db.VarChar(64)
+  email           String    @unique @db.VarChar(255)
+  password_hash   String
+  display_name    String?   @db.VarChar(128)
+  role            String    @default("agent") @db.VarChar(32) // e.g. "super_admin", "agent", "staff"
+  position        String?   @db.VarChar(128)
+  level           Int       @default(1)
+  status          String    @default("active") @db.VarChar(32)
+  restrictions    String[]  @default([])
+  byok_key        String?   @db.VarChar(255)
+  companion_id    String?   @db.VarChar(128)
+  omni_router_ext Boolean   @default(false)
+  last_login_at   DateTime? @db.Timestamptz(6)
+  metadata        Json      @default("{}")
+  created_at      DateTime  @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  updated_at      DateTime  @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+
+  @@index([role], map: "idx_oly_emp_role")
+  @@index([status], map: "idx_oly_emp_status")
+}
+
+// ── EXPERTISE-AS-A-SERVICE (GStack Personas) ──
+
+model ai_personas {
+  id                   String                 @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name                 String                 @unique @db.VarChar(128) // e.g. "ceo-plan-audit" 
+  display_name         String                 @db.VarChar(128)
+  system_prompt        String                 @db.Text
+  capabilities         Json                   @default("[]") // e.g. ["read_code", "run_tests"]
+  sector               IndustrySector? // Null = Universal Persona. Assigned = Sector Specific Expert
+  tier                 String                 @default("basic") @db.VarChar(32) // basic, premium, enterprise
+  status               String                 @default("active") @db.VarChar(32)
+  created_at           DateTime               @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  updated_at           DateTime               @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  tenant_subscriptions tenant_subscriptions[]
+  user_interactions    user_interactions[]
+
+  @@index([name], map: "idx_ai_personas_name")
+  @@index([tier], map: "idx_ai_personas_tier")
+  @@index([status], map: "idx_ai_personas_status")
+}
+
+model tenant_subscriptions {
+  id            String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenant_id     String      @db.Uuid
+  persona_id    String      @db.Uuid
+  status        String      @default("active") @db.VarChar(32) // active, suspended, canceled
+  billing_cycle String      @default("monthly") @db.VarChar(32)
+  purchased_at  DateTime    @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  expires_at    DateTime?   @db.Timestamptz(6)
+  created_at    DateTime    @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  updated_at    DateTime    @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  tenants       tenants     @relation(fields: [tenant_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  ai_personas   ai_personas @relation(fields: [persona_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([tenant_id, persona_id])
+  @@index([tenant_id], map: "idx_merchant_subs_merchant_id")
+  @@index([persona_id], map: "idx_merchant_subs_persona_id")
+  @@index([status], map: "idx_merchant_subs_status")
+}
+
+model user_interactions {
+  id               String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id          String      @db.Uuid
+  workspace_id     String      @db.Uuid
+  persona_id       String      @db.Uuid
+  session_context  Json        @default("{}") // Log of chat/review
+  tokens_used      Int         @default(0)
+  interaction_date DateTime    @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  created_at       DateTime    @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  updated_at       DateTime    @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  users            users       @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  ai_personas      ai_personas @relation(fields: [persona_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([user_id], map: "idx_emp_interactions_emp_id")
+  @@index([workspace_id], map: "idx_emp_interactions_company_id")
+  @@index([persona_id], map: "idx_emp_interactions_persona_id")
+}
+
+model clients {
+  id              String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenant_id       String      @db.Uuid
+  workspace_id    String?     @db.Uuid
+  name            String      @db.VarChar(255)
+  phone           String?     @db.VarChar(32)
+  email           String?     @db.VarChar(255)
+  loyalty_points  Int         @default(0)
+  preferences     Json        @default("{}")
+  status          String      @default("active") @db.VarChar(32)
+  last_visited_at DateTime?   @db.Timestamptz(6)
+  created_at      DateTime    @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  updated_at      DateTime    @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  workspaces      workspaces? @relation(fields: [workspace_id], references: [id], onDelete: SetNull, onUpdate: NoAction)
+  orders          orders[]
+
+  @@unique([tenant_id, phone])
+  @@unique([tenant_id, email])
+  @@index([workspace_id], map: "idx_customers_company_id")
+  @@index([tenant_id], map: "idx_customers_merchant_id")
+  @@index([phone], map: "idx_customers_phone")
+  @@index([email], map: "idx_customers_email")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model wallets {
+  id                                                String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenant_id                                         String         @db.Uuid
+  owner_type                                        String         @db.VarChar(16)
+  owner_id                                          String         @db.Uuid
+  label                                             String?        @db.VarChar(128)
+  currency                                          String         @default("USD") @db.Char(3)
+  balance                                           Decimal        @default(0) @db.Decimal(20, 8)
+  available_balance                                 Decimal        @default(0) @db.Decimal(20, 8)
+  reserved_balance                                  Decimal        @default(0) @db.Decimal(20, 8)
+  wallet_type                                       String         @default("general") @db.VarChar(32)
+  external_ref                                      String?        @db.VarChar(255)
+  status                                            String         @default("active") @db.VarChar(32)
+  created_at                                        DateTime       @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  updated_at                                        DateTime       @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  accounts                                          accounts[]
+  financials                                        financials[]
+  transactions_transactions_from_wallet_idTowallets transactions[] @relation("transactions_from_wallet_idTowallets")
+  transactions_transactions_to_wallet_idTowallets   transactions[] @relation("transactions_to_wallet_idTowallets")
+  tenants                                           tenants        @relation(fields: [tenant_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([tenant_id], map: "idx_wallets_merchant_id")
+  @@index([owner_type, owner_id], map: "idx_wallets_owner")
+  @@index([status], map: "idx_wallets_status")
+  @@index([wallet_type], map: "idx_wallets_wallet_type")
+}
+
+// ── ZAP CLAW INTERNAL AGENT MODELS (Migrated from SQLite) ──
+
+model Interaction {
+  id               String   @id @default(uuid())
+  sessionId        String
+  role             String
+  content          String
+  accountType      String   @default("PERSONAL")
+  createdAt        DateTime @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  processed        Boolean  @default(false)
+  completionTokens Int?
+  promptTokens     Int?
+  totalTokens      Int?
+}
+
+model MemoryFact {
+  id          String   @id @default(uuid())
+  merchantId  String?
+  agentId     String?
+  factType    String
+  fact        String
+  accountType String   @default("PERSONAL")
+  sourceId    String?
+  createdAt   DateTime @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  synced      Boolean  @default(false)
+}
+
+model JobTicket {
+  id           String    @id @default(uuid())
+  ticketId     String    @unique
+  level        String
+  scope        String
+  manager      String
+  status       String    @default("PENDING")
+  targetBranch String
+  errorRate    String?
+  createdAt    DateTime  @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  completedAt  DateTime?
+}
+
+model ExtractionTicket {
+  urlPath String  @id // The path (e.g., /account/billing/history)
+  group   String? // The logical grouping (e.g., Account, Auth, Network)
+
+  // ZAP Architecture Mapping (Stored as JSON string arrays)
+  zapLevel     String  @default("L7") // Architecture level of this ticket
+  l6Layout     String? // The primary L6 Layout/Template used
+  l5Organisms  String? // JSON array of L5 dependencies (e.g., ["Data Grid", "Toolbar"])
+  l4Molecules  String? // JSON array of L4 dependencies
+  l3Atoms      String? // JSON array of L3 dependencies
+  l2Primitives String? // JSON array of L2 dependencies
+  l1Tokens     String? // JSON array of L1 dependencies
+
+  assignedWorker String? // e.g. 'Spike (Agent-3)' or 'ZAP'
+  status         String   @default("PENDING") // PENDING, DOM_RIPPED, CSS_PURGED, M3_INJECTED, QA_PASSED
+  dependencies   String? // Legacy generic dependency array
+  auditHash      String? // Hash to prove no tampering post-QA
+  createdAt      DateTime @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  updatedAt      DateTime @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+}
+
+model AssetTicket {
+  filePath       String  @id // e.g., "/media/brand-logos/google.svg"
+  originalName   String // e.g., "google.svg"
+  status         String  @default("PENDING") // PENDING, GENERATING, SWAPPED, PURGED
+  isLocked       Boolean @default(false) // Prevent accidental overwrite by script or human
+  assignedWorker String? // e.g., "NanoBanana2"
+  filePathB      String? // Mirrored original path to keep site live
+  filePathZap    String? // New /image/... location for ZAP generated assets
+  promptUsed     String? // The prompt sent to Nano Banana
+
+  trackingId  String?
+  category    String?
+  tags        String?
+  width       Int?
+  height      Int?
+  fileType    String?
+  description String?
+
+  createdAt DateTime @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  updatedAt DateTime @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+}
+
+model PageAudit {
+  universalId  String  @unique
+  path         String  @id
+  existingPath String?
+  finalPath    String?
+  category     String?
+  tags         String?
+
+  // Compliance Flags
+  fontsApplied   Boolean @default(false)
+  colorsApplied  Boolean @default(false)
+  spacingApplied Boolean @default(false)
+  layersApplied  Boolean @default(false)
+  iconsApplied   Boolean @default(false)
+
+  // Certification
+  m3MobileCertified  Boolean @default(false)
+  m3DesktopCertified Boolean @default(false)
+
+  details   String?
+  createdAt DateTime @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  updatedAt DateTime @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+}
+
+model TypographyOverride {
+  id               String   @id @default("global") // e.g. "metro-typography" or "global"
+  theme            String   @default("metro")
+  primaryFont      String
+  primaryTransform String
+  updatedAt        DateTime @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+}
+
+model ComponentRegistry {
+  id String @id @default(uuid())
+
+  // Identity
+  name        String  @unique // e.g. "Button", "Toolbar", "UserHero"
+  displayName String? // Human-friendly name, e.g. "User Hero Banner"
+
+  // Classification
+  tier     String // L3 (Atom), L4 (Molecule), L5 (Organism), L6 (Layout)
+  category String // Navigation, Form, DataDisplay, Feedback, Layout, Surface, Content, Auth
+  tags     String? // JSON array: ["shadcn", "metronic", "interactive", "form", "dashboard"]
+
+  // Usage & Source
+  usageCount   Int     @default(0) // How many Metronic pages use this
+  pages        String? // JSON array of page URLs that use this component
+  sourcePath   String? // Where it lives in Metronic source
+  sourceImport String? // The import path (e.g., "@/components/ui/button")
+
+  // Genesis Cross-Reference
+  genesisStatus String  @default("UNKNOWN") // EXISTS, NEEDS_BUILD, NEEDS_IMPROVEMENT, NOT_NEEDED, UNKNOWN
+  genesisPath   String? // Path to our Genesis component if it exists
+  genesisNotes  String? // What's missing or needs improvement
+  genesisOrigin String  @default("CORE") // CORE, METRO, SHARED, NEO, WIX
+
+  // Audit
+  auditFlag  String  @default("CLEAN") // CLEAN, PHANTOM, MISCLASSIFIED, DEMO, ICON, HTML, FRAMEWORK, DUPLICATE, PAGE_SECTION, MALFORMED
+  auditNotes String? // Explanation of the flag
+
+  // Metadata
+  notes     String? // Free text notes
+  createdAt DateTime @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  updatedAt DateTime @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+}
+
+model ZapPageAudit {
+  id       String @id @default(uuid())
+  pagePath String @unique
+  theme    String @default("CORE") // "CORE" or "METRO"
+
+  // ZAP Tier Compliance Ratings (e.g., 0-100 scale)
+  l1TokensScore     Int? // Physics & Global Design Tokens
+  l2PrimitivesScore Int? // Genesis Primitives & Atoms
+  l3ElementsScore   Int? // Atomic UI components
+  l4MoleculesScore  Int? // Localized logic components
+  l5WidgetsScore    Int? // Complex data assemblies
+  l6LayoutsScore    Int? // Structural containers / Shells
+  l7PageScore       Int? // Full Route compliance
+
+  // Overall Audit Status
+  overallStatus String @default("PENDING") // PENDING, AI_REVIEWED, HUMAN_REVIEWED, APPROVED, REJECTED
+
+  // AI Audit (Spike / Team Claud)
+  aiAuditor     String? // Identifier for the agent (e.g., "Spike")
+  aiReviewNotes String? // Detailed breakdown of non-compliance
+  aiAuditedAt   DateTime?
+
+  // Human Audit
+  humanAuditor     String? // Name or ID of the human reviewer
+  humanReviewNotes String?
+  humanApprovedAt  DateTime?
+
+  // Human Per-Level Ratings (0-100, overrides AI score)
+  humanL1Rating      Int? // Physics & Global Design Tokens
+  humanL2Rating      Int? // Genesis Primitives & Atoms
+  humanL3Rating      Int? // Atomic UI components
+  humanL4Rating      Int? // Localized logic components
+  humanL5Rating      Int? // Complex data assemblies
+  humanL6Rating      Int? // Structural containers / Shells
+  humanL7Rating      Int? // Full Route compliance
+  humanOverallRating Int? // Final human-assigned score
+
+  createdAt DateTime @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  updatedAt DateTime @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+
+  @@index([theme])
+  @@index([overallStatus])
+}
+
+model system_modules {
+  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  core_identifier String   @unique @db.VarChar(255) // e.g., CORE_HR, INVENTORY
+  description     String?
+  status          String   @default("active") @db.VarChar(32)
+  created_at      DateTime @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  updated_at      DateTime @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+
+  localizations  module_localizations[]
+  tenant_modules tenant_modules[]
+}
+
+model module_localizations {
+  id              String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  module_id       String         @db.Uuid
+  industry_sector IndustrySector
+  locale          String         @default("en") @db.VarChar(10) // 'en', 'es', etc.
+  audience_type   String         @default("tenant") @db.VarChar(32) // 'tenant', 'user', 'customer'
+  display_label   String         @db.VarChar(255) // The tailored name, e.g., "Staff & Housekeeping"
+  description     String? // Tailored description
+  created_at      DateTime       @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  updated_at      DateTime       @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+
+  system_module system_modules @relation(fields: [module_id], references: [id], onDelete: Cascade)
+
+  @@unique([module_id, industry_sector, locale, audience_type], map: "idx_module_localization_unique")
+}
+
+model tenant_modules {
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenant_id    String   @db.Uuid
+  module_id    String   @db.Uuid
+  status       String   @default("active") @db.VarChar(32) // active, suspended
+  purchased_at DateTime @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  created_at   DateTime @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  updated_at   DateTime @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+
+  tenant        tenants        @relation(fields: [tenant_id], references: [id], onDelete: Cascade)
+  system_module system_modules @relation(fields: [module_id], references: [id], onDelete: Cascade)
+
+  @@unique([tenant_id, module_id], map: "idx_tenant_module_unique")
+}
+
+// ── LEVEL 3: OMNICHANNEL COMMERCE OVERLAY (ZAP LEGACY ARCHITECTURE) ──
+
+// ── NEW COMPARTMENT 1: INTERNAL OR OWNED CHANNELS (Fixed Architecture IDs 1-5+) ──
+model internal_channels {
+  id                   Int      @id // STATIC ID INHERITANCE MODEL (1 = POS, 2 = Handheld, etc.)
+  channel_name         String   @db.VarChar(128)
+  hardware_form_factor String   @db.VarChar(128) // 'Landscape Tablet', 'Portrait Mobile'
+  is_active            Boolean  @default(true) // Inherited global master toggle
+  metadata             Json     @default("{}")
+  created_at           DateTime @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  updated_at           DateTime @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  orders               orders[]
+}
+
+// ── COMPARTMENT 2: MARKETPLACE/MARKETING CHANNELS (Fixed Architecture IDs 0-6+) ──
+model marketplace_channels {
+  id               Int      @id // STATIC ID INHERITANCE MODEL (0 = N/A, 1 = UberEats, 2 = DoorDash, etc.)
+  marketplace_name String   @db.VarChar(128)
+  integration_type String   @db.VarChar(128) // 'Webhook', 'Polling API'
+  is_active        Boolean  @default(true) // Inherited global master toggle
+  metadata         Json     @default("{}")
+  created_at       DateTime @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  updated_at       DateTime @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  orders           orders[]
+}
+
+// ── LEVEL 4: INVENTORY & BOM RECONCILIATION LEDGERS ─────────────────────────
+// Enforcing Perpetual Inventory and BOM (Bill of Materials) equivalent to Toast/xtraCHEF
+
+model raw_ingredients {
+  id                String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenant_id         String  @db.Uuid
+  name              String  @db.VarChar(255) // e.g., "Flour 50lb Bag", "Arabica Beans"
+  sku               String? @db.VarChar(128)
+  base_unit_measure String  @default("oz") @db.VarChar(32) // Fundamental tracking math (oz, lb, count)
+  yield_percentage  Decimal @default(100.0) @db.Decimal(5, 2) // Subtracts waste/trim weight
+  current_cost      Decimal @default(0) @db.Decimal(20, 8) // Dynamic calculation from AP Invoices
+
+  created_at DateTime @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  updated_at DateTime @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+
+  tenant               tenants                @relation(fields: [tenant_id], references: [id], onDelete: Cascade)
+  bom_recipes          bom_recipes[]
+  inventory_counts     inventory_counts[]
+  inventory_movements  inventory_movements[]
+  purchase_order_items purchase_order_items[]
+
+  @@index([tenant_id], map: "idx_raw_ingredients_tenant_id")
+}
+
+model bom_recipes {
+  id                 String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenant_id          String @db.Uuid
+  product_variant_id String @db.Uuid // The Finished Good being sold
+  raw_ingredient_id  String @db.Uuid // The Raw Component being depleted
+
+  quantity_needed Decimal @db.Decimal(10, 4) // e.g., 0.5 (lbs)
+  unit_of_measure String  @db.VarChar(32) // Must structurally convert back to base_unit_measure
+
+  tenant          tenants          @relation(fields: [tenant_id], references: [id], onDelete: Cascade)
+  product_variant product_variants @relation(fields: [product_variant_id], references: [id], onDelete: Cascade)
+  raw_ingredient  raw_ingredients  @relation(fields: [raw_ingredient_id], references: [id], onDelete: Cascade)
+
+  @@unique([product_variant_id, raw_ingredient_id], map: "idx_bom_recipes_unique_bridge")
+  @@index([tenant_id], map: "idx_bom_recipes_tenant_id")
+}
+
+model inventory_counts {
+  id                String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenant_id         String @db.Uuid
+  raw_ingredient_id String @db.Uuid
+  location_id       Int
+
+  // THE STATE LEDGER
+  quantity_on_hand Decimal  @default(0) @db.Decimal(15, 4) // Derived exclusively by summing inventory_movements
+  quantity_warning Decimal? @db.Decimal(15, 4) // The PAR Level Threshold
+
+  tenant         tenants         @relation(fields: [tenant_id], references: [id], onDelete: Cascade)
+  raw_ingredient raw_ingredients @relation(fields: [raw_ingredient_id], references: [id], onDelete: Cascade)
+  location       locations       @relation(fields: [location_id], references: [id], onDelete: Cascade)
+
+  @@unique([raw_ingredient_id, location_id], map: "idx_inv_counts_unique_loc")
+  @@index([tenant_id], map: "idx_inv_counts_tenant_id")
+}
+
+model inventory_movements {
+  id                String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenant_id         String @db.Uuid
+  raw_ingredient_id String @db.Uuid
+  location_id       Int
+
+  // THE EVENT LEDGER
+  adjustment_unit           Decimal @db.Decimal(15, 4) // Strict Double-Entry (+) or (-)
+  movement_reason           String  @db.VarChar(64) // 'SALE', 'WASTE', 'RECEIPT', 'MANUAL_COUNT'
+  reference_id              String? @db.VarChar(128) // Ties directly to the Order ID or Purchase Order ID
+  purchase_order_id         String? @db.Uuid
+  purchase_order_receipt_id String? @db.Uuid
+
+  client_timestamp DateTime @default(now()) @db.Timestamptz(6) // Enforces sequence on offline tablets
+  created_at       DateTime @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+
+  tenant                 tenants                  @relation(fields: [tenant_id], references: [id], onDelete: Cascade)
+  raw_ingredient         raw_ingredients          @relation(fields: [raw_ingredient_id], references: [id], onDelete: Cascade)
+  location               locations                @relation(fields: [location_id], references: [id], onDelete: Cascade)
+  purchase_order         purchase_orders?         @relation(fields: [purchase_order_id], references: [id], onDelete: SetNull)
+  purchase_order_receipt purchase_order_receipts? @relation(fields: [purchase_order_receipt_id], references: [id], onDelete: SetNull)
+
+  @@index([tenant_id], map: "idx_inv_movements_tenant_id")
+  @@index([purchase_order_id], map: "idx_inv_movements_po_id")
+  @@index([purchase_order_receipt_id], map: "idx_inv_movements_po_receipt_id")
+  @@index([raw_ingredient_id, location_id], map: "idx_inv_movements_loc")
+  @@index([client_timestamp], map: "idx_inv_movements_time_seq")
+}
+
+model vendors {
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenant_id    String   @db.Uuid
+  name         String   @db.VarChar(255)
+  contact_name String?  @db.VarChar(128)
+  email        String?  @db.VarChar(255)
+  phone        String?  @db.VarChar(32)
+  address      Json     @default("{}")
+  status       String   @default("active") @db.VarChar(32) // active, inactive
+  created_at   DateTime @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  updated_at   DateTime @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+
+  tenant          tenants           @relation(fields: [tenant_id], references: [id], onDelete: Cascade)
+  purchase_orders purchase_orders[]
+
+  @@index([tenant_id], map: "idx_vendors_tenant_id")
+  @@index([status], map: "idx_vendors_status")
+}
+
+model purchase_orders {
+  id           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenant_id    String    @db.Uuid
+  vendor_id    String    @db.Uuid
+  location_id  Int // Where the goods are expected to land
+  status       String    @default("draft") @db.VarChar(32) // draft, submitted, partial, completed, canceled
+  total_amount Decimal   @default(0) @db.Decimal(20, 8)
+  currency     String    @default("USD") @db.Char(3)
+  expected_at  DateTime? @db.Timestamptz(6)
+  notes        String?
+  metadata     Json      @default("{}")
+  created_at   DateTime  @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  updated_at   DateTime  @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+
+  tenant              tenants                   @relation(fields: [tenant_id], references: [id], onDelete: Cascade)
+  vendor              vendors                   @relation(fields: [vendor_id], references: [id], onDelete: Cascade)
+  location            locations                 @relation(fields: [location_id], references: [id], onDelete: Cascade)
+  items               purchase_order_items[]
+  inventory_movements inventory_movements[]
+  receipts            purchase_order_receipts[]
+
+  @@index([tenant_id], map: "idx_purchase_orders_tenant_id")
+  @@index([vendor_id], map: "idx_purchase_orders_vendor_id")
+  @@index([status], map: "idx_purchase_orders_status")
+}
+
+model purchase_order_items {
+  id                String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  purchase_order_id String   @db.Uuid
+  raw_ingredient_id String   @db.Uuid
+  quantity_ordered  Decimal  @db.Decimal(15, 4)
+  quantity_received Decimal  @default(0) @db.Decimal(15, 4)
+  unit_price        Decimal  @db.Decimal(20, 8)
+  total_price       Decimal  @db.Decimal(20, 8)
+  created_at        DateTime @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  updated_at        DateTime @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+
+  purchase_order purchase_orders @relation(fields: [purchase_order_id], references: [id], onDelete: Cascade)
+  raw_ingredient raw_ingredients @relation(fields: [raw_ingredient_id], references: [id], onDelete: Cascade)
+
+  @@unique([purchase_order_id, raw_ingredient_id], map: "idx_po_items_unique")
+  @@index([purchase_order_id], map: "idx_po_items_po_id")
+  @@index([raw_ingredient_id], map: "idx_po_items_ingredient_id")
+}
+
+model purchase_order_receipts {
+  id                String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenant_id         String   @db.Uuid
+  purchase_order_id String   @db.Uuid
+  receipt_number    String   @db.VarChar(64) // E.g. REC-001
+  notes             String?
+  received_at       DateTime @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+
+  tenant              tenants               @relation(fields: [tenant_id], references: [id], onDelete: Cascade)
+  purchase_order      purchase_orders       @relation(fields: [purchase_order_id], references: [id], onDelete: Cascade)
+  inventory_movements inventory_movements[]
+
+  @@index([tenant_id], map: "idx_po_receipts_tenant_id")
+  @@index([purchase_order_id], map: "idx_po_receipts_po_id")
+}
+
+model product_categories {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenant_id   String   @db.Uuid
+  parent_id   String?  @db.Uuid // For nested categories
+  name        String   @db.VarChar(255)
+  description String?
+  status      String   @default("active") @db.VarChar(32) // active, drafted, archived
+  created_at  DateTime @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  updated_at  DateTime @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+
+  tenant             tenants              @relation(fields: [tenant_id], references: [id], onDelete: Cascade)
+  parent_category    product_categories?  @relation("CategoryHierarchy", fields: [parent_id], references: [id], onDelete: SetNull)
+  child_categories   product_categories[] @relation("CategoryHierarchy")
+  products           products[]
+  category_modifiers category_modifiers[]
+
+  @@index([tenant_id], map: "idx_categories_tenant_id")
+  @@index([parent_id], map: "idx_categories_parent_id")
+}
+
+model products {
+  id               String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenant_id        String   @db.Uuid
+  category_id      String?  @db.Uuid
+  name             String   @db.VarChar(255)
+  description      String?
+  is_service       Boolean  @default(false)
+  duration_minutes Int? // If service (e.g., Salon)
+  status           String   @default("active") @db.VarChar(32) // active, drafted, archived
+  metadata         Json     @default("{}") // Sector-specific attributes
+  nutritional_info Json? // Toast gap: calories, macros
+  allergens        Json? // Toast gap: dietary tags
+  prep_station_id  String?  @db.Uuid // Toast gap: KDS routing
+  created_at       DateTime @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  updated_at       DateTime @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+
+  tenant           tenants             @relation(fields: [tenant_id], references: [id], onDelete: Cascade)
+  category         product_categories? @relation(fields: [category_id], references: [id], onDelete: SetNull)
+  product_variants product_variants[]
+
+  @@index([tenant_id], map: "idx_products_tenant_id")
+  @@index([category_id], map: "idx_products_category_id")
+  @@index([status], map: "idx_products_status")
+}
+
+model product_variants {
+  id               String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenant_id        String   @db.Uuid
+  product_id       String   @db.Uuid
+  name             String   @db.VarChar(255) // e.g., "Small", "Red", "Default"
+  sku              String?  @db.VarChar(128)
+  barcode          String?  @db.VarChar(128)
+  price            Decimal  @default(0) @db.Decimal(20, 8)
+  compare_at_price Decimal? @db.Decimal(20, 8)
+  inventory_count  Int      @default(0) // Legacy - Deprecated in favor of BOM & Perpetual Ledgers
+  is_default       Boolean  @default(false)
+  tax_included     Boolean  @default(false) // Toast gap: explicit tax inclusion
+  status           String   @default("active") @db.VarChar(32)
+  created_at       DateTime @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  updated_at       DateTime @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+
+  tenant           tenants            @relation(fields: [tenant_id], references: [id], onDelete: Cascade)
+  product          products           @relation(fields: [product_id], references: [id], onDelete: Cascade)
+  order_items      order_items[]
+  linked_modifiers modifier_options[] // Modifiers that point to this variant for inventory deduction
+  bom_recipes      bom_recipes[]
+
+  @@unique([tenant_id, sku], map: "idx_variants_tenant_sku")
+  @@index([product_id], map: "idx_variants_product_id")
+  @@index([status], map: "idx_variants_status")
+}
+
+model modifier_lists {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenant_id      String   @db.Uuid
+  name           String   @db.VarChar(255) // e.g., "Dairy Options"
+  min_allowed    Int      @default(0)
+  max_allowed    Int      @default(1)
+  max_per_option Int      @default(1) // Toast gap: multi-select limits on a single option
+  status         String   @default("active") @db.VarChar(32)
+  created_at     DateTime @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  updated_at     DateTime @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+
+  tenant             tenants              @relation(fields: [tenant_id], references: [id], onDelete: Cascade)
+  modifier_options   modifier_options[]
+  category_modifiers category_modifiers[]
+
+  @@index([tenant_id], map: "idx_modifier_lists_tenant_id")
+}
+
+model modifier_options {
+  id                String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenant_id         String   @db.Uuid
+  modifier_list_id  String   @db.Uuid
+  name              String   @db.VarChar(255) // e.g., "Oat Milk"
+  price_override    Decimal? @db.Decimal(20, 8)
+  linked_variant_id String?  @db.Uuid // Optional: Deduct inventory from another variant (e.g. "Bacon")
+  status            String   @default("active") @db.VarChar(32)
+  created_at        DateTime @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  updated_at        DateTime @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+
+  tenant         tenants           @relation(fields: [tenant_id], references: [id], onDelete: Cascade)
+  modifier_list  modifier_lists    @relation(fields: [modifier_list_id], references: [id], onDelete: Cascade)
+  linked_variant product_variants? @relation(fields: [linked_variant_id], references: [id], onDelete: SetNull)
+
+  @@index([modifier_list_id], map: "idx_mod_options_list_id")
+  @@index([linked_variant_id], map: "idx_mod_options_linked_var_id")
+}
+
+model category_modifiers {
+  category_id      String @db.Uuid
+  modifier_list_id String @db.Uuid
+
+  category      product_categories @relation(fields: [category_id], references: [id], onDelete: Cascade)
+  modifier_list modifier_lists     @relation(fields: [modifier_list_id], references: [id], onDelete: Cascade)
+
+  @@id([category_id, modifier_list_id])
+}
+
+model menu_presentations {
+  id                    String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenant_id             String   @db.Uuid
+  name                  String   @db.VarChar(255) // e.g., "Happy Hour Menu"
+  availability_schedule Json? // Toast gap: active_days, active_hours
+  metadata              Json     @default("{}") // Visibility rules, active hours, kiosk assignments
+  status                String   @default("active") @db.VarChar(32)
+  created_at            DateTime @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  updated_at            DateTime @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+
+  tenant tenants @relation(fields: [tenant_id], references: [id], onDelete: Cascade)
+
+  @@index([tenant_id], map: "idx_menus_tenant_id")
+  @@index([status], map: "idx_menus_status")
+}
+
+model pre_modifiers {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenant_id  String   @db.Uuid
+  name       String   @db.VarChar(255) // e.g., "Extra", "No", "Side of"
+  status     String   @default("active") @db.VarChar(32)
+  created_at DateTime @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  updated_at DateTime @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+
+  tenant tenants @relation(fields: [tenant_id], references: [id], onDelete: Cascade)
+
+  @@index([tenant_id], map: "idx_pre_modifiers_tenant_id")
+}
+
+model pricing_rules {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenant_id  String   @db.Uuid
+  name       String   @db.VarChar(255)
+  type       String   @db.VarChar(64) // e.g., "time_based", "promotional"
+  metadata   Json     @default("{}") // contains scheduling rules, markup formulas
+  status     String   @default("active") @db.VarChar(32)
+  created_at DateTime @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  updated_at DateTime @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+
+  tenant tenants @relation(fields: [tenant_id], references: [id], onDelete: Cascade)
+
+  @@index([tenant_id], map: "idx_pricing_rules_tenant_id")
+}
+
+model orders {
+  id           String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenant_id    String  @db.Uuid
+  workspace_id String? @db.Uuid
+  client_id    String? @db.Uuid
+
+  // COMPARTMENTALIZATION (THE STATIC IDS)
+  internal_channel_id    Int? // The internal POS/Kiosk etc origin
+  marketplace_channel_id Int  @default(0) // The explicit 0 = Walk-in/Not Applicable fallback rule
+  payment_gateway_id     Int? // The payment capture origin
+
+  status        String   @default("pending") @db.VarChar(32) // pending, completed, canceled, refunded
+  fulfillment   String   @default("unfulfilled") @db.VarChar(32) // unfulfilled, processing, ready, delivered
+  dining_option String   @default("for_here") @db.VarChar(32) // for_here, pickup, delivery, to_go
+  subtotal      Decimal  @default(0) @db.Decimal(20, 8)
+  tax           Decimal  @default(0) @db.Decimal(20, 8)
+  total         Decimal  @default(0) @db.Decimal(20, 8)
+  currency      String   @default("USD") @db.Char(3)
+  notes         String?
+  metadata      Json     @default("{}") // Contextual/external meta, custom attributes
+  created_at    DateTime @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  updated_at    DateTime @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+
+  tenant              tenants               @relation(fields: [tenant_id], references: [id], onDelete: Cascade)
+  workspace           workspaces?           @relation(fields: [workspace_id], references: [id], onDelete: SetNull)
+  client              clients?              @relation(fields: [client_id], references: [id], onDelete: SetNull)
+  internal_channel    internal_channels?    @relation(fields: [internal_channel_id], references: [id], onDelete: NoAction)
+  marketplace_channel marketplace_channels  @relation(fields: [marketplace_channel_id], references: [id], onDelete: NoAction)
+  payment_gateway     payment_gateways?     @relation(fields: [payment_gateway_id], references: [id], onDelete: NoAction)
+  items               order_items[]
+  tickets             fulfillment_tickets[]
+
+  @@index([tenant_id], map: "idx_orders_tenant_id")
+  @@index([client_id], map: "idx_orders_client_id")
+  @@index([status], map: "idx_orders_status")
+  @@index([fulfillment], map: "idx_orders_fulfillment")
+}
+
+model order_items {
+  id                 String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  order_id           String   @db.Uuid
+  product_variant_id String?  @db.Uuid // Strictly transact against the variant
+  name               String   @db.VarChar(255) // Cached name (Product + Variant)
+  quantity           Int      @default(1)
+  unit_price         Decimal  @db.Decimal(20, 8)
+  total_price        Decimal  @db.Decimal(20, 8)
+  metadata           Json     @default("{}") // Store array of purchased modifier_options here
+  created_at         DateTime @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+
+  order   orders            @relation(fields: [order_id], references: [id], onDelete: Cascade)
+  variant product_variants? @relation(fields: [product_variant_id], references: [id], onDelete: SetNull)
+
+  @@index([order_id], map: "idx_order_items_order_id")
+  @@index([product_variant_id], map: "idx_order_items_variant_id")
+}
+
+model fulfillment_tickets {
+  id           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenant_id    String    @db.Uuid
+  order_id     String    @db.Uuid
+  assigned_to  String?   @db.Uuid // user_id
+  station      String?   @db.VarChar(64) // e.g., "Grill", "Pick & Pack", "Chair 3"
+  status       String    @default("open") @db.VarChar(32) // open, in_progress, completed
+  due_at       DateTime? @db.Timestamptz(6)
+  completed_at DateTime? @db.Timestamptz(6)
+  metadata     Json      @default("{}")
+  created_at   DateTime  @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  updated_at   DateTime  @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+
+  tenant tenants @relation(fields: [tenant_id], references: [id], onDelete: Cascade)
+  order  orders  @relation(fields: [order_id], references: [id], onDelete: Cascade)
+  user   users?  @relation(fields: [assigned_to], references: [id], onDelete: SetNull)
+
+  @@index([tenant_id], map: "idx_fulfillment_tenant_id")
+  @@index([order_id], map: "idx_fulfillment_order_id")
+  @@index([assigned_to], map: "idx_fulfillment_assigned_to")
+  @@index([status], map: "idx_fulfillment_status")
+}
+
+model locations {
+  id             Int      @id @default(autoincrement())
+  tenant_id      String   @db.Uuid
+  marketing_name String   @db.VarChar(255) // e.g., Pho24 - Hoan Kiem
+  legal_name     String   @db.VarChar(255) // e.g., Pho Twenty Four Hanoi LLC
+  status         String   @default("active") @db.VarChar(32)
+  created_at     DateTime @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  updated_at     DateTime @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+
+  tenant              tenants               @relation(fields: [tenant_id], references: [id], onDelete: Cascade)
+  inventory_counts    inventory_counts[]
+  inventory_movements inventory_movements[]
+  purchase_orders     purchase_orders[]
+
+  @@index([tenant_id], map: "idx_locations_tenant_id")
+  @@index([status], map: "idx_locations_status")
+}

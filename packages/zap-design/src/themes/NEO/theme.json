@@ -1,0 +1,54 @@
+{
+  "version": "1.0",
+  "theme": "neo",
+  "tokens": {
+    "colors": {
+      "brand": {
+        "midnight": "#1e293b",
+        "teal": "#bdf2d5",
+        "yellow": "#fdf6b0",
+        "magenta": "#ff577f",
+        "cream": "#ffffff"
+      },
+      "layers": {
+        "canvas": "#bdf2d5",
+        "cover": "#ffffff",
+        "panel": "#fdf6b0"
+      }
+    },
+    "physics": {
+      "borderRadius": "24px",
+      "borderWidth": "4px",
+      "shadows": {
+        "offset": "4px",
+        "color": "#1e293b"
+      }
+    }
+  },
+  "metrics": {
+    "colorBrandMidnight": "#1e293b !important",
+    "colorBrandTeal": "#bdf2d5 !important",
+    "colorBrandYellow": "#fdf6b0 !important",
+    "colorBrandMagenta": "#ff577f !important",
+    "colorCreamWhite": "#ffffff !important",
+    "colorLayerCanvas": "#bdf2d5 !important",
+    "colorLayerCover": "#ffffff !important",
+    "colorLayerPanel": "#fdf6b0 !important",
+    "cardRadius": "24px !important",
+    "btnRadius": "24px !important",
+    "inputRadius": "24px !important",
+    "cardBorderWidth": "4px !important",
+    "cardBorder": "#1e293b !important",
+    "inputBorder": "#1e293b !important",
+    "colorStateSuccess": "#39ff14 !important",
+    "colorStateError": "#FF0000 !important",
+    "colorStateWarning": "#FFA500 !important",
+    "colorStateInfo": "#bdf2d5 !important",
+    "colorStateFocus": "#fdf6b0 !important",
+    "cardShadow": "4px 4px 0px 0px #1e293b !important",
+    "navGapCategory": "10px !important",
+    "navGapItem": "6px !important",
+    "navExpansionPad": "6px !important"
+  },
+  "name": "NEO"
+}

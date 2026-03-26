@@ -1,0 +1,23 @@
+/* AUTO-GENERATED ZAP THEME OVERRIDE: WIX */
+/* Do not edit directly. Edit theme.json and run the compiler. */
+
+.theme-wix {
+    --color-brand-midnight: #FFFFFF !important;
+    --color-brand-teal: #00F0FF !important;
+    --color-brand-yellow: #FF007F !important;
+    --color-brand-magenta: #B026FF !important;
+    --color-cream-white: #1A0B2E !important;
+    --color-layer-canvas: #090014 !important;
+    --color-layer-cover: #1A0B2E !important;
+    --color-layer-panel: #2D1445 !important;
+    --card-radius: 16px !important;
+    --btn-radius: 9999px !important;
+    --input-radius: 8px !important;
+    --card-border-width: 2px !important;
+    --card-border: #FF007F !important;
+    --input-border: #00F0FF !important;
+    --card-shadow: 4px 4px 0px 0px #00F0FF !important;
+    --nav-gap-category: 10px !important;
+    --nav-gap-item: 6px !important;
+    --nav-expansion-pad: 10px !important;
+}

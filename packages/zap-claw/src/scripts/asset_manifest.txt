@@ -1,0 +1,977 @@
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/ui/empty-image.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/ui/empty-avatar.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/products/8.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/products/9.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/products/14.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/products/28.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/products/29.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/products/15.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/products/17.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/products/16.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/products/12.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/products/13.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/products/11.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/products/10.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/products/21.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/products/35.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/products/34.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/products/20.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/products/22.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/products/23.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/products/33.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/products/27.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/products/26.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/products/32.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/products/18.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/products/24.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/products/30.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/products/31.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/products/25.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/products/19.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/products/4.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/products/5.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/products/7.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/products/6.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/products/2.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/products/3.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/products/1.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/saint-kitts-and-nevis.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/tuvalu-1.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/melilla.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/dominican-republic.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/canary-islands.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/trinidad-and-tobago.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/nigeria.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/equatorial-guinea.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/costa-rica.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/switzerland.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/panama.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/corsica.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/oman.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/north-korea.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/senegal.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/papua-new-guinea.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/comoros.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/malaysia.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/montenegro.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/sint-eustatius.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/christmas-island.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/madagascar.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/northern-cyprus.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/grenada.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/bermuda.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/sahrawi-arab-democratic-republic.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/montserrat.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/tonga.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/marshall-island.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/libya.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/burkina-faso.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/sicily.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/syria.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/ecuador.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/gabon.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/andorra.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/greece.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/british-columbia.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/pitcairn-islands.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/benin.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/brazil.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/mozambique.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/belgium.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/isle-of-man.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/moldova.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/seychelles.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/burundi.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/sweden.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/czech-republic.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/gibraltar.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/england.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/balearic-islands.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/nepal.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/monaco.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/rapa-nui.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/republic-of-the-congo.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/turkey.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/cameroon.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/sierra-leone.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/australia.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/french-polynesia.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/virgin-islands.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/puerto-rico.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/guam.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/east-timor.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/niue.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/british-virgin-islands.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/kiribati.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/armenia.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/honduras.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/taiwan.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/south-korea.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/somaliland.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/cook-islands.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/rwanda.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/algeria.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/curacao.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/aruba.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/united-nations.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/kosovo.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/greenland.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/cocos-island.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/sao-tome-and-prince.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/cuba.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/tajikistan.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/kyrgyzstan.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/laos.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/estonia.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/guinea.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/aland-islands.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/tunisia.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/sint-maarten.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/ukraine.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/angola.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/djibouti.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/tibet.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/cambodia.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/scotland.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/lesotho.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/saudi-arabia.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/zambia.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/nato.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/flag.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/jamaica.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/tanzania.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/iran.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/namibia.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/venezuela.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/guernsey.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/british-indian-ocean-territory.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/colombia.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/liberia.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/south-sudan.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/iceland.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/ceuta.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/democratic-republic-of-congo.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/hungary.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/kazakhstan.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/argentina.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/china.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/cape-verde.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/poland.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/bolivia.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/st-lucia.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/russia.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/guatemala.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/ghana.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/kenya.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/afghanistan.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/samoa.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/norway.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/el-salvador.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/sardinia.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/mexico.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/belize.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/united-states.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/botswana.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/morocco.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/romania.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/st-vincent-and-the-grenadines.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/northern-mariana-islands.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/european-union.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/chile.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/indonesia.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/slovenia.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/slovakia.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/nauru.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/lithuania.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/ireland.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/finland.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/uzbekistan.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/japan.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/vietnam.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/uruguay.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/malta.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/st-barts.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/egypt.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/wales.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/niger.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/vatican-city.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/hawaii.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/malawi.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/croatia.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/fiji.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/jordan.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/sri-lanka.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/vanuatu.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/turks-and-caicos.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/norfolk-island.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/palestine.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/iraq.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/swaziland.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/bahamas.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/bonaire.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/ethiopia.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/netherlands.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/georgia.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/lebanon.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/singapore.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/peru.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/india.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/philippines.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/barbados.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/albania.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/denmark.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/palau.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/belarus.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/uk.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/ivory-coast.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/jersey.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/eritrea.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/chad.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/brunei.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/new-zealand.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/falkland-islands.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/liechtenstein.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/ossetia.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/italy.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/zimbabwe.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/france.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/san-marino.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/dominica.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/kuwait.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/thailand.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/bangladesh.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/serbia.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/mali.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/suriname.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/mongolia.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/bahrain.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/luxembourg.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/paraguay.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/american-samoa.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/central-african-republic.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/saba-island.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/portugal.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/mauritius.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/basque-country.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/spain.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/tuvalu.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/south-africa.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/myanmar.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/martinique.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/turkmenistan.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/nicaragua.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/haiti.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/guinea-bissau.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/uganda.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/austria.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/antigua-and-barbuda.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/israel.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/latvia.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/macao.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/sudan.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/galapagos-islands.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/maldives.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/somalia.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/united-arab-emirates.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/germany.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/bhutan.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/qatar.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/azerbaijan.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/hong-kong.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/pakistan.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/mauritania.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/solomon-islands.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/bulgaria.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/tokelau.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/togo.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/madeira.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/gambia.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/yemen.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/canada.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/united-kingdom.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/cayman-islands.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/micronesia.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/bosnia-and-herzegovina.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/anguilla.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/republic-of-macedonia.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/transnistria.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags/azores-islands.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/app/auth-bg.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/app/favicon-16x16.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/app/mini-logo-circle-primary.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/app/mini-logo-circle-success.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/app/apple-touch-icon.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/app/default-logo-dark.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/app/mini-logo-square-gray-dark.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/app/mini-logo-gray-dark.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/app/mini-logo-primary.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/app/og-image.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/app/mini-logo.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/app/mini-logo-circle-primary-dark.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/app/default-logo.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/app/auth-screen.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/app/mini-logo-circle-dark.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/app/mini-logo-square-gray.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/app/mini-logo-circle.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/app/mini-logo-primary-dark.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/app/mini-logo-gray.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/app/favicon-32x32.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/2600x1200/bg-4.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/2600x1200/bg-5.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/2600x1200/bg-14-dark.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/2600x1200/bg-7.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/2600x1200/bg-14.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/2600x1200/bg-6.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/2600x1200/bg-1-dark.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/2600x1200/bg-2.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/2600x1200/bg-10.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/2600x1200/bg-11.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/2600x1200/bg-3.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/2600x1200/bg-1.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/2600x1200/bg-13.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/2600x1200/bg-12.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/2600x1200/2-dark.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/2600x1200/3-dark.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/2600x1200/bg-2-dark.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/2600x1200/bg-3-dark.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/2600x1200/bg-10-dark.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/2600x1200/bg-5-dark.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/2600x1200/bg-4-dark.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/2600x1200/2.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/2600x1200/3.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/2600x1200/1.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/2600x1200/bg-8.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/2600x1200/bg-9.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/2600x1600/bg-1-dark.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/2600x1600/bg-2.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/2600x1600/bg-3.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/2600x1600/bg-1.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/2600x1600/2-dark.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/2600x1600/1-dark.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/2600x1600/bg-2-dark.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/2600x1600/bg-3-dark.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/2600x1600/2.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/2600x1600/1.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/600x400/8.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/600x400/9.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/600x400/14.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/600x400/28.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/600x400/29.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/600x400/15.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/600x400/17.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/600x400/16.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/600x400/12.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/600x400/13.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/600x400/11.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/600x400/10.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/600x400/21.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/600x400/20.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/600x400/22.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/600x400/23.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/600x400/33.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/600x400/27.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/600x400/26.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/600x400/32.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/600x400/18.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/600x400/24.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/600x400/30.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/600x400/31.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/600x400/25.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/600x400/19.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/600x400/4.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/600x400/5.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/600x400/7.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/600x400/6.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/600x400/2.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/600x400/3.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/600x400/1.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/600x600/8.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/600x600/9.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/600x600/14.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/600x600/28.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/600x600/29.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/600x600/15.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/600x600/17.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/600x600/16.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/600x600/12.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/600x600/13.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/600x600/11.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/600x600/10.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/600x600/21.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/600x600/35.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/600x600/34.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/600x600/20.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/600x600/22.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/600x600/23.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/600x600/33.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/600x600/27.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/600x600/26.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/600x600/32.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/600x600/18.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/600x600/24.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/600x600/30.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/600x600/31.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/600x600/25.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/600x600/19.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/600x600/4.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/600x600/5.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/600x600/7.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/600x600/6.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/600x600/2.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/600x600/3.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/images/600x600/1.jpg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/illustrations/10.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/illustrations/35-dark.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/illustrations/34-dark.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/illustrations/11.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/illustrations/13.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/illustrations/12.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/illustrations/16.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/illustrations/4-dark.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/illustrations/5-dark.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/illustrations/22-dark.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/illustrations/23-dark.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/illustrations/17.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/illustrations/15.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/illustrations/29.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/illustrations/28-dark.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/illustrations/29-dark.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/illustrations/28.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/illustrations/14.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/illustrations/3-dark.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/illustrations/2-dark.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/illustrations/9.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/illustrations/8.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/illustrations/11-dark.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/illustrations/10-dark.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/illustrations/32-dark.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/illustrations/33-dark.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/illustrations/1.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/illustrations/3.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/illustrations/21-dark.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/illustrations/20-dark.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/illustrations/2.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/illustrations/6.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/illustrations/7.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/illustrations/5.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/illustrations/4.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/illustrations/19.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/illustrations/31.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/illustrations/25.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/illustrations/24.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/illustrations/30.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/illustrations/18.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/illustrations/26.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/illustrations/32.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/illustrations/31-dark.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/illustrations/30-dark.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/illustrations/33.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/illustrations/27.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/illustrations/23.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/illustrations/22.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/illustrations/1-dark.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/illustrations/34.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/illustrations/20.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/illustrations/18-dark.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/illustrations/19-dark.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/illustrations/21.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/illustrations/35.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/saint-kitts-and-nevis.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/tuvalu-1.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/melilla.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/dominican-republic.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/canary-islands.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/trinidad-and-tobago.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/nigeria.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/equatorial-guinea.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/costa-rica.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/switzerland.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/panama.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/corsica.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/oman.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/north-korea.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/senegal.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/papua-new-guinea.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/comoros.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/malaysia.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/montenegro.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/sint-eustatius.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/christmas-island.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/madagascar.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/northern-cyprus.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/grenada.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/bermuda.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/sahrawi-arab-democratic-republic.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/montserrat.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/tonga.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/marshall-island.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/libya.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/burkina-faso.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/sicily.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/syria.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/ecuador.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/gabon.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/andorra.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/greece.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/british-columbia.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/pitcairn-islands.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/benin.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/brazil.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/mozambique.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/belgium.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/isle-of-man.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/moldova.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/seychelles.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/burundi.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/sweden.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/czech-republic.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/gibraltar.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/england.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/balearic-islands.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/nepal.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/monaco.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/rapa-nui.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/republic-of-the-congo.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/turkey.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/cameroon.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/sierra-leone.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/australia.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/french-polynesia.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/virgin-islands.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/puerto-rico.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/guam.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/east-timor.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/niue.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/british-virgin-islands.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/kiribati.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/armenia.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/honduras.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/taiwan.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/south-korea.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/somaliland.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/cook-islands.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/rwanda.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/algeria.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/curacao.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/aruba.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/united-nations.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/kosovo.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/greenland.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/cocos-island.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/sao-tome-and-prince.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/cuba.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/tajikistan.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/kyrgyzstan.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/laos.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/estonia.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/guinea.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/aland-islands.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/tunisia.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/sint-maarten.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/ukraine.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/angola.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/djibouti.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/tibet.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/cambodia.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/scotland.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/lesotho.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/saudi-arabia.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/zambia.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/nato.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/flag.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/jamaica.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/tanzania.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/iran.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/namibia.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/venezuela.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/guernsey.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/british-indian-ocean-territory.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/colombia.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/liberia.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/south-sudan.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/iceland.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/ceuta.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/democratic-republic-of-congo.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/hungary.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/kazakhstan.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/argentina.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/china.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/cape-verde.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/poland.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/bolivia.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/st-lucia.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/russia.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/guatemala.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/ghana.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/kenya.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/afghanistan.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/samoa.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/norway.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/el-salvador.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/sardinia.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/mexico.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/belize.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/united-states.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/botswana.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/morocco.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/romania.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/st-vincent-and-the-grenadines.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/northern-mariana-islands.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/european-union.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/chile.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/indonesia.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/slovenia.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/slovakia.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/nauru.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/lithuania.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/ireland.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/finland.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/uzbekistan.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/japan.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/vietnam.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/uruguay.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/malta.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/st-barts.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/egypt.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/wales.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/niger.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/vatican-city.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/hawaii.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/malawi.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/croatia.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/fiji.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/jordan.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/sri-lanka.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/vanuatu.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/turks-and-caicos.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/norfolk-island.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/palestine.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/iraq.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/swaziland.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/bahamas.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/bonaire.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/ethiopia.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/netherlands.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/georgia.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/lebanon.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/singapore.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/peru.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/india.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/philippines.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/barbados.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/albania.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/denmark.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/palau.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/belarus.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/uk.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/ivory-coast.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/jersey.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/eritrea.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/chad.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/brunei.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/new-zealand.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/falkland-islands.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/liechtenstein.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/ossetia.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/italy.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/zimbabwe.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/france.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/san-marino.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/dominica.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/kuwait.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/thailand.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/bangladesh.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/serbia.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/mali.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/suriname.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/mongolia.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/bahrain.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/luxembourg.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/paraguay.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/american-samoa.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/central-african-republic.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/saba-island.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/portugal.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/mauritius.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/basque-country.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/spain.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/tuvalu.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/south-africa.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/myanmar.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/martinique.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/turkmenistan.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/nicaragua.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/haiti.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/guinea-bissau.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/uganda.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/austria.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/antigua-and-barbuda.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/israel.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/latvia.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/macao.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/sudan.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/galapagos-islands.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/maldives.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/somalia.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/united-arab-emirates.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/germany.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/bhutan.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/qatar.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/azerbaijan.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/hong-kong.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/pakistan.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/mauritania.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/solomon-islands.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/bulgaria.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/tokelau.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/togo.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/madeira.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/gambia.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/yemen.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/canada.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/united-kingdom.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/cayman-islands.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/micronesia.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/bosnia-and-herzegovina.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/anguilla.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/republic-of-macedonia.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/transnistria.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/flags copy/azores-islands.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/banners/button-dark.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/banners/button-red.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/avatars/gray/4.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/avatars/gray/5.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/avatars/gray/2.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/avatars/gray/3.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/avatars/gray/1.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/avatars/300-7.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/avatars/300-10.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/avatars/blank.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/avatars/300-11.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/avatars/300-6.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/avatars/300-4.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/avatars/300-13.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/avatars/300-12.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/avatars/300-5.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/avatars/300-1.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/avatars/300-16.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/avatars/300-17.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/avatars/300-2.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/avatars/300-15.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/avatars/300-29.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/avatars/300-28.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/avatars/300-14.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/avatars/300-3.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/avatars/300-19.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/avatars/300-31.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/avatars/300-25.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/avatars/300-24.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/avatars/300-30.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/avatars/300-18.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/avatars/300-26.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/avatars/300-32.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/avatars/300-33.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/avatars/300-27.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/avatars/300-8.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/avatars/300-23.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/avatars/300-22.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/avatars/300-9.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/avatars/300-34.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/avatars/300-20.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/avatars/300-21.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/file-types/figma.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/file-types/video-1.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/file-types/txt.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/file-types/javascript.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/file-types/mail-1.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/file-types/js.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/file-types/music.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/file-types/powerpoint.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/file-types/sql.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/file-types/vector.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/file-types/ttf.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/file-types/doc.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/file-types/zip.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/file-types/mail.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/file-types/psd.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/file-types/disc.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/file-types/record.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/file-types/text.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/file-types/image.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/file-types/word.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/file-types/ai.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/file-types/svg.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/file-types/css.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/file-types/iso.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/file-types/php.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/file-types/apk.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/file-types/pdf.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/file-types/ppt.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/file-types/mp3.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/file-types/video.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/file-types/excel.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/file-types/xls.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/file-types/font.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/bootstrap.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/spring.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/figma.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/general-electric.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/weave.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/lykke-lkk.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/coinhodler.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/microsoft-5.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/telcoin.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/voise.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/webpack.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/amazon-dark.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/foursquare.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/android.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/vue.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/divi.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/openid.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/gitlab.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/visa.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/sass.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/mailchimp-1.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/instagram-03.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/airbnb-2.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/forest.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/btcexchange.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/uex.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/principle-app.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/google-play-store.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/sololearn.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/cloud-one.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/google-analytics.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/equacoin.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/mailchimp-2.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/npm.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/proyecto-casa.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/btcchina.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/google-calendar.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/tezos.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/infography.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/angular.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/x.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/vimeo.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/symfony.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/shell.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/twitch-purple.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/instagram.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/netcore.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/rails-2.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/zoom.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/gamer-trophy.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/bitsane.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/patientory.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/twitter-2.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/discover.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/atica.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/coinranking.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/webrtc.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/netcore-2.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/myriadcoin.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/disqus.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/icon.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/telegram.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/xostme-ltd.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/american-express.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/x-dark.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/paper.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/online-game.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/invision.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/amazon-2.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/boomerang.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/clusterhq.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/apple-black.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/quickbooks.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/pinterest-circle.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/jira.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/nodejs.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/tiktok-dark.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/kickstarter.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/yarn.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/linkedin-2.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/laravel.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/monday.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/paypal.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/facebook.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/pillar.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/amazon.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/bithumb.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/css.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/monetha.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/google-webdev.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/whatsapp.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/google.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/bridgefy.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/stripe.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/youtube-2.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/instagram-2.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/flood-io.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/hsbc.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/plurk.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/grab.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/xing.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/prefect.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/azure.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/hot-air-balloon.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/gamer-coin.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/paccion.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/youtube.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/rails.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/gamer-diamond.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/bookingcom.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/inferno.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/hp-hewlett-packard.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/gulp.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/beats-electronics.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/blazor.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/datatables.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/gomix.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/codeigniter.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/perrier.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/hex-lab.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/evernote.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/dribbble.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/linkedin.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/ideal.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/react.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/twitter.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/discord.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/duolingo.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/tbg.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/html.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/slack.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/office.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/logo.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/django.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/casual-hookups.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/ebay.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/yii.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/tiktok-2.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/tiktok-3.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/google-analytics-2.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/the-ocean.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/go.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/chrome.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/spotify-2.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/tiktok.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/apple-white.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/brand-logos/plastic-scm.svg
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/store/client/600x600/8.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/store/client/600x600/9.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/store/client/600x600/14.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/store/client/600x600/15.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/store/client/600x600/16.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/store/client/600x600/12.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/store/client/600x600/13.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/store/client/600x600/11.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/store/client/600x600/10.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/store/client/600x600/4.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/store/client/600x600/5.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/store/client/600x600/7.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/store/client/600x600/6.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/store/client/600x600/2.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/store/client/600x600/3.png
+/Users/zap/Workspace/references/metronic/metronic-tailwind-react-demos/typescript/nextjs/public/media/store/client/600x600/1.png

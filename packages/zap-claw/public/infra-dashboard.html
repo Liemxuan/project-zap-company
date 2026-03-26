@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infrastructure Dashboard - ZAP Claw</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a110c;
+            --surface: #16261b;
+            --surface-accent: rgba(22, 38, 27, 0.7);
+            --border: rgba(19, 236, 91, 0.15);
+            --text-main: #f6f8f6;
+            --text-dim: #94ab9c;
+            --accent: #13ec5b;
+            --accent-glow: rgba(19, 236, 91, 0.4);
+            --success: #13ec5b;
+            --error: #ef4444;
+            --warning: #f59e0b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 2.5rem;
+            background-image: radial-gradient(circle at 50% 0%, rgba(19, 236, 91, 0.05) 0%, #0a110c 100%);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.05em;
+            text-transform: uppercase;
+        }
+
+        .logo h1 span {
+            color: var(--accent);
+        }
+
+        .status-pill {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+            padding: 0.4rem 1rem;
+            border-radius: 99rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .pulse {
+            width: 8px;
+            height: 8px;
+            background: var(--success);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(1.5);
+                opacity: 0.5;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+        }
+
+        .card {
+            background: var(--surface);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .card-subtitle {
+            font-size: 0.875rem;
+            color: var(--text-dim);
+            margin-bottom: 1.5rem;
+        }
+
+        .registry-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 0.5rem;
+        }
+
+        .registry-table th {
+            text-align: left;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-dim);
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .registry-table td {
+            padding: 1.25rem 1rem;
+            background: var(--surface-accent);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            font-size: 0.95rem;
+        }
+
+        .registry-table td:first-child {
+            border-left: 1px solid var(--border);
+            border-top-left-radius: 12px;
+            border-bottom-left-radius: 12px;
+            font-weight: 600;
+        }
+
+        .registry-table td:last-child {
+            border-right: 1px solid var(--border);
+            border-top-right-radius: 12px;
+            border-bottom-right-radius: 12px;
+        }
+
+        .badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .badge-google {
+            background: rgba(66, 133, 244, 0.1);
+            color: #4285f4;
+        }
+
+        .badge-openrouter {
+            background: rgba(255, 255, 255, 0.05);
+            color: #ffffff;
+        }
+
+        .status-dot {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .status-active .status-dot {
+            background: var(--success);
+            box-shadow: 0 0 10px var(--success);
+        }
+
+        .status-missing .status-dot {
+            background: var(--error);
+            box-shadow: 0 0 10px var(--error);
+        }
+
+        .key-tail {
+            font-family: 'JetBrains Mono', monospace;
+            background: #000;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            color: var(--accent);
+            font-size: 0.85rem;
+        }
+
+        .add-key-card {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group label {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--text-dim);
+        }
+
+        .input {
+            background: #000;
+            border: 1px solid var(--border);
+            padding: 0.75rem 1rem;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .input:focus {
+            border-color: var(--accent);
+        }
+
+        .btn {
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            padding: 1rem;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 20px var(--accent-glow);
+        }
+
+        .metric-card {
+            background: var(--surface-accent);
+            border: 1px solid var(--border);
+            padding: 1.5rem;
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .metric-label {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            display: none;
+            animation: slideIn 0.3s ease-out;
+            z-index: 100;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .empty-cell {
+            color: var(--error);
+            font-style: italic;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="32" height="32" rx="8" fill="var(--accent)" />
+                    <path d="M16 8L24 24H8L16 8Z" fill="#0a110c" />
+                </svg>
+                <h1>ZAP <span>Infra</span> Dashboard</h1>
+            </div>
+            <div class="status-pill">
+                <div class="pulse"></div>
+                Gateway: Active
+            </div>
+        </header>
+
+        <div class="grid">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Infra-Isolation Key Registry</h2>
+                    <span class="badge" style="background: rgba(255,255,255,0.05);">SOP-007</span>
+                </div>
+                <p class="card-subtitle">Strategic allocation for Pro, Ultra, and Tenant isolation.</p>
+
+                <table class="registry-table">
+                    <thead>
+                        <tr>
+                            <th>logical name</th>
+                            <th>provider</th>
+                            <th>project</th>
+                            <th>status</th>
+                            <th>key thumb</th>
+                        </tr>
+                    </thead>
+                    <tbody id="registry-body">
+                        <!-- Polled dynamically -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="add-key-card">
+                <div class="card">
+                    <h2 class="card-title" style="margin-bottom: 1.5rem;">Provision New Key</h2>
+                    <form id="key-form" class="add-key-card">
+                        <div class="form-group">
+                            <label>Target Role / Logical Name</label>
+                            <select class="input" id="key-name">
+                                <option value="PRECISION_GATEWAY">PRECISION_GATEWAY (Ultra)</option>
+                                <option value="INTERNAL_COMMANDER">INTERNAL_COMMANDER (Leader)</option>
+                                <option value="CODE_WORKFORCE">CODE_WORKFORCE (Pro/Coder)</option>
+                                <option value="SCOUT_RESEARCH">SCOUT_RESEARCH (Pro/Scout)</option>
+                                <option value="TENANT_PLATINUM">TENANT_PLATINUM (Customer)</option>
+                                <option value="TENANT_STANDARD">TENANT_STANDARD (Customer)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>GCP Project / ID</label>
+                            <input type="text" class="input" id="key-project" placeholder="e.g. zap-precision-99">
+                        </div>
+                        <div class="form-group">
+                            <label>API Key Value</label>
+                            <input type="password" class="input" id="key-value" placeholder="Paste your key here">
+                        </div>
+                        <button class="btn" type="submit">Deploy to Gateway</button>
+                    </form>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-label">Arbiter Uptime</div>
+                    <div class="metric-value">99.98%</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-label">Prepaid Savings</div>
+                    <div class="metric-value">$1,248.50</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <script>
+        const registryBody = document.getElementById('registry-body');
+        const keyForm = document.getElementById('key-form');
+        const toast = document.getElementById('toast');
+
+        function showToast(msg) {
+            toast.innerText = msg;
+            toast.style.display = 'block';
+            setTimeout(() => { toast.style.display = 'none'; }, 3000);
+        }
+
+        async function fetchRegistry() {
+            try {
+                const res = await fetch('/api/admin/infra-registry');
+                const data = await res.json();
+
+                registryBody.innerHTML = '';
+                data.forEach(item => {
+                    const row = document.createElement('tr');
+                    const statusClass = item.status === 'ACTIVE' ? 'status-active' : 'status-missing';
+                    const providerBadge = item.provider === 'GOOGLE' ? 'badge-google' : 'badge-openrouter';
+
+                    row.innerHTML = `
+                        <td>${item.name}</td>
+                        <td><span class="badge ${providerBadge}">${item.provider}</span></td>
+                        <td>${item.project}</td>
+                        <td class="${statusClass}"><span class="status-dot"></span>${item.status}</td>
+                        <td>
+                            ${item.keyTail !== 'BLANK'
+                            ? `<span class="key-tail">${item.keyTail}</span>`
+                            : `<span class="empty-cell">FILL IN BLANK</span>`}
+                        </td>
+                    `;
+                    registryBody.appendChild(row);
+                });
+            } catch (err) {
+                console.error("Dashboard failed to fetch registry:", err);
+            }
+        }
+
+        keyForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('key-name').value;
+            const project = document.getElementById('key-project').value;
+            const value = document.getElementById('key-value').value;
+
+            if (!value) {
+                showToast("Physical API Key is required.");
+                return;
+            }
+
+            try {
+                const res = await fetch('/api/admin/infra-registry', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, project, apiKey: value })
+                });
+
+                if (res.ok) {
+                    showToast(`Key successfully mapped to ${name}`);
+                    keyForm.reset();
+                    fetchRegistry();
+                } else {
+                    showToast("Error saving key to registry.");
+                }
+            } catch (err) {
+                console.error(err);
+                showToast("Network error submitting key.");
+            }
+        });
+
+        fetchRegistry();
+        setInterval(fetchRegistry, 10000);
+    </script>
+</body>
+
+</html>

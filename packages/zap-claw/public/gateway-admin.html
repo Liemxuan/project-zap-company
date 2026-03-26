@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gateway Management - ZAP Claw</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #09090b;
+            --surface: #18181b;
+            --border: #27272a;
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
+            --accent: #3b82f6;
+            --accent-glow: rgba(59, 130, 246, 0.5);
+            --success: #10b981;
+            --error: #ef4444;
+            --warning: #f59e0b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Space Grotesk', -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header-title {
+            grid-column: 1 / -1;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .header-title h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .card {
+            background: rgba(24, 24, 27, 0.7);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        .gateway-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .gateway-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 1rem;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .gateway-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .gateway-item.active {
+            border-color: var(--accent);
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .gateway-id {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .gateway-details {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            font-family: ui-monospace, SFMono-Regular, monospace;
+        }
+
+        .status-badge {
+            font-size: 0.7rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            background: #27272a;
+            color: #d4d4d8;
+        }
+
+        .status-badge.active {
+            background: rgba(16, 185, 129, 0.2);
+            color: #34d399;
+        }
+
+        .status-badge.inactive {
+            background: rgba(239, 68, 68, 0.2);
+            color: #f87171;
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-dim);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-control {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+            outline: none;
+        }
+
+        .form-control:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 1px var(--accent);
+        }
+
+        select.form-control {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1em;
+        }
+
+        .submit-btn {
+            background: var(--text-main);
+            color: var(--bg);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            float: right;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(255, 255, 255, 0.15);
+        }
+
+        .clear-btn {
+            background: transparent;
+            color: var(--text-dim);
+            border: 1px solid var(--border);
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .clear-btn:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-main);
+        }
+
+        .action-row {
+            margin-top: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(150%);
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 0.75rem 1.25rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Tracking Badge */
+        .zap-form-badge {
+            position: fixed;
+            bottom: 16px;
+            right: 16px;
+            background: rgba(0, 0, 0, 0.8);
+            color: #64748b;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-family: monospace;
+            z-index: 9999;
+            pointer-events: none;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-dim);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header-title">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="28" height="28"
+            xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1">
+            </path>
+        </svg>
+        <h1>Gateway Registry Directory</h1>
+    </div>
+
+    <div class="card">
+        <h2 style="font-size: 1.1rem; margin-bottom: 1rem; color: var(--text-dim);">Registered Gateways</h2>
+        <div class="gateway-list" id="gatewayList">
+            <div class="empty-state">Loading gateways...</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2 style="font-size: 1.1rem; margin-bottom: 1.5rem; color: var(--text-dim);" id="formTitle">Add New Gateway
+        </h2>
+
+        <form id="gatewayForm">
+            <div class="form-group">
+                <label for="gatewayId">Unique Gateway ID</label>
+                <input type="text" id="gatewayId" class="form-control" placeholder="e.g., telegram_main, discord_beta"
+                    required>
+            </div>
+
+            <div class="form-group">
+                <label for="tenantId">Assigned Tenant ID</label>
+                <input type="text" id="tenantId" class="form-control" placeholder="e.g., ZVN, GLOBAL, CUST99" required>
+            </div>
+
+            <div class="form-group">
+                <label for="boundAgentId">Bound Agent ID</label>
+                <input type="text" id="boundAgentId" class="form-control" placeholder="e.g., AGNT-ZVN-SUPPORT" required>
+            </div>
+
+            <div class="form-group">
+                <label for="type">Direct UI / Channel</label>
+                <select id="type" class="form-control" required>
+                    <option value="Telegram">Telegram (Default)</option>
+                    <option value="Web">Web Dashboard</option>
+                    <option value="Whatsapp">WhatsApp</option>
+                    <option value="Discord">Discord</option>
+                    <option value="iMessage">iMessage</option>
+                    <option value="Terminal">Terminal CLI</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="role">Roles / Limitations</label>
+                <select id="role" class="form-control" required>
+                    <option value="Full">Full Access</option>
+                    <option value="Limited">Limited (Constrained Prompts)</option>
+                    <option value="None">None (Disabled)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="modelSource">Model Usage Source</label>
+                <select id="modelSource" class="form-control" required>
+                    <option value="Default System">Default System Models</option>
+                    <option value="BYOK">BYOK (Bring Your Own Key)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="status">Gateway Status</label>
+                <select id="status" class="form-control" required>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                </select>
+            </div>
+
+            <div class="action-row">
+                <button type="button" class="clear-btn" id="clearBtn">Clear Form</button>
+                <button type="submit" class="submit-btn" id="submitBtn">Save Gateway</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="toast" id="toast"></div>
+    <div class="zap-form-badge">FRM-GTW-01 (104) &bull; Status: In Progress &bull; QC: Pending</div>
+
+    <script>
+        const form = document.getElementById('gatewayForm');
+        const gatewayList = document.getElementById('gatewayList');
+        const formTitle = document.getElementById('formTitle');
+        const clearBtn = document.getElementById('clearBtn');
+        const toastInfo = document.getElementById('toast');
+
+        let gateways = [];
+
+        async function fetchGateways() {
+            try {
+                const res = await fetch('/api/admin/gateways');
+                if (res.ok) {
+                    gateways = await res.json();
+                    renderList();
+                }
+            } catch (e) {
+                console.error("Failed to fetch gateways:", e);
+                gatewayList.innerHTML = `<div class="empty-state" style="color:var(--error)">Error loading gateways.</div>`;
+            }
+        }
+
+        function renderList() {
+            if (gateways.length === 0) {
+                gatewayList.innerHTML = `<div class="empty-state">No gateways registered yet.</div>`;
+                return;
+            }
+
+            gatewayList.innerHTML = gateways.map(g => `
+                <div class="gateway-item" onclick="selectGateway('${g.gatewayId}')" id="card-${g.gatewayId}">
+                    <div class="gateway-id">
+                        ${g.gatewayId}
+                        <span class="status-badge ${g.status}">${g.status.toUpperCase()}</span>
+                    </div>
+                    <div class="gateway-details">
+                        ${g.type} &bull; Role: ${g.role} &bull; ${g.modelSource}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function selectGateway(id) {
+            const g = gateways.find(gw => gw.gatewayId === id);
+            if (!g) return;
+
+            document.querySelectorAll('.gateway-item').forEach(el => el.classList.remove('active'));
+            document.getElementById(`card-${id}`).classList.add('active');
+
+            document.getElementById('gatewayId').value = g.gatewayId;
+            document.getElementById('gatewayId').readOnly = true;
+            document.getElementById('gatewayId').style.opacity = '0.7';
+
+            document.getElementById('tenantId').value = g.tenantId || '';
+            document.getElementById('boundAgentId').value = g.boundAgentId || '';
+
+            document.getElementById('type').value = g.type;
+            document.getElementById('role').value = g.role;
+            document.getElementById('modelSource').value = g.modelSource;
+            document.getElementById('status').value = g.status;
+
+            formTitle.textContent = `Edit Gateway - ${g.gatewayId}`;
+            document.getElementById('submitBtn').textContent = "Update Gateway";
+        }
+
+        clearBtn.addEventListener('click', () => {
+            form.reset();
+            document.getElementById('gatewayId').readOnly = false;
+            document.getElementById('gatewayId').style.opacity = '1';
+            document.querySelectorAll('.gateway-item').forEach(el => el.classList.remove('active'));
+            formTitle.textContent = "Add New Gateway";
+            document.getElementById('submitBtn').textContent = "Save Gateway";
+        });
+
+        function showToast(msg, isErr = false) {
+            toastInfo.innerHTML = isErr ? `⚠️ ${msg}` : `✅ ${msg}`;
+            toastInfo.style.borderLeft = `4px solid var(--${isErr ? 'error' : 'success'})`;
+            toastInfo.classList.add('show');
+            setTimeout(() => toastInfo.classList.remove('show'), 3000);
+        }
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            btn.textContent = "Saving...";
+            btn.disabled = true;
+
+            const payload = {
+                gatewayId: document.getElementById('gatewayId').value.trim(),
+                tenantId: document.getElementById('tenantId').value.trim(),
+                boundAgentId: document.getElementById('boundAgentId').value.trim(),
+                type: document.getElementById('type').value,
+                role: document.getElementById('role').value,
+                modelSource: document.getElementById('modelSource').value,
+                status: document.getElementById('status').value
+            };
+
+            try {
+                const res = await fetch('/api/admin/gateways', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await res.json();
+
+                if (res.ok) {
+                    showToast(data.message);
+                    fetchGateways(); // reload list
+                } else {
+                    showToast(data.error || "Failed to save gateway", true);
+                }
+            } catch (err) {
+                showToast("Network Error", true);
+            } finally {
+                const isEdit = document.getElementById('gatewayId').readOnly;
+                btn.textContent = isEdit ? "Update Gateway" : "Save Gateway";
+                btn.disabled = false;
+            }
+        });
+
+        fetchGateways();
+    </script>
+</body>
+
+</html>
