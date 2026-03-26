@@ -20,7 +20,7 @@ import {
   PopoverTrigger,
 } from './popover';
 import { Wrapper } from '../../components/dev/Wrapper';
-import { getDomains, DOMAIN_META, getWorkspacesByDomain } from '../../config/workspace-registry';
+import { getDomains, DOMAIN_META, getWorkspacesByDomain, getWorkspaceUrl } from '../../config/workspace-registry';
 import { useWorkspaceStore } from '../../store/workspace-store';
 import { Icon } from '../atoms/icons/Icon';
 
@@ -30,9 +30,12 @@ export interface QuickNavigateProps {
 
 export function QuickNavigate({ className }: QuickNavigateProps) {
     const [open, setOpen] = useState(false);
+    const [mounted, setMounted] = useState(false);
     
     // Global Context Switcher State
     const { activeWorkspaceId, setActiveWorkspace, getActiveWorkspace } = useWorkspaceStore();
+    React.useEffect(() => setMounted(true), []);
+
     const selectedItem = getActiveWorkspace();
     const domains = getDomains();
 
@@ -53,15 +56,15 @@ export function QuickNavigate({ className }: QuickNavigateProps) {
                     className
                   )}
                 >
-                  <div className="flex items-center gap-2.5 pr-3">
-                    {selectedItem ? (
+                  <div className="flex items-center gap-2.5 pr-3 min-w-[140px]">
+                    {mounted && selectedItem ? (
                       <>
                         {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                         <Icon name={selectedItem.icon as any} size={15} className={"text-[\x235E6D21] opacity-90"} />
                         <span className={"text-[13px] font-normal font-display text-[\x235E6D21] leading-none mt-[1px]"}>{selectedItem.name}</span>
                       </>
                     ) : (
-                      <span className="text-[13px] font-normal font-display leading-none mt-[1px]">Select Workspace...</span>
+                      <span className="text-[13px] font-normal font-display leading-none mt-[1px] opacity-0 pointer-events-none">Select Workspace...</span>
                     )}
                   </div>
                   <ChevronUp className={cn("opacity-50 transition-transform", !open && "rotate-180")} size={14} />
@@ -85,8 +88,16 @@ export function QuickNavigate({ className }: QuickNavigateProps) {
                                   key={ws.id}
                                   value={ws.name + " " + ws.tags.join(" ")} // searchable by name and tags
                                   onSelect={() => {
-                                    setActiveWorkspace(ws.id);
                                     setOpen(false);
+                                    
+                                    const rawPort = window.location.port;
+                                    const currentPort = parseInt(rawPort || '80', 10);
+                                    
+                                    if (currentPort !== ws.port) {
+                                      window.location.assign(getWorkspaceUrl(ws));
+                                    } else {
+                                      setActiveWorkspace(ws.id);
+                                    }
                                   }}
                                   className={cn(
                                     "flex items-center gap-3 px-3 py-2 rounded-[var(--radius-none,0px)] mb-0.5 last:mb-0 cursor-pointer transition-colors text-[13px] font-normal font-display group",

@@ -23,6 +23,11 @@ export function middleware(request: NextRequest) {
       return NextResponse.next();
     }
 
+    // Dev Bypass: Allow local UI testing without active auth bounds
+    if (process.env.NODE_ENV === 'development') {
+      return NextResponse.next();
+    }
+
     const session = request.cookies.get('zap_session');
     if (!session) {
       // Unauthorized intrusion detected, route back to Root Login Gate.

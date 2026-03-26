@@ -178,6 +178,44 @@ async function getLiveInfraKeys(): Promise<Record<string, string>> {
     return keys;
 }
 
+export interface InfraProject {
+    id: string;
+    keys: string[];
+}
+
+export async function resolveBalancedKey(tier: "ULTRA" | "PRO"): Promise<{ apiKey: string; projectId: string } | null> {
+    const poolJsonString = tier === "ULTRA" ? process.env.GOOGLE_ULTRA_POOL : process.env.GOOGLE_PRO_POOL;
+    if (!poolJsonString) return null;
+
+    try {
+        const projects: InfraProject[] = JSON.parse(poolJsonString);
+        if (!projects || projects.length === 0) return null;
+
+        for (const project of projects) {
+            if (!project.id || !project.keys || project.keys.length === 0) continue;
+
+            const isBlocked = await redisClient.exists(`block:project:${project.id}`);
+            if (isBlocked === 1) {
+                console.log(`[Omni-Router] ⛔ Project ${project.id} is currently 429 blocked. Skipping...`);
+                continue;
+            }
+
+            const index = await redisClient.incr(`index:project:${project.id}`);
+            const keyIndex = index % project.keys.length;
+            const selectedKey = project.keys[keyIndex];
+
+            console.log(`[Omni-Router] ⚖️ Load Balanced: Tier ${tier} -> Project ${project.id} -> Key Index ${keyIndex}`);
+            return { apiKey: selectedKey, projectId: project.id };
+        }
+        
+        console.warn(`[Omni-Router] ⚠️ All projects in tier ${tier} are either empty or currently blocked by a 429!`);
+        return null;
+    } catch (e) {
+        console.error(`[Omni-Router] ❌ Failed to parse key pool for ${tier}. Ensure valid JSON format.`);
+        return null;
+    }
+}
+
 /**
  * Enqueues an OmniRouter payload into the Multi-Tier Job Queue system
  * using the complexity triage rules outlined in BLAST-016.
@@ -352,15 +390,65 @@ export async function generateOmniContent(config: LLMConfig, payload: OmniPayloa
                 accountLevel
             };
 
-            let response: OmniResponse;
+            let response: OmniResponse | undefined;
             if (currentProvider === "GOOGLE") {
-                response = await executeGoogleGenAI(attemptConfig, payload);
+                let success = false;
+                let lastGoogleError: any = null;
+                const isMatrixRouted = (accountLevel === "ULTRA" || accountLevel === "PRO");
+                const maxAttempts = isMatrixRouted ? 4 : 1; 
+
+                for (let i = 0; i < maxAttempts; i++) {
+                    let activeKey = attemptApiKey;
+                    let activeProjectId: string | undefined;
+
+                    if (isMatrixRouted) {
+                        const balanced = await resolveBalancedKey(accountLevel as "ULTRA" | "PRO");
+                        if (balanced) {
+                            activeKey = balanced.apiKey;
+                            activeProjectId = balanced.projectId;
+                        }
+                    }
+
+                    const googleAttemptConfig: LLMConfig = {
+                        ...config,
+                        apiKey: activeKey || config.apiKey,
+                        defaultModel: modelIdToUse,
+                        accountLevel
+                    };
+
+                    try {
+                        response = await executeGoogleGenAI(googleAttemptConfig, payload);
+                        success = true;
+                        break; 
+                    } catch (gErr: any) {
+                        lastGoogleError = gErr;
+                        const statusCode = gErr.status || gErr.statusCode || (gErr.response ? gErr.response.status : null);
+                        
+                        if (statusCode === 429 && activeProjectId) {
+                            console.error(`[Omni-Router] 🛑 429 TPM LIMIT HIT on Google Project '${activeProjectId}'. Applying 60s quarantine block.`);
+                            await redisClient.setex(`block:project:${activeProjectId}`, 60, "true");
+                            continue; 
+                        } else if (statusCode === 429) {
+                            break;
+                        } else {
+                            break; 
+                        }
+                    }
+                }
+
+                if (!success || !response) {
+                    throw lastGoogleError || new Error("All Google Matrix Retries Failed.");
+                }
             } else if (currentProvider === "OPENROUTER") {
                 response = await executeOpenRouter(attemptConfig, payload);
             } else if (currentProvider === "OLLAMA") {
                 response = await executeOllama(attemptConfig, payload);
             } else {
                 throw new Error(`Unsupported provider: ${currentProvider}`);
+            }
+
+            if (!response) {
+                throw new Error("Null response from model generator.");
             }
 
             // BLAST-012: TRT Hidden Reflection Loop (SOP-010)

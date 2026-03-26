@@ -585,7 +585,7 @@ export const SideNav: React.FC<SideNavProps> = ({ showDevWrapper = false }) => {
 
             {/* Navigation List */}
             <div className="flex-1 overflow-y-auto scrollbar-hide py-4 px-3 space-y-1">
-                {EFFECTIVE_NAV.map((category) => {
+                {mounted && EFFECTIVE_NAV.map((category) => {
                     const isOpen = openCategories[category.id] && (effectivelyExpanded);
                     const hasItems = category.items.length > 0;
                     const IconComp = category.icon;

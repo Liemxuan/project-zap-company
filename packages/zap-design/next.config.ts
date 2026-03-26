@@ -30,6 +30,26 @@ const nextConfig: NextConfig = {
       }
     ];
   },
+  async redirects() {
+    return [
+      {
+        source: '/metro',
+        destination: '/design/metro',
+        permanent: false,
+      },
+      {
+        source: '/metro/:path*',
+        destination: '/design/metro/:path*',
+        permanent: false,
+      },
+      // Escape trap for browsers stuck on the previous invalid redirect
+      {
+        source: '/design/metro/mission-control',
+        destination: '/mission-control',
+        permanent: false,
+      }
+    ];
+  },
 };
 
 export default nextConfig;

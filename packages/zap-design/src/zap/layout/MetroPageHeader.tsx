@@ -35,8 +35,8 @@ export const MetroPageHeader = ({
     showBackground = true,
 }: MetroPageHeaderProps) => {
     // Dynamic vertical spacing calculations: Enforcing equal top/bottom padding per user request
-    const paddingTop = 'pt-6 md:pt-10';
-    const paddingBottom = tabs ? 'pb-2 md:pb-4' : 'pb-6 md:pb-10';
+    const paddingTop = 'pt-2 md:pt-5';
+    const paddingBottom = tabs ? 'pb-2 md:pb-4' : 'pb-2 md:pb-5';
 
     return (
         <div className={`relative w-full flex flex-col overflow-hidden ${showBackground ? 'border-b border-border/50 bg-layer-cover z-30' : 'bg-transparent border-transparent'}`}>

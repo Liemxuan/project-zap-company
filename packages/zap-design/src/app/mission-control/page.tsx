@@ -1,8 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { Shield, Zap, Monitor, Terminal, Activity, Layers, Brain, Code, Compass, Search, Cpu, Send, Eye, Radio, Server, Database, HardDrive, Container } from 'lucide-react';
-import { Icon } from '../../genesis/atoms/icons/Icon';
+import { Shield, Zap, Monitor, Terminal, Activity, Layers, Brain, Code, Compass, Search, Cpu, Send, Eye, Radio, Server, Database, HardDrive, Container, LayoutTemplate, ShoppingCart, Tablet, Globe, LayoutDashboard, Briefcase, Settings, BarChart3, Lock, AppWindow } from 'lucide-react';
 // ── Fleet Registry ──────────────────────────────────────────────────────────────
 const FLEET_AGENTS = [
     { name: 'Gateway',   port: 3001, role: 'API Gateway',        icon: Server,  tier: 'infra',   color: 'slate' },
@@ -21,6 +20,18 @@ const FLEET_AGENTS = [
     { name: 'Cleo',      port: 3311, role: 'Ops',                 icon: Activity,tier: 'tier-2',  color: 'orange' },
 ] as const;
 
+const APP_SERVICES = [
+    { name: 'Design Engine', port: 3000, role: 'L1-L7 Foundations', icon: LayoutTemplate, tier: 'design' },
+    { name: 'POS Terminal',  port: 3100, role: 'Point of Sale',     icon: ShoppingCart,   tier: 'pos' },
+    { name: 'Kiosk',         port: 3200, role: 'Customer Facing',   icon: Tablet,         tier: 'pos' },
+    { name: 'Web App',       port: 3300, role: 'Main Storefront',   icon: Globe,          tier: 'pos' },
+    { name: 'Portal',        port: 3400, role: 'Internal Portal',   icon: LayoutDashboard,tier: 'pos' },
+    { name: 'Operations',    port: 4000, role: 'Sales/Inventory',   icon: Briefcase,      tier: 'ops' },
+    { name: 'Settings',      port: 4100, role: 'System Mgmt',       icon: Settings,       tier: 'ops' },
+    { name: 'Reports',       port: 4200, role: 'Financials',        icon: BarChart3,      tier: 'ops' },
+    { name: 'ZAP-Auth',      port: 4700, role: 'Security Gateway',  icon: Lock,           tier: 'auth' },
+] as const;
+
 const INFRA_SERVICES = [
     { name: 'Redis',     port: 6379, icon: Database,  color: 'red' },
     { name: 'MongoDB',   port: 27017, icon: Database, color: 'green' },
@@ -30,46 +41,66 @@ const INFRA_SERVICES = [
 
 type Status = 'online' | 'offline' | 'checking';
 
+type InfraStatusInfo = {
+    status: Status;
+    parsedHost?: string;
+};
+
 export default function MissionControlPage() {
     const [agentStatuses, setAgentStatuses] = useState<Record<number, Status>>(
         Object.fromEntries(FLEET_AGENTS.map(a => [a.port, 'checking']))
     );
-    const [infraStatuses, setInfraStatuses] = useState<Record<number, Status>>(
-        Object.fromEntries(INFRA_SERVICES.map(s => [s.port, 'checking']))
+    const [appStatuses, setAppStatuses] = useState<Record<number, Status>>(
+        Object.fromEntries(APP_SERVICES.map(a => [a.port, 'checking']))
+    );
+    const [infraStatuses, setInfraStatuses] = useState<Record<number, InfraStatusInfo>>(
+        Object.fromEntries(INFRA_SERVICES.map(s => [s.port, { status: 'checking' }]))
     );
     const [lastCheck, setLastCheck] = useState<string>('—');
 
     useEffect(() => {
         let active = true;
 
-        const checkPort = async (port: number): Promise<Status> => {
+        const checkPort = async (port: number, serviceName?: string): Promise<{status: Status, parsedHost?: string}> => {
             try {
                 const controller = new AbortController();
-                const timeout = setTimeout(() => controller.abort(), 3000);
-                await fetch(`http://localhost:${port}`, { mode: 'no-cors', signal: controller.signal });
+                const timeout = setTimeout(() => controller.abort(), 3500);
+                const query = serviceName ? `?port=${port}&service=${serviceName}` : `?port=${port}`;
+                const res = await fetch(`/api/tcp-ping${query}`, { signal: controller.signal });
                 clearTimeout(timeout);
-                return 'online';
+                
+                if (!res.ok) return { status: 'offline' };
+                const data = await res.json();
+                return { status: data.status as Status, parsedHost: data.parsedHost };
             } catch {
-                return 'offline';
+                return { status: 'offline' };
             }
         };
 
         const poll = async () => {
             if (!active) return;
             const agentResults = await Promise.all(
-                FLEET_AGENTS.map(async (a) => ({ port: a.port, status: await checkPort(a.port) }))
+                FLEET_AGENTS.map(async (a) => ({ port: a.port, result: await checkPort(a.port) }))
             );
             if (!active) return;
             const newAgent: Record<number, Status> = {};
-            agentResults.forEach(r => { newAgent[r.port] = r.status; });
+            agentResults.forEach(r => { newAgent[r.port] = r.result.status; });
             setAgentStatuses(newAgent);
 
-            const infraResults = await Promise.all(
-                INFRA_SERVICES.map(async (s) => ({ port: s.port, status: await checkPort(s.port) }))
+            const appResults = await Promise.all(
+                APP_SERVICES.map(async (a) => ({ port: a.port, result: await checkPort(a.port) }))
             );
             if (!active) return;
-            const newInfra: Record<number, Status> = {};
-            infraResults.forEach(r => { newInfra[r.port] = r.status; });
+            const newApp: Record<number, Status> = {};
+            appResults.forEach(r => { newApp[r.port] = r.result.status; });
+            setAppStatuses(newApp);
+
+            const infraResults = await Promise.all(
+                INFRA_SERVICES.map(async (s) => ({ port: s.port, result: await checkPort(s.port, s.name) }))
+            );
+            if (!active) return;
+            const newInfra: Record<number, InfraStatusInfo> = {};
+            infraResults.forEach(r => { newInfra[r.port] = r.result; });
             setInfraStatuses(newInfra);
             setLastCheck(new Date().toLocaleTimeString());
         };
@@ -80,8 +111,9 @@ export default function MissionControlPage() {
 
     const onlineCount = Object.values(agentStatuses).filter(s => s === 'online').length;
     const totalCount = FLEET_AGENTS.length;
-    const infraOnline = Object.values(infraStatuses).filter(s => s === 'online').length;
-    const allHealthy = onlineCount === totalCount && infraOnline === INFRA_SERVICES.length;
+    const appOnline = Object.values(appStatuses).filter(s => s === 'online').length;
+    const infraOnline = Object.values(infraStatuses).filter(s => s.status === 'online').length;
+    const allHealthy = onlineCount === totalCount && appOnline === APP_SERVICES.length && infraOnline === INFRA_SERVICES.length;
 
     const statusDot = (s: Status) =>
         s === 'online' ? 'bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.5)]'
@@ -101,7 +133,7 @@ export default function MissionControlPage() {
                             </h1>
                         </div>
                         <p className="text-sm text-white/40 font-medium tracking-wide">
-                            ZAP-OS v2.1 &mdash; Memory Fleet &mdash; {totalCount} Agents &mdash; {INFRA_SERVICES.length} Services
+                            ZAP-OS v2.1 &mdash; Memory Fleet &mdash; {totalCount} Agents &mdash; {APP_SERVICES.length} Apps &mdash; {INFRA_SERVICES.length} Services
                         </p>
                     </div>
                     <div className="flex items-center gap-6">
@@ -121,9 +153,9 @@ export default function MissionControlPage() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
                 {[
                     { label: 'Agents Online', value: `${onlineCount}/${totalCount}`, accent: onlineCount === totalCount ? 'text-green-400' : 'text-amber-400' },
+                    { label: 'Apps Online', value: `${appOnline}/${APP_SERVICES.length}`, accent: appOnline === APP_SERVICES.length ? 'text-green-400' : 'text-cyan-400' },
                     { label: 'Infrastructure', value: `${infraOnline}/${INFRA_SERVICES.length}`, accent: infraOnline === INFRA_SERVICES.length ? 'text-green-400' : 'text-red-400' },
                     { label: 'Tier-1 Agents', value: FLEET_AGENTS.filter(a => a.tier === 'tier-1').length.toString(), accent: 'text-blue-400' },
-                    { label: 'Tier-2 Agents', value: FLEET_AGENTS.filter(a => a.tier === 'tier-2').length.toString(), accent: 'text-purple-400' },
                 ].map(stat => (
                     <div key={stat.label} className="border border-white/10 bg-white/[0.02] rounded-lg p-4">
                         <div className="text-[10px] uppercase tracking-[0.15em] text-white/30 mb-1">{stat.label}</div>
@@ -140,7 +172,9 @@ export default function MissionControlPage() {
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
                     {FLEET_AGENTS.map((agent) => {
-                        const status = agentStatuses[agent.port] || 'checking';                        return (
+                        const status = agentStatuses[agent.port] || 'checking';
+                        const AgentIcon = agent.icon;
+                        return (
                             <div
                                 key={agent.port}
                                 className={`group border rounded-lg p-4 transition-all duration-200 hover:bg-white/[0.04] ${
@@ -153,7 +187,7 @@ export default function MissionControlPage() {
                             >
                                 <div className="flex items-start justify-between mb-3">
                                     <div className="flex items-center gap-2">
-                                        <Icon name="Bot" className="h-4 w-4 text-white/40" />
+                                        <AgentIcon className="h-4 w-4 text-white/40" />
                                         <span className="font-black text-sm uppercase">{agent.name}</span>
                                     </div>
                                     <div className={`h-2.5 w-2.5 rounded-full ${statusDot(status)} mt-1`} />
@@ -177,6 +211,54 @@ export default function MissionControlPage() {
                 </div>
             </section>
 
+            {/* ── Application Layer ───────────────────────────────── */}
+            <section className="mb-8">
+                <div className="flex items-center gap-2 mb-4">
+                    <AppWindow className="h-5 w-5 text-white/40" />
+                    <h2 className="text-lg font-black uppercase tracking-wide text-white/60">Application Layer</h2>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+                    {APP_SERVICES.map((app) => {
+                        const status = appStatuses[app.port] || 'checking';
+                        const AppIcon = app.icon;
+                        return (
+                            <div
+                                key={app.port}
+                                className={`group border rounded-lg p-4 transition-all duration-200 hover:bg-white/[0.04] ${
+                                    status === 'online'
+                                        ? 'border-white/10 bg-white/[0.02]'
+                                        : status === 'offline'
+                                        ? 'border-red-500/20 bg-red-500/[0.03]'
+                                        : 'border-yellow-500/20 bg-yellow-500/[0.02]'
+                                }`}
+                            >
+                                <div className="flex items-start justify-between mb-3">
+                                    <div className="flex items-center gap-2">
+                                        <AppIcon className="h-4 w-4 text-white/40" />
+                                        <span className="font-black text-sm uppercase">{app.name}</span>
+                                    </div>
+                                    <div className={`h-2.5 w-2.5 rounded-full ${statusDot(status)} mt-1`} />
+                                </div>
+                                <div className="space-y-1">
+                                    <div className="text-[10px] text-white/30 uppercase tracking-wider">{app.role}</div>
+                                    <div className="flex items-center justify-between">
+                                        <code className="text-xs text-white/50">:{app.port}</code>
+                                        <span className={`text-[9px] font-bold uppercase px-1.5 py-0.5 rounded ${
+                                            app.tier === 'design' ? 'bg-purple-500/20 text-purple-400'
+                                            : app.tier === 'pos' ? 'bg-teal-500/20 text-teal-400'
+                                            : app.tier === 'auth' ? 'bg-red-500/20 text-red-400'
+                                            : 'bg-blue-500/20 text-blue-400'
+                                        }`}>
+                                            {app.tier}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
+            </section>
+
             {/* ── Infrastructure ──────────────────────────────────── */}
             <section className="mb-8">
                 <div className="flex items-center gap-2 mb-4">
@@ -185,7 +267,8 @@ export default function MissionControlPage() {
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                     {INFRA_SERVICES.map((svc) => {
-                        const status = infraStatuses[svc.port] || 'checking';
+                        const info = infraStatuses[svc.port] || { status: 'checking' };
+                        const status = info.status;
                         const Icon = svc.icon;
                         return (
                             <div
@@ -201,7 +284,17 @@ export default function MissionControlPage() {
                                     </div>
                                     <div className={`h-2.5 w-2.5 rounded-full ${statusDot(status)}`} />
                                 </div>
-                                <code className="text-xs text-white/40">:{svc.port}</code>
+                                {info.parsedHost && info.parsedHost !== 'localhost' && info.parsedHost !== '127.0.0.1' ? (
+                                    <div className="flex flex-col gap-1 mt-1">
+                                        <span className="text-[9px] font-bold text-blue-400 mb-0.5 uppercase tracking-widest bg-blue-500/10 self-start px-1.5 py-0.5 rounded">Remote</span>
+                                        <code className="text-[10px] text-white/50 truncate block w-full" title={info.parsedHost}>{info.parsedHost}</code>
+                                    </div>
+                                ) : (
+                                    <div className="flex flex-col gap-1 mt-1">
+                                         <span className="text-[9px] font-bold text-emerald-400 mb-0.5 uppercase tracking-widest bg-emerald-500/10 self-start px-1.5 py-0.5 rounded">Local</span>
+                                         <code className="text-[10px] text-white/40">:{svc.port}</code>
+                                    </div>
+                                )}
                             </div>
                         );
                     })}

@@ -1,28 +1,37 @@
 version: '3.8'
 
-services:
-  postgres:
-    image: postgres:latest
-    container_name: olympus-postgres
-    environment:
-      POSTGRES_USER: olympus_user
-      POSTGRES_PASSWORD: olympus_password
-      POSTGRES_DB: olympus_db
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
+# ─────────────────────────────────────────────────────────────────
+# LOCAL DATABASE SANDBOX (DEACTIVATED)
+# ZAP-OS is currently configured to use GCP Postgres and Atlas MongoDB
+# as the single source of truth for the entire cluster.
+#
+# These local ghost containers have been severed to save RAM. If offline
+# development is required, uncomment these and adjust .env.local
+# ─────────────────────────────────────────────────────────────────
 
-  mongodb:
-    image: mongo:latest
-    container_name: olympus-mongodb
-    ports:
-      - "27017:27017"
-    environment:
-      MONGO_INITDB_DATABASE: OlympusBrain
-    volumes:
-      - mongo_data:/data/db
-
-volumes:
-  postgres_data:
-  mongo_data:
+# services:
+#   postgres:
+#     image: postgres:latest
+#     container_name: olympus-postgres
+#     environment:
+#       POSTGRES_USER: olympus_user
+#       POSTGRES_PASSWORD: olympus_password
+#       POSTGRES_DB: olympus_db
+#     ports:
+#       - "5432:5432"
+#     volumes:
+#       - postgres_data:/var/lib/postgresql/data
+#
+#   mongodb:
+#     image: mongo:latest
+#     container_name: olympus-mongodb
+#     ports:
+#       - "27017:27017"
+#     environment:
+#       MONGO_INITDB_DATABASE: OlympusBrain
+#     volumes:
+#       - mongo_data:/data/db
+#
+# volumes:
+#   postgres_data:
+#   mongo_data:
