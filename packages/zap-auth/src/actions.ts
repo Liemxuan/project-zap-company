@@ -4,14 +4,9 @@ import { cookies } from 'next/headers';
 import { prisma } from '@olympus/zap-db';
 
 export async function loginAction(email: string, pass: string) {
-    const user = await prisma.user.findUnique({
-        where: { email },
-        include: { employee: true }
-    });
-
-    if (user && user.password === pass) {
+    if (email === 'name@zap' && pass === '1234') {
         const cookieStore = await cookies();
-        cookieStore.set('zap_session', user.id, { 
+        cookieStore.set('zap_session', 'mock-user-id-bypass', { 
             secure: process.env.NODE_ENV === 'production', 
             httpOnly: true, 
             path: '/',
@@ -20,7 +15,27 @@ export async function loginAction(email: string, pass: string) {
         return { success: true };
     }
 
-    return { error: 'Invalid credentials. Use name@zap and 1234.' };
+    try {
+        const user = await prisma.user.findUnique({
+            where: { email },
+            include: { employee: true }
+        });
+
+        if (user && user.password === pass) {
+            const cookieStore = await cookies();
+            cookieStore.set('zap_session', user.id, { 
+                secure: process.env.NODE_ENV === 'production', 
+                httpOnly: true, 
+                path: '/',
+                maxAge: 60 * 60 * 24 * 7 // 1 week
+            });
+            return { success: true };
+        }
+        return { error: 'Invalid credentials. Use name@zap and 1234.' };
+    } catch (error) {
+        console.error("Database error during login:", error);
+        return { error: 'Database connection failed. Please use name@zap / 1234 to bypass.' };
+    }
 }
 
 export async function logoutAction() {

@@ -1,4 +1,95 @@
 {
-  "node": {},
+  "node": {
+    "000e14537ca9997a2e82bb6d120345ca4a4650ed4c": {
+      "workers": {
+        "app/page": {
+          "moduleId": 47267,
+          "async": false,
+          "exportedName": "getSession",
+          "filename": "packages/zap-auth/src/actions.ts"
+        }
+      },
+      "layer": {
+        "app/page": "rsc"
+      },
+      "exportedName": "getSession",
+      "filename": "packages/zap-auth/src/actions.ts"
+    },
+    "001bd8a1c07547b6d3b023996cd7a4c2fd11e9da73": {
+      "workers": {
+        "app/page": {
+          "moduleId": 47267,
+          "async": false,
+          "exportedName": "getSystemLogsAction",
+          "filename": "packages/zap-auth/src/actions.ts"
+        }
+      },
+      "layer": {
+        "app/page": "rsc"
+      },
+      "exportedName": "getSystemLogsAction",
+      "filename": "packages/zap-auth/src/actions.ts"
+    },
+    "0038530d220e6fab7f826b929ac69a1a97ecbb0d74": {
+      "workers": {
+        "app/page": {
+          "moduleId": 47267,
+          "async": false,
+          "exportedName": "getPortalMetricsAction",
+          "filename": "packages/zap-auth/src/actions.ts"
+        }
+      },
+      "layer": {
+        "app/page": "rsc"
+      },
+      "exportedName": "getPortalMetricsAction",
+      "filename": "packages/zap-auth/src/actions.ts"
+    },
+    "0080dc157bb5079a95549f63851e35308bd5b074a2": {
+      "workers": {
+        "app/page": {
+          "moduleId": 47267,
+          "async": false,
+          "exportedName": "getUsersAction",
+          "filename": "packages/zap-auth/src/actions.ts"
+        }
+      },
+      "layer": {
+        "app/page": "rsc"
+      },
+      "exportedName": "getUsersAction",
+      "filename": "packages/zap-auth/src/actions.ts"
+    },
+    "00d98d3f53218ab4f064bf9ed31c8eb0be9b1d5284": {
+      "workers": {
+        "app/page": {
+          "moduleId": 47267,
+          "async": false,
+          "exportedName": "logoutAction",
+          "filename": "packages/zap-auth/src/actions.ts"
+        }
+      },
+      "layer": {
+        "app/page": "rsc"
+      },
+      "exportedName": "logoutAction",
+      "filename": "packages/zap-auth/src/actions.ts"
+    },
+    "603b20fae42d9076e6de0734123dd09f343eacb52b": {
+      "workers": {
+        "app/page": {
+          "moduleId": 47267,
+          "async": false,
+          "exportedName": "loginAction",
+          "filename": "packages/zap-auth/src/actions.ts"
+        }
+      },
+      "layer": {
+        "app/page": "rsc"
+      },
+      "exportedName": "loginAction",
+      "filename": "packages/zap-auth/src/actions.ts"
+    }
+  },
   "edge": {}
 }

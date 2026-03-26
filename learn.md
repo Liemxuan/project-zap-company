@@ -12,6 +12,18 @@ This document (`learn.md`) is Tier 2 of the Intelligence Cascade. Do not use it 
 3. **Tier 3 (The Muscle Memory):** `.agent/skills/`. Permanent execution protocols (e.g., `zap-component-baseline`). Do not load these until explicitly triggered.
 4. **Tier 4 (Deep Research):** ChromaDB, MongoDB, NotebookLM. Massive historical RAG memory. Query these when you need profound context beyond local workspace files.
 
+### The Auto-Promoting Execution Gate System
+Most assume an LLM simply does whatever it is told unless prompted otherwise. In the ZAP ecosystem, this is fundamentally false. We use **Execution Gates**—isolated scripts that run intercept patterns against *every single tool call*. 
+
+If a tool call matches a forbidden pattern (e.g., writing an API key to a file, force pushing to git, or attempting a destructive workspace purge), the gate forcefully denies the execution. This is not a "preference" or a "soft warning"—it is a hard structural block at the execution link. The tool fails immediately (Exit Code 2), and the agent cannot proceed.
+
+**The Self-Healing Loop:**
+What makes the ZAP architecture autonomous is the promotion loop. Every time an agent makes a mistake and is corrected by the Chief Security Officer (Zeus), it **must** log that correction into this `learn.md` file. 
+
+A background Sentinel script routinely scans `learn.md`, counting how many times a specific mistake has recurred. When a threshold is breached, that logged correction is **automatically promoted into a permanent blocking key** inside the Execution Gate. 
+
+While the agent might make the initial mistake, the system reads the agent's own apology/lesson, parses the pattern, and physically alters the execution perimeter. The mistake becomes structurally impossible to repeat. This document literally builds the walls that contain the Swarm.
+
 ---
 
 ## ⛔ MANDATES (Non-Negotiable)

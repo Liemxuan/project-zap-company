@@ -89,3 +89,25 @@ model SystemLog {
   metadata  Json?
   createdAt DateTime @default(now())
 }
+
+model AssetTicket {
+  filePath       String  @id
+  originalName   String
+  status         String  @default("PENDING")
+  isLocked       Boolean @default(false)
+  assignedWorker String?
+  filePathB      String?
+  filePathZap    String?
+  promptUsed     String?
+
+  trackingId  String?
+  category    String?
+  tags        String?
+  width       Int?
+  height      Int?
+  fileType    String?
+  description String?
+
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @default(now()) @db.Timestamptz(6)
+}

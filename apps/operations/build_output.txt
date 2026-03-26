@@ -1,0 +1,232 @@
+
+> operations@0.1.0 build /Users/zap/Workspace/olympus/apps/operations
+> next build
+
+▲ Next.js 16.2.1 (Turbopack)
+- Environments: .env
+
+  Creating an optimized production build ...
+
+> Build error occurred
+Error: Turbopack build failed with 8 errors:
+./apps/operations/src/app/inventory/ItemMasterDataGrid.tsx:4:1
+Module not found: Can't resolve 'zap-design/genesis/atoms/interactive/button'
+  [90m2 |[0m
+  [90m3 |[0m [36mimport[0m [33mReact[0m, { useState, useEffect } [36mfrom[0m [32m'react'[0m;
+[31m[1m>[0m [90m4 |[0m [36mimport[0m { [33mButton[0m } [36mfrom[0m [32m'zap-design/genesis/atoms/interactive/button'[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m5 |[0m [36mimport[0m { [33mInput[0m } [36mfrom[0m [32m'zap-design/genesis/atoms/interactive/inputs'[0m;
+  [90m6 |[0m
+  [90m7 |[0m [36minterface[0m [33mInventoryItem[0m {
+
+
+
+Import traces:
+  Client Component Browser:
+    ./apps/operations/src/app/inventory/ItemMasterDataGrid.tsx [Client Component Browser]
+    ./apps/operations/src/app/inventory/page.tsx [Client Component Browser]
+    ./apps/operations/src/app/inventory/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./apps/operations/src/app/inventory/ItemMasterDataGrid.tsx [Client Component SSR]
+    ./apps/operations/src/app/inventory/page.tsx [Client Component SSR]
+    ./apps/operations/src/app/inventory/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./apps/operations/src/app/inventory/ReceiveGoods.tsx:4:1
+Module not found: Can't resolve 'zap-design/genesis/atoms/interactive/button'
+  [90m2 |[0m
+  [90m3 |[0m [36mimport[0m [33mReact[0m, { useState, useEffect } [36mfrom[0m [32m'react'[0m;
+[31m[1m>[0m [90m4 |[0m [36mimport[0m { [33mButton[0m } [36mfrom[0m [32m'zap-design/genesis/atoms/interactive/button'[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m5 |[0m [36mimport[0m { [33mInput[0m } [36mfrom[0m [32m'zap-design/genesis/atoms/interactive/inputs'[0m;
+  [90m6 |[0m
+  [90m7 |[0m [36minterface[0m [33mRawIngredient[0m {
+
+
+
+Import traces:
+  Client Component Browser:
+    ./apps/operations/src/app/inventory/ReceiveGoods.tsx [Client Component Browser]
+    ./apps/operations/src/app/inventory/page.tsx [Client Component Browser]
+    ./apps/operations/src/app/inventory/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./apps/operations/src/app/inventory/ReceiveGoods.tsx [Client Component SSR]
+    ./apps/operations/src/app/inventory/page.tsx [Client Component SSR]
+    ./apps/operations/src/app/inventory/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./apps/operations/src/app/inventory/WasteLogging.tsx:4:1
+Module not found: Can't resolve 'zap-design/genesis/atoms/interactive/button'
+  [90m2 |[0m
+  [90m3 |[0m [36mimport[0m [33mReact[0m, { useState, useEffect } [36mfrom[0m [32m'react'[0m;
+[31m[1m>[0m [90m4 |[0m [36mimport[0m { [33mButton[0m } [36mfrom[0m [32m'zap-design/genesis/atoms/interactive/button'[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m5 |[0m [36mimport[0m { [33mInput[0m } [36mfrom[0m [32m'zap-design/genesis/atoms/interactive/inputs'[0m;
+  [90m6 |[0m
+  [90m7 |[0m [36minterface[0m [33mRawIngredient[0m {
+
+
+
+Import traces:
+  Client Component Browser:
+    ./apps/operations/src/app/inventory/WasteLogging.tsx [Client Component Browser]
+    ./apps/operations/src/app/inventory/page.tsx [Client Component Browser]
+    ./apps/operations/src/app/inventory/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./apps/operations/src/app/inventory/WasteLogging.tsx [Client Component SSR]
+    ./apps/operations/src/app/inventory/page.tsx [Client Component SSR]
+    ./apps/operations/src/app/inventory/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./apps/operations/src/app/ops/page.tsx:4:1
+Module not found: Can't resolve 'zap-design/genesis/atoms/interactive/button'
+  [90m2 |[0m
+  [90m3 |[0m [36mimport[0m [33mReact[0m, { useState } [36mfrom[0m [32m"react"[0m;
+[31m[1m>[0m [90m4 |[0m [36mimport[0m { [33mButton[0m } [36mfrom[0m [32m'zap-design/genesis/atoms/interactive/button'[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m5 |[0m [36mimport[0m { [33mCard[0m, [33mCardContent[0m, [33mCardHeader[0m, [33mCardTitle[0m } [36mfrom[0m [32m'zap-design/genesis/molecules/card'[0m;
+  [90m6 |[0m [36mimport[0m { 
+  [90m7 |[0m   [33mCheckCircle2[0m,
+
+
+
+Import traces:
+  Client Component Browser:
+    ./apps/operations/src/app/ops/page.tsx [Client Component Browser]
+    ./apps/operations/src/app/ops/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./apps/operations/src/app/ops/page.tsx [Client Component SSR]
+    ./apps/operations/src/app/ops/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./apps/operations/src/app/inventory/ItemMasterDataGrid.tsx:5:1
+Module not found: Can't resolve 'zap-design/genesis/atoms/interactive/inputs'
+  [90m3 |[0m [36mimport[0m [33mReact[0m, { useState, useEffect } [36mfrom[0m [32m'react'[0m;
+  [90m4 |[0m [36mimport[0m { [33mButton[0m } [36mfrom[0m [32m'zap-design/genesis/atoms/interactive/button'[0m;
+[31m[1m>[0m [90m5 |[0m [36mimport[0m { [33mInput[0m } [36mfrom[0m [32m'zap-design/genesis/atoms/interactive/inputs'[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m6 |[0m
+  [90m7 |[0m [36minterface[0m [33mInventoryItem[0m {
+  [90m8 |[0m   id: string;
+
+
+
+Import traces:
+  Client Component Browser:
+    ./apps/operations/src/app/inventory/ItemMasterDataGrid.tsx [Client Component Browser]
+    ./apps/operations/src/app/inventory/page.tsx [Client Component Browser]
+    ./apps/operations/src/app/inventory/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./apps/operations/src/app/inventory/ItemMasterDataGrid.tsx [Client Component SSR]
+    ./apps/operations/src/app/inventory/page.tsx [Client Component SSR]
+    ./apps/operations/src/app/inventory/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./apps/operations/src/app/inventory/ReceiveGoods.tsx:5:1
+Module not found: Can't resolve 'zap-design/genesis/atoms/interactive/inputs'
+  [90m3 |[0m [36mimport[0m [33mReact[0m, { useState, useEffect } [36mfrom[0m [32m'react'[0m;
+  [90m4 |[0m [36mimport[0m { [33mButton[0m } [36mfrom[0m [32m'zap-design/genesis/atoms/interactive/button'[0m;
+[31m[1m>[0m [90m5 |[0m [36mimport[0m { [33mInput[0m } [36mfrom[0m [32m'zap-design/genesis/atoms/interactive/inputs'[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m6 |[0m
+  [90m7 |[0m [36minterface[0m [33mRawIngredient[0m {
+  [90m8 |[0m   id: string;
+
+
+
+Import traces:
+  Client Component Browser:
+    ./apps/operations/src/app/inventory/ReceiveGoods.tsx [Client Component Browser]
+    ./apps/operations/src/app/inventory/page.tsx [Client Component Browser]
+    ./apps/operations/src/app/inventory/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./apps/operations/src/app/inventory/ReceiveGoods.tsx [Client Component SSR]
+    ./apps/operations/src/app/inventory/page.tsx [Client Component SSR]
+    ./apps/operations/src/app/inventory/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./apps/operations/src/app/inventory/WasteLogging.tsx:5:1
+Module not found: Can't resolve 'zap-design/genesis/atoms/interactive/inputs'
+  [90m3 |[0m [36mimport[0m [33mReact[0m, { useState, useEffect } [36mfrom[0m [32m'react'[0m;
+  [90m4 |[0m [36mimport[0m { [33mButton[0m } [36mfrom[0m [32m'zap-design/genesis/atoms/interactive/button'[0m;
+[31m[1m>[0m [90m5 |[0m [36mimport[0m { [33mInput[0m } [36mfrom[0m [32m'zap-design/genesis/atoms/interactive/inputs'[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m6 |[0m
+  [90m7 |[0m [36minterface[0m [33mRawIngredient[0m {
+  [90m8 |[0m   id: string;
+
+
+
+Import traces:
+  Client Component Browser:
+    ./apps/operations/src/app/inventory/WasteLogging.tsx [Client Component Browser]
+    ./apps/operations/src/app/inventory/page.tsx [Client Component Browser]
+    ./apps/operations/src/app/inventory/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./apps/operations/src/app/inventory/WasteLogging.tsx [Client Component SSR]
+    ./apps/operations/src/app/inventory/page.tsx [Client Component SSR]
+    ./apps/operations/src/app/inventory/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./apps/operations/src/app/ops/page.tsx:5:1
+Module not found: Can't resolve 'zap-design/genesis/molecules/card'
+  [90m3 |[0m [36mimport[0m [33mReact[0m, { useState } [36mfrom[0m [32m"react"[0m;
+  [90m4 |[0m [36mimport[0m { [33mButton[0m } [36mfrom[0m [32m'zap-design/genesis/atoms/interactive/button'[0m;
+[31m[1m>[0m [90m5 |[0m [36mimport[0m { [33mCard[0m, [33mCardContent[0m, [33mCardHeader[0m, [33mCardTitle[0m } [36mfrom[0m [32m'zap-design/genesis/molecules/card'[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m6 |[0m [36mimport[0m { 
+  [90m7 |[0m   [33mCheckCircle2[0m, 
+  [90m8 |[0m   [33mClock[0m,
+
+
+
+Import traces:
+  Client Component Browser:
+    ./apps/operations/src/app/ops/page.tsx [Client Component Browser]
+    ./apps/operations/src/app/ops/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./apps/operations/src/app/ops/page.tsx [Client Component SSR]
+    ./apps/operations/src/app/ops/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+    at <unknown> (./apps/operations/src/app/inventory/ItemMasterDataGrid.tsx:4:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (./apps/operations/src/app/inventory/ReceiveGoods.tsx:4:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (./apps/operations/src/app/inventory/WasteLogging.tsx:4:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (./apps/operations/src/app/ops/page.tsx:4:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (./apps/operations/src/app/inventory/ItemMasterDataGrid.tsx:5:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (./apps/operations/src/app/inventory/ReceiveGoods.tsx:5:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (./apps/operations/src/app/inventory/WasteLogging.tsx:5:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (./apps/operations/src/app/ops/page.tsx:5:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+ ELIFECYCLE  Command failed with exit code 1.
