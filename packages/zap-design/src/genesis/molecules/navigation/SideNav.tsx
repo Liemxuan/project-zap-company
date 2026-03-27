@@ -293,11 +293,11 @@ const getHref = (item: string, theme: string, activeWorkspaceId?: string | null,
             'Database': '/infrastructure/db',
 
             // Mission Control
-            'Radar': '/mission-control',
-            'Fleet Status': '/mission-control/fleet',
-            'Jobs': '/mission-control/jobs',
-            'Agents': '/mission-control/agents',
-            'Registry': '/mission-control/swarm/registry',
+            'Radar': `/design/${theme}/mission-control`,
+            'Fleet Status': `/design/${theme}/mission-control/fleet`,
+            'Jobs': `/design/${theme}/mission-control/jobs`,
+            'Agents': `/design/${theme}/mission-control/agents`,
+            'Registry': `/design/${theme}/mission-control/swarm/registry`,
         };
         finalPath = map[item] || '';
     }

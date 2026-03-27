@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
-import { Button } from '../../../../genesis/atoms/interactive/button';
+import { Button } from '@/genesis/atoms/interactive/button';
 import { 
     Loader2,
     RefreshCw, 
@@ -25,10 +25,10 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-} from '../../../../genesis/molecules/table';
-import { Badge } from '../../../../genesis/atoms/interactive/badge';
-import { Input } from '../../../../genesis/atoms/interactive/inputs';
-import { AppShell } from '../../../../zap/layout/AppShell';
+} from '@/genesis/molecules/table';
+import { Badge } from '@/genesis/atoms/interactive/badge';
+import { Input } from '@/genesis/atoms/interactive/inputs';
+import { AppShell } from '@/zap/layout/AppShell';
 
 interface ComponentRegistryItem {
     id: string;
@@ -163,23 +163,28 @@ export default function ComponentRegistryDashboard() {
                     </div>
                     
                     <div className="bg-muted/30 border rounded-xl p-4 flex flex-col gap-1 md:col-span-3 overflow-hidden">
-                         <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center justify-between mb-2">
                             <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Origin Breakdown</span>
                             <div className="flex gap-2">
-                                <Badge variant="outline" className="text-[9px] font-bold">CORE: {stats.core}</Badge>
-                                <Badge variant="outline" className="text-[9px] font-bold border-purple-500/30 text-purple-500">METRO: {stats.metro}</Badge>
-                                <Badge variant="outline" className="text-[9px] font-bold border-amber-500/30 text-amber-500">SHARED: {stats.shared}</Badge>
+                                <Badge variant="outline" className="text-[9px] font-bold text-info border-info/30">CORE: {stats.core}</Badge>
+                                <Badge variant="outline" className="text-[9px] font-bold border-primary/30 text-primary">METRO: {stats.metro}</Badge>
+                                <Badge variant="outline" className="text-[9px] font-bold border-warning/30 text-warning">SHARED: {stats.shared}</Badge>
                             </div>
                         </div>
+                        <style>{`
+                            .bar-core { width: ${(stats.core / stats.total) * 100}%; }
+                            .bar-metro { width: ${(stats.metro / stats.total) * 100}%; }
+                            .bar-shared { width: ${(stats.shared / stats.total) * 100}%; }
+                        `}</style>
                         <div className="flex h-2 w-full rounded-full overflow-hidden bg-muted">
-                            <div className="bg-blue-500 h-full" style={{ width: `${(stats.core / stats.total) * 100}%` }}></div>
-                            <div className="bg-purple-500 h-full" style={{ width: `${(stats.metro / stats.total) * 100}%` }}></div>
-                            <div className="bg-amber-500 h-full" style={{ width: `${(stats.shared / stats.total) * 100}%` }}></div>
+                            <div className="bg-info h-full bar-core"></div>
+                            <div className="bg-primary h-full bar-metro"></div>
+                            <div className="bg-warning h-full bar-shared"></div>
                         </div>
                         <div className="mt-2 flex justify-between text-[9px] font-black uppercase tracking-tighter">
-                            <div className="flex items-center gap-1"><div className="size-1.5 rounded-full bg-blue-500"></div> Core Legacy</div>
-                            <div className="flex items-center gap-1"><div className="size-1.5 rounded-full bg-purple-500"></div> Metro M3</div>
-                            <div className="flex items-center gap-1"><div className="size-1.5 rounded-full bg-amber-500"></div> Shared Infra</div>
+                            <div className="flex items-center gap-1"><div className="size-1.5 rounded-full bg-info"></div> Core Legacy</div>
+                            <div className="flex items-center gap-1"><div className="size-1.5 rounded-full bg-primary"></div> Metro M3</div>
+                            <div className="flex items-center gap-1"><div className="size-1.5 rounded-full bg-warning"></div> Shared Infra</div>
                         </div>
                     </div>
                 </div>
@@ -192,7 +197,7 @@ export default function ComponentRegistryDashboard() {
                             placeholder="Search naming conventions..." 
                             className="pl-10 h-11 bg-muted/20 border-border/50 focus: transition-all"
                             value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
                         />
                     </div>
                     <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">

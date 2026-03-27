@@ -68,9 +68,9 @@ export function AuthUserManagementView({
 
   useEffect(() => {
     getUsersAction().then((res: UserWithEmployee[]) => {
-      setUsers(res);
+      setUsers(res || []);
       if (onRolesLoaded) {
-        onRolesLoaded(Array.from(new Set(res.map(u => u.role))));
+        onRolesLoaded(Array.from(new Set((res || []).map(u => u.role))));
       }
       setLoading(false);
     }).catch(err => {

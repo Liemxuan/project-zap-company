@@ -22,7 +22,7 @@ export function AuthForm() {
       setLoading(false);
       toast.success("Authentication successful. Redirecting...");
       // Simulate redirect
-      router.push("/dashboard"); 
+      router.push("/auth/core/user-management"); 
     }, 1500);
   };
 

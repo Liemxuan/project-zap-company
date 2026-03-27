@@ -240,3 +240,19 @@ Left "V4" version labels in the heading, floating badge, and footer. **Rule:** V
 ### The V4 Golden Rule
 > **Strip everything. Trust the cascade. If a Genesis atom accepts it as a prop, the Inspector already controls it. Your job as a page author is to compose atoms, not style them.**
 
+---
+
+## 15. The Pre-Flight Skill Audit & Business/Tech Dual-Layer Protocol
+
+**Origin:** Merchant Digital Workspace Sandbox execution (March 2026).
+
+### 15.1 The Pre-Flight Skill Audit is Mandatory
+Before proposing any architectural flow, drawing any layout skeletons, or generating a `UI-SPEC.md`, agents must structurally verify the boundaries of the engine by reading the master skills (`zap-build.md`, `audit-and-fix.md`, `zap-foundation-enforcer.md`). Proposing UI shapes without establishing the L0-L5 Layer Depth and Inspector Tethering rules results in generic designs that fracture the ecosystem. **Rule:** Read the law before you draft the blueprint.
+
+### 15.2 The `Object.assign` Reflex
+Generic Tailwind classes (`rounded-md`, `p-4`) are forbidden on complex structural containers governed by the Theme Engine. **Rule:** When elevating a structural floating pane (L1-L5), agents must instinctively utilize the runtime bypass to enforce Metronic Inspector compliance: `style={Object.assign({}, { borderRadius: 'var(--layer-[level]-border-radius)' })}`.
+
+### 15.3 The Dual-Layer Communication Standard
+When projecting a new feature, architecture, or plan to the user, answers must be strictly decoupled into two distinct blocks:
+1. **Layer 1 (The Business Value):** Plain English. Explain what the feature *does* for the merchant, customer, or workflow. Zero technical jargon.
+2. **Layer 2 (The Technical Engine):** Unabridged technical jargon. The exact Docker architecture, Next.js routing logic, L1-L4 tokens, Postgres schemas, and security gates driving Layer 1.

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
-import { Button } from '../../../genesis/atoms/interactive/button';
+import { Button } from '@/genesis/atoms/interactive/button';
 import { Loader2, RefreshCw, ChevronLeft, ChevronRight, ChevronDown, ChevronUp, Layers, Fingerprint, ExternalLink } from 'lucide-react';
 import {
     Table,
@@ -10,9 +10,9 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-} from '../../../genesis/molecules/table';
-import { Badge } from '../../../genesis/atoms/interactive/badge';
-import { AppShell } from '../../../zap/layout/AppShell';
+} from '@/genesis/molecules/table';
+import { Badge } from '@/genesis/atoms/interactive/badge';
+import { AppShell } from '@/zap/layout/AppShell';
 
 // Derives a human-readable page name from a URL path
 // e.g. '/account/billing/history' -> 'Billing History'

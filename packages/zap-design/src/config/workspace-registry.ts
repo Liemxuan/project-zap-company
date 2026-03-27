@@ -150,16 +150,16 @@ export const WORKSPACE_REGISTRY: WorkspaceEntry[] = [
 
   // ── AGENT (:3500–3900) ────────────────────────────────────
   {
-    id: 'zap-claw',
-    name: 'ZAP-Claw Agent',
+    id: 'merchant-hub',
+    name: 'Merchant Hub',
     domain: 'AGENT',
-    sub: 'CLAW',
+    sub: 'WORKSPACE',
     port: 3500,
-    folder: 'packages/zap-claw',
-    healthEndpoint: '/health',
-    description: 'Backend agent runtime',
-    icon: 'memory',
-    tags: ['agent', 'claw', 'backend', 'runtime'],
+    folder: 'apps/merchant',
+    healthEndpoint: '/',
+    description: 'Merchant Digital Workspace for Swarm Operations',
+    icon: 'storefront',
+    tags: ['merchant', 'workspace', 'hub', 'swarm', 'agent'],
   },
   {
     id: 'mission-control',

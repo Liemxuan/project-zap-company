@@ -2,6 +2,11 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   transpilePackages: ['@excalidraw/excalidraw'],
+  experimental: {
+    turbo: {
+      root: '../../',
+    },
+  },
   images: {
     remotePatterns: [
       {
@@ -42,11 +47,16 @@ const nextConfig: NextConfig = {
         destination: '/design/metro/:path*',
         permanent: false,
       },
-      // Escape trap for browsers stuck on the previous invalid redirect
+      // Forward legacy URLs to the new M3 dynamic theme router
       {
-        source: '/design/metro/mission-control',
-        destination: '/mission-control',
-        permanent: false,
+        source: '/mission-control',
+        destination: '/design/metro/mission-control',
+        permanent: true,
+      },
+      {
+        source: '/mission-control/:path*',
+        destination: '/design/metro/mission-control/:path*',
+        permanent: true,
       }
     ];
   },

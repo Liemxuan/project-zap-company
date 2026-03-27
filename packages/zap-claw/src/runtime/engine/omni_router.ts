@@ -204,6 +204,14 @@ export async function resolveBalancedKey(tier: "ULTRA" | "PRO"): Promise<{ apiKe
             const keyIndex = index % project.keys.length;
             const selectedKey = project.keys[keyIndex];
 
+            if (!selectedKey) continue;
+
+            const isDead = await redisClient.sismember('dead_keys:google', selectedKey);
+            if (isDead === 1) {
+                console.log(`[Omni-Router] 💀 Skipping DEAD KEY in Project ${project.id}.`);
+                continue; 
+            }
+
             console.log(`[Omni-Router] ⚖️ Load Balanced: Tier ${tier} -> Project ${project.id} -> Key Index ${keyIndex}`);
             return { apiKey: selectedKey, projectId: project.id };
         }
@@ -427,6 +435,10 @@ export async function generateOmniContent(config: LLMConfig, payload: OmniPayloa
                         if (statusCode === 429 && activeProjectId) {
                             console.error(`[Omni-Router] 🛑 429 TPM LIMIT HIT on Google Project '${activeProjectId}'. Applying 60s quarantine block.`);
                             await redisClient.setex(`block:project:${activeProjectId}`, 60, "true");
+                            continue; 
+                        } else if ((statusCode === 403 || statusCode === 400) && activeKey) {
+                            console.error(`[Omni-Router] 💀 DEAD KEY DETECTED (Status ${statusCode}). Blacklisting key permanently.`);
+                            await redisClient.sadd(`dead_keys:google`, activeKey);
                             continue; 
                         } else if (statusCode === 429) {
                             break;

@@ -1,4 +1,4 @@
-import SwarmDashboard from '../../app/mission-control/swarm/page';
+import SwarmDashboard from '../../app/design/[theme]/mission-control/swarm/page';
 
 export default function SwarmLab() {
     return (
