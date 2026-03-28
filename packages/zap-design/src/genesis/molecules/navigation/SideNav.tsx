@@ -15,6 +15,7 @@ import {
     Database
 } from 'lucide-react';
 import { Icon } from '../../../genesis/atoms/icons/Icon';
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '../../../genesis/molecules/accordion';
 import { cn } from '../../../lib/utils';
 import Link from 'next/link';
 import { useTheme, AppTheme } from '../../../components/ThemeContext';
@@ -28,6 +29,9 @@ import { getAtomsForTheme, getAtomsByCategory } from '../../../themes/atom-regis
 import { getFoundationsForTheme, getFoundationsByCategory } from '../../../themes/foundation-registry';
 import { useWorkspaceStore } from '../../../store/workspace-store';
 import { WORKSPACE_REGISTRY } from '../../../config/workspace-registry';
+import { QuickNavigate } from '../../../genesis/molecules/quick-navigate';
+import { UserSession } from '../user-session';
+import { getSession, logoutAction } from '../../../../../zap-auth/src/actions';
 
 type NavItem = string | { title: string; items: string[] };
 
@@ -41,14 +45,16 @@ interface Category {
 const NAV_DATA: Category[] = [
     // L1 to L4 are populated dynamically from their respective registries inside the component.
     {
-        id: 'L5', title: 'L5: Organisms (0)', icon: Layout, items: []
+        id: 'L5', title: 'L5: Organisms (2)', icon: Layout, items: ['Inspector System', 'Login']
     },
     {
-        id: 'L6', title: 'L6: Layouts (0)', icon: Columns, items: []
+        id: 'L6', title: 'L6: Layouts (3)', icon: Columns, items: [
+            'Merchant Workspace',
+            { title: 'Authentication', items: ['Sign-in A', 'Sign-in B'] }
+        ]
     },
     {
-        id: 'L7', title: 'L7: Pages (3)', icon: FileText, items: [
-            'User Management',
+        id: 'L7', title: 'L7: Pages (2)', icon: FileText, items: [
             { title: 'Tables', items: ['System Logs'] },
             { title: 'Authentication', items: ['Signin'] }
         ]
@@ -179,9 +185,9 @@ const buildDynamicFoundations = (theme: string, type: 'L1: Tokens' | 'L2: Primit
     const foundationIds = themeConfig?.features.hasFoundations || [];
     const grouped = getFoundationsByCategory(foundationIds);
     const targets = grouped[type] || [];
-    
+
     const items = targets.map(f => f.label);
-    
+
     if (type === 'L1: Tokens') {
         items.unshift('Materials');
     }
@@ -249,12 +255,18 @@ const getHref = (item: string, theme: string, activeWorkspaceId?: string | null,
             'Materials': `/design/${theme}`,
 
             // System
+            'Inspector System': `/design/${theme}/organisms/inspector`,
             'Design Audit': '/design/audit',
             'Typography Architect': `/design/${theme}/labs/typography-architect`,
 
             // Static fallbacks
             'Wireframe': `/design/${theme}/template`,
             'Component Registry': '/design/swarm/registry',
+
+            // L6 Layouts
+            'Merchant Workspace': `/design/${theme}/merchant-workspace`,
+            'Sign-in A': `/design/${theme}/organisms/login`,
+            'Sign-in B': `/auth/${theme}/signin`,
 
             // L5 Organisms — use theme path
             'Data Grid': `/design/${theme}/organisms/data-grid`,
@@ -263,6 +275,7 @@ const getHref = (item: string, theme: string, activeWorkspaceId?: string | null,
             'Interactive Elements Gallery': `/design/${theme}/organisms/interactive-gallery`,
             'User Profile Header': `/design/${theme}/organisms/user-profile-header`,
             'Authentication Scaffolds': `/design/${theme}/organisms/auth-scaffold`,
+            'Login': `/design/${theme}/organisms/login`,
 
             // L7 Pages
             'Signin': `/auth/${theme}/signin`,
@@ -341,8 +354,24 @@ export const SideNav: React.FC<SideNavProps> = ({ showDevWrapper = false }) => {
     const router = useRouter();
 
     const [currentPort, setCurrentPort] = React.useState<string | null>(null);
+    const [userSession, setUserSession] = React.useState<any>(null);
+
     React.useEffect(() => {
         setCurrentPort(window.location.port);
+
+        // Fetch session for the user session pill
+        getSession().then((session: any) => {
+            if (session && typeof session === 'object') {
+                setUserSession({
+                    name: session.name || "Unknown User",
+                    email: session.email || "",
+                    role: session.role || "USER",
+                    avatarUrl: session.avatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(session.name || "Unknown")}`,
+                    status: 'online',
+                    position: session.employee?.position || 'Unknown Position'
+                });
+            }
+        }).catch(console.error);
     }, []);
 
     // Build dynamic categories from registries
@@ -350,13 +379,13 @@ export const SideNav: React.FC<SideNavProps> = ({ showDevWrapper = false }) => {
     const dynamicL2 = React.useMemo(() => buildDynamicFoundations(theme, 'L2: Primitives'), [theme]);
     const dynamicL3 = React.useMemo(() => buildDynamicL3(theme), [theme]);
     const dynamicL4 = React.useMemo(() => buildDynamicL4(theme), [theme]);
-    
+
     const { activeWorkspaceId, getActiveWorkspace } = useWorkspaceStore();
 
     const EFFECTIVE_NAV = React.useMemo(() => {
         if (activeWorkspaceId !== 'zap-design') {
             const ws = getActiveWorkspace();
-            
+
             // Generate domain-specific or workspace-specific navigation trees
             // tracking the newly migrated pages exactly.
             if (ws?.id === 'pos-kiosk') {
@@ -390,7 +419,7 @@ export const SideNav: React.FC<SideNavProps> = ({ showDevWrapper = false }) => {
                     { id: 'auth-prefs', title: 'SYSTEM PREFERENCES', icon: Columns, items: ['User Management', 'Settings', 'Access Control'] }
                 ];
             }
-            
+
             // Default generic tree for other workspaces
             return [
                 {
@@ -492,7 +521,7 @@ export const SideNav: React.FC<SideNavProps> = ({ showDevWrapper = false }) => {
                 // Avoid redundant state updates if it's already the ONLY open category.
                 const isOpenOnly = prev[activeCategoryId] && Object.keys(prev).filter(k => prev[k]).length === 1;
                 if (isOpenOnly) return prev;
-                
+
                 return { [activeCategoryId]: true };
             });
         }
@@ -570,177 +599,189 @@ export const SideNav: React.FC<SideNavProps> = ({ showDevWrapper = false }) => {
 
             {/* Top Logo Area - Aligned to MetroHeader */}
             <div className={cn(
-                "h-[var(--sys-header-height,3.5rem)] flex items-center shrink-0 w-full overflow-hidden transition-all duration-300 border-b border-black",
-                effectivelyExpanded ? "px-6" : "px-0 justify-center"
+                "h-[var(--sys-header-height,3.5rem)] flex items-center shrink-0 w-full overflow-hidden transition-all duration-300 border-b border-black gap-3",
+                effectivelyExpanded ? "px-4" : "px-0 justify-center"
             )}>
                 <Image
                     src="/zap-logo.png"
                     alt="ZAP Logo"
-                    width={45}
-                    height={45}
-                    className="cursor-pointer hover:scale-110 transition-transform"
+                    width={effectivelyExpanded ? 32 : 45}
+                    height={effectivelyExpanded ? 32 : 45}
+                    className="cursor-pointer hover:scale-110 transition-transform shrink-0"
                     priority
                 />
+                <AnimatePresence>
+                    {effectivelyExpanded && (
+                        <motion.div
+                            initial={{ opacity: 0, width: 0 }}
+                            animate={{ opacity: 1, width: "auto" }}
+                            exit={{ opacity: 0, width: 0 }}
+                            className="flex-1 overflow-hidden pointer-events-auto"
+                        >
+                            <QuickNavigate className="w-full bg-transparent border-none shadow-none text-on-surface hover:bg-on-surface/5" />
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </div>
 
             {/* Navigation List */}
             <div className="flex-1 overflow-y-auto scrollbar-hide py-4 px-3 space-y-1">
-                {mounted && EFFECTIVE_NAV.map((category) => {
-                    const isOpen = openCategories[category.id] && (effectivelyExpanded);
-                    const hasItems = category.items.length > 0;
-                    const IconComp = category.icon;
-                    const isActive = isActiveLevel(category.id);
+                <Accordion
+                    type="multiple"
+                    value={Object.keys(openCategories).filter(k => openCategories[k] && effectivelyExpanded)}
+                    onValueChange={(val) => {
+                        const newCat = { ...openCategories };
+                        EFFECTIVE_NAV.forEach(cat => {
+                            newCat[cat.id] = val.includes(cat.id);
+                        });
+                        setOpenCategories(newCat);
+                    }}
+                    className="w-full space-y-1"
+                    variant="navigation"
+                    indicator="none"
+                >
+                    {mounted && EFFECTIVE_NAV.map((category) => {
+                        const hasItems = category.items.length > 0;
+                        const IconComp = category.icon;
+                        const isActive = isActiveLevel(category.id);
 
-                    return (
-                        <div key={category.id} className="flex flex-col">
-                            <motion.button
-                                onClick={() => toggleCategory(category.id)}
-                                title={!effectivelyExpanded ? category.title : undefined}
-                                whileHover={{ scale: 1.02, x: 2 }}
-                                whileTap={{ scale: 0.98 }}
-                                className={cn(
-                                    "w-full flex items-center rounded-lg transition-all duration-200 outline-none text-left",
-                                    !effectivelyExpanded ? "justify-center py-3" : "justify-between px-3 py-2.5",
-                                    isActive ? "bg-primary/10 text-on-surface ring-1 ring-primary/20" : "text-on-surface-variant hover:bg-on-surface/5 hover:text-on-surface"
-                                )}
-                            >
-                                <div className="flex items-center gap-3 overflow-hidden">
-                                    <IconComp size={20} strokeWidth={isActive ? 2.5 : 1.5} className={cn(isActive ? "text-primary" : "text-on-surface-variant opacity-70")} />
-                                    {effectivelyExpanded && (
-                                        <span className="font-display font-medium text-titleSmall text-transform-primary tracking-tight whitespace-nowrap">
-                                            {category.title}
-                                        </span>
+                        return (
+                            <AccordionItem key={category.id} value={category.id} className="border-none w-full">
+                                <AccordionTrigger
+                                    onClick={() => {
+                                        if (!effectivelyExpanded) {
+                                            setSidebarState('expanded');
+                                        }
+                                    }}
+                                    className={cn(
+                                        !effectivelyExpanded ? "justify-center py-3 px-0 h-11" : "",
+                                        isActive && effectivelyExpanded ? "bg-primary/10 text-on-surface ring-1 ring-primary/20" : "",
+                                        isActive && !effectivelyExpanded ? "bg-primary/10 text-primary ring-1 ring-primary/20" : ""
                                     )}
-                                </div>
-                                {effectivelyExpanded && (
-                                    <div className="text-on-surface-variant text-transform-secondary/50">
-                                        <motion.div animate={{ rotate: isOpen ? 0 : -90 }}>
-                                            <ChevronDown size={14} strokeWidth={2.5} />
-                                        </motion.div>
+                                >
+                                    <div className="flex items-center gap-3 overflow-hidden text-left flex-1 min-w-0">
+                                        <IconComp
+                                            size={20}
+                                            strokeWidth={isActive ? 2.5 : 1.5}
+                                            className={cn(
+                                                "shrink-0 transition-colors",
+                                                isActive ? "text-primary" : "text-on-surface-variant opacity-70 group-data-[state=open]:text-primary"
+                                            )}
+                                        />
+                                        {effectivelyExpanded && (
+                                            <span className="font-display font-medium text-titleSmall text-transform-primary tracking-tight whitespace-nowrap overflow-hidden text-ellipsis">
+                                                {category.title}
+                                            </span>
+                                        )}
                                     </div>
-                                )}
-                            </motion.button>
+                                    {/* Manual indicator for effectivelyExpanded cases */}
+                                    {effectivelyExpanded && (
+                                        <ChevronDown className="size-4 shrink-0 transition-transform duration-200 text-on-surface-variant/50 group-data-[state=open]:rotate-180" strokeWidth={2.5} />
+                                    )}
+                                </AccordionTrigger>
 
-                            {/* Inner Items */}
-                            <AnimatePresence>
-                                {isOpen && hasItems && (
-                                    <motion.div
-                                        initial={{ height: 0, opacity: 0 }}
-                                        animate={{ height: "auto", opacity: 1 }}
-                                        exit={{ height: 0, opacity: 0 }}
-                                        transition={{ duration: 0.3, ease: [0.23, 1, 0.32, 1] }}
-                                        className="flex flex-col m-0 pl-11 overflow-hidden group/navlist"
-                                    >
-                                        {category.items.map((item, itemIdx) => {
-                                            if (typeof item === 'string') {
-                                                const href = getHref(item, theme, activeWorkspaceId, currentPort);
-                                                const isItemActive = mounted && href !== '' && href === activeHref;
+                                {/* Inner Items */}
+                                {hasItems && effectivelyExpanded && (
+                                    <AccordionContent>
+                                        <div className="flex flex-col m-0 pl-8 overflow-hidden group/navlist space-y-[2px]">
+                                            {category.items.map((item, itemIdx) => {
+                                                if (typeof item === 'string') {
+                                                    const href = getHref(item, theme, activeWorkspaceId, currentPort);
+                                                    const isItemActive = mounted && href !== '' && href === activeHref;
 
-                                                return (
-                                                    <motion.div
-                                                        key={`str-${item}`}
-                                                        initial={{ opacity: 0, x: -10 }}
-                                                        animate={{ opacity: 1, x: 0 }}
-                                                        transition={{ delay: itemIdx * 0.03 }}
-                                                    >
-                                                            <Link
-                                                                href={href || '#'}
-                                                                data-sidebar-active={isItemActive}
-                                                                className={cn(
-                                                                    "relative block py-1.5 px-3 -ml-3 rounded-md text-bodyMedium transition-all duration-300 outline-none font-body text-transform-secondary tracking-tight",
-                                                                    isItemActive
-                                                                        ? "bg-primary-container text-on-primary-container font-bold border border-primary-container shadow-[var(--md-sys-elevation-level1)]"
-                                                                        : "text-on-surface-variant opacity-70 hover:text-on-surface hover:bg-on-surface/5 group-hover/navlist:opacity-40 hover:!opacity-100"
-                                                                )}
-                                                            >
+                                                    return (
+                                                        <Link
+                                                            key={`str-${item}`}
+                                                            href={href || '#'}
+                                                            data-sidebar-active={isItemActive}
+                                                            className={cn(
+                                                                "relative block py-[5px] px-3 rounded-md text-bodyMedium transition-all duration-300 outline-none font-body text-transform-secondary tracking-tight",
+                                                                isItemActive
+                                                                    ? "bg-primary-container text-on-primary-container font-bold shadow-[var(--md-sys-elevation-level1)]"
+                                                                    : "text-on-surface-variant opacity-70 hover:text-on-surface hover:bg-on-surface/5 group-hover/navlist:opacity-40 hover:!opacity-100"
+                                                            )}
+                                                        >
                                                             {isItemActive && (
-                                                                <motion.div
-                                                                    layoutId="sidebar-active-indicator"
-                                                                    className="absolute left-[-20px] top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-primary shadow-[0_0_8px_rgba(var(--sys-color-primary-rgb),0.6)]"
+                                                                <div
+                                                                    className="absolute left-[-16px] top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-primary shadow-[0_0_8px_rgba(var(--sys-color-primary-rgb),0.6)]"
                                                                 />
                                                             )}
                                                             {item}
                                                         </Link>
-                                                    </motion.div>
-                                                );
-                                            } else {
-                                                return (
-                                                    <motion.div
-                                                        key={`grp-${item.title}`}
-                                                        initial={{ opacity: 0, x: -10 }}
-                                                        animate={{ opacity: 1, x: 0 }}
-                                                        transition={{ delay: itemIdx * 0.03 }}
-                                                        className="flex flex-col mt-2 mb-1"
-                                                    >
-                                                        <button
-                                                            onClick={(e) => {
-                                                                e.preventDefault();
-                                                                e.stopPropagation();
-                                                                const key = `${category.id}-${item.title}`;
-                                                                setOpenSubGroups(prev => {
-                                                                    if (prev[key]) return {};
-                                                                    return { [key]: true };
-                                                                });
-                                                            }}
-                                                            className="flex items-center justify-between w-full outline-none group/subgroup cursor-pointer hover:bg-on-surface/5 rounded px-2 py-1.5 -ml-2 mb-1 transition-colors"
-                                                        >
-                                                            <div className="text-bodyMedium font-body text-on-surface-variant opacity-80 group-hover/subgroup:opacity-100 text-transform-secondary tracking-tight transition-opacity font-medium">
-                                                                {item.title}
-                                                            </div>
-                                                            <motion.div 
-                                                                animate={{ rotate: (openSubGroups[`${category.id}-${item.title}`]) ? 0 : -90 }}
-                                                                className="text-on-surface-variant opacity-50 group-hover/subgroup:opacity-100 transition-opacity"
+                                                    );
+                                                } else {
+                                                    return (
+                                                        <div key={`grp-${item.title}`} className="flex flex-col mt-2 mb-1">
+                                                            <button
+                                                                onClick={(e) => {
+                                                                    e.preventDefault();
+                                                                    e.stopPropagation();
+                                                                    const key = `${category.id}-${item.title}`;
+                                                                    setOpenSubGroups(prev => {
+                                                                        if (prev[key]) return {};
+                                                                        return { [key]: true };
+                                                                    });
+                                                                }}
+                                                                className="flex items-center justify-between w-full outline-none group/subgroup cursor-pointer hover:bg-on-surface/5 rounded px-2 py-1.5 -ml-2 mb-1 transition-colors"
                                                             >
-                                                                <ChevronDown size={14} strokeWidth={2.5} />
-                                                            </motion.div>
-                                                        </button>
-                                                        <AnimatePresence initial={false}>
-                                                            {(openSubGroups[`${category.id}-${item.title}`]) && (
-                                                                <motion.div 
-                                                                    initial={{ height: 0, opacity: 0 }}
-                                                                    animate={{ height: "auto", opacity: 1 }}
-                                                                    exit={{ height: 0, opacity: 0 }}
-                                                                    transition={{ duration: 0.2, ease: "easeInOut" }}
-                                                                    className="flex flex-col border-l border-primary/20 ml-2 pl-3 space-y-0.5 overflow-hidden"
+                                                                <div className="text-bodyMedium font-body text-on-surface-variant opacity-80 group-hover/subgroup:opacity-100 text-transform-secondary tracking-tight transition-opacity font-medium">
+                                                                    {item.title}
+                                                                </div>
+                                                                <motion.div
+                                                                    animate={{ rotate: (openSubGroups[`${category.id}-${item.title}`]) ? 0 : -90 }}
+                                                                    className="text-on-surface-variant opacity-50 group-hover/subgroup:opacity-100 transition-opacity"
                                                                 >
-                                                                    {item.items.map((subItem) => {
-                                                                        const href = getHref(subItem, theme, activeWorkspaceId, currentPort);
-                                                                        const isItemActive = mounted && href !== '' && href === activeHref;
-                                                                        return (
-                                                                            <Link
-                                                                                href={href || '#'}
-                                                                                key={subItem}
-                                                                                data-sidebar-active={isItemActive}
-                                                                                className={cn(
-                                                                                    "relative block py-1.5 px-3 -ml-3 rounded-md text-[12px] transition-all duration-300 outline-none font-body text-transform-secondary",
-                                                                                    isItemActive
-                                                                                        ? "bg-primary-container text-on-primary-container font-bold border border-primary-container shadow-[var(--md-sys-elevation-level1)]"
-                                                                                        : "text-on-surface-variant opacity-60 hover:text-on-surface hover:bg-on-surface/5 group-hover/navlist:opacity-40 hover:!opacity-100"
-                                                                                )}
-                                                                            >
-                                                                                {isItemActive && (
-                                                                                    <motion.div
-                                                                                        layoutId="sidebar-active-indicator"
-                                                                                        className="absolute left-[-17px] top-1/2 -translate-y-1/2 w-1 h-1 rounded-full bg-primary shadow-[0_0_6px_rgba(var(--sys-color-primary-rgb),0.5)]"
-                                                                                    />
-                                                                                )}
-                                                                                {subItem}
-                                                                            </Link>
-                                                                        );
-                                                                    })}
+                                                                    <ChevronDown size={14} strokeWidth={2.5} />
                                                                 </motion.div>
-                                                            )}
-                                                        </AnimatePresence>
-                                                    </motion.div>
-                                                );
-                                            }
-                                        })}
-                                    </motion.div>
+                                                            </button>
+                                                            <AnimatePresence initial={false}>
+                                                                {(openSubGroups[`${category.id}-${item.title}`]) && (
+                                                                    <motion.div
+                                                                        initial={{ height: 0, opacity: 0 }}
+                                                                        animate={{ height: "auto", opacity: 1 }}
+                                                                        exit={{ height: 0, opacity: 0 }}
+                                                                        transition={{ duration: 0.2, ease: "easeInOut" }}
+                                                                        className="flex flex-col border-l border-primary/20 ml-2 pl-3 space-y-0.5 overflow-hidden"
+                                                                    >
+                                                                        {item.items.map((subItem) => {
+                                                                            const href = getHref(subItem, theme, activeWorkspaceId, currentPort);
+                                                                            const isItemActive = mounted && href !== '' && href === activeHref;
+                                                                            return (
+                                                                                <Link
+                                                                                    href={href || '#'}
+                                                                                    key={subItem}
+                                                                                    data-sidebar-active={isItemActive}
+                                                                                    className={cn(
+                                                                                        "relative block py-1.5 px-3 -ml-3 rounded-md text-[12px] transition-all duration-300 outline-none font-body text-transform-secondary",
+                                                                                        isItemActive
+                                                                                            ? "bg-primary-container text-on-primary-container font-bold border border-primary-container shadow-[var(--md-sys-elevation-level1)]"
+                                                                                            : "text-on-surface-variant opacity-60 hover:text-on-surface hover:bg-on-surface/5 group-hover/navlist:opacity-40 hover:!opacity-100"
+                                                                                    )}
+                                                                                >
+                                                                                    {isItemActive && (
+                                                                                        <motion.div
+                                                                                            layoutId="sidebar-active-indicator"
+                                                                                            className="absolute left-[-17px] top-1/2 -translate-y-1/2 w-1 h-1 rounded-full bg-primary shadow-[0_0_6px_rgba(var(--sys-color-primary-rgb),0.5)]"
+                                                                                        />
+                                                                                    )}
+                                                                                    {subItem}
+                                                                                </Link>
+                                                                            );
+                                                                        })}
+                                                                    </motion.div>
+                                                                )}
+                                                            </AnimatePresence>
+                                                        </div>
+                                                    );
+                                                }
+                                            })}
+                                        </div>
+                                    </AccordionContent>
                                 )}
-                            </AnimatePresence>
-                        </div>
-                    );
-                })}
+                            </AccordionItem>
+                        );
+                    })}
+                </Accordion>
             </div>
 
             {/* Footer Area */}
@@ -775,13 +816,28 @@ export const SideNav: React.FC<SideNavProps> = ({ showDevWrapper = false }) => {
                         ))}
                     </div>
 
-                    {/* Dev Mode Toggle */}
-                    <div className="flex items-center justify-between bg-layer-dialog py-2 px-3 rounded-lg border border-outline-variant/50">
-                        <span className="font-dev text-[10px] tracking-widest opacity-70 text-transform-tertiary">Dev Status</span>
-                        <Switch
-                            checked={devMode}
-                            onCheckedChange={setDevMode}
-                            className="scale-75"
+                    {/* User Session */}
+                    <div className="flex items-center justify-between rounded-lg w-full">
+                        <UserSession
+                            size="small"
+                            variant="ghost"
+                            showLabel={false}
+                            isLoggedIn={!!userSession}
+                            user={userSession ? {
+                                name: userSession.name || "User",
+                                role: userSession.role,
+                                avatarUrl: userSession.avatarUrl || undefined,
+                                status: userSession.status || "online"
+                            } : undefined}
+                            onLoginClick={() => window.location.href = '/'}
+                            onLogoutClick={async () => {
+                                try {
+                                    await logoutAction();
+                                    window.location.href = '/';
+                                } catch (e) {
+                                    console.error('Logout failed:', e);
+                                }
+                            }}
                         />
                     </div>
                 </div>
