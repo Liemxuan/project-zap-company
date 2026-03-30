@@ -18,11 +18,11 @@ export default function IndicatorSandboxPage() {
             <div className="space-y-4">
                 <Wrapper identity={{ displayName: "StatusDot Structural Settings", type: "Docs Link", filePath: "zap/atoms/indicator/page.tsx" }}>
                     <div className="space-y-6">
-                        <h4 className="text-[10px] text-transform-primary font-display font-bold text-muted-foreground tracking-wider uppercase">Sandbox Variables</h4>
+                        <h4 className="text-label-small text-transform-primary font-display font-bold text-muted-foreground tracking-wider uppercase">Sandbox Variables</h4>
 
                         <div className="space-y-4">
                             <div className="space-y-2">
-                                <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-muted-foreground uppercase">
+                                <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-muted-foreground uppercase">
                                     <span>--indicator-height</span>
                                     <span className="font-bold">{height[0]}px</span>
                                 </div>
@@ -30,7 +30,7 @@ export default function IndicatorSandboxPage() {
                             </div>
 
                             <div className="space-y-2">
-                                <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-muted-foreground uppercase">
+                                <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-muted-foreground uppercase">
                                     <span>--indicator-border-width</span>
                                     <span className="font-bold">{borderWidth[0]}px</span>
                                 </div>
@@ -38,7 +38,7 @@ export default function IndicatorSandboxPage() {
                             </div>
 
                             <div className="space-y-2">
-                                <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-muted-foreground uppercase">
+                                <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-muted-foreground uppercase">
                                     <span>--indicator-border-radius</span>
                                     <span className="font-bold">{borderRadius[0]}px</span>
                                 </div>

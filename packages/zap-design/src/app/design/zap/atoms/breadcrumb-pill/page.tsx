@@ -34,8 +34,8 @@ export default function BreadcrumbPillSandboxPage() {
 
                 {/* Single Pills */}
                 <div className="space-y-2">
-                    <span className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Individual Breadcrumb Pills</span>
-                    <span className="text-[10px] font-dev text-muted-foreground block">
+                    <span className="text-label-small font-semibold text-muted-foreground uppercase tracking-widest">Individual Breadcrumb Pills</span>
+                    <span className="text-label-small font-dev text-muted-foreground block">
                         Each pill renders with <code>label</code> prop
                     </span>
                     <Wrapper identity={{ displayName: "BreadcrumbPill", type: "Atom", filePath: "genesis/atoms/indicators/BreadcrumbPill.tsx" }}>
@@ -49,16 +49,16 @@ export default function BreadcrumbPillSandboxPage() {
 
                 {/* Breadcrumb Trail */}
                 <div className="space-y-2">
-                    <span className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Breadcrumb Trail Pattern</span>
-                    <span className="text-[10px] font-dev text-muted-foreground block">
+                    <span className="text-label-small font-semibold text-muted-foreground uppercase tracking-widest">Breadcrumb Trail Pattern</span>
+                    <span className="text-label-small font-dev text-muted-foreground block">
                         Pills chained with separators to form navigation breadcrumbs
                     </span>
                     <Wrapper identity={{ displayName: "BreadcrumbPill (Trail)", type: "Atom", filePath: "genesis/atoms/indicators/BreadcrumbPill.tsx" }}>
                         <div className="bg-layer-panel border border-card-border rounded-lg p-6 flex items-center gap-1">
                             <BreadcrumbPill label="HOME" />
-                            <span className="text-muted-foreground text-xs mx-1">›</span>
+                            <span className="text-muted-foreground text-label-small mx-1">›</span>
                             <BreadcrumbPill label="DESIGN" />
-                            <span className="text-muted-foreground text-xs mx-1">›</span>
+                            <span className="text-muted-foreground text-label-small mx-1">›</span>
                             <BreadcrumbPill label="ATOMS" />
                         </div>
                     </Wrapper>

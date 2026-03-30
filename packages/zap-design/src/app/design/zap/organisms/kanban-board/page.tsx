@@ -44,31 +44,31 @@ export default function KanbanBoardSandbox() {  const [tasks, setTasks] = useSta
       <div className="space-y-4">
         <Wrapper identity={{ displayName: "Kanban Structural Settings", type: "Docs Link", filePath: "zap/organisms/kanban-board/page.tsx" }}>
           <div className="space-y-6">
-            <h4 className="text-[10px] text-transform-primary font-display font-bold text-muted-foreground tracking-wider">Sandbox Variables</h4>
+            <h4 className="text-label-small text-transform-primary font-display font-bold text-muted-foreground tracking-wider">Sandbox Variables</h4>
             <div className="space-y-4">
               <div className="space-y-2">
-                <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-muted-foreground">
+                <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-muted-foreground">
                   <span>--kanban-column-radius</span>
                   <span className="font-bold">{colRadius[0]}px</span>
                 </div>
                 <Slider value={colRadius} onValueChange={setColRadius} min={0} max={64} step={1} className="w-full" />
               </div>
               <div className="space-y-2">
-                <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-muted-foreground">
+                <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-muted-foreground">
                   <span>--kanban-column-border-width</span>
                   <span className="font-bold">{colBorderWidth[0]}px</span>
                 </div>
                 <Slider value={colBorderWidth} onValueChange={setColBorderWidth} min={0} max={8} step={1} className="w-full" />
               </div>
               <div className="space-y-2 pt-2">
-                <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-muted-foreground">
+                <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-muted-foreground">
                   <span>--kanban-task-radius</span>
                   <span className="font-bold">{taskRadius[0]}px</span>
                 </div>
                 <Slider value={taskRadius} onValueChange={setTaskRadius} min={0} max={64} step={1} className="w-full" />
               </div>
               <div className="space-y-2">
-                <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-muted-foreground">
+                <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-muted-foreground">
                   <span>--kanban-task-border-width</span>
                   <span className="font-bold">{taskBorderWidth[0]}px</span>
                 </div>
@@ -112,7 +112,7 @@ export default function KanbanBoardSandbox() {  const [tasks, setTasks] = useSta
       >
         <div className="absolute top-6 right-6 z-50">
             <Link href="/design/metro/kanban">
-                <Button variant="flat" className="gap-2 px-3 py-1.5 text-xs shadow-[var(--md-sys-elevation-level3)] border border-primary/20">
+                <Button variant="flat" className="gap-2 px-3 py-1.5 text-label-small shadow-[var(--md-sys-elevation-level3)] border border-primary/20">
                     <ExternalLink className="size-4" />
                     Open Full Page Template
                 </Button>

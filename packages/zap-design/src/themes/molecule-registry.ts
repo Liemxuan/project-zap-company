@@ -47,6 +47,7 @@ const Rating = dynamic(() => import('../app/design/zap/molecules/rating/page'), 
 const Steppers = dynamic(() => import('../app/design/zap/molecules/steppers/page'), { ssr: false });
 const UserSession = dynamic(() => import('../app/design/zap/molecules/user-session/page'), { ssr: false });
 const HorizontalNavigation = dynamic(() => import('../app/design/zap/molecules/horizontal-navigation/page'), { ssr: false });
+const SideNav = dynamic(() => import('../app/design/zap/molecules/side-nav/page'), { ssr: false });
 
 // 'showcase' type — shared body components from zap/sections/molecules/*
 const Cards = dynamic(
@@ -61,6 +62,7 @@ const Dialogs = dynamic(
 // Additional zap-only molecules (their pages are self-contained)
 const Alert = dynamic(() => import('../app/design/zap/molecules/alert/page'), { ssr: false });
 const Breadcrumb = dynamic(() => import('../app/design/zap/molecules/breadcrumb/page'), { ssr: false });
+const DataReadout = dynamic(() => import('../app/design/zap/molecules/data-readout/page'), { ssr: false });
 const DropdownMenu = dynamic(() => import('../app/design/zap/molecules/dropdown-menu/page'), { ssr: false });
 const Form = dynamic(() => import('../app/design/zap/molecules/form/page'), { ssr: false });
 const Pagination = dynamic(() => import('../app/design/zap/molecules/pagination/page'), { ssr: false });
@@ -68,6 +70,11 @@ const Progress = dynamic(() => import('../app/design/zap/molecules/progress/page
 const Tabs = dynamic(() => import('../app/design/zap/molecules/tabs/page'), { ssr: false });
 const Tooltip = dynamic(() => import('../app/design/zap/molecules/tooltip/page'), { ssr: false });
 const ThemeHeaderShowcase = dynamic(() => import('../app/design/zap/molecules/theme-header/page'), { ssr: false });
+
+// Auth molecules
+const RememberMeCheckboxPage = dynamic(() => import('../app/design/zap/molecules/remember-me-checkbox/page'), { ssr: false });
+const SocialLoginButtonsPage = dynamic(() => import('../app/design/zap/molecules/social-login-buttons/page'), { ssr: false });
+const ConfigBarPage = dynamic(() => import('../app/design/zap/molecules/config-bar/page'), { ssr: false });
 
 // ─── REGISTRY ───────────────────────────────────────────────────────────────────
 
@@ -88,10 +95,12 @@ export const MOLECULE_REGISTRY: Record<string, MoleculeEntry> = {
     'steppers': { id: 'steppers', label: 'Steppers', tier: 'L4 MOLECULE', status: 'In Progress', type: 'page', component: Steppers, icon: 'linear_scale', category: 'Navigation' },
     'user-session': { id: 'user-session', label: 'User Session', tier: 'L4 MOLECULE', status: 'In Progress', type: 'page', component: UserSession, icon: 'person', category: 'Navigation' },
     'horizontal-navigation': { id: 'horizontal-navigation', label: 'Horizontal Navigation', tier: 'L4 MOLECULE', status: 'Verified', type: 'page', component: HorizontalNavigation, icon: 'web_asset', category: 'Navigation' },
+    'side-nav': { id: 'side-nav', label: 'Side Navigation', tier: 'L6 ORGANISM', status: 'Verified', type: 'page', component: SideNav, icon: 'view_sidebar', category: 'Navigation' },
 
     // ── Additional zap molecules ────────────────────────────────────────
     'alert': { id: 'alert', label: 'Alert', tier: 'L4 MOLECULE', status: 'Verified', type: 'page', component: Alert, icon: 'warning', category: 'Feedback' },
     'breadcrumb': { id: 'breadcrumb', label: 'Breadcrumb', tier: 'L4 MOLECULE', status: 'Verified', type: 'page', component: Breadcrumb, icon: 'chevron_right', category: 'Navigation' },
+    'data-readout': { id: 'data-readout', label: 'Data Readout', tier: 'L4 MOLECULE', status: 'Verified', type: 'page', component: DataReadout, icon: 'list_alt', category: 'Data Display' },
     'dropdown-menu': { id: 'dropdown-menu', label: 'Dropdown Menu', tier: 'L4 MOLECULE', status: 'Verified', type: 'page', component: DropdownMenu, icon: 'arrow_drop_down', category: 'Navigation' },
     'form': { id: 'form', label: 'Form', tier: 'L4 MOLECULE', status: 'Verified', type: 'page', component: Form, icon: 'assignment', category: 'Forms' },
     'pagination': { id: 'pagination', label: 'Pagination', tier: 'L4 MOLECULE', status: 'Verified', type: 'page', component: Pagination, icon: 'last_page', category: 'Navigation' },
@@ -99,6 +108,11 @@ export const MOLECULE_REGISTRY: Record<string, MoleculeEntry> = {
     'tabs': { id: 'tabs', label: 'Tabs', tier: 'L4 MOLECULE', status: 'Verified', type: 'page', component: Tabs, icon: 'tab', category: 'Navigation' },
     'tooltip': { id: 'tooltip', label: 'Tooltip', tier: 'L4 MOLECULE', status: 'Verified', type: 'page', component: Tooltip, icon: 'info', category: 'Feedback' },
     'theme-header': { id: 'theme-header', label: 'Theme Header', tier: 'L4 MOLECULE', status: 'Verified', type: 'page', component: ThemeHeaderShowcase, icon: 'web_asset', category: 'Navigation' },
+
+    // ── Auth molecules ──────────────────────────────────────────────────
+    'remember-me-checkbox': { id: 'remember-me-checkbox', label: 'Remember Me Checkbox', tier: 'L4 MOLECULE', status: 'Verified', type: 'page', component: RememberMeCheckboxPage, icon: 'check_box', category: 'Auth' },
+    'social-login-buttons': { id: 'social-login-buttons', label: 'Social Login Buttons', tier: 'L4 MOLECULE', status: 'Verified', type: 'page', component: SocialLoginButtonsPage, icon: 'login', category: 'Auth' },
+    'config-bar': { id: 'config-bar', label: 'Config Bar', tier: 'L4 MOLECULE', status: 'Verified', type: 'page', component: ConfigBarPage, icon: 'tune', category: 'Auth' },
 };
 
 // ─── HELPERS ────────────────────────────────────────────────────────────────────

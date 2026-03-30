@@ -36,6 +36,7 @@ export interface ComponentSandboxTemplateProps {
         databaseLocation?: string;
     };
     fullWidth?: boolean;
+    hideDataTerminal?: boolean;
 }
 
 export const ComponentSandboxTemplate = ({
@@ -53,7 +54,8 @@ export const ComponentSandboxTemplate = ({
     publishPayload,
     onLoadedVariables,
     terminalData,
-    fullWidth = false
+    fullWidth = false,
+    hideDataTerminal = false
 }: ComponentSandboxTemplateProps) => {
     const { devMode, theme } = useTheme();
     const [platform, setPlatform] = useState<Platform>('web');
@@ -129,47 +131,49 @@ export const ComponentSandboxTemplate = ({
             <div className="flex flex-col gap-0">
                 
                 {/* The DebugAuditor Default Status Block */}
-                <Wrapper identity={{ displayName: "Data Terminal (Metadata)", filePath: "zap/layout/ComponentSandboxTemplate.tsx", type: "Wrapped Snippet", architecture: "Metadata" }}>
-                    <InspectorAccordion title="Data Terminal" icon="database" defaultOpen={true}>
-                        <div className="space-y-4 p-4 bg-layer-dialog rounded-lg border border-border/50">
-                            <div className="space-y-1">
-                                <p className="text-[10px] font-black text-transform-secondary tracking-widest text-muted-foreground opacity-60">Status</p>
-                                <div className={cn(
-                                    "inline-flex items-center px-2.5 py-1 rounded text-[10px] font-bold text-transform-secondary",
-                                    status === 'Verified' ? "bg-green-500/10 text-green-500 border border-green-500/20" :
-                                    status === 'Beta' || status === 'In Progress' ? "bg-amber-500/10 text-amber-500 border border-amber-500/20" :
-                                    "bg-red-500/10 text-red-500 border border-red-500/20"
-                                )}>
-                                    {status}
+                {!hideDataTerminal && (
+                    <Wrapper identity={{ displayName: "Data Terminal (Metadata)", filePath: "zap/layout/ComponentSandboxTemplate.tsx", type: "Wrapped Snippet", architecture: "Metadata" }}>
+                        <InspectorAccordion title="Data Terminal" icon="database" defaultOpen={true}>
+                            <div className="space-y-4 p-4 bg-layer-dialog rounded-lg border border-border/50">
+                                <div className="space-y-1">
+                                    <p className="text-[10px] font-black text-transform-secondary tracking-widest text-muted-foreground opacity-60">Status</p>
+                                    <div className={cn(
+                                        "inline-flex items-center px-2.5 py-1 rounded text-[10px] font-bold text-transform-secondary",
+                                        status === 'Verified' ? "bg-green-500/10 text-green-500 border border-green-500/20" :
+                                        status === 'Beta' || status === 'In Progress' ? "bg-amber-500/10 text-amber-500 border border-amber-500/20" :
+                                        "bg-red-500/10 text-red-500 border border-red-500/20"
+                                    )}>
+                                        {status}
+                                    </div>
                                 </div>
+                                <div className="space-y-1">
+                                    <p className="text-[10px] font-black text-transform-secondary tracking-widest text-muted-foreground opacity-60">Tier</p>
+                                    <p className="text-xs font-dev text-transform-tertiary font-medium text-on-surface">{tier}</p>
+                                </div>
+                                <div className="space-y-1">
+                                    <p className="text-[10px] font-black text-transform-secondary tracking-widest text-muted-foreground opacity-60">Import</p>
+                                    <code className="text-[10px] leading-tight block p-2 bg-on-surface/5 rounded-md border border-border/50 font-dev text-transform-tertiary break-all text-on-surface-variant">
+                                        import &#123; {componentName} &#125; from &apos;{importPath}&apos;;
+                                    </code>
+                                </div>
+                                {terminalData && (
+                                    <>
+                                        <div className="space-y-1">
+                                            <p className="text-[10px] font-black text-transform-secondary tracking-widest text-muted-foreground opacity-60">Database</p>
+                                            <p className="text-xs font-dev text-transform-tertiary font-medium text-on-surface">{terminalData.databaseType}</p>
+                                        </div>
+                                        <div className="space-y-1">
+                                            <p className="text-[10px] font-black text-transform-secondary tracking-widest text-muted-foreground opacity-60">Location</p>
+                                            <p className="text-[10px] leading-tight block p-2 bg-on-surface/5 rounded-md border border-border/50 font-dev text-transform-tertiary break-all text-on-surface-variant">
+                                                {terminalData.databaseLocation}
+                                            </p>
+                                        </div>
+                                    </>
+                                )}
                             </div>
-                            <div className="space-y-1">
-                                <p className="text-[10px] font-black text-transform-secondary tracking-widest text-muted-foreground opacity-60">Tier</p>
-                                <p className="text-xs font-dev text-transform-tertiary font-medium text-on-surface">{tier}</p>
-                            </div>
-                            <div className="space-y-1">
-                                <p className="text-[10px] font-black text-transform-secondary tracking-widest text-muted-foreground opacity-60">Import</p>
-                                <code className="text-[10px] leading-tight block p-2 bg-on-surface/5 rounded-md border border-border/50 font-dev text-transform-tertiary break-all text-on-surface-variant">
-                                    import &#123; {componentName} &#125; from &apos;{importPath}&apos;;
-                                </code>
-                            </div>
-                            {terminalData && (
-                                <>
-                                    <div className="space-y-1">
-                                        <p className="text-[10px] font-black text-transform-secondary tracking-widest text-muted-foreground opacity-60">Database</p>
-                                        <p className="text-xs font-dev text-transform-tertiary font-medium text-on-surface">{terminalData.databaseType}</p>
-                                    </div>
-                                    <div className="space-y-1">
-                                        <p className="text-[10px] font-black text-transform-secondary tracking-widest text-muted-foreground opacity-60">Location</p>
-                                        <p className="text-[10px] leading-tight block p-2 bg-on-surface/5 rounded-md border border-border/50 font-dev text-transform-tertiary break-all text-on-surface-variant">
-                                            {terminalData.databaseLocation}
-                                        </p>
-                                    </div>
-                                </>
-                            )}
-                        </div>
-                    </InspectorAccordion>
-                </Wrapper>
+                        </InspectorAccordion>
+                    </Wrapper>
+                )}
 
                 {/* Component Specific Controls — slot 2, right below Data Terminal */}
                 {inspectorControls && (

@@ -6,7 +6,7 @@ import { MasterVerticalShell } from '../../../../../zap/layout/MasterVerticalShe
 import { Tabs, TabItem } from '../../../../../genesis/atoms/interactive/Tabs';
 import { TypographyWildPreview } from '../../../../../zap/sections/atoms/typography/wild-preview';
 import { TypographyBody } from '../../../../../zap/sections/atoms/typography/body';
-import { TypographyInspector, TypographyTemplate } from '../../../../../zap/sections/atoms/typography/inspector';
+import { TypographyInspector, TypographyTemplate, LayeredStylizationSettings } from '../../../../../zap/sections/atoms/typography/inspector';
 import { TypographyPlaygroundShell } from '../../../../../zap/sections/atoms/typography/playground-shell';
 import { ALL_THEMES, TypographyThemeSchema } from '../../../../../zap/sections/atoms/typography/schema';
 import { Canvas } from '../../../../../genesis/atoms/surfaces/canvas';
@@ -24,11 +24,18 @@ export default function ZapTypographyPage() {
   // Playground state
   const [activeTemplate, setActiveTemplate] = useState<TypographyTemplate>('basic');
   const [customThemes, setCustomThemes] = useState<Record<string, TypographyThemeSchema>>({});
+  const [playgroundActiveAtom, setPlaygroundActiveAtom] = useState<string | null>(null);
 
   const currentThemeData = customThemes[activeTemplate] || ALL_THEMES.find(t => t.id === activeTemplate) || ALL_THEMES[0];
 
   const handleUpdateTheme = (updatedTheme: TypographyThemeSchema) => {
     setCustomThemes(prev => ({ ...prev, [activeTemplate]: updatedTheme }));
+  };
+
+  const handleUpdateActiveAtom = (newSettings: LayeredStylizationSettings) => {
+    if (!playgroundActiveAtom) return;
+    const newElements = { ...currentThemeData.elements, [playgroundActiveAtom]: newSettings };
+    handleUpdateTheme({ ...currentThemeData, elements: newElements });
   };
 
   const breadcrumbs = [
@@ -45,6 +52,9 @@ export default function ZapTypographyPage() {
         <TypographyInspector
           activeTemplate={activeTemplate}
           setActiveTemplate={setActiveTemplate}
+          activeAtom={playgroundActiveAtom}
+          settings={playgroundActiveAtom ? currentThemeData.elements[playgroundActiveAtom] : null}
+          onUpdateSettings={handleUpdateActiveAtom}
         />
       }
     >
@@ -75,7 +85,7 @@ export default function ZapTypographyPage() {
                         {activeTab === 'details' && 'TYPOGRAPHY'}
                         {activeTab === 'playground' && 'PLAYGROUND'}
                       </h1>
-                      <div className="bg-brand-midnight text-white px-3 py-1.5 text-[13px] font-bold uppercase tracking-wide">
+                      <div className="bg-brand-midnight text-white px-3 py-1.5 text-body-small font-bold uppercase tracking-wide">
                         {activeTab === 'preview' && 'EXPERIMENTAL TYPOGRAPHY PREVIEW'}
                         {activeTab === 'details' && 'FOUNDATIONAL TYPE SYSTEM (LEVEL 1)'}
                         {activeTab === 'playground' && 'STYLIZATION LAB'}
@@ -92,7 +102,7 @@ export default function ZapTypographyPage() {
                             transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
                             className="w-3.5 h-3.5 rounded-full bg-red-500 border-2 border-brand-midnight"
                           />
-                          <span className="text-[11px] font-black uppercase text-brand-midnight tracking-widest">LIVE PREVIEW</span>
+                          <span className="text-label-medium font-black uppercase text-brand-midnight tracking-widest">LIVE PREVIEW</span>
                         </>
                       )}
                     </div>
@@ -122,8 +132,10 @@ export default function ZapTypographyPage() {
               <div className="w-full max-w-5xl mx-auto">
                 <TypographyPlaygroundShell
                   key={currentThemeData.id}
-                  initialTheme={currentThemeData}
-                  onUpdateGlobalTheme={handleUpdateTheme}
+                  theme={currentThemeData}
+                  onUpdateTheme={handleUpdateTheme}
+                  activeAtom={playgroundActiveAtom}
+                  setActiveAtom={setPlaygroundActiveAtom}
                 />
               </div>
             )}

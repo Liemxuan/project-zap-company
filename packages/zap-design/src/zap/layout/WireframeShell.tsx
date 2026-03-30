@@ -75,10 +75,10 @@ export const WireframeShell = ({ children, inspector }: WireframeShellProps) => 
                 <button
                     onClick={() => setSidebarState('expanded')}
                     title="Expand Sidebar"
-                    className="absolute left-4 top-3.5 z-[200] w-7 h-7 bg-primary text-on-primary hover:bg-primary/90 rounded-[var(--button-border-radius,8px)] flex items-center justify-center shadow-lg hover:scale-110 active:scale-95 transition-all duration-200 outline-none"
+                    className="absolute left-4 top-3.5 z-[200] w-5 h-5 bg-transparent text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/50 border border-outline rounded-[var(--button-border-radius,8px)] flex items-center justify-center hover:scale-110 active:scale-95 transition-all duration-200 outline-none"
                 >
                     <div className="flex items-center justify-center translate-x-[0.5px]">
-                        <Icon name="chevron_right" size={16} weight={700} />
+                        <Icon name="chevron_right" size={14} weight={700} />
                     </div>
                 </button>
             )}
@@ -99,9 +99,9 @@ export const WireframeShell = ({ children, inspector }: WireframeShellProps) => 
                 <button
                     onClick={() => setInspectorState('expanded')}
                     title="Expand Inspector"
-                    className="absolute right-4 top-3.5 z-[60] w-7 h-7 bg-primary text-on-primary hover:bg-primary/90 rounded-[var(--button-border-radius,8px)] flex items-center justify-center shadow-sm hover:scale-110 active:scale-95 transition-all duration-200 outline-none"
+                    className="absolute right-4 top-3.5 z-[60] w-5 h-5 bg-transparent text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/50 border border-outline rounded-[var(--button-border-radius,8px)] flex items-center justify-center hover:scale-110 active:scale-95 transition-all duration-200 outline-none"
                 >
-                    <Icon name="chevron_left" size={16} weight={700} />
+                    <Icon name="chevron_left" size={14} weight={700} />
                 </button>
             )}
 
@@ -112,9 +112,9 @@ export const WireframeShell = ({ children, inspector }: WireframeShellProps) => 
                     <button
                         onClick={() => setInspectorState('collapsed')}
                         title="Collapse Inspector"
-                        className="absolute left-0 top-3.5 -translate-x-1/2 z-[60] w-7 h-7 bg-primary text-on-primary hover:bg-primary/90 rounded-[var(--button-border-radius,8px)] flex items-center justify-center shadow-sm hover:scale-110 active:scale-95 transition-all duration-200 outline-none"
+                        className="absolute left-0 top-3.5 -translate-x-1/2 z-[60] w-5 h-5 bg-transparent text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/50 border border-outline rounded-[var(--button-border-radius,8px)] flex items-center justify-center hover:scale-110 active:scale-95 transition-all duration-200 outline-none"
                     >
-                        <Icon name="chevron_right" size={16} weight={700} />
+                        <Icon name="chevron_right" size={14} weight={700} />
                     </button>
                     {inspector}
                 </div>

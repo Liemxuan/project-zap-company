@@ -18,7 +18,7 @@ When you receive a user prompt containing a `/[shortcut]` or when you encounter 
 
 | Skill Folder | Shortcut Command | Description |
 | :--- | :--- | :--- |
-| `agent-session-checkpoint` | **`/agent-session-checkpoint`** | Generates a serialized B.L.A.S.T. State Summary, saves it to the Olympus MongoDB cluster, and returns a BLAST-SPLIT ID. Use when the user requests a 'State Summary', 'Checkpoint', or 'Save Session'. |
+| `agent-session-checkpoint` | **`/agent-session-checkpoint`** | Generates a serialized B.L.A.S.T. State Summary, saves it to the Olympus MongoDB cluster via CLI, and returns a BLAST-SPLIT ID. Use when the user requests a 'State Summary', 'Checkpoint', or 'Save Session'. |
 | `agent-skill-creator` | **`/agent-skill-creator`** | Guide for creating effective skills. This skill should be used when users want to create a new skill (or update an existing skill) that extends Antigravity's capabilities with specialized knowledge, workflows, or tool integrations |
 | `agent-skill-evaluator` | **`/agent-skill-evaluator`** | Create new skills, modify and improve existing skills, and measure skill performance. Use when users want to create a skill from scratch, update or optimize an existing skill, run evals to test a skill, benchmark skill performance with variance analysis, or optimize a skill's description for better triggering accuracy. |
 | `agent-using-superpowers` | **`/agent-using-superpowers`** | Use when starting any conversation - establishes how to find and use skills, requiring Skill tool invocation before ANY response including clarifying questions |
@@ -59,7 +59,8 @@ When you receive a user prompt containing a `/[shortcut]` or when you encounter 
 
 | Skill Folder | Shortcut Command | Description |
 | :--- | :--- | :--- |
-| `mcp-notebooklm-setup` | **`/mcp-notebooklm-setup`** | Installs, configures, and authenticates the NotebookLM MCP server for use in the agent. |
+| `agent-notebooklm-cli` | **`/agent-notebooklm-cli`** | Standard protocol for utilizing the `notebooklm-py` CLI for backend research queries and source injects instead of the MCP protocol. |
+| `agent-playwright-cli` | **`/agent-playwright-cli`** | Standard protocol for using playwright-cli for token-efficient, skill-based browser automation instead of Playwright MCP. |
 | `mcp-server-builder` | **`/mcp-server-builder`** | Guide for creating high-quality MCP (Model Context Protocol) servers that enable LLMs to interact with external services through well-designed tools. Use when building MCP servers to integrate external APIs or services, whether in Python (FastMCP) or Node/TypeScript (MCP SDK). |
 | `mcp-stitch-main` | **`/mcp-stitch-main`** | No description provided. |
 | `mcp-stitch-snippet-import` | **`/mcp-stitch-snippet-import`** | Standard procedure for importing parts (snippets) of Stitch MCP screens (e.g., Body, Inspector) into the ZAP ecosystem (Olympus). |

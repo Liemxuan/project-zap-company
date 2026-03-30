@@ -36,7 +36,7 @@ async function blast() {
             // Clear existing if needed (Optional planning decision)
             // await componentCol.deleteMany({});
             
-            const componentData = sqliteComponents.map(c => ({
+            const componentData = sqliteComponents.map((c: any) => ({
                 ...c,
                 id: undefined, // Let Mongo handle _id or map specific ID
                 sqliteId: c.id,
@@ -55,7 +55,7 @@ async function blast() {
         if (sqliteTickets.length > 0) {
             const navCol = db.collection("SYS_OS_form_registry"); // Mapping to existing nav collection
             
-            const navData = sqliteTickets.map(t => ({
+            const navData = sqliteTickets.map((t: any) => ({
                 ...t,
                 id: undefined,
                 sqlitePath: t.urlPath,

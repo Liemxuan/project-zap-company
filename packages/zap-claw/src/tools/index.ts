@@ -8,6 +8,9 @@ import * as replaceFileContent from "./replace_file_content.js";
 import * as runCommand from "./run_command.js";
 import * as braveSearch from "./brave_search.js";
 import * as hydraHandoff from "./hydra_handoff.js";
+import * as subagentTask from "./task.js";
+import * as writeTodos from "./write_todos.js";
+import * as analyzeAsset from "./analyze_asset.js";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -16,7 +19,7 @@ export interface ToolResult {
     isError: boolean;
 }
 
-type ToolHandler = (input: Record<string, unknown>, userId: number, botName?: string) => Promise<string | { output: string }> | string | { output: string };
+type ToolHandler = (input: Record<string, unknown>, userId: number, botName?: string, sessionId?: string) => Promise<string | { output: string; isError?: boolean }> | string | { output: string; isError?: boolean };
 
 interface RegistryEntry {
     definition: ChatCompletionTool;
@@ -62,6 +65,18 @@ const registry: Record<string, RegistryEntry> = {
     deploy_hydra_team: {
         definition: hydraHandoff.definition,
         handler: (input, userId, botName) => hydraHandoff.handler(input, userId, botName),
+    },
+    task: {
+        definition: subagentTask.definition,
+        handler: (input, userId, botName) => subagentTask.handler(input, userId, botName),
+    },
+    write_todos: {
+        definition: writeTodos.definition,
+        handler: (input, userId, botName, sessionId) => writeTodos.handler(input, userId, botName, sessionId),
+    },
+    analyze_asset: {
+        definition: analyzeAsset.definition,
+        handler: (input, _userId, botName) => analyzeAsset.handler(input, botName),
     }
 };
 
@@ -82,7 +97,7 @@ export function getAvailableTools(botName: string): ChatCompletionTool[] {
     }
 
     // Other bots only get the safe base tools
-    const safeTools = ["get_current_time", "remember", "recall", "forget", "brave_search", "view_file", "deploy_hydra_team"];
+    const safeTools = ["get_current_time", "remember", "recall", "forget", "brave_search", "view_file", "deploy_hydra_team", "task", "write_todos", "analyze_asset"];
     return safeTools.map(name => registry[name]!.definition);
 }
 
@@ -91,7 +106,8 @@ export async function executeTool(
     name: string,
     input: Record<string, unknown>,
     userId: number,
-    botName?: string
+    botName?: string,
+    sessionId?: string
 ): Promise<ToolResult> {
     const entry = registry[name];
 
@@ -103,9 +119,10 @@ export async function executeTool(
     }
 
     try {
-        const result = await entry.handler(input, userId, botName);
+        const result = await entry.handler(input, userId, botName, sessionId);
         const output = typeof result === 'string' ? result : result.output;
-        return { output, isError: false };
+        const isError = typeof result === 'string' ? false : (result.isError ?? false);
+        return { output, isError };
     } catch (err) {
         const message = err instanceof Error ? err.message : String(err);
         return { output: `Tool "${name}" error: ${message}`, isError: true };

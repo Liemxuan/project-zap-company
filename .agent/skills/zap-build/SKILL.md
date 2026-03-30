@@ -13,11 +13,13 @@ This is the mandatory, unskippable procedure for all agents to build anything ne
 
 Without these two answers, you do not have the components or the aesthetic foundation to build. Stop immediately and ask the user. Once the user answers, use that information to lock in the target visual values and parameters for the current theme before proceeding.
 
-## 2. Foundation Sync (The Guardrails)
+## 2. Foundation Sync (The Guardrails & The Nouns)
+- Before building, identify what Nouns (Tokens) you will be utilizing (e.g., Typography, Elevation, Colors). 
+- Autonomously read the active theme's Data Dictionaries at `packages/zap-design/src/themes/[THEME]/[NOUN].md` (e.g., `elevation.md`, `typography.md`).
 - Autonomously read `/Users/zap/Workspace/olympus/learn.md`
 - Autonomously read `.agent/skills/zap-foundation-enforcer/SKILL.md`
 - Autonomously read `.agent/skills/zap-component-baseline/SKILL.md`
-- **Goal:** Internalize M3 Layer Topology (L0-L5) and the absolute ban on hardcoded basic Tailwind colors/font classes.
+- **Goal:** Internalize the precise Token mappings from the Dictionaries and the absolute bans on hardcoded basic Tailwind colors/font classes.
 
 ## 3. Extraction & Intent
 - Invoke the `brainstorming` skill.
@@ -52,8 +54,16 @@ Run this against every `<Button>`, `<Input>`, `<EmailInput>`, `<PasswordInput>`,
 | 8 | **No dev artifacts** | Version labels, debug text, or placeholder content in the UI |
 | 9 | **Icon consistency** | Specialized input wrappers missing expected `leadingIcon` matching their siblings |
 | 10 | **Layer token binding** | Structural containers using hardcoded `rounded-*` instead of `style={{ borderRadius: 'var(--layer-X-border-radius)' }}` |
+| 11 | **Zero manual casing/size classes** | `uppercase`, `lowercase`, `text-[size]`, `font-bold` existing inside `className` strings on text elements |
+
 
 > **The V4 Golden Rule:** If a Genesis atom accepts it as a prop, the Inspector already controls it. Your job as a page author is to compose atoms, not style them.
+
+### 6b. The Inspector & Shell Validation Rail
+**CRITICAL:** Every time you construct a new page or application flow, you MUST perform a structural parity check against our global design systems:
+1. Load `http://localhost:3000/design/metro/organisms/inspector` to visually verify the established padding, height, and bounding boxes for the overall Inspector layout.
+2. Load `http://localhost:3000/design/metro/molecules/theme-header` to guarantee you are rigorously using `<ThemeHeader>` (Variant Minimal) for top-level Page structural anchors instead of rolling a custom L3 `<header>`.
+3. If your layout headers, toolbars, or layer containers deviate in dimension or padding rules from the ones running on those two live sandbox URLs, you fail the build instantly. Fix it.
 
 ## 7. The 4-Point Verification
 - Invoke `verification-before-completion`.

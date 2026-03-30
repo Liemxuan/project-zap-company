@@ -17,11 +17,11 @@ export default function SteppersSandboxPage() {
             <div className="space-y-4">
                 <Wrapper identity={{ displayName: "Number Stepper Structural Settings", type: "Docs Link", filePath: "zap/molecules/steppers/page.tsx" }}>
                     <div className="space-y-6">
-                        <h4 className="text-[10px] text-transform-primary font-display font-bold text-on-surface-variant text-transform-secondary tracking-wider uppercase">Sandbox Variables</h4>
+                        <h4 className="text-label-small text-transform-primary font-display font-bold text-on-surface-variant text-transform-secondary tracking-wider uppercase">Sandbox Variables</h4>
 
                         <div className="space-y-4">
                             <div className="space-y-2">
-                                <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary uppercase">
+                                <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary uppercase">
                                     <span>--input-height</span>
                                     <span className="font-bold">{inputHeight[0]}px</span>
                                 </div>
@@ -29,7 +29,7 @@ export default function SteppersSandboxPage() {
                             </div>
 
                             <div className="space-y-2">
-                                <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary uppercase">
+                                <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary uppercase">
                                     <span>--input-border-radius</span>
                                     <span className="font-bold">{inputRadius[0]}px</span>
                                 </div>

@@ -5,9 +5,10 @@ import { ComponentSandboxTemplate } from '../../../../../zap/layout/ComponentSan
 import { Wrapper } from '../../../../../components/dev/Wrapper';
 
 import { Alert, AlertContent, AlertDescription, AlertTitle } from '../../../../../genesis/molecules/alert';
-import { CheckCircle, AlertTriangle, Info, XCircle } from 'lucide-react';
+import { CheckCircle, AlertTriangle, Info, XCircle, AppWindow, MessageSquare } from 'lucide-react';
 import { Slider } from '../../../../../genesis/atoms/interactive/slider';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../../../../genesis/atoms/interactive/select';
+import { ToggleGroup, ToggleGroupItem } from '../../../../../genesis/atoms/interactive/toggle-group';
 import { ThemePublisher } from '../../../../../components/dev/ThemePublisher';
 import { useTheme } from 'next-themes';
 import { toast } from 'sonner';
@@ -110,11 +111,11 @@ export default function AlertSandboxPage() {
             <div className="space-y-4">
                 <Wrapper identity={{ displayName: "Alert Structural Settings", type: "Docs Link", filePath: "zap/molecules/alert/page.tsx" }}>
                     <div className="space-y-6">
-                        <h4 className="text-[10px] text-transform-primary font-display font-bold text-on-surface-variant text-transform-secondary tracking-wider">Sandbox Variables</h4>
+                        <h4 className="text-label-small text-transform-primary font-display font-bold text-on-surface-variant text-transform-secondary tracking-wider">Sandbox Variables</h4>
 
                         <div className="space-y-4">
                             <div className="space-y-2">
-                                <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary">
+                                <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary">
                                     <span>--alert-padding</span>
                                     <span className="font-bold">{padding[0]}px</span>
                                 </div>
@@ -122,7 +123,7 @@ export default function AlertSandboxPage() {
                             </div>
 
                             <div className="space-y-2">
-                                <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary">
+                                <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary">
                                     <span>--alert-gap</span>
                                     <span className="font-bold">{gap[0]}px</span>
                                 </div>
@@ -130,7 +131,7 @@ export default function AlertSandboxPage() {
                             </div>
 
                             <div className="space-y-2">
-                                <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary">
+                                <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary">
                                     <span>--alert-border-width</span>
                                     <span className="font-bold">{borderWidth[0]}px</span>
                                 </div>
@@ -138,14 +139,14 @@ export default function AlertSandboxPage() {
                             </div>
 
                             <div className="space-y-2">
-                                <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary">
+                                <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary">
                                     <span>--alert-radius</span>
                                     <span className="font-bold">{borderRadius[0]}px</span>
                                 </div>
                                 <Slider value={borderRadius} onValueChange={setBorderRadius} min={0} max={64} step={1} className="w-full" />
                             </div>
                             <div className="space-y-2">
-                                <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary">
+                                <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary">
                                     <span>--alert-callout-border</span>
                                     <span className="font-bold">{calloutBorder[0]}px</span>
                                 </div>
@@ -157,14 +158,14 @@ export default function AlertSandboxPage() {
 
                 <Wrapper identity={{ displayName: "Contextual View Options", type: "Style Selection", filePath: "zap/molecules/alert/page.tsx" }}>
                     <div className="space-y-4 pt-4 border-t border-outline-variant">
-                            <span className="text-[10px] text-transform-primary font-display font-bold text-on-surface-variant text-transform-secondary tracking-wider">Semantic Overrides</span>
+                            <span className="text-label-small text-transform-primary font-display font-bold text-on-surface-variant text-transform-secondary tracking-wider">Semantic Overrides</span>
                             <div className="space-y-4">
                                 <div className="space-y-2">
-                                    <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary">
+                                    <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary">
                                         <span>--alert-bg</span>
                                     </div>
                                     <Select value={alertBg} onValueChange={setAlertBg}>
-                                        <SelectTrigger className="w-full text-xs h-8">
+                                        <SelectTrigger className="w-full text-label-small h-8">
                                             <SelectValue placeholder="Default (Inherit from Variant)" />
                                         </SelectTrigger>
                                         <SelectContent>
@@ -177,11 +178,11 @@ export default function AlertSandboxPage() {
                                 </div>
 
                                 <div className="space-y-2">
-                                    <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary">
+                                    <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary">
                                         <span>--alert-border</span>
                                     </div>
                                     <Select value={alertBorder} onValueChange={setAlertBorder}>
-                                        <SelectTrigger className="w-full text-xs h-8">
+                                        <SelectTrigger className="w-full text-label-small h-8">
                                             <SelectValue placeholder="Default (Inherit from Variant)" />
                                         </SelectTrigger>
                                         <SelectContent>
@@ -194,11 +195,11 @@ export default function AlertSandboxPage() {
                                 </div>
 
                                 <div className="space-y-2">
-                                    <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary">
+                                    <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary">
                                         <span>--alert-text</span>
                                     </div>
                                     <Select value={alertText} onValueChange={setAlertText}>
-                                        <SelectTrigger className="w-full text-xs h-8">
+                                        <SelectTrigger className="w-full text-label-small h-8">
                                             <SelectValue placeholder="Default (Inherit from Variant)" />
                                         </SelectTrigger>
                                         <SelectContent>
@@ -212,21 +213,23 @@ export default function AlertSandboxPage() {
                             </div>
 
                         <div className="flex flex-col gap-2 pt-4 border-t border-outline-variant">
-                            <span className="text-[10px] text-transform-primary font-display font-bold text-on-surface-variant text-transform-secondary tracking-wider">Visual Style</span>
-                            <div className="flex bg-surface-variant p-1 rounded-md">
-                                <button
-                                    onClick={() => setVisualStyle('standard')}
-                                    className={`flex-1 text-[11px] font-bold py-1.5 px-3 rounded text-center transition-all ${visualStyle === 'standard' ? 'bg-surface text-on-surface shadow-sm' : 'text-on-surface-variant text-transform-secondary hover:text-on-surface text-transform-primary'}`}
-                                >
+                            <span className="text-label-small text-transform-primary font-display font-bold text-on-surface-variant text-transform-secondary tracking-wider">Visual Style</span>
+                            <ToggleGroup 
+                                type="single" 
+                                visualStyle="segmented" 
+                                value={visualStyle} 
+                                onValueChange={(val) => { if (val) setVisualStyle(val as 'standard' | 'callout'); }} 
+                                className="w-full bg-layer-base"
+                            >
+                                <ToggleGroupItem value="standard" className="flex-1 h-8 text-label-medium font-bold justify-start pl-3 gap-2">
+                                    <AppWindow className="size-3.5 opacity-70" />
                                     Standard
-                                </button>
-                                <button
-                                    onClick={() => setVisualStyle('callout')}
-                                    className={`flex-1 text-[11px] font-bold py-1.5 px-3 rounded text-center transition-all ${visualStyle === 'callout' ? 'bg-surface text-on-surface shadow-sm' : 'text-on-surface-variant text-transform-secondary hover:text-on-surface text-transform-primary'}`}
-                                >
+                                </ToggleGroupItem>
+                                <ToggleGroupItem value="callout" className="flex-1 h-8 text-label-medium font-bold justify-start pl-3 gap-2">
+                                    <MessageSquare className="size-3.5 opacity-70" />
                                     Callout
-                                </button>
-                            </div>
+                                </ToggleGroupItem>
+                            </ToggleGroup>
                         </div>
                     </div>
                 </Wrapper>
@@ -272,7 +275,7 @@ export default function AlertSandboxPage() {
                 <div className="w-full max-w-4xl grid grid-cols-1 gap-6">
                     {/* Dynamic Interactive Sandbox */}
                     <div className="p-8 pb-12 rounded-xl bg-layer-panel border-b-4 border-outline-variant/30 flex flex-col gap-4 shadow-sm relative overflow-visible">
-                        <div className="absolute top-0 right-0 p-2 bg-layer-2 rounded-bl-lg border-b border-l border-outline-variant/30 text-[10px] font-bold text-on-surface-variant text-transform-secondary font-dev tracking-widest uppercase">Interactive Sandbox</div>
+                        <div className="absolute top-0 right-0 p-2 bg-layer-2 rounded-bl-lg border-b border-l border-outline-variant/30 text-label-small font-bold text-on-surface-variant text-transform-secondary font-dev tracking-widest uppercase">Interactive Sandbox</div>
                         <Alert variant={selectedVariant} visualStyle={visualStyle} style={Object.assign({}, {
                             ...(alertBg && alertBg !== 'default' ? { '--alert-bg': alertBg } : {}),
                             ...(alertText && alertText !== 'default' ? { '--alert-text': alertText } : {}),
@@ -290,22 +293,22 @@ export default function AlertSandboxPage() {
 
                     <div className="w-full flex items-center gap-4 py-4">
                         <div className="h-px bg-outline-variant flex-1" />
-                        <span className="text-xs font-bold text-on-surface-variant text-transform-secondary font-display uppercase tracking-wider">L1-L3 Assemblies (Static Variants)</span>
+                        <span className="text-label-small font-bold text-on-surface-variant text-transform-secondary font-display uppercase tracking-wider">L1-L3 Assemblies (Static Variants)</span>
                         <div className="h-px bg-outline-variant flex-1" />
                     </div>
 
                     {/* L1 Surface Assembly */}
                     <div className="p-8 rounded-xl bg-layer-1 border border-outline-variant/30 flex flex-col gap-4 shadow-sm relative overflow-visible">
                         <div className="absolute top-0 right-0 py-1 pl-3 pr-2 bg-layer-2 rounded-bl-lg border-b border-l border-outline-variant/30 flex items-center gap-3">
-                            <span className="text-[10px] font-bold text-on-surface-variant text-transform-secondary font-dev tracking-widest uppercase">L1 Surface</span>
+                            <span className="text-label-small font-bold text-on-surface-variant text-transform-secondary font-dev tracking-widest uppercase">L1 Surface</span>
                             <Select value={l1Bg} onValueChange={setL1Bg}>
-                                <SelectTrigger className="h-6 text-[10px] w-32 border-outline-variant/50">
+                                <SelectTrigger className="h-6 text-label-small w-32 border-outline-variant/50">
                                     <SelectValue placeholder="Alert Bg" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="default" className="text-[10px]">Inherit Default</SelectItem>
+                                    <SelectItem value="default" className="text-label-small">Inherit Default</SelectItem>
                                     {M3_COLORS.map(color => (
-                                        <SelectItem key={color.value} value={color.value} className="text-[10px]">{color.label}</SelectItem>
+                                        <SelectItem key={color.value} value={color.value} className="text-label-small">{color.label}</SelectItem>
                                     ))}
                                 </SelectContent>
                             </Select>
@@ -324,15 +327,15 @@ export default function AlertSandboxPage() {
                     {/* L2 Surface Assembly */}
                     <div className="p-8 rounded-xl bg-layer-2 border border-outline-variant/30 flex flex-col gap-4 shadow-md relative overflow-visible">
                         <div className="absolute top-0 right-0 py-1 pl-3 pr-2 bg-layer-3 rounded-bl-lg border-b border-l border-outline-variant/30 flex items-center gap-3">
-                            <span className="text-[10px] font-bold text-on-surface-variant text-transform-secondary font-dev tracking-widest uppercase">L2 Surface</span>
+                            <span className="text-label-small font-bold text-on-surface-variant text-transform-secondary font-dev tracking-widest uppercase">L2 Surface</span>
                             <Select value={l2Bg} onValueChange={setL2Bg}>
-                                <SelectTrigger className="h-6 text-[10px] w-32 border-outline-variant/50">
+                                <SelectTrigger className="h-6 text-label-small w-32 border-outline-variant/50">
                                     <SelectValue placeholder="Alert Bg" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="default" className="text-[10px]">Inherit Default</SelectItem>
+                                    <SelectItem value="default" className="text-label-small">Inherit Default</SelectItem>
                                     {M3_COLORS.map(color => (
-                                        <SelectItem key={color.value} value={color.value} className="text-[10px]">{color.label}</SelectItem>
+                                        <SelectItem key={color.value} value={color.value} className="text-label-small">{color.label}</SelectItem>
                                     ))}
                                 </SelectContent>
                             </Select>
@@ -351,15 +354,15 @@ export default function AlertSandboxPage() {
                     {/* L3 Surface Assembly */}
                     <div className="p-8 rounded-xl bg-layer-3 border border-outline-variant/30 flex flex-col gap-4 shadow-lg relative overflow-visible">
                         <div className="absolute top-0 right-0 py-1 pl-3 pr-2 bg-surface text-on-surface rounded-bl-lg border-b border-l border-outline-variant/30 flex items-center gap-3">
-                            <span className="text-[10px] font-bold font-dev tracking-widest uppercase">L3 Surface</span>
+                            <span className="text-label-small font-bold font-dev tracking-widest uppercase">L3 Surface</span>
                             <Select value={l3Bg} onValueChange={setL3Bg}>
-                                <SelectTrigger className="h-6 text-[10px] w-32 border-outline-variant/50">
+                                <SelectTrigger className="h-6 text-label-small w-32 border-outline-variant/50">
                                     <SelectValue placeholder="Alert Bg" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="default" className="text-[10px]">Inherit Default</SelectItem>
+                                    <SelectItem value="default" className="text-label-small">Inherit Default</SelectItem>
                                     {M3_COLORS.map(color => (
-                                        <SelectItem key={color.value} value={color.value} className="text-[10px]">{color.label}</SelectItem>
+                                        <SelectItem key={color.value} value={color.value} className="text-label-small">{color.label}</SelectItem>
                                     ))}
                                 </SelectContent>
                             </Select>

@@ -3,8 +3,6 @@
 import React from 'react';
 import { usePathname } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
-import { HorizontalNav } from './HorizontalNav';
-import { HorizontalNavigation } from '../../genesis/molecules/navigation/HorizontalNavigation';
 import { VerticalNav, ATOM_ROUTES, designSystemLevels } from './VerticalNav';
 import { Breadcrumbs } from '../../genesis/molecules/navigation/Breadcrumbs';
 import { Inspector } from './Inspector';
@@ -20,18 +18,7 @@ interface MasterVerticalShellProps {
     activeItem?: string;
 }
 
-import { getSession, logoutAction } from '../../../../zap-auth/src/actions';
-
 // ─── Layout Component ───────────────────────────────────────────────────────────
-
-interface SessionUser {
-    name: string;
-    email: string;
-    role: string;
-    avatarUrl: string;
-    status: "online" | "offline" | "busy" | "away";
-    position?: string;
-}
 
 export const MasterVerticalShell = (props: MasterVerticalShellProps) => {
     return (
@@ -51,24 +38,6 @@ const MasterVerticalShellContent = ({
     activeItem: propActiveItem
 }: MasterVerticalShellProps) => {
     const pathname = usePathname();
-
-    const [userSession, setUserSession] = React.useState<SessionUser | null>(null);
-
-    React.useEffect(() => {
-        getSession().then((session: unknown) => {
-            if (session && typeof session === 'object') {
-                const s = session as Record<string, string>;
-                setUserSession({
-                    name: s.name || "Unknown User",
-                    email: s.email || "",
-                    role: s.role || "USER",
-                    avatarUrl: s.avatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(s.name || "Unknown")}`,
-                    status: 'online',
-                    position: (session as { employee?: { position?: string } }).employee?.position || 'Unknown Position'
-                });
-            }
-        });
-    }, []);
 
     // Dynamic Breadcrumb Calculation
     const breadcrumbs = React.useMemo(() => {
@@ -241,10 +210,7 @@ const MasterVerticalShellContent = ({
 
     return (
         <div className="h-screen flex flex-col bg-brand-midnight text-black antialiased overflow-hidden font-sans">
-            {/* 1. Full-Width Header */}
-            <HorizontalNav />
-
-            {/* 2. Full-Width Breadcrumbs Bar */}
+            {/* Full-Width Breadcrumbs Bar */}
             <div className="h-10 bg-layer-panel border-b-[length:var(--card-border-width,0px)] border-card-border-[length:var(--card-border-width,0px)] flex items-center px-4 shrink-0 z-40">
                 <Breadcrumbs items={breadcrumbs} showDevWrapper={false} />
             </div>
@@ -264,21 +230,6 @@ const MasterVerticalShellContent = ({
 
                 {/* Center Content Section - Using Surface tokens */}
                 <section className="flex-1 flex flex-col overflow-hidden relative bg-cream-white m-0.5 border-l-2 border-black">
-                    <HorizontalNavigation
-                        user={userSession || undefined}
-                        isLoggedIn={!!userSession}
-                        onLoginClick={() => window.location.href = '/'}
-                        onLogoutClick={async () => {
-                            console.log('LOGOUT BUTTON CLICKED IN SHELL!');
-                            try {
-                                await logoutAction();
-                                console.log('LOGOUT ACTION COMPLETED, REDIRECTING...');
-                                window.location.href = '/';
-                            } catch (e) {
-                                console.error('LOGOUT ACTION FAILED:', e);
-                            }
-                        }}
-                    />
                     <AnimatePresence>
                         <motion.div
                             key={pathname}

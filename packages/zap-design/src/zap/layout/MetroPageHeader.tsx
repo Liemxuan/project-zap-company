@@ -12,7 +12,7 @@ import { type Platform } from '../../zap/sections/atoms/foundations/components';
 export interface MetroPageHeaderProps {
     title: React.ReactNode;
     breadcrumb?: string;
-    badge?: string;
+    badge?: string | null;
 
     tabs?: TabItem[];
     activeTab?: string;

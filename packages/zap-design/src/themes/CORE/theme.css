@@ -41,10 +41,10 @@
     --button-height-large: 34px !important;
     --card-max-width: 342px !important;
     --font-display: var(--font-jetbrains), monospace !important;
-    --heading-transform: uppercase !important;
+    --heading-transform: uppercase;
     --font-body: var(--font-jetbrains), monospace !important;
-    --body-transform: lowercase !important;
-    --dev-transform: lowercase !important;
+    --body-transform: lowercase;
+    --dev-transform: lowercase;
     --button-padding-x: 20px !important;
     --button-padding-y: 8px !important;
     --button-icon-gap: 8px !important;

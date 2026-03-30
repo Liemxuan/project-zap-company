@@ -46,8 +46,8 @@ export default function ProfileSwitcherSandbox() {
                 <InspectorAccordion title="Switcher Data">
                     <div className="flex flex-col gap-4">
                         <div className="flex flex-col gap-2">
-                            <span className="text-sm font-semibold text-on-surface text-transform-primary">Current Active ID</span>
-                            <span className="text-xs font-mono text-on-surface-variant text-transform-secondary bg-surface-variant p-2 rounded">{activeId}</span>
+                            <span className="text-body-small font-semibold text-on-surface text-transform-primary">Current Active ID</span>
+                            <span className="text-label-small font-mono text-on-surface-variant text-transform-secondary bg-surface-variant p-2 rounded">{activeId}</span>
                         </div>
                     </div>
                 </InspectorAccordion>

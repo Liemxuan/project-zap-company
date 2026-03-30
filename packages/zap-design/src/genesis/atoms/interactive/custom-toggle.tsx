@@ -31,14 +31,15 @@ export const Toggle: React.FC<ToggleProps> = ({ checked, onChange, disabled = fa
     return (
         <button
             type="button"
+            style={{ borderWidth: 'var(--toggle-border-width, 0px)' }}
             className={cn(
-                "relative flex items-center transition-colors rounded-[length:var(--toggle-border-radius,var(--layer-border-radius,9999px))]",
+                "relative flex items-center transition-colors rounded-[length:var(--toggle-border-radius,var(--layer-border-radius,9999px))] border-solid",
                 containerClasses,
                 disabled
-                    ? "bg-layer-dialog border-[length:var(--toggle-border-width,0px)] border-card-border/20 cursor-not-allowed opacity-50"
+                    ? "bg-[color:var(--toggle-group-bg,var(--color-surface-container-highest))] border-outline-variant/30 cursor-not-allowed opacity-50"
                     : checked
-                        ? "bg-primary border-[length:var(--toggle-border-width,0px)] cursor-pointer shadow-card"
-                        : "bg-layer-dialog border-[length:var(--toggle-border-width,0px)] cursor-pointer shadow-card",
+                        ? "bg-[color:var(--toggle-bg,var(--color-primary))] border-[color:var(--toggle-bg,var(--color-primary))] cursor-pointer shadow-card"
+                        : "bg-[color:var(--toggle-group-bg,var(--color-surface-container-highest))] border-[color:var(--toggle-border-color,var(--color-outline-variant))] cursor-pointer shadow-card",
                 className
             )}
             onClick={(e) => {
@@ -46,14 +47,18 @@ export const Toggle: React.FC<ToggleProps> = ({ checked, onChange, disabled = fa
                 if (!disabled) onChange(!checked);
             }}
             role="switch"
-            aria-checked={checked}
-            aria-disabled={disabled}
+            aria-checked={checked ? "true" : "false"}
+            aria-disabled={disabled ? "true" : "false"}
             aria-label={ariaLabel}
         >
             <div 
+                style={{ 
+                    borderWidth: 'var(--toggle-item-border-width, 0px)',
+                    borderRadius: 'var(--toggle-item-border-radius, var(--toggle-border-radius, 9999px))'
+                }}
                 className={cn(
                     thumbClasses,
-                    "transition-all duration-200 ease-in-out rounded-full",
+                    "transition-all duration-200 ease-in-out border-solid border-transparent bg-clip-padding",
                     disabled
                         ? "bg-layer-panel"
                         : checked

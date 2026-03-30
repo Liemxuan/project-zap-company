@@ -136,11 +136,11 @@ export default function BadgeSandboxPage() {
             <div className="space-y-4">
                 <Wrapper identity={{ displayName: "Badge Structural Settings", type: "Docs Link", filePath: "zap/atoms/badge/page.tsx" }}>
                     <div className="space-y-6">
-                        <h4 className="text-[10px] text-transform-primary font-display font-bold text-muted-foreground tracking-wider uppercase">Sandbox Variables</h4>
+                        <h4 className="text-label-small text-transform-primary font-display font-bold text-muted-foreground tracking-wider uppercase">Sandbox Variables</h4>
 
                         <div className="space-y-4">
                             <div className="space-y-2">
-                                <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-muted-foreground uppercase">
+                                <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-muted-foreground uppercase">
                                     <span>--badge-height</span>
                                     <span className="font-bold">{height[0]}px</span>
                                 </div>
@@ -148,7 +148,7 @@ export default function BadgeSandboxPage() {
                             </div>
 
                             <div className="space-y-1">
-                                <span className="text-[10px] text-muted-foreground flex justify-between">
+                                <span className="text-label-small text-muted-foreground flex justify-between">
                                     <span>Width Override</span>
                                     <span className="font-bold">{previewWidth}</span>
                                 </span>
@@ -162,7 +162,7 @@ export default function BadgeSandboxPage() {
                             </div>
 
                             <div className="space-y-1">
-                                <span className="text-[10px] text-muted-foreground flex justify-between">
+                                <span className="text-label-small text-muted-foreground flex justify-between">
                                     <span>Radius Override</span>
                                     <span className="font-bold">{previewRadius}</span>
                                 </span>
@@ -230,7 +230,7 @@ export default function BadgeSandboxPage() {
                        </Badge>
                    </div>
                    <span className="font-display font-medium mt-4">Badge Sandbox Mounted (M3 Token Verification)</span>
-                   <span className="text-xs font-mono">Dynamically mapped to Global Theme (Border: {previewWidth}, Radius: {previewRadius})</span>
+                   <span className="text-label-small font-mono">Dynamically mapped to Global Theme (Border: {previewWidth}, Radius: {previewRadius})</span>
                 </div>
             </div>
         </ComponentSandboxTemplate>

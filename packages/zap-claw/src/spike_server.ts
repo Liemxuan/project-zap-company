@@ -87,12 +87,12 @@ app.post("/api/hud/chat", async (req, res) => {
     }
 });
 
-const PORT = 3301;
+const PORT = parseInt(process.env.PORT as string, 10) || 3902;
 
 // Mount Memory v2 + Heartbeat
 mountMemoryRoutes(app, { name: 'spike', role: 'Agent 1 / Builder', port: PORT });
 
-app.listen(PORT, () => {
+app.listen(PORT, "0.0.0.0", () => {
     console.log(`[SPIKE INBOUND] 🎧 Isolater Listener active on port ${PORT}`);
     console.log(`   Endpoint: POST http://localhost:${PORT}/api/inbound`);
     console.log(`   Endpoint: POST http://localhost:${PORT}/api/hud/chat`);

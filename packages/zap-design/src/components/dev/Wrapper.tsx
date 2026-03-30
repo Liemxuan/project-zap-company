@@ -48,7 +48,14 @@ export const Wrapper: React.FC<WrapperProps> = ({
             <ContainerDevWrapper
                 showClassNames={devMode}
                 identity={resolvedIdentity}
-                className="w-full h-full"
+                className={cn(
+                    "w-full h-full",
+                    className.includes('flex') && 'flex',
+                    className.includes('flex-col') && 'flex-col',
+                    className.includes('flex-1') && 'flex-1',
+                    className.includes('items-center') && 'items-center',
+                    className.includes('justify-center') && 'justify-center'
+                )}
                 style={style}
                 align={align}
             >

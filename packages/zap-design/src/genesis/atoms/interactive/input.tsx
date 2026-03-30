@@ -5,10 +5,10 @@ import { cva, type VariantProps } from 'class-variance-authority';
 // Define input size variants
 const inputVariants = cva(
     `
-    flex w-full bg-layer-dialog border border-[length:var(--input-border-width,1px)] border-outline-variant shadow-xs shadow-black/5 transition-[color,box-shadow] text-on-surface placeholder:text-on-surface-variant/80 placeholder:text-transform-secondary font-body text-transform-primary
+    flex w-full bg-[color:var(--input-bg,var(--color-surface-container-highest))] border border-[length:var(--input-border-width,1px)] border-outline-variant shadow-xs shadow-black/5 transition-[color,box-shadow] text-on-surface placeholder:text-on-surface-variant/80 placeholder:text-transform-secondary font-body text-transform-primary
     focus-visible:border-[color:var(--input-focus-border,var(--m3-sys-light-primary))] focus-visible:ring-[color:var(--input-focus-ring,var(--color-primary-fixed-dim))] focus-visible:outline-none focus-visible:ring-[length:var(--input-focus-width,2px)]
     disabled:cursor-not-allowed disabled:opacity-60 
-    [&[readonly]]:bg-layer-dialog/80 [&[readonly]]:cursor-not-allowed
+    [&[readonly]]:bg-[color:color-mix(in_srgb,var(--input-bg,var(--color-surface-container-highest))_80%,transparent)] [&[readonly]]:cursor-not-allowed
     file:h-full [&[type=file]]:py-0 file:border-solid file:border-[length:var(--input-border-width,1px)] file:border-outline-variant file:bg-transparent 
     file:font-medium file:not-italic file:text-on-surface file:p-0 file:border-0 file:border-e
     aria-invalid:border-[color:var(--input-error-border,var(--color-error))] aria-invalid:ring-[length:var(--input-error-width,2px)] aria-invalid:ring-[color:var(--input-error-ring,var(--color-error-fixed-dim))] dark:aria-invalid:border-[color:var(--input-error-border,var(--color-error))] dark:aria-invalid:ring-[color:var(--input-error-ring,var(--color-error-fixed-dim))]
@@ -28,7 +28,7 @@ const inputVariants = cva(
 );
 
 const inputAddonVariants = cva(
-    'flex items-center shrink-0 justify-center bg-layer-dialog border border-[length:var(--input-border-width,1px)] border-outline-variant shadow-xs shadow-[rgba(0,0,0,0.05)] text-on-surface-variant [&_svg]:text-on-surface-variant/60 font-body text-transform-primary text-sm',
+    'flex items-center shrink-0 justify-center bg-[color:var(--input-bg,var(--color-surface-container-highest))] border border-[length:var(--input-border-width,1px)] border-outline-variant shadow-xs shadow-[rgba(0,0,0,0.05)] text-on-surface-variant [&_svg]:text-on-surface-variant/60 font-body text-transform-primary text-sm',
     {
         variants: {
             variant: {

@@ -135,6 +135,13 @@ export function useLayerProperties() {
                layer.tintOpacity !== DEFAULT_LAYER_PROPS.tintOpacity;
     }, [state.layers]);
 
+    // ── Enforce Architecture Rules ──
+    const hasTerminalViolation = Object.values(state.layers).some(l => 
+        l.bgToken === 'surface' || 
+        l.bgToken === 'surface-variant' || 
+        l.bgToken === 'surface-container'
+    );
+
     // ── Publish to theme ──
     const publish = useCallback(async () => {
         const res = await fetch('/api/elevation/publish', {
@@ -152,6 +159,7 @@ export function useLayerProperties() {
         setLayerOverride,
         resetAll,
         hasOverrides,
+        hasTerminalViolation,
         publish,
     };
 }

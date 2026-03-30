@@ -28,29 +28,29 @@ export default function SurfaceSandboxPage() {
             <div className="w-full space-y-10 animate-in fade-in duration-500 pb-8">
 
                 <div className="space-y-2">
-                    <span className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Default Surface</span>
-                    <span className="text-[10px] font-dev text-muted-foreground block">
+                    <span className="text-label-small font-semibold text-muted-foreground uppercase tracking-widest">Default Surface</span>
+                    <span className="text-label-small font-dev text-muted-foreground block">
                         Base container with <code>--card-border-width</code> border
                     </span>
                     <Wrapper identity={{ displayName: "Surface", type: "Atom", filePath: "genesis/atoms/surfaces/surface.tsx" }}>
                         <Surface className="bg-layer-panel rounded-lg">
-                            <p className="text-sm text-muted-foreground">Default Surface — base container with dynamic border width.</p>
+                            <p className="text-body-small text-muted-foreground">Default Surface — base container with dynamic border width.</p>
                         </Surface>
                     </Wrapper>
                 </div>
 
                 <div className="space-y-2">
-                    <span className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Nested Surfaces</span>
-                    <span className="text-[10px] font-dev text-muted-foreground block">
+                    <span className="text-label-small font-semibold text-muted-foreground uppercase tracking-widest">Nested Surfaces</span>
+                    <span className="text-label-small font-dev text-muted-foreground block">
                         Surfaces can nest to create depth hierarchy
                     </span>
                     <Wrapper identity={{ displayName: "Surface (Nested)", type: "Atom", filePath: "genesis/atoms/surfaces/surface.tsx" }}>
                         <Surface className="bg-layer-canvas rounded-lg">
-                            <p className="text-xs text-muted-foreground mb-3">L1 · Canvas Surface</p>
+                            <p className="text-label-small text-muted-foreground mb-3">L1 · Canvas Surface</p>
                             <Surface className="bg-layer-cover rounded-md">
-                                <p className="text-xs text-muted-foreground mb-3">L2 · Cover Surface</p>
+                                <p className="text-label-small text-muted-foreground mb-3">L2 · Cover Surface</p>
                                 <Surface className="bg-layer-panel rounded-sm">
-                                    <p className="text-xs text-muted-foreground">L3 · Panel Surface</p>
+                                    <p className="text-label-small text-muted-foreground">L3 · Panel Surface</p>
                                 </Surface>
                             </Surface>
                         </Surface>

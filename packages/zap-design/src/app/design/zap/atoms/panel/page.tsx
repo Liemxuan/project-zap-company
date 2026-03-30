@@ -18,11 +18,11 @@ export default function PanelSandboxPage() {
             <div className="space-y-4">
                 <Wrapper identity={{ displayName: "Panel Structural Settings", type: "Docs Link", filePath: "zap/atoms/panel/page.tsx" }}>
                     <div className="space-y-6">
-                        <h4 className="text-[10px] text-transform-primary font-display font-bold text-muted-foreground tracking-wider uppercase">Sandbox Variables</h4>
+                        <h4 className="text-label-small text-transform-primary font-display font-bold text-muted-foreground tracking-wider uppercase">Sandbox Variables</h4>
 
                         <div className="space-y-4">
                             <div className="space-y-2">
-                                <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-muted-foreground uppercase">
+                                <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-muted-foreground uppercase">
                                     <span>--panel-height</span>
                                     <span className="font-bold">{height[0]}px</span>
                                 </div>
@@ -30,7 +30,7 @@ export default function PanelSandboxPage() {
                             </div>
 
                             <div className="space-y-2">
-                                <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-muted-foreground uppercase">
+                                <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-muted-foreground uppercase">
                                     <span>--panel-border-width</span>
                                     <span className="font-bold">{borderWidth[0]}px</span>
                                 </div>
@@ -38,7 +38,7 @@ export default function PanelSandboxPage() {
                             </div>
 
                             <div className="space-y-2">
-                                <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-muted-foreground uppercase">
+                                <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-muted-foreground uppercase">
                                     <span>--panel-border-radius</span>
                                     <span className="font-bold">{borderRadius[0]}px</span>
                                 </div>
@@ -92,11 +92,11 @@ export default function PanelSandboxPage() {
                    <div className="flex gap-8">
                        <Panel className="p-6 w-64 gap-4 text-center min-h-[length:var(--panel-height,auto)]">
                            <span className="font-display font-medium text-brand-midnight">Standard Panel</span>
-                           <span className="text-xs font-mono text-muted-foreground">Shadow active</span>
+                           <span className="text-label-small font-mono text-muted-foreground">Shadow active</span>
                        </Panel>
                        <Panel className="p-6 w-64 gap-4 text-center min-h-[length:var(--panel-height,auto)]" noShadow>
                            <span className="font-display font-medium text-brand-midnight">No Shadow Panel</span>
-                           <span className="text-xs font-mono text-muted-foreground">Radius: {borderRadius[0]}px</span>
+                           <span className="text-label-small font-mono text-muted-foreground">Radius: {borderRadius[0]}px</span>
                        </Panel>
                    </div>
             </div>

@@ -25,11 +25,11 @@ export default function ScrollAreaSandbox() {
             <div className="space-y-4">
                 <Wrapper identity={{ displayName: "Scroll Area Structural Settings", type: "Docs Link", filePath: "zap/atoms/scroll-area/page.tsx" }}>
                     <div className="space-y-6">
-                        <h4 className="text-[10px] text-transform-primary font-display font-bold text-muted-foreground tracking-wider uppercase">Sandbox Variables</h4>
+                        <h4 className="text-label-small text-transform-primary font-display font-bold text-muted-foreground tracking-wider uppercase">Sandbox Variables</h4>
 
                         <div className="space-y-4">
                             <div className="space-y-2">
-                                <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-muted-foreground uppercase">
+                                <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-muted-foreground uppercase">
                                     <span>--scroll-area-height</span>
                                     <span className="font-bold">{height[0]}px</span>
                                 </div>
@@ -37,7 +37,7 @@ export default function ScrollAreaSandbox() {
                             </div>
 
                             <div className="space-y-2">
-                                <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-muted-foreground uppercase">
+                                <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-muted-foreground uppercase">
                                     <span>--scroll-area-width</span>
                                     <span className="font-bold">{width[0]}px</span>
                                 </div>
@@ -45,7 +45,7 @@ export default function ScrollAreaSandbox() {
                             </div>
 
                             <div className="space-y-2">
-                                <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-muted-foreground uppercase">
+                                <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-muted-foreground uppercase">
                                     <span>--scroll-area-border-radius</span>
                                     <span className="font-bold">{borderRadius[0]}px</span>
                                 </div>
@@ -89,22 +89,34 @@ export default function ScrollAreaSandbox() {
             <div
                 className="w-full space-y-12 animate-in fade-in duration-500 pb-16 scroll-area-preview-sandbox"
             >
-                <div className="w-full flex flex-col items-center justify-center p-12 bg-layer-panel shadow-sm border border-outline-variant rounded-[length:var(--scroll-area-border-radius,12px)] min-h-[400px]">
-                    <ScrollArea className="border border-border bg-layer-dialog shadow-sm">
-                        <div className="p-4">
-                            <h4 className="mb-4 text-labelLarge font-display font-medium leading-none text-transform-primary">Tags</h4>
-                            {Array.from({ length: 50 }).map((_, i) => (
-                                <React.Fragment key={i}>
-                                    <div className="text-sm font-body text-transform-secondary">
-                                        Tag {i + 1}
-                                    </div>
-                                    <div className="my-2 border-b border-border" />
-                                </React.Fragment>
-                            ))}
+                <div className="w-full flex flex-col items-center justify-center p-12 bg-layer-panel shadow-sm border border-outline-variant rounded-[length:var(--card-border-radius,12px)] min-h-[400px]">
+                    <div className="w-full max-w-md bg-layer-dialog border border-outline-variant rounded-[length:var(--card-border-radius,12px)] shadow-xl overflow-hidden flex flex-col">
+                        
+                        <div className="p-6 border-b border-border/40">
+                            <h2 className="text-title-small font-semibold text-transform-primary mb-1">Available Tags</h2>
+                            <p className="text-body-small text-muted-foreground font-body leading-relaxed">
+                                Scroll through the list of internal system tags.
+                            </p>
                         </div>
-                    </ScrollArea>
+
+                        <div className="p-6 bg-layer-surface/30 flex justify-center">
+                            <ScrollArea className="border border-border bg-layer-dialog shadow-sm">
+                                <div className="p-4">
+                                    <h4 className="mb-4 text-labelLarge font-display font-medium leading-none text-transform-primary">System Tags</h4>
+                                    {Array.from({ length: 50 }).map((_, i) => (
+                                        <React.Fragment key={i}>
+                                            <div className="text-body-small font-body text-transform-secondary">
+                                                Tag {i + 1}
+                                            </div>
+                                            <div className="my-2 border-b border-border/50" />
+                                        </React.Fragment>
+                                    ))}
+                                </div>
+                            </ScrollArea>
+                        </div>
+                    </div>
                     
-                    <div className="mt-8 text-sm text-muted-foreground/50">
+                    <div className="mt-8 text-body-small text-muted-foreground/50">
                         M3 dynamic variable protocol correctly scaling container dimensions and clipping via `overflow: hidden`.
                     </div>
                 </div>

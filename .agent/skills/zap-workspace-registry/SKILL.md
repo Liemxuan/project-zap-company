@@ -86,7 +86,7 @@ Required fields:
 
 ### Step 5 — Seed MongoDB
 
-Insert a document into `olympus_config.workspaces`:
+Insert a document into `olympus_config.workspaces` via the MongoDB CLI (`mongosh`):
 
 ```json
 {

@@ -97,11 +97,19 @@ async function runCompactor() {
                 // Get ALL messages for this sender, sorted oldest to newest
                 const allMessages = await memoryCol.find({ senderIdentifier: sender }).sort({ timestamp: 1 }).toArray();
 
-                // Count how many of these are raw messages (not already a summary)
                 const rawMessages = allMessages.filter(msg => msg.role !== 'summary');
 
                 if (rawMessages.length > MAX_RAW_MESSAGES) {
-                    console.log(`[Memory Compactor] ⚠️ Threshold exceeded for ${sender} (${rawMessages.length} raw messages). Compacting...`);
+                    const lastMsg = allMessages[allMessages.length - 1];
+                    const lastMsgTime = new Date(lastMsg?.timestamp || lastMsg?.createdAt || Date.now()).getTime();
+                    const isIdle = (Date.now() - lastMsgTime) > (5 * 60 * 1000); // 5 minutes
+
+                    if (!isIdle) {
+                        console.log(`[Memory Compactor] ⏳ ${sender} has exceeded raw messages (${rawMessages.length}) but is NOT IDLE. Skipping compaction to prevent context rotation during active burst.`);
+                        continue;
+                    }
+
+                    console.log(`[Memory Compactor] ⚠️ Threshold exceeded for ${sender} (${rawMessages.length} raw messages) and IDLE > 5m. Compacting...`);
 
                     // We want to compact the oldest messages, leaving the `KEEP_RECENT_MESSAGES` intact.
                     const messagesToCompact = rawMessages.slice(0, rawMessages.length - KEEP_RECENT_MESSAGES);

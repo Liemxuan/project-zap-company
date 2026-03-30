@@ -10,7 +10,7 @@ import { Slider } from '../../../../../genesis/atoms/interactive/slider';
 import { Select as ZapSelect } from '../../../../../genesis/atoms/interactive/option-select';
 import { ThemePublisher } from '../../../../../components/dev/ThemePublisher';
 import { useBorderProperties } from '../../../../../zap/sections/atoms/border_radius/use-border-properties';
-import { BORDER_RADIUS_TOKENS, BORDER_WIDTH_TOKENS } from '../../../../../zap/sections/atoms/foundations/schema';
+import { BORDER_RADIUS_TOKENS, BORDER_WIDTH_TOKENS, ZAP_LAYER_MAP } from '../../../../../zap/sections/atoms/foundations/schema';
 import { toast } from 'sonner';
 
 export default function TextareaSandbox() {
@@ -55,6 +55,12 @@ export default function TextareaSandbox() {
     const previewRadius = BORDER_RADIUS_TOKENS.find(t => t.token === effectiveProps.radius)?.value.split(' ')[0] || '8px';
     const previewWidth = BORDER_WIDTH_TOKENS.find(t => t.token === effectiveProps.width)?.value.split(' ')[0] || '1px';
 
+    const previewBgLayer = state.components['Textarea']?.bg || '';
+    const previewBgTokenDef = ZAP_LAYER_MAP.find(L => L.zapToken === previewBgLayer);
+    const previewBgCssVar = previewBgTokenDef 
+        ? `var(--color-${previewBgTokenDef.m3Token.replace('bg-', '')})` 
+        : 'var(--color-surface-container-highest)';
+
     // Token selector renderers
     const renderRadiusSelect = (value: string, onChange: (val: string) => void) => {
         const safeValue = value === '' ? 'inherit' : value;
@@ -85,6 +91,23 @@ export default function TextareaSandbox() {
                 onChange={(val) => onChange(val === 'inherit' ? '' : val)}
                 options={options}
                 placeholder="(Inherit Universal)"
+                className={`w-full bg-layer-base ${value !== '' ? 'border-primary/50 text-primary' : 'border-border/30 text-foreground'}`}
+            />
+        );
+    };
+
+    const renderBgSelect = (value: string, onChange: (val: string) => void) => {
+        const safeValue = value === '' ? 'inherit' : value;
+        const options = [
+            { label: '(L4 Default)', value: 'inherit' },
+            ...ZAP_LAYER_MAP.map(L => ({ label: `${L.zapLayer} (${L.zapToken})`, value: L.zapToken }))
+        ];
+        return (
+            <ZapSelect 
+                value={safeValue} 
+                onChange={(val) => onChange(val === 'inherit' ? '' : val)}
+                options={options}
+                placeholder="(L4 Default)"
                 className={`w-full bg-layer-base ${value !== '' ? 'border-primary/50 text-primary' : 'border-border/30 text-foreground'}`}
             />
         );
@@ -133,12 +156,12 @@ export default function TextareaSandbox() {
             <div className="space-y-4">
                 <Wrapper identity={{ displayName: "Textarea Structural Settings", type: "Docs Link", filePath: "zap/atoms/textarea/page.tsx" }}>
                     <div className="space-y-6">
-                        <h4 className="text-[10px] text-transform-primary font-display font-bold text-muted-foreground tracking-wider uppercase">Sandbox Variables</h4>
+                        <h4 className="text-label-small text-transform-primary font-display font-bold text-muted-foreground tracking-wider uppercase">Sandbox Variables</h4>
 
                         <div className="space-y-4">
                             {/* Min Height — local sandbox slider */}
                             <div className="space-y-2">
-                                <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-muted-foreground uppercase">
+                                <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-muted-foreground uppercase">
                                     <span>--textarea-min-height</span>
                                     <span className="font-bold">{minHeight[0]}px</span>
                                 </div>
@@ -147,7 +170,7 @@ export default function TextareaSandbox() {
 
                             {/* Border Width — L1 token selector */}
                             <div className="space-y-1">
-                                <span className="text-[10px] text-muted-foreground flex justify-between">
+                                <span className="text-label-small text-muted-foreground flex justify-between">
                                     <span>Width Override</span>
                                     <span className="font-bold">{previewWidth}</span>
                                 </span>
@@ -162,7 +185,7 @@ export default function TextareaSandbox() {
 
                             {/* Border Radius — L1 token selector */}
                             <div className="space-y-1">
-                                <span className="text-[10px] text-muted-foreground flex justify-between">
+                                <span className="text-label-small text-muted-foreground flex justify-between">
                                     <span>Radius Override</span>
                                     <span className="font-bold">{previewRadius}</span>
                                 </span>
@@ -171,6 +194,21 @@ export default function TextareaSandbox() {
                                     (val) => {
                                         if (val === '') clearComponentOverride('Textarea', 'radius');
                                         else setComponentOverride('Textarea', 'radius', val);
+                                    }
+                                )}
+                            </div>
+
+                            {/* Color / Layer — L1 token selector */}
+                            <div className="space-y-1">
+                                <span className="text-label-small text-muted-foreground flex justify-between">
+                                    <span>Color / Layer</span>
+                                    <span className="font-bold whitespace-nowrap overflow-hidden text-ellipsis ml-2 max-w-[120px]">{previewBgTokenDef ? previewBgTokenDef.zapLayer : 'L4 Default'}</span>
+                                </span>
+                                {renderBgSelect(
+                                    state.components['Textarea']?.bg || '', 
+                                    (val) => {
+                                        if (val === '') clearComponentOverride('Textarea', 'bg');
+                                        else setComponentOverride('Textarea', 'bg', val);
                                     }
                                 )}
                             </div>
@@ -217,16 +255,30 @@ export default function TextareaSandbox() {
                     --textarea-min-height: ${minHeight[0]}px;
                     --textarea-border-radius: ${previewRadius};
                     --textarea-border-width: ${previewWidth};
+                    --textarea-bg: ${previewBgCssVar};
                 }
             ` }} />
             <div
                 className="w-full space-y-12 animate-in fade-in duration-500 pb-16 textarea-preview-sandbox"
             >
                 <div className="w-full flex flex-col items-center justify-center p-12 bg-layer-panel shadow-sm border border-outline-variant rounded-[length:var(--card-border-radius,12px)] min-h-[400px]">
-                    <div className="w-full max-w-sm flex items-center justify-center">
-                        <Textarea
-                            placeholder="Type your message here."
-                        />
+                    <div className="w-full max-w-md bg-layer-dialog border border-outline-variant rounded-[length:var(--card-border-radius,12px)] shadow-xl overflow-hidden flex flex-col">
+                        
+                        <div className="p-6 border-b border-border/40">
+                            <h2 className="text-title-small font-semibold text-transform-primary mb-1">System Prompt</h2>
+                            <p className="text-body-small text-muted-foreground font-body leading-relaxed">
+                                Configure the base behavior of the underlying assistant model.
+                            </p>
+                        </div>
+
+                        <div className="p-6 flex flex-col gap-4 bg-layer-surface/30">
+                            <div className="w-full flex items-center justify-center">
+                                <Textarea
+                                    placeholder="You are a helpful coding assistant..."
+                                />
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>

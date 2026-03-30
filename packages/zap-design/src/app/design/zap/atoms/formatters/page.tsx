@@ -32,8 +32,8 @@ export default function FormattersSandboxPage() {
 
                 {/* Credit Card */}
                 <div className="space-y-2">
-                    <span className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Credit Card Input</span>
-                    <span className="text-[10px] font-dev text-muted-foreground block">
+                    <span className="text-label-small font-semibold text-muted-foreground uppercase tracking-widest">Credit Card Input</span>
+                    <span className="text-label-small font-dev text-muted-foreground block">
                         Pattern: <code>#### #### #### ####</code> · Mask: <code>_</code>
                     </span>
                     <Wrapper identity={{ displayName: "CreditCardInput", type: "Atom", filePath: "genesis/atoms/formatters/credit-card.tsx" }}>
@@ -45,8 +45,8 @@ export default function FormattersSandboxPage() {
 
                 {/* Currency */}
                 <div className="space-y-2">
-                    <span className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Currency Input</span>
-                    <span className="text-[10px] font-dev text-muted-foreground block">
+                    <span className="text-label-small font-semibold text-muted-foreground uppercase tracking-widest">Currency Input</span>
+                    <span className="text-label-small font-dev text-muted-foreground block">
                         Prefix: <code>$</code> · Thousand separator · 2 decimal places
                     </span>
                     <Wrapper identity={{ displayName: "CurrencyInput", type: "Atom", filePath: "genesis/atoms/formatters/currency.tsx" }}>
@@ -58,8 +58,8 @@ export default function FormattersSandboxPage() {
 
                 {/* Phone */}
                 <div className="space-y-2">
-                    <span className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Phone Number Input</span>
-                    <span className="text-[10px] font-dev text-muted-foreground block">
+                    <span className="text-label-small font-semibold text-muted-foreground uppercase tracking-widest">Phone Number Input</span>
+                    <span className="text-label-small font-dev text-muted-foreground block">
                         Default format: <code>(###) ###-####</code> · Customizable via <code>format</code> prop
                     </span>
                     <Wrapper identity={{ displayName: "PhoneNumberInput", type: "Atom", filePath: "genesis/atoms/formatters/phone.tsx" }}>

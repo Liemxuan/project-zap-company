@@ -21,6 +21,7 @@ export default function ElevationPage() {
             theme={themeId}
             onPublish={layerProps.publish}
             filePath={`app/design/${themeId}/foundations/elevation/page.tsx`}
+            hideWrapper={true}
         />
     );
 

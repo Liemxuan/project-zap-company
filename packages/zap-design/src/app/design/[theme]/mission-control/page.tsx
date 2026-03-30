@@ -5,6 +5,9 @@ import { useParams, useRouter } from 'next/navigation';
 import { Shield, Monitor, Terminal, Activity, Layers, Brain, Code, Compass, Search, Cpu, Send, Eye, Radio, Server, Database, HardDrive, Container, LayoutTemplate, ShoppingCart, Tablet, Globe, LayoutDashboard, Briefcase, Settings, BarChart3, Lock, AppWindow, Key } from 'lucide-react';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '../../../../components/ui/sheet';
 import { Button } from '../../../../components/ui/button';
+import { Heading } from '../../../../genesis/atoms/typography/headings';
+import { Text } from '../../../../genesis/atoms/typography/text';
+
 // ── Fleet Registry ──────────────────────────────────────────────────────────────
 const FLEET_AGENTS = [
     { name: 'Gateway',   port: 3001, role: 'API Gateway',        icon: Server,  tier: 'infra',   color: 'slate' },
@@ -158,27 +161,32 @@ export default function MissionControlPage() {
         : 'bg-warning animate-pulse';
 
     return (
-        <div className="flex flex-col min-h-screen bg-layer-base text-on-surface pb-10 selection:bg-primary/20 cursor-default">
-            <div className="w-full max-w-7xl mx-auto flex flex-col h-full p-4 md:p-8 lg:pt-12">
+        <div className="flex flex-col min-h-screen w-full bg-layer-canvas text-on-surface sm:p-4 md:p-6 lg:p-8 selection:bg-primary/20 cursor-default">
+            <div 
+                className="w-full max-w-7xl mx-auto flex flex-col h-full bg-layer-cover border border-outline/5 p-6 md:p-8 lg:p-12 shadow-sm relative overflow-hidden"
+                style={{ borderRadius: 'var(--layer-2-border-radius)' }}
+            >
             
             {/* ── Header ClawX Style ──────────────────────────── */}
             <div className="flex flex-col md:flex-row md:items-start justify-between mb-12 shrink-0 gap-4">
                 <div>
-                    <h1 className="text-4xl md:text-5xl font-serif text-on-surface mb-3 font-normal tracking-tight">
+                    <Heading level={1} className="text-on-surface mb-3">
                         Mission Control
-                    </h1>
-                    <p className="text-[17px] text-on-surface-variant font-medium">
+                    </Heading>
+                    <Text size="body-large" weight="medium" className="text-on-surface-variant block mt-2">
                         ZAP-OS v2.1 — Memory Fleet — {totalCount} Agents — {APP_SERVICES.length} Apps — {INFRA_SERVICES.length} Services
-                    </p>
+                    </Text>
                 </div>
                 <div className="flex items-center gap-3 md:mt-2">
                     <div className="text-right">
-                        <div className="text-[11px] uppercase tracking-widest text-on-surface-variant mb-1 font-bold">System Pulse</div>
+                        <Text size="label-small" weight="bold" className="text-on-surface-variant mb-1 block">System Pulse</Text>
                         <div className="flex items-center gap-2 justify-end">
                             <div className={`h-3 w-3 rounded-full ${allHealthy ? 'bg-success shadow-[0_0_12px_rgba(var(--success),0.6)]' : 'bg-warning animate-pulse'}`} />
-                            <span className="font-bold text-sm text-on-surface">{allHealthy ? 'ALL SYSTEMS GO' : `${onlineCount}/${totalCount} ONLINE`}</span>
+                            <Text size="label-large" weight="bold" className="text-on-surface">
+                                {allHealthy ? 'ALL SYSTEMS GO' : `${onlineCount}/${totalCount} ONLINE`}
+                            </Text>
                         </div>
-                        <div className="text-[10px] text-on-surface-variant mt-1.5 font-medium">Last check: {lastCheck}</div>
+                        <Text size="body-small" weight="medium" className="text-on-surface-variant mt-1.5 block">Last check: {lastCheck}</Text>
                     </div>
                 </div>
             </div>
@@ -191,9 +199,10 @@ export default function MissionControlPage() {
                     { label: 'Infrastructure', value: `${infraOnline}/${INFRA_SERVICES.length}`, accent: infraOnline === INFRA_SERVICES.length ? 'text-success' : 'text-error' },
                     { label: 'Tier-1 Agents', value: FLEET_AGENTS.filter(a => a.tier === 'tier-1').length.toString(), accent: 'text-primary' },
                 ].map(stat => (
-                    <div key={stat.label} className="border border-outline/10 bg-surface-container-low rounded-xl p-5">
-                        <div className="text-[11px] uppercase tracking-widest text-on-surface-variant mb-2 font-bold">{stat.label}</div>
-                        <div className={`text-3xl font-black ${stat.accent}`}>{stat.value}</div>
+                    <div key={stat.label} className="border border-outline/10 bg-layer-panel"
+                         style={{ borderRadius: 'var(--layer-3-border-radius, 0.75rem)', padding: 'var(--layer-3-padding, 1.25rem)' }}>
+                        <Text size="label-small" weight="bold" className="text-on-surface-variant mb-2 block">{stat.label}</Text>
+                        <Heading level={2} className={`${stat.accent}`}>{stat.value}</Heading>
                     </div>
                 ))}
             </div>
@@ -202,7 +211,7 @@ export default function MissionControlPage() {
             <section className="mb-10">
                 <div className="flex items-center gap-3 mb-5">
                     <Monitor className="h-5 w-5 text-on-surface-variant" />
-                    <h2 className="text-lg font-black uppercase tracking-widest text-on-surface">Agent Fleet</h2>
+                    <Heading level={5} transform="uppercase" className="text-on-surface">Agent Fleet</Heading>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
                     {FLEET_AGENTS.map((agent) => {
@@ -212,32 +221,33 @@ export default function MissionControlPage() {
                             <div
                                 key={agent.port}
                                 onClick={() => setInspector({ type: 'agent', node: agent, status })}
-                                className={`cursor-pointer group border rounded-xl p-5 transition-all duration-200 hover:shadow-sm ${
+                                className={`cursor-pointer group border transition-all duration-200 hover:shadow-sm ${
                                     status === 'online'
-                                        ? 'border-outline/10 bg-surface-container-low hover:bg-surface-container'
+                                        ? 'border-outline/10 bg-layer-panel hover:bg-layer-dialog'
                                         : status === 'offline'
                                         ? 'border-error/20 bg-error/5 hover:bg-error/10'
                                         : 'border-warning/20 bg-warning/5 hover:bg-warning/10'
                                 }`}
+                                style={{ borderRadius: 'var(--layer-3-border-radius, 0.75rem)', padding: 'var(--layer-3-padding, 1.25rem)' }}
                             >
                                 <div className="flex items-start justify-between mb-4">
                                     <div className="flex items-center gap-3">
                                         <AgentIcon className="h-5 w-5 text-on-surface-variant" />
-                                        <span className="font-bold text-base text-on-surface">{agent.name}</span>
+                                        <Text size="body-large" weight="bold" className="text-on-surface block">{agent.name}</Text>
                                     </div>
                                     <div className={`h-2.5 w-2.5 rounded-full ${statusDot(status)} mt-1.5`} />
                                 </div>
                                 <div className="space-y-2">
-                                    <div className="text-[11px] text-on-surface-variant uppercase tracking-widest font-bold">{agent.role}</div>
+                                    <Text size="body-small" className="text-on-surface-variant block normal-case">{agent.role}</Text>
                                     <div className="flex items-center justify-between">
-                                        <code className="text-xs text-on-surface-variant font-medium">:${agent.port}</code>
-                                        <span className={`text-[10px] font-black uppercase px-2 py-1 rounded ${
+                                        <Text size="dev-note" weight="medium" className="text-on-surface-variant !bg-transparent !px-0" as="code">:${agent.port}</Text>
+                                        <div className={`px-2 py-0.5 rounded text-[10px] font-bold tracking-wider uppercase ${
                                             agent.tier === 'infra' ? 'bg-outline/10 text-on-surface-variant'
                                             : agent.tier === 'tier-1' ? 'bg-primary/10 text-primary'
                                             : 'bg-secondary/10 text-secondary'
                                         }`}>
                                             {agent.tier}
-                                        </span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -250,7 +260,7 @@ export default function MissionControlPage() {
             <section className="mb-10">
                 <div className="flex items-center gap-3 mb-5">
                     <AppWindow className="h-5 w-5 text-on-surface-variant" />
-                    <h2 className="text-lg font-black uppercase tracking-widest text-on-surface">Application Layer</h2>
+                    <Heading level={5} transform="uppercase" className="text-on-surface">Application Layer</Heading>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
                     {APP_SERVICES.map((app) => {
@@ -260,33 +270,34 @@ export default function MissionControlPage() {
                             <div
                                 key={app.port}
                                 onClick={() => setInspector({ type: 'app', node: app, status })}
-                                className={`cursor-pointer group border rounded-xl p-5 transition-all duration-200 hover:shadow-sm ${
+                                className={`cursor-pointer group border transition-all duration-200 hover:shadow-sm ${
                                     status === 'online'
-                                        ? 'border-outline/10 bg-surface-container-low hover:bg-surface-container'
+                                        ? 'border-outline/10 bg-layer-panel hover:bg-layer-dialog'
                                         : status === 'offline'
                                         ? 'border-error/20 bg-error/5 hover:bg-error/10'
                                         : 'border-warning/20 bg-warning/5 hover:bg-warning/10'
                                 }`}
+                                style={{ borderRadius: 'var(--layer-3-border-radius, 0.75rem)', padding: 'var(--layer-3-padding, 1.25rem)' }}
                             >
                                 <div className="flex items-start justify-between mb-4">
                                     <div className="flex items-center gap-3">
                                         <AppIcon className="h-5 w-5 text-on-surface-variant" />
-                                        <span className="font-bold text-base text-on-surface">{app.name}</span>
+                                        <Text size="body-large" weight="bold" className="text-on-surface block">{app.name}</Text>
                                     </div>
                                     <div className={`h-2.5 w-2.5 rounded-full ${statusDot(status)} mt-1.5`} />
                                 </div>
                                 <div className="space-y-2">
-                                    <div className="text-[11px] text-on-surface-variant uppercase tracking-widest font-bold">{app.role}</div>
+                                    <Text size="body-small" className="text-on-surface-variant block normal-case">{app.role}</Text>
                                     <div className="flex items-center justify-between">
-                                        <code className="text-xs text-on-surface-variant font-medium">:${app.port}</code>
-                                        <span className={`text-[10px] font-black uppercase px-2 py-1 rounded ${
+                                        <Text size="dev-note" weight="medium" className="text-on-surface-variant !bg-transparent !px-0" as="code">:${app.port}</Text>
+                                        <div className={`px-2 py-0.5 rounded text-[10px] font-bold tracking-wider uppercase ${
                                             app.tier === 'design' ? 'bg-secondary/10 text-secondary'
                                             : app.tier === 'pos' ? 'bg-success/10 text-success'
                                             : app.tier === 'auth' ? 'bg-error/10 text-error'
                                             : 'bg-primary/10 text-primary'
                                         }`}>
                                             {app.tier}
-                                        </span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -299,7 +310,7 @@ export default function MissionControlPage() {
             <section className="mb-10">
                 <div className="flex items-center gap-3 mb-5">
                     <Database className="h-5 w-5 text-on-surface-variant" />
-                    <h2 className="text-lg font-black uppercase tracking-widest text-on-surface">Infrastructure</h2>
+                    <Heading level={5} transform="uppercase" className="text-on-surface">Infrastructure</Heading>
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                     {INFRA_SERVICES.map((svc) => {
@@ -310,26 +321,27 @@ export default function MissionControlPage() {
                             <div
                                 key={svc.port}
                                 onClick={() => setInspector({ type: 'infra', node: svc, info })}
-                                className={`cursor-pointer border rounded-xl p-5 transition-all ${
-                                    status === 'online' ? 'border-outline/10 bg-surface-container-low hover:bg-surface-container' : 'border-error/20 bg-error/5 hover:bg-error/10'
+                                className={`cursor-pointer border transition-all ${
+                                    status === 'online' ? 'border-outline/10 bg-layer-panel hover:bg-layer-dialog' : 'border-error/20 bg-error/5 hover:bg-error/10'
                                 }`}
+                                style={{ borderRadius: 'var(--layer-3-border-radius, 0.75rem)', padding: 'var(--layer-3-padding, 1.25rem)' }}
                             >
                                 <div className="flex items-center justify-between mb-3">
                                     <div className="flex items-center gap-3">
                                         <Icon className="h-5 w-5 text-on-surface-variant" />
-                                        <span className="font-bold text-base text-on-surface">{svc.name}</span>
+                                        <Text size="body-large" weight="bold" className="text-on-surface block">{svc.name}</Text>
                                     </div>
                                     <div className={`h-2.5 w-2.5 rounded-full ${statusDot(status)}`} />
                                 </div>
                                 {info.parsedHost && info.parsedHost !== 'localhost' && info.parsedHost !== '127.0.0.1' ? (
                                     <div className="flex flex-col gap-1.5 mt-2">
-                                        <span className="text-[10px] font-black text-info mb-0.5 uppercase tracking-widest bg-info/10 self-start px-2 py-1 rounded">Remote</span>
-                                        <code className="text-xs text-on-surface-variant font-medium truncate w-full" title={info.parsedHost}>{info.parsedHost}</code>
+                                        <div className="text-info mb-0.5 bg-info/10 self-start px-2 py-0.5 rounded text-[10px] font-bold tracking-wider uppercase">REMOTE</div>
+                                        <Text size="dev-note" weight="medium" className="text-on-surface-variant truncate w-full !bg-transparent !px-0" title={info.parsedHost} as="code">{info.parsedHost}</Text>
                                     </div>
                                 ) : (
                                     <div className="flex flex-col gap-1.5 mt-2">
-                                         <span className="text-[10px] font-black text-success mb-0.5 uppercase tracking-widest bg-success/10 self-start px-2 py-1 rounded">Local</span>
-                                         <code className="text-xs text-on-surface-variant font-medium">:${svc.port}</code>
+                                         <div className="text-success mb-0.5 bg-success/10 self-start px-2 py-0.5 rounded text-[10px] font-bold tracking-wider uppercase">LOCAL</div>
+                                         <Text size="dev-note" weight="medium" className="text-on-surface-variant !bg-transparent !px-0" as="code">:${svc.port}</Text>
                                     </div>
                                 )}
                             </div>
@@ -346,50 +358,54 @@ export default function MissionControlPage() {
                 <div className="flex items-center justify-between mb-6">
                     <div className="flex items-center gap-3">
                         <Key className="h-6 w-6 text-secondary" />
-                        <h2 className="text-xl font-black uppercase tracking-widest text-secondary">Gateway Matrix</h2>
+                        <Heading level={4} transform="uppercase" className="text-secondary">Gateway Matrix</Heading>
                     </div>
                     <div className={`h-3 w-3 rounded-full ${statusDot(gatewayStatus.status)}`} />
                 </div>
                 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     <div 
-                        className="border border-outline/10 bg-surface-container rounded-xl p-5 hover:border-outline/30 transition-all box-border-active"
+                        className="border border-outline/10 bg-layer-panel hover:border-outline/30 transition-all box-border-active"
+                        style={{ borderRadius: 'var(--layer-3-border-radius, 0.75rem)', padding: 'var(--layer-3-padding, 1.25rem)' }}
                         onClick={(e) => { e.stopPropagation(); setInspector({ type: 'gateway', statusData: gatewayStatus, view: 'ultra' }); }}
                     >
-                        <div className="text-[11px] uppercase tracking-widest text-on-surface-variant mb-2 font-bold">Ultra Tier</div>
-                        <div className="text-3xl font-black text-rose-500">{gatewayStatus.ultraKeys} Keys</div>
+                        <Text size="label-small" weight="bold" className="text-on-surface-variant mb-2 block">Ultra Tier</Text>
+                        <Heading level={2} className="text-rose-500">{gatewayStatus.ultraKeys} Keys</Heading>
                     </div>
                     <div 
-                        className="border border-outline/10 bg-surface-container rounded-xl p-5 hover:border-outline/30 transition-all box-border-active"
+                        className="border border-outline/10 bg-layer-panel hover:border-outline/30 transition-all box-border-active"
+                        style={{ borderRadius: 'var(--layer-3-border-radius, 0.75rem)', padding: 'var(--layer-3-padding, 1.25rem)' }}
                         onClick={(e) => { e.stopPropagation(); setInspector({ type: 'gateway', statusData: gatewayStatus, view: 'pro' }); }}
                     >
-                        <div className="text-[11px] uppercase tracking-widest text-on-surface-variant mb-2 font-bold">Pro Tier</div>
-                        <div className="text-3xl font-black text-info">{gatewayStatus.proKeys} Keys</div>
+                         <Text size="label-small" weight="bold" className="text-on-surface-variant mb-2 block">Pro Tier</Text>
+                        <Heading level={2} className="text-info">{gatewayStatus.proKeys} Keys</Heading>
                     </div>
                     <div 
-                        className={`border rounded-xl p-5 transition-all box-border-active hover:border-outline/30 ${gatewayStatus.blockedProjects.length > 0 ? 'border-error/40 bg-error/10' : 'border-outline/10 bg-surface-container'}`}
+                        className={`border transition-all box-border-active hover:border-outline/30 ${gatewayStatus.blockedProjects.length > 0 ? 'border-error/40 bg-error/10' : 'border-outline/10 bg-layer-panel'}`}
+                        style={{ borderRadius: 'var(--layer-3-border-radius, 0.75rem)', padding: 'var(--layer-3-padding, 1.25rem)' }}
                         onClick={(e) => { e.stopPropagation(); setInspector({ type: 'gateway', statusData: gatewayStatus, view: 'blocks' }); }}
                     >
-                        <div className="text-[11px] uppercase tracking-widest text-on-surface-variant mb-2 font-bold">429 Blocks</div>
-                        <div className="text-3xl font-black text-error">{gatewayStatus.blockedProjects.length} Active</div>
+                        <Text size="label-small" weight="bold" className="text-on-surface-variant mb-2 block">429 Blocks</Text>
+                        <Heading level={2} className="text-error">{gatewayStatus.blockedProjects.length} Active</Heading>
                     </div>
                     <div 
-                        className={`border rounded-xl p-5 transition-all box-border-active hover:border-outline/30 ${gatewayStatus.deadKeysCount > 0 ? 'border-warning/40 bg-warning/10' : 'border-outline/10 bg-surface-container'}`}
+                        className={`border transition-all box-border-active hover:border-outline/30 ${gatewayStatus.deadKeysCount > 0 ? 'border-warning/40 bg-warning/10' : 'border-outline/10 bg-layer-panel'}`}
+                        style={{ borderRadius: 'var(--layer-3-border-radius, 0.75rem)', padding: 'var(--layer-3-padding, 1.25rem)' }}
                         onClick={(e) => { e.stopPropagation(); setInspector({ type: 'gateway', statusData: gatewayStatus, view: 'dead' }); }}
                     >
-                        <div className="text-[11px] uppercase tracking-widest text-on-surface-variant mb-2 font-bold">Dead Keys (403)</div>
-                        <div className="text-3xl font-black text-warning">{gatewayStatus.deadKeysCount} Total</div>
+                        <Text size="label-small" weight="bold" className="text-on-surface-variant mb-2 block">Dead Keys (403)</Text>
+                        <Heading level={2} className="text-warning">{gatewayStatus.deadKeysCount} Total</Heading>
                     </div>
                 </div>
 
                 {gatewayStatus.blockedProjects.length > 0 && (
                     <div className="mt-6 border border-error/20 bg-error/10 rounded-xl p-5">
-                        <div className="text-[11px] font-black text-error uppercase tracking-widest mb-3">Currently Quarantined Projects</div>
+                        <Text size="label-small" weight="black" className="text-error mb-3 block">Currently Quarantined Projects</Text>
                         <div className="flex gap-2 flex-wrap">
                             {gatewayStatus.blockedProjects.map(p => (
-                                <span key={p} className="text-xs font-mono bg-error/20 text-error px-3 py-1.5 rounded border border-error/30 font-bold">
+                                <Text size="dev-note" weight="bold" key={p} className="bg-error/20 text-error px-3 py-1.5 rounded border border-error/30 block" as="span">
                                     {p}
-                                </span>
+                                </Text>
                             ))}
                         </div>
                     </div>
@@ -400,8 +416,8 @@ export default function MissionControlPage() {
             <section className="mb-10 border border-warning/20 bg-warning/5 rounded-xl p-6 md:p-8">
                 <div className="flex items-center gap-3 mb-6">
                     <Brain className="h-6 w-6 text-warning" />
-                    <h2 className="text-xl font-black uppercase tracking-widest text-warning">Athena Research Agent</h2>
-                    <span className="text-[10px] bg-warning/20 text-warning px-2.5 py-1 rounded font-black uppercase ml-2">NotebookLM</span>
+                    <Heading level={4} transform="uppercase" className="text-warning">Athena Research Agent</Heading>
+                    <Text size="label-small" weight="black" className="bg-warning/20 text-warning px-2.5 py-1 rounded ml-2" as="span">NotebookLM</Text>
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                     {[
@@ -415,12 +431,12 @@ export default function MissionControlPage() {
                         { label: 'Status', endpoint: '/api/research/status', method: 'GET' },
                     ].map(ep => (
                         <div key={ep.endpoint} className="border border-warning/20 rounded-xl p-4 bg-warning/5 hover:bg-warning/10 transition-colors">
-                            <div className="text-[11px] font-bold text-warning/80 mb-2 uppercase tracking-wide">{ep.label}</div>
+                            <Text size="label-small" className="text-warning/80 mb-2 block">{ep.label}</Text>
                             <div className="flex items-center gap-2">
-                                <span className={`text-[10px] font-black px-1.5 py-0.5 rounded ${ep.method === 'GET' ? 'bg-success/20 text-success' : 'bg-info/20 text-info'}`}>
+                                <Text size="label-small" weight="black" className={`px-1.5 py-0.5 rounded ${ep.method === 'GET' ? 'bg-success/20 text-success' : 'bg-info/20 text-info'}`} as="span">
                                     {ep.method}
-                                </span>
-                                <code className="text-xs text-on-surface-variant font-medium truncate">{ep.endpoint}</code>
+                                </Text>
+                                <Text size="dev-note" weight="medium" className="text-on-surface-variant truncate !bg-transparent !px-0" as="code">{ep.endpoint}</Text>
                             </div>
                         </div>
                     ))}
@@ -431,16 +447,20 @@ export default function MissionControlPage() {
 
             {/* ── Right-Side Inspector Sheet ──────────────────────── */}
             <Sheet open={inspector !== null} onOpenChange={(open: boolean) => !open && setInspector(null)}>
-                <SheetContent className="bg-surface-container-low border-l border-outline/10 text-on-surface sm:max-w-md overflow-y-auto z-[99999]" side="right">
-                    <SheetHeader className="mb-8">
-                        <SheetTitle className="flex items-center gap-3 text-2xl font-serif text-on-surface capitalize border-b border-outline/10 pb-5" style={{ fontFamily: 'Georgia, Cambria, "Times New Roman", Times, serif' }}>
-                            {inspector?.type === 'agent' && <><Monitor className="h-6 w-6 text-primary" /> {inspector.node.name} Agent</>}
-                            {inspector?.type === 'app' && <><AppWindow className="h-6 w-6 text-primary" /> {inspector.node.name}</>}
-                            {inspector?.type === 'infra' && <><Database className="h-6 w-6 text-primary" /> {inspector.node.name} Node</>}
-                            {inspector?.type === 'gateway' && <><Key className="h-6 w-6 text-secondary" /> Gateway Matrix</>}
+                <SheetContent className="bg-layer-dialog border-l border-outline/10 text-on-surface sm:max-w-md overflow-y-auto z-[99999]" side="right">
+                    <SheetHeader className="mb-8 border-b border-outline/10 pb-5">
+                        <SheetTitle asChild className="mb-0">
+                            <Heading level={3} transform="capitalize" className="text-on-surface flex items-center gap-3">
+                                {inspector?.type === 'agent' && <><Monitor className="h-6 w-6 text-primary" /> {inspector.node.name} Agent</>}
+                                {inspector?.type === 'app' && <><AppWindow className="h-6 w-6 text-primary" /> {inspector.node.name}</>}
+                                {inspector?.type === 'infra' && <><Database className="h-6 w-6 text-primary" /> {inspector.node.name} Node</>}
+                                {inspector?.type === 'gateway' && <><Key className="h-6 w-6 text-secondary" /> Gateway Matrix</>}
+                            </Heading>
                         </SheetTitle>
-                        <SheetDescription className="text-[15px] font-medium text-on-surface-variant mt-2">
-                            Live node diagnostics and operational forensics.
+                        <SheetDescription asChild>
+                            <Text size="body-medium" weight="medium" className="text-on-surface-variant mt-2 block">
+                                Live node diagnostics and operational forensics.
+                            </Text>
                         </SheetDescription>
                     </SheetHeader>
                     
@@ -448,30 +468,30 @@ export default function MissionControlPage() {
                         <div className="flex flex-col gap-5">
                             {inspector.type === 'agent' && (
                                 <>
-                                    <div className="flex justify-between items-center p-5 rounded-xl bg-surface-container shadow-sm ring-1 ring-outline/10 text-sm">
+                                    <div className="flex justify-between items-center p-5 rounded-xl bg-layer-modal shadow-sm ring-1 ring-outline/10 text-sm">
                                         <div className="flex items-center gap-2">
                                             <Activity className="h-4 w-4 text-on-surface-variant" />
-                                            <span className="text-on-surface-variant tracking-widest uppercase text-[11px] font-bold">Status</span>
+                                            <Text size="label-small" weight="bold" className="text-on-surface-variant block" as="span">Status</Text>
                                         </div>
-                                        <div className="flex items-center gap-3 bg-surface-container-high px-3.5 py-1.5 rounded-full border border-outline/10">
-                                            <span className="capitalize font-mono text-xs font-bold text-on-surface">{inspector.status}</span>
+                                        <div className="flex items-center gap-3 bg-outline/5 px-3.5 py-1.5 rounded-full border border-outline/10">
+                                            <Text size="dev-note" weight="bold" className="text-on-surface !bg-transparent !px-0 capitalize" as="span">{inspector.status}</Text>
                                             <div className={`h-2.5 w-2.5 rounded-full ${statusDot(inspector.status)}`} />
                                         </div>
                                     </div>
                                     <div className="grid grid-cols-2 gap-5">
-                                        <div className="p-5 bg-surface-container shadow-sm ring-1 ring-outline/10 rounded-xl flex flex-col justify-center">
-                                            <div className="text-[11px] uppercase font-bold text-on-surface-variant tracking-widest mb-3">Port Bind</div>
-                                            <div className="font-mono text-xl text-on-surface border border-outline/5 bg-surface-container-high px-3 py-1.5 rounded-lg w-max">:${inspector.node.port}</div>
+                                        <div className="p-5 bg-layer-modal shadow-sm ring-1 ring-outline/10 rounded-xl flex flex-col justify-center">
+                                            <Text size="label-small" className="text-on-surface-variant mb-3 block">Port Bind</Text>
+                                            <Text size="dev-note" weight="medium" className="text-on-surface bg-outline/5 border border-outline/5 px-3 py-1.5 rounded-lg w-max !text-xl flex items-center" as="div">:${inspector.node.port}</Text>
                                         </div>
-                                        <div className="p-5 bg-surface-container shadow-sm ring-1 ring-outline/10 rounded-xl flex flex-col justify-center">
-                                            <div className="text-[11px] uppercase font-bold text-on-surface-variant tracking-widest mb-3">Clearance</div>
-                                            <div className="font-mono text-sm font-black tracking-widest bg-primary/10 text-primary w-max px-3 py-1.5 rounded-md uppercase">{inspector.node.tier}</div>
+                                        <div className="p-5 bg-layer-modal shadow-sm ring-1 ring-outline/10 rounded-xl flex flex-col justify-center">
+                                            <Text size="label-small" className="text-on-surface-variant mb-3 block">Clearance</Text>
+                                            <Text size="label-small" weight="black" className="bg-primary/10 text-primary w-max px-3 py-1.5 rounded-md" as="div">{inspector.node.tier}</Text>
                                         </div>
                                     </div>
-                                    <div className="p-5 bg-surface-container shadow-sm ring-1 ring-outline/10 rounded-xl relative overflow-hidden">
+                                    <div className="p-5 bg-layer-modal shadow-sm ring-1 ring-outline/10 rounded-xl relative overflow-hidden">
                                         <div className="absolute top-0 left-0 w-1.5 h-full bg-primary" />
-                                        <div className="text-[11px] uppercase font-bold text-on-surface-variant tracking-widest mb-2 pl-3">Primary Role</div>
-                                        <div className="font-body text-base font-medium text-on-surface pl-3 capitalize">{inspector.node.role}</div>
+                                        <Text size="label-small" className="text-on-surface-variant mb-2 pl-3 block">Primary Role</Text>
+                                        <Text size="body-large" weight="medium" className="text-on-surface pl-3 capitalize block">{inspector.node.role}</Text>
                                     </div>
                                     <div className="pt-6">
                                         <Button 
@@ -488,28 +508,28 @@ export default function MissionControlPage() {
                                 <>
                                     <div className="flex justify-between items-center p-5 rounded-xl bg-primary/5 shadow-sm ring-1 ring-primary/20 text-sm">
                                         <span className="text-primary tracking-widest uppercase text-[11px] font-bold">Network State</span>
-                                        <div className="flex items-center gap-3 bg-surface-container px-3.5 py-1.5 rounded-full border border-primary/10">
+                                        <div className="flex items-center gap-3 bg-layer-modal px-3.5 py-1.5 rounded-full border border-primary/10">
                                             <span className="capitalize font-mono text-xs font-bold text-primary">{inspector.statusData.status}</span>
                                             <div className={`h-2.5 w-2.5 rounded-full ${statusDot(inspector.statusData.status)}`} />
                                         </div>
                                     </div>
                                     <div className="flex flex-col gap-4 mt-6">
-                                        <div className="overflow-hidden rounded-xl bg-surface-container shadow-sm ring-1 ring-outline/10">
+                                        <div className="overflow-hidden rounded-xl bg-layer-modal shadow-sm ring-1 ring-outline/10">
                                             <div className="max-h-[60vh] overflow-y-auto scrollbar-thin scrollbar-thumb-outline/20 scrollbar-track-transparent">
                                                 <table className="w-full text-left text-sm text-on-surface-variant">
-                                                    <thead className="sticky top-0 bg-surface-container-highest z-10 text-[11px] uppercase font-black tracking-widest text-on-surface border-b border-outline/10">
+                                                    <thead className="sticky top-0 bg-outline/5est z-10 text-[11px] uppercase font-black tracking-widest text-on-surface border-b border-outline/10">
                                                         <tr>
-                                                            <th className="p-4 bg-surface-container-high font-body">API Key</th>
-                                                            <th className="p-4 bg-surface-container-high font-body">Project Bind</th>
-                                                            <th className="p-4 bg-surface-container-high font-body">Status</th>
-                                                            { (!inspector.view || inspector.view === 'all') && <th className="p-4 bg-surface-container-high font-body">Tier</th> }
+                                                            <th className="p-4 bg-outline/5 font-body">API Key</th>
+                                                            <th className="p-4 bg-outline/5 font-body">Project Bind</th>
+                                                            <th className="p-4 bg-outline/5 font-body">Status</th>
+                                                            { (!inspector.view || inspector.view === 'all') && <th className="p-4 bg-outline/5 font-body">Tier</th> }
                                                         </tr>
                                                     </thead>
                                                     <tbody className="divide-y divide-outline/5 font-mono text-xs">
                                                         {(!inspector.view || inspector.view === 'all' || inspector.view === 'ultra') && inspector.statusData.ultraKeysList?.map((k, i) => (
-                                                            <tr key={`u-${i}`} className="hover:bg-surface-container-high transition-colors">
+                                                            <tr key={`u-${i}`} className="hover:bg-outline/5 transition-colors">
                                                                 <td className="p-4 text-secondary">{k.key}</td>
-                                                                <td className="p-4"><span className="bg-surface-container-high font-medium px-2 py-1 rounded border border-outline/5">{k.project}</span></td>
+                                                                <td className="p-4"><span className="bg-outline/5 font-medium px-2 py-1 rounded border border-outline/5">{k.project}</span></td>
                                                                 <td className="p-4">
                                                                     <span className={`px-2 py-1 rounded-full text-[10px] font-black uppercase tracking-wider ${
                                                                         k.status === 'Active' ? 'bg-success/15 text-success' :
@@ -523,9 +543,9 @@ export default function MissionControlPage() {
                                                             </tr>
                                                         ))}
                                                         {(!inspector.view || inspector.view === 'all' || inspector.view === 'pro') && inspector.statusData.proKeysList?.map((k, i) => (
-                                                            <tr key={`p-${i}`} className="hover:bg-surface-container-high transition-colors">
+                                                            <tr key={`p-${i}`} className="hover:bg-outline/5 transition-colors">
                                                                 <td className="p-4 text-info">{k.key}</td>
-                                                                <td className="p-4"><span className="bg-surface-container-high font-medium px-2 py-1 rounded border border-outline/5">{k.project}</span></td>
+                                                                <td className="p-4"><span className="bg-outline/5 font-medium px-2 py-1 rounded border border-outline/5">{k.project}</span></td>
                                                                 <td className="p-4">
                                                                     <span className={`px-2 py-1 rounded-full text-[10px] font-black uppercase tracking-wider ${
                                                                         k.status === 'Active' ? 'bg-success/15 text-success' :
@@ -542,7 +562,7 @@ export default function MissionControlPage() {
                                                            (inspector.view === 'pro' && !inspector.statusData.proKeysList?.length) ||
                                                            ((!inspector.view || inspector.view === 'all') && !inspector.statusData.ultraKeysList?.length && !inspector.statusData.proKeysList?.length)) && (
                                                             <tr>
-                                                                <td colSpan={100} className="p-10 text-center text-on-surface-variant font-medium text-sm border-t border-outline/5 bg-surface-container/50">No Keys Detected in Pool</td>
+                                                                <td colSpan={100} className="p-10 text-center text-on-surface-variant font-medium text-sm border-t border-outline/5 bg-layer-modal">No Keys Detected in Pool</td>
                                                             </tr>
                                                         )}
                                                     </tbody>
@@ -579,33 +599,33 @@ export default function MissionControlPage() {
                             {/* App & Infra defaults */}
                             {(inspector.type === 'app' || inspector.type === 'infra') && (
                                 <>
-                                    <div className="flex justify-between items-center p-5 rounded-xl bg-surface-container shadow-sm ring-1 ring-outline/10 text-sm">
+                                    <div className="flex justify-between items-center p-5 rounded-xl bg-layer-modal shadow-sm ring-1 ring-outline/10 text-sm">
                                         <div className="flex items-center gap-2">
                                             <Activity className="h-4 w-4 text-on-surface-variant" />
-                                            <span className="text-on-surface-variant tracking-widest uppercase text-[11px] font-bold">Ping State</span>
+                                            <Text size="label-small" weight="bold" className="text-on-surface-variant block" as="span">Ping State</Text>
                                         </div>
-                                        <div className="flex items-center gap-3 bg-surface-container-high px-3.5 py-1.5 rounded-full border border-outline/10">
-                                            <span className="capitalize font-mono text-xs font-bold text-on-surface">
+                                        <div className="flex items-center gap-3 bg-outline/5 px-3.5 py-1.5 rounded-full border border-outline/10">
+                                            <Text size="dev-note" weight="bold" className="text-on-surface !bg-transparent !px-0 capitalize" as="span">
                                                 {inspector.type === 'app' ? inspector.status : inspector.info.status}
-                                            </span>
+                                            </Text>
                                             <div className={`h-2.5 w-2.5 rounded-full ${statusDot(inspector.type === 'app' ? inspector.status : inspector.info.status)}`} />
                                         </div>
                                     </div>
                                     
-                                    <div className="p-5 bg-surface-container shadow-sm ring-1 ring-outline/10 rounded-xl">
-                                        <div className="text-[11px] uppercase font-bold text-on-surface-variant tracking-widest mb-3">Connection Bind</div>
-                                        <div className="font-mono text-lg font-medium text-on-surface bg-surface-container-high px-4 py-2 rounded-lg border border-outline/5 w-max">
+                                    <div className="p-5 bg-layer-modal shadow-sm ring-1 ring-outline/10 rounded-xl">
+                                        <Text size="label-small" className="text-on-surface-variant mb-3 block">Connection Bind</Text>
+                                        <Text size="body-large" weight="medium" className="text-on-surface bg-outline/5 border border-outline/5 px-4 py-2 rounded-lg w-max font-mono block">
                                             {inspector.type === 'infra' && inspector.info.parsedHost && inspector.info.parsedHost !== 'localhost' ? inspector.info.parsedHost : `:${inspector.node.port}`}
-                                        </div>
+                                        </Text>
                                     </div>
                                     
                                     {inspector.type === 'app' && (
-                                        <div className="p-5 bg-surface-container shadow-sm ring-1 ring-outline/10 rounded-xl relative overflow-hidden">
+                                        <div className="p-5 bg-layer-modal shadow-sm ring-1 ring-outline/10 rounded-xl relative overflow-hidden">
                                             <div className="absolute top-0 left-0 w-1.5 h-full bg-primary" />
-                                            <div className="text-[11px] uppercase font-bold text-on-surface-variant tracking-widest mb-2 pl-3">Component</div>
-                                            <div className="font-body text-base font-bold text-on-surface uppercase tracking-widest pl-3">
+                                            <Text size="label-small" className="text-on-surface-variant mb-2 pl-3 block">Component</Text>
+                                            <Text size="body-large" weight="bold" className="text-on-surface uppercase tracking-widest pl-3 block">
                                                 {(inspector.node as typeof APP_SERVICES[number]).role}
-                                            </div>
+                                            </Text>
                                         </div>
                                     )}
                                 </>
@@ -617,15 +637,15 @@ export default function MissionControlPage() {
 
             {/* ── Footer ─────────────────────────────────────────── */}
             <div className="mt-auto">
-                <footer className="flex items-center justify-between border-t border-outline/10 pt-6 mt-12 text-[11px] uppercase tracking-widest text-on-surface-variant font-bold">
+                <footer className="flex items-center justify-between border-t border-outline/10 pt-6 mt-12">
                     <div className="flex items-center gap-4">
-                        <span>Session: {new Date().toISOString().split('T')[0]}</span>
+                        <Text size="label-small" weight="bold" className="text-on-surface-variant" as="span">Session: {new Date().toISOString().split('T')[0]}</Text>
                         <div className="h-1.5 w-1.5 bg-outline/20 rounded-full" />
-                        <span>User: ZEUS_TOM</span>
+                        <Text size="label-small" weight="bold" className="text-on-surface-variant" as="span">User: ZEUS_TOM</Text>
                     </div>
                     <div className="flex items-center gap-2">
-                        <Terminal className="h-4 w-4" />
-                        <span>ZAP-OS Kernel v4.2.0 // Memory v2.1</span>
+                        <Terminal className="h-4 w-4 text-on-surface-variant" />
+                        <Text size="label-small" weight="bold" className="text-on-surface-variant" as="span">ZAP-OS Kernel v4.2.0 // Memory v2.1</Text>
                     </div>
                 </footer>
             </div>

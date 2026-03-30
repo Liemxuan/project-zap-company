@@ -1,72 +1,89 @@
 "use client";
 
-import { useState } from "react";
-import { Button } from "zap-design/src/genesis/atoms/interactive/button";
-import { Input } from "zap-design/src/genesis/atoms/interactive/input";
-import { Label } from "zap-design/src/genesis/atoms/interactive/label";
-import { Checkbox } from "zap-design/src/genesis/atoms/interactive/checkbox";
+import { useState, useEffect, Suspense } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
+import { loginAction } from "@olympus/zap-auth/src/actions";
+import { LoginForm } from "zap-design/src/genesis/organisms/auth/LoginForm";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
-import { Loader2 } from "lucide-react";
 
-export function AuthForm() {
+function AuthFormInner() {
   const [loading, setLoading] = useState(false);
+  const [merchantName, setMerchantName] = useState('ZAP Inc.');
+  const [email, setEmail] = useState('name@zap');
+  const [password, setPassword] = useState('1234');
+  const [rememberMe, setRememberMe] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [activeLang, setActiveLang] = useState('🇺🇸 EN');
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    if (document.documentElement.classList.contains('dark')) {
+      setIsDarkMode(true);
+    }
+  }, []);
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
-    // Simulate network request
-    setTimeout(() => {
-      setLoading(false);
+    try {
+      const result = await loginAction(email, password);
+      if (result.error) {
+        toast.error(result.error);
+        setLoading(false);
+        return;
+      }
+
       toast.success("Authentication successful. Redirecting...");
-      // Simulate redirect
-      router.push("/auth/core/user-management"); 
-    }, 1500);
+      const callbackUrl = searchParams.get('callbackUrl');
+      if (callbackUrl) {
+         window.location.href = callbackUrl;
+      } else {
+         router.push("/auth/core/user-management");
+      }
+    } catch (err) {
+      toast.error("Auth failed");
+      setLoading(false);
+    }
+  };
+
+  const toggleTheme = () => {
+    document.documentElement.classList.toggle('dark');
+    setIsDarkMode(!isDarkMode);
+  };
+
+  const cycleLanguage = () => {
+    const languages = ['🇺🇸 EN', '🇻🇳 VI', '🇫🇷 FR', '🇯🇵 JA'];
+    const nextIndex = (languages.indexOf(activeLang) + 1) % languages.length;
+    setActiveLang(languages[nextIndex]);
   };
 
   return (
-    <form onSubmit={handleSignIn} className="space-y-6 w-full max-w-sm mx-auto">
-      <div className="space-y-4">
-        <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
-          <Input 
-            id="email" 
-            type="email" 
-            placeholder="admin@zap.inc" 
-            required 
-            disabled={loading}
-          />
-        </div>
-        <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <Label htmlFor="password">Password</Label>
-            <a href="#" className="text-sm text-primary hover:underline hover:text-primary-active">
-              Forgot password?
-            </a>
-          </div>
-          <Input 
-            id="password" 
-            type="password" 
-            placeholder="••••••••" 
-            required 
-            disabled={loading}
-          />
-        </div>
-      </div>
-      
-      <div className="flex items-center space-x-2">
-        <Checkbox id="remember" />
-        <Label htmlFor="remember" className="text-sm font-normal text-on-surface-variant cursor-pointer">
-          Remember this device
-        </Label>
-      </div>
+    <LoginForm
+      onSubmit={handleSignIn}
+      merchantName={merchantName}
+      onMerchantNameChange={setMerchantName}
+      email={email}
+      onEmailChange={setEmail}
+      password={password}
+      onPasswordChange={setPassword}
+      rememberMe={rememberMe}
+      onRememberMeChange={setRememberMe}
+      isProcessing={loading}
+      activeLang={activeLang}
+      onCycleLang={cycleLanguage}
+      isDarkMode={isDarkMode}
+      onToggleTheme={toggleTheme}
+      showSocialLogin={false}
+    />
+  );
+}
 
-      <Button type="submit" className="w-full" disabled={loading}>
-        {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-        Sign In
-      </Button>
-    </form>
+export function AuthForm() {
+  return (
+    <Suspense fallback={<div>Loading Auth...</div>}>
+      <AuthFormInner />
+    </Suspense>
   );
 }

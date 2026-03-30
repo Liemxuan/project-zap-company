@@ -1,6 +1,6 @@
 import "dotenv/config";
 import { Chroma } from "@langchain/community/vectorstores/chroma";
-import { OpenAIEmbeddings } from "@langchain/openai";
+import { GoogleGenerativeAIEmbeddings } from "@langchain/google-genai";
 
 export class VectorStore {
     private chromaClient: Chroma;
@@ -11,29 +11,23 @@ export class VectorStore {
             console.warn("[vector_store] ⚠️ GOOGLE_API_KEY not found. Semantic search embeddings will fail.");
         }
         
-        const embeddingParams = {
-            openAIApiKey: googleApiKey || "dummy", 
-            modelName: "gemini-embedding-001",
-            configuration: {
-                baseURL: "https://generativelanguage.googleapis.com/v1beta/openai"
-            }
-        };
+        const bindings = new GoogleGenerativeAIEmbeddings({
+            apiKey: googleApiKey || "dummy",
+            modelName: "gemini-embedding-2-preview", // SOP-036: Multimodal Embedding 2 for native VFS image mapping
+        });
 
-        this.chromaClient = new Chroma(new OpenAIEmbeddings(embeddingParams), {
+        this.chromaClient = new Chroma(bindings, {
             collectionName: "zap-knowledge",
             url: process.env.CHROMA_URL || "http://localhost:8100"
         });
     }
 
     async getEmbedding(text: string): Promise<number[]> {
-        // Embeddings are now handled natively by the LangChain Chroma retriever during search/add operations.
+        // Embeddings are now handled natively by the LangChain Chroma retriever during search/add operations via gemini-embedding-2-preview.
         // This is kept for legacy compatibility if strict manual embedding extraction is requested.
-        const embeddings = new OpenAIEmbeddings({
-            openAIApiKey: process.env["GOOGLE_API_KEY"] || "dummy", 
-            modelName: "gemini-embedding-001",
-            configuration: {
-                baseURL: "https://generativelanguage.googleapis.com/v1beta/openai"
-            }
+        const embeddings = new GoogleGenerativeAIEmbeddings({
+            apiKey: process.env["GOOGLE_API_KEY"] || "dummy",
+            modelName: "gemini-embedding-2-preview",
         });
         return await embeddings.embedQuery(text);
     }
@@ -64,18 +58,34 @@ export class VectorStore {
     
     async insertMany(documents: { merchantId: string, accountType: string, factType: string, fact: string }[]) {
         try {
-            const texts = documents.map(d => d.fact);
-            const metadatas = documents.map(d => ({
-                merchantId: d.merchantId,
-                accountType: d.accountType,
-                factType: d.factType,
-                created_at: new Date().toISOString(),
-                updated_at: new Date().toISOString()
-            }));
+            const texts: string[] = [];
+            const metadatas: Record<string, any>[] = [];
+            const ids: string[] = [];
+            const crypto = await import("crypto");
+            
+            for (const d of documents) {
+                // Phase 8 (DeerFlow Pattern): Aggressive memory deduplication:
+                // Normalizing whitespace and creating a deterministic hash ID
+                const normalizedFact = d.fact.replace(/\s+/g, " ").trim().toLowerCase();
+                const hashId = crypto.createHash("sha256").update(`${d.merchantId}:${d.accountType}:${normalizedFact}`).digest("hex");
+                
+                texts.push(d.fact);
+                metadatas.push({
+                    merchantId: d.merchantId,
+                    accountType: d.accountType,
+                    factType: d.factType,
+                    dedupHash: hashId,
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString()
+                });
+                ids.push(hashId);
+            }
             
             await this.chromaClient.addDocuments(
-                texts.map((text, i) => ({ pageContent: text, metadata: metadatas[i] as Record<string, any> }))
+                texts.map((text, i) => ({ pageContent: text, metadata: metadatas[i] as Record<string, any> })),
+                { ids }
             );
+            console.log(`[vector_store] 🧠 Inserted/Upserted ${documents.length} facts with deterministic deduplication hashes.`);
         } catch (error: any) {
              console.error(`[vector_store] ❌ Failed to insert into Chroma: ${error.message}`);
         }

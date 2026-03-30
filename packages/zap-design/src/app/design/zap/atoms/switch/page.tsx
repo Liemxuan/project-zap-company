@@ -142,11 +142,11 @@ export default function SwitchSandbox() {
             <div className="space-y-4">
                 <Wrapper identity={{ displayName: "Switch Structural Settings", type: "Docs Link", filePath: "zap/atoms/switch/page.tsx" }}>
                     <div className="space-y-6">
-                        <h4 className="text-[10px] text-transform-primary font-display font-bold text-muted-foreground tracking-wider uppercase">Sandbox Variables</h4>
+                        <h4 className="text-label-small text-transform-primary font-display font-bold text-muted-foreground tracking-wider uppercase">Sandbox Variables</h4>
 
                         <div className="space-y-4">
                             <div className="space-y-2">
-                                <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-muted-foreground uppercase">
+                                <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-muted-foreground uppercase">
                                     <span>--switch-track-width</span>
                                     <span className="font-bold">{width[0]}px</span>
                                 </div>
@@ -154,7 +154,7 @@ export default function SwitchSandbox() {
                             </div>
 
                             <div className="space-y-2">
-                                <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-muted-foreground uppercase">
+                                <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-muted-foreground uppercase">
                                     <span>--switch-track-height</span>
                                     <span className="font-bold">{height[0]}px</span>
                                 </div>
@@ -162,7 +162,7 @@ export default function SwitchSandbox() {
                             </div>
 
                             <div className="space-y-2">
-                                <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-muted-foreground uppercase">
+                                <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-muted-foreground uppercase">
                                     <span>--switch-thumb-size</span>
                                     <span className="font-bold">{thumbSize[0]}px</span>
                                 </div>
@@ -173,7 +173,7 @@ export default function SwitchSandbox() {
                         <div className="space-y-4 pt-4 border-t border-border/50">
                             {/* Border Width — L1 token selector */}
                             <div className="space-y-1">
-                                <span className="text-[10px] text-muted-foreground flex justify-between">
+                                <span className="text-label-small text-muted-foreground flex justify-between">
                                     <span>Width Override</span>
                                     <span className="font-bold">{previewWidth}</span>
                                 </span>
@@ -188,7 +188,7 @@ export default function SwitchSandbox() {
 
                             {/* Border Radius — L1 token selector */}
                             <div className="space-y-1">
-                                <span className="text-[10px] text-muted-foreground flex justify-between">
+                                <span className="text-label-small text-muted-foreground flex justify-between">
                                     <span>Radius Override</span>
                                     <span className="font-bold">{previewRadius}</span>
                                 </span>
@@ -251,9 +251,22 @@ export default function SwitchSandbox() {
                 className="w-full space-y-12 animate-in fade-in duration-500 pb-16 switch-preview-sandbox"
             >
                 <div className="w-full flex flex-col items-center justify-center p-12 bg-layer-panel shadow-sm border border-outline-variant rounded-[length:var(--card-border-radius,12px)] min-h-[400px]">
-                    <div className="w-full flex items-center justify-center space-x-4">
-                        <Switch id="airplane-mode" />
-                        <Label htmlFor="airplane-mode">Airplane Mode</Label>
+                    <div className="w-full max-w-md bg-layer-dialog border border-outline-variant rounded-[length:var(--card-border-radius,12px)] shadow-xl overflow-hidden flex flex-col">
+                        
+                        <div className="p-6 border-b border-border/40">
+                            <h2 className="text-title-small font-semibold text-transform-primary mb-1">Network Settings</h2>
+                            <p className="text-body-small text-muted-foreground font-body leading-relaxed">
+                                Toggle system connectivity modes.
+                            </p>
+                        </div>
+
+                        <div className="p-6 flex flex-col gap-4">
+                            <div className="flex items-center justify-between">
+                                <Label htmlFor="airplane-mode" className="text-body-small font-medium text-transform-secondary cursor-pointer">Airplane Mode</Label>
+                                <Switch id="airplane-mode" />
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>

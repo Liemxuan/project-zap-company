@@ -142,17 +142,17 @@ export default function DataGridSandbox() {  const [borderRadius, setBorderRadiu
       <div className="space-y-4">
         <Wrapper identity={{ displayName: "DataGrid Structural Settings", type: "Docs Link", filePath: "zap/organisms/data-grid/page.tsx" }}>
           <div className="space-y-6">
-            <h4 className="text-[10px] text-transform-primary font-display font-bold text-muted-foreground tracking-wider">Sandbox Variables</h4>
+            <h4 className="text-label-small text-transform-primary font-display font-bold text-muted-foreground tracking-wider">Sandbox Variables</h4>
             <div className="space-y-4">
               <div className="space-y-2">
-                <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-muted-foreground">
+                <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-muted-foreground">
                   <span>--data-grid-radius</span>
                   <span className="font-bold">{borderRadius[0]}px</span>
                 </div>
                 <Slider value={borderRadius} onValueChange={setBorderRadius} min={0} max={64} step={1} className="w-full" />
               </div>
               <div className="space-y-2">
-                <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-muted-foreground">
+                <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-muted-foreground">
                   <span>--data-grid-border-width</span>
                   <span className="font-bold">{borderWidth[0]}px</span>
                 </div>

@@ -7,7 +7,7 @@ import { mountMemoryRoutes } from "./lib/memory_routes.js";
 // Parse args to know which agent we are booting
 const agentName = process.env.AGENT_NAME || "Generic Agent";
 const agentTokenVar = process.env.AGENT_TOKEN_VAR || "TELEGRAM_BOT_TOKEN_CLAW";
-const agentPort = parseInt(process.env.PORT || "3399", 10);
+const agentPort = parseInt(process.env.PORT || "3999", 10);
 const agentFlavor = process.env.AGENT_FLAVOR || "tier_p3_heavy";
 
 // ── Validate core environment variables (non-Telegram) ────────────────────────
@@ -47,7 +47,7 @@ app.post("/api/inbound", async (req, res) => {
 // Mount Memory v2.1 + Heartbeat + Reflect + Stats
 mountMemoryRoutes(app, { name: agentName.toLowerCase(), role: agentFlavor, port: agentPort });
 
-app.listen(agentPort, () => {
+app.listen(agentPort, "0.0.0.0", () => {
     console.log(`[${agentName.toUpperCase()} SERVER] 🎧 Listener active on port ${agentPort}`);
 });
 

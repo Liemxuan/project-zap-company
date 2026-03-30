@@ -15,24 +15,45 @@
         "width": "border-2",
         "radius": "rounded-lg"
       },
-      "Select": {},
-      "Toggle": {},
+      "Select": {
+        "width": "",
+        "radius": ""
+      },
+      "Toggle": {
+        "radius": "rounded-lg",
+        "width": "border",
+        "bg": "bg-layer-canvas",
+        "itemRadius": "rounded-lg",
+        "itemWidth": "border-2"
+      },
       "Canvas (L1)": {},
-      "Checkbox": {},
+      "Checkbox": {
+        "width": "border",
+        "radius": "rounded-md"
+      },
       "Radio": {
         "width": "border"
       },
       "Input": {
         "width": "border"
       },
-      "Textarea": {},
+      "Textarea": {
+        "width": "border-0",
+        "radius": "rounded-none",
+        "bg": "bg-layer-dialog"
+      },
       "Switch": {
         "width": "border-2",
         "radius": "rounded-lg"
       },
       "Table": {},
-      "Panel (L3)": {}
+      "Panel (L3)": {},
+      "ToggleGroup": {
+        "bgGroup": "bg-layer-panel",
+        "itemRadius": "rounded-md",
+        "itemWidth": "border-8"
+      }
     }
   },
-  "updatedAt": "2026-03-25T22:46:03.360Z"
+  "updatedAt": "2026-03-29T09:55:23.818Z"
 }

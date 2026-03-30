@@ -249,39 +249,55 @@ export async function handleTelegramWebhook(update: any) {
             return;
         }
 
-        // Get or Create Context Bound Session
-        const { getOrCreateSession } = await import("../gateway/session.js");
-        const sessionId = await getOrCreateSession(chatId, user.tenantId as string, threadId);
-        console.log(`[Telegram] 🌐 Bound to Session: ${sessionId}`);
+        // Get or Create Native Mongoose Context Bound Session
+        const { getOrCreateSession, appendMessage } = await import("../runtime/router/session.js");
+        const session = await getOrCreateSession(user.tenantId, "telegram", chatId, threadId);
+        console.log(`[Telegram] 🌐 Bound to Native Session: ${session.sessionId}`);
 
         // Send 'typing' indicator to Telegram so the user knows we are processing
         sendTelegramTypingAction(chatId, threadId);
 
-        const reply = await receiveMessage({
-            channel: "TELEGRAM",
-            senderIdentifier: user.name,
-            tenantId: user.tenantId as any, // Cast for simplicity in this demo
-            payload: text,
-            sessionId: sessionId,
-            threadId: threadId // Pass the subagent context down the pipe
-        } as any);
+        // Append User Message to History
+        await appendMessage(session.sessionId, user.tenantId, "user", text);
 
-        // 4. Send the LLM response back to the user via the dynamic HUD
-        if (reply) {
-            let replyText: string;
-            let omniResponse: OmniResponse | undefined;
+        const { omniQueue, triageJob } = await import("../runtime/engine/omni_queue.js");
 
-            if (typeof reply === "string") {
-                replyText = reply;
-            } else {
-                omniResponse = reply;
-                replyText = reply.text || "";
+        const omniPayload = {
+            systemPrompt: "You are a helpful ZAP Claw assistant.",
+            messages: [
+                ...session.messages.map(m => ({ role: m.role as "user" | "assistant" | "system", content: m.content })),
+                { role: "user" as const, content: text }
+            ],
+            theme: "A_ECONOMIC" as const,
+            intent: "FAST_CHAT" as const
+        };
+
+        const queueName = triageJob(omniPayload);
+        const llmConfig = {
+            apiKey: process.env.GOOGLE_API_KEY || "",
+            defaultModel: "google/gemini-2.0-flash-001",
+            accountLevel: "STANDARD" as const
+        };
+
+        const jobId = await omniQueue.enqueue(
+            queueName,
+            1, // priority
+            user.tenantId,
+            omniPayload,
+            llmConfig,
+            "TELEGRAM",
+            telegramId, // Sender Identifier (Used for user lookup on egress)
+            chatId,     // Target channel reply ID
+            {
+                tenantId: user.tenantId,
+                senderIdentifier: telegramId,
+                sessionId: session.sessionId,
+                assignedAgentId: "default-agent",
+                threadId: threadId
             }
+        );
 
-            const formattedReply = await formatTelegramHUD(user, replyText, omniResponse);
-            sendTelegramMessage(chatId, formattedReply, threadId);
-            console.log(`[Telegram] 📤 Response transmitted to ChatID: ${chatId} | ThreadID: ${threadId || 'N/A'}.`);
-        }
+        console.log(`[Telegram] 🚀 Enqueued Job ${jobId} into ${queueName} for Session: ${session.sessionId}`);
 
     } catch (error) {
         console.error(`[Telegram] 🚨 Database/Gateway Error:`, error);

@@ -64,7 +64,7 @@ Once graded, the Omni Router generates a structured Benchmark Matrix. You (the H
 If Team Beta (Enhanced) scores higher (e.g., 100% boundary wrap vs 60%, or completed via flat logic vs complex ternaries):
 
 1. **Merge:** The Omni Router officially merges Team Beta's PR pipeline.
-2. **B.L.A.S.T. Synchronization (Memory Hook):** The successful test vectors and the new skill instructions are serialized via the B.L.A.S.T. protocol and saved to the `olympus.knowledge_items` MongoDB cluster. If the Swarm ever "forgets" the skill, we can instantly rehydrate its context from the brain.
+2. **B.L.A.S.T. Synchronization (Memory Hook):** The successful test vectors and the new skill instructions are serialized via the B.L.A.S.T. protocol and saved to the `olympus.knowledge_items` MongoDB cluster via the CLI (`mongosh`). If the Swarm ever "forgets" the skill, we can instantly rehydrate its context from the brain.
 
 ## Creating or Updating a Skill (The SOP)
 

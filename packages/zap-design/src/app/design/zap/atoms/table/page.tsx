@@ -139,11 +139,11 @@ const Object_assign = Object.assign;
             <div className="space-y-4">
                 <Wrapper identity={{ displayName: "Table Structural Settings", type: "Docs Link", filePath: "zap/atoms/table/page.tsx" }}>
                     <div className="space-y-6">
-                        <h4 className="text-[10px] text-transform-primary font-display font-bold text-muted-foreground tracking-wider uppercase">Sandbox Variables</h4>
+                        <h4 className="text-label-small text-transform-primary font-display font-bold text-muted-foreground tracking-wider uppercase">Sandbox Variables</h4>
 
                         <div className="space-y-4">
                             <div className="space-y-1">
-                                <span className="text-[10px] text-muted-foreground flex justify-between">
+                                <span className="text-label-small text-muted-foreground flex justify-between">
                                     <span>Width Override</span>
                                     <span className="font-bold">{previewWidth}</span>
                                 </span>
@@ -157,7 +157,7 @@ const Object_assign = Object.assign;
                             </div>
 
                             <div className="space-y-1">
-                                <span className="text-[10px] text-muted-foreground flex justify-between">
+                                <span className="text-label-small text-muted-foreground flex justify-between">
                                     <span>Radius Override</span>
                                     <span className="font-bold">{previewRadius}</span>
                                 </span>
@@ -171,7 +171,7 @@ const Object_assign = Object.assign;
                             </div>
 
                             <div className="space-y-1">
-                                <span className="text-[10px] text-muted-foreground flex justify-between">
+                                <span className="text-label-small text-muted-foreground flex justify-between">
                                     <span>Typography Override</span>
                                     <span className="font-bold whitespace-nowrap overflow-hidden text-ellipsis">{typography !== 'inherit' ? typography : 'Inherit'}</span>
                                 </span>
@@ -179,7 +179,7 @@ const Object_assign = Object.assign;
                             </div>
 
                             <div className="space-y-1">
-                                <span className="text-[10px] text-muted-foreground flex justify-between">
+                                <span className="text-label-small text-muted-foreground flex justify-between">
                                     <span>Text Casing</span>
                                     <span className="font-bold">{textCasing !== 'inherit' ? textCasing : 'Inherit'}</span>
                                 </span>
@@ -276,8 +276,8 @@ const Object_assign = Object.assign;
 
                 {/* Standard Table */}
                 <div className="space-y-2">
-                    <span className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Standard Data Table</span>
-                    <span className="text-[10px] font-dev text-muted-foreground block">
+                    <span className="text-label-small font-semibold text-muted-foreground uppercase tracking-widest">Standard Data Table</span>
+                    <span className="text-label-small font-dev text-muted-foreground block">
                         Composable sub-components: <code>Table</code>, <code>TableHeader</code>, <code>TableBody</code>, <code>TableRow</code>, <code>TableHead</code>, <code>TableCell</code>
                     </span>
                     <Wrapper identity={{ displayName: "Table", type: "Atom", filePath: "genesis/atoms/data-display/table.tsx" }}>
@@ -313,8 +313,8 @@ const Object_assign = Object.assign;
 
                 {/* Minimal Table */}
                 <div className="space-y-2">
-                    <span className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Minimal 2-Column Table</span>
-                    <span className="text-[10px] font-dev text-muted-foreground block">
+                    <span className="text-label-small font-semibold text-muted-foreground uppercase tracking-widest">Minimal 2-Column Table</span>
+                    <span className="text-label-small font-dev text-muted-foreground block">
                         Key-value layout for settings or property display
                     </span>
                     <Wrapper identity={{ displayName: "Table (Minimal)", type: "Atom", filePath: "genesis/atoms/data-display/table.tsx" }}>

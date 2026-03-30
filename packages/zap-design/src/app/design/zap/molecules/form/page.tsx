@@ -45,11 +45,11 @@ export default function FormSandboxPage() {    const [gap, setGap] = useState([8
             <div className="space-y-4">
                 <Wrapper identity={{ displayName: "Form Structural Settings", type: "Docs Link", filePath: "zap/molecules/form/page.tsx" }}>
                     <div className="space-y-6">
-                        <h4 className="text-[10px] text-transform-primary font-display font-bold text-on-surface-variant text-transform-secondary tracking-wider">Sandbox Variables</h4>
+                        <h4 className="text-label-small text-transform-primary font-display font-bold text-on-surface-variant text-transform-secondary tracking-wider">Sandbox Variables</h4>
 
                         <div className="space-y-4">
                             <div className="space-y-2">
-                                <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary">
+                                <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary">
                                     <span>--form-item-gap</span>
                                     <span className="font-bold">{gap[0]}px</span>
                                 </div>

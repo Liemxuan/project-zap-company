@@ -98,7 +98,7 @@ export function AuthUserManagementView({
 
   if (loading) {
     return (
-      <main className="w-full flex items-center justify-center min-h-[length:var(--table-min-height,25rem)] bg-layer-canvas border-outline-variant rounded-[length:var(--radius-card,8px)] border">
+      <main className="w-full flex items-center justify-center min-h-[length:var(--table-min-height,25rem)] bg-layer-cover transition-all duration-300">
         <div className="flex flex-col items-center space-y-4">
           <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full" />
           <Text size="dev-wrapper" className="bg-transparent text-muted-foreground uppercase text-transform-tertiary">Fetching Vault Identities...</Text>
@@ -109,7 +109,7 @@ export function AuthUserManagementView({
 
   if (error) {
     return (
-      <main className="w-full flex items-center justify-center min-h-[length:var(--table-min-height,25rem)] bg-layer-canvas border-outline-variant rounded-[length:var(--radius-card,8px)] border">
+      <main className="w-full flex items-center justify-center min-h-[length:var(--table-min-height,25rem)] bg-layer-cover transition-all duration-300">
         <div className="flex flex-col items-center space-y-4 px-6 text-center">
           <Icon name="error_outline" size={48} className="text-destructive mb-2" />
           <Heading level={4} className="text-foreground">Failed to Load User Vault</Heading>
@@ -122,7 +122,7 @@ export function AuthUserManagementView({
   }
 
   return (
-    <main className="w-full bg-layer-canvas border-outline-variant overflow-hidden border-[length:var(--table-border-width,var(--card-border-width,1px))] rounded-[length:var(--table-border-radius,var(--radius-card,8px))]">
+    <main className="w-full h-full flex flex-col bg-layer-cover overflow-hidden transition-all duration-300">
       <div className="flex h-full flex-col">
         <div className="flex flex-col md:flex-row justify-between items-end md:items-center w-full py-4 px-5 gap-4 border-b border-border bg-layer-panel min-h-[length:var(--table-toolbar-height,4.5rem)]">
           <div className="flex items-center h-8">

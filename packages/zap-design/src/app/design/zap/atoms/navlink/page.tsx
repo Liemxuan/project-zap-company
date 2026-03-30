@@ -38,8 +38,8 @@ export default function NavLinkSandboxPage() {
 
                 {/* Active vs Ghost States */}
                 <div className="space-y-2">
-                    <span className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Active vs Ghost States</span>
-                    <span className="text-[10px] font-dev text-muted-foreground block">
+                    <span className="text-label-small font-semibold text-muted-foreground uppercase tracking-widest">Active vs Ghost States</span>
+                    <span className="text-label-small font-dev text-muted-foreground block">
                         First item active, rest ghost · <code>isActive</code> prop
                     </span>
                     <Wrapper identity={{ displayName: "NavLink", type: "Atom", filePath: "genesis/atoms/interactive/NavLink.tsx" }}>
@@ -61,8 +61,8 @@ export default function NavLinkSandboxPage() {
 
                 {/* All Active */}
                 <div className="space-y-2">
-                    <span className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">All Active State</span>
-                    <span className="text-[10px] font-dev text-muted-foreground block">
+                    <span className="text-label-small font-semibold text-muted-foreground uppercase tracking-widest">All Active State</span>
+                    <span className="text-label-small font-dev text-muted-foreground block">
                         Shows how multiple active links would render
                     </span>
                     <Wrapper identity={{ displayName: "NavLink (All Active)", type: "Atom", filePath: "genesis/atoms/interactive/NavLink.tsx" }}>

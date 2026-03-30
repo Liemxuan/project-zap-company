@@ -30,8 +30,8 @@ export default function LiveBlinkerSandboxPage() {
 
                 {/* Default */}
                 <div className="space-y-2">
-                    <span className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Default Live Blinker</span>
-                    <span className="text-[10px] font-dev text-muted-foreground block">
+                    <span className="text-label-small font-semibold text-muted-foreground uppercase tracking-widest">Default Live Blinker</span>
+                    <span className="text-label-small font-dev text-muted-foreground block">
                         Animated red dot with &quot;LIVE&quot; label
                     </span>
                     <Wrapper identity={{ displayName: "LiveBlinker", type: "Atom", filePath: "genesis/atoms/indicators/LiveBlinker.tsx" }}>
@@ -43,13 +43,13 @@ export default function LiveBlinkerSandboxPage() {
 
                 {/* In Context */}
                 <div className="space-y-2">
-                    <span className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">In Header Context</span>
-                    <span className="text-[10px] font-dev text-muted-foreground block">
+                    <span className="text-label-small font-semibold text-muted-foreground uppercase tracking-widest">In Header Context</span>
+                    <span className="text-label-small font-dev text-muted-foreground block">
                         LiveBlinker alongside a title, mimicking a streaming header
                     </span>
                     <Wrapper identity={{ displayName: "LiveBlinker (Header)", type: "Atom", filePath: "genesis/atoms/indicators/LiveBlinker.tsx" }}>
                         <div className="bg-layer-panel border border-card-border rounded-lg p-6 flex items-center justify-between w-full">
-                            <h3 className="text-sm font-display font-bold text-foreground tracking-wide uppercase">Real-time Dashboard</h3>
+                            <h3 className="text-body-small font-display font-bold text-foreground tracking-wide uppercase">Real-time Dashboard</h3>
                             <LiveBlinker />
                         </div>
                     </Wrapper>
@@ -57,19 +57,19 @@ export default function LiveBlinkerSandboxPage() {
 
                 {/* Icon Only */}
                 <div className="space-y-2">
-                    <span className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Icon Only</span>
-                    <span className="text-[10px] font-dev text-muted-foreground block">
+                    <span className="text-label-small font-semibold text-muted-foreground uppercase tracking-widest">Icon Only</span>
+                    <span className="text-label-small font-dev text-muted-foreground block">
                         Color variations for the Live Blinker without text
                     </span>
                     <Wrapper identity={{ displayName: "LiveBlinker (Icon Only)", type: "Atom", filePath: "genesis/atoms/indicators/LiveBlinker.tsx" }}>
                         <div className="bg-layer-panel border border-card-border rounded-lg p-6 flex items-center gap-6">
                             <div className="flex flex-col items-center gap-2">
                                 <LiveBlinker iconOnly color="red" />
-                                <span className="text-[10px] font-dev text-muted-foreground">Red</span>
+                                <span className="text-label-small font-dev text-muted-foreground">Red</span>
                             </div>
                             <div className="flex flex-col items-center gap-2">
                                 <LiveBlinker iconOnly color="green" />
-                                <span className="text-[10px] font-dev text-muted-foreground">Green</span>
+                                <span className="text-label-small font-dev text-muted-foreground">Green</span>
                             </div>
                         </div>
                     </Wrapper>

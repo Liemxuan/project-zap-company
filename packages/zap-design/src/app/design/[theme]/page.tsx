@@ -71,9 +71,9 @@ export default function ThemeHomePage() {
                                             <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
                                                 <Icon name={page.icon} size={20} className="text-primary" />
                                             </div>
-                                            <div>
-                                                <p className="text-sm font-bold text-foreground">{page.label}</p>
-                                                <p className="text-[10px] font-dev text-transform-tertiary text-muted-foreground">
+                                            <div className="min-w-0 flex-1">
+                                                <p className="text-sm font-bold text-foreground truncate">{page.label}</p>
+                                                <p className="text-[10px] font-dev text-transform-tertiary text-muted-foreground truncate">
                                                     /design/{themeId}/{page.id}
                                                 </p>
                                             </div>

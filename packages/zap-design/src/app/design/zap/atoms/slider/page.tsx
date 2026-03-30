@@ -22,11 +22,11 @@ export default function SliderSandbox() {
             <div className="space-y-4">
                 <Wrapper identity={{ displayName: "Slider Structural Settings", type: "Docs Link", filePath: "zap/atoms/slider/page.tsx" }}>
                     <div className="space-y-6">
-                        <h4 className="text-[10px] text-transform-primary font-display font-bold text-muted-foreground tracking-wider uppercase">Sandbox Variables</h4>
+                        <h4 className="text-label-small text-transform-primary font-display font-bold text-muted-foreground tracking-wider uppercase">Sandbox Variables</h4>
 
                         <div className="space-y-4">
                             <div className="space-y-2">
-                                <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-muted-foreground uppercase">
+                                <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-muted-foreground uppercase">
                                     <span>--slider-track-thickness</span>
                                     <span className="font-bold">{thickness[0]}px</span>
                                 </div>
@@ -34,7 +34,7 @@ export default function SliderSandbox() {
                             </div>
 
                             <div className="space-y-2">
-                                <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-muted-foreground uppercase">
+                                <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-muted-foreground uppercase">
                                     <span>--slider-thumb-size</span>
                                     <span className="font-bold">{thumbSize[0]}px</span>
                                 </div>
@@ -83,48 +83,57 @@ export default function SliderSandbox() {
             <div
                 className="w-full space-y-12 animate-in fade-in duration-500 pb-16 slider-preview-sandbox"
             >
-                {/* ── Basic Slider ───────────────────────────────── */}
-                <div className="w-full flex flex-col items-center justify-center p-12 bg-layer-panel shadow-sm border border-outline-variant rounded-[length:var(--card-border-radius,12px)] min-h-[200px]">
-                    <h3 className="text-xs font-display font-bold text-muted-foreground uppercase tracking-widest mb-8">Basic</h3>
-                    <div className="w-full max-w-sm flex items-center justify-center">
-                        <Slider
-                            value={sliderValue}
-                            onValueChange={setSliderValue}
-                            max={100}
-                            step={1}
-                            className="w-full"
-                        />
-                    </div>
-                </div>
+                <div className="w-full flex flex-col items-center justify-center p-12 bg-layer-panel shadow-sm border border-outline-variant rounded-[length:var(--card-border-radius,12px)] min-h-[400px]">
+                    <div className="w-full max-w-md bg-layer-dialog border border-outline-variant rounded-[length:var(--card-border-radius,12px)] shadow-xl overflow-hidden flex flex-col">
+                        
+                        <div className="p-6 border-b border-border/40">
+                            <h2 className="text-title-small font-semibold text-transform-primary mb-1">Audio & Display</h2>
+                            <p className="text-body-small text-muted-foreground font-body leading-relaxed">
+                                Adjust your system preferences using dynamic atomic sliders.
+                            </p>
+                        </div>
 
-                {/* ── Labeled Slider with Value Badge ─────────────── */}
-                <div className="w-full flex flex-col items-center justify-center p-12 bg-layer-panel shadow-sm border border-outline-variant rounded-[length:var(--card-border-radius,12px)] min-h-[200px]">
-                    <h3 className="text-xs font-display font-bold text-muted-foreground uppercase tracking-widest mb-8">Labeled + Value</h3>
-                    <div className="w-full max-w-sm">
-                        <Slider
-                            label="VOLUME"
-                            showValue
-                            value={sliderValue}
-                            onValueChange={setSliderValue}
-                            max={100}
-                            step={1}
-                        />
-                    </div>
-                </div>
+                        <div className="p-6 flex flex-col gap-10">
+                            {/* ── Basic Slider ───────────────────────────────── */}
+                            <div className="space-y-4">
+                                <h3 className="text-label-small font-display font-bold text-muted-foreground uppercase tracking-widest">Brightness</h3>
+                                <Slider
+                                    value={sliderValue}
+                                    onValueChange={setSliderValue}
+                                    max={100}
+                                    step={1}
+                                    className="w-full"
+                                />
+                            </div>
 
-                {/* ── Labeled Slider with Steps + Info ────────────── */}
-                <div className="w-full flex flex-col items-center justify-center p-12 bg-layer-panel shadow-sm border border-outline-variant rounded-[length:var(--card-border-radius,12px)] min-h-[200px]">
-                    <h3 className="text-xs font-display font-bold text-muted-foreground uppercase tracking-widest mb-8">Steps + Info</h3>
-                    <div className="w-full max-w-sm">
-                        <Slider
-                            label="OPACITY"
-                            showValue
-                            showSteps
-                            defaultValue={[75]}
-                            max={100}
-                            step={25}
-                            info="Discrete steps: 0, 25, 50, 75, 100. Useful for selecting fixed tiers."
-                        />
+                            {/* ── Labeled Slider with Value Badge ─────────────── */}
+                            <div className="space-y-4">
+                                <h3 className="text-label-small font-display font-bold text-muted-foreground uppercase tracking-widest">Volume Output</h3>
+                                <Slider
+                                    label="VOLUME"
+                                    showValue
+                                    value={sliderValue}
+                                    onValueChange={setSliderValue}
+                                    max={100}
+                                    step={1}
+                                />
+                            </div>
+
+                            {/* ── Labeled Slider with Steps + Info ────────────── */}
+                            <div className="space-y-4">
+                                <h3 className="text-label-small font-display font-bold text-muted-foreground uppercase tracking-widest">System Opacity</h3>
+                                <Slider
+                                    label="OPACITY"
+                                    showValue
+                                    showSteps
+                                    defaultValue={[75]}
+                                    max={100}
+                                    step={25}
+                                    info="Discrete steps: 0, 25, 50, 75, 100."
+                                />
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>

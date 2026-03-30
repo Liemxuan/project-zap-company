@@ -3,6 +3,9 @@
 import React, { useState } from 'react';
 import { Button } from '../../../genesis/atoms/interactive/button';
 import { Input } from '../../../genesis/atoms/interactive/inputs';
+import { Heading } from '../../../genesis/atoms/typography/headings';
+import { Text } from '../../../genesis/atoms/typography/text';
+import { Label } from '../../../genesis/atoms/typography/label';
 
 export default function TenantOnboardingPage() {
   const [tenantName, setTenantName] = useState('');
@@ -37,16 +40,16 @@ export default function TenantOnboardingPage() {
   return (
     <div className="flex items-center justify-center min-h-[80vh] bg-[var(--md-sys-color-surface)]">
       <div className="w-full max-w-lg p-8 rounded-xl shadow-sm border border-[var(--md-sys-color-outline-variant)] bg-[var(--md-sys-color-surface-container-low)]">
-        <h1 className="text-3xl font-bold mb-2 text-[var(--md-sys-color-on-surface)] text-center">
+        <Heading level={1} className="mb-2 text-[var(--md-sys-color-on-surface)] text-center">
           Tenant Onboarding
-        </h1>
-        <p className="text-sm text-center text-[var(--md-sys-color-on-surface-variant)] mb-8">
+        </Heading>
+        <Text size="body-small" className="text-center text-[var(--md-sys-color-on-surface-variant)] mb-8">
           Provision a new enterprise workspace entity into the ZAP-OS B2B ecosystem.
-        </p>
+        </Text>
 
         <form onSubmit={handleOnboard} className="space-y-6">
           <div className="space-y-2">
-            <label className="text-sm font-medium text-[var(--md-sys-color-on-surface)]">Tenant (Business) Name</label>
+            <Label className="text-[var(--md-sys-color-on-surface)]">Tenant (Business) Name</Label>
             <Input 
               value={tenantName} 
               onChange={(e) => setTenantName(e.target.value)} 
@@ -57,7 +60,7 @@ export default function TenantOnboardingPage() {
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-medium text-[var(--md-sys-color-on-surface)]">Administrator Email</label>
+            <Label className="text-[var(--md-sys-color-on-surface)]">Administrator Email</Label>
             <Input 
               type="email" 
               value={email} 
@@ -69,12 +72,12 @@ export default function TenantOnboardingPage() {
           </div>
           
           <div className="space-y-2">
-             <label className="text-sm font-medium text-[var(--md-sys-color-on-surface)]">B2B Sector</label>
+             <Label className="text-[var(--md-sys-color-on-surface)]">B2B Sector</Label>
              <select 
                title="B2B Sector"
                value={sector}
                onChange={(e) => setSector(e.target.value)}
-               className="flex h-10 w-full rounded-md border border-[var(--md-sys-color-outline)] bg-[var(--md-sys-color-surface)] px-3 py-2 text-sm text-[var(--md-sys-color-on-surface)] focus:outline-none focus:ring-2 focus:ring-[var(--md-sys-color-primary)] focus:border-transparent"
+               className="flex h-10 w-full rounded-md border border-[var(--md-sys-color-outline)] bg-[var(--md-sys-color-surface)] px-3 py-2 text-[length:var(--type-label-large-desktop,14px)] text-[var(--md-sys-color-on-surface)] focus:outline-none focus:ring-2 focus:ring-[var(--md-sys-color-primary)] focus:border-transparent"
              >
                 <option value="Hospitality">Hospitality</option>
                 <option value="F&B">Food & Beverage (F&B)</option>
@@ -93,9 +96,9 @@ export default function TenantOnboardingPage() {
             {isSubmitting ? 'Provisioning Environment...' : 'Provision Tenant Namespace'}
           </Button>
 
-          <p className="text-xs text-center text-[var(--md-sys-color-on-surface-variant)] mt-4">
+          <Text size="label-small" className="text-center text-[var(--md-sys-color-on-surface-variant)] mt-4">
             * All provisions are metered strictly in absolute UTC.
-          </p>
+          </Text>
         </form>
       </div>
     </div>

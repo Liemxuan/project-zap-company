@@ -17,11 +17,11 @@ export default function BreadcrumbsSandboxPage() {    const [gap, setGap] = useS
             <div className="space-y-4">
                 <Wrapper identity={{ displayName: "Breadcrumbs Structural Settings", type: "Docs Link", filePath: "zap/molecules/breadcrumb/page.tsx" }}>
                     <div className="space-y-6">
-                        <h4 className="text-[10px] text-transform-primary font-display font-bold text-on-surface-variant text-transform-secondary tracking-wider">Sandbox Variables</h4>
+                        <h4 className="text-label-small text-transform-primary font-display font-bold text-on-surface-variant text-transform-secondary tracking-wider">Sandbox Variables</h4>
 
                         <div className="space-y-4">
                             <div className="space-y-2">
-                                <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary">
+                                <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary">
                                     <span>--breadcrumb-gap</span>
                                     <span className="font-bold">{gap[0]}px</span>
                                 </div>
@@ -29,7 +29,7 @@ export default function BreadcrumbsSandboxPage() {    const [gap, setGap] = useS
                             </div>
 
                             <div className="space-y-2">
-                                <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary">
+                                <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary">
                                     <span>--breadcrumb-icon-size</span>
                                     <span className="font-bold">{iconSize[0]}px</span>
                                 </div>
@@ -37,7 +37,7 @@ export default function BreadcrumbsSandboxPage() {    const [gap, setGap] = useS
                             </div>
 
                             <div className="space-y-2">
-                                <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary">
+                                <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary">
                                     <span>--breadcrumb-padding</span>
                                     <span className="font-bold">{padding[0]}px</span>
                                 </div>

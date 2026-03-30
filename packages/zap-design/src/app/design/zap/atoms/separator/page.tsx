@@ -21,11 +21,11 @@ export default function SeparatorSandbox() {
             <div className="space-y-4">
                 <Wrapper identity={{ displayName: "Separator Structural Settings", type: "Docs Link", filePath: "zap/atoms/separator/page.tsx" }}>
                     <div className="space-y-6">
-                        <h4 className="text-[10px] text-transform-primary font-display font-bold text-muted-foreground tracking-wider uppercase">Sandbox Variables</h4>
+                        <h4 className="text-label-small text-transform-primary font-display font-bold text-muted-foreground tracking-wider uppercase">Sandbox Variables</h4>
 
                         <div className="space-y-4">
                             <div className="space-y-2">
-                                <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-muted-foreground uppercase">
+                                <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-muted-foreground uppercase">
                                     <span>--separator-thickness</span>
                                     <span className="font-bold">{thickness[0]}px</span>
                                 </div>
@@ -33,7 +33,7 @@ export default function SeparatorSandbox() {
                             </div>
 
                             <div className="space-y-2">
-                                <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-muted-foreground uppercase">
+                                <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-muted-foreground uppercase">
                                     <span>--separator-width</span>
                                     <span className="font-bold">{width[0]}%</span>
                                 </div>
@@ -76,20 +76,51 @@ export default function SeparatorSandbox() {
                 className="w-full space-y-12 animate-in fade-in duration-500 pb-16 separator-preview-sandbox"
             >
                 <div className="w-full flex flex-col items-center justify-center p-12 bg-layer-panel shadow-sm border border-outline-variant rounded-[length:var(--card-border-radius,12px)] min-h-[400px]">
-                    <div className="w-full max-w-sm flex items-center justify-center">
-                       <div className="flex flex-col gap-8 w-full items-center">
-                            <div className="text-sm">Content Above</div>
-                            
+                    <div className="w-full max-w-md bg-layer-dialog border border-outline-variant rounded-[length:var(--card-border-radius,12px)] shadow-xl overflow-hidden flex flex-col">
+                        
+                        <div className="p-6">
+                            <h2 className="text-title-small font-semibold text-transform-primary mb-1">ZAP Separator Atom</h2>
+                            <p className="text-body-small text-muted-foreground font-body leading-relaxed">
+                                Separators dynamically split UI content blocks. The sliders in the Inspector control the thickness and width of the dividing line below.
+                            </p>
+                        </div>
+
+                        {/* Horizontal Sandbox Separator */}
+                        <Separator 
+                            orientation="horizontal"
+                            style={Object.assign({}, {
+                                height: 'var(--separator-thickness)',
+                                width: 'var(--separator-width)',
+                                margin: '0 auto'
+                            })}
+                        />
+
+                        <div className="p-6 flex items-center justify-center gap-6 h-20 text-body-small font-medium text-on-surface-variant font-display bg-layer-surface/50">
+                            <span className="hover:text-primary cursor-pointer transition-colors">Tokens</span>
+
+                            {/* Vertical Sandbox Separator */}
                             <Separator 
-                                orientation="horizontal"
+                                orientation="vertical"
+                                className="h-full"
                                 style={Object.assign({}, {
-                                    height: 'var(--separator-thickness)',
-                                    width: 'var(--separator-width)'
+                                    width: 'var(--separator-thickness)'
                                 })}
                             />
-                            
-                            <div className="text-sm text-muted-foreground">Content Below</div>
-                       </div>
+
+                            <span className="hover:text-primary cursor-pointer transition-colors">Layouts</span>
+
+                            {/* Vertical Sandbox Separator */}
+                            <Separator 
+                                orientation="vertical"
+                                className="h-full"
+                                style={Object.assign({}, {
+                                    width: 'var(--separator-thickness)'
+                                })}
+                            />
+
+                            <span className="hover:text-primary cursor-pointer transition-colors">Components</span>
+                        </div>
+
                     </div>
                 </div>
             </div>

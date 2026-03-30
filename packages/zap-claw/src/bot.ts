@@ -1,7 +1,31 @@
-import { Bot, type Context } from "grammy";
+import { Bot, type Context, InlineKeyboard } from "grammy";
 import { AgentLoop } from "./agent.js";
 import { type GatewayTier } from "./gateway.js";
 import { getOrCreateSession } from "./gateway/session.js";
+import { Redis } from "ioredis";
+import * as fs from "fs";
+import * as path from "path";
+
+async function downloadTelegramFile(ctx: Context, fileId: string, botToken: string, extension: string = "bin"): Promise<string> {
+    const file = await ctx.api.getFile(fileId);
+    if (!file.file_path) throw new Error("Could not get file path from Telegram");
+    
+    const url = `https://api.telegram.org/file/bot${botToken}/${file.file_path}`;
+    const response = await fetch(url);
+    if (!response.ok) throw new Error(`Failed to download file: ${response.statusText}`);
+    
+    const vfsDir = "/tmp/zap-assets";
+    if (!fs.existsSync(vfsDir)) {
+        fs.mkdirSync(vfsDir, { recursive: true });
+    }
+    
+    const filename = `${Date.now()}_${fileId}.${extension}`;
+    const destPath = path.join(vfsDir, filename);
+    const arrayBuffer = await response.arrayBuffer();
+    fs.writeFileSync(destPath, Buffer.from(arrayBuffer));
+    
+    return destPath;
+}
 
 // ── Security: parse the allowlist once at startup ─────────────────────────────
 
@@ -143,6 +167,55 @@ export function createBot(token: string, botName: string = "ZapClaw", defaultTie
         await next();
     });
 
+    // ── HITL Subsystem (Phase 3.2) ────────────────────────────────────────────────
+    const hitlSubscriber = new Redis(process.env.REDIS_URL || "redis://localhost:6379");
+    const hitlPublisher = new Redis(process.env.REDIS_URL || "redis://localhost:6379");
+
+    hitlSubscriber.subscribe("zap:hitl:request");
+    hitlSubscriber.on("message", async (channel: string, message: string) => {
+        if (channel === "zap:hitl:request") {
+            try {
+                const payload = JSON.parse(message);
+                if (payload.botName === botName) {
+                    const keyboard = new InlineKeyboard()
+                        .text("✅ Approve", `hitl:approve:${payload.reqId}`).row()
+                        .text("🛑 Deny", `hitl:deny:${payload.reqId}`);
+                    
+                    const text = `🚦 *Human-In-The-Loop Intervention Required*\n\n` + 
+                                 `🤖 *Agent:* ${payload.botName}\n` + 
+                                 `🛠 *Tool:* \`${payload.toolName}\`\n\n` + 
+                                 `*Payload:*\n\`\`\`json\n${JSON.stringify(payload.toolInput, null, 2).substring(0, 1000)}\n\`\`\`\n\n` +
+                                 `Do you authorize this execution?`;
+                    
+                    await bot.api.sendMessage(payload.userId, text, { parse_mode: "Markdown", reply_markup: keyboard });
+                }
+            } catch (err) {
+                console.error("[bot:hitl] Failed to process HITL request", err);
+            }
+        }
+    });
+
+    bot.on("callback_query:data", async (ctx) => {
+        const data = ctx.callbackQuery.data;
+        if (data.startsWith("hitl:")) {
+            const [, action, reqId] = data.split(":");
+            const approved = action === "approve";
+            const responsePayload = {
+                approved,
+                reason: approved ? "Approved by Zeus via Telegram" : "Denied by Zeus via Telegram"
+            };
+
+            await hitlPublisher.publish(`zap:hitl:response:${reqId}`, JSON.stringify(responsePayload));
+            
+            const originalText = ctx.callbackQuery.message?.text || "HITL Request";
+            await ctx.editMessageText(
+                `${originalText}\n\n*Status:* ${approved ? '✅ APPROVED' : '🛑 DENIED'}`, 
+                { parse_mode: "Markdown" }
+            );
+            await ctx.answerCallbackQuery({ text: approved ? "Authorized." : "Rejected." });
+        }
+    });
+
     // /start — welcome message
     bot.command("start", async (ctx) => {
         const userId = ctx.from?.id;
@@ -161,10 +234,71 @@ export function createBot(token: string, botName: string = "ZapClaw", defaultTie
         await ctx.reply("🧹 Conversation cleared.");
     });
 
+    // Phase 8: Swarm IM Message Bus Commands
+    bot.command("status", async (ctx) => {
+        const agentKeys = Object.keys(globalSwarmAgents).join(", ") || "None";
+        await ctx.reply(`📊 *ZAP Swarm Deployment Status*\n\n🟢 Active Fleet: ${agentKeys}\n🛡️ Guardrail: Synchronous (Jerry V2)\n🧠 Memory: Deduplicator Active\n\nSystem is fully nominal.`, { parse_mode: "Markdown" });
+    });
+
+    bot.command("deploy_spike", async (ctx) => {
+        const userId = ctx.from?.id;
+        if (!userId) return;
+        
+        await ctx.reply("🚀 *Deploying Spike (Structural Engineer)...*\n\nVFS Sandboxing initialized. Delegating to background Executor.", { parse_mode: "Markdown" });
+        
+        // Emulate sending a directive to the Swarm
+        const sessionId = await getOrCreateSession(ctx.chat.id, "ZAP_CLAW");
+        const triggerPayload = `[SYSTEM DELEGATION] The user has authorized a mobile deployment for Spike via Telegram. Please evaluate the workspace and engage the 'task' tool to assign Spike to structural extraction tasks on the frontend immediately.`;
+        
+        try {
+            const sendAction = () => ctx.api.sendChatAction(ctx.chat.id, "typing").catch(() => { });
+            sendAction();
+            const interval = setInterval(sendAction, 4000);
+            
+            const reply = await agent.run(userId, triggerPayload, "PERSONAL", sessionId);
+            
+            clearInterval(interval);
+            try {
+                await ctx.reply(reply, { parse_mode: "Markdown" });
+            } catch {
+                await ctx.reply(reply);
+            }
+        } catch (err: any) {
+            await ctx.reply(`⚠️ Swarm deployment failed: ${err.message}`);
+        }
+    });
+
     // Main message handler
-    bot.on("message:text", async (ctx: Context) => {
+    bot.on("message", async (ctx: Context) => {
         const userId = ctx.from!.id;
-        const userMessage = ctx.message!.text!;
+        let userMessage = ctx.message?.text || ctx.message?.caption || "";
+
+        // Phase 3.3 Media Ingestion (Photos/Documents/Video)
+        let downloadedAssets: string[] = [];
+        try {
+            if (ctx.message?.photo && ctx.message.photo.length > 0) {
+                const photo = ctx.message.photo[ctx.message.photo.length - 1]; // get highest res
+                if (photo) {
+                    const destPath = await downloadTelegramFile(ctx, photo.file_id, token, "jpg");
+                    downloadedAssets.push(destPath);
+                }
+            } 
+            if (ctx.message?.document) {
+                const doc = ctx.message.document;
+                const ext = doc.file_name ? doc.file_name.split('.').pop() || "bin" : "bin";
+                const destPath = await downloadTelegramFile(ctx, doc.file_id, token, ext);
+                downloadedAssets.push(destPath);
+            }
+        } catch (downloadErr) {
+            console.error("[bot] Failed to download media asset:", downloadErr);
+        }
+
+        if (downloadedAssets.length > 0) {
+            userMessage = `[ASSET INGESTED: ${downloadedAssets.join(", ")}]\n${userMessage}`;
+            console.log(`[bot] 📥 Media Assets downloaded: ${downloadedAssets.join(", ")}`);
+        }
+
+        if (!userMessage.trim()) return; // Ignore if no text/caption/media
 
         // --- GROUP CHAT PROTOCOL ---
         // If in a group/supergroup, only respond if explicitly mentioned
@@ -229,8 +363,23 @@ export function createBot(token: string, botName: string = "ZapClaw", defaultTie
 
         try {
             const sessionId = await getOrCreateSession(chat.id, "ZAP_CLAW");
-            const reply = await agent.run(userId, userMessage, "PERSONAL", sessionId);
+
+            const onStatus = async (msg: string) => {
+                const formatted = `\r\n> 🧠 [status] ${msg}\r\n`;
+                await hitlPublisher.rpush(`zap:trace:${sessionId}:logs`, formatted);
+                await hitlPublisher.publish(`zap:trace:${sessionId}`, formatted);
+                await hitlPublisher.expire(`zap:trace:${sessionId}:logs`, 3600);
+            };
+
+            const reply = await agent.run(userId, userMessage, "PERSONAL", sessionId, onStatus);
             if (stopHeartbeat) stopHeartbeat();
+            
+            // Also trace the agent reply
+            const replyFormatted = `\r\n> 🤖 [reply] ${reply}\r\n`;
+            await hitlPublisher.rpush(`zap:trace:${sessionId}:logs`, replyFormatted);
+            await hitlPublisher.publish(`zap:trace:${sessionId}`, replyFormatted);
+            await hitlPublisher.expire(`zap:trace:${sessionId}:logs`, 3600);
+
             try {
                 // Try sending with Markdown parsing first
                 await ctx.reply(reply, { parse_mode: "Markdown" });

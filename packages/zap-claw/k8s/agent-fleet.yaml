@@ -27,7 +27,7 @@ spec:
           imagePullPolicy: IfNotPresent
           command: ["npm", "run", "gateway"]
           ports:
-            - containerPort: 3001
+            - containerPort: 3900
           envFrom:
             - secretRef:
                 name: zap-claw-secrets
@@ -42,8 +42,8 @@ spec:
     app: zap-claw-gateway
   ports:
     - protocol: TCP
-      port: 3001
-      targetPort: 3001
+      port: 3900
+      targetPort: 3900
   type: ClusterIP
 
 ---
@@ -92,7 +92,7 @@ spec:
 
 ---
 # ==========================================
-# JERRY (Orchestrator - Port 3300)
+# JERRY (Orchestrator - Port 3901)
 # ==========================================
 apiVersion: apps/v1
 kind: Deployment
@@ -111,11 +111,11 @@ spec:
     spec:
       containers:
         - name: jerry
-          image: zap-claw:latest
+          image: vefaas-public/all-in-one-sandbox:latest
           imagePullPolicy: IfNotPresent
           command: ["npm", "run", "jerry"]
           ports:
-            - containerPort: 3300
+            - containerPort: 3901
           envFrom:
             - secretRef:
                 name: zap-claw-secrets
@@ -130,13 +130,13 @@ spec:
     app: zap-claw-jerry
   ports:
     - protocol: TCP
-      port: 3300
-      targetPort: 3300
+      port: 3901
+      targetPort: 3901
   type: ClusterIP
 
 ---
 # ==========================================
-# SPIKE (Structural Builder - Port 3301)
+# SPIKE (Structural Builder - Port 3902)
 # ==========================================
 apiVersion: apps/v1
 kind: Deployment
@@ -156,11 +156,11 @@ spec:
     spec:
       containers:
         - name: spike
-          image: zap-claw:latest
+          image: vefaas-public/all-in-one-sandbox:latest
           imagePullPolicy: IfNotPresent
           command: ["pnpm", "run", "spike"]
           ports:
-            - containerPort: 3301
+            - containerPort: 3902
           envFrom:
             - secretRef:
                 name: zap-claw-secrets
@@ -175,6 +175,6 @@ spec:
     app: zap-claw-spike
   ports:
     - protocol: TCP
-      port: 3301
-      targetPort: 3301
+      port: 3902
+      targetPort: 3902
   type: ClusterIP

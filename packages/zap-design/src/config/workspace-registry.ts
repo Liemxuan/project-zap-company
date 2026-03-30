@@ -150,11 +150,23 @@ export const WORKSPACE_REGISTRY: WorkspaceEntry[] = [
 
   // ── AGENT (:3500–3900) ────────────────────────────────────
   {
+    id: 'zap-swarm',
+    name: 'ZAP Swarm Command',
+    domain: 'AGENT',
+    sub: 'WORKSPACE',
+    port: 3500,
+    folder: 'apps/zap-swarm',
+    healthEndpoint: '/',
+    description: 'Standalone Swarm Command Center (DeerFlow UI)',
+    icon: 'smart_toy',
+    tags: ['swarm', 'command', 'agent', 'deerflow'],
+  },
+  {
     id: 'merchant-hub',
     name: 'Merchant Hub',
     domain: 'AGENT',
     sub: 'WORKSPACE',
-    port: 3500,
+    port: 3501,
     folder: 'apps/merchant',
     healthEndpoint: '/',
     description: 'Merchant Digital Workspace for Swarm Operations',
@@ -268,7 +280,7 @@ export const WORKSPACE_REGISTRY: WorkspaceEntry[] = [
   // ── HUMAN (:4700) ─────────────────────────────────────────
   {
     id: 'zap-auth',
-    name: 'ZAP-Auth',
+    name: 'ZAP Auth Vault',
     domain: 'HUMAN',
     sub: 'AUTH',
     port: 4700,

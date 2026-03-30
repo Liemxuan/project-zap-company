@@ -18,11 +18,11 @@ export default function AvatarSandboxPage() {
             <div className="space-y-4">
                 <Wrapper identity={{ displayName: "Avatar Structural Settings", type: "Docs Link", filePath: "zap/atoms/avatar/page.tsx" }}>
                     <div className="space-y-6">
-                        <h4 className="text-[10px] text-transform-primary font-display font-bold text-muted-foreground tracking-wider uppercase">Sandbox Variables</h4>
+                        <h4 className="text-label-small text-transform-primary font-display font-bold text-muted-foreground tracking-wider uppercase">Sandbox Variables</h4>
 
                         <div className="space-y-4">
                             <div className="space-y-2">
-                                <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-muted-foreground uppercase">
+                                <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-muted-foreground uppercase">
                                     <span>--avatar-height</span>
                                     <span className="font-bold">{height[0]}px</span>
                                 </div>
@@ -30,7 +30,7 @@ export default function AvatarSandboxPage() {
                             </div>
 
                             <div className="space-y-2">
-                                <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-muted-foreground uppercase">
+                                <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-muted-foreground uppercase">
                                     <span>--avatar-border-width</span>
                                     <span className="font-bold">{borderWidth[0]}px</span>
                                 </div>
@@ -38,7 +38,7 @@ export default function AvatarSandboxPage() {
                             </div>
 
                             <div className="space-y-2">
-                                <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-muted-foreground uppercase">
+                                <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-muted-foreground uppercase">
                                     <span>--avatar-border-radius</span>
                                     <span className="font-bold">{borderRadius[0]}px</span>
                                 </div>
@@ -98,8 +98,8 @@ export default function AvatarSandboxPage() {
                 <div className="p-12 bg-layer-panel shadow-sm border-[length:var(--card-border-width)] border-outline-variant rounded-[length:var(--card-radius)] flex flex-col items-center justify-center gap-12 text-on-surface w-full">
                    
                    <div className="text-center space-y-2">
-                       <span className="font-display font-medium text-lg text-transform-primary">Avatar Sandbox Mounted (M3 Token Verification)</span>
-                       <p className="text-xs font-mono opacity-80 max-w-lg mx-auto leading-relaxed">Dynamically mapped to CSS Properties (Border: {borderWidth[0]}px, Radius: {borderRadius[0]}px)</p>
+                       <span className="font-display font-medium text-title-small text-transform-primary">Avatar Sandbox Mounted (M3 Token Verification)</span>
+                       <p className="text-label-small font-mono opacity-80 max-w-lg mx-auto leading-relaxed">Dynamically mapped to CSS Properties (Border: {borderWidth[0]}px, Radius: {borderRadius[0]}px)</p>
                    </div>
 
                    <div className="grid grid-cols-1 md:grid-cols-4 gap-8 w-full max-w-4xl mx-auto">
@@ -111,8 +111,8 @@ export default function AvatarSandboxPage() {
                                </Avatar>
                            </div>
                            <div className="flex flex-col items-center gap-2 text-center">
-                               <span className="text-xs font-bold text-transform-secondary uppercase tracking-widest text-muted-foreground">Small (75%)</span>
-                               <code className="text-[10px] bg-layer-canvas px-2 py-1 rounded border border-border/50 text-transform-tertiary">
+                               <span className="text-label-small font-bold text-transform-secondary uppercase tracking-widest text-muted-foreground">Small (75%)</span>
+                               <code className="text-label-small bg-layer-canvas px-2 py-1 rounded border border-border/50 text-transform-tertiary">
                                    &lt;Avatar size=&quot;sm&quot;&gt;
                                </code>
                            </div>
@@ -126,8 +126,8 @@ export default function AvatarSandboxPage() {
                                </Avatar>
                            </div>
                            <div className="flex flex-col items-center gap-2 text-center">
-                               <span className="text-xs font-bold text-transform-secondary uppercase tracking-widest text-muted-foreground">Default (Base)</span>
-                               <code className="text-[10px] bg-layer-canvas px-2 py-1 rounded border border-border/50 text-transform-tertiary">
+                               <span className="text-label-small font-bold text-transform-secondary uppercase tracking-widest text-muted-foreground">Default (Base)</span>
+                               <code className="text-label-small bg-layer-canvas px-2 py-1 rounded border border-border/50 text-transform-tertiary">
                                    &lt;Avatar&gt;
                                </code>
                            </div>
@@ -141,8 +141,8 @@ export default function AvatarSandboxPage() {
                                </Avatar>
                            </div>
                            <div className="flex flex-col items-center gap-2 text-center">
-                               <span className="text-xs font-bold text-transform-secondary uppercase tracking-widest text-muted-foreground">Large (150%)</span>
-                               <code className="text-[10px] bg-layer-canvas px-2 py-1 rounded border border-border/50 text-transform-tertiary">
+                               <span className="text-label-small font-bold text-transform-secondary uppercase tracking-widest text-muted-foreground">Large (150%)</span>
+                               <code className="text-label-small bg-layer-canvas px-2 py-1 rounded border border-border/50 text-transform-tertiary">
                                    &lt;Avatar size=&quot;lg&quot;&gt;
                                </code>
                            </div>
@@ -157,8 +157,8 @@ export default function AvatarSandboxPage() {
                                </Avatar>
                            </div>
                            <div className="flex flex-col items-center gap-2 text-center">
-                               <span className="text-xs font-bold text-transform-secondary uppercase tracking-widest text-muted-foreground">Manual Override</span>
-                               <code className="text-[10px] bg-layer-canvas px-2 py-1 rounded border border-border/50 text-transform-tertiary">
+                               <span className="text-label-small font-bold text-transform-secondary uppercase tracking-widest text-muted-foreground">Manual Override</span>
+                               <code className="text-label-small bg-layer-canvas px-2 py-1 rounded border border-border/50 text-transform-tertiary">
                                    &lt;Avatar className=&quot;size-16&quot;&gt;
                                </code>
                            </div>

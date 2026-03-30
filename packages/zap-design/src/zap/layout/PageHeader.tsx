@@ -16,7 +16,7 @@ import { type Platform } from '../../zap/sections/atoms/foundations/components';
 interface PageHeaderProps {
     title: React.ReactNode;
     breadcrumb?: string;
-    badge: string;
+    badge?: string | null;
 
     tabs?: TabItem[];
     activeTab?: string;
@@ -52,7 +52,7 @@ export const PageHeader = ({
                             <Heading level={1} className="text-foreground leading-none text-transform-primary">
                                 {title}
                             </Heading>
-                            <BadgePill label={badge} variant="solid" className="mb-1" />
+                            {badge && <BadgePill label={badge} variant="solid" className="mb-1" />}
                         </div>
                     </Wrapper>
                     <Wrapper identity={{ displayName: "Header Controls Area", filePath: "zap/layout/PageHeader.tsx", type: "Wrapped Snippet", architecture: "L2: Primitives" }} className="w-auto flex items-end h-[28px] md:h-[32px]">

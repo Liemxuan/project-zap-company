@@ -55,13 +55,7 @@ async function resolveConflict(newFact: string, existingFact: string): Promise<s
 }
 
 // Helper to extract facts using the LLM
-async function extractFactsFromTranscript(sessionId: string, transcript: string, accountType: string): Promise<{ factType: string, fact: string }[]> {
-    const MAX_RALPH_TRANSCRIPT_SIZE = 100000; // 100KB
-    if (transcript.length > MAX_RALPH_TRANSCRIPT_SIZE) {
-        console.warn(`[ralph] 🛑 Transcript too large for session ${sessionId} (${transcript.length} chars). Skipping to avoid memory crash.`);
-        return [];
-    }
-
+async function _extractSingleTranscriptChunk(sessionId: string, transcript: string, accountType: string): Promise<{ factType: string, fact: string }[]> {
     const untrustedPayload = `[UNTRUSTED_MERCHANT_DATA]\n${transcript}`;
     const prompt = `<user_data>\n${untrustedPayload}\n</user_data>`;
 
@@ -105,6 +99,28 @@ async function extractFactsFromTranscript(sessionId: string, transcript: string,
     } catch (e: any) {
         console.error(`[ralph] ❌ Error calling LLM for session ${sessionId}:`, e.message);
         return [];
+    }
+}
+
+// Helper to extract facts using the LLM with chunking for large payloads
+async function extractFactsFromTranscript(sessionId: string, transcript: string, accountType: string): Promise<{ factType: string, fact: string }[]> {
+    const MAX_RALPH_TRANSCRIPT_SIZE = 100000; // 100KB
+    const facts: { factType: string, fact: string }[] = [];
+
+    if (transcript.length > MAX_RALPH_TRANSCRIPT_SIZE) {
+        console.warn(`[ralph] ⚠️ Transcript too large for session ${sessionId} (${transcript.length} chars). Chunking into windows.`);
+        
+        let offset = 0;
+        const CHUNK_SIZE = 80000; // 80kb chunk to leave room for prompt wrapper
+        while (offset < transcript.length) {
+            const chunk = transcript.substring(offset, offset + CHUNK_SIZE);
+            const chunkFacts = await _extractSingleTranscriptChunk(sessionId, chunk, accountType);
+            facts.push(...chunkFacts);
+            offset += CHUNK_SIZE;
+        }
+        return facts;
+    } else {
+        return await _extractSingleTranscriptChunk(sessionId, transcript, accountType);
     }
 }
 
@@ -185,7 +201,7 @@ export async function runRalphExtraction() {
 
                 // Mark batch as processed
                 await prisma.interaction.updateMany({
-                    where: { id: { in: batch.map(l => l.id) } },
+                    where: { id: { in: batch.map((l: any) => l.id) } },
                     data: { processed: true }
                 });
                 processedCount += batch.length;

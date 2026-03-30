@@ -40,10 +40,27 @@ export default function ThemeHeaderPage() {
         >
             <div className="w-full flex flex-col gap-10 py-8">
 
-                {/* ── VARIANT 1: Minimal (title + breadcrumb only) */}
+                {/* ── VARIANT 1: Basic (title + breadcrumb only) */}
+                <Wrapper identity={{ displayName: 'Basic Variant', type: 'Demo', filePath: 'zap/molecules/theme-header/page.tsx' }}>
+                    <div className="flex flex-col gap-2">
+                        <span className="text-label-small font-bold tracking-widest text-on-surface-variant text-transform-secondary font-dev text-transform-tertiary px-1">
+                            VARIANT — BASIC (breadcrumb + title)
+                        </span>
+                        <div className="rounded-xl border border-outline-variant/50 overflow-hidden">
+                            <ThemeHeader
+                                title="Basic Title"
+                                breadcrumb="molecule / layout"
+                                badge={null}
+                                liveIndicator={false}
+                            />
+                        </div>
+                    </div>
+                </Wrapper>
+
+                {/* ── VARIANT 1.5: Minimal (breadcrumb + title + badge) */}
                 <Wrapper identity={{ displayName: 'Minimal Variant', type: 'Demo', filePath: 'zap/molecules/theme-header/page.tsx' }}>
                     <div className="flex flex-col gap-2">
-                        <span className="text-[10px] font-bold tracking-widest text-on-surface-variant text-transform-secondary font-dev text-transform-tertiary px-1">
+                        <span className="text-label-small font-bold tracking-widest text-on-surface-variant text-transform-secondary font-dev text-transform-tertiary px-1">
                             VARIANT — MINIMAL (breadcrumb + title + badge)
                         </span>
                         <div className="rounded-xl border border-outline-variant/50 overflow-hidden">
@@ -60,7 +77,7 @@ export default function ThemeHeaderPage() {
                 {/* ── VARIANT 2: With Tabs */}
                 <Wrapper identity={{ displayName: 'With Tabs Variant', type: 'Demo', filePath: 'zap/molecules/theme-header/page.tsx' }}>
                     <div className="flex flex-col gap-2">
-                        <span className="text-[10px] font-bold tracking-widest text-on-surface-variant text-transform-secondary font-dev text-transform-tertiary px-1">
+                        <span className="text-label-small font-bold tracking-widest text-on-surface-variant text-transform-secondary font-dev text-transform-tertiary px-1">
                             VARIANT — WITH TABS
                         </span>
                         <div className="rounded-xl border border-outline-variant/50 overflow-hidden">
@@ -80,7 +97,7 @@ export default function ThemeHeaderPage() {
                 {/* ── VARIANT 3: With Live Indicator */}
                 <Wrapper identity={{ displayName: 'Live Indicator Variant', type: 'Demo', filePath: 'zap/molecules/theme-header/page.tsx' }}>
                     <div className="flex flex-col gap-2">
-                        <span className="text-[10px] font-bold tracking-widest text-on-surface-variant text-transform-secondary font-dev text-transform-tertiary px-1">
+                        <span className="text-label-small font-bold tracking-widest text-on-surface-variant text-transform-secondary font-dev text-transform-tertiary px-1">
                             VARIANT — LIVE INDICATOR (real-time data stream)
                         </span>
                         <div className="rounded-xl border border-outline-variant/50 overflow-hidden">

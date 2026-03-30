@@ -26,11 +26,11 @@ export default function InputModulesV2Page() {
             <div className="space-y-4">
                 <Wrapper identity={{ displayName: "Input L1 Controls", type: "Docs Link", filePath: "zap/molecules/inputs/page.tsx" }}>
                     <div className="space-y-6">
-                        <h4 className="text-[10px] text-transform-primary font-display font-bold text-on-surface-variant text-transform-secondary tracking-wider uppercase">L1 Foundation Controls</h4>
+                        <h4 className="text-label-small text-transform-primary font-display font-bold text-on-surface-variant text-transform-secondary tracking-wider uppercase">L1 Foundation Controls</h4>
 
                         {/* --input-border-width */}
                         <div className="space-y-2">
-                            <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary uppercase">
+                            <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary uppercase">
                                 <span>--input-border-width</span>
                                 <div className="flex items-center gap-2">
                                     <span className="font-bold">{borderWidth[0]}px</span>
@@ -42,7 +42,7 @@ export default function InputModulesV2Page() {
 
                         {/* --input-border-radius */}
                         <div className="space-y-2">
-                            <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary uppercase">
+                            <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary uppercase">
                                 <span>--input-border-radius</span>
                                 <div className="flex items-center gap-2">
                                     <span className="font-bold">{borderRadius[0]}px</span>
@@ -54,7 +54,7 @@ export default function InputModulesV2Page() {
 
                         {/* --input-height */}
                         <div className="space-y-2">
-                            <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary uppercase">
+                            <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary uppercase">
                                 <span>--input-height</span>
                                 <div className="flex items-center gap-2">
                                     <span className="font-bold">{inputHeight[0]}px</span>
@@ -65,7 +65,7 @@ export default function InputModulesV2Page() {
                         </div>
 
                         {/* Cascade info */}
-                        <div className="p-3 text-[10px] font-dev text-on-surface-variant text-transform-secondary bg-layer-surface border border-outline-variant/50 rounded-md space-y-1">
+                        <div className="p-3 text-label-small font-dev text-on-surface-variant text-transform-secondary bg-layer-surface border border-outline-variant/50 rounded-md space-y-1">
                             <p><strong>L1</strong> → <code>--layer-border-*</code> (Border & Radius foundation)</p>
                             <p><strong>L4</strong> → <code>--input-border-*</code>, <code>--input-height</code> (component override)</p>
                             <p className="pt-1 text-on-surface-variant text-transform-secondary/60">Sliders seed from L4 if published, else fall through to L1 foundation values.</p>

@@ -6,6 +6,7 @@ import { Icon } from '../../genesis/atoms/icons/Icon';
 import { useTheme } from '../../components/ThemeContext';
 import { ContainerDevWrapper } from '../../components/dev/ContainerDevWrapper';
 import { Wrapper } from '../../components/dev/Wrapper';
+import { Switch } from '../../genesis/atoms/interactive/switch';
 
 interface InspectorProps {
     title?: string;
@@ -21,7 +22,7 @@ export const Inspector = ({
     footer,
     width = 280,
 }: Omit<InspectorProps, 'isOpen'>) => {
-    const { devMode, inspectorState } = useTheme();
+    const { devMode, setDevMode, inspectorState } = useTheme();
 
     if (inspectorState === 'collapsed') return null;
 
@@ -51,6 +52,13 @@ export const Inspector = ({
                             <h2 className="font-black text-on-surface text-[11px] tracking-widest font-display text-transform-primary uppercase">
                                 {title}
                             </h2>
+                        </div>
+                        <div className="flex items-center" title="Toggle Dev Mode">
+                            <Switch
+                                checked={devMode}
+                                onCheckedChange={setDevMode}
+                                className="scale-75 cursor-pointer opacity-70 hover:opacity-100 transition-opacity"
+                            />
                         </div>
                     </div>
                 </Wrapper>

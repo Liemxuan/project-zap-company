@@ -2,11 +2,11 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   transpilePackages: ['@excalidraw/excalidraw'],
-  experimental: {
-    turbo: {
-      root: '../../',
-    },
-  },
+  // experimental: {
+  //   turbo: {
+  //     root: '../../',
+  //   },
+  // },
   images: {
     remotePatterns: [
       {

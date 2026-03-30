@@ -30,8 +30,8 @@ export default function PropertyBoxSandboxPage() {
 
                 {/* Theme Properties */}
                 <div className="space-y-2">
-                    <span className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Theme Properties</span>
-                    <span className="text-[10px] font-dev text-muted-foreground block">
+                    <span className="text-label-small font-semibold text-muted-foreground uppercase tracking-widest">Theme Properties</span>
+                    <span className="text-label-small font-dev text-muted-foreground block">
                         Key-value display for theme configuration · <code>PropertyBox</code> + <code>PropertyRow</code>
                     </span>
                     <Wrapper identity={{ displayName: "PropertyBox", type: "Atom", filePath: "genesis/atoms/data-display/PropertyBox.tsx" }}>
@@ -49,8 +49,8 @@ export default function PropertyBoxSandboxPage() {
 
                 {/* Component Stats */}
                 <div className="space-y-2">
-                    <span className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Component Stats</span>
-                    <span className="text-[10px] font-dev text-muted-foreground block">
+                    <span className="text-label-small font-semibold text-muted-foreground uppercase tracking-widest">Component Stats</span>
+                    <span className="text-label-small font-dev text-muted-foreground block">
                         Used in Inspector panels for component metadata
                     </span>
                     <Wrapper identity={{ displayName: "PropertyBox (Stats)", type: "Atom", filePath: "genesis/atoms/data-display/PropertyBox.tsx" }}>

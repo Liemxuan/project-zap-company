@@ -1,8 +1,6 @@
 'use client';
 
 import React from 'react';
-import { HorizontalNav } from './HorizontalNav';
-import { HorizontalNavigation } from '../molecules/navigation/HorizontalNavigation';
 import { VerticalNav } from './VerticalNav';
 import { Breadcrumbs } from '../molecules/navigation/Breadcrumbs';
 import { Inspector } from './Inspector';
@@ -75,9 +73,6 @@ export const MasterVerticalShell = ({
 
     return (
         <div className="h-screen flex flex-col bg-layer-canvas text-theme-base antialiased overflow-hidden select-none">
-            {/* 1. Full-Width Header */}
-            <HorizontalNav />
-
             {/* 2. Full-Width Breadcrumbs Bar */}
             <div className="h-8 bg-layer-cover border-b-[length:var(--card-border-width,0px)] border-card-border-[length:var(--card-border-width,0px)] flex items-center px-6 shrink-0 z-40">
                 <Breadcrumbs items={breadcrumbs} showDevWrapper={false} />
@@ -98,11 +93,6 @@ export const MasterVerticalShell = ({
 
                 {/* Center Content Section */}
                 <section className="flex-1 flex flex-col overflow-hidden relative">
-                    <HorizontalNavigation
-                        isLoggedIn={true}
-                        onLoginClick={() => {}}
-                        onLogoutClick={() => {}}
-                    />
                     <div className="flex-1 overflow-y-auto w-full max-w-[1400px] mx-auto p-4 md:p-8">
                         {children}
                     </div>

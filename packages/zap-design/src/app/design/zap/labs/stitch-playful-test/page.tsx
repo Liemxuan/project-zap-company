@@ -21,8 +21,8 @@ export default function StitchPlayfulTestPage() {
             inspectorContent={
                 <div className="p-4 space-y-4 text-brand-midnight">
                     <div className="bg-layer-panel border-[length:var(--card-border-width,0px)] border-card-border p-4 shadow-card rounded-card">
-                        <h4 className="font-bold uppercase text-xs mb-2">Protocol: Playful Wash</h4>
-                        <p className="text-[11px] font-medium leading-relaxed">
+                        <h4 className="font-bold uppercase text-label-small mb-2">Protocol: Playful Wash</h4>
+                        <p className="text-label-medium font-medium leading-relaxed">
                             This layout was automatically transpiled from the Stitch Playful About Me prototype.
                             <br /><br />
                             Custom arbitrary colors (mint, peach, lavender) are retained via JIT compilation while the structure is securely dropped into the ZAP Shell.
@@ -64,7 +64,7 @@ export default function StitchPlayfulTestPage() {
                                 <div className="size-12 bg-[#E1BAFF] rounded-2xl flex items-center justify-center rotate-3 bubbly-shadow">
                                     <span className="text-white font-bold"><Icon name="celebration" /></span>
                                 </div>
-                                <h2 className="text-2xl font-bold font-display text-transform-primary tracking-tight text-[#2D3436]">Hello.Studio</h2>
+                                <h2 className="text-title-large font-bold font-display text-transform-primary tracking-tight text-[#2D3436]">Hello.Studio</h2>
                             </div>
                             <nav className="hidden md:flex items-center gap-8 bg-white/60 backdrop-blur-md px-8 py-3 rounded-full bubbly-shadow border-[length:var(--card-border-width,1px)] border-white/40">
                                 <a className="font-bold hover:text-[#E1BAFF] transition-colors" href="#">Home</a>
@@ -96,7 +96,7 @@ export default function StitchPlayfulTestPage() {
                                 <div className="lg:col-span-7 flex flex-col gap-10">
 
                                     <section className="relative">
-                                        <div className="inline-block px-6 py-2 bg-[#FFBADA]/20 text-pink-700 rounded-full font-bold text-sm mb-6 uppercase tracking-widest border border-[#FFBADA]/30">
+                                        <div className="inline-block px-6 py-2 bg-[#FFBADA]/20 text-pink-700 rounded-full font-bold text-body-small mb-6 uppercase tracking-widest border border-[#FFBADA]/30">
                                             ✨ Creative Explorer
                                         </div>
                                         <h1 className="text-6xl md:text-8xl font-display text-transform-primary font-bold leading-[1.1] mb-8 relative">
@@ -106,13 +106,13 @@ export default function StitchPlayfulTestPage() {
                                                 </svg>
                                             </span>
                                         </h1>
-                                        <p className="text-xl md:text-2xl text-[#2D3436]/80 leading-relaxed font-medium max-w-2xl">
+                                        <p className="text-title-medium md:text-2xl text-[#2D3436]/80 leading-relaxed font-medium max-w-2xl">
                                             I&apos;m a designer and developer who loves building <span className="bg-[#BAFFD9] px-2 rounded-lg">digital playgrounds</span>. I believe websites should be as fun to use as they are beautiful to look at.
                                         </p>
                                     </section>
 
                                     <section className="bg-white/40 backdrop-blur-sm p-8 rounded-[2rem] border-[length:var(--card-border-width,1px)] border-white/60 bubbly-shadow">
-                                        <h3 className="text-2xl font-display text-transform-primary font-bold mb-6 flex items-center gap-3">
+                                        <h3 className="text-title-large font-display text-transform-primary font-bold mb-6 flex items-center gap-3">
                                             <span className="size-10 bg-[#BAE8FF] rounded-xl flex items-center justify-center text-white">
                                                 <Icon name="rocket_launch" />
                                             </span>
@@ -149,7 +149,7 @@ export default function StitchPlayfulTestPage() {
                                                 <span className="text-[#2D3436] group-hover:text-white transition-colors"><Icon name="smart_toy" /></span>
                                             </a>
                                         </div>
-                                        <a className="px-10 py-5 bg-[#2D3436] text-white rounded-full font-bold text-lg hover:scale-105 transition-transform flex items-center gap-3 bubbly-shadow" href="#">
+                                        <a className="px-10 py-5 bg-[#2D3436] text-white rounded-full font-bold text-title-small hover:scale-105 transition-transform flex items-center gap-3 bubbly-shadow" href="#">
                                             Let&apos;s Chat! <span><Icon name="send" /></span>
                                         </a>
                                     </section>

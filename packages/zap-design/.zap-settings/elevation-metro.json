@@ -6,14 +6,14 @@
       "tintOpacity": 0
     },
     "1": {
-      "bgToken": "surface-container",
+      "bgToken": "surface-container-highest",
       "bgOpacity": 100,
       "tintOpacity": 20,
       "borderWidth": 0,
       "borderRadius": 0
     },
     "2": {
-      "bgToken": "surface-container-high",
+      "bgToken": "surface-container",
       "bgOpacity": 100,
       "tintOpacity": 0,
       "borderStyle": "dotted",
@@ -22,7 +22,7 @@
       "borderRadius": 0
     },
     "3": {
-      "bgToken": "surface-container-high",
+      "bgToken": "surface",
       "bgOpacity": 100,
       "tintOpacity": 0,
       "borderWidth": 2,
@@ -31,7 +31,7 @@
       "borderColor": "outline"
     },
     "4": {
-      "bgToken": "surface-container-highest",
+      "bgToken": "tertiary-container",
       "bgOpacity": 100,
       "tintOpacity": 0,
       "borderRadius": 13,
@@ -40,7 +40,7 @@
       "borderColor": "outline"
     },
     "5": {
-      "bgToken": "tertiary-container",
+      "bgToken": "surface-container-lowest",
       "bgOpacity": 100,
       "tintOpacity": 0,
       "borderStyle": "dotted",

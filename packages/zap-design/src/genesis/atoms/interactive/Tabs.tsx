@@ -1,7 +1,7 @@
 'use client';
 
-import React from 'react';
-import { motion, LayoutGroup } from 'framer-motion';
+import React, { useState, useId } from 'react';
+import { motion, LayoutGroup } from 'motion/react';
 
 export interface TabItem {
     id: string;
@@ -21,34 +21,50 @@ export interface TabsProps {
  * Features a neo-brutalist animated underline using Framer Motion.
  */
 export const Tabs: React.FC<TabsProps> = ({ tabs, activeTab, onChange, className = '' }) => {
+    const [focusedTab, setFocusedTab] = useState<string | null>(null);
+    const layoutGroupId = useId();
+
     return (
-        <LayoutGroup>
+        <LayoutGroup id={layoutGroupId}>
             <div className={`flex items-center gap-2 border-b-[length:var(--card-border-width,2px)] border-card-border pb-px ${className}`}>
                 {tabs.map((tab) => {
                     const isActive = activeTab === tab.id;
 
                     return (
-                        <button
+                        <motion.button
                             key={tab.id}
                             onClick={() => onChange(tab.id)}
+                            onFocus={() => setFocusedTab(tab.id)}
+                            onBlur={() => setFocusedTab(null)}
+                            whileTap={{ scale: 0.95 }}
+                            whileHover={{ backgroundColor: 'var(--color-surface-container)' }}
                             className={`
                                 relative px-6 py-3 font-bold text-[13px] text-transform-primary font-display tracking-wider
-                                transition-colors outline-none
-                                focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-surface
-                                ${isActive ? 'text-primary' : 'text-on-surface-variant hover:text-primary hover:bg-surface-container/50'}
+                                transition-colors outline-none rounded-t-[length:var(--radius-shape-small,8px)]
+                                ${isActive ? 'text-primary' : 'text-on-surface-variant hover:text-primary'}
                            `}
                         >
-                            {tab.label}
+                            {/* Animated Focus Keyboard Highlight */}
+                            {focusedTab === tab.id && (
+                                <motion.div
+                                    layoutId="focusTabBackground"
+                                    className="absolute inset-x-0 bottom-0 top-0 bg-surface-variant/80 rounded-[length:var(--radius-shape-small,8px)] -z-10 border border-outline-variant shadow-sm"
+                                    layout
+                                    transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                                />
+                            )}
+
+                            <span className="relative z-10">{tab.label}</span>
 
                             {isActive && (
                                 <motion.div
                                     layoutId="activeTabUnderline"
-                                    className="absolute left-0 right-0 top-[calc(100%+1px)] h-[var(--card-border-width,2px)] bg-primary z-10"
+                                    className="absolute inset-x-0 bottom-0 h-[2px] bg-primary z-0"
                                     layout
                                     transition={{ type: "spring", stiffness: 500, damping: 30 }}
                                 />
                             )}
-                        </button>
+                        </motion.button>
                     );
                 })}
             </div>

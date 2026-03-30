@@ -19,35 +19,35 @@ export default function AgentTrackingMatrix() {
                 <Canvas className="p-8 overflow-hidden rounded-card border-[length:var(--card-border-width,0px)] border-card-border">
                     <Card className="p-8 flex flex-col gap-6 rounded-card border-[length:var(--card-border-width,0px)] border-card-border shadow-card h-full">
                         <div className="flex justify-between items-start">
-                            <h2 className="text-2xl font-black uppercase text-brand-midnight">Routing & Memory</h2>
-                            <div className="bg-state-success text-brand-midnight text-xs font-bold px-3 py-1 uppercase border-[length:var(--card-border-width,0px)] border-card-border">Online</div>
+                            <h2 className="text-title-large font-black uppercase text-brand-midnight">Routing & Memory</h2>
+                            <div className="bg-state-success text-brand-midnight text-label-small font-bold px-3 py-1 uppercase border-[length:var(--card-border-width,0px)] border-card-border">Online</div>
                         </div>
 
                         <Panel className="p-6 flex flex-col gap-4 rounded-card border-[length:var(--card-border-width,0px)] border-card-border shadow-card bg-layer-panel">
-                            <h3 className="text-lg font-bold uppercase text-brand-midnight mb-2 border-b-2 border-brand-midnight/10 pb-2">Session Memory</h3>
+                            <h3 className="text-title-small font-bold uppercase text-brand-midnight mb-2 border-b-2 border-brand-midnight/10 pb-2">Session Memory</h3>
                             <div className="flex justify-between items-center text-brand-midnight">
                                 <span className="font-bold">Protocol</span>
-                                <span className="text-brand-midnight/70 font-dev text-transform-tertiary text-sm">SYS_CLAW_sessions</span>
+                                <span className="text-brand-midnight/70 font-dev text-transform-tertiary text-body-small">SYS_CLAW_sessions</span>
                             </div>
                             <div className="flex justify-between items-center text-brand-midnight">
                                 <span className="font-bold">Compaction</span>
-                                <span className="text-acid-yellow bg-black px-2 font-dev text-transform-tertiary text-sm font-bold">Rule of 500 [WIP]</span>
+                                <span className="text-acid-yellow bg-black px-2 font-dev text-transform-tertiary text-body-small font-bold">Rule of 500 [WIP]</span>
                             </div>
                             <div className="flex justify-between items-center text-brand-midnight">
                                 <span className="font-bold">Thread Binding</span>
-                                <span className="text-brand-midnight/70 font-dev text-transform-tertiary text-sm">Native Sub-agents</span>
+                                <span className="text-brand-midnight/70 font-dev text-transform-tertiary text-body-small">Native Sub-agents</span>
                             </div>
                         </Panel>
 
                         <Panel className="p-6 flex flex-col gap-4 rounded-card border-[length:var(--card-border-width,0px)] border-card-border shadow-card bg-layer-panel">
-                            <h3 className="text-lg font-bold uppercase text-brand-midnight mb-2 border-b-2 border-brand-midnight/10 pb-2">OmniQueue Router</h3>
+                            <h3 className="text-title-small font-bold uppercase text-brand-midnight mb-2 border-b-2 border-brand-midnight/10 pb-2">OmniQueue Router</h3>
                             <div className="flex justify-between items-center text-brand-midnight">
                                 <span className="font-bold">Engine</span>
-                                <span className="text-brand-midnight/70 font-dev text-transform-tertiary text-sm">Redis / BullMQ</span>
+                                <span className="text-brand-midnight/70 font-dev text-transform-tertiary text-body-small">Redis / BullMQ</span>
                             </div>
                             <div className="flex justify-between items-center text-brand-midnight">
                                 <span className="font-bold">Events</span>
-                                <span className="text-state-warning bg-black px-2 font-dev text-transform-tertiary text-sm font-bold">Pending Hooks</span>
+                                <span className="text-state-warning bg-black px-2 font-dev text-transform-tertiary text-body-small font-bold">Pending Hooks</span>
                             </div>
                         </Panel>
                     </Card>
@@ -57,26 +57,26 @@ export default function AgentTrackingMatrix() {
                 <Canvas className="p-8 overflow-hidden rounded-card border-[length:var(--card-border-width,0px)] border-card-border">
                     <Card className="p-8 flex flex-col gap-6 rounded-card border-[length:var(--card-border-width,0px)] border-card-border shadow-card h-full">
                         <div className="flex justify-between items-start">
-                            <h2 className="text-2xl font-black uppercase text-brand-midnight">The Armory Tracker</h2>
-                            <div className="bg-brand-teal text-white text-xs font-bold px-3 py-1 uppercase border-[length:var(--card-border-width,0px)] border-card-border">JIT Injection</div>
+                            <h2 className="text-title-large font-black uppercase text-brand-midnight">The Armory Tracker</h2>
+                            <div className="bg-brand-teal text-white text-label-small font-bold px-3 py-1 uppercase border-[length:var(--card-border-width,0px)] border-card-border">JIT Injection</div>
                         </div>
 
                         <div className="grid grid-cols-2 gap-4">
                             <Panel className="p-4 flex flex-col gap-2 rounded-card border-[length:var(--card-border-width,0px)] border-card-border shadow-card bg-layer-panel">
                                 <span className="font-bold uppercase text-brand-midnight">database-design</span>
-                                <span className="text-xs text-brand-midnight/60">Mongoose/MongoDB optimizations</span>
+                                <span className="text-label-small text-brand-midnight/60">Mongoose/MongoDB optimizations</span>
                             </Panel>
                             <Panel className="p-4 flex flex-col gap-2 rounded-card border-[length:var(--card-border-width,0px)] border-card-border shadow-card bg-layer-panel">
                                 <span className="font-bold uppercase text-brand-midnight">server-management</span>
-                                <span className="text-xs text-brand-midnight/60">Distributed queuing & scaling</span>
+                                <span className="text-label-small text-brand-midnight/60">Distributed queuing & scaling</span>
                             </Panel>
                             <Panel className="p-4 flex flex-col gap-2 rounded-card border-[length:var(--card-border-width,0px)] border-card-border shadow-card bg-layer-panel">
                                 <span className="font-bold uppercase text-brand-midnight">clean-code</span>
-                                <span className="text-xs text-brand-midnight/60">Refactoring & SNR control</span>
+                                <span className="text-label-small text-brand-midnight/60">Refactoring & SNR control</span>
                             </Panel>
                             <Panel className="p-4 flex flex-col gap-2 rounded-card border-[length:var(--card-border-width,0px)] border-card-border shadow-card bg-layer-panel">
                                 <span className="font-bold uppercase text-brand-midnight">agent-skill-builder</span>
-                                <span className="text-xs text-brand-midnight/60">JIT pipeline generation</span>
+                                <span className="text-label-small text-brand-midnight/60">JIT pipeline generation</span>
                             </Panel>
                         </div>
                     </Card>
@@ -86,12 +86,12 @@ export default function AgentTrackingMatrix() {
                 <Canvas className="col-span-1 lg:col-span-2 p-8 overflow-hidden rounded-card border-[length:var(--card-border-width,0px)] border-card-border">
                     <Card className="p-8 flex flex-col gap-6 rounded-card border-[length:var(--card-border-width,0px)] border-card-border shadow-card">
                         <div className="flex justify-between items-start mb-4">
-                            <h2 className="text-2xl font-black uppercase text-brand-midnight">Olympus vs OpenClaw Matrix</h2>
-                            <div className="bg-acid-yellow text-brand-midnight text-xs font-bold px-3 py-1 uppercase border-[length:var(--card-border-width,0px)] border-card-border">Teacher vs Student</div>
+                            <h2 className="text-title-large font-black uppercase text-brand-midnight">Olympus vs OpenClaw Matrix</h2>
+                            <div className="bg-acid-yellow text-brand-midnight text-label-small font-bold px-3 py-1 uppercase border-[length:var(--card-border-width,0px)] border-card-border">Teacher vs Student</div>
                         </div>
 
                         <div className="overflow-x-auto">
-                            <table className="w-full text-left font-dev text-transform-tertiary text-sm text-brand-midnight">
+                            <table className="w-full text-left font-dev text-transform-tertiary text-body-small text-brand-midnight">
                                 <thead>
                                     <tr className="border-b-[length:var(--card-border-width,0px)] border-card-border bg-theme-base/5 uppercase tracking-tight">
                                         <th className="p-4 font-bold">Feature Layer</th>

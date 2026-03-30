@@ -25,11 +25,11 @@ export default function CanvasSandboxPage() {
             <div className="space-y-4">
                 <Wrapper identity={{ displayName: "Canvas L1 Controls", type: "Docs Link", filePath: "zap/atoms/canvas/page.tsx" }}>
                     <div className="space-y-6">
-                        <h4 className="text-[10px] text-transform-primary font-display font-bold text-muted-foreground tracking-wider uppercase">L1 Foundation Controls</h4>
+                        <h4 className="text-label-small text-transform-primary font-display font-bold text-muted-foreground tracking-wider uppercase">L1 Foundation Controls</h4>
 
                         {/* --canvas-border-width */}
                         <div className="space-y-2">
-                            <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-muted-foreground uppercase">
+                            <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-muted-foreground uppercase">
                                 <span>--canvas-border-width</span>
                                 <div className="flex items-center gap-2">
                                     <span className="font-bold">{borderWidth[0]}px</span>
@@ -41,7 +41,7 @@ export default function CanvasSandboxPage() {
 
                         {/* --canvas-border-radius */}
                         <div className="space-y-2">
-                            <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-muted-foreground uppercase">
+                            <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-muted-foreground uppercase">
                                 <span>--canvas-border-radius</span>
                                 <div className="flex items-center gap-2">
                                     <span className="font-bold">{borderRadius[0]}px</span>
@@ -52,7 +52,7 @@ export default function CanvasSandboxPage() {
                         </div>
 
                         {/* Cascade info */}
-                        <div className="p-3 text-[10px] font-dev text-muted-foreground bg-layer-surface border border-border/50 rounded-md space-y-1">
+                        <div className="p-3 text-label-small font-dev text-muted-foreground bg-layer-surface border border-border/50 rounded-md space-y-1">
                             <p><strong>L1</strong> → <code>--layer-border-*</code> (Border & Radius foundation)</p>
                             <p><strong>L3</strong> → <code>--canvas-border-*</code> (component override)</p>
                             <p className="pt-1 text-muted-foreground/60">Sliders seed from L3 if published, else fall through to L1 foundation values.</p>
@@ -120,13 +120,13 @@ export default function CanvasSandboxPage() {
                 {/* CANVAS SURFACE                                         */}
                 {/* ═══════════════════════════════════════════════════════ */}
                 <div className="space-y-2">
-                    <span className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Canvas Surface</span>
-                    <span className="text-[10px] font-dev text-muted-foreground block">
+                    <span className="text-label-small font-semibold text-muted-foreground uppercase tracking-widest">Canvas Surface</span>
+                    <span className="text-label-small font-dev text-muted-foreground block">
                         L3: <code>--canvas-border-radius</code> · <code>--canvas-border-width</code>
                     </span>
                     <Canvas className="flex flex-col items-center justify-center p-8 gap-3 border-solid border-outline-variant w-full">
-                        <span className="font-display font-medium text-base">Canvas Surface</span>
-                        <span className="text-xs font-dev text-muted-foreground">
+                        <span className="font-display font-medium text-body-medium">Canvas Surface</span>
+                        <span className="text-label-small font-dev text-muted-foreground">
                             border: {borderWidth[0]}px · radius: {borderRadius[0]}px
                         </span>
                     </Canvas>
@@ -136,14 +136,14 @@ export default function CanvasSandboxPage() {
                 {/* CANVAS + NESTED L2 CARD                                */}
                 {/* ═══════════════════════════════════════════════════════ */}
                 <div className="space-y-2">
-                    <span className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Canvas + Nested Card</span>
-                    <span className="text-[10px] font-dev text-muted-foreground block">
+                    <span className="text-label-small font-semibold text-muted-foreground uppercase tracking-widest">Canvas + Nested Card</span>
+                    <span className="text-label-small font-dev text-muted-foreground block">
                         L3 Canvas wrapping L2 Card — card inherits L2 layer tokens
                     </span>
                     <Canvas className="flex flex-col items-center justify-center p-6 gap-4 border-solid border-outline-variant w-full">
                         <div className="bg-layer-panel border border-card-border rounded-lg p-6 w-full max-w-md shadow-sm">
-                            <h3 className="font-display font-semibold text-sm text-foreground">L2 Card</h3>
-                            <p className="text-xs text-muted-foreground mt-1">
+                            <h3 className="font-display font-semibold text-body-small text-foreground">L2 Card</h3>
+                            <p className="text-label-small text-muted-foreground mt-1">
                                 Card border-radius follows <code className="font-dev text-primary">--card-border-radius</code> → <code className="font-dev text-primary">--layer-border-radius</code>
                             </p>
                         </div>
@@ -154,16 +154,16 @@ export default function CanvasSandboxPage() {
                 {/* CANVAS + GRID LAYOUT                                   */}
                 {/* ═══════════════════════════════════════════════════════ */}
                 <div className="space-y-2">
-                    <span className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Canvas + Grid Layout</span>
-                    <span className="text-[10px] font-dev text-muted-foreground block">
+                    <span className="text-label-small font-semibold text-muted-foreground uppercase tracking-widest">Canvas + Grid Layout</span>
+                    <span className="text-label-small font-dev text-muted-foreground block">
                         Canvas as a layout container with multiple L2 card surfaces
                     </span>
                     <Canvas className="p-6 gap-4 border-solid border-outline-variant w-full">
                         <div className="grid grid-cols-3 gap-4 w-full">
                             {['Panel A', 'Panel B', 'Panel C'].map((label) => (
                                 <div key={label} className="bg-layer-panel border border-card-border rounded-lg p-4 shadow-sm text-center">
-                                    <span className="text-xs font-semibold text-foreground">{label}</span>
-                                    <p className="text-[10px] font-dev text-muted-foreground mt-1">L2 Surface</p>
+                                    <span className="text-label-small font-semibold text-foreground">{label}</span>
+                                    <p className="text-label-small font-dev text-muted-foreground mt-1">L2 Surface</p>
                                 </div>
                             ))}
                         </div>

@@ -7,13 +7,14 @@ import { Toggle as TogglePrimitive } from "radix-ui"
 import { cn } from '../../../lib/utils'
 
 const toggleVariants = cva(
-  "group/toggle inline-flex items-center justify-center gap-1 rounded-[var(--layer-border-radius,var(--radius-btn,4px))] text-sm font-medium font-body text-transform-secondary whitespace-nowrap transition-all outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+  "group/toggle inline-flex items-center justify-center gap-1 rounded-[length:var(--toggle-item-border-radius,var(--toggle-border-radius,var(--layer-border-radius,4px)))] bg-clip-padding text-sm font-medium font-body text-transform-secondary whitespace-nowrap transition-all outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
   {
     variants: {
       visualStyle: {
-        solid: "border-transparent bg-transparent hover:bg-layer-panel hover:text-on-surface aria-pressed:bg-primary aria-pressed:text-on-primary data-[state=on]:bg-primary data-[state=on]:text-on-primary",
-        outline: "border-[length:var(--layer-border-width,1px)] [border-style:var(--layer-border-style,solid)] border-border bg-transparent hover:bg-layer-panel hover:text-on-surface aria-pressed:border-primary aria-pressed:bg-primary/10 aria-pressed:text-primary data-[state=on]:border-primary data-[state=on]:bg-primary/10 data-[state=on]:text-primary",
+        solid: "border-transparent bg-transparent hover:bg-layer-panel hover:text-on-surface aria-pressed:bg-[color:var(--toggle-bg,var(--color-primary))] aria-pressed:text-on-primary data-[state=on]:bg-[color:var(--toggle-bg,var(--color-primary))] data-[state=on]:text-on-primary",
+        outline: "border-[length:var(--toggle-border-width,var(--layer-border-width,1px))] [border-style:var(--layer-border-style,solid)] border-border bg-transparent hover:bg-layer-panel hover:text-on-surface aria-pressed:border-primary aria-pressed:bg-primary/10 aria-pressed:text-primary data-[state=on]:border-primary data-[state=on]:bg-primary/10 data-[state=on]:text-primary",
         ghost: "border-transparent bg-transparent hover:bg-layer-panel hover:text-on-surface text-on-surface-variant aria-pressed:text-primary aria-pressed:bg-primary/20 data-[state=on]:text-primary data-[state=on]:bg-primary/20",
+        segmented: "border-transparent bg-transparent border-solid text-muted-foreground hover:bg-layer-panel hover:text-foreground aria-pressed:bg-[color:var(--toggle-bg,var(--color-layer-surface))] aria-pressed:text-foreground aria-pressed:shadow-sm data-[state=on]:bg-[color:var(--toggle-bg,var(--color-layer-surface))] data-[state=on]:text-foreground data-[state=on]:shadow-sm transition-all",
       },
       size: {
         default: "h-8 min-w-8 px-2",
@@ -40,6 +41,7 @@ function Toggle({
   // Intercept legacy variant
   let resolvedVisualStyle = visualStyle;
   if (variant === 'outline') resolvedVisualStyle = 'outline';
+  else if (variant === 'segmented') resolvedVisualStyle = 'segmented';
 
   return (
     <TogglePrimitive.Root

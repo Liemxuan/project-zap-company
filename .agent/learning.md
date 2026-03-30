@@ -120,6 +120,24 @@ This document tracks mistakes I've made and the lessons learned to fix them. Eve
   6. **Rule: Always audit systemically, not incrementally.** One-off fixes create a false sense of completion. The `zap-font-cap-audit` skill should be run against the full codebase periodically, not just the file you're currently editing.
   7. Full audit artifact saved at: `.gemini/antigravity/brain/.../full_font_audit_all_pages.md`
 
+### **Date:** 2026-03-27 / 09:20 PST
+
+- **The Mistake:** A "white space at the bottom" visual anomaly persisted because the original audit only resolved internal component layer tokens, completely ignoring the macro layout wrappers in `page.tsx` that govern flex alignment and explicit mathematical height caps (`100vh`).
+- **Action Taken:** Upgraded the inner component to an M3 `bg-layer-cover` (L2) but left the structural L1 wrapper dynamically constrained by conflicting flex properties (`items-start`), exposing the padding floor.
+- **The Fix & Lesson Learned:** 
+  1. **Mandatory Background & Ascension Sweep:** When executing an "audit and fix", ALWAYS verify that the outermost boundaries of the background layout cleanly implement the strictly ascending ZAP surface layer bounds (L0 Base -> L1 Canvas -> L2 Cover -> L3 Panel). Check `page.tsx` just as aggressively as `Component.tsx`.
+  2. **Eradicate Mathematical Viewports:** Do not rely on fixed `h-[calc(100vh-...)]` math or fixed padding (`pb-8`) for full-screen organisms. Apply pure intrinsic `flex-1 w-full h-full flex flex-col` physics to guarantee the bounding box reaches the absolute terminating pixel of the browser window.
+  3. **Flex Collision Awareness:** Strip conflicting cross-axis instructions (like `items-start` paired with `items-stretch`) from parent flex containers that artificially collapse component expansion.
+
+### **Date:** 2026-03-27 / 09:50 PST
+
+- **The Mistake:** I attempted to force a single primitive `<Accordion>` component to mimic the complex `organisms/inspector` layout by wrapping it in an artificial `bg-layer-panel border-r` bounding box (a "framework binding"). Simultaneously, the underlying `<ComponentSandboxTemplate>` was silently purging the L1 and L2 background layers globally by hardcoding `flush={true}`.
+- **Action Taken:** I over-engineered the component wrap to simulate spatial depth, creating a visually restrictive, narrow pink strip around the Accordion instead of letting it breathe, while completely missing that the true layer anomaly was rooted in the sandbox template itself.
+- **The Fix & Lesson Learned:**
+  1. **The Flex-1 Viewport Truncation Law:** Never place `flex-1` directly on a full-height container (`<Canvas>`) sitting *inside* an `overflow-y-auto` parent column. The `flex-1` constraint forces the container to mathematically clamp at exactly `100vh`. When inner content stretches beyond `100vh`, the content visibly overflows, but the container's background color (e.g. `bg-layer-canvas`) **stops painting at precisely the 100vh line**, revealing raw L0 background underneath. Rip `flex-1` out and let the container wrap intrinsically.
+  2. **Zero Framework Bindings for Atoms:** When placing an atom (like a Button or Accordion) into a sandbox layout, do not wrap it in a rigid structural cage (like `bg-layer-panel`). Let it float cleanly on the L2 `bg-layer-cover` floor so its own padding, borders, and variables control its geometry natively.
+  3. **Template Suppression Awareness:** If a macro layout (like `ComponentSandboxTemplate`) enforces `flush={true}` or hardcodes `bg-layer-base` on its payload wrapper, it mathematically obliterates the L1 Canvas and L2 Cover cards for **everything** that consumes it. Always audit the root template wrappers to ensure ZAP spatial depth inheritance isn't being strangled off at the source.
+
 ---
 title: "ZAP Layer System & Component Elevation Map"
 description: "Reference tables correlating ZAP Legacy Tokens with Material 3 standard Tailwind classes and Mobile Flutter semantic variables."

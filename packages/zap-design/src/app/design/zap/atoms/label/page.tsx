@@ -23,11 +23,11 @@ export default function LabelSandbox() {
             <div className="space-y-4">
                 <Wrapper identity={{ displayName: "Label Structural Settings", type: "Docs Link", filePath: "zap/atoms/label/page.tsx" }}>
                     <div className="space-y-6">
-                        <h4 className="text-[10px] text-transform-primary font-display font-bold text-muted-foreground tracking-wider uppercase">Sandbox Variables</h4>
+                        <h4 className="text-label-small text-transform-primary font-display font-bold text-muted-foreground tracking-wider uppercase">Sandbox Variables</h4>
 
                         <div className="space-y-4">
                             <div className="space-y-2">
-                                <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-muted-foreground uppercase">
+                                <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-muted-foreground uppercase">
                                     <span>--label-font-size</span>
                                     <span className="font-bold">{fontSize[0]}px</span>
                                 </div>
@@ -35,7 +35,7 @@ export default function LabelSandbox() {
                             </div>
 
                             <div className="space-y-2">
-                                <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-muted-foreground uppercase">
+                                <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-muted-foreground uppercase">
                                     <span>--label-font-weight</span>
                                     <span className="font-bold">{fontWeight[0]}</span>
                                 </div>
@@ -43,7 +43,7 @@ export default function LabelSandbox() {
                             </div>
 
                             <div className="space-y-2">
-                                <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-muted-foreground uppercase">
+                                <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-muted-foreground uppercase">
                                     <span>--label-line-height</span>
                                     <span className="font-bold">{lineHeight[0]}px</span>
                                 </div>

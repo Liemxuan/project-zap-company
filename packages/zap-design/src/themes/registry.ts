@@ -147,14 +147,17 @@ export const CORE_THEME: ThemeConfig = {
             'dropzone',
             'profile-switcher', 'quick-navigate', 'rating',
             'steppers',
+            'side-nav',
             'user-session',
             // Additional molecules
-            'alert', 'breadcrumb', 'dropdown-menu', 'form',
+            'alert', 'breadcrumb', 'data-readout', 'dropdown-menu', 'form',
             'pagination', 'progress', 'tabs', 'tooltip', 'theme-header',
+            // Auth molecules
+            'remember-me-checkbox', 'social-login-buttons', 'config-bar',
         ],
         hasOrganisms: [
             'dashboard', 'billing', 'kanban', 'login',
-            'profile', 'settings', 'activities', 'system-logs'
+            'profile', 'settings', 'activities', 'system-logs', 'system-logs-layout', 'signin-a', 'signin-b'
         ],
         hasLabs: [
             'color-architect', 'typography-architect', 'swarm'
@@ -210,14 +213,17 @@ export const METRO_THEME: ThemeConfig = {
             'dropzone',
             'profile-switcher', 'quick-navigate', 'rating',
             'steppers',
+            'side-nav',
             'user-session',
             // Additional molecules
-            'alert', 'breadcrumb', 'dropdown-menu', 'form',
+            'alert', 'breadcrumb', 'data-readout', 'dropdown-menu', 'form',
             'pagination', 'progress', 'tabs', 'tooltip', 'theme-header',
+            // Auth molecules
+            'remember-me-checkbox', 'social-login-buttons', 'config-bar',
         ],
         hasOrganisms: [
             'dashboard', 'billing', 'kanban', 'login',
-            'profile', 'settings', 'activities', 'system-logs', 'user-management'
+            'profile', 'settings', 'activities', 'system-logs', 'system-logs-layout', 'user-management', 'merchant-workspace', 'signin-a', 'signin-b'
         ],
         hasLabs: [
             'color-architect', 'typography-architect', 'swarm'

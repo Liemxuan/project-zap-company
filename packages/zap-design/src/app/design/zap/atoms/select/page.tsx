@@ -10,7 +10,7 @@ import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '.
 import { Slider } from '../../../../../genesis/atoms/interactive/slider';
 import { ThemePublisher } from '../../../../../components/dev/ThemePublisher';
 import { useBorderProperties } from '../../../../../zap/sections/atoms/border_radius/use-border-properties';
-import { BORDER_RADIUS_TOKENS, BORDER_WIDTH_TOKENS, TYPE_STYLES } from '../../../../../zap/sections/atoms/foundations/schema';
+import { BORDER_RADIUS_TOKENS, BORDER_WIDTH_TOKENS, ZAP_LAYER_MAP } from '../../../../../zap/sections/atoms/foundations/schema';
 import { toast } from 'sonner';
 
 export default function SelectSandboxPage() {
@@ -18,8 +18,6 @@ export default function SelectSandboxPage() {
     const activeTheme = appTheme === 'core' ? 'core' : 'metro';
     
     const [height, setHeight] = useState([40]);
-    const [typography, setTypography] = useState('inherit');
-    const [textCasing, setTextCasing] = useState('inherit');
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const {
@@ -53,6 +51,11 @@ export default function SelectSandboxPage() {
     
     const previewRadius = BORDER_RADIUS_TOKENS.find(t => t.token === effectiveProps.radius)?.value.split(' ')[0] || '8px';
     const previewWidth = BORDER_WIDTH_TOKENS.find(t => t.token === effectiveProps.width)?.value.split(' ')[0] || '1px';
+    const previewBgLayer = state.components['Select']?.bg || '';
+    const previewBgTokenDef = ZAP_LAYER_MAP.find(L => L.zapToken === previewBgLayer);
+    const previewBgCssVar = previewBgTokenDef 
+        ? `var(--color-${previewBgTokenDef.m3Token.replace('bg-', '')})` 
+        : 'var(--color-surface-container-highest)';
 
     const renderRadiusSelect = (value: string, onChange: (val: string) => void) => {
         const safeValue = value === '' ? 'inherit' : value;
@@ -88,51 +91,34 @@ export default function SelectSandboxPage() {
         );
     };
 
-    const renderTypographySelect = (value: string, onChange: (val: string) => void) => {
+    const renderBgSelect = (value: string, onChange: (val: string) => void) => {
+        const safeValue = value === '' ? 'inherit' : value;
         const options = [
-            { label: '(Inherit Universal)', value: 'inherit' },
-            ...TYPE_STYLES.map(t => ({ label: t.name, value: t.name }))
+            { label: '(L4 Default)', value: 'inherit' },
+            ...ZAP_LAYER_MAP.map(L => ({ label: `${L.zapLayer} (${L.zapToken})`, value: L.zapToken }))
         ];
         return (
             <ZapSelect 
-                value={value} 
-                onChange={onChange}
+                value={safeValue} 
+                onChange={(val) => onChange(val === 'inherit' ? '' : val)}
                 options={options}
-                placeholder="(Inherit Universal)"
-                className={`w-full bg-layer-base ${value !== 'inherit' && value ? 'border-primary/50 text-primary' : 'border-border/30 text-foreground'}`}
+                placeholder="(L4 Default)"
+                className={`w-full bg-layer-base ${value !== '' ? 'border-primary/50 text-primary' : 'border-border/30 text-foreground'}`}
             />
         );
     };
 
-    const renderTextCasingSelect = (value: string, onChange: (val: string) => void) => {
-        const options = [
-            { label: '(Inherit Universal)', value: 'inherit' },
-            { label: 'Normal (normal-case)', value: 'normal-case' },
-            { label: 'Uppercase (uppercase)', value: 'uppercase' },
-            { label: 'Lowercase (lowercase)', value: 'lowercase' },
-            { label: 'Capitalize (capitalize)', value: 'capitalize' }
-        ];
-        return (
-            <ZapSelect 
-                value={value} 
-                onChange={onChange}
-                options={options}
-                placeholder="(Inherit Universal)"
-                className={`w-full bg-layer-base ${value !== 'inherit' && value ? 'border-primary/50 text-primary' : 'border-border/30 text-foreground'}`}
-            />
-        );
-    };
 
     const inspectorControls = (
         <Wrapper identity={{ displayName: "Inspector Controls Container", type: "Container", filePath: "zap/atoms/select/page.tsx" }}>
             <div className="space-y-4">
                 <Wrapper identity={{ displayName: "Select Structural Settings", type: "Docs Link", filePath: "zap/atoms/select/page.tsx" }}>
                     <div className="space-y-6">
-                        <h4 className="text-[10px] text-transform-primary font-display font-bold text-muted-foreground tracking-wider uppercase">Sandbox Variables</h4>
+                        <h4 className="text-label-small text-transform-primary font-display font-bold text-muted-foreground tracking-wider uppercase">Sandbox Variables</h4>
 
                         <div className="space-y-4">
                             <div className="space-y-2">
-                                <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-muted-foreground uppercase">
+                                <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-muted-foreground uppercase">
                                     <span>--select-height</span>
                                     <span className="font-bold">{height[0]}px</span>
                                 </div>
@@ -140,7 +126,7 @@ export default function SelectSandboxPage() {
                             </div>
 
                             <div className="space-y-1">
-                                <span className="text-[10px] text-muted-foreground flex justify-between">
+                                <span className="text-label-small text-muted-foreground flex justify-between">
                                     <span>Width Override</span>
                                     <span className="font-bold">{previewWidth}</span>
                                 </span>
@@ -154,7 +140,7 @@ export default function SelectSandboxPage() {
                             </div>
 
                             <div className="space-y-1">
-                                <span className="text-[10px] text-muted-foreground flex justify-between">
+                                <span className="text-label-small text-muted-foreground flex justify-between">
                                     <span>Radius Override</span>
                                     <span className="font-bold">{previewRadius}</span>
                                 </span>
@@ -168,20 +154,20 @@ export default function SelectSandboxPage() {
                             </div>
 
                             <div className="space-y-1">
-                                <span className="text-[10px] text-muted-foreground flex justify-between">
-                                    <span>Typography Override</span>
-                                    <span className="font-bold whitespace-nowrap overflow-hidden text-ellipsis">{typography !== 'inherit' ? typography : 'Inherit'}</span>
+                                <span className="text-label-small text-muted-foreground flex justify-between">
+                                    <span>Color / Layer</span>
+                                    <span className="font-bold whitespace-nowrap overflow-hidden text-ellipsis ml-2 max-w-[120px]">{previewBgTokenDef ? previewBgTokenDef.zapLayer : 'L4 Default'}</span>
                                 </span>
-                                {renderTypographySelect(typography, setTypography)}
+                                {renderBgSelect(
+                                    state.components['Select']?.bg || '', 
+                                    (val) => {
+                                        if (val === '') clearComponentOverride('Select', 'bg');
+                                        else setComponentOverride('Select', 'bg', val);
+                                    }
+                                )}
                             </div>
 
-                            <div className="space-y-1">
-                                <span className="text-[10px] text-muted-foreground flex justify-between">
-                                    <span>Text Casing</span>
-                                    <span className="font-bold">{textCasing !== 'inherit' ? textCasing : 'Inherit'}</span>
-                                </span>
-                                {renderTextCasingSelect(textCasing, setTextCasing)}
-                            </div>
+
                         </div>
                     </div>
                 </Wrapper>
@@ -191,8 +177,6 @@ export default function SelectSandboxPage() {
 
     const handleLoadedVariables = React.useCallback((variables: Record<string, string>) => {
         if (variables['--select-height']) setHeight([parseCssToNumber(variables['--select-height'])]);
-        if (variables['--select-typography']) setTypography(variables['--select-typography']);
-        if (variables['--select-text-casing']) setTextCasing(variables['--select-text-casing']);
     }, []);
 
     const handlePublish = async () => {
@@ -200,9 +184,7 @@ export default function SelectSandboxPage() {
         try {
             // Publish local component values
             const variables = {
-                '--select-height': `${height[0]}px`,
-                '--select-typography': typography,
-                '--select-text-casing': textCasing
+                '--select-height': `${height[0]}px`
             };
             const res1 = await fetch('/api/theme/publish', {
                 method: 'POST',
@@ -259,18 +241,14 @@ export default function SelectSandboxPage() {
             ]} 
             onLoadedVariables={handleLoadedVariables}
         >
-            <style dangerouslySetInnerHTML={{ __html: `
-                .select-preview-sandbox {
+            <style 
+                key={`sandbox-styles-${previewWidth}-${previewRadius}-${height[0]}-${previewBgLayer}`}
+                dangerouslySetInnerHTML={{ __html: `
+                :root {
                     --select-border-width: ${previewWidth};
                     --select-border-radius: ${previewRadius};
                     --select-height: ${height[0]}px;
-                    ${TYPE_STYLES.find(t => t.name === typography) ? `
-                    --select-font-size: ${TYPE_STYLES.find(t => t.name === typography)?.fontSizeRem};
-                    --select-line-height: ${TYPE_STYLES.find(t => t.name === typography)?.lineHeight};
-                    --select-letter-spacing: ${TYPE_STYLES.find(t => t.name === typography)?.letterSpacing}px;
-                    --select-font-weight: ${TYPE_STYLES.find(t => t.name === typography)?.fontWeight};
-                    ` : ''}
-                    ${(textCasing === 'uppercase' || textCasing === 'lowercase' || textCasing === 'capitalize' || textCasing === 'normal-case') ? `--select-text-casing: ${textCasing === 'uppercase' ? 'uppercase' : textCasing === 'lowercase' ? 'lowercase' : textCasing === 'capitalize' ? 'capitalize' : 'none'};` : ''}
+                    --select-bg: ${previewBgCssVar};
                 }
             ` }} />
             <div 

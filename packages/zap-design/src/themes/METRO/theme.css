@@ -79,9 +79,9 @@
     --radio-border-width: 2px !important;
     --form-item-gap: 12px !important;
     --font-display: var(--font-pacifico), cursive !important;
-    --heading-transform: uppercase !important;
+    --heading-transform: uppercase;
     --font-body: var(--font-pacifico), cursive !important;
-    --body-transform: uppercase !important;
+    --body-transform: uppercase;
     --font-dev: var(--font-jetbrains), monospace !important;
-    --dev-transform: lowercase !important;
+    --dev-transform: lowercase;
 }

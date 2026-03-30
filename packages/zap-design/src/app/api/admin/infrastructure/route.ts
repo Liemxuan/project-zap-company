@@ -72,11 +72,16 @@ export async function GET() {
     try {
         await prisma.$queryRawUnsafe('SELECT 1');
         
-        // Fetch live Swarm JobTickets
-        const jobTickets = await prisma.jobTicket.findMany({
-            orderBy: { createdAt: 'desc' },
-            take: 50
-        });
+        // Fetch live Swarm JobTickets safely
+        let jobTickets: Record<string, unknown>[] = [];
+        try {
+            jobTickets = await prisma.jobTicket.findMany({
+                orderBy: { createdAt: 'desc' },
+                take: 50
+            }) as unknown as Record<string, unknown>[];
+        } catch (jobErr) {
+            console.warn('[ZAP] Optional JobTicket table is migrated/missing. Skipping task fetch.');
+        }
         
         report.tasks = jobTickets.map((t: Record<string, unknown>) => {
             let columnId = 'queued';
@@ -126,25 +131,27 @@ export async function GET() {
         const adminDb = client.db('admin');
         const info = await adminDb.admin().listDatabases();
         await client.close();
+        const displayHost = MONGO_URI.includes('@') ? MONGO_URI.split('@')[1].split('/')[0] : 'localhost:27017';
         report.servers.push({
             id: 'mongodb',
             name: 'mongodb',
             sector: 'ZAP-CORE',
             status: 'online',
             version: '8.0.19',
-            host: 'mongodb://localhost:27017/zap',
+            host: `mongodb+srv://${displayHost}`,
             details: `${info.databases.length} databases mapped`,
             latency: `${Date.now() - mongoStart}ms`
         });
-    } catch {
+    } catch (err: unknown) {
+        const displayHost = MONGO_URI.includes('@') ? MONGO_URI.split('@')[1].split('/')[0] : 'localhost:27017';
         report.servers.push({
             id: 'mongodb',
             name: 'mongodb',
             sector: 'ZAP-CORE',
             status: 'offline',
             version: '-',
-            host: 'localhost:27017',
-            details: 'Cluster Unreachable',
+            host: displayHost,
+            details: err instanceof Error ? err.message : 'Cluster Unreachable',
             latency: '999ms'
         });
     }

@@ -1,4 +1,6 @@
 import { ShieldCheck } from 'lucide-react';
+import { Heading } from "zap-design/src/genesis/atoms/typography/headings";
+import { Text } from "zap-design/src/genesis/atoms/typography/text";
 
 export function BrandHeader() {
   return (
@@ -7,8 +9,8 @@ export function BrandHeader() {
         <ShieldCheck className="w-6 h-6 text-primary" />
       </div>
       <div className="text-center space-y-1">
-        <h1 className="text-2xl font-bold tracking-tight text-on-surface">ZAP Vault</h1>
-        <p className="text-sm text-on-surface-variant">Master Authentication Gateway</p>
+        <Heading level={1} className="text-on-surface">ZAP Vault</Heading>
+        <Text size="body-small" className="text-on-surface-variant">Master Authentication Gateway</Text>
       </div>
     </div>
   );

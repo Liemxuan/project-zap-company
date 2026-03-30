@@ -25,8 +25,8 @@
       }
     },
     "typography": {
-      "primaryFont": "var(--font-roboto), sans-serif",
-      "primaryTransform": "uppercase",
+      "primaryFont": "var(--font-jetbrains), monospace",
+      "primaryTransform": "lowercase",
       "secondaryFont": "var(--font-inter), sans-serif",
       "secondaryTransform": "lowercase",
       "tertiaryFont": "var(--font-jetbrains), monospace",
@@ -34,7 +34,7 @@
     }
   },
   "metrics": {
-    "checkboxSize": "20px !important",
+    "checkboxSize": "16px !important",
     "checkboxBorderWidth": "1px !important",
     "checkboxBorderRadius": "4px !important",
     "buttonHeight": "34px !important",
@@ -64,7 +64,7 @@
     "inputHeight": "42px !important",
     "inputBorderWidth": "1px !important",
     "inputBorderRadius": "12px !important",
-    "textareaMinHeight": "80px !important",
+    "textareaMinHeight": "130px !important",
     "textareaBorderRadius": "12px !important",
     "textareaBorderWidth": "1px !important",
     "switchTrackWidth": "38px !important",
@@ -110,8 +110,8 @@
     "radioSize": "18px !important",
     "radioBorderWidth": "2px !important",
     "formItemGap": "12px !important",
-    "fontDisplay": "var(--font-roboto), sans-serif !important",
-    "headingTransform": "uppercase !important",
+    "fontDisplay": "var(--font-jetbrains), monospace !important",
+    "headingTransform": "lowercase !important",
     "fontBody": "var(--font-inter), sans-serif !important",
     "bodyTransform": "lowercase !important",
     "fontDev": "var(--font-jetbrains), monospace !important",
@@ -192,8 +192,25 @@
     "cardBorderRadius": "0px !important",
     "spacingCardPad": "15px !important",
     "alertRadius": "8px !important",
-    "alertCalloutBorder": "4px !important"
+    "alertCalloutBorder": "4px !important",
+    "merchantSidenavWidth": "202px !important",
+    "merchantCanvasPadding": "24px !important",
+    "merchantRadius": "6px !important",
+    "merchantHeaderHeight": "72px !important",
+    "selectHeight": "34px !important",
+    "zapAccordionLayout": "pill !important",
+    "userSessionSize": "small !important",
+    "userSessionVariant": "ghost !important",
+    "userSessionSpacing": "sm !important",
+    "userSessionInteraction": "dropdown !important",
+    "userSessionDropdownSide": "top !important",
+    "userSessionShowLabel": "true !important",
+    "navMaxWidth": "100% !important",
+    "navBorderWidth": "0px !important",
+    "navBorderRadius": "0px !important",
+    "navShowContent": "false !important",
+    "navDropdownSide": "top !important"
   },
   "name": "METRO",
-  "updatedAt": "2026-03-26T00:30:47.712Z"
+  "updatedAt": "2026-03-29T23:49:13.084Z"
 }

@@ -18,6 +18,7 @@ export interface HorizontalNavigationProps {
         } | null;
     };
     isLoggedIn?: boolean;
+    dropdownSide?: 'top' | 'bottom';
     onLoginClick?: () => void;
     onLogoutClick?: () => void;
 }
@@ -32,6 +33,7 @@ export function HorizontalNavigation({
         position: "Principal Designer"
     },
     isLoggedIn = true,
+    dropdownSide,
     onLoginClick,
     onLogoutClick
 }: HorizontalNavigationProps) {
@@ -56,6 +58,7 @@ export function HorizontalNavigation({
                             avatarUrl: user.avatarUrl || undefined,
                             status: (user.status as "online" | "offline" | "busy" | "away") || "online"
                         } : undefined}
+                        dropdownSide={dropdownSide}
                         onLoginClick={onLoginClick}
                         onLogoutClick={onLogoutClick}
                     />

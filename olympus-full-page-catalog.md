@@ -1,0 +1,424 @@
+# Olympus Global Page & Route Catalog
+
+Generated for site-wide architectural auditing.
+
+## ZAP Design Engine (Port 3000)
+- `packages/zap-design/src/app/admin/tracker/page.tsx`
+  - **Export:** `AdminTrackerPage`
+  - **Summary:** **Main Heading:** Olympus Mission Control
+- `packages/zap-design/src/app/api/admin/infrastructure/route.ts`
+  - **Export:** `API Route`
+  - **Summary:** API Route Controller supporting GET
+- `packages/zap-design/src/app/api/assets/lock/route.ts`
+  - **Export:** `API Route`
+  - **Summary:** API Route Controller supporting unknown verbs
+- `packages/zap-design/src/app/api/assets/route.ts`
+  - **Export:** `API Route`
+  - **Summary:** API Route Controller supporting GET
+- `packages/zap-design/src/app/api/audit/route.ts`
+  - **Export:** `API Route`
+  - **Summary:** API Route Controller supporting GET
+- `packages/zap-design/src/app/api/border_radius/publish/route.ts`
+  - **Export:** `API Route`
+  - **Summary:** API Route Controller supporting GET, POST
+- `packages/zap-design/src/app/api/colors/publish/route.ts`
+  - **Export:** `API Route`
+  - **Summary:** API Route Controller supporting GET, POST
+- `packages/zap-design/src/app/api/elevation/publish/route.ts`
+  - **Export:** `API Route`
+  - **Summary:** API Route Controller supporting POST
+- `packages/zap-design/src/app/api/elevation/settings/route.ts`
+  - **Export:** `API Route`
+  - **Summary:** API Route Controller supporting GET
+- `packages/zap-design/src/app/api/geometry/publish/route.ts`
+  - **Export:** `API Route`
+  - **Summary:** API Route Controller supporting GET, POST
+- `packages/zap-design/src/app/api/heartbeat/route.ts`
+  - **Export:** `API Route`
+  - **Summary:** API Route Controller supporting GET | *Doc:* * GET /api/heartbeat * * Agent heartbeat endpoint. Returns agent status, uptime, * and memory system...
+- `packages/zap-design/src/app/api/image/route.ts`
+  - **Export:** `API Route`
+  - **Summary:** API Route Controller supporting GET
+- `packages/zap-design/src/app/api/memory/recall/route.ts`
+  - **Export:** `API Route`
+  - **Summary:** API Route Controller supporting GET, POST | *Doc:* * POST /api/memory/recall * * Recall memories from the Olympus Memory System. * * Body: RecallOption...
+- `packages/zap-design/src/app/api/memory/reflect/route.ts`
+  - **Export:** `API Route`
+  - **Summary:** API Route Controller supporting POST | *Doc:* * POST /api/memory/reflect * * Karpathy-inspired: evaluate recent experiences, promote repeated * su...
+- `packages/zap-design/src/app/api/memory/retain/route.ts`
+  - **Export:** `API Route`
+  - **Summary:** API Route Controller supporting POST | *Doc:* * POST /api/memory/retain * * Retain a world fact or experience in the Olympus Memory System. * * Bo...
+- `packages/zap-design/src/app/api/memory/stats/route.ts`
+  - **Export:** `API Route`
+  - **Summary:** API Route Controller supporting GET | *Doc:* * GET /api/memory/stats * * Memory system health and statistics.
+- `packages/zap-design/src/app/api/spacing/publish/route.ts`
+  - **Export:** `API Route`
+  - **Summary:** API Route Controller supporting GET, POST
+- `packages/zap-design/src/app/api/swarm/registry/route.ts`
+  - **Export:** `API Route`
+  - **Summary:** API Route Controller supporting GET
+- `packages/zap-design/src/app/api/swarm/route.ts`
+  - **Export:** `API Route`
+  - **Summary:** API Route Controller supporting GET
+- `packages/zap-design/src/app/api/tcp-ping/route.ts`
+  - **Export:** `API Route`
+  - **Summary:** API Route Controller supporting GET | *Doc:* * GET /api/tcp-ping * * Server-side raw TCP port ping to verify if a local or remote network service...
+- `packages/zap-design/src/app/api/telemetry/keys/route.ts`
+  - **Export:** `API Route`
+  - **Summary:** API Route Controller supporting GET
+- `packages/zap-design/src/app/api/theme/publish/route.ts`
+  - **Export:** `API Route`
+  - **Summary:** API Route Controller supporting GET, POST | *Doc:* * API: Publish Theme * * Writes the adjusted variables back to the specific theme CSS file * (defaul...
+- `packages/zap-design/src/app/api/theme/settings/route.ts`
+  - **Export:** `API Route`
+  - **Summary:** API Route Controller supporting GET, POST | *Doc:* * ═══════════════════════════════════════════════════════════════════ * API: /api/theme/settings * U...
+- `packages/zap-design/src/app/api/typography/publish/route.ts`
+  - **Export:** `API Route`
+  - **Summary:** API Route Controller supporting GET, POST
+- `packages/zap-design/src/app/api/zap-pages/route.ts`
+  - **Export:** `API Route`
+  - **Summary:** API Route Controller supporting GET
+- `packages/zap-design/src/app/auth/metro/user-management/page.tsx`
+  - **Export:** `AuthUserManagementPage`
+  - **Summary:** Core Application Page
+- `packages/zap-design/src/app/design/[theme]/atoms/[atom]/page.tsx`
+  - **Export:** `DynamicAtomPage`
+  - **Summary:** Core Application Page
+- `packages/zap-design/src/app/design/[theme]/foundations/[foundation]/page.tsx`
+  - **Export:** `DynamicFoundationPage`
+  - **Summary:** Core Application Page
+- `packages/zap-design/src/app/design/[theme]/labs/[lab]/page.tsx`
+  - **Export:** `DynamicLabPage`
+  - **Summary:** Core Application Page
+- `packages/zap-design/src/app/design/[theme]/merchant-workspace/page.tsx`
+  - **Export:** `MerchantWorkspaceSandbox`
+  - **Summary:** **Sandbox:** Merchant Workspace Sandbox (WORKSPACE INTEGRATION)
+- `packages/zap-design/src/app/design/[theme]/mission-control/agents/[name]/page.tsx`
+  - **Export:** `AgentForensicsPage`
+  - **Summary:** **Main Heading:**                                                                   {agentName} Agent                             
+- `packages/zap-design/src/app/design/[theme]/mission-control/gateway/page.tsx`
+  - **Export:** `GatewayForensicsPage`
+  - **Summary:** **Main Heading:**                                                                   Gateway Matrix                             
+- `packages/zap-design/src/app/design/[theme]/mission-control/page.tsx`
+  - **Export:** `MissionControlPage`
+  - **Summary:** **Main Heading:**                          Mission Control                     
+- `packages/zap-design/src/app/design/[theme]/mission-control/swarm/execution/page.tsx`
+  - **Export:** `ExecutionTrackerDashboard`
+  - **Summary:** **Main Heading:** Execution Tracker
+- `packages/zap-design/src/app/design/[theme]/mission-control/swarm/page.tsx`
+  - **Export:** `SwarmDashboardTable`
+  - **Summary:** Core Application Page
+- `packages/zap-design/src/app/design/[theme]/mission-control/swarm/registry/page.tsx`
+  - **Export:** `ComponentRegistryDashboard`
+  - **Summary:** **Main Heading:** Genesis Registry
+- `packages/zap-design/src/app/design/[theme]/mission-control/topology/page.tsx`
+  - **Export:** `TopologyForensicsPage`
+  - **Summary:** **Main Heading:**                                                                   Topology Viewer                             
+- `packages/zap-design/src/app/design/[theme]/molecules/[molecule]/page.tsx`
+  - **Export:** `DynamicMoleculePage`
+  - **Summary:** Core Application Page
+- `packages/zap-design/src/app/design/[theme]/organisms/[organism]/page.tsx`
+  - **Export:** `DynamicOrganismPage`
+  - **Summary:** Core Application Page
+- `packages/zap-design/src/app/design/[theme]/organisms/inspector/page.tsx`
+  - **Export:** `InspectorOrganismPage`
+  - **Summary:** **Sandbox:** Inspector Architecture (L4/L5 TEMPLATE)
+- `packages/zap-design/src/app/design/[theme]/page.tsx`
+  - **Export:** `ThemeHomePage`
+  - **Summary:** Core Application Page | *Doc:* * Dynamic Theme Home Page * * Renders at /design/[theme]/ — shows an overview of the theme * with qu...
+- `packages/zap-design/src/app/design/[theme]/signin/page.tsx`
+  - **Export:** `SignInPage`
+  - **Summary:** Core Application Page
+- `packages/zap-design/src/app/design/audit/page.tsx`
+  - **Export:** `DesignAuditPage`
+  - **Summary:** **Sandbox:** Design Audit Dashboard (L7)
+- `packages/zap-design/src/app/design/zap/atoms/accordion/page.tsx`
+  - **Export:** `AccordionItemSandboxPage`
+  - **Summary:** **Sandbox:** AccordionItem (L3 ATOM)
+- `packages/zap-design/src/app/design/zap/atoms/avatar/page.tsx`
+  - **Export:** `AvatarSandboxPage`
+  - **Summary:** **Sandbox:** Avatar (L3 ATOM)
+- `packages/zap-design/src/app/design/zap/atoms/badge/page.tsx`
+  - **Export:** `BadgeSandboxPage`
+  - **Summary:** **Sandbox:** Badge (L3 ATOM)
+- `packages/zap-design/src/app/design/zap/atoms/breadcrumb-pill/page.tsx`
+  - **Export:** `BreadcrumbPillSandboxPage`
+  - **Summary:** **Sandbox:** BreadcrumbPill (L3 ATOM)
+- `packages/zap-design/src/app/design/zap/atoms/button/page.tsx`
+  - **Export:** `ButtonSandboxPage`
+  - **Summary:** **Sandbox:** Button (L3 ATOM)
+- `packages/zap-design/src/app/design/zap/atoms/canvas/page.tsx`
+  - **Export:** `CanvasSandboxPage`
+  - **Summary:** **Sandbox:** Canvas (L3 ATOM)
+- `packages/zap-design/src/app/design/zap/atoms/card/page.tsx`
+  - **Export:** `CardSandboxPage`
+  - **Summary:** **Sandbox:** Cards & Containers (L4 MOLECULE)
+- `packages/zap-design/src/app/design/zap/atoms/checkbox/page.tsx`
+  - **Export:** `CheckboxSandboxPage`
+  - **Summary:** **Sandbox:** Checkbox (L3 ATOM)
+- `packages/zap-design/src/app/design/zap/atoms/colors/page.tsx`
+  - **Export:** `ColorPalettePage`
+  - **Summary:** Core Application Page
+- `packages/zap-design/src/app/design/zap/atoms/formatters/page.tsx`
+  - **Export:** `FormattersSandboxPage`
+  - **Summary:** **Sandbox:** Formatters (L3 ATOM)
+- `packages/zap-design/src/app/design/zap/atoms/icons/page.tsx`
+  - **Export:** `IconographyPage`
+  - **Summary:** Core Application Page
+- `packages/zap-design/src/app/design/zap/atoms/indicator/page.tsx`
+  - **Export:** `IndicatorSandboxPage`
+  - **Summary:** **Sandbox:** StatusDot (L3 ATOM)
+- `packages/zap-design/src/app/design/zap/atoms/input/page.tsx`
+  - **Export:** `InputSandboxPage`
+  - **Summary:** **Sandbox:** Input (L3 ATOM)
+- `packages/zap-design/src/app/design/zap/atoms/interactive/page.tsx`
+  - **Export:** `InteractiveElementsPage`
+  - **Summary:** Core Application Page
+- `packages/zap-design/src/app/design/zap/atoms/label/page.tsx`
+  - **Export:** `LabelSandbox`
+  - **Summary:** **Sandbox:** Label (L3 ATOM)
+- `packages/zap-design/src/app/design/zap/atoms/layout/page.tsx`
+  - **Export:** `LayoutPrimitivesPage`
+  - **Summary:** Core Application Page
+- `packages/zap-design/src/app/design/zap/atoms/layout-layers/page.tsx`
+  - **Export:** `LayoutLayersPage`
+  - **Summary:** Core Application Page
+- `packages/zap-design/src/app/design/zap/atoms/live-blinker/page.tsx`
+  - **Export:** `LiveBlinkerSandboxPage`
+  - **Summary:** **Sandbox:** LiveBlinker (L3 ATOM)
+- `packages/zap-design/src/app/design/zap/atoms/navlink/page.tsx`
+  - **Export:** `NavLinkSandboxPage`
+  - **Summary:** **Sandbox:** NavLink (L3 ATOM)
+- `packages/zap-design/src/app/design/zap/atoms/panel/page.tsx`
+  - **Export:** `PanelSandboxPage`
+  - **Summary:** **Sandbox:** Panel (L3 ATOM)
+- `packages/zap-design/src/app/design/zap/atoms/pill/page.tsx`
+  - **Export:** `PillSandboxPage`
+  - **Summary:** **Sandbox:** Pill (L3 ATOM)
+- `packages/zap-design/src/app/design/zap/atoms/property-box/page.tsx`
+  - **Export:** `PropertyBoxSandboxPage`
+  - **Summary:** **Sandbox:** PropertyBox (L3 ATOM)
+- `packages/zap-design/src/app/design/zap/atoms/radio/page.tsx`
+  - **Export:** `RadioSandboxPage`
+  - **Summary:** **Sandbox:** Radio (L3 ATOM)
+- `packages/zap-design/src/app/design/zap/atoms/scroll-area/page.tsx`
+  - **Export:** `ScrollAreaSandbox`
+  - **Summary:** **Sandbox:** Scroll Area (L3 ATOM)
+- `packages/zap-design/src/app/design/zap/atoms/select/page.tsx`
+  - **Export:** `SelectSandboxPage`
+  - **Summary:** **Sandbox:** Select (L3 ATOM)
+- `packages/zap-design/src/app/design/zap/atoms/separator/page.tsx`
+  - **Export:** `SeparatorSandbox`
+  - **Summary:** **Sandbox:** Separator (L3 ATOM)
+- `packages/zap-design/src/app/design/zap/atoms/skeleton/page.tsx`
+  - **Export:** `SkeletonSandbox`
+  - **Summary:** **Sandbox:** Skeleton (L3 ATOM)
+- `packages/zap-design/src/app/design/zap/atoms/slider/page.tsx`
+  - **Export:** `SliderSandbox`
+  - **Summary:** **Sandbox:** Slider (L3 ATOM)
+- `packages/zap-design/src/app/design/zap/atoms/status/page.tsx`
+  - **Export:** `StatusIndicatorsPage`
+  - **Summary:** Core Application Page
+- `packages/zap-design/src/app/design/zap/atoms/surface/page.tsx`
+  - **Export:** `SurfaceSandboxPage`
+  - **Summary:** **Sandbox:** Surface (L3 ATOM)
+- `packages/zap-design/src/app/design/zap/atoms/switch/page.tsx`
+  - **Export:** `SwitchSandbox`
+  - **Summary:** **Sandbox:** Switch (L3 ATOM)
+- `packages/zap-design/src/app/design/zap/atoms/table/page.tsx`
+  - **Export:** `TableSandboxPage`
+  - **Summary:** **Sandbox:** Table (L3 ATOM)
+- `packages/zap-design/src/app/design/zap/atoms/tabs/page.tsx`
+  - **Export:** `TabsSandboxPage`
+  - **Summary:** **Sandbox:** Tabs (L3 ATOM)
+- `packages/zap-design/src/app/design/zap/atoms/textarea/page.tsx`
+  - **Export:** `TextareaSandbox`
+  - **Summary:** **Sandbox:** Textarea (L3 ATOM)
+- `packages/zap-design/src/app/design/zap/atoms/toggle/page.tsx`
+  - **Export:** `ToggleSandboxPage`
+  - **Summary:** **Sandbox:** Toggle (L3 ATOM)
+- `packages/zap-design/src/app/design/zap/atoms/typography/page.tsx`
+  - **Export:** `ZapTypographyPage`
+  - **Summary:** **Main Heading:**                          {activeTab === 'preview' && activeTemplate === 'fun' ? 'FUN MODE' : null}                         {activeTab === 'preview' && activeTemplate !== 'fun' ? 'WILD MODE' : null}                         {activeTab === 'details' && 'TYPOGRAPHY'}                         {activeTab === 'playground' && 'PLAYGROUND'}                       
+- `packages/zap-design/src/app/design/zap/labs/agents/page.tsx`
+  - **Export:** `AgentTrackingMatrix`
+  - **Summary:** **Main Heading:** Olympus Agent Wikidocs
+- `packages/zap-design/src/app/design/zap/labs/stitch-brand-test/page.tsx`
+  - **Export:** `StitchMoleculeTestPage`
+  - **Summary:** **Main Heading:**                                          Build Consistent Experiences                                     
+- `packages/zap-design/src/app/design/zap/labs/stitch-dropzone/page.tsx`
+  - **Export:** `StitchDropzonePage`
+  - **Summary:** **Main Heading:**                          Stitch Dropzone                     
+- `packages/zap-design/src/app/design/zap/labs/stitch-playful-test/page.tsx`
+  - **Export:** `StitchPlayfulTestPage`
+  - **Summary:** **Main Heading:**                                              Hi, I&apos;m Alex!                                                                                                                                                                                                                                             
+- `packages/zap-design/src/app/design/zap/labs/stitch-test/page.tsx`
+  - **Export:** `StitchMagicTestPage`
+  - **Summary:** **Main Heading:**                          Stitch Magic Test                         (Actual Stitch Layout Validation)                     
+- `packages/zap-design/src/app/design/zap/labs/theme-remix/page.tsx`
+  - **Export:** `ThemeRemixBlast`
+  - **Summary:** **Main Heading:** Theme Remix Engine Test (4-State)
+- `packages/zap-design/src/app/design/zap/labs/theme-wix/page.tsx`
+  - **Export:** `WixCompetitorBlast`
+  - **Summary:** **Main Heading:**                          Create a website                          without limits                     
+- `packages/zap-design/src/app/design/zap/m3-preview/page.tsx`
+  - **Export:** `M3PreviewPage`
+  - **Summary:** **Main Heading:** ZAP M3 Engine Preview
+- `packages/zap-design/src/app/design/zap/molecules/alert/page.tsx`
+  - **Export:** `AlertSandboxPage`
+  - **Summary:** **Sandbox:** Alert (L4 MOLECULE)
+- `packages/zap-design/src/app/design/zap/molecules/breadcrumb/page.tsx`
+  - **Export:** `BreadcrumbsSandboxPage`
+  - **Summary:** **Sandbox:** Breadcrumbs (L4 MOLECULE)
+- `packages/zap-design/src/app/design/zap/molecules/canvas-body/page.tsx`
+  - **Export:** `CanvasBodyPage`
+  - **Summary:** **Sandbox:** CanvasBody (L4 MOLECULE)
+- `packages/zap-design/src/app/design/zap/molecules/cards/page.tsx`
+  - **Export:** `CardsPage`
+  - **Summary:** **Sandbox:** Cards (L4 MOLECULE)
+- `packages/zap-design/src/app/design/zap/molecules/config-bar/page.tsx`
+  - **Export:** `ConfigBarPage`
+  - **Summary:** **Sandbox:** Config Bar (L4 MOLECULE)
+- `packages/zap-design/src/app/design/zap/molecules/data-readout/page.tsx`
+  - **Export:** `DataReadoutSandbox`
+  - **Summary:** **Sandbox:** DataReadout (L4 MOLECULE)
+- `packages/zap-design/src/app/design/zap/molecules/dialog/page.tsx`
+  - **Export:** `DialogSandboxPage`
+  - **Summary:** **Sandbox:** Dialog (L4 MOLECULE)
+- `packages/zap-design/src/app/design/zap/molecules/dialogs/page.tsx`
+  - **Export:** `DialogsPage`
+  - **Summary:** **Sandbox:** Dialogs (L4 MOLECULE)
+- `packages/zap-design/src/app/design/zap/molecules/dropdown-menu/page.tsx`
+  - **Export:** `DropdownMenuSandboxPage`
+  - **Summary:** **Sandbox:** Dropdown Menu (L4 MOLECULE)
+- `packages/zap-design/src/app/design/zap/molecules/dropzone/page.tsx`
+  - **Export:** `DropzoneSandboxPage`
+  - **Summary:** **Sandbox:** File Dropzone (L4 MOLECULE)
+- `packages/zap-design/src/app/design/zap/molecules/form/page.tsx`
+  - **Export:** `FormSandboxPage`
+  - **Summary:** **Sandbox:** Form (L4 MOLECULE)
+- `packages/zap-design/src/app/design/zap/molecules/forms/page.tsx`
+  - **Export:** `FormSandboxPage`
+  - **Summary:** **Sandbox:** Form Architecture (L4 MOLECULE)
+- `packages/zap-design/src/app/design/zap/molecules/horizontal-navigation/page.tsx`
+  - **Export:** `HorizontalNavigationSandboxPage`
+  - **Summary:** **Sandbox:** Horizontal Navigation (L4 MOLECULE)
+- `packages/zap-design/src/app/design/zap/molecules/inputs/page.tsx`
+  - **Export:** `InputModulesV2Page`
+  - **Summary:** **Sandbox:** Input Modules (L4 MOLECULE)
+- `packages/zap-design/src/app/design/zap/molecules/inspector-accordion/page.tsx`
+  - **Export:** `InspectorAccordionPage`
+  - **Summary:** **Sandbox:** InspectorAccordion (L4 MOLECULE)
+- `packages/zap-design/src/app/design/zap/molecules/layout/page.tsx`
+  - **Export:** `ThemeHeaderPage`
+  - **Summary:** **Sandbox:** ThemeHeader (L4 MOLECULE)
+- `packages/zap-design/src/app/design/zap/molecules/pagination/page.tsx`
+  - **Export:** `PaginationSandboxPage`
+  - **Summary:** **Sandbox:** Pagination (L4 MOLECULE)
+- `packages/zap-design/src/app/design/zap/molecules/profile-switcher/page.tsx`
+  - **Export:** `ProfileSwitcherSandbox`
+  - **Summary:** **Sandbox:** Profile Switcher (Molecules)
+- `packages/zap-design/src/app/design/zap/molecules/progress/page.tsx`
+  - **Export:** `ProgressSandboxPage`
+  - **Summary:** **Sandbox:** Progress (L4 MOLECULE)
+- `packages/zap-design/src/app/design/zap/molecules/quick-navigate/page.tsx`
+  - **Export:** `QuickNavigateSandboxPage`
+  - **Summary:** **Sandbox:** Quick Navigate (L4 MOLECULE)
+- `packages/zap-design/src/app/design/zap/molecules/rating/page.tsx`
+  - **Export:** `RatingSandboxPage`
+  - **Summary:** **Sandbox:** Rating (L4 MOLECULE)
+- `packages/zap-design/src/app/design/zap/molecules/remember-me-checkbox/page.tsx`
+  - **Export:** `RememberMeCheckboxPage`
+  - **Summary:** **Sandbox:** Remember Me Checkbox (L4 MOLECULE)
+- `packages/zap-design/src/app/design/zap/molecules/social-login-buttons/page.tsx`
+  - **Export:** `SocialLoginButtonsPage`
+  - **Summary:** **Sandbox:** Social Login Buttons (L4 MOLECULE)
+- `packages/zap-design/src/app/design/zap/molecules/steppers/page.tsx`
+  - **Export:** `SteppersSandboxPage`
+  - **Summary:** **Sandbox:** Quantity Stepper (L4 MOLECULE)
+- `packages/zap-design/src/app/design/zap/molecules/tabs/page.tsx`
+  - **Export:** `TabsSandboxPage`
+  - **Summary:** **Sandbox:** Tabs (L4 MOLECULE)
+- `packages/zap-design/src/app/design/zap/molecules/theme-header/page.tsx`
+  - **Export:** `ThemeHeaderPage`
+  - **Summary:** **Sandbox:** ThemeHeader (L4 MOLECULE)
+- `packages/zap-design/src/app/design/zap/molecules/theme-publisher/page.tsx`
+  - **Export:** `ThemePublisherSandboxPage`
+  - **Summary:** **Sandbox:** Theme Publisher (Dev Tooling (L1))
+- `packages/zap-design/src/app/design/zap/molecules/tooltip/page.tsx`
+  - **Export:** `TooltipSandboxPage`
+  - **Summary:** **Sandbox:** Tooltip (L4 MOLECULE)
+- `packages/zap-design/src/app/design/zap/molecules/user-session/page.tsx`
+  - **Export:** `UserSessionSandboxPage`
+  - **Summary:** **Sandbox:** User Session (L4 MOLECULE)
+- `packages/zap-design/src/app/design/zap/organisms/auth-scaffold/page.tsx`
+  - **Export:** `AuthScaffoldSandbox`
+  - **Summary:** **Sandbox:** Authentication Scaffolds (L5: Organisms)
+- `packages/zap-design/src/app/design/zap/organisms/data-grid/page.tsx`
+  - **Export:** `DataGridSandbox`
+  - **Summary:** **Sandbox:** Data Grid (L5 ORGANISM)
+- `packages/zap-design/src/app/design/zap/organisms/inspector/page.tsx`
+  - **Export:** `InspectorSandboxPage`
+  - **Summary:** **Sandbox:** MockComponent (L5 ORGANISM)
+- `packages/zap-design/src/app/design/zap/organisms/interactive-gallery/page.tsx`
+  - **Export:** `InteractiveGallerySandbox`
+  - **Summary:** **Sandbox:** Interactive Elements Gallery (L5: Organisms)
+- `packages/zap-design/src/app/design/zap/organisms/kanban-board/page.tsx`
+  - **Export:** `KanbanBoardSandbox`
+  - **Summary:** **Sandbox:** Kanban Board (L5 ORGANISM)
+- `packages/zap-design/src/app/design/zap/organisms/navigation-menu/page.tsx`
+  - **Export:** `NavigationMenuSandbox`
+  - **Summary:** **Sandbox:** Navigation Menu (L5 ORGANISM)
+- `packages/zap-design/src/app/design/zap/organisms/user-profile-header/page.tsx`
+  - **Export:** `UserProfileHeaderSandbox`
+  - **Summary:** **Sandbox:** User Profile Header (L5: Organisms)
+- `packages/zap-design/src/app/design/zap/templates/sign-in/page.tsx`
+  - **Export:** `SignInSandboxPage`
+  - **Summary:** **Sandbox:** SignInTemplate (L7 PAGE)
+- `packages/zap-design/src/app/page.tsx`
+  - **Export:** `RootLoginPage`
+  - **Summary:** **Main Heading:**                      ZAP SYSTEM                 
+- `packages/zap-design/src/app/tenant/apps/page.tsx`
+  - **Export:** `TenantAppsDirectory`
+  - **Summary:** **Main Heading:** Workspace Applications
+- `packages/zap-design/src/app/tenant/onboarding/page.tsx`
+  - **Export:** `TenantOnboardingPage`
+  - **Summary:** **Main Heading:**            Tenant Onboarding         
+
+## ZAP Swarm Command Center (Port 3500)
+- `apps/zap-swarm/src/app/agents/[id]/page.tsx`
+  - **Export:** `AgentConfig`
+  - **Summary:** **Main Heading:**                Configuring:               {resolvedParams.id}                                                                    {isActive ? 'ONLINE NODE' : 'OFFLINE'}                                             
+- `apps/zap-swarm/src/app/agents/new/page.tsx`
+  - **Export:** `AgentFactory`
+  - **Summary:** **Main Heading:** Deploy Subagent
+- `apps/zap-swarm/src/app/agents/page.tsx`
+  - **Export:** `DeerflowCommandCenter`
+  - **Summary:** **Main Heading:** Deerflow 2.0
+- `apps/zap-swarm/src/app/api/fleet/route.ts`
+  - **Export:** `API Route`
+  - **Summary:** API Route Controller supporting GET
+- `apps/zap-swarm/src/app/api/swarm/agent/identity/route.ts`
+  - **Export:** `API Route`
+  - **Summary:** API Route Controller supporting GET
+- `apps/zap-swarm/src/app/api/swarm/docker/route.ts`
+  - **Export:** `API Route`
+  - **Summary:** API Route Controller supporting GET
+- `apps/zap-swarm/src/app/api/swarm/jobs/route.ts`
+  - **Export:** `API Route`
+  - **Summary:** API Route Controller supporting GET, POST
+- `apps/zap-swarm/src/app/api/swarm/logs/route.ts`
+  - **Export:** `API Route`
+  - **Summary:** API Route Controller supporting GET
+- `apps/zap-swarm/src/app/api/swarm/zss/route.ts`
+  - **Export:** `API Route`
+  - **Summary:** API Route Controller supporting GET
+- `apps/zap-swarm/src/app/chats/[id]/page.tsx`
+  - **Export:** `TraceExecution`
+  - **Summary:** Core Application Page
+- `apps/zap-swarm/src/app/fleet/page.tsx`
+  - **Export:** `FleetDashboard`
+  - **Summary:** **Main Heading:**             API Fleet Command         
+- `apps/zap-swarm/src/app/page.tsx`
+  - **Export:** `SwarmDashboard`
+  - **Summary:** **Main Heading:**              ZAP Swarm Command Center           

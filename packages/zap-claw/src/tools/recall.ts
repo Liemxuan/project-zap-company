@@ -38,7 +38,7 @@ export async function executeRecall(userId: number, input: Record<string, unknow
             return { output: 'No matching memories found.' };
         }
 
-        const formatted = rows.map(r =>
+        const formatted = rows.map((r: any) =>
             `[Memory ID: ${r.id}] [Type: ${r.factType}] ${r.fact}`
         ).join('\n');
 

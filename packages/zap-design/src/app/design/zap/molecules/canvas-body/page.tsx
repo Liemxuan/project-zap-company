@@ -39,38 +39,38 @@ export default function CanvasBodyPage() {
                 {/* ── Layer Stack Visual */}
                 <Wrapper identity={{ displayName: 'Layer Stack Reference', type: 'Docs', filePath: 'zap/molecules/canvas-body/page.tsx' }}>
                     <div className="flex flex-col gap-2">
-                        <span className="text-[10px] font-bold tracking-widest text-on-surface-variant text-transform-secondary font-dev text-transform-tertiary px-1">
+                        <span className="text-label-small font-bold tracking-widest text-on-surface-variant text-transform-secondary font-dev text-transform-tertiary px-1">
                             M3 SPATIAL DEPTH — LAYER STACK
                         </span>
                         <div className="rounded-xl border border-outline-variant/40 overflow-hidden">
                             {/* L1 */}
                             <div className="bg-layer-canvas p-5 flex flex-col gap-3 border-b border-outline-variant/30">
                                 <div className="flex items-center justify-between">
-                                    <span className="text-[10px] font-bold font-dev tracking-widest text-on-surface-variant">L1 — CANVAS FLOOR</span>
-                                    <code className="text-[10px] font-dev text-primary bg-primary/10 px-2 py-0.5 rounded">bg-layer-canvas</code>
+                                    <span className="text-label-small font-bold font-dev tracking-widest text-on-surface-variant">L1 — CANVAS FLOOR</span>
+                                    <code className="text-label-small font-dev text-primary bg-primary/10 px-2 py-0.5 rounded">bg-layer-canvas</code>
                                 </div>
-                                <span className="text-[11px] text-on-surface-variant">surface-container-low · The outermost page background. Provided by the Canvas atom.</span>
+                                <span className="text-label-medium text-on-surface-variant">surface-container-low · The outermost page background. Provided by the Canvas atom.</span>
                                 {/* L2 */}
                                 <div className="bg-layer-cover rounded-xl border border-outline-variant/50 p-4 flex flex-col gap-3">
                                     <div className="flex items-center justify-between">
-                                        <span className="text-[10px] font-bold font-dev tracking-widest text-on-surface-variant">L2 — COVER CARD</span>
-                                        <code className="text-[10px] font-dev text-primary bg-primary/10 px-2 py-0.5 rounded">bg-layer-cover</code>
+                                        <span className="text-label-small font-bold font-dev tracking-widest text-on-surface-variant">L2 — COVER CARD</span>
+                                        <code className="text-label-small font-dev text-primary bg-primary/10 px-2 py-0.5 rounded">bg-layer-cover</code>
                                     </div>
-                                    <span className="text-[11px] text-on-surface-variant">surface-container · The main content card. CanvasBody root.</span>
+                                    <span className="text-label-medium text-on-surface-variant">surface-container · The main content card. CanvasBody root.</span>
                                     {/* L3 */}
                                     <div className="bg-layer-panel rounded-xl border border-outline-variant/40 p-4 flex flex-col gap-3">
                                         <div className="flex items-center justify-between">
-                                            <span className="text-[10px] font-bold font-dev tracking-widest text-on-surface-variant">L3 — SECTION PANEL</span>
-                                            <code className="text-[10px] font-dev text-primary bg-primary/10 px-2 py-0.5 rounded">bg-layer-panel</code>
+                                            <span className="text-label-small font-bold font-dev tracking-widest text-on-surface-variant">L3 — SECTION PANEL</span>
+                                            <code className="text-label-small font-dev text-primary bg-primary/10 px-2 py-0.5 rounded">bg-layer-panel</code>
                                         </div>
-                                        <span className="text-[11px] text-on-surface-variant">surface-container-high · Content sections. CanvasBody.Section.</span>
+                                        <span className="text-label-medium text-on-surface-variant">surface-container-high · Content sections. CanvasBody.Section.</span>
                                         {/* L4 */}
                                         <div className="bg-layer-dialog rounded-lg border border-outline-variant/30 p-4">
                                             <div className="flex items-center justify-between mb-1">
-                                                <span className="text-[10px] font-bold font-dev tracking-widest text-on-surface-variant">L4 — DEMO FRAME</span>
-                                                <code className="text-[10px] font-dev text-primary bg-primary/10 px-2 py-0.5 rounded">bg-layer-dialog</code>
+                                                <span className="text-label-small font-bold font-dev tracking-widest text-on-surface-variant">L4 — DEMO FRAME</span>
+                                                <code className="text-label-small font-dev text-primary bg-primary/10 px-2 py-0.5 rounded">bg-layer-dialog</code>
                                             </div>
-                                            <span className="text-[11px] text-on-surface-variant">surface-container-highest · Preview boxes. CanvasBody.Demo. Ceiling.</span>
+                                            <span className="text-label-medium text-on-surface-variant">surface-container-highest · Preview boxes. CanvasBody.Demo. Ceiling.</span>
                                         </div>
                                     </div>
                                 </div>
@@ -82,7 +82,7 @@ export default function CanvasBodyPage() {
                 {/* ── Live Demo: Full Composition */}
                 <Wrapper identity={{ displayName: 'Live Composition Demo', type: 'Demo', filePath: 'zap/molecules/canvas-body/page.tsx' }}>
                     <div className="flex flex-col gap-2">
-                        <span className="text-[10px] font-bold tracking-widest text-on-surface-variant text-transform-secondary font-dev text-transform-tertiary px-1">
+                        <span className="text-label-small font-bold tracking-widest text-on-surface-variant text-transform-secondary font-dev text-transform-tertiary px-1">
                             LIVE — CanvasBody + Section + Demo (nested live rendering)
                         </span>
                         <CanvasBody maxWidth="max-w-full">
@@ -92,7 +92,7 @@ export default function CanvasBodyPage() {
                                         <p className="font-display text-3xl text-on-surface">The quick brown fox jumps</p>
                                     </CanvasBody.Demo>
                                     <CanvasBody.Demo label="BODY FONT — Inter" minHeight="min-h-[80px]">
-                                        <p className="font-body text-base text-on-surface">Consistent type hierarchy starts with the right surface.</p>
+                                        <p className="font-body text-body-medium text-on-surface">Consistent type hierarchy starts with the right surface.</p>
                                     </CanvasBody.Demo>
                                 </div>
                             </CanvasBody.Section>
@@ -104,7 +104,7 @@ export default function CanvasBodyPage() {
                                         { label: 'Tertiary', cls: 'bg-tertiary text-on-tertiary' },
                                         { label: 'Error', cls: 'bg-error text-on-error' },
                                     ].map(({ label, cls }) => (
-                                        <div key={label} className={`rounded-lg p-4 flex items-center justify-center text-[11px] font-bold font-dev tracking-widest ${cls}`}>
+                                        <div key={label} className={`rounded-lg p-4 flex items-center justify-center text-label-medium font-bold font-dev tracking-widest ${cls}`}>
                                             {label}
                                         </div>
                                     ))}
@@ -117,20 +117,20 @@ export default function CanvasBodyPage() {
                 {/* ── Prop Map */}
                 <Wrapper identity={{ displayName: 'Prop Reference', type: 'Docs', filePath: 'zap/molecules/canvas-body/page.tsx' }}>
                     <div className="flex flex-col gap-2">
-                        <span className="text-[10px] font-bold tracking-widest text-on-surface-variant text-transform-secondary font-dev text-transform-tertiary px-1">
+                        <span className="text-label-small font-bold tracking-widest text-on-surface-variant text-transform-secondary font-dev text-transform-tertiary px-1">
                             PROP REFERENCE
                         </span>
                         <div className="rounded-xl border border-outline-variant/40 overflow-hidden bg-layer-dialog">
                             <div className="px-4 py-3 bg-layer-modal border-b border-outline-variant/30 flex items-center justify-between">
-                                <span className="text-sm font-black tracking-tight text-on-surface uppercase font-secondary">CanvasBody + Sub-components</span>
-                                <span className="text-[10px] text-on-surface-variant font-secondary opacity-70">zap/layout/CanvasBody.tsx</span>
+                                <span className="text-body-small font-black tracking-tight text-on-surface uppercase font-secondary">CanvasBody + Sub-components</span>
+                                <span className="text-label-small text-on-surface-variant font-secondary opacity-70">zap/layout/CanvasBody.tsx</span>
                             </div>
                             <div className="overflow-x-auto">
-                                <table className="w-full text-xs">
+                                <table className="w-full text-label-small">
                                     <thead>
                                         <tr className="bg-layer-modal border-b border-outline-variant/30">
                                             {['Component', 'Prop', 'Type', 'Default', 'Description'].map(h => (
-                                                <th key={h} className="px-4 py-3 text-left text-[10px] font-bold tracking-wider text-on-surface-variant">{h}</th>
+                                                <th key={h} className="px-4 py-3 text-left text-label-small font-bold tracking-wider text-on-surface-variant">{h}</th>
                                             ))}
                                         </tr>
                                     </thead>
@@ -150,7 +150,7 @@ export default function CanvasBodyPage() {
                                             ['CanvasBody.Demo', 'centered', 'boolean?', 'true', 'Center content inside the frame.'],
                                         ].map(([comp, prop, type, def, desc]) => (
                                             <tr key={`${comp}-${prop}`} className="bg-layer-dialog hover:bg-on-surface/3 transition-colors">
-                                                <td className="px-4 py-3 font-dev text-transform-tertiary text-secondary font-bold text-[10px]">{comp}</td>
+                                                <td className="px-4 py-3 font-dev text-transform-tertiary text-secondary font-bold text-label-small">{comp}</td>
                                                 <td className="px-4 py-3 font-dev text-transform-tertiary text-primary font-bold">{prop}</td>
                                                 <td className="px-4 py-3 font-dev text-transform-tertiary text-on-surface-variant">{type}</td>
                                                 <td className="px-4 py-3 font-dev text-transform-tertiary text-on-surface-variant opacity-60">{def}</td>

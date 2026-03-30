@@ -36,24 +36,24 @@ export default function TabsSandboxPage() {
             }}
             platformConstraints={{ web: "Full support", mobile: "Horizontal scroll" }}
             foundationRules={[
-                "Tabs use animated underline via Framer Motion LayoutGroup.",
-                "Active tab text uses --color-primary, underline height follows --card-border-width.",
-                "Border-bottom follows --card-border-width with outline-variant color.",
+                "Tabs use animated underline via Framer Motion LayoutGroup scoped by useId().",
+                "Active tab text uses --color-primary.",
+                "Active state features an explicit 2-pixel primary-color Neo-Brutal line."
             ]}
         >
             <div className="w-full space-y-10 animate-in fade-in duration-500 pb-8">
 
                 {/* Standard Tabs */}
                 <div className="space-y-2">
-                    <span className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Standard Navigation Tabs</span>
-                    <span className="text-[10px] font-dev text-muted-foreground block">
+                    <span className="text-label-small font-semibold text-muted-foreground uppercase tracking-widest">Standard Navigation Tabs</span>
+                    <span className="text-label-small font-dev text-muted-foreground block">
                         4-tab layout with spring-animated underline · Active: <code>{activeTab}</code>
                     </span>
                     <Wrapper identity={{ displayName: "Tabs", type: "Atom", filePath: "genesis/atoms/interactive/Tabs.tsx" }}>
                         <div className="bg-layer-panel border border-card-border rounded-lg p-6 w-full">
                             <Tabs tabs={DEMO_TABS} activeTab={activeTab} onChange={setActiveTab} />
                             <div className="mt-6 p-4 bg-layer-surface rounded-md border border-border/30">
-                                <p className="text-sm text-muted-foreground font-dev">
+                                <p className="text-body-small text-muted-foreground font-dev">
                                     Content for <strong className="text-primary">{activeTab}</strong> tab
                                 </p>
                             </div>
@@ -63,8 +63,8 @@ export default function TabsSandboxPage() {
 
                 {/* Compact Tabs */}
                 <div className="space-y-2">
-                    <span className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Compact Time-Range Tabs</span>
-                    <span className="text-[10px] font-dev text-muted-foreground block">
+                    <span className="text-label-small font-semibold text-muted-foreground uppercase tracking-widest">Compact Time-Range Tabs</span>
+                    <span className="text-label-small font-dev text-muted-foreground block">
                         3-tab compact layout · Active: <code>{compactTab}</code>
                     </span>
                     <Wrapper identity={{ displayName: "Tabs (Compact)", type: "Atom", filePath: "genesis/atoms/interactive/Tabs.tsx" }}>

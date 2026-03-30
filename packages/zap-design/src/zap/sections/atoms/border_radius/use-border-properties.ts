@@ -18,6 +18,10 @@ export interface PerComponentOverride {
     width?: string;
     style?: string;
     opacity?: string;
+    bg?: string;
+    bgGroup?: string;
+    itemRadius?: string;
+    itemWidth?: string;
 }
 
 export type BorderPropertiesState = {
@@ -141,6 +145,7 @@ export function useBorderProperties() {
             width: overrides.width || state.universal.width,
             style: overrides.style || state.universal.style,
             opacity: overrides.opacity || state.universal.opacity,
+            bg: overrides.bg,
         };
     }, [state.universal, state.components]);
 

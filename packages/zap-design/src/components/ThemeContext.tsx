@@ -135,42 +135,46 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
             try {
                 // Fetch Typography
                 const typoRes = await fetch(`/api/typography/publish?theme=${theme}`);
-                const typoResult = await typoRes.json();
-                if (typoResult.success && typoResult.data) {
-                    setTypographyOverrides({
-                        primaryFont: typoResult.data.primaryFont,
-                        primaryTransform: typoResult.data.primaryTransform,
-                        secondaryFont: typoResult.data.secondaryFont,
-                        secondaryTransform: typoResult.data.secondaryTransform,
-                        tertiaryFont: typoResult.data.tertiaryFont,
-                        tertiaryTransform: typoResult.data.tertiaryTransform,
-                        components: typoResult.data.components,
-                    });
+                if (typoRes.ok) {
+                    const typoResult = await typoRes.json();
+                    if (typoResult.success && typoResult.data) {
+                        setTypographyOverrides({
+                            primaryFont: typoResult.data.primaryFont,
+                            primaryTransform: typoResult.data.primaryTransform,
+                            secondaryFont: typoResult.data.secondaryFont,
+                            secondaryTransform: typoResult.data.secondaryTransform,
+                            tertiaryFont: typoResult.data.tertiaryFont,
+                            tertiaryTransform: typoResult.data.tertiaryTransform,
+                            components: typoResult.data.components,
+                        });
+                    }
                 }
-            } catch (err) {
-                console.error("ThemeContext: Failed to load typography:", err);
+            } catch {
+                console.warn("ThemeContext: Could not load typography from theme api.");
             }
 
             try {
                 // Fetch Colors
                 const colorRes = await fetch(`/api/colors/publish?theme=${theme}`);
-                const colorResult = await colorRes.json();
-                
-                let styleTag = document.getElementById('m3-dynamic-theme');
-                if (!styleTag) {
-                    styleTag = document.createElement('style');
-                    styleTag.id = 'm3-dynamic-theme';
-                    document.head.appendChild(styleTag);
-                }
+                if (colorRes.ok) {
+                    const colorResult = await colorRes.json();
+                    
+                    let styleTag = document.getElementById('m3-dynamic-theme');
+                    if (!styleTag) {
+                        styleTag = document.createElement('style');
+                        styleTag.id = 'm3-dynamic-theme';
+                        document.head.appendChild(styleTag);
+                    }
 
-                if (colorResult.success && colorResult.data && colorResult.data.cssOutput) {
-                    styleTag.innerHTML = colorResult.data.cssOutput;
-                } else {
-                    // CLEAR dynamic CSS if theme has no custom configuration to prevent theme bleeding
-                    styleTag.innerHTML = '';
+                    if (colorResult.success && colorResult.data && colorResult.data.cssOutput) {
+                        styleTag.innerHTML = colorResult.data.cssOutput;
+                    } else {
+                        // CLEAR dynamic CSS if theme has no custom configuration to prevent theme bleeding
+                        styleTag.innerHTML = '';
+                    }
                 }
-            } catch (err) {
-                console.error("ThemeContext: Failed to load colors:", err);
+            } catch {
+                console.warn("ThemeContext: Could not load colors from theme api.");
             }
         };
 

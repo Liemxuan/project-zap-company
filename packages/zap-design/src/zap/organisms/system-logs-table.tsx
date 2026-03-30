@@ -40,13 +40,13 @@ export interface Log {
   tags: string[];
 }
 
-type Filters = {
+export type Filters = {
   level: string[];
   service: string[];
   status: string[];
 };
 
-const SAMPLE_LOGS: Log[] = [
+export const SAMPLE_LOGS: Log[] = [
   {
     id: "1",
     timestamp: "2024-11-08T14:32:45Z",
@@ -413,16 +413,46 @@ function FilterPanel({
   );
 }
 
-export function SystemLogsTable({ initialLogs }: { initialLogs?: Log[] }) {
+export function SystemLogsTable({ 
+  initialLogs,
+  filters: controlledFilters,
+  onFilterChange,
+  onToggleFilters,
+  isFilterActive
+}: { 
+  initialLogs?: Log[];
+  filters?: Filters;
+  onFilterChange?: (filters: Filters) => void;
+  onToggleFilters?: () => void;
+  isFilterActive?: boolean;
+}) {
   const [searchQuery, setSearchQuery] = useState("");
   const [expandedId, setExpandedId] = useState<string | null>(null);
-  const [showFilters, setShowFilters] = useState(false);
   const [logs] = useState<Log[]>(initialLogs ?? SAMPLE_LOGS);
-  const [filters, setFilters] = useState<Filters>({
+  
+  // Keep internal state for fallback
+  const [internalFilters, setInternalFilters] = useState<Filters>({
     level: [],
     service: [],
     status: [],
   });
+  const [internalShowFilters, setInternalShowFilters] = useState(false);
+
+  const filters = controlledFilters ?? internalFilters;
+  const showFilters = isFilterActive ?? internalShowFilters;
+
+  const handleFilterChange = (newFilters: Filters) => {
+    if (onFilterChange) onFilterChange(newFilters);
+    setInternalFilters(newFilters);
+  };
+
+  const handleToggleFilters = () => {
+    if (onToggleFilters) {
+      onToggleFilters();
+    } else {
+      setInternalShowFilters(current => !current);
+    }
+  };
 
   const filteredLogs = useMemo(() => {
     return logs.filter((log) => {
@@ -472,7 +502,7 @@ export function SystemLogsTable({ initialLogs }: { initialLogs?: Log[] }) {
           <Button
             variant={showFilters ? "primary" : "outline"}
             size="sm"
-            onClick={() => setShowFilters((current) => !current)}
+            onClick={handleToggleFilters}
             className="relative h-[var(--input-height,var(--button-height,48px))] px-6"
           >
             <Filter className="h-4 w-4 mr-2" />
@@ -488,7 +518,7 @@ export function SystemLogsTable({ initialLogs }: { initialLogs?: Log[] }) {
 
       <div className="flex flex-1 overflow-hidden">
         <AnimatePresence initial={false}>
-          {showFilters && (
+          {showFilters && !isFilterActive && (
             <motion.div
               key="filters"
               initial={{ width: 0, opacity: 0 }}
@@ -499,7 +529,7 @@ export function SystemLogsTable({ initialLogs }: { initialLogs?: Log[] }) {
             >
               <FilterPanel
                 filters={filters}
-                onChange={setFilters}
+                onChange={handleFilterChange}
                 logs={logs}
               />
             </motion.div>

@@ -14,17 +14,17 @@ export default function InteractiveGallerySandbox() {  const [cardRadius, setCar
       <div className="space-y-4">
         <Wrapper identity={{ displayName: "Gallery Structural Settings", type: "Docs Link", filePath: "zap/organisms/interactive-gallery/page.tsx" }}>
           <div className="space-y-6">
-            <h4 className="text-[10px] text-transform-primary font-display font-bold text-muted-foreground tracking-wider">Sandbox Variables</h4>
+            <h4 className="text-label-small text-transform-primary font-display font-bold text-muted-foreground tracking-wider">Sandbox Variables</h4>
             <div className="space-y-4">
               <div className="space-y-2">
-                <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-muted-foreground">
+                <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-muted-foreground">
                   <span>--interactive-gallery-card-radius</span>
                   <span className="font-bold">{cardRadius[0]}px</span>
                 </div>
                 <Slider value={cardRadius} onValueChange={setCardRadius} min={0} max={64} step={1} className="w-full" />
               </div>
               <div className="space-y-2">
-                <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-muted-foreground">
+                <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-muted-foreground">
                   <span>--interactive-gallery-card-border-width</span>
                   <span className="font-bold">{cardBorderWidth[0]}px</span>
                 </div>

@@ -2,8 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
-import { usePathname, useRouter } from 'next/navigation';
-import {
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';import {
     ChevronDown,
     Palette,
     Box,
@@ -12,7 +11,9 @@ import {
     Layout,
     Columns,
     FileText,
-    Database
+    Database,
+    Activity,
+    Orbit
 } from 'lucide-react';
 import { Icon } from '../../../genesis/atoms/icons/Icon';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '../../../genesis/molecules/accordion';
@@ -45,17 +46,20 @@ interface Category {
 const NAV_DATA: Category[] = [
     // L1 to L4 are populated dynamically from their respective registries inside the component.
     {
-        id: 'L5', title: 'L5: Organisms (2)', icon: Layout, items: ['Inspector System', 'Login']
-    },
-    {
-        id: 'L6', title: 'L6: Layouts (3)', icon: Columns, items: [
-            'Merchant Workspace',
-            { title: 'Authentication', items: ['Sign-in A', 'Sign-in B'] }
+        id: 'L5', title: 'L5: Organisms (3)', icon: Layout, items: [
+            'Inspector System', 
+            'Login',
+            { title: 'Tables', items: ['System Logs'] }
         ]
     },
     {
-        id: 'L7', title: 'L7: Pages (2)', icon: FileText, items: [
-            { title: 'Tables', items: ['System Logs'] },
+        id: 'L6', title: 'L6: Layouts (3)', icon: Columns, items: [
+            { title: 'Authentication', items: ['Sign-in A', 'Sign-in B'] },
+            { title: 'Tables', items: ['system logs'] }
+        ]
+    },
+    {
+        id: 'L7', title: 'L7: Pages (1)', icon: FileText, items: [
             { title: 'Authentication', items: ['Signin'] }
         ]
     },
@@ -64,6 +68,7 @@ const NAV_DATA: Category[] = [
         title: 'System: Build',
         icon: Database,
         items: [
+            'Merchant Workspace',
             'Design Audit',
             'Typography Architect',
             'Data Grid',
@@ -265,8 +270,9 @@ const getHref = (item: string, theme: string, activeWorkspaceId?: string | null,
 
             // L6 Layouts
             'Merchant Workspace': `/design/${theme}/merchant-workspace`,
-            'Sign-in A': `/design/${theme}/organisms/login`,
-            'Sign-in B': `/auth/${theme}/signin`,
+            'Sign-in A': `/design/${theme}/organisms/signin-a`,
+            'Sign-in B': `/design/${theme}/organisms/signin-b`,
+            'system logs': `/design/${theme}/organisms/system-logs-layout`,
 
             // L5 Organisms — use theme path
             'Data Grid': `/design/${theme}/organisms/data-grid`,
@@ -311,6 +317,14 @@ const getHref = (item: string, theme: string, activeWorkspaceId?: string | null,
             'Jobs': `/design/${theme}/mission-control/jobs`,
             'Agents': `/design/${theme}/mission-control/agents`,
             'Registry': `/design/${theme}/mission-control/swarm/registry`,
+
+            // Swarm Command Center (:3500)
+            'Swarm Dashboard': '/swarm/',
+            'Agent Roster': '/swarm/agents',
+            'API Keys': '/swarm/fleet',
+            'Skills Library': '/swarm/skills',
+            'Active Sessions': '/swarm/sessions',
+            'Channels Matrix': '/swarm/channels',
         };
         finalPath = map[item] || '';
     }
@@ -329,6 +343,7 @@ const getHref = (item: string, theme: string, activeWorkspaceId?: string | null,
     if (finalPath.startsWith('/auth/')) targetPort = 4700;
     if (finalPath.startsWith('/mission-control')) targetPort = 3600;
     if (finalPath.startsWith('/reports')) targetPort = 4200;
+    if (finalPath.startsWith('/swarm/') || finalPath === '/swarm/') targetPort = 3500;
 
     // Use actual browser port post-hydration, fallback to registry port otherwise
     // LocalStorage (which populates activeWorkspaceId) leaks across localhost ports, so we cannot trust it blindly.
@@ -338,6 +353,13 @@ const getHref = (item: string, theme: string, activeWorkspaceId?: string | null,
 
     if (evaluatingPort !== targetPort) {
         return `http://localhost:${targetPort}${finalPath}`;
+    }
+
+    // Strip domain prefix when we're already on the target port
+    // e.g., on port 3500, '/swarm/agents' becomes '/agents'
+    if (targetPort === 3500 && finalPath.startsWith('/swarm')) {
+        const stripped = finalPath.replace(/^\/swarm/, '') || '/';
+        return stripped;
     }
 
     return finalPath;
@@ -351,6 +373,7 @@ export const SideNav: React.FC<SideNavProps> = ({ showDevWrapper = false }) => {
     const { theme, setTheme, devMode, setDevMode, sidebarState, setSidebarState, openCategories, setOpenCategories } = useTheme();
     const isDev = showDevWrapper && devMode;
     const pathname = usePathname();
+    const searchParams = useSearchParams();
     const router = useRouter();
 
     const [currentPort, setCurrentPort] = React.useState<string | null>(null);
@@ -419,6 +442,12 @@ export const SideNav: React.FC<SideNavProps> = ({ showDevWrapper = false }) => {
                     { id: 'auth-prefs', title: 'SYSTEM PREFERENCES', icon: Columns, items: ['User Management', 'Settings', 'Access Control'] }
                 ];
             }
+            if (activeWorkspaceId === 'zap-swarm') {
+                return [
+                    { id: 'swarm-telemetry', title: 'CORE TELEMETRY', icon: Activity, items: ['Swarm Dashboard'] },
+                    { id: 'swarm-deerflow', title: 'DEERFLOW COMMAND', icon: Orbit, items: ['Agent Roster', 'API Keys', 'Skills Library', 'Active Sessions', 'Channels Matrix'] }
+                ];
+            }
 
             // Default generic tree for other workspaces
             return [
@@ -447,17 +476,19 @@ export const SideNav: React.FC<SideNavProps> = ({ showDevWrapper = false }) => {
     const activeHref = React.useMemo(() => {
         if (!pathname) return null;
         let bestMatch = '';
+        const currentPathWithParams = searchParams?.toString() ? `${pathname}?${searchParams.toString()}` : pathname;
+
         for (const category of EFFECTIVE_NAV) {
             for (const item of category.items) {
                 if (typeof item === 'string') {
                     const href = getHref(item, theme, activeWorkspaceId, currentPort);
-                    if (href && (pathname === href || pathname.startsWith(href + '/'))) {
+                    if (href && (currentPathWithParams === href || pathname === href || pathname.startsWith(href + '/'))) {
                         if (href.length > bestMatch.length) bestMatch = href;
                     }
                 } else {
                     for (const subItem of item.items) {
                         const href = getHref(subItem, theme, activeWorkspaceId, currentPort);
-                        if (href && (pathname === href || pathname.startsWith(href + '/'))) {
+                        if (href && (currentPathWithParams === href || pathname === href || pathname.startsWith(href + '/'))) {
                             if (href.length > bestMatch.length) bestMatch = href;
                         }
                     }
@@ -465,7 +496,7 @@ export const SideNav: React.FC<SideNavProps> = ({ showDevWrapper = false }) => {
             }
         }
         return bestMatch || pathname;
-    }, [pathname, theme, EFFECTIVE_NAV, activeWorkspaceId]);
+    }, [pathname, theme, EFFECTIVE_NAV, activeWorkspaceId, searchParams, currentPort]);
 
     const [isHovered, setIsHovered] = React.useState(false);
     const [mounted, setMounted] = React.useState(false);
@@ -582,7 +613,7 @@ export const SideNav: React.FC<SideNavProps> = ({ showDevWrapper = false }) => {
                 onClick={toggleSidebar}
                 title={isExpanded ? "Collapse Sidebar" : "Expand Sidebar"}
                 className={cn(
-                    "absolute -right-3.5 top-3.5 z-[200] w-7 h-7 bg-primary text-on-primary hover:bg-primary/90 rounded-[var(--button-border-radius,8px)] flex items-center justify-center shadow-md hover:scale-110 active:scale-95 transition-all duration-200 outline-none",
+                    "absolute -right-2.5 top-3.5 z-[200] w-5 h-5 bg-transparent text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/50 border border-outline rounded-[var(--button-border-radius,8px)] flex items-center justify-center hover:scale-110 active:scale-95 transition-all duration-200 outline-none",
                     !isExpanded && "opacity-0 group-hover/sidebar:opacity-100"
                 )}
             >
@@ -592,21 +623,21 @@ export const SideNav: React.FC<SideNavProps> = ({ showDevWrapper = false }) => {
                         transition={{ duration: 0.3, ease: "easeInOut" }}
                         className="flex items-center justify-center translate-x-[-0.5px]"
                     >
-                        <Icon name="chevron_left" size={16} weight={700} />
+                        <Icon name="chevron_left" size={14} weight={700} />
                     </motion.div>
                 </div>
             </button>
 
-            {/* Top Logo Area - Aligned to MetroHeader */}
+            {/* Top Logo Area - Aligned to MetroHeader (50px) */}
             <div className={cn(
-                "h-[var(--sys-header-height,3.5rem)] flex items-center shrink-0 w-full overflow-hidden transition-all duration-300 border-b border-black gap-3",
+                "h-[50px] flex items-center shrink-0 w-full overflow-hidden transition-all duration-300 border-b border-outline/10 gap-3 bg-layer-base/50 backdrop-blur-md relative z-20",
                 effectivelyExpanded ? "px-4" : "px-0 justify-center"
             )}>
                 <Image
                     src="/zap-logo.png"
                     alt="ZAP Logo"
-                    width={effectivelyExpanded ? 32 : 45}
-                    height={effectivelyExpanded ? 32 : 45}
+                    width={effectivelyExpanded ? 32 : 40}
+                    height={effectivelyExpanded ? 32 : 40}
                     className="cursor-pointer hover:scale-110 transition-transform shrink-0"
                     priority
                 />
@@ -819,6 +850,7 @@ export const SideNav: React.FC<SideNavProps> = ({ showDevWrapper = false }) => {
                     {/* User Session */}
                     <div className="flex items-center justify-between rounded-lg w-full">
                         <UserSession
+                            dropdownSide="top"
                             size="small"
                             variant="ghost"
                             showLabel={false}

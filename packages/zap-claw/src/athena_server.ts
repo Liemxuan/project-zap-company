@@ -22,7 +22,7 @@ import { SafeExecutor } from "./security/safe-executor.js";
 import { mountMemoryRoutes } from "./lib/memory_routes.js";
 
 const AGENT_NAME = "Athena";
-const PORT = parseInt(process.env.PORT || "3303", 10);
+const PORT = parseInt(process.env.PORT || "3903", 10);
 const NOTEBOOKLM_BIN = process.env.NOTEBOOKLM_BIN || "notebooklm";
 
 console.log(`⚡️ ${AGENT_NAME} Research Agent booting...`);
@@ -226,7 +226,7 @@ app.post("/api/research/web", async (req, res) => {
 });
 
 // ── Start Server ──────────────────────────────────────────────────────────────
-app.listen(PORT, () => {
+app.listen(PORT, "0.0.0.0", () => {
     console.log(`[${AGENT_NAME.toUpperCase()} SERVER] 🎧 Research agent active on port ${PORT}`);
     console.log(`[${AGENT_NAME.toUpperCase()}] 📚 NotebookLM CLI: ${NOTEBOOKLM_BIN}`);
 

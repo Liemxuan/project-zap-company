@@ -10,7 +10,7 @@ import { motion } from 'framer-motion';
 export interface ExperimentalHeaderProps {
     title: React.ReactNode;
     breadcrumb?: string;
-    badge?: string;
+    badge?: string | null;
     tabs?: TabItem[];
     activeTab?: string;
     onTabChange?: (tab: string) => void;

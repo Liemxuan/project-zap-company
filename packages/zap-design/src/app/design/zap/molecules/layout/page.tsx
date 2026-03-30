@@ -43,7 +43,7 @@ export default function ThemeHeaderPage() {
                 {/* ── VARIANT 1: Minimal (title + breadcrumb only) */}
                 <Wrapper identity={{ displayName: 'Minimal Variant', type: 'Demo', filePath: 'zap/molecules/layout/page.tsx' }}>
                     <div className="flex flex-col gap-2">
-                        <span className="text-[10px] font-bold tracking-widest text-on-surface-variant text-transform-secondary font-dev text-transform-tertiary px-1">
+                        <span className="text-label-small font-bold tracking-widest text-on-surface-variant text-transform-secondary font-dev text-transform-tertiary px-1">
                             VARIANT — MINIMAL (breadcrumb + title + badge)
                         </span>
                         <div className="rounded-xl border border-outline-variant/50 overflow-hidden">
@@ -60,7 +60,7 @@ export default function ThemeHeaderPage() {
                 {/* ── VARIANT 2: With Tabs */}
                 <Wrapper identity={{ displayName: 'With Tabs Variant', type: 'Demo', filePath: 'zap/molecules/layout/page.tsx' }}>
                     <div className="flex flex-col gap-2">
-                        <span className="text-[10px] font-bold tracking-widest text-on-surface-variant text-transform-secondary font-dev text-transform-tertiary px-1">
+                        <span className="text-label-small font-bold tracking-widest text-on-surface-variant text-transform-secondary font-dev text-transform-tertiary px-1">
                             VARIANT — WITH TABS
                         </span>
                         <div className="rounded-xl border border-outline-variant/50 overflow-hidden">
@@ -80,7 +80,7 @@ export default function ThemeHeaderPage() {
                 {/* ── VARIANT 3: With Live Indicator */}
                 <Wrapper identity={{ displayName: 'Live Indicator Variant', type: 'Demo', filePath: 'zap/molecules/layout/page.tsx' }}>
                     <div className="flex flex-col gap-2">
-                        <span className="text-[10px] font-bold tracking-widest text-on-surface-variant text-transform-secondary font-dev text-transform-tertiary px-1">
+                        <span className="text-label-small font-bold tracking-widest text-on-surface-variant text-transform-secondary font-dev text-transform-tertiary px-1">
                             VARIANT — LIVE INDICATOR (real-time data stream)
                         </span>
                         <div className="rounded-xl border border-outline-variant/50 overflow-hidden">
@@ -100,24 +100,24 @@ export default function ThemeHeaderPage() {
                 {/* ── PROP MAP */}
                 <Wrapper identity={{ displayName: 'Prop Reference', type: 'Docs', filePath: 'zap/molecules/layout/page.tsx' }}>
                     <div className="flex flex-col gap-2">
-                        <span className="text-[10px] font-bold tracking-widest text-on-surface-variant text-transform-secondary font-dev text-transform-tertiary px-1">
+                        <span className="text-label-small font-bold tracking-widest text-on-surface-variant text-transform-secondary font-dev text-transform-tertiary px-1">
                             PROP REFERENCE
                         </span>
                         <div className="rounded-xl border border-outline-variant/40 overflow-hidden bg-surface">
                             <div className="px-4 py-3 bg-surface-container-high border-b border-outline-variant/30 flex items-center justify-between">
-                                <span className="text-sm font-black tracking-tight text-on-surface uppercase font-secondary">
+                                <span className="text-body-small font-black tracking-tight text-on-surface uppercase font-secondary">
                                     ThemeHeaderProps
                                 </span>
-                                <span className="text-[10px] text-on-surface-variant font-secondary opacity-70">
+                                <span className="text-label-small text-on-surface-variant font-secondary opacity-70">
                                     genesis/molecules/layout/ThemeHeader.tsx
                                 </span>
                             </div>
                             <div className="overflow-x-auto">
-                                <table className="w-full text-xs">
+                                <table className="w-full text-label-small">
                                     <thead>
                                         <tr className="bg-surface-container border-b border-outline-variant/30">
                                             {['Prop', 'Type', 'Default', 'Description'].map(h => (
-                                                <th key={h} className="px-4 py-3 text-left text-[10px] font-bold tracking-wider text-on-surface-variant">{h}</th>
+                                                <th key={h} className="px-4 py-3 text-left text-label-small font-bold tracking-wider text-on-surface-variant">{h}</th>
                                             ))}
                                         </tr>
                                     </thead>

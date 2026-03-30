@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
-import { BORDER_RADIUS_TOKENS, BORDER_WIDTH_TOKENS } from '../../../../zap/sections/atoms/foundations/schema';
+import { BORDER_RADIUS_TOKENS, BORDER_WIDTH_TOKENS, ZAP_LAYER_MAP } from '../../../../zap/sections/atoms/foundations/schema';
 import { compileThemeCSS } from '../../../../lib/theme-compiler';
 import { compileFlutterRadius } from '../../../../lib/flutter-compiler';
 
@@ -56,6 +56,20 @@ export async function POST(request: Request) {
             return null; // Fallback to universal
         };
 
+        const getBgOverride = (compName: string, propName: 'bg' | 'bgGroup' = 'bg') => {
+            const overrideToken = state?.components?.[compName]?.[propName];
+            if (overrideToken) {
+                const layer = ZAP_LAYER_MAP.find(L => L.zapToken === overrideToken);
+                if (layer) {
+                    return `var(--color-${layer.m3Token.replace('bg-', '')})`;
+                }
+                if (overrideToken.startsWith('bg-')) {
+                    return `var(--color-${overrideToken.replace('bg-', '')})`;
+                }
+            }
+            return null; // Fallback to universal
+        };
+
         const rawRadiusValue = BORDER_RADIUS_TOKENS.find(t => t.token === universalRadiusToken)?.value || '4px';
         const rawWidthValue = BORDER_WIDTH_TOKENS.find(t => t.token === universalWidthToken)?.value || '1px';
 
@@ -68,9 +82,9 @@ export async function POST(request: Request) {
             '--radius-shape-large': compiledRadius,
             '--card-radius': getOverride('Card', 'radius') || compiledRadius,
             '--button-border-radius': getOverride('Button', 'radius') || compiledRadius,
-            '--input-border-radius': getOverride('Input Field', 'radius') || compiledRadius,
+            '--input-border-radius': getOverride('Input', 'radius') || compiledRadius,
             '--card-border-width': getOverride('Card', 'width') || compiledWidth,
-            '--input-border-width': getOverride('Input Field', 'width') || compiledWidth,
+            '--input-border-width': getOverride('Input', 'width') || compiledWidth,
             '--button-border-width': getOverride('Button', 'width') || compiledWidth,
             '--badge-border-radius': getOverride('Badge', 'radius') || compiledRadius,
             '--badge-border-width': getOverride('Badge', 'width') || compiledWidth,
@@ -84,12 +98,18 @@ export async function POST(request: Request) {
             '--search-input-border-width': getOverride('SearchInput', 'width') || compiledWidth,
             '--select-border-radius': getOverride('Select', 'radius') || compiledRadius,
             '--select-border-width': getOverride('Select', 'width') || compiledWidth,
+            '--select-bg': getBgOverride('Select') || 'var(--color-surface-container-highest)',
             '--textarea-border-radius': getOverride('Textarea', 'radius') || compiledRadius,
             '--textarea-border-width': getOverride('Textarea', 'width') || compiledWidth,
+            '--textarea-bg': getBgOverride('Textarea') || 'var(--color-surface-container-highest)',
+            '--input-bg': getBgOverride('Input') || 'var(--color-surface-container-highest)',
             '--switch-border-radius': getOverride('Switch', 'radius') || compiledRadius,
             '--switch-border-width': getOverride('Switch', 'width') || compiledWidth,
-            '--toggle-border-radius': getOverride('Toggle', 'radius') || compiledRadius,
-            '--toggle-border-width': getOverride('Toggle', 'width') || compiledWidth,
+            '--toggle-bg': getBgOverride('Toggle') || 'var(--color-surface-container-highest)',
+            '--toggle-border-radius': getOverride('ToggleGroup', 'radius') || getOverride('Toggle', 'radius') || compiledRadius,
+            '--toggle-border-width': getOverride('ToggleGroup', 'width') || getOverride('Toggle', 'width') || compiledWidth,
+            '--toggle-group-bg': getBgOverride('ToggleGroup', 'bgGroup') || 'transparent',
+            '--dialog-bg': getBgOverride('Dialog') || 'var(--color-surface-container-highest)',
             '--dialog-border-radius': getOverride('Dialog', 'radius') || compiledRadius,
             '--dialog-border-width': getOverride('Dialog', 'width') || compiledWidth,
             '--table-border-radius': getOverride('Table', 'radius') || compiledRadius,

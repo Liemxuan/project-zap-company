@@ -6,11 +6,15 @@ import { Inspector } from 'zap-design/src/zap/layout/Inspector';
 import { useTheme } from 'zap-design/src/components/ThemeContext';
 import { AuthUserManagementView } from 'zap-design/src/genesis/organisms/auth/AuthUserManagementView';
 import { ThemeHeader } from 'zap-design/src/genesis/molecules/layout/ThemeHeader';
-import { InspectorAccordion } from 'zap-design/src/zap/organisms/laboratory/InspectorAccordion';
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from 'zap-design/src/genesis/molecules/accordion';
+import { DataFilter } from 'zap-design/src/genesis/molecules/data-filter';
+import { Icon } from 'zap-design/src/genesis/atoms/icons/Icon';
 import { Check } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Button } from 'zap-design/src/genesis/atoms/interactive/button';
 import { ContainerDevWrapper } from 'zap-design/src/components/dev/ContainerDevWrapper';
+import { Heading } from "zap-design/src/genesis/atoms/typography/headings";
+import { Text } from "zap-design/src/genesis/atoms/typography/text";
 
 type Filters = {
     role: string[];
@@ -69,44 +73,42 @@ export default function AuthUserManagementPage() {
             }}
         >
             <div className="flex flex-col gap-0">
-                <InspectorAccordion title="Data Filters" icon="filter_list" defaultOpen={true}>
-                    <div className="flex h-full flex-col space-y-6 bg-layer-panel p-4 pt-2">
-                        <div className="flex items-center justify-between">
-                            <h3 className="text-sm font-display text-transform-primary font-semibold text-foreground">Active Filters</h3>
-                            {activeFiltersCount > 0 && (
-                                <Button variant="ghost" size="sm" onClick={clearAll} className="h-6 text-xs text-primary">
-                                    Clear
-                                </Button>
-                            )}
-                        </div>
-                        <div className="space-y-3">
-                            <p className="text-[length:var(--table-font-size,0.625rem)] font-display font-semibold text-transform-primary tracking-wide text-muted-foreground">
-                                Role Assignment
-                            </p>
-                            <div className="space-y-2">
-                                {roles.map((role) => {
-                                    const selected = filters.role.includes(role);
-                                    return (
-                                        <motion.button
-                                            key={role}
-                                            type="button"
-                                            whileHover={{ x: 2 }}
-                                            onClick={() => toggleFilter("role", role)}
-                                            aria-pressed={selected}
-                                            className={`flex w-full items-center justify-between gap-2 border border-[length:max(var(--button-border-width,1px),1px)] rounded-[length:var(--button-border-radius,var(--radius-btn,4px))] px-3 py-2 text-sm transition-colors font-body text-transform-secondary ${selected
-                                                ? "border-primary bg-primary/10 text-primary"
-                                                : "border-border text-muted-foreground hover:border-primary/40 hover:bg-surface-variant/40"
-                                                }`}
-                                        >
-                                            <span>{role}</span>
-                                            {selected && <Check className="h-3.5 w-3.5" />}
-                                        </motion.button>
-                                    );
-                                })}
+                <Accordion type="single" collapsible defaultValue="item-1" className="bg-transparent w-full space-y-2" variant="navigation">
+                    <AccordionItem value="item-1" className="border-none m-0">
+                        <AccordionTrigger className="px-4 py-3 flex items-center gap-2 rounded-lg bg-surface-variant hover:bg-surface-variant/80 font-mono text-[11px] uppercase tracking-widest text-on-surface font-bold transition-colors m-0 w-full min-w-0">
+                            <div className="flex items-center gap-2 overflow-hidden flex-1 text-left min-w-0">
+                                <Icon name="filter_list" size={16} className="shrink-0 text-on-surface-variant opacity-70 group-data-[state=open]:text-primary transition-colors" />
+                                <span className="truncate">DATA FILTERS</span>
                             </div>
-                        </div>
-                    </div>
-                </InspectorAccordion>
+                        </AccordionTrigger>
+                        <AccordionContent className="bg-transparent px-4 pb-4 pt-2">
+                            <DataFilter
+                                groups={[
+                                    {
+                                        id: 'role',
+                                        title: 'ROLE ASSIGNMENT',
+                                        options: roles.map(role => ({
+                                            id: role,
+                                            label: role,
+                                            selected: filters.role.includes(role)
+                                        }))
+                                    }
+                                ]}
+                                onToggle={(groupId, optionId) => toggleFilter(groupId as any, optionId)}
+                            />
+                            {activeFiltersCount > 0 && (
+                                <div className="mt-4 flex justify-between items-center border-t border-outline-variant/30 pt-3">
+                                    <Text size="label-small" className="text-muted-foreground uppercase tracking-widest font-bold text-[9px]">
+                                        {activeFiltersCount} Active
+                                    </Text>
+                                    <Button variant="ghost" size="sm" onClick={clearAll} className="h-6 px-2 text-primary hover:bg-primary/10 transition-colors">
+                                        <Text size="label-small" className="text-inherit uppercase tracking-widest font-bold text-[9px]">Clear</Text>
+                                    </Button>
+                                </div>
+                            )}
+                        </AccordionContent>
+                    </AccordionItem>
+                </Accordion>
             </div>
         </ContainerDevWrapper>
     );
@@ -119,11 +121,11 @@ export default function AuthUserManagementPage() {
                 </Inspector>
             }
         >
-            <div className="transition-all duration-300 origin-center flex flex-col pt-0 h-[calc(100vh-theme(spacing.16))] overflow-y-auto">
+            <div className="transition-all duration-300 origin-center flex flex-col pt-0 w-full h-full">
                 <div className="w-full flex-none">
                     {header}
                 </div>
-                <div className="flex-1 relative flex items-start justify-center w-full h-full bg-layer-base overflow-hidden items-stretch px-12 py-8">
+                <div className="flex-1 relative flex justify-center w-full bg-layer-canvas overflow-hidden items-stretch px-12 pt-8 pb-0">
                     <AuthUserManagementView
                         searchQuery={searchQuery}
                         setSearchQuery={setSearchQuery}

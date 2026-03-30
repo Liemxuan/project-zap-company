@@ -10,17 +10,17 @@ export default function WixCompetitorBlast() {
         <div className="theme-wix w-full min-h-screen bg-layer-canvas text-brand-midnight flex flex-col font-sans transition-colors duration-200">
             {/* Website Header */}
             <Panel className="w-full flex justify-between items-center px-8 py-4 bg-layer-cover border-b-card-border-width border-brand-midnight">
-                <div className="text-2xl font-black uppercase tracking-tighter text-brand-teal">
+                <div className="text-title-large font-black uppercase tracking-tighter text-brand-teal">
                     HyperWix
                 </div>
-                <div className="flex gap-6 text-sm font-bold uppercase">
+                <div className="flex gap-6 text-body-small font-bold uppercase">
                     <button className="hover:text-brand-magenta transition-colors">Templates</button>
                     <button className="hover:text-brand-magenta transition-colors">Features</button>
                     <button className="hover:text-brand-magenta transition-colors">Resources</button>
                     <button className="hover:text-brand-magenta transition-colors">Pricing</button>
                 </div>
                 <div className="flex gap-4">
-                    <button className="px-5 py-2 font-bold uppercase text-sm focus:outline-none">
+                    <button className="px-5 py-2 font-bold uppercase text-body-small focus:outline-none">
                         Login
                     </button>
                     <button className="px-5 py-2 bg-brand-teal text-white font-bold uppercase flex items-center justify-center border-card-border-width border-brand-midnight rounded-btn-radius shadow-card-shadow hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_0px_#000] transition-all">
@@ -36,15 +36,15 @@ export default function WixCompetitorBlast() {
                         Create a website <br />
                         <span className="text-brand-magenta">without limits</span>
                     </h1>
-                    <p className="text-xl max-w-2xl text-brand-midnight/70 mb-10 font-medium">
+                    <p className="text-title-medium max-w-2xl text-brand-midnight/70 mb-10 font-medium">
                         Discover the platform that gives you the freedom to create, design, manage and develop your web presence exactly the way you want.
                     </p>
 
                     <div className="flex gap-6">
-                        <button className="px-8 py-4 bg-brand-midnight text-white font-black uppercase text-lg border-card-border-width border-brand-midnight rounded-btn-radius shadow-card-shadow hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_#D3D3D3] transition-all">
+                        <button className="px-8 py-4 bg-brand-midnight text-white font-black uppercase text-title-small border-card-border-width border-brand-midnight rounded-btn-radius shadow-card-shadow hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_#D3D3D3] transition-all">
                             Start Creating
                         </button>
-                        <button className="px-8 py-4 bg-transparent text-brand-midnight font-black uppercase text-lg border-card-border-width border-brand-midnight rounded-btn-radius shadow-card-shadow hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_#D3D3D3] transition-all bg-layer-cover">
+                        <button className="px-8 py-4 bg-transparent text-brand-midnight font-black uppercase text-title-small border-card-border-width border-brand-midnight rounded-btn-radius shadow-card-shadow hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_#D3D3D3] transition-all bg-layer-cover">
                             Read the Docs
                         </button>
                     </div>
@@ -63,7 +63,7 @@ export default function WixCompetitorBlast() {
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                     </svg>
                                 </div>
-                                <h3 className="text-2xl font-black uppercase">Intuitive Design</h3>
+                                <h3 className="text-title-large font-black uppercase">Intuitive Design</h3>
                                 <p className="text-brand-midnight/70 font-medium leading-relaxed">
                                     Drag and drop elements freely with our visual editor. No restrictive grids, just pure creative freedom.
                                 </p>
@@ -76,7 +76,7 @@ export default function WixCompetitorBlast() {
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
                                     </svg>
                                 </div>
-                                <h3 className="text-2xl font-black uppercase">Dev Scalable</h3>
+                                <h3 className="text-title-large font-black uppercase">Dev Scalable</h3>
                                 <p className="text-white/80 font-medium leading-relaxed">
                                     Need more power? Drop into the code. Connect APIs, write custom JS, and deploy seamlessly.
                                 </p>
@@ -89,7 +89,7 @@ export default function WixCompetitorBlast() {
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                                     </svg>
                                 </div>
-                                <h3 className="text-2xl font-black uppercase">Lightning Fast</h3>
+                                <h3 className="text-title-large font-black uppercase">Lightning Fast</h3>
                                 <p className="text-white/80 font-medium leading-relaxed">
                                     Optimized for performance out of the box. Your site loads instantly anywhere in the world.
                                 </p>
@@ -123,16 +123,16 @@ export default function WixCompetitorBlast() {
 
             {/* Footer */}
             <footer className="w-full py-12 px-8 bg-brand-midnight text-white border-t-card-border-width border-brand-midnight flex flex-col md:flex-row justify-between items-center gap-6">
-                <div className="text-2xl font-black uppercase tracking-tighter text-brand-yellow">
+                <div className="text-title-large font-black uppercase tracking-tighter text-brand-yellow">
                     HyperWix
                 </div>
-                <div className="flex gap-6 text-sm font-bold uppercase text-white/50">
+                <div className="flex gap-6 text-body-small font-bold uppercase text-white/50">
                     <span className="hover:text-white transition-colors cursor-pointer">About</span>
                     <span className="hover:text-white transition-colors cursor-pointer">Careers</span>
                     <span className="hover:text-white transition-colors cursor-pointer">Terms</span>
                     <span className="hover:text-white transition-colors cursor-pointer">Privacy</span>
                 </div>
-                <div className="font-bold uppercase text-white/30 text-xs text-center md:text-right">
+                <div className="font-bold uppercase text-white/30 text-label-small text-center md:text-right">
                     © 2026 ZAP Design Engine. <br /> All rights reserved.
                 </div>
             </footer>

@@ -9,6 +9,7 @@ import { getHistory, appendMessage, pruneHistory } from "./history.js";
 import * as fs from "fs";
 import * as path from "path";
 import { type GatewayTier, getGatewayConfig, type GatewayPayload } from "./gateway.js";
+import { type ToolMiddlewareContext } from "./middlewares/pipeline.js";
 import { MongoClient } from "mongodb";
 
 const MONGO_URI = process.env.MONGODB_URI || "mongodb://localhost:27017";
@@ -185,12 +186,42 @@ export class AgentLoop {
                 dbHistory.push(msg);
             }
 
+            // PHASE 8: DanglingToolCall Sweep
+            // Check for assistant messages that contain tool_calls that were never answered by a subsequent tool result
+            const safeHistory: ChatCompletionMessageParam[] = [];
+            for (let i = 0; i < dbHistory.length; i++) {
+                const msg = dbHistory[i];
+                if (!msg) continue;
+                safeHistory.push(msg);
+
+                if (msg.role === "assistant") {
+                    const assistantMsg = msg as any;
+                    if (assistantMsg.tool_calls && Array.isArray(assistantMsg.tool_calls) && assistantMsg.tool_calls.length > 0) {
+                        for (const call of assistantMsg.tool_calls) {
+                            // Look ahead in the immediate sequence for the matching tool response
+                            const hasMatchingResult = dbHistory.slice(i + 1).some(futureMsg => 
+                                futureMsg?.role === "tool" && (futureMsg as any).tool_call_id === call.id
+                            );
+                            
+                            if (!hasMatchingResult) {
+                                const funcName = call.function?.name || 'unknown_tool';
+                                console.warn(`[agent] 🧹 Dangling tool call detected: ${call.id} (${funcName}). Injecting automatic fallback result.`);
+                                safeHistory.push({
+                                    role: "tool",
+                                    tool_call_id: call.id,
+                                    content: `[SYSTEM AUTO-RECOVERY] The execution of ${funcName} timed out or was forcefully interrupted. No result is available. Please acknowledge and proceed gracefully.`
+                                } as any);
+                            }
+                        }
+                    }
+                }
+            }
             // --- Context Injection applies activeSystemPrompt here ---
 
 
             const messages: ChatCompletionMessageParam[] = [
                 { role: "system", content: activeSystemPrompt },
-                ...dbHistory,
+                ...safeHistory,
                 ...currentTurnMessages,
             ];
 
@@ -364,7 +395,7 @@ export class AgentLoop {
                             role: 'tool' as const,
                             tool_call_id: call.id,
                             content: `Unsupported tool type: ${call.type}`,
-                        };
+                        } as ChatCompletionToolMessageParam;
                     }
                     const toolName = call.function.name;
                     let toolInput: Record<string, unknown> = {};
@@ -376,18 +407,40 @@ export class AgentLoop {
                     }
 
                     console.log(`[tool] ${toolName}`, toolInput);
-                    const result = await executeTool(toolName, toolInput, userId, this.botName);
-                    console.log(`[tool result] ${toolName}:`, result.output);
 
-                    if (result.isError) {
+                    const { runMiddlewarePipeline, GuardrailMiddleware, ExecutionMiddleware, TodoListMiddleware, HitlMiddleware, UploadsMiddleware, FallbackMiddleware, SandboxMiddleware } = await import("./middlewares/index.js");
+                    
+                    const pipelineCtx: ToolMiddlewareContext & Record<string, any> = {
+                        toolName,
+                        toolInput,
+                        userId,
+                        botName: this.botName,
+                        isAllowed: true,
+                        hadError: false
+                    };
+                    if (sessionId !== undefined) pipelineCtx.sessionId = sessionId;
+                    
+                    // --- PHASE 8/9: DYNAMIC MIDDLEWARE PIPELINE ---
+                    // By defining execution as an array of middlewares, we can easily inject Uploads, Sandboxes, or HITL later
+                    await runMiddlewarePipeline([
+                        GuardrailMiddleware,
+                        SandboxMiddleware, // Absolute airgap routing for Spike execution
+                        UploadsMiddleware,
+                        FallbackMiddleware, // Catch execution failures
+                        TodoListMiddleware,
+                        HitlMiddleware,
+                        ExecutionMiddleware
+                    ], pipelineCtx);
+                    
+                    if (pipelineCtx.hadError) {
                         hadToolError = true;
                     }
 
                     return {
                         role: "tool" as const,
                         tool_call_id: call.id,
-                        content: result.output,
-                    };
+                        content: pipelineCtx.resultContent || `[SYSTEM ERROR] Middleware failure: No output generated for ${toolName}.`,
+                    } as ChatCompletionToolMessageParam;
                 }));
 
                 if (hadToolError) {

@@ -1,13 +1,12 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Text } from '../../../../genesis/atoms/typography/text';
 import { SectionHeader } from '../../../../zap/sections/atoms/foundations/components';
 import { Select } from '../../../../genesis/atoms/interactive/option-select';
 
 
 import { Wrapper } from '../../../../components/dev/Wrapper';
-import { DraggableToolbox } from './DraggableToolbox';
 import { LayeredStylizationSettings, CORE_FONTS } from './inspector';
 import { TypographyThemeSchema } from './schema';
 import { TYPOGRAPHY_REGISTRY, M3_ROLE_META, type TypographyTokenMap, type M3Role } from '../../../../genesis/utilities/typography-registry';
@@ -102,8 +101,10 @@ const PLAYGROUND_SECTIONS: PlaygroundSection[] = ALL_ROLES.map(role => {
 });
 
 interface TypographyPlaygroundShellProps {
-    initialTheme: TypographyThemeSchema;
-    onUpdateGlobalTheme?: (theme: TypographyThemeSchema) => void;
+    theme: TypographyThemeSchema;
+    onUpdateTheme: (theme: TypographyThemeSchema) => void;
+    activeAtom: string | null;
+    setActiveAtom: (atom: string | null) => void;
 }
 
 const getLayerStyles = (settings?: LayeredStylizationSettings): React.CSSProperties => {
@@ -154,67 +155,39 @@ const FontSelector = ({ value, onChange, label }: { value: string, onChange: (va
     </label>
 );
 
-export const TypographyPlaygroundShell = ({ initialTheme, onUpdateGlobalTheme }: TypographyPlaygroundShellProps) => {
-    const [theme, setTheme] = useState<TypographyThemeSchema>(initialTheme);
-    const [activeAtom, setActiveAtom] = useState<string | null>(null);
+export const TypographyPlaygroundShell = ({ theme, onUpdateTheme, activeAtom, setActiveAtom }: TypographyPlaygroundShellProps) => {
 
     const handleAtomClick = (id: string, e?: React.MouseEvent) => {
         e?.stopPropagation();
         setActiveAtom(activeAtom === id ? null : id);
     };
 
-    const handleAtomUpdate = (id: string, newSettings: LayeredStylizationSettings) => {
-        setTheme(prev => ({
-            ...prev,
-            elements: { ...prev.elements, [id]: newSettings }
-        }));
-    };
-
     const handleGlobalFontChange = (type: 'primaryFont' | 'secondaryFont' | 'tertiaryFont', val: string) => {
-        setTheme(prev => {
-            const newElements = { ...prev.elements };
+        const newElements = { ...theme.elements };
 
-            const roleMap: Record<string, string> = { primaryFont: 'primary', secondaryFont: 'secondary', tertiaryFont: 'tertiary' };
-            const targetRole = roleMap[type];
-            REGISTRY_ENTRIES
-                .filter(t => t.fontFamilyRole === targetRole)
-                .forEach(t => {
-                    if (newElements[t.m3Name]) {
-                        newElements[t.m3Name] = { ...newElements[t.m3Name], fontFamily: val };
-                    }
-                });
+        const roleMap: Record<string, string> = { primaryFont: 'primary', secondaryFont: 'secondary', tertiaryFont: 'tertiary' };
+        const targetRole = roleMap[type];
+        REGISTRY_ENTRIES
+            .filter(t => t.fontFamilyRole === targetRole)
+            .forEach(t => {
+                if (newElements[t.m3Name]) {
+                    newElements[t.m3Name] = { ...newElements[t.m3Name], fontFamily: val };
+                }
+            });
 
-            const newTheme: TypographyThemeSchema = {
-                ...prev,
-                global: { ...prev.global, [type]: val },
-                elements: newElements
-            };
+        const newTheme: TypographyThemeSchema = {
+            ...theme,
+            global: { ...theme.global, [type]: val },
+            elements: newElements
+        };
 
-            // Immediately sync with parent to update the entire page layout
-            setTimeout(() => onUpdateGlobalTheme?.(newTheme), 0);
-
-            return newTheme;
-        });
+        onUpdateTheme(newTheme);
     };
 
     return (
         <Wrapper identity={{ displayName: `Shell - ${theme.name}`, filePath: "zap/sections/atoms/typography/playground-shell.tsx", type: "Atom/View" }}>
             <div className="relative overflow-hidden transition-all duration-300 border border-border/50 rounded-md bg-layer-panel shadow-sm">
                 <div className="p-12 space-y-16">
-
-                    {/* TOOLBOX OVERLAY */}
-                    {activeAtom && theme.elements[activeAtom] && (
-                        <DraggableToolbox
-                            atomId={activeAtom}
-                            settings={theme.elements[activeAtom]}
-                            onUpdate={(newSettings) => handleAtomUpdate(activeAtom, newSettings)}
-                            onClose={() => setActiveAtom(null)}
-                            onSave={() => {
-                                setActiveAtom(null);
-                                onUpdateGlobalTheme?.(theme);
-                            }}
-                        />
-                    )}
 
                     {/* DECORATIONS */}
                     {theme.decorations?.map(deco => {

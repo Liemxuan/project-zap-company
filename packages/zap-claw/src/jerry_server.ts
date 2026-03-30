@@ -9,8 +9,8 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// The strict, permanent port mandated by ZEUS_TOM
-const PORT = 3300;
+// Decoupled port mapping for orchestration
+const PORT = parseInt(process.env.PORT as string, 10) || 3901;
 
 console.log("==========================================");
 console.log(" ZAP CLAW - JERRY ISOLATED INSTANCE");
@@ -93,7 +93,7 @@ app.get("/health", (req, res) => {
 // Mount Memory v2 + Heartbeat
 mountMemoryRoutes(app, { name: 'jerry', role: 'Agent 2 / Watchdog', port: PORT });
 
-app.listen(PORT, () => {
+app.listen(PORT, "0.0.0.0", () => {
     console.log(`[JERRY SERVER] 🎧 Dedicated listener active on port ${PORT}`);
     console.log(`   Endpoint: POST http://localhost:${PORT}/api/inbound`);
     console.log(`   Endpoint: POST http://localhost:${PORT}/api/hud/chat`);

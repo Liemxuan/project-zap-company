@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { cn } from '../../lib/utils';
 import {
   Check,
-  ChevronUp,
+  ChevronDown,
 } from "lucide-react";
 import { Button } from '../atoms/interactive/button';
 import {
@@ -46,32 +46,32 @@ export function QuickNavigate({ className }: QuickNavigateProps) {
                 <Button
                   variant="outline"
                   role="combobox"
-                  size="xs"
                   aria-expanded={open}
                   className={cn(
-                    "w-fit flex items-center justify-between px-3 rounded-[var(--input-border-radius,8px)] bg-layer-dialog transition-colors border",
-                    open 
-                      ? "border-primary text-primary" 
-                      : "border-outline-variant text-transform-secondary hover:bg-layer-dialog/90",
+                    "flex w-fit items-center justify-between gap-1.5 transition-[color,box-shadow]",
+                    "rounded-[length:var(--select-border-radius,var(--radius-shape-small,8px))]",
+                    "border border-[length:var(--select-border-width,var(--layer-border-width,1px))] border-outline-variant",
+                    "bg-[color:var(--select-bg,var(--color-surface-container-highest))]",
+                    "text-sm font-body text-transform-secondary text-on-surface h-[var(--select-height,32px)] py-2 pr-2 pl-2.5 outline-none focus-visible:border-[color:var(--input-focus-border,var(--m3-sys-light-primary))] focus-visible:ring-[color:var(--input-focus-ring,var(--color-primary-fixed-dim))] focus-visible:ring-[length:var(--input-focus-width,2px)]",
                     className
                   )}
                 >
-                  <div className="flex items-center gap-2.5 pr-3 min-w-[140px]">
+                  <div className="flex items-center gap-1.5 pr-3 min-w-[140px]">
                     {mounted && selectedItem ? (
                       <>
                         {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                        <Icon name={selectedItem.icon as any} size={15} className={"text-[\x235E6D21] opacity-90"} />
-                        <span className={"text-[13px] font-normal font-display text-[\x235E6D21] leading-none mt-[1px]"}>{selectedItem.name}</span>
+                        <Icon name={selectedItem.icon as any} size={15} className="text-on-surface-variant/80 shrink-0 pointer-events-none" />
+                        <span className="flex items-center gap-1.5 line-clamp-1 truncate">{selectedItem.name}</span>
                       </>
                     ) : (
-                      <span className="text-[13px] font-normal font-display leading-none mt-[1px] opacity-0 pointer-events-none">Select Workspace...</span>
+                      <span className="text-muted-foreground flex items-center gap-1.5 line-clamp-1 truncate">Select Workspace...</span>
                     )}
                   </div>
-                  <ChevronUp className={cn("opacity-50 transition-transform", !open && "rotate-180")} size={14} />
+                  <ChevronDown className="pointer-events-none size-4 text-muted-foreground shrink-0 opacity-50" />
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-[280px] p-1 rounded-[var(--container-radius,8px)] bg-layer-dialog border-outline-variant shadow-lg mt-2" align="start">
-                <Command className="bg-transparent text-transform-primary">
+              <PopoverContent className="w-[280px] p-1 rounded-[length:var(--select-border-radius,var(--radius-shape-small,8px))] bg-[color:var(--select-bg,var(--color-surface-container-highest))] text-on-surface shadow-md border border-[length:var(--select-border-width,var(--layer-border-width,1px))] border-outline-variant mt-2 z-[200]" align="start">
+                <Command className="bg-transparent text-transform-secondary">
                   <CommandList className="max-h-[400px] p-0 overflow-y-auto custom-scrollbar">
                     {domains.map((domain, index) => {
                       const workspaces = getWorkspacesByDomain(domain);
@@ -80,7 +80,7 @@ export function QuickNavigate({ className }: QuickNavigateProps) {
 
                       return (
                         <React.Fragment key={domain}>
-                          <CommandGroup heading={meta.label} className="text-transform-tertiary">
+                          <CommandGroup heading={meta.label} className="px-1.5 py-1 text-xs text-muted-foreground bg-transparent">
                             {workspaces.map((ws) => {
                               const isSelected = activeWorkspaceId === ws.id;
                               return (
@@ -100,22 +100,22 @@ export function QuickNavigate({ className }: QuickNavigateProps) {
                                     }
                                   }}
                                   className={cn(
-                                    "flex items-center gap-3 px-3 py-2 rounded-[var(--radius-none,0px)] mb-0.5 last:mb-0 cursor-pointer transition-colors text-[13px] font-normal font-display group",
-                                    isSelected 
-                                      ? "bg-[\x23E6E8DB] text-[\x235E6D21]" 
-                                      : "text-slate-600 hover:bg-slate-100"
+                                    "relative flex w-full cursor-pointer items-center gap-1.5 rounded-md py-1 pr-8 pl-1.5 text-sm font-body text-transform-secondary text-on-surface outline-hidden select-none hover:bg-layer-panel focus:bg-layer-panel focus:text-on-surface mb-0.5 last:mb-0 transition-colors",
+                                    isSelected ? "bg-layer-panel" : ""
                                   )}
                                 >
-                                  <div className="flex items-center justify-center w-6 h-6 rounded-md bg-layer-panel group-hover:bg-white border text-transform-tertiary shrink-0">
+                                  <div className="flex items-center justify-center shrink-0">
                                      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                                     <Icon name={ws.icon as any} size={14} className={isSelected ? "text-[\x235E6D21]" : "opacity-70"} />
+                                     <Icon name={ws.icon as any} size={14} className="opacity-70 pointer-events-none shrink-0" />
                                   </div>
-                                  <div className="flex flex-col">
-                                    <span className="font-semibold text-transform-primary leading-tight">{ws.name}</span>
-                                    <span className="text-[11px] text-transform-tertiary">{ws.sub} • :{ws.port}</span>
+                                  <div className="flex flex-col gap-0.5 ml-1">
+                                    <span className="font-semibold text-transform-secondary leading-tight">{ws.name}</span>
+                                    <span className="text-[11px] font-body text-muted-foreground leading-none">{ws.sub} • :{ws.port}</span>
                                   </div>
                                   {isSelected && (
-                                    <Check className="ml-auto text-primary shrink-0" size={14} />
+                                    <span className="pointer-events-none absolute right-2 flex size-4 items-center justify-center">
+                                      <Check className="pointer-events-none size-4 shrink-0" />
+                                    </span>
                                   )}
                                 </CommandItem>
                               );

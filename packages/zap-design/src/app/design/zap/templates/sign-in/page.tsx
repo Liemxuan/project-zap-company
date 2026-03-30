@@ -12,7 +12,7 @@ export default function SignInSandboxPage() {
             filePath="src/genesis/templates/login/SignInTemplate.tsx"
             importPath="@/genesis/templates/login/SignInTemplate"
             inspectorControls={
-                <div className="text-xs text-on-surface-variant p-4">
+                <div className="text-label-small text-on-surface-variant p-4">
                     Template pages are generally static structural scaffolding for organism combinations.
                 </div>
             }

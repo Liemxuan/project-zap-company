@@ -101,11 +101,11 @@ export default function PillSandboxPage() {
             <div className="space-y-4">
                 <Wrapper identity={{ displayName: "Pill Structural Settings", type: "Docs Link", filePath: "zap/atoms/pill/page.tsx" }}>
                     <div className="space-y-6">
-                        <h4 className="text-[10px] text-transform-primary font-display font-bold text-muted-foreground tracking-wider uppercase">Sandbox Variables</h4>
+                        <h4 className="text-label-small text-transform-primary font-display font-bold text-muted-foreground tracking-wider uppercase">Sandbox Variables</h4>
 
                         <div className="space-y-4">
                             <div className="space-y-2">
-                                <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-muted-foreground uppercase">
+                                <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-muted-foreground uppercase">
                                     <span>--pill-height</span>
                                     <span className="font-bold">{height[0]}px</span>
                                 </div>
@@ -113,7 +113,7 @@ export default function PillSandboxPage() {
                             </div>
 
                             <div className="space-y-1">
-                                <span className="text-[10px] text-muted-foreground flex justify-between">
+                                <span className="text-label-small text-muted-foreground flex justify-between">
                                     <span>Width Override</span>
                                     <span className="font-bold">{previewWidth}</span>
                                 </span>
@@ -127,7 +127,7 @@ export default function PillSandboxPage() {
                             </div>
 
                             <div className="space-y-1">
-                                <span className="text-[10px] text-muted-foreground flex justify-between">
+                                <span className="text-label-small text-muted-foreground flex justify-between">
                                     <span>Radius Override</span>
                                     <span className="font-bold">{previewRadius}</span>
                                 </span>
@@ -142,7 +142,7 @@ export default function PillSandboxPage() {
 
                             {Object.entries(colors).map(([variant, color]) => (
                                 <div key={variant} className="space-y-2">
-                                    <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-muted-foreground uppercase">
+                                    <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-muted-foreground uppercase">
                                         <span>--color-{variant}</span>
                                         <span className="font-bold">{color || 'Default'}</span>
                                     </div>
@@ -157,7 +157,7 @@ export default function PillSandboxPage() {
                                     <div className="flex justify-end">
                                         <button 
                                             onClick={() => setColors(prev => ({ ...prev, [variant]: '' }))}
-                                            className="text-[10px] text-muted-foreground hover:text-primary transition-colors uppercase font-bold"
+                                            className="text-label-small text-muted-foreground hover:text-primary transition-colors uppercase font-bold"
                                         >
                                             Reset {variant}
                                         </button>
@@ -268,7 +268,7 @@ export default function PillSandboxPage() {
                    </div>
                    <div className="mt-8 flex flex-col items-center">
                        <span className="font-display font-medium">Pill Sandbox Mounted (M3 Token Verification)</span>
-                       <span className="text-xs font-mono">Dynamically mapped to Global Theme (Border: {previewWidth}, Radius: {previewRadius})</span>
+                       <span className="text-label-small font-mono">Dynamically mapped to Global Theme (Border: {previewWidth}, Radius: {previewRadius})</span>
                    </div>
                 </div>
             </div>

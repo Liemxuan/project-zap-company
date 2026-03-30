@@ -29,12 +29,14 @@ When you receive a user prompt containing an `@Shortcut` or when you encounter a
 
 | File Name | Shortcut Command | Title / Scope |
 | :--- | :--- | :--- |
+| [STATE_SUMMARY.md](STATE_SUMMARY.md) | **`@STATE_SUMMARY`** | STATE_SUMMARY — OLY-AUTH-PHASE11-X7V9 |
 | [architecture.md](architecture.md) | **`@architecture`** | Olympus Omni-Channel CRM — architecture |
 | [collaboration-guide.md](collaboration-guide.md) | **`@collaboration-guide`** | ZAP Olympus Collaboration Guide |
 | [cross-workspace-map.md](cross-workspace-map.md) | **`@cross-workspace-map`** | 🗺️ Cross-Workspace Documentation Map |
 | [localhost_3200_scan.md](localhost_3200_scan.md) | **`@localhost_3200_scan`** | Localhost:3200 Scan Report |
 | [olympus-protocols.md](olympus-protocols.md) | **`@olympus-protocols`** | OLYMPUS PROTOCOLS (OLY-002) |
 | [progress_summary.md](progress_summary.md) | **`@progress_summary`** | Progress & Constraints Summary |
+| [task.md](task.md) | **`@task`** | Task Log — OLY-AUTH-PHASE11-X7V9 |
 
 ## MANAGEMENT
 
@@ -112,6 +114,13 @@ When you receive a user prompt containing an `@Shortcut` or when you encounter a
 | [sop-033-inventory-webhook-integration.md](sops/sop-033-inventory-webhook-integration.md) | **`@sop-033`** | SOP-033-INVENTORY-WEBHOOK-INTEGRATION |
 | [sop-034-olympus-data-architecture.md](sops/sop-034-olympus-data-architecture.md) | **`@sop-034`** | SOP-034-OLYMPUS-DATA-ARCHITECTURE |
 | [sop-035-olympus-memory-system.md](sops/sop-035-olympus-memory-system.md) | **`@sop-035`** | SOP-035-OLYMPUS_MEMORY_SYSTEM |
+| [sop-036-gemini-model-fleet-mapping.md](sops/sop-036-gemini-model-fleet-mapping.md) | **`@sop-036`** | SOP-036-GEMINI-MODEL-FLEET-MAPPING |
+
+## SUPERPOWERS
+
+| File Name | Shortcut Command | Title / Scope |
+| :--- | :--- | :--- |
+| [2026-03-24-button-theme-sync-design.md](superpowers/specs/2026-03-24-button-theme-sync-design.md) | **`@2026-03-24-button-theme-sync-design`** | Button Theme-Sync: Data-Attribute CSS Variable Resolution |
 
 ## TASKS
 

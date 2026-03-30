@@ -12,7 +12,7 @@ import { z } from 'zod';
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3900;
 
 // Middleware to parse incoming JSON bodies
 app.use(cors());
@@ -57,7 +57,13 @@ app.get('/webhook/telegram', (req, res) => {
 
 const AdminKeysSchema = z.object({
     tenantId: z.string().max(250),
-    llmConfig: z.object({ provider: z.string().max(100) }).passthrough()
+    llmConfig: z.object({ provider: z.string().max(100) }).passthrough(),
+    searchConfig: z.object({
+        provider: z.enum(['InfoQuest', 'Brave', 'Perplexity']).default('InfoQuest'),
+        infoQuestApiKey: z.string().optional(),
+        braveApiKey: z.string().optional(),
+        perplexityApiKey: z.string().optional()
+    }).optional()
 });
 
 // 1. Admin Titan Registry
@@ -67,16 +73,22 @@ app.post('/api/admin/keys', async (req, res) => {
         res.status(400).json({ error: "Missing required fields or invalid payload lengths." });
         return;
     }
-    const { tenantId, llmConfig } = parse.data;
+    const { tenantId, llmConfig, searchConfig } = parse.data;
 
     const client = new MongoClient(MONGO_URI);
     try {
         await client.connect();
         const db = client.db(DB_NAME);
         const settingsCol = db.collection(`SYS_OS_settings`);
+        
+        const updatePayload: any = { llmConfig };
+        if (searchConfig) {
+            updatePayload.searchConfig = searchConfig;
+        }
+
         const result = await settingsCol.updateOne(
             { tenantId: tenantId },
-            { $set: { llmConfig: llmConfig } },
+            { $set: updatePayload },
             { upsert: true }
         );
 
@@ -640,7 +652,7 @@ app.get('/api/admin/swarm', async (req, res) => {
     }
 });
 
-const httpServer = app.listen(PORT, () => {
+const httpServer = app.listen(PORT as number, "0.0.0.0", () => {
     console.log(`[Server] ✅ ZAP Claw is listening on port ${PORT}`);
     console.log(`[Server] Webhook Endpoint Ready: POST http://localhost:${PORT}/webhook/telegram`);
 });

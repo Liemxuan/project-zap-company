@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { useTheme } from '../../../components/ThemeContext';
 import { ComponentSandboxTemplate } from '../../../zap/layout/ComponentSandboxTemplate';
 import { CanvasDesktop } from '../../../components/dev/CanvasDesktop';
@@ -20,9 +21,16 @@ import { InspectorAccordion } from '../../../zap/organisms/laboratory/InspectorA
 export default function LoginTemplate() {
     const { theme: appTheme } = useTheme();
     const activeTheme = appTheme === 'core' ? 'core' : 'metro';
+    const searchParams = useSearchParams();
+    const isFullscreen = searchParams.get('fullscreen') === 'true';
 
     // ─── Form State ──────────────────────────────────────────────────
-    const [isDarkMode, setIsDarkMode] = useState(false);
+    const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
+        if (typeof document !== 'undefined') {
+            return document.documentElement.classList.contains('dark');
+        }
+        return false;
+    });
     const [activeLang, setActiveLang] = useState('🇺🇸 EN');
     const [rememberMe, setRememberMe] = useState(false);
     const [merchantName, setMerchantName] = useState('ZAP Inc.');
@@ -46,12 +54,7 @@ export default function LoginTemplate() {
         getEffectiveProps
     } = useBorderProperties();
 
-    useEffect(() => {
-        // Run once on mount to sync React state with document class
-        if (typeof document !== 'undefined') {
-            setIsDarkMode(document.documentElement.classList.contains('dark'));
-        }
-    }, []);
+    // Removed duplicate useEffect updating isDarkMode on mount
 
     useEffect(() => {
         let mounted = true;
@@ -129,6 +132,51 @@ export default function LoginTemplate() {
         </L5Inspector>
     );
 
+    const layoutContent = (
+        <AuthSplitLayout
+            className={isFullscreen ? "min-h-screen h-screen w-full" : "min-h-full h-full"}
+            formSlot={
+                <LoginForm
+                    onSubmit={(e) => e.preventDefault()}
+                    merchantName={merchantName}
+                    onMerchantNameChange={setMerchantName}
+                    email={email}
+                    onEmailChange={setEmail}
+                    password={password}
+                    onPasswordChange={setPassword}
+                    rememberMe={rememberMe}
+                    onRememberMeChange={setRememberMe}
+                    activeLang={activeLang}
+                    onCycleLang={cycleLanguage}
+                    isDarkMode={isDarkMode}
+                    onToggleTheme={toggleTheme}
+                    showMerchantName={showMerchantName}
+                    showEmail={showEmail}
+                    showPassword={showPassword}
+                    showRememberMe={showRememberMe}
+                    showSocialLogin={showSocialLogin}
+                    showConfigBar={showConfigBar}
+                />
+            }
+            heroSlot={
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/30 via-indigo-500/20 to-surface-container overflow-hidden flex items-center justify-center">
+                    <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/20 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob"></div>
+                    <div className="absolute top-1/3 right-1/4 w-96 h-96 bg-purple-500/20 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-2000"></div>
+                    <div className="absolute -bottom-8 left-1/3 w-96 h-96 bg-indigo-500/20 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-4000"></div>
+                    <span className="material-symbols-outlined text-[300px] text-white/5 z-0 transform -rotate-12 translate-y-12">shield_lock</span>
+                </div>
+            }
+        />
+    );
+
+    if (isFullscreen) {
+        return (
+            <div className="w-screen h-screen m-0 p-0 overflow-hidden">
+                {layoutContent}
+            </div>
+        );
+    }
+
     return (
         <ComponentSandboxTemplate
             componentName="LoginForm"
@@ -150,41 +198,8 @@ export default function LoginTemplate() {
             ]}
         >
             <div className="w-full flex justify-center py-6 px-4 md:px-0">
-                <CanvasDesktop title="Sign-In Experience // ZAP Auth">
-                    <AuthSplitLayout
-                        className="min-h-full h-full"
-                        formSlot={
-                            <LoginForm
-                                onSubmit={(e) => e.preventDefault()}
-                                merchantName={merchantName}
-                                onMerchantNameChange={setMerchantName}
-                                email={email}
-                                onEmailChange={setEmail}
-                                password={password}
-                                onPasswordChange={setPassword}
-                                rememberMe={rememberMe}
-                                onRememberMeChange={setRememberMe}
-                                activeLang={activeLang}
-                                onCycleLang={cycleLanguage}
-                                isDarkMode={isDarkMode}
-                                onToggleTheme={toggleTheme}
-                                showMerchantName={showMerchantName}
-                                showEmail={showEmail}
-                                showPassword={showPassword}
-                                showRememberMe={showRememberMe}
-                                showSocialLogin={showSocialLogin}
-                                showConfigBar={showConfigBar}
-                            />
-                        }
-                        heroSlot={
-                            <div className="absolute inset-0 bg-gradient-to-br from-primary/30 via-indigo-500/20 to-surface-container overflow-hidden flex items-center justify-center">
-                                <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/20 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob"></div>
-                                <div className="absolute top-1/3 right-1/4 w-96 h-96 bg-purple-500/20 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-2000"></div>
-                                <div className="absolute -bottom-8 left-1/3 w-96 h-96 bg-indigo-500/20 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-4000"></div>
-                                <span className="material-symbols-outlined text-[300px] text-white/5 z-0 transform -rotate-12 translate-y-12">shield_lock</span>
-                            </div>
-                        }
-                    />
+                <CanvasDesktop title="Sign-In Experience // ZAP Auth" fullScreenHref={`/design/${activeTheme}/organisms/signin-a?fullscreen=true`}>
+                    {layoutContent}
                 </CanvasDesktop>
             </div>
         </ComponentSandboxTemplate>

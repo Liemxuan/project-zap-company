@@ -107,11 +107,12 @@ export function ThemePublisher({
             onClick={handlePublish}
             visualStyle={fetchedProps.visualStyle || "solid"}
             color={isError ? "destructive" : (fetchedProps.color || "primary")}
-            variant={fetchedProps.variant || "flat"}
+            variant={fetchedProps.variant || "neo"}
             size={fetchedProps.size || "medium"}
             {...buttonProps}
             className={cn(
-                "w-full transition-all", 
+                "w-full h-10 transition-all text-xs font-bold tracking-wide", 
+                "border border-primary/30 shadow-sm",
                 fetchedProps.variant === 'neo' && "border-2 border-foreground", 
                 buttonProps?.className, 
                 className
@@ -119,15 +120,15 @@ export function ThemePublisher({
             disabled={activeIsLoading || buttonProps?.disabled}
         >
             {fetchedProps.iconPosition !== 'none' && !isSuccess && !isError && (
-                <Icon name="rocket_launch" size={iconSize} className="opacity-90" />
+                <Icon name="rocket_launch" size={16} className="opacity-90" />
             )}
-            {isSuccess && <Icon name="check" size={iconSize} />}
-            {isError && <Icon name="error" size={iconSize} />}
+            {isSuccess && <Icon name="check" size={16} />}
+            {isError && <Icon name="error" size={16} />}
             <span>
-                {activeIsLoading ? "Publishing..." : 
-                 isSuccess ? "Published!" :
-                 isError ? "Publish Failed" : 
-                 `Publish to ${theme} Theme`}
+                {activeIsLoading ? "publishing..." : 
+                 isSuccess ? "published!" :
+                 isError ? "publish failed" : 
+                 `publish to ${theme} theme`}
             </span>
         </Button>
     );

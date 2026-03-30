@@ -4,24 +4,28 @@ import { parseCssToNumber } from '../../../../../lib/utils';
 import React, { useState, useEffect } from 'react';
 import { useTheme } from '../../../../../components/ThemeContext';
 import { ComponentSandboxTemplate } from '../../../../../zap/layout/ComponentSandboxTemplate';
-import { Checkbox } from '../../../../../genesis/atoms/interactive/checkbox';
 import { Icon } from '../../../../../genesis/atoms/icons/Icon';
-import { Switch } from '../../../../../genesis/atoms/interactive/switch';
 import { Wrapper } from '../../../../../components/dev/Wrapper';
-import { Slider } from '../../../../../genesis/atoms/interactive/slider';
-import { ThemePublisher } from '../../../../../components/dev/ThemePublisher';
+import { Checkbox } from '../../../../../genesis/atoms/interactive/checkbox';
 import { useBorderProperties } from '../../../../../zap/sections/atoms/border_radius/use-border-properties';
 import { BORDER_RADIUS_TOKENS, BORDER_WIDTH_TOKENS } from '../../../../../zap/sections/atoms/foundations/schema';
-import { Select } from '../../../../../genesis/atoms/interactive/option-select';
-import { toast } from 'sonner';
+import { L5Inspector } from '../../../../../genesis/organisms/inspector';
 
 export default function CheckboxSandboxPage() {
     const { theme: appTheme } = useTheme();
     const activeTheme = appTheme === 'core' ? 'core' : 'metro';
     
+    // Core States
     const [disabled, setDisabled] = useState(false);
+    
+    // Unified Template States (Adopted from Button)
+    const [checkboxColor, setCheckboxColor] = useState<string>('primary');
+    const [checkboxSize, setCheckboxSize] = useState<string>('medium');
+    
+    // Sandbox manual sizes (for granular testing if Scale preset is overridden)
     const [size, setSize] = useState([16]);
-    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    // Dynamic Database State
     const {
         state,
         setComponentOverride,
@@ -49,159 +53,58 @@ export default function CheckboxSandboxPage() {
         return () => { mounted = false; };
     }, [activeTheme, hydrateState]);
 
+    // Map Density to physical size via direct handler
+    const handleSizeChange = (newSize: string) => {
+        setCheckboxSize(newSize);
+        switch (newSize) {
+            case 'tiny': setSize([14]); break;
+            case 'compact': setSize([18]); break;
+            case 'medium': setSize([24]); break;
+            case 'expanded': setSize([32]); break;
+        }
+    };
+
     const effectiveProps = getEffectiveProps('Checkbox');
     
     const previewRadius = BORDER_RADIUS_TOKENS.find(t => t.token === effectiveProps.radius)?.value.split(' ')[0] || '12px';
     const previewWidth = BORDER_WIDTH_TOKENS.find(t => t.token === effectiveProps.width)?.value.split(' ')[0] || '0px';
 
-    const renderRadiusSelect = (value: string, onChange: (val: string) => void) => {
-        const safeValue = value === '' ? 'inherit' : value;
-        const options = [
-            { label: '(Inherit Universal)', value: 'inherit' },
-            ...BORDER_RADIUS_TOKENS.map(t => ({ label: `${t.name} (${t.token})`, value: t.token }))
-        ];
-        return (
-            <Select 
-                value={safeValue} 
-                onChange={(val) => onChange(val === 'inherit' ? '' : val)}
-                options={options}
-                placeholder="(Inherit Universal)"
-                className={`w-full bg-layer-base ${value !== '' ? 'border-primary/50 text-primary' : 'border-border/30 text-foreground'}`}
-            />
-        );
-    };
-
-    const renderWidthSelect = (value: string, onChange: (val: string) => void) => {
-        const safeValue = value === '' ? 'inherit' : value;
-        const options = [
-            { label: '(Inherit Universal)', value: 'inherit' },
-            ...BORDER_WIDTH_TOKENS.map(t => ({ label: `${t.name} (${t.token})`, value: t.token }))
-        ];
-        return (
-            <Select 
-                value={safeValue} 
-                onChange={(val) => onChange(val === 'inherit' ? '' : val)}
-                options={options}
-                placeholder="(Inherit Universal)"
-                className={`w-full bg-layer-base ${value !== '' ? 'border-primary/50 text-primary' : 'border-border/30 text-foreground'}`}
-            />
-        );
-    };
-
     const inspectorControls = (
-        <Wrapper identity={{ displayName: "Inspector Controls Container", type: "Container", filePath: "zap/atoms/checkbox/page.tsx" }}>
-            <div className="space-y-4">
-
-                {/* Structure Theme Section */}
-                <Wrapper identity={{ displayName: "Checkbox Structural Settings", type: "Docs Link", filePath: "zap/atoms/checkbox/page.tsx" }}>
-                    <div className="space-y-6">
-                        <h4 className="text-[10px] text-transform-primary font-display font-bold text-muted-foreground tracking-wider uppercase">Sandbox Variables</h4>
-
-                        <div className="space-y-4">
-                            <div className="space-y-2">
-                                <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-muted-foreground uppercase">
-                                    <span>--checkbox-size</span>
-                                    <span className="font-bold">{size[0]}px</span>
-                                </div>
-                                <Slider value={size} onValueChange={setSize} min={12} max={32} step={1} className="w-full" />
-                            </div>
-
-                            <div className="space-y-1">
-                                <span className="text-[10px] text-muted-foreground flex justify-between">
-                                    <span>Width Override</span>
-                                    <span className="font-bold">{previewWidth}</span>
-                                </span>
-                                {renderWidthSelect(
-                                    state.components['Checkbox']?.width || '', 
-                                    (val) => {
-                                        if (val === '') clearComponentOverride('Checkbox', 'width');
-                                        else setComponentOverride('Checkbox', 'width', val);
-                                    }
-                                )}
-                            </div>
-
-                            <div className="space-y-1">
-                                <span className="text-[10px] text-muted-foreground flex justify-between">
-                                    <span>Radius Override</span>
-                                    <span className="font-bold">{previewRadius}</span>
-                                </span>
-                                {renderRadiusSelect(
-                                    state.components['Checkbox']?.radius || '', 
-                                    (val) => {
-                                        if (val === '') clearComponentOverride('Checkbox', 'radius');
-                                        else setComponentOverride('Checkbox', 'radius', val);
-                                    }
-                                )}
-                            </div>
-                        </div>
-                    </div>
-                </Wrapper>
-
-                <Wrapper identity={{ displayName: "Disabled State Toggle Row", type: "Control Row", filePath: "zap/atoms/checkbox/page.tsx" }}>
-                    <div className="flex items-center justify-between pt-4 border-t border-border/50">
-                        <span className="text-[11px] font-bold font-display text-transform-primary text-muted-foreground">Disabled State</span>
-                        <Switch size="sm" checked={disabled} onCheckedChange={setDisabled} />
-                    </div>
-                </Wrapper>
-
-                <Wrapper identity={{ displayName: "Architecture Docs Section", type: "Docs Link", filePath: "zap/atoms/checkbox/page.tsx" }}>
-                    <div className="pt-4 mt-4 border-t border-border/50">
-                        <h4 className="text-[10px] text-transform-primary font-display font-bold text-muted-foreground tracking-wider mb-2">Architecture Docs</h4>
-                        <div className="bg-layer-panel p-3 rounded-lg border border-outline-variant">
-                            <p className="text-[11px] text-surface-foreground/80 font-dev text-transform-tertiary mb-2">Checkbox Typography & Publish Protocol</p>
-                            <a href="vscode://file/Users/zap/Workspace/olympus/packages/zap-design/src/genesis/atoms/interactive/checkbox-publish-protocol.md" className="block w-full text-center text-[10px] py-1.5 bg-primary/10 text-primary hover:bg-primary/20 rounded font-bold tracking-widest transition-colors">
-                                OPEN PROTOCOL.MD
-                            </a>
-                        </div>
-                    </div>
-                </Wrapper>
-
-            </div>
-        </Wrapper>
+        <L5Inspector
+            componentName="Checkbox"
+            activeColor={checkboxColor}
+            onColorChange={setCheckboxColor}
+            activeSize={checkboxSize}
+            onSizeChange={handleSizeChange}
+            customVariableLabel="--checkbox-size"
+            customVariableValue={size}
+            onCustomVariableChange={setSize}
+            customVariableMin={12}
+            customVariableMax={48}
+            customVariableStep={2}
+            borderState={state}
+            setComponentOverride={setComponentOverride}
+            clearComponentOverride={clearComponentOverride}
+            effectiveProps={effectiveProps}
+            disabled={disabled}
+            onDisabledChange={setDisabled}
+            docsLabel="Typography & Publish Protocol"
+            docsHref="vscode://file/Users/zap/Workspace/olympus/packages/zap-design/src/genesis/atoms/interactive/checkbox-publish-protocol.md"
+            publishContext={{
+                activeTheme,
+                filePath: "app/design/zap/atoms/checkbox/page.tsx",
+                customVariables: { '--checkbox-size': size[0] + 'px' }
+            }}
+        />
     );
 
-            const handleLoadedVariables = React.useCallback((variables: Record<string, string>) => {
-                if (variables['--checkbox-size']) setSize([parseCssToNumber(variables['--checkbox-size'])]);
-            }, []);
-        
-            const handlePublish = async () => {
-                setIsSubmitting(true);
-                try {
-                    // Publish specific size
-                    const res1 = await fetch('/api/theme/publish', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ theme: activeTheme, variables: { '--checkbox-size': size[0] + 'px' }})
-                    });
+    const handleLoadedVariables = React.useCallback((variables: Record<string, string>) => {
+        if (variables['--checkbox-size']) setSize([parseCssToNumber(variables['--checkbox-size'])]);
+    }, []);
 
-                    // Publish border radius & width globally
-                    const res2 = await fetch('/api/border_radius/publish', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ theme: activeTheme, state })
-                    });
-
-                    if (res1.ok && res2.ok) {
-                        toast.success(`Checkbox Settings Published`, { description: `Successfully synced values to the ${activeTheme} theme.` });
-                    } else {
-                        throw new Error("Failed to publish one or more services");
-                    }
-                } catch (error) {
-                    console.error("Publish Error:", error);
-                    toast.error(`Publish Failed`, { description: `Failed to sync values.` });
-                } finally {
-                    setIsSubmitting(false);
-                }
-            };
-
-            const inspectorFooter = (
-                <ThemePublisher
-                    theme={activeTheme}
-                    onPublish={handlePublish}
-                    isLoading={isSubmitting}
-                    filePath={`app/design/zap/atoms/checkbox/page.tsx`}
-                />
-            );
+    // Dynamic color re-mapping for Semantic visual testing!
+    const previewColorVar = checkboxColor === 'destructive' ? 'var(--color-error)' : `var(--color-${checkboxColor})`;
+    const previewOnColorVar = checkboxColor === 'destructive' ? 'var(--color-on-error)' : `var(--color-on-${checkboxColor})`;
 
     return (
         <ComponentSandboxTemplate
@@ -216,16 +119,15 @@ export default function CheckboxSandboxPage() {
                 typographyScales: ['--font-body (labelLarge)']
             }}
             platformConstraints={{
-                web: "Checkboxes use a 16px size by default with a subtle rounded corner. Labels are positioned to the right with an 8px-12px gap.",
+                web: "Checkboxes use a scalable sizing system driven by density. Labels are positioned to the right.",
                 mobile: "Touch targets for checkboxes and their labels must be at least 48px high to comply with accessibility standards."
             }}
             foundationRules={[
                 "Checkboxes must use [data-slot='checkbox'] for external theme injection.",
                 "Labels must be bound via htmlFor to the checkbox ID.",
                 "Primary labels should use var(--font-body) and text-transform-secondary.",
-                "Disabled states must apply 38% opacity to both the box and the label."
+                "Dynamic properties Inspector is the Unified standard for all future Atom sandboxes!"
             ]}
-            inspectorFooter={inspectorFooter}
             onLoadedVariables={handleLoadedVariables}
         >
             <div
@@ -233,7 +135,9 @@ export default function CheckboxSandboxPage() {
                 style={Object.assign({}, {
                     '--checkbox-size': `${size[0]}px`,
                     '--checkbox-border-width': previewWidth,
-                    '--checkbox-border-radius': previewRadius
+                    '--checkbox-border-radius': previewRadius,
+                    '--color-primary': previewColorVar,
+                    '--color-on-primary': previewOnColorVar
                 } as React.CSSProperties)}
             >
 
@@ -280,7 +184,7 @@ export default function CheckboxSandboxPage() {
                                                     <label htmlFor="cb-protocol" style={Object.assign({}, { fontSize: 'calc(var(--checkbox-size, 16px) * 0.875)' })} className="font-body text-transform-secondary font-bold mt-px leading-none">Primary Scope</label>
                                                 </div>
                                             </Wrapper>
-                                            <p className="text-[10px] font-dev text-transform-tertiary text-muted-foreground ml-7 uppercase tracking-wider">
+                                            <p className="text-label-small font-dev text-transform-tertiary text-muted-foreground ml-7 uppercase tracking-wider">
                                                 Inherits Secondary Protocol
                                             </p>
                                         </div>
@@ -323,7 +227,7 @@ export default function CheckboxSandboxPage() {
                         <Wrapper identity={{ displayName: "Anatomy Visual Block", type: "Visual Guide", filePath: "zap/atoms/checkbox/page.tsx" }}>
                             <div className="flex gap-12 items-center">
                                 <div className="relative p-6 bg-white rounded-xl border border-border shadow-sm">
-                                    <Checkbox id="anatomy-cb" />
+                                    <Checkbox id="anatomy-cb" defaultChecked />
                                     <div className="absolute -top-3 -right-4 bg-brand-midnight text-white px-2 py-0.5 text-[9px] font-dev text-transform-tertiary rounded whitespace-nowrap">
                                         [data-slot=&quot;checkbox&quot;]
                                     </div>
@@ -348,11 +252,10 @@ export default function CheckboxSandboxPage() {
                     </div>
                 </section>
 
-                {/* Protocol Info */}
                 <Wrapper identity={{ displayName: "Protocol Engine Badge", type: "Badge", filePath: "zap/atoms/checkbox/page.tsx" }} className="mt-8 flex justify-center opacity-40 w-fit mx-auto">
-                    <div className="flex items-center gap-2 bg-warning-container text-on-warning-container px-3 py-1.5 rounded-full text-[10px] font-dev tracking-widest text-transform-tertiary uppercase">
-                        <Icon name="published_with_changes" size={14} className="text-current" />
-                        ZAP Typography Publish Engine Enabled
+                    <div className="flex items-center gap-2 bg-warning-container text-on-warning-container px-3 py-1.5 rounded-full text-label-small font-dev tracking-widest text-transform-tertiary uppercase">
+                        <Icon name="verified" size={14} className="text-current" />
+                        Unified Dynamic Properties Template Enabled
                     </div>
                 </Wrapper>
 

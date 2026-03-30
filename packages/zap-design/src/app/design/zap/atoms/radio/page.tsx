@@ -99,11 +99,11 @@ export default function RadioSandboxPage() {
 
                 <Wrapper identity={{ displayName: "Radio Structural Settings", type: "Docs Link", filePath: "zap/atoms/radio/page.tsx" }}>
                     <div className="space-y-6">
-                        <h4 className="text-[10px] text-transform-primary font-display font-bold text-muted-foreground tracking-wider uppercase">Sandbox Variables</h4>
+                        <h4 className="text-label-small text-transform-primary font-display font-bold text-muted-foreground tracking-wider uppercase">Sandbox Variables</h4>
 
                         <div className="space-y-4">
                             <div className="space-y-2">
-                                <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-muted-foreground uppercase">
+                                <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-muted-foreground uppercase">
                                     <span>--radio-size</span>
                                     <span className="font-bold">{size[0]}px</span>
                                 </div>
@@ -111,7 +111,7 @@ export default function RadioSandboxPage() {
                             </div>
 
                             <div className="space-y-1">
-                                <span className="text-[10px] text-muted-foreground flex justify-between">
+                                <span className="text-label-small text-muted-foreground flex justify-between">
                                     <span>Width Override</span>
                                     <span className="font-bold">{previewWidth}</span>
                                 </span>
@@ -125,7 +125,7 @@ export default function RadioSandboxPage() {
                             </div>
 
                             <div className="space-y-1">
-                                <span className="text-[10px] text-muted-foreground flex justify-between">
+                                <span className="text-label-small text-muted-foreground flex justify-between">
                                     <span>Radius Override</span>
                                     <span className="font-bold">{previewRadius}</span>
                                 </span>
@@ -143,16 +143,16 @@ export default function RadioSandboxPage() {
 
                 <Wrapper identity={{ displayName: "Disabled State Toggle Row", type: "Control Row", filePath: "zap/atoms/radio/page.tsx" }}>
                     <div className="flex items-center justify-between pt-4 border-t border-border/50">
-                        <span className="text-[11px] font-bold font-display text-transform-primary text-muted-foreground">Disabled State</span>
+                        <span className="text-label-medium font-bold font-display text-transform-primary text-muted-foreground">Disabled State</span>
                         <Switch size="sm" checked={disabled} onCheckedChange={setDisabled} />
                     </div>
                 </Wrapper>
 
                 <Wrapper identity={{ displayName: "Architecture Docs Section", type: "Docs Link", filePath: "zap/atoms/radio/page.tsx" }}>
                     <div className="pt-4 mt-4 border-t border-border/50">
-                        <h4 className="text-[10px] text-transform-primary font-display font-bold text-muted-foreground tracking-wider mb-2">Architecture Docs</h4>
+                        <h4 className="text-label-small text-transform-primary font-display font-bold text-muted-foreground tracking-wider mb-2">Architecture Docs</h4>
                         <div className="bg-layer-panel p-3 rounded-lg border border-outline-variant text-center space-y-2">
-                            <p className="text-[11px] text-surface-foreground/80 font-dev text-transform-tertiary">Radio follows generic Checkbox Token Sync logic.</p>
+                            <p className="text-label-medium text-surface-foreground/80 font-dev text-transform-tertiary">Radio follows generic Checkbox Token Sync logic.</p>
                         </div>
                     </div>
                 </Wrapper>
@@ -286,7 +286,7 @@ export default function RadioSandboxPage() {
                                                     </div>
                                                 </Wrapper>
                                             </RadioGroup>
-                                            <p className="text-[10px] font-dev text-transform-tertiary text-muted-foreground ml-7 uppercase tracking-wider">
+                                            <p className="text-label-small font-dev text-transform-tertiary text-muted-foreground ml-7 uppercase tracking-wider">
                                                 Inherits Secondary Protocol
                                             </p>
                                         </div>

@@ -18,7 +18,7 @@ export default function ThemeRemixBlast() {
 
                 {/* NEUTRAL CORE (NO THEME) */}
                 <div className="theme-core flex flex-col w-full h-full relative">
- <div className="absolute -top-6 left-0 text-[10px] font-dev text-transform-tertiary text-white/50 bg-black/50 px-2 py-1 tracking-widest">
+ <div className="absolute -top-6 left-0 text-label-small font-dev text-transform-tertiary text-white/50 bg-black/50 px-2 py-1 tracking-widest">
                         GLOBAL.CSS (Neutral Base)
                     </div>
                     <Canvas className="flex-1 p-8 overflow-hidden rounded-t-card border-[length:var(--card-border-width,0px)] border-card-border">
@@ -53,7 +53,7 @@ export default function ThemeRemixBlast() {
 
                 {/* METRO THEME */}
                 <div className="theme-metro flex flex-col w-full h-full relative">
- <div className="absolute -top-6 left-0 text-[10px] font-dev text-transform-tertiary text-white/50 bg-black/50 px-2 py-1 tracking-widest">
+ <div className="absolute -top-6 left-0 text-label-small font-dev text-transform-tertiary text-white/50 bg-black/50 px-2 py-1 tracking-widest">
                         METRO.JSON (Core Reset)
                     </div>
                     <Canvas className="flex-1 p-8 overflow-hidden rounded-t-card border-[length:var(--card-border-width,0px)] border-card-border">
@@ -88,7 +88,7 @@ export default function ThemeRemixBlast() {
 
                 {/* NEO THEME */}
                 <div className="theme-neo flex flex-col w-full h-full relative">
- <div className="absolute -top-6 left-0 text-[10px] font-dev text-transform-tertiary text-acid-yellow bg-black px-2 py-1 tracking-widest font-black">
+ <div className="absolute -top-6 left-0 text-label-small font-dev text-transform-tertiary text-acid-yellow bg-black px-2 py-1 tracking-widest font-black">
                         NEO.JSON (Zap-OS)
                     </div>
                     <Canvas className="flex-1 p-8 overflow-hidden rounded-t-card border-[length:var(--card-border-width,0px)] border-card-border">
@@ -123,7 +123,7 @@ export default function ThemeRemixBlast() {
 
                 {/* WIX THEME */}
                 <div className="theme-wix flex flex-col w-full h-full relative">
- <div className="absolute -top-6 left-0 text-[10px] font-dev text-transform-tertiary text-cyan-400 bg-black/50 px-2 py-1 tracking-widest">
+ <div className="absolute -top-6 left-0 text-label-small font-dev text-transform-tertiary text-cyan-400 bg-black/50 px-2 py-1 tracking-widest">
                         WIX.JSON (Competitor)
                     </div>
                     <Canvas className="flex-1 p-8 overflow-hidden rounded-t-card border-[length:var(--card-border-width,0px)] border-card-border">

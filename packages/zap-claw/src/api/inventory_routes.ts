@@ -232,7 +232,7 @@ inventoryRouter.post('/api/inventory/receive', async (req, res) => {
                 where: { purchase_order_id }
             });
 
-            const fullyReceived = updatedItems.every(item => 
+            const fullyReceived = updatedItems.every((item: any) => 
                 Number(item.quantity_received) >= Number(item.quantity_ordered)
             );
 

@@ -12,14 +12,14 @@ export default function RatingSandboxPage() {    const [value, setValue] = useSt
             <div className="space-y-4">
                 <Wrapper identity={{ displayName: "Rating Settings", type: "Docs Link", filePath: "zap/molecules/rating/page.tsx" }}>
                     <div className="space-y-6">
-                        <h4 className="text-[10px] text-transform-primary font-display font-bold text-on-surface-variant text-transform-secondary tracking-wider">Sandbox Controls</h4>
+                        <h4 className="text-label-small text-transform-primary font-display font-bold text-on-surface-variant text-transform-secondary tracking-wider">Sandbox Controls</h4>
                         
                         <div className="space-y-2">
-                            <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary">
+                            <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary">
                                 <span>Current Rating Value</span>
                                 <span className="font-bold">{value}</span>
                             </div>
-                            <p className="text-xs text-on-surface-variant text-transform-secondary font-body">Use the interaction preview to assign a rating score.</p>
+                            <p className="text-label-small text-on-surface-variant text-transform-secondary font-body">Use the interaction preview to assign a rating score.</p>
                         </div>
                     </div>
                 </Wrapper>
@@ -37,7 +37,7 @@ export default function RatingSandboxPage() {    const [value, setValue] = useSt
             inspectorControls={inspectorControls}
             foundationInheritance={{
                 colorTokens: ['text-primary', 'fill-primary', 'text-border'],
-                typographyScales: ['font-body', 'font-display', 'text-xs', 'text-transform-tertiary']
+                typographyScales: ['font-body', 'font-display', 'text-label-small', 'text-transform-tertiary']
             }}
             platformConstraints={{ web: "Supported", mobile: "Touch Supported" }}
             foundationRules={[

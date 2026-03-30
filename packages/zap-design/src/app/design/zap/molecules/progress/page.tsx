@@ -16,11 +16,11 @@ export default function ProgressSandboxPage() {    const [height, setHeight] = u
             <div className="space-y-4">
                 <Wrapper identity={{ displayName: "Progress Structural Settings", type: "Docs Link", filePath: "zap/molecules/progress/page.tsx" }}>
                     <div className="space-y-6">
-                        <h4 className="text-[10px] text-transform-primary font-display font-bold text-on-surface-variant text-transform-secondary tracking-wider">Sandbox Variables</h4>
+                        <h4 className="text-label-small text-transform-primary font-display font-bold text-on-surface-variant text-transform-secondary tracking-wider">Sandbox Variables</h4>
 
                         <div className="space-y-4">
                             <div className="space-y-2">
-                                <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary">
+                                <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary">
                                     <span>--progress-height</span>
                                     <span className="font-bold">{height[0]}px</span>
                                 </div>
@@ -28,7 +28,7 @@ export default function ProgressSandboxPage() {    const [height, setHeight] = u
                             </div>
 
                             <div className="space-y-2">
-                                <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary">
+                                <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary">
                                     <span>--progress-radius</span>
                                     <span className="font-bold">{radius[0]}px</span>
                                 </div>
@@ -63,7 +63,7 @@ export default function ProgressSandboxPage() {    const [height, setHeight] = u
                 } as React.CSSProperties)}
             >
                 <div className="w-[60%] flex gap-4 flex-col">
-                    <p className="font-display text-sm">Uploading file...</p>
+                    <p className="font-display text-body-small">Uploading file...</p>
                     <Progress value={60} className="w-full" />
                 </div>
             </div>

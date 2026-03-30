@@ -5,6 +5,7 @@ import { ComponentSandboxTemplate } from '../../../../../zap/layout/ComponentSan
 import { Wrapper } from '../../../../../components/dev/Wrapper';
 import { HorizontalNavigation } from '../../../../../genesis/molecules/navigation/HorizontalNavigation';
 import { Switch } from '../../../../../genesis/atoms/interactive/switch';
+import { ToggleGroup, ToggleGroupItem } from '../../../../../genesis/atoms/interactive/toggle-group';
 
 export default function HorizontalNavigationSandboxPage() {
     const [isLoggedIn, setIsLoggedIn] = useState(true);
@@ -12,32 +13,40 @@ export default function HorizontalNavigationSandboxPage() {
     const [showBorder, setShowBorder] = useState(true);
     const [showRadius, setShowRadius] = useState(true);
     const [isFullWidth, setIsFullWidth] = useState(false);
+    const [dropdownSide, setDropdownSide] = useState<'top' | 'bottom'>('bottom');
 
     const inspectorControls = (
         <Wrapper identity={{ displayName: "Inspector Controls Container", type: "Container", filePath: "zap/molecules/horizontal-navigation/page.tsx" }}>
             <div className="space-y-4">
                 <Wrapper identity={{ displayName: "Navigation Settings", type: "Docs Link", filePath: "zap/molecules/horizontal-navigation/page.tsx" }}>
                     <div className="space-y-6">
-                        <h4 className="text-[10px] text-transform-primary font-display font-bold text-on-surface-variant text-transform-secondary tracking-wider">Sandbox Controls</h4>
+                        <h4 className="text-label-small text-transform-primary font-display font-bold text-on-surface-variant text-transform-secondary tracking-wider">Sandbox Controls</h4>
                         
                         <div className="space-y-4">
-                            <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary">
+                            <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary">
                                 <span className={isLoggedIn ? 'text-primary font-bold' : ''}>Logged In State</span>
                                 <Switch checked={isLoggedIn} onCheckedChange={setIsLoggedIn} />
                             </div>
-                            <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary mt-4">
+                            <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary mt-4">
                                 <span className={showContent ? 'text-primary font-bold' : ''}>Show Page Content</span>
                                 <Switch checked={showContent} onCheckedChange={setShowContent} />
                             </div>
-                            <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary mt-4">
+                            <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary mt-4">
+                                <span className={dropdownSide === 'top' ? 'text-primary font-bold' : ''}>Menu Orientation</span>
+                                <ToggleGroup type="single" value={dropdownSide} onValueChange={(val) => val && setDropdownSide(val as 'top' | 'bottom')} visualStyle="segmented">
+                                    <ToggleGroupItem value="top">Upward</ToggleGroupItem>
+                                    <ToggleGroupItem value="bottom">Downward</ToggleGroupItem>
+                                </ToggleGroup>
+                            </div>
+                            <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary mt-4">
                                 <span className={showBorder ? 'text-primary font-bold' : ''}>Border Width</span>
                                 <Switch checked={showBorder} onCheckedChange={setShowBorder} />
                             </div>
-                            <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary mt-4">
+                            <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary mt-4">
                                 <span className={showRadius ? 'text-primary font-bold' : ''}>Border Radius</span>
                                 <Switch checked={showRadius} onCheckedChange={setShowRadius} />
                             </div>
-                            <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary mt-4">
+                            <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary mt-4">
                                 <span className={isFullWidth ? 'text-primary font-bold' : ''}>Full Width Container</span>
                                 <Switch checked={isFullWidth} onCheckedChange={setIsFullWidth} />
                             </div>
@@ -62,6 +71,10 @@ export default function HorizontalNavigationSandboxPage() {
         if (variables['--nav-show-content']) {
             setShowContent(variables['--nav-show-content'] === 'true');
         }
+        if (variables['--nav-dropdown-side']) {
+            const side = variables['--nav-dropdown-side'].replace(' !important', '').trim() as 'top' | 'bottom';
+            if (['top', 'bottom'].includes(side)) setDropdownSide(side);
+        }
     };
 
     return (
@@ -74,7 +87,7 @@ export default function HorizontalNavigationSandboxPage() {
             inspectorControls={inspectorControls}
             foundationInheritance={{
                 colorTokens: ['bg-layer-panel', 'border-black'],
-                typographyScales: ['font-body', 'text-sm']
+                typographyScales: ['font-body', 'text-body-small']
             }}
             platformConstraints={{ web: "Supported", mobile: "Touch Supported" }}
             foundationRules={[
@@ -88,7 +101,8 @@ export default function HorizontalNavigationSandboxPage() {
                 '--nav-max-width': isFullWidth ? '100%' : '1240px',
                 '--nav-border-width': showBorder ? '1px' : '0px',
                 '--nav-border-radius': showRadius ? '12px' : '0px',
-                '--nav-show-content': showContent ? 'true' : 'false'
+                '--nav-show-content': showContent ? 'true' : 'false',
+                '--nav-dropdown-side': dropdownSide
             }}
             onLoadedVariables={handleLoadedVariables}
         >
@@ -97,12 +111,13 @@ export default function HorizontalNavigationSandboxPage() {
                     <div className={`w-full ${isFullWidth ? '' : 'max-w-[1240px]'} bg-background ${showBorder ? 'border border-outline-variant' : ''} ${showRadius ? 'rounded-xl overflow-hidden' : ''} ${showContent ? 'min-h-[400px]' : ''}`}>
                         <HorizontalNavigation 
                             isLoggedIn={isLoggedIn} 
+                            dropdownSide={dropdownSide}
                             onLoginClick={() => setIsLoggedIn(true)}
                             onLogoutClick={() => setIsLoggedIn(false)}
                         />
                         {showContent && (
                             <div className="p-8">
-                                <h2 className="text-xl font-bold font-display text-transform-primary mb-2">Page Content</h2>
+                                <h2 className="text-title-medium font-bold font-display text-transform-primary mb-2">Page Content</h2>
                                 <p className="text-muted-foreground font-body">
                                     The horizontal navigation is mounted at the top of this layout wrapper. Use the Quick Navigate combobox or test the User Session authentication toggle using the Inspector controls in the sidebar.
                                 </p>

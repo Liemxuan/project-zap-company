@@ -23,11 +23,11 @@ export default function TooltipSandboxPage() {    const [paddingX, setPaddingX] 
             <div className="space-y-4">
                 <Wrapper identity={{ displayName: "Tooltip Structural Settings", type: "Docs Link", filePath: "zap/molecules/tooltip/page.tsx" }}>
                     <div className="space-y-6">
-                        <h4 className="text-[10px] text-transform-primary font-display font-bold text-on-surface-variant text-transform-secondary tracking-wider">Sandbox Variables</h4>
+                        <h4 className="text-label-small text-transform-primary font-display font-bold text-on-surface-variant text-transform-secondary tracking-wider">Sandbox Variables</h4>
 
                         <div className="space-y-4">
                             <div className="space-y-2">
-                                <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary">
+                                <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary">
                                     <span>--tooltip-padding-x</span>
                                     <span className="font-bold">{paddingX[0]}px</span>
                                 </div>
@@ -35,7 +35,7 @@ export default function TooltipSandboxPage() {    const [paddingX, setPaddingX] 
                             </div>
 
                             <div className="space-y-2">
-                                <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary">
+                                <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary">
                                     <span>--tooltip-padding-y</span>
                                     <span className="font-bold">{paddingY[0]}px</span>
                                 </div>
@@ -43,7 +43,7 @@ export default function TooltipSandboxPage() {    const [paddingX, setPaddingX] 
                             </div>
 
                             <div className="space-y-2">
-                                <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary">
+                                <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary">
                                     <span>--tooltip-radius</span>
                                     <span className="font-bold">{radius[0]}px</span>
                                 </div>

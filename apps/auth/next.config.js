@@ -8,7 +8,7 @@ const nextConfig = {
       },
     ],
   },
-  transpilePackages: ['zap-design'],
+  transpilePackages: ['zap-design', '@olympus/zap-auth', '@olympus/zap-db'],
   async rewrites() {
     return [
       {

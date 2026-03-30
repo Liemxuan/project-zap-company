@@ -2,7 +2,7 @@
 
 import React, { useRef } from 'react';
 import { sourceColorFromImage, hexFromArgb } from "@material/material-color-utilities";
-import { Check, Sparkles, Image as ImageIcon, Palette, Wand2 } from 'lucide-react';
+import { Check, Sparkles } from 'lucide-react';
 import { InspectorAccordion } from '../../../zap/organisms/laboratory/InspectorAccordion';
 
 export const SCHEME_VARIANTS = [
@@ -103,7 +103,7 @@ export const ColorInspectorPanel: React.FC<ColorInspectorPanelProps> = ({
             </div>
             
             {/* 1. Seed Color Image Chooser Section */}
-            <InspectorAccordion title="Seed Color" icon={ImageIcon} defaultOpen={true}>
+            <InspectorAccordion title="Seed Color" icon="image" defaultOpen={true}>
                 <div className="space-y-4 pt-2">
                     <p className="text-xs text-[#7F8C8D] leading-relaxed">Extract from image or hex.</p>
 
@@ -157,7 +157,7 @@ export const ColorInspectorPanel: React.FC<ColorInspectorPanelProps> = ({
 
             {/* 2. Core Colors Overrides */}
             {palettes && (
-                <InspectorAccordion title="Core Colors" icon={Palette} defaultOpen={false}>
+                <InspectorAccordion title="Core Colors" icon="palette" defaultOpen={false}>
                     <div className="space-y-4 pt-2">
                         <p className="text-xs text-[#7F8C8D]">Override scheme keys.</p>
 
@@ -173,7 +173,7 @@ export const ColorInspectorPanel: React.FC<ColorInspectorPanelProps> = ({
                 </InspectorAccordion>
             )}
 
-            <InspectorAccordion title="Theme Variant" icon={Wand2} defaultOpen={true}>
+            <InspectorAccordion title="Theme Variant" icon="auto_fix_high" defaultOpen={true}>
                 <div className="space-y-4 pt-2">
                     <h3 className="text-[14px] text-muted-foreground mb-2 font-secondary uppercase">
                         Active Style: <strong className="text-foreground">{SCHEME_VARIANTS.find(v => v.id === schemeVariant)?.label || schemeVariant}</strong>
@@ -201,3 +201,4 @@ export const ColorInspectorPanel: React.FC<ColorInspectorPanelProps> = ({
         </div>
     );
 };
+

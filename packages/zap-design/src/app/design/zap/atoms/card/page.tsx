@@ -27,11 +27,11 @@ export default function CardSandboxPage() {
             <div className="space-y-4">
                 <Wrapper identity={{ displayName: "Card L1 Controls", type: "Docs Link", filePath: "zap/atoms/card/page.tsx" }}>
                     <div className="space-y-6">
-                        <h4 className="text-[10px] text-transform-primary font-display font-bold text-muted-foreground tracking-wider uppercase">L1 Foundation Controls</h4>
+                        <h4 className="text-label-small text-transform-primary font-display font-bold text-muted-foreground tracking-wider uppercase">L1 Foundation Controls</h4>
 
                         {/* --card-border-width */}
                         <div className="space-y-2">
-                            <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-muted-foreground uppercase">
+                            <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-muted-foreground uppercase">
                                 <span>--card-border-width</span>
                                 <div className="flex items-center gap-2">
                                     <span className="font-bold">{borderWidth[0]}px</span>
@@ -43,7 +43,7 @@ export default function CardSandboxPage() {
 
                         {/* --card-border-radius */}
                         <div className="space-y-2">
-                            <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-muted-foreground uppercase">
+                            <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-muted-foreground uppercase">
                                 <span>--card-border-radius</span>
                                 <div className="flex items-center gap-2">
                                     <span className="font-bold">{borderRadius[0]}px</span>
@@ -55,7 +55,7 @@ export default function CardSandboxPage() {
 
                         {/* --spacing-card-pad */}
                         <div className="space-y-2">
-                            <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-muted-foreground uppercase">
+                            <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-muted-foreground uppercase">
                                 <span>--spacing-card-pad</span>
                                 <div className="flex items-center gap-2">
                                     <span className="font-bold">{padding[0]}px</span>
@@ -66,7 +66,7 @@ export default function CardSandboxPage() {
                         </div>
 
                         {/* Cascade info */}
-                        <div className="p-3 text-[10px] font-dev text-muted-foreground bg-layer-surface border border-border/50 rounded-md space-y-1">
+                        <div className="p-3 text-label-small font-dev text-muted-foreground bg-layer-surface border border-border/50 rounded-md space-y-1">
                             <p><strong>L1</strong> → <code>--layer-border-*</code> (Border & Radius foundation)</p>
                             <p><strong>L3</strong> → <code>--card-border-*</code>, <code>--card-border-radius</code> (component override)</p>
                             <p className="pt-1 text-muted-foreground/60">Sliders seed from L3 if published, else fall through to L1 foundation values.</p>

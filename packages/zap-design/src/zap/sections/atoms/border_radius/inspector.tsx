@@ -41,9 +41,9 @@ export const BorderRadiusInspector = ({
     const renderWidthSelect = (value: string, onChange: (val: string) => void, isOverride = false) => {
         if (!isOverride) {
             return (
-                <ToggleGroup type="single" value={value} onValueChange={(val) => { if (val) onChange(val); }} className="w-full">
+                <ToggleGroup visualStyle="segmented" type="single" value={value} onValueChange={(val) => { if (val) onChange(val); }} className="w-full bg-layer-base">
                     {BORDER_WIDTH_TOKENS.map(t => (
-                        <ToggleGroupItem key={t.token} value={t.token} size="sm" variant="outline" className="flex-1 h-7 px-1 text-[10px] bg-layer-base border-border/30" title={t.name}>
+                        <ToggleGroupItem key={t.token} value={t.token} size="sm" className="flex-1 h-7 px-1 text-[10px]" title={t.name}>
                             {t.name.split(' ')[0]} {/* Keep it concise */}
                         </ToggleGroupItem>
                     ))}
@@ -68,9 +68,9 @@ export const BorderRadiusInspector = ({
     const renderStyleSelect = (value: string, onChange: (val: string) => void, isOverride = false) => {
         if (!isOverride) {
             return (
-                <ToggleGroup type="single" value={value} onValueChange={(val) => { if (val) onChange(val); }} className="w-full">
+                <ToggleGroup visualStyle="segmented" type="single" value={value} onValueChange={(val) => { if (val) onChange(val); }} className="w-full bg-layer-base">
                     {BORDER_STYLE_TOKENS.map(t => (
-                        <ToggleGroupItem key={t.token} value={t.token} size="sm" variant="outline" className="flex-1 h-7 px-1 text-[10px] bg-layer-base border-border/30" title={t.name}>
+                        <ToggleGroupItem key={t.token} value={t.token} size="sm" className="flex-1 h-7 px-1 text-[10px]" title={t.name}>
                             {t.name}
                         </ToggleGroupItem>
                     ))}

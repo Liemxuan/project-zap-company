@@ -182,7 +182,7 @@ export default function ButtonSandboxPage() {
                 {/* Semantic Color Section */}
                 <Wrapper identity={{ displayName: "Button Semantic Color", type: "Control Row", filePath: "zap/atoms/button/page.tsx" }}>
                     <div className="space-y-4 pb-4 border-b border-border/50">
-                        <h4 className="text-[10px] text-transform-primary font-display font-bold text-muted-foreground tracking-wider">Semantic Color</h4>
+                        <h4 className="text-label-small text-transform-primary font-display font-bold text-muted-foreground tracking-wider">Semantic Color</h4>
                         <div className="flex bg-layer-panel p-1 border border-border/50 rounded-[var(--button-border-radius,9999px)]">
                             {(['primary', 'secondary', 'tertiary', 'destructive'] as const).map((c) => (
                                 <Button
@@ -204,8 +204,8 @@ export default function ButtonSandboxPage() {
                 <Wrapper identity={{ displayName: "Button Visual Style", type: "Control Row", filePath: "zap/atoms/button/page.tsx" }}>
                     <div className="space-y-4 pb-4 border-b border-border/50">
                         <div className="flex items-center justify-between">
-                            <h4 className="text-[10px] text-transform-primary font-display font-bold text-muted-foreground tracking-wider">Visual Style</h4>
-                            <span className="text-[10px] text-primary font-secondary font-bold tracking-widest text-transform-secondary">
+                            <h4 className="text-label-small text-transform-primary font-display font-bold text-muted-foreground tracking-wider">Visual Style</h4>
+                            <span className="text-label-small text-primary font-secondary font-bold tracking-widest text-transform-secondary">
                                 {visualStyle === 'solid' ? 'FILLED' : visualStyle === 'outline' ? 'OUTLINED' : visualStyle === 'ghost' ? 'TEXT' : visualStyle.toUpperCase()}
                             </span>
                         </div>
@@ -239,7 +239,7 @@ export default function ButtonSandboxPage() {
                 {/* Variant Style Section */}
                 <Wrapper identity={{ displayName: "Button Variant Style", type: "Control Row", filePath: "zap/atoms/button/page.tsx" }}>
                     <div className="space-y-4 pb-4 border-b border-border/50">
-                        <h4 className="text-[10px] text-transform-primary font-display font-bold text-muted-foreground tracking-wider">Variant Style</h4>
+                        <h4 className="text-label-small text-transform-primary font-display font-bold text-muted-foreground tracking-wider">Variant Style</h4>
                         <div className="grid grid-cols-2 gap-2">
                             {(
                                 [
@@ -254,7 +254,7 @@ export default function ButtonSandboxPage() {
                                     onClick={() => setVariantStyle(v.id)}
                                     visualStyle={variantStyle === v.id ? 'solid' : 'ghost'}
                                     color={buttonColor}
-                                    className="h-16 flex-col gap-1 justify-center tracking-widest text-[10px] font-secondary text-transform-secondary shadow-sm transition-all"
+                                    className="h-16 flex-col gap-1 justify-center tracking-widest text-label-small font-secondary text-transform-secondary shadow-sm transition-all"
                                 >
                                     <Icon name={v.icon} size={18} className={variantStyle === v.id ? "" : "opacity-70"} />
                                     {v.label}
@@ -267,7 +267,7 @@ export default function ButtonSandboxPage() {
                 {/* Size Style Section */}
                 <Wrapper identity={{ displayName: "Button Size Style", type: "Control Row", filePath: "zap/atoms/button/page.tsx" }}>
                     <div className="space-y-4 pb-4 border-b border-border/50">
-                        <h4 className="text-[10px] text-transform-primary font-display font-bold text-muted-foreground tracking-wider">Scale & Density</h4>
+                        <h4 className="text-label-small text-transform-primary font-display font-bold text-muted-foreground tracking-wider">Scale & Density</h4>
                         <div className="flex flex-wrap gap-1 bg-layer-panel p-1 border border-border/50 rounded-[var(--button-border-radius,9999px)]">
                             {(['default', 'tiny', 'compact', 'medium', 'expanded'] as const).map((s) => (
                                 <Button
@@ -288,7 +288,7 @@ export default function ButtonSandboxPage() {
                 {/* Icon Position Section */}
                 <Wrapper identity={{ displayName: "Button Icon Position", type: "Control Row", filePath: "zap/atoms/button/page.tsx" }}>
                     <div className="space-y-4 pb-4 border-b border-border/50">
-                        <h4 className="text-[10px] text-transform-primary font-display font-bold text-muted-foreground tracking-wider">Icon Position</h4>
+                        <h4 className="text-label-small text-transform-primary font-display font-bold text-muted-foreground tracking-wider">Icon Position</h4>
                         <div className="flex bg-layer-panel p-1 border border-border/50 rounded-[var(--button-border-radius,9999px)]">
                             {(['left', 'right', 'top', 'none'] as const).map((pos) => (
                                 <Button
@@ -310,7 +310,7 @@ export default function ButtonSandboxPage() {
                 <Wrapper identity={{ displayName: "Button Structural Settings", type: "Docs Link", filePath: "zap/atoms/button/page.tsx" }}>
                     <div className={cn("space-y-6 transition-all duration-300", buttonSize !== 'default' && "opacity-40 pointer-events-none grayscale")}>
                         <div className="flex items-center justify-between">
-                            <h4 className="text-[10px] text-transform-primary font-display font-bold text-muted-foreground tracking-wider">Sandbox Variables</h4>
+                            <h4 className="text-label-small text-transform-primary font-display font-bold text-muted-foreground tracking-wider">Sandbox Variables</h4>
                                 <span className="text-[9px] font-secondary font-bold tracking-widest text-transform-secondary bg-destructive/10 text-destructive px-2 py-0.5 rounded-sm">
                                     Requires Default Size
                                 </span>
@@ -318,7 +318,7 @@ export default function ButtonSandboxPage() {
 
                         <div className="space-y-4">
                             <div className="space-y-2">
-                                <div className="flex justify-between items-center text-[10px] font-secondary text-transform-secondary text-muted-foreground">
+                                <div className="flex justify-between items-center text-label-small font-secondary text-transform-secondary text-muted-foreground">
                                     <span>--button-padding-x</span>
                                     <span className="font-bold">{paddingX[0]}px</span>
                                 </div>
@@ -326,7 +326,7 @@ export default function ButtonSandboxPage() {
                             </div>
 
                             <div className="space-y-2">
-                                <div className="flex justify-between items-center text-[10px] font-secondary text-transform-secondary text-muted-foreground">
+                                <div className="flex justify-between items-center text-label-small font-secondary text-transform-secondary text-muted-foreground">
                                     <span>--button-padding-y</span>
                                     <span className="font-bold">{paddingY[0]}px</span>
                                 </div>
@@ -334,7 +334,7 @@ export default function ButtonSandboxPage() {
                             </div>
 
                             <div className="space-y-2">
-                                <div className="flex justify-between items-center text-[10px] font-secondary text-transform-secondary text-muted-foreground">
+                                <div className="flex justify-between items-center text-label-small font-secondary text-transform-secondary text-muted-foreground">
                                     <span>--button-icon-gap</span>
                                     <span className="font-bold">{iconGap[0]}px</span>
                                 </div>
@@ -342,7 +342,7 @@ export default function ButtonSandboxPage() {
                             </div>
 
                             <div className="space-y-2">
-                                <div className="flex justify-between items-center text-[10px] font-secondary text-transform-secondary text-muted-foreground">
+                                <div className="flex justify-between items-center text-label-small font-secondary text-transform-secondary text-muted-foreground">
                                     <span>--button-border-width</span>
                                     <span className="font-bold">{borderWidth[0]}px</span>
                                 </div>
@@ -350,7 +350,7 @@ export default function ButtonSandboxPage() {
                             </div>
 
                             <div className="space-y-2">
-                                <div className="flex justify-between items-center text-[10px] font-secondary text-transform-secondary text-muted-foreground">
+                                <div className="flex justify-between items-center text-label-small font-secondary text-transform-secondary text-muted-foreground">
                                     <span>--button-border-radius</span>
                                     <span className="font-bold">{borderRadius[0]}px</span>
                                 </div>
@@ -572,7 +572,7 @@ export default function ButtonSandboxPage() {
 
                 {/* Interactive Cloud Icon Warning */}
                 <div className="mt-8 flex justify-center opacity-40">
-                    <div className="flex items-center gap-2 bg-warning-container text-on-warning-container px-3 py-1.5 rounded-full text-[10px] font-secondary tracking-widest text-transform-secondary">
+                    <div className="flex items-center gap-2 bg-warning-container text-on-warning-container px-3 py-1.5 rounded-full text-label-small font-secondary tracking-widest text-transform-secondary">
                         <Icon name="cloud_download" size={14} className="text-current" />
                         Google Material Symbols (Cloud Active)
                     </div>

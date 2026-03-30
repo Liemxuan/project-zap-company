@@ -38,10 +38,13 @@ export interface OmniJob {
     _id?: ObjectId;
     queueName: QueueName;
     priority: QueuePriority;
-    status: "PENDING" | "PROCESSING" | "COMPLETED" | "FAILED" | "WAITING_APPROVAL";
+    status: "PENDING" | "PROCESSING" | "COMPLETED" | "FAILED" | "WAITING_APPROVAL" | "BLOCKED";
+    dependsOn?: ObjectId[];
+    workflowId?: string;
     tenantId: string;
     payload: OmniPayload;
     config: LLMConfig;
+    retryCount?: number;
     sourceChannel?: "WHATSAPP" | "TELEGRAM" | "ZALO" | "IMESSAGE" | "CLI" | "HUD";
     senderIdentifier?: string;
     chatId?: number;
@@ -50,6 +53,7 @@ export interface OmniJob {
         senderIdentifier: string;
         sessionId?: string;
         assignedAgentId: string;
+        threadId?: string;
     };
     result?: OmniResponse;
     errorMap?: string;
@@ -163,18 +167,89 @@ export class OmniQueueManager {
 
         if (!job) return false;
 
+        const sessionId = job.historyContext?.sessionId || `job_${job._id}`;
+        const redis = new (await import('ioredis')).Redis(process.env.REDIS_URL || "redis://localhost:6379");
+        
+        const logTrace = async (msg: string) => {
+            const formatted = `\r\n${msg}\r\n`;
+            await redis.rpush(`zap:trace:${sessionId}:logs`, formatted);
+            await redis.publish(`zap:trace:${sessionId}`, formatted);
+            await redis.expire(`zap:trace:${sessionId}:logs`, 3600);
+        };
+
         console.log(`[OmniQueue] 🚀 Processing Job ${job._id} from ${job.queueName} (Priority ${job.priority})`);
+        await logTrace(`> ⚙️ [OmniQueue] 🚀 Processing Job ${job._id} (Agent: ${job.config.agentId})`);
 
         try {
+            // PHASE 4: DeerFlow Skill Interceptor & Assimilation
+            const userText = job.payload.messages[0]?.content as string || "";
+            if (userText.startsWith('/df-')) {
+                const fs = await import('fs');
+                const path = await import('path');
+                const match = userText.match(/^\/(df-[^\s]+)(?:\s+(.*))?/);
+                if (match) {
+                    const skillName = match[1];
+                    const query = match[2] || "";
+                    
+                    try {
+                        const skillPath = path.resolve(process.cwd(), `../../.agent/skills/${skillName}/SKILL.md`);
+                        const skillContent = fs.readFileSync(skillPath, 'utf8');
+                        job.payload.systemPrompt += `\n\n[DEERFLOW SKILL: ${skillName}]\n${skillContent}`;
+                        await logTrace(`> 🧠 [Skill Intercepter] Assimilated ${skillName}`);
+                        
+                        // Execute Brave Search immediately if it's a research skill to seed the OmniRouter context
+                        if (skillName === "df-deep-research" && query) {
+                            try {
+                                const { executeTool } = await import('../../tools/index.js');
+                                await logTrace(`> 🔎 [Search Engine] Executing realtime query for: "${query}"`);
+                                const searchResult = await executeTool('brave_search', { query }, 0, job.config.agentId);
+                                job.payload.systemPrompt += `\n\n[INITIAL SEARCH RESULTS (DO NOT HALLUCINATE)]\n${typeof searchResult === 'string' ? searchResult : searchResult.output}`;
+                                await logTrace(`> ✅ [Search Engine] Raw DOM content injected into OmniPayload.`);
+                            } catch (searchErr: any) {
+                                await logTrace(`> ⚠️ [Search Engine] Failed: ${searchErr.message}`);
+                            }
+                        }
+                    } catch (e: any) {
+                        await logTrace(`> ⚠️ [Skill Intercepter] Skill ${skillName} not found. Proceeding without context.`);
+                    }
+                }
+            }
+
             // Processing logic using standard router
-            const { generateOmniContent } = await import('./omni_router.js');
-            const response = await generateOmniContent(job.config, job.payload);
+            let response: any;
+            
+            if (job.payload.intent?.startsWith("DAG_STAGE_")) {
+                const delay = job.payload.contextParams?.simulateDelay || 2000;
+                await new Promise(resolve => setTimeout(resolve, delay));
+                response = { text: `Simulated DAG Node completed after ${delay}ms` };
+            } else {
+                const { generateOmniContent } = await import('./omni_router.js');
+                response = await generateOmniContent(job.config, job.payload);
+            }
 
             await col.updateOne(
                 { _id: job._id },
                 { $set: { status: "COMPLETED", result: response, completedAt: new Date() } }
             );
             console.log(`[OmniQueue] ✅ Job ${job._id} completed successfully.`);
+            await logTrace(`> ✅ [OmniQueue] Job ${job._id} completed.`);
+
+            if (response.text) {
+                await logTrace(`> 🤖 [reply] ${response.text}`);
+            }
+
+            // Phase 5: DeerFlow DAG Dependent Unblocking
+            const dependents = await col.find({ status: "BLOCKED", dependsOn: job._id }).toArray();
+            for (const dep of dependents) {
+                const updatedDepends = dep.dependsOn!.filter(id => !id.equals(job._id!));
+                if (updatedDepends.length === 0) {
+                    await col.updateOne({ _id: dep._id }, { $set: { status: "PENDING", dependsOn: [] } });
+                    console.log(`[OmniQueue] 🚀 DAG Node Unblocked: Job ${dep._id}`);
+                    await logTrace(`> 🚀 [OmniQueue] DAG Execution: Unblocked dependent Job ${dep._id}`);
+                } else {
+                    await col.updateOne({ _id: dep._id }, { $set: { dependsOn: updatedDepends } });
+                }
+            }
 
             // Emit instant cross-process/cross-module push notification for the WSS Daemon
             import('../../gateway/wss.js').then(({ websocketNotifier }) => {
@@ -202,9 +277,23 @@ export class OmniQueueManager {
 
             // Return-routing push
             if (job.sourceChannel === "TELEGRAM" && job.chatId && response.text) {
-                import('../../platforms/telegram.js').then(({ sendTelegramMessage }) => {
-                    sendTelegramMessage(job.chatId!, `[Background Job ${job._id} Completed]\n\n${response.text}`);
-                }).catch(e => console.error("[OmniQueue] Background Egress Failed (TELEGRAM):", e.message));
+                try {
+                    const { sendTelegramMessage } = await import('../../platforms/telegram.js');
+                    const { formatTelegramHUD } = await import('../../platforms/telegram_hud.js');
+                    const userCol = db.collection(`${job.tenantId}_SYS_OS_users`);
+                    const user = await userCol.findOne({ telegramId: job.senderIdentifier });
+                    
+                    if (user) {
+                        const formatted = await formatTelegramHUD(user, response.text, response);
+                        sendTelegramMessage(job.chatId, formatted, job.historyContext?.threadId ? parseInt(job.historyContext.threadId) : undefined);
+                    } else {
+                        sendTelegramMessage(job.chatId, `[Background Job ${job._id} Completed]\n\n${response.text}`, job.historyContext?.threadId ? parseInt(job.historyContext.threadId) : undefined);
+                    }
+                } catch (e: any) {
+                    console.error("[OmniQueue] Background Egress Failed (TELEGRAM):", e.message);
+                }
+            } else if (job.sourceChannel === "HUD") {
+                // HUD channel is handled via Redis Trace [reply] tags already published above
             } else if (job.sourceChannel === "CLI") {
                 console.log(`\n================= (BACKGROUND CLI RESPONSE) =================`);
                 console.log(response.text);
@@ -212,41 +301,105 @@ export class OmniQueueManager {
             }
 
         } catch (error: any) {
-            console.error(`[OmniQueue] ❌ Job ${job._id} failed:`, error.message);
-            // Fallback logic
-            await col.updateOne(
-                { _id: job._id },
-                { $set: { status: "FAILED", errorMap: error.message, completedAt: new Date() } }
-            );
+            const currentRetries = job.retryCount || 0;
+            if (currentRetries < 3) {
+                console.warn(`[OmniQueue] ⚠️ Job ${job._id} failed: ${error.message}. Retrying (${currentRetries + 1}/3)...`);
+                await logTrace(`> ⚠️ [OmniQueue] Job ${job._id} failed: ${error.message}. Retrying (${currentRetries + 1}/3)...`);
+                await col.updateOne(
+                    { _id: job._id },
+                    { $set: { status: "PENDING", retryCount: currentRetries + 1, errorMap: error.message } }
+                );
+            } else {
+                console.error(`[OmniQueue] ❌ Job ${job._id} permanently failed:`, error.message);
+                await logTrace(`> ❌ [OmniQueue] Job ${job._id} permanently failed after 3 retries: ${error.message}`);
+                // Fallback logic
+                await col.updateOne(
+                    { _id: job._id },
+                    { $set: { status: "FAILED", errorMap: error.message, completedAt: new Date() } }
+                );
 
-            if (job.sourceChannel === "TELEGRAM" && job.chatId) {
-                import('../../platforms/telegram.js').then(({ sendTelegramMessage }) => {
-                    sendTelegramMessage(job.chatId!, `⚠️ Background Job ${job._id} Failed.\nError: ${error.message}`);
-                }).catch(e => console.error("[OmniQueue] Background Egress Failed (TELEGRAM):", e.message));
+                if (job.sourceChannel === "TELEGRAM" && job.chatId) {
+                    import('../../platforms/telegram.js').then(({ sendTelegramMessage }) => {
+                        sendTelegramMessage(job.chatId!, `❌ Background Job ${job._id} permanently failed after 3 tries.\nError: ${error.message}`, job.historyContext?.threadId ? parseInt(job.historyContext.threadId) : undefined);
+                    }).catch(e => console.error("[OmniQueue] Background Egress Failed (TELEGRAM):", e.message));
+                }
             }
+        } finally {
+            await redis.quit();
         }
+
 
         return true;
     }
 
-    // Fire-and-forget daemon loop
-    async startWorkerDaemon(tenantId: string = "ZVN", intervalMs = 2000) {
+    // Fire-and-forget concurrent daemon pool
+    async startWorkerDaemon(tenantId: string = "ZVN", intervalMs = 2000, maxConcurrency = 5) {
         if (this.isProcessing) return;
         this.isProcessing = true;
 
-        console.log(`[OmniQueue] 🎧 Worker Daemon Started for ${tenantId}. Listening for OmniRouter Jobs...`);
+        console.log(`[OmniQueue] 🎧 Concurrent Worker Daemon (Pool: ${maxConcurrency}) Started for ${tenantId}...`);
+        
+        let activePromises = new Set<Promise<void>>();
+
         while (this.isProcessing) {
-            const processed = await this.processNextJob(tenantId);
-            if (!processed) {
-                // Sleep if no jobs
-                await new Promise(r => setTimeout(r, intervalMs));
+            if (activePromises.size >= maxConcurrency) {
+                await Promise.race(activePromises);
             }
+            
+            const workerPromise = this.processNextJob(tenantId).then(async (processed) => {
+                if (!processed) {
+                    await new Promise(r => setTimeout(r, intervalMs));
+                }
+            }).catch(e => console.error("[OmniQueue] Worker Error:", e)).finally(() => {
+                activePromises.delete(workerPromise);
+            });
+            
+            activePromises.add(workerPromise);
         }
     }
 
     stopWorkerDaemon() {
         this.isProcessing = false;
         console.log(`[OmniQueue] 🛑 Worker Daemon Stopping...`);
+    }
+
+    // Phase 5: DeerFlow DAG Queue Ingress
+    async enqueueWorkflowDAG(tenantId: string, workflowDef: Array<{ id: string; dependsOn: string[]; payload: OmniPayload; config: LLMConfig; queueName: QueueName; priority: QueuePriority }>) {
+        const db = this.client.db(DB_NAME);
+        const col = db.collection<OmniJob>(getQueueCollection(tenantId));
+        
+        const workflowId = `WF_${new ObjectId().toString()}`;
+        const nodeMap = new Map<string, ObjectId>();
+        
+        // 1. Generate ObjectIds for all nodes mapping their string aliases
+        for (const node of workflowDef) {
+            nodeMap.set(node.id, new ObjectId());
+        }
+
+        // 2. Build the OmniJob records
+        const jobsToInsert: OmniJob[] = workflowDef.map(node => {
+            const deps = node.dependsOn.map(id => nodeMap.get(id)!);
+            return {
+                _id: nodeMap.get(node.id)!,
+                status: deps.length > 0 ? "BLOCKED" : "PENDING",
+                dependsOn: deps,
+                workflowId,
+                tenantId,
+                payload: node.payload,
+                config: node.config,
+                queueName: node.queueName,
+                priority: node.priority,
+                createdAt: new Date(),
+            };
+        });
+
+        // 3. Atomically block-insert the DAG
+        if (jobsToInsert.length > 0) {
+            await col.insertMany(jobsToInsert);
+            console.log(`[OmniQueue] 🕸️ Workflow DAG ${workflowId} enqueued with ${jobsToInsert.length} nodes.`);
+        }
+        
+        return workflowId;
     }
 }
 

@@ -6,7 +6,7 @@
     "dev": "next dev -p 4700",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "next lint"
   },
   "dependencies": {
     "@olympus/zap-auth": "workspace:^",

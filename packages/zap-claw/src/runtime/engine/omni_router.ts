@@ -2,7 +2,7 @@ import { Redis } from "ioredis";
 import { PrismaClient } from "@prisma/client";
 import { RedisByteStore } from "@langchain/community/storage/ioredis";
 import { Chroma } from "@langchain/community/vectorstores/chroma";
-import { OpenAIEmbeddings } from "@langchain/openai";
+import { GoogleGenerativeAIEmbeddings } from "@langchain/google-genai";
 import dotenv from "dotenv";
 
 dotenv.config({ path: "/Users/zap/Workspace/zap-core/.env", override: true });
@@ -18,9 +18,9 @@ redisClient.on("error", () => {});
 const redisStore = new RedisByteStore({ client: redisClient });
 
 // 3. Intelligence Layer (ChromaDB) via LangChain Retriever
-const chromaRetriever = new Chroma(new OpenAIEmbeddings({ 
-    openAIApiKey: process.env.OPENROUTER_API_KEY || "dummy",
-    configuration: { baseURL: "https://openrouter.ai/api/v1" }
+const chromaRetriever = new Chroma(new GoogleGenerativeAIEmbeddings({ 
+    apiKey: process.env.GOOGLE_API_KEY || "dummy",
+    modelName: "gemini-embedding-2-preview"
 }), {
     collectionName: "zap-knowledge",
     url: process.env.CHROMA_URL || "http://localhost:8100"
@@ -69,9 +69,9 @@ export const ZAP_THEMES: Record<ArbiterTheme, { priorities: string[], descriptio
 };
 
 export interface LLMConfig {
-    apiKey: string;
+    apiKey: string; // Used as baseURL for Ollama in local pools
     defaultModel: string;
-    accountLevel?: "ULTRA" | "PRO" | "STANDARD";
+    accountLevel?: "ULTRA" | "PRO" | "STANDARD" | "OPENROUTER" | "OLLAMA";
     agentId?: string;
     regionCode?: string;
 }
@@ -81,10 +81,12 @@ export interface OmniPayload {
     messages: ChatCompletionMessageParam[];
     theme: ArbiterTheme;
     intent: OmniIntent;
+    contextParams?: Record<string, any>;
     tag?: string;
     tools?: any[];
     reflexions?: number;
     forceModel?: boolean;
+    watchdogReview?: boolean;
 }
 
 export interface OmniResponse {
@@ -104,6 +106,32 @@ export interface OmniResponse {
         latencyMs?: number;
         intent?: OmniIntent;
     } | undefined;
+}
+
+// ZSS Loop Detection: Scans the conversation history for identical trailing tool calls or LLM repetitions
+export function detectZSSLoop(messages: ChatCompletionMessageParam[], maxLoops: number = 3): boolean {
+    if (!messages || messages.length < 6) return false;
+    let recentToolCalls: string[] = [];
+    
+    // Look backwards to find the last N assistant tool calls
+    for (let i = messages.length - 1; i >= 0; i--) {
+        const msg = messages[i];
+        if (!msg) continue;
+        if (msg.role === "assistant" && (msg as any).tool_calls && (msg as any).tool_calls.length > 0) {
+            recentToolCalls.push(JSON.stringify((msg as any).tool_calls.map((t: any) => ({ name: t.function?.name, args: t.function?.arguments }))));
+        }
+    }
+
+    if (recentToolCalls.length >= maxLoops) {
+        const mostRecent = recentToolCalls[0];
+        let identicalCount = 0;
+        for (let j = 0; j < recentToolCalls.length; j++) {
+            if (recentToolCalls[j] === mostRecent) identicalCount++;
+            else break;
+        }
+        if (identicalCount >= maxLoops) return true;
+    }
+    return false;
 }
 
 export function getGlobalKeyFallback(provider: string): string {
@@ -150,10 +178,10 @@ export async function resolveAgentLLMConfig(tenantId: string, assignedAgentId: s
     };
 }
 
-async function getLiveInfraKeys(): Promise<Record<string, string>> {
-    // 3. Fetch Infrastructure Keys using LangChain's Official Redis ByteStore
+async function getLiveInfraKeys(merchantId: string = "OLYMPUS"): Promise<Record<string, string>> {
+    // 1. Check Redis Cache first
     try {
-        const cachedBytes = await redisStore.mget(["infra_keys_cache"]);
+        const cachedBytes = await redisStore.mget([`merchant_keys_${merchantId}`]);
         if (cachedBytes && cachedBytes[0]) {
             const decoded = new TextDecoder().decode(cachedBytes[0]);
             return JSON.parse(decoded);
@@ -162,64 +190,149 @@ async function getLiveInfraKeys(): Promise<Record<string, string>> {
         console.warn("[Omni-Router] Redis ByteStore Cache Miss");
     }
 
-    // Fallback: Pull credentials from /Users/zap/Workspace/zap-core/.env
-    const keys = {
-        "PRECISION_GATEWAY": process.env.GOOGLE_ULTRA_API_KEY || process.env.GOOGLE_API_KEY || "",
-        "CODE_WORKFORCE": process.env.GOOGLE_PRO_API_KEY || process.env.GOOGLE_API_KEY || "",
-        "FRONTIER_BRIDGE": process.env.OPENROUTER_API_KEY || ""
-    };
-
+    // 2. Fallback to MongoDB 'zap-admin-settings' collection
     try {
-        await redisStore.mset([["infra_keys_cache", new TextEncoder().encode(JSON.stringify(keys))]]);
+        const { MongoClient } = await import("mongodb");
+        const mclient = new MongoClient(process.env.MONGODB_URI || "mongodb://localhost:27017");
+        await mclient.connect();
+        
+        const db = mclient.db("olympus");
+        const doc = await db.collection("zap-admin-settings").findOne({ merchantId, type: "llm_credentials" });
+        await mclient.close();
+
+        if (doc && doc.keys) {
+            const keys = {
+                "PRECISION_GATEWAY": doc.keys.GOOGLE_ULTRA_API_KEY || doc.keys.GOOGLE_API_KEY || "",
+                "CODE_WORKFORCE": doc.keys.GOOGLE_PRO_API_KEY || doc.keys.GOOGLE_API_KEY || "",
+                "FRONTIER_BRIDGE": doc.keys.OPENROUTER_API_KEY || ""
+            };
+
+            // Sync to Redis cache for speed
+            try {
+                await redisStore.mset([[`merchant_keys_${merchantId}`, new TextEncoder().encode(JSON.stringify(keys))]]);
+            } catch (e) {
+                console.warn("[Omni-Router] Failed to set Redis ByteStore Cache");
+            }
+            
+            return keys;
+        }
     } catch (e) {
-        console.warn("[Omni-Router] Failed to set Redis ByteStore Cache");
+        console.error(`[Omni-Router] Failed to fetch merchant keys for ${merchantId}:`, e);
     }
-    
-    return keys;
+
+    // Safest fallback
+    return {
+        "PRECISION_GATEWAY": "",
+        "CODE_WORKFORCE": "",
+        "FRONTIER_BRIDGE": ""
+    };
 }
 
-export interface InfraProject {
-    id: string;
-    keys: string[];
+export interface InfraKey {
+    keyHash: string;
+    apiKey: string;
+    projectId?: string;
+    tier: string;
+    allocation: string;
 }
 
-export async function resolveBalancedKey(tier: "ULTRA" | "PRO"): Promise<{ apiKey: string; projectId: string } | null> {
-    const poolJsonString = tier === "ULTRA" ? process.env.GOOGLE_ULTRA_POOL : process.env.GOOGLE_PRO_POOL;
-    if (!poolJsonString) return null;
-
+export async function syncApiKeysToRedis(): Promise<void> {
     try {
-        const projects: InfraProject[] = JSON.parse(poolJsonString);
-        if (!projects || projects.length === 0) return null;
+        const { MongoClient } = await import("mongodb");
+        const mclient = new MongoClient(process.env.MONGODB_URI || "mongodb://localhost:27017");
+        await mclient.connect();
+        
+        const db = mclient.db("olympus");
+        const keysCursor = db.collection("SYS_API_KEYS").find({ status: "ACTIVE", allocation: { $in: ["INTERNAL_ONLY", "MERCHANT_SHARED"] } });
+        const allKeys = await keysCursor.toArray();
+        await mclient.close();
 
-        for (const project of projects) {
-            if (!project.id || !project.keys || project.keys.length === 0) continue;
+        const groupedKeys: Record<string, InfraKey[]> = {};
+        
+        for (const doc of allKeys) {
+            const k: InfraKey = {
+                keyHash: doc.keyHash || doc._id.toString(),
+                apiKey: doc.encryptedKey || doc.apiKey, 
+                projectId: doc.projectId || "generic",
+                tier: doc.tier, // ULTRA, PRO, OPENROUTER, OLLAMA
+                allocation: doc.allocation
+            };
+            const tier = doc.tier || "GENERIC";
+            if (!groupedKeys[tier]) groupedKeys[tier] = [];
+            groupedKeys[tier].push(k);
+        }
 
-            const isBlocked = await redisClient.exists(`block:project:${project.id}`);
+        for (const [tier, keys] of Object.entries(groupedKeys)) {
+            if (keys.length > 0) {
+                await redisClient.set(`infra_keys:${tier}`, JSON.stringify(keys));
+                console.log(`[Omni-Router] 🔄 Synced ${keys.length} ${tier} keys into Redis Ring.`);
+            }
+        }
+    } catch (e) {
+        console.error(`[Omni-Router] ❌ Failed to sync SYS_API_KEYS from Mongo to Redis:`, e);
+    }
+}
+
+export async function resolveBalancedKey(tier: string, tenantId?: string): Promise<{ apiKey: string; projectId: string; keyHash: string } | null> {
+    try {
+        const poolJsonString = await redisClient.get(`infra_keys:${tier}`);
+        if (!poolJsonString) {
+            console.warn(`[Omni-Router] ⚠️ Redis pool empty for tier ${tier}.`);
+            // Legacy Fallback for dev/transition
+            let legacyEnv = undefined;
+            if (tier === "ULTRA") legacyEnv = process.env.GOOGLE_ULTRA_POOL;
+            else if (tier === "PRO") legacyEnv = process.env.GOOGLE_PRO_POOL;
+            else if (tier === "OPENROUTER") legacyEnv = process.env.OPENROUTER_POOL; // Future proofing
+
+            if (!legacyEnv) return null;
+            const projects = JSON.parse(legacyEnv);
+            // Just grab the first active one we can find in legacy format for safety
+            for (const p of projects) {
+                if (p.keys && p.keys.length > 0) return { apiKey: p.keys[0], projectId: p.id || "legacy", keyHash: "legacy" };
+            }
+            return null;
+        }
+
+        const keys: InfraKey[] = JSON.parse(poolJsonString);
+        if (!keys || keys.length === 0) return null;
+
+        // Filter based on allocation strictly if tenantId is provided
+        const isInternal = tenantId === "OLYMPUS" || tenantId === "ZAP_GALAXY";
+        const allowedAllocation = isInternal ? ["INTERNAL_ONLY", "MERCHANT_SHARED"] : ["MERCHANT_SHARED"];
+        const playableKeys = keys.filter(k => allowedAllocation.includes(k.allocation));
+
+        if (playableKeys.length === 0) {
+            console.warn(`[Omni-Router] ⚠️ No playable keys for Tier ${tier} and Tenant ${tenantId || 'Unknown'}`);
+            return null;
+        }
+
+        // Loop array length times to find an unblocked key
+        const index = await redisClient.incr(`index:pool:${tier}`);
+        for (let i = 0; i < playableKeys.length; i++) {
+            const keyIndex = (index + i) % playableKeys.length;
+            const selectedKey = playableKeys[keyIndex];
+            if (!selectedKey) continue;
+
+            const isBlocked = await redisClient.exists(`block:key:${selectedKey.keyHash}`);
             if (isBlocked === 1) {
-                console.log(`[Omni-Router] ⛔ Project ${project.id} is currently 429 blocked. Skipping...`);
+                console.log(`[Omni-Router] ⛔ Key ${selectedKey.keyHash} is currently 429 blocked. Shifting ⏩`);
                 continue;
             }
 
-            const index = await redisClient.incr(`index:project:${project.id}`);
-            const keyIndex = index % project.keys.length;
-            const selectedKey = project.keys[keyIndex];
-
-            if (!selectedKey) continue;
-
-            const isDead = await redisClient.sismember('dead_keys:google', selectedKey);
+            const isDead = await redisClient.sismember('dead_keys:google', selectedKey.apiKey);
             if (isDead === 1) {
-                console.log(`[Omni-Router] 💀 Skipping DEAD KEY in Project ${project.id}.`);
+                console.log(`[Omni-Router] 💀 Skipping DEAD KEY ${selectedKey.keyHash}.`);
                 continue; 
             }
 
-            console.log(`[Omni-Router] ⚖️ Load Balanced: Tier ${tier} -> Project ${project.id} -> Key Index ${keyIndex}`);
-            return { apiKey: selectedKey, projectId: project.id };
+            console.log(`[Omni-Router] ⚖️ Load Balanced [Tenant: ${tenantId || 'Unknown'}]: Tier ${tier} -> Key ${selectedKey.keyHash}`);
+            return { apiKey: selectedKey.apiKey, projectId: selectedKey.projectId || "generic", keyHash: selectedKey.keyHash };
         }
         
-        console.warn(`[Omni-Router] ⚠️ All projects in tier ${tier} are either empty or currently blocked by a 429!`);
+        console.warn(`[Omni-Router] ⚠️ All ${playableKeys.length} keys in tier ${tier} are currently 429 blocked!`);
         return null;
     } catch (e) {
-        console.error(`[Omni-Router] ❌ Failed to parse key pool for ${tier}. Ensure valid JSON format.`);
+        console.error(`[Omni-Router] ❌ Failed to resolve key pool or connect to Redis for ${tier}. Error:`, e);
         return null;
     }
 }
@@ -266,6 +379,36 @@ export async function enqueueOmniJob(
 
 export async function generateOmniContent(config: LLMConfig, payload: OmniPayload): Promise<OmniResponse> {
     const { theme, tag, forceModel } = payload;
+    
+    // Phase 5: DeerFlow Handlebars Context Injection
+    if (payload.contextParams) {
+        try {
+            const Handlebars = require('handlebars');
+            const template = Handlebars.compile(payload.systemPrompt);
+            payload.systemPrompt = template(payload.contextParams);
+        } catch (e: any) {
+            console.error(`[Omni-Router] Handlebars Compilation Failed: ${e.message}`);
+        }
+    }
+    
+    // ZSS Phase 1: Pre-Execution Loop Detection
+    if (detectZSSLoop(payload.messages, 3)) {
+        console.error(`[ZSS] 🛑 Spike Terminated: Infinite Loop Detected (Repeated Tool Calls).`);
+        try {
+            const { MongoClient } = await import("mongodb");
+            const mclient = new MongoClient(process.env.MONGODB_URI || "mongodb://localhost:27017");
+            await mclient.connect();
+            await mclient.db("olympus").collection("SYS_OS_zss_audit").insertOne({
+                interceptType: "INFINITE_LOOP",
+                timestamp: new Date(),
+                agentId: config.agentId || "unknown",
+                details: "Repeated Tool Calls Detected"
+            });
+            await mclient.close();
+        } catch(e) { console.error("ZSS Audit logging failed"); }
+        throw new Error("TERMINATED_BY_ZSS_INFINITE_LOOP");
+    }
+
     let strategyPriorities = ZAP_THEMES[theme]?.priorities || ["google/gemini-2.5-flash"];
 
     // Automatically inject VFS tools globally for the Swarm
@@ -313,14 +456,15 @@ export async function generateOmniContent(config: LLMConfig, payload: OmniPayloa
     // Explicitly mutate payload for the downstream functions
     payload.systemPrompt = activeSystemPrompt;
 
-    const liveKeys = await getLiveInfraKeys();
+    const tenantId = (payload as any).tenantId || config.agentId || "MERCHANT_UNKNOWN";
+    const liveKeys = await getLiveInfraKeys(tenantId);
     let lastError: any = null;
     const startTime = Date.now();
 
     for (const modelToTry of strategyPriorities) {
         try {
             let currentProvider: "GOOGLE" | "OPENROUTER" | "OLLAMA" = "GOOGLE";
-            let accountLevel: "ULTRA" | "PRO" | "STANDARD" = config.accountLevel || "STANDARD";
+            let accountLevel: "ULTRA" | "PRO" | "STANDARD" | "OPENROUTER" | "OLLAMA" = config.accountLevel || "STANDARD";
 
             if (modelToTry === "OLLAMA") {
                 currentProvider = "OLLAMA";
@@ -383,6 +527,9 @@ export async function generateOmniContent(config: LLMConfig, payload: OmniPayloa
                 accountLevel = "STANDARD";
             }
 
+            if (currentProvider === "OPENROUTER") accountLevel = "OPENROUTER";
+            if (currentProvider === "OLLAMA") accountLevel = "OLLAMA";
+
             let modelIdToUse = modelToTry;
             if (currentProvider === "GOOGLE") {
                 modelIdToUse = modelToTry.replace('google/', '').replace('-ultra', '');
@@ -399,25 +546,32 @@ export async function generateOmniContent(config: LLMConfig, payload: OmniPayloa
             };
 
             let response: OmniResponse | undefined;
-            if (currentProvider === "GOOGLE") {
+            
+            // Shared Logic for Google, OpenRouter, and Ollama retries
+            if (currentProvider === "GOOGLE" || currentProvider === "OPENROUTER" || currentProvider === "OLLAMA") {
                 let success = false;
-                let lastGoogleError: any = null;
-                const isMatrixRouted = (accountLevel === "ULTRA" || accountLevel === "PRO");
+                let lastAPIError: any = null;
+                const isMatrixRouted = (accountLevel === "ULTRA" || accountLevel === "PRO" || accountLevel === "OPENROUTER" || accountLevel === "OLLAMA");
                 const maxAttempts = isMatrixRouted ? 4 : 1; 
 
                 for (let i = 0; i < maxAttempts; i++) {
                     let activeKey = attemptApiKey;
                     let activeProjectId: string | undefined;
+                    let activeKeyHash: string | undefined;
+
+                    // We now explicitly map the tenantId for sandboxing
+                    const tenantId = (payload as any).tenantId || config.agentId || "MERCHANT_UNKNOWN";
 
                     if (isMatrixRouted) {
-                        const balanced = await resolveBalancedKey(accountLevel as "ULTRA" | "PRO");
+                        const balanced = await resolveBalancedKey(accountLevel as string, tenantId);
                         if (balanced) {
                             activeKey = balanced.apiKey;
                             activeProjectId = balanced.projectId;
+                            activeKeyHash = balanced.keyHash;
                         }
                     }
 
-                    const googleAttemptConfig: LLMConfig = {
+                    const providerAttemptConfig: LLMConfig = {
                         ...config,
                         apiKey: activeKey || config.apiKey,
                         defaultModel: modelIdToUse,
@@ -425,36 +579,75 @@ export async function generateOmniContent(config: LLMConfig, payload: OmniPayloa
                     };
 
                     try {
-                        response = await executeGoogleGenAI(googleAttemptConfig, payload);
+                        if (currentProvider === "GOOGLE") {
+                            response = await executeGoogleGenAI(providerAttemptConfig, payload);
+                        } else if (currentProvider === "OPENROUTER") {
+                            response = await executeOpenRouter(providerAttemptConfig, payload);
+                        } else {
+                            response = await executeOllama(providerAttemptConfig, payload);
+                        }
                         success = true;
-                        break; 
-                    } catch (gErr: any) {
-                        lastGoogleError = gErr;
-                        const statusCode = gErr.status || gErr.statusCode || (gErr.response ? gErr.response.status : null);
                         
-                        if (statusCode === 429 && activeProjectId) {
-                            console.error(`[Omni-Router] 🛑 429 TPM LIMIT HIT on Google Project '${activeProjectId}'. Applying 60s quarantine block.`);
-                            await redisClient.setex(`block:project:${activeProjectId}`, 60, "true");
-                            continue; 
-                        } else if ((statusCode === 403 || statusCode === 400) && activeKey) {
-                            console.error(`[Omni-Router] 💀 DEAD KEY DETECTED (Status ${statusCode}). Blacklisting key permanently.`);
-                            await redisClient.sadd(`dead_keys:google`, activeKey);
+                        // Async Telemetry Log
+                        try {
+                            const { MongoClient } = await import("mongodb");
+                            const mclient = new MongoClient(process.env.MONGODB_URI || "mongodb://localhost:27017");
+                            await mclient.connect();
+                            await mclient.db("olympus").collection("SYS_OS_arbiter_metrics").insertOne({
+                                timestamp: new Date(),
+                                tenantId,
+                                provider: currentProvider,
+                                modelId: modelIdToUse,
+                                keyHash: activeKeyHash || "fallback",
+                                gatewayCharge: currentGatewayCharge,
+                                tokensUsed: response.tokensUsed
+                            });
+                            await mclient.close();
+                        } catch (metricErr) { /* non-blocking log */ }
+                        
+                        break; 
+                    } catch (err: any) {
+                        lastAPIError = err;
+                        const statusCode = err.status || err.statusCode || (err.response ? err.response.status : null);
+                        
+                        if (statusCode === 429 && activeKeyHash) {
+                            console.error(`[Omni-Router] 🛑 429 RATE LIMIT (or Offline) HIT on Key Hash '${activeKeyHash}'. Tripping 60s cooldown in Redis.`);
+                            await redisClient.setex(`block:key:${activeKeyHash}`, 60, "true");
+                            continue; // Shift to next key flawlessly
+                        } else if ((statusCode === 403 || statusCode === 400 || statusCode === 401) && activeKey) {
+                            console.error(`[Omni-Router] 💀 DEAD KEY DETECTED (Status ${statusCode} on Hash ${activeKeyHash || 'unknown'}). Routing around and flagging Mongo.`);
+                            await redisClient.sadd(`dead_keys:${currentProvider.toLowerCase()}`, activeKey);
+                            
+                            if (activeKeyHash) {
+                                try {
+                                    const { MongoClient } = await import("mongodb");
+                                    const mclient = new MongoClient(process.env.MONGODB_URI || "mongodb://localhost:27017");
+                                    await mclient.connect();
+                                    await mclient.db("olympus").collection("SYS_API_KEYS").updateOne(
+                                        { keyHash: activeKeyHash },
+                                        { $set: { status: "DEAD", updatedAt: new Date() } }
+                                    );
+                                    await mclient.close();
+                                } catch (mongoDeadErr) { console.error("Failed flagging dead key in DB"); }
+                            }
                             continue; 
                         } else if (statusCode === 429) {
+                            // Hit a 429 on a non-pooled key
                             break;
                         } else {
+                            // For Ollama models, ECONNREFUSED might not have a statusCode, so we should allow continuing if it's local pool and connection refused.
+                            if (currentProvider === "OLLAMA" && err.message?.includes("ECONNREFUSED")) {
+                                if (activeKeyHash) await redisClient.setex(`block:key:${activeKeyHash}`, 60, "true");
+                                continue;
+                            }
                             break; 
                         }
                     }
                 }
 
                 if (!success || !response) {
-                    throw lastGoogleError || new Error("All Google Matrix Retries Failed.");
+                    throw lastAPIError || new Error(`All ${currentProvider} Matrix Retries Failed.`);
                 }
-            } else if (currentProvider === "OPENROUTER") {
-                response = await executeOpenRouter(attemptConfig, payload);
-            } else if (currentProvider === "OLLAMA") {
-                response = await executeOllama(attemptConfig, payload);
             } else {
                 throw new Error(`Unsupported provider: ${currentProvider}`);
             }
@@ -502,6 +695,104 @@ export async function generateOmniContent(config: LLMConfig, payload: OmniPayloa
                 response.text = currentText;
                 response.tokensUsed = currentTokens;
                 console.log(`[Omni-Router] ✅ TRT Phase complete. Final logic locked.`);
+            }
+
+            // BLAST-017: Watchdog Review Pattern (Air-Gapped Jerry Evaluation)
+            if (payload.watchdogReview && response.text) {
+                console.log(`[Omni-Router] 🐕 Waking Jerry for Air-Gapped Watchdog Review...`);
+                
+                const jerryPrompt = `You are JERRY, the autonomous ZAP-OS Watchdog.
+                Your sole purpose is to ruthlessly review the output of Builder agents (Spike) against the central ZAP ecosystem constraints.
+                
+                Review the following solution specifically for:
+                1. M3 Architectural Compliance
+                2. Token Efficiency / Code Bloat
+                3. Logic Flattening / Best Practices
+                
+                You must output your evaluation strictly as a valid JSON object with no markdown fences, formatted exactly like this:
+                {
+                  "score": { "m3_compliance": 100, "token_efficiency": 100, "logic_flattening": 100 },
+                  "pass": true,
+                  "failure_reason": null,
+                  "extracted_lesson": "Any novel optimization or recurring failure the Swarm must remember. Otherwise null."
+                }
+                
+                If the solution violates the rules, set 'pass' to false and populate 'failure_reason'.
+                If the solution contains a novel fix or a failure that future agents must avoid, populate 'extracted_lesson' with a single assertive sentence.`;
+
+                const jerryPayload: OmniPayload = {
+                    ...payload,
+                    systemPrompt: jerryPrompt,
+                    messages: [
+                        { role: "user", content: `## Builder Output to Review:\n\n${response.text}` } as any
+                    ],
+                    tools: [], // Strip tools to prevent Jerry from executing things during review
+                    reflexions: 0, // No nested reflections
+                    watchdogReview: false // Prevent infinite loop
+                };
+
+                // Hardwire Jerry to an economical model since he runs on every Builder ticket
+                const jerryConfig: LLMConfig = {
+                    ...attemptConfig,
+                    defaultModel: "gemini-2.5-flash", 
+                    accountLevel: "STANDARD"
+                };
+
+                let jerryResponse: OmniResponse;
+                try {
+                    jerryResponse = await executeGoogleGenAI(jerryConfig, jerryPayload);
+                    const rawJson = jerryResponse.text?.replace(/```json/g, '').replace(/```/g, '').trim() || "{}";
+                    const evaluation = JSON.parse(rawJson);
+
+                    const scoreStr = `${evaluation.score?.m3_compliance || 0}% / ${evaluation.score?.token_efficiency || 0}%`;
+                    console.log(`[Omni-Router] 🐕 Jerry Evaluation:`, evaluation.pass ? `✅ PASS (${scoreStr})` : `❌ FAIL (${evaluation.failure_reason})`);
+
+                    if (!evaluation.pass) {
+                        throw new Error(`WATCHDOG_REJECTED: ${evaluation.failure_reason}`);
+                    }
+
+                    if (evaluation.extracted_lesson) {
+                        const fs = typeof require !== "undefined" ? require("fs") : await import("fs");
+                        const path = typeof require !== "undefined" ? require("path") : await import("path");
+                        // We are typically running from packages/zap-claw or root. Resolve to the absolute learn.md
+                        const learnPath = "/Users/zap/Workspace/olympus/learn.md"; 
+                        if (fs.existsSync(learnPath)) {
+                            const timestamp = new Date().toISOString();
+                            const entry = `\n- **[${timestamp} Watchdog Injection]:** ${evaluation.extracted_lesson}`;
+                            fs.appendFileSync(learnPath, entry);
+                            console.log(`[Omni-Router] 🧠 Compounding Intelligence: Injected new lesson into learn.md`);
+                        }
+                    }
+
+                    // Accumulate Jerry's tokens so accounting is accurate
+                    response.tokensUsed.prompt += jerryResponse.tokensUsed.prompt;
+                    response.tokensUsed.completion += jerryResponse.tokensUsed.completion;
+                    response.tokensUsed.total += jerryResponse.tokensUsed.total;
+                } catch (evalErr: any) {
+                    if (evalErr.message.includes("WATCHDOG_REJECTED")) {
+                        throw evalErr; // Propagate the rejection upward to hit the DLQ
+                    }
+                    console.error(`[Omni-Router] ⚠️ Jerry Watchdog syntax or API failure, bypassing review: ${evalErr.message}`);
+                }
+            }
+
+            // ZSS Phase 1: Post-Execution Subagent Concurrency Trimming
+            const maxSubagents = 3;
+            if (response.toolCalls && response.toolCalls.length > maxSubagents) {
+                console.warn(`[ZSS] ⚠️ Spike Output Trimmed: Exceeded max sub-agent concurrency (${maxSubagents}). Clipping ${response.toolCalls.length - maxSubagents} extra calls.`);
+                try {
+                    const { MongoClient } = await import("mongodb");
+                    const mclient = new MongoClient(process.env.MONGODB_URI || "mongodb://localhost:27017");
+                    await mclient.connect();
+                    await mclient.db("olympus").collection("SYS_OS_zss_audit").insertOne({
+                        interceptType: "CONCURRENCY_TRIPWIRE",
+                        timestamp: new Date(),
+                        agentId: config.agentId || "unknown",
+                        details: `Clipped ${response.toolCalls.length - maxSubagents} extra subagent calls`
+                    });
+                    await mclient.close();
+                } catch(e) { console.error("ZSS Audit logging failed"); }
+                response.toolCalls = response.toolCalls.slice(0, maxSubagents);
             }
 
             return {
@@ -670,9 +961,14 @@ async function executeOllama(config: LLMConfig, payload: OmniPayload): Promise<O
     const messages = convertToLangChainMessages(payload.systemPrompt, payload.messages);
     const modelToUse = config.defaultModel === "OLLAMA" ? "llama3.1:8b" : config.defaultModel.replace("ollama/", "");
 
+    // Use config.apiKey directly as the generic BaseURL if pulling from a pool of instances
+    const activeBaseURL = (config.apiKey && config.apiKey !== "ollama" && config.apiKey.startsWith("http")) 
+        ? config.apiKey 
+        : (process.env.OLLAMA_BASE_URL || "http://127.0.0.1:11434/v1");
+
     const openai = new ChatOpenAI({
         configuration: {
-            baseURL: process.env.OLLAMA_BASE_URL || "http://127.0.0.1:11434/v1",
+            baseURL: activeBaseURL,
         },
         apiKey: "ollama",
         modelName: modelToUse,

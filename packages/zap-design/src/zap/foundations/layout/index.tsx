@@ -13,7 +13,7 @@ export default function LayoutPage() {
 
     return (
         <AppShell>
-            <Canvas className="transition-all duration-300 origin-center flex flex-col pt-0 min-h-full">
+            <Canvas className="transition-all duration-300 origin-center flex flex-col w-full min-h-[100vh] pt-0">
                 <div className="w-full flex-none">
                     <ThemeHeader
                         title="Layout Grid"
@@ -24,7 +24,7 @@ export default function LayoutPage() {
                     />
                 </div>
                 
-                <CanvasBody coverTitle="Component Sandbox" coverBadge="[ L2 Cover // Main Content Canvas ]">
+                <CanvasBody className="!pb-0" coverTitle="Component Sandbox" coverBadge="[ L2 Cover // Main Content Canvas ]">
                     <LayoutBody platform={platform} />
                 </CanvasBody>
             </Canvas>

@@ -202,9 +202,9 @@ export const VerticalNav = ({ width = 260, isCollapsed = false }: VerticalNavPro
 
                         {/* Dev Mode Toggle */}
                         <div className="p-3 border-b border-[#0000000a]">
-                            <button
+                            <div
                                 onClick={() => setDevMode(!devMode)}
-                                className={`w-full text-[10px] font-black uppercase px-3 py-2 border-[length:var(--btn-border-width,0px)] rounded-btn transition-all flex items-center justify-between group ${devMode
+                                className={`w-full text-[10px] font-black uppercase px-3 py-2 border-[length:var(--btn-border-width,0px)] rounded-btn transition-all flex items-center justify-between group cursor-pointer ${devMode
                                     ? 'bg-brand-yellow border-btn-border text-brand-midnight shadow-btn'
                                     : 'bg-layer-panel border-transparent text-iso-gray-500 hover:border-btn-border hover:text-brand-midnight'
                                     }`}
@@ -216,7 +216,7 @@ export const VerticalNav = ({ width = 260, isCollapsed = false }: VerticalNavPro
                                     onCheckedChange={setDevMode}
                                     className={!devMode ? 'opacity-70 group-hover:opacity-100 group-hover:border-black' : ''}
                                 />
-                            </button>
+                            </div>
                         </div>
 
                     </div>

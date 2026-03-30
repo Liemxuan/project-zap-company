@@ -88,10 +88,10 @@ export default function DialogsPage() {
             <div className="space-y-4">
                 <Wrapper identity={{ displayName: "Dialog Structural Settings", type: "Docs Link", filePath: "zap/molecules/dialogs/page.tsx" }}>
                     <div className="space-y-6">
-                        <h4 className="text-[10px] text-transform-primary font-display font-bold text-on-surface-variant text-transform-secondary tracking-wider uppercase">Sandbox Variables</h4>
+                        <h4 className="text-label-small text-transform-primary font-display font-bold text-on-surface-variant text-transform-secondary tracking-wider uppercase">Sandbox Variables</h4>
                         <div className="space-y-4">
                             <div className="space-y-1">
-                                <span className="text-[10px] text-on-surface-variant text-transform-secondary flex justify-between">
+                                <span className="text-label-small text-on-surface-variant text-transform-secondary flex justify-between">
                                     <span>Width Override</span>
                                     <span className="font-bold">{previewWidth}</span>
                                 </span>
@@ -105,7 +105,7 @@ export default function DialogsPage() {
                             </div>
 
                             <div className="space-y-1">
-                                <span className="text-[10px] text-on-surface-variant text-transform-secondary flex justify-between">
+                                <span className="text-label-small text-on-surface-variant text-transform-secondary flex justify-between">
                                     <span>Radius Override</span>
                                     <span className="font-bold">{previewRadius}</span>
                                 </span>

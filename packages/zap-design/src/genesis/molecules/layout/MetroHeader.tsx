@@ -10,7 +10,7 @@ import { LiveBlinker } from '../../../genesis/atoms/indicators/LiveBlinker';
 export interface MetroHeaderProps {
     title: React.ReactNode;
     breadcrumb?: string;
-    badge?: string;
+    badge?: string | null;
     tabs?: TabItem[];
     activeTab?: string;
     onTabChange?: (tab: string) => void;
@@ -18,6 +18,7 @@ export interface MetroHeaderProps {
     platform?: Platform;
     setPlatform?: (platform: Platform) => void;
     showBackground?: boolean;
+    rightSlot?: React.ReactNode;
 }
 
 export const MetroHeader = ({
@@ -30,7 +31,8 @@ export const MetroHeader = ({
     liveIndicator = false,
     platform,
     setPlatform,
-    showBackground = true
+    showBackground = true,
+    rightSlot
 }: MetroHeaderProps) => {
     return (
         <Wrapper identity={{ displayName: "Metro Header", filePath: "genesis/molecules/layout/MetroHeader.tsx", type: "Wrapped Snippet", architecture: "L4: Molecules" }}>
@@ -45,7 +47,7 @@ export const MetroHeader = ({
                 setPlatform={setPlatform}
                 showBackground={showBackground}
                 rightSlot={
-                    liveIndicator ? <LiveBlinker /> : undefined
+                    rightSlot || (liveIndicator ? <LiveBlinker /> : undefined)
                 }
             />
         </Wrapper>

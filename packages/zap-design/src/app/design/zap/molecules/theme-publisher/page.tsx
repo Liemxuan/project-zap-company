@@ -25,8 +25,8 @@ export default function ThemePublisherSandboxPage() {
                 <div className="space-y-6">
                     <div className="space-y-2">
                         <div className="flex justify-between items-center">
-                            <label className="text-sm font-medium font-secondary text-transform-secondary text-brand-on-surface">Border Radius</label>
-                            <span className="text-xs text-brand-on-surface/50 font-secondary">{borderRadius[0]}px</span>
+                            <label className="text-body-small font-medium font-secondary text-transform-secondary text-brand-on-surface">Border Radius</label>
+                            <span className="text-label-small text-brand-on-surface/50 font-secondary">{borderRadius[0]}px</span>
                         </div>
                         <Slider
                             value={borderRadius}
@@ -34,23 +34,23 @@ export default function ThemePublisherSandboxPage() {
                             max={48}
                             step={1}
                         />
-                        <p className="text-[11px] text-brand-on-surface/50 font-secondary mt-1">
+                        <p className="text-label-medium text-brand-on-surface/50 font-secondary mt-1">
                             Controls `--button-border-radius` which dynamically curves the inspector bounds.
                         </p>
                     </div>
 
                     <div className="space-y-4 mt-6">
-                        <h4 className="text-xs font-bold text-transform-primary uppercase font-display tracking-wider">State Controls</h4>
+                        <h4 className="text-label-small font-bold text-transform-primary uppercase font-display tracking-wider">State Controls</h4>
                         <div className="flex items-center justify-between">
-                            <label className="text-sm font-medium font-secondary text-transform-secondary text-brand-on-surface">Loading State</label>
+                            <label className="text-body-small font-medium font-secondary text-transform-secondary text-brand-on-surface">Loading State</label>
                             <Switch checked={isLoading} onCheckedChange={setIsLoading} />
                         </div>
                         <div className="flex items-center justify-between">
-                            <label className="text-sm font-medium font-secondary text-transform-secondary text-brand-on-surface">Disabled</label>
+                            <label className="text-body-small font-medium font-secondary text-transform-secondary text-brand-on-surface">Disabled</label>
                             <Switch checked={isDisabled} onCheckedChange={setIsDisabled} />
                         </div>
                         <div className="flex items-center justify-between">
-                            <label className="text-sm font-medium font-secondary text-transform-secondary text-brand-on-surface">Hide Dev Wrapper</label>
+                            <label className="text-body-small font-medium font-secondary text-transform-secondary text-brand-on-surface">Hide Dev Wrapper</label>
                             <Switch checked={hideWrapper} onCheckedChange={setHideWrapper} />
                         </div>
                     </div>
@@ -89,7 +89,7 @@ export default function ThemePublisherSandboxPage() {
             >
                 <div className="max-w-md w-full relative">
                     <div className="text-center mb-8 px-4 font-secondary text-brand-on-surface">
-                        <p className="text-sm opacity-60 mb-2">Adjust the radius in the left sidebar to watch the dashed Inspector outline dynamically wrap the internal Genesis Button pill geometries.</p>
+                        <p className="text-body-small opacity-60 mb-2">Adjust the radius in the left sidebar to watch the dashed Inspector outline dynamically wrap the internal Genesis Button pill geometries.</p>
                     </div>
                     
                     <ThemePublisher 

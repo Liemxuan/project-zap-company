@@ -76,7 +76,7 @@ export const Select: React.FC<SelectProps> = ({ options, value, onChange, placeh
                 className={cn(
                     "w-full focus-within:ring-1 focus-within:ring-primary focus-within:border-primary cursor-pointer transition-colors hover:bg-layer-dialog",
                     isOpen ? 'ring-1 ring-primary border-primary' : '',
-                    "h-[var(--select-height,40px)] rounded-[length:var(--select-border-radius,var(--rounded-input,8px))] border-[length:var(--select-border-width,1px)]"
+                    "h-[var(--input-height,40px)] rounded-[length:var(--input-border-radius,var(--rounded-input,8px))] border-[length:var(--input-border-width,1px)]"
                 )}
                 onClick={() => setIsOpen(!isOpen)}
             >
@@ -87,7 +87,7 @@ export const Select: React.FC<SelectProps> = ({ options, value, onChange, placeh
                     aria-expanded={isOpen ? true : false}
                     aria-label={placeholder || "Select option"}
                 >
-                    <span className={`block truncate text-transform-tertiary text-[length:var(--select-font-size,0.875rem)] leading-[var(--select-line-height,1.25rem)] tracking-[var(--select-letter-spacing,normal)] font-[number:var(--select-font-weight,400)] ${!activeOption && placeholder ? 'text-on-surface-variant/70' : ''}`}
+                    <span className={`block truncate text-transform-tertiary text-[length:var(--input-font-size,0.875rem)] leading-[var(--input-line-height,1.25rem)] tracking-[var(--input-letter-spacing,normal)] font-[number:var(--input-font-weight,400)] ${!activeOption && placeholder ? 'text-on-surface-variant/70' : ''}`}
                     >
                         {activeOption ? activeOption.label : (placeholder || 'Select option')}
                     </span>
@@ -100,7 +100,7 @@ export const Select: React.FC<SelectProps> = ({ options, value, onChange, placeh
                     ref={dropdownRef}
                     className={cn(
                         "fixed border-outline-variant bg-layer-dialog z-[99999] max-h-60 overflow-y-auto outline-none shadow-lg text-on-surface",
-                        "rounded-[length:var(--select-border-radius,var(--rounded-card,8px))] border-[length:var(--select-border-width,1px)]"
+                        "rounded-[length:var(--input-border-radius,var(--rounded-card,8px))] border-[length:var(--input-border-width,1px)]"
                     )}
                     role="listbox"
                     aria-label="Options"
@@ -118,7 +118,7 @@ export const Select: React.FC<SelectProps> = ({ options, value, onChange, placeh
                             }}
                             className={cn(
                                 "px-3 py-2 text-transform-tertiary cursor-pointer transition-colors border-b border-outline-variant/30 last:border-b-0",
-                                "text-[length:var(--select-font-size,0.875rem)] leading-[var(--select-line-height,1.25rem)] tracking-[var(--select-letter-spacing,normal)] font-[number:var(--select-font-weight,400)]",
+                                "text-[length:var(--input-font-size,0.875rem)] leading-[var(--input-line-height,1.25rem)] tracking-[var(--input-letter-spacing,normal)] font-[number:var(--input-font-weight,400)]",
                                 option.value === value
                                     ? 'bg-primary text-on-primary hover:bg-primary/90'
                                     : 'hover:bg-layer-panel'
