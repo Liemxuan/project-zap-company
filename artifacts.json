@@ -1,0 +1,1 @@
+{"success":true,"artifacts":[{"filename":"index.tsx","content":"export const Button = ({ onClick, children }: { onClick: () => void, children: React.ReactNode }) => (\n  <button onClick={onClick} className=\"btn-primary\">\n    {children}\n  </button>\n);"},{"filename":"index.html","content":"<button class=\"btn-primary\" onclick=\"handleClick()\">\n  Click Me\n</button>"}]}

@@ -32,7 +32,7 @@ export async function getHistory(userId: string | number, accountType: string = 
   const rows = await prisma.interaction.findMany({
     where: {
       sessionId: userId.toString(),
-      accountType: accountType
+      accountType: { startsWith: accountType }
     },
     orderBy: { createdAt: 'desc' },
     take: limit
@@ -123,7 +123,9 @@ export async function appendMessage(
     finalContent = finalContent.substring(0, MAX_PAYLOAD_SIZE) + "\n\n... [TRUNCATED BY SYSTEM DUE TO PAYLOAD LIMIT]";
   }
 
+  const { randomUUID } = require('crypto');
   const cacheRecord = {
+    id: randomUUID(),
     sessionId: userId.toString(),
     role: role.toUpperCase(),
     content: finalContent,
@@ -163,6 +165,8 @@ export async function appendMessage(
             const tenantPrefix = (accountType === "OLYMPUS_HUD" || accountType === "PERSONAL") ? "ZVN" : accountType;
             const bucket = new GridFSBucket(db, { bucketName: `${tenantPrefix}_SYS_ARTIFACTS` });
 
+            const uploadPromises: Promise<void>[] = [];
+
             // Extract Code Artifacts (html, tsx, ts, jsx, js, css, json, md)
             const codeBlockRegex = /```(html|tsx|ts|jsx|js|css|json|markdown|md)\s*([\s\S]*?)```/g;
             let codeMatch: RegExpExecArray | null;
@@ -177,10 +181,14 @@ export async function appendMessage(
               counts[lang] = (counts[lang] || 0) + 1;
               const filename = counts[lang] === 1 ? `index.${lang}` : `component_${counts[lang]}.${lang}`;
 
-              const uploadStream = bucket.openUploadStream(filename, {
-                metadata: { sessionId: userId.toString(), type: lang }
-              });
-              uploadStream.end(Buffer.from(contentValue, 'utf-8'));
+              uploadPromises.push(new Promise((resolve, reject) => {
+                const uploadStream = bucket.openUploadStream(filename, {
+                  metadata: { sessionId: userId.toString(), type: lang }
+                });
+                uploadStream.on('finish', resolve);
+                uploadStream.on('error', reject);
+                uploadStream.end(Buffer.from(contentValue, 'utf-8'));
+              }));
             }
 
             // Extract Image Artifacts
@@ -190,11 +198,17 @@ export async function appendMessage(
             while ((imgMatch = imageRegex.exec(finalContent)) !== null) {
               if (!imgMatch[1]) continue;
               const url = imgMatch[1].trim();
-              const uploadStream = bucket.openUploadStream(`generated_image_${imgIndex++}.png`, {
-                metadata: { sessionId: userId.toString(), type: 'image' }
-              });
-              uploadStream.end(Buffer.from(url, 'utf-8')); // Store the URL in the buffer
+              uploadPromises.push(new Promise((resolve, reject) => {
+                const uploadStream = bucket.openUploadStream(`generated_image_${imgIndex++}.png`, {
+                  metadata: { sessionId: userId.toString(), type: 'image' }
+                });
+                uploadStream.on('finish', resolve);
+                uploadStream.on('error', reject);
+                uploadStream.end(Buffer.from(url, 'utf-8')); // Store the URL in the buffer
+              }));
             }
+            
+            await Promise.all(uploadPromises);
           } catch (err) {
             console.error("[history] Error extracting artifacts to GridFS:", err);
           } finally {

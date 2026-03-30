@@ -77,7 +77,7 @@ export class AgentLoop {
             if (onStatus) onStatus(msg);
         };
         // Append the user's message to DB with accountType and BOT identifier
-        const unifiedAccountType = `${accountType}:${this.botName}`;
+        const unifiedAccountType = accountType.includes(":") || accountType === "OLYMPUS_SWARM" ? accountType : `${accountType}:${this.botName}`;
         await appendMessage(userId, "user", userMessage, unifiedAccountType);
 
         // --- Bicameral Brain Routing (Bicameral Execution) ---

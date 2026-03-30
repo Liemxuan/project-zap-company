@@ -96,6 +96,24 @@ export async function executeSerializedLane(
         console.log(`[Serialized Lane] 🌐 Injecting RAG Context from ChromaDB...`);
         const ragContext = await fetchChromaContext(tenantId, payload);
 
+        // Security Check: Prompt Injection / Cognitive Bypass Prevention
+        const bypassPatterns = [
+            /ignore all previous instructions/i,
+            /uncodixfy/i,
+            /uncodexify/i,
+            /forget your previous/i,
+            /you are now/i,
+            /bypass the/i,
+            /new system prompt:/i
+        ];
+
+        for (const pattern of bypassPatterns) {
+            if (pattern.test(payload) || (ragContext && pattern.test(ragContext))) {
+                console.warn(`[Serialized Lane] 🚨 ZSS Security Alert: Prompt Injection / Cognitive Bypass Attempt Detected (Pattern: ${pattern})`);
+                return "❌ [SECURITY BLOCK] Prompt Injection or Cognitive Bypass attempt detected. This incident has been logged. Compliance with ZSS is mandatory.";
+            }
+        }
+
         console.log(`[Serialized Lane] ⚙️ Building Cached Prompt Sequence (${userProfile.defaultModel})...`);
 
         // Layer 2: The Dynamic System Update (Injected as the first conversation message)

@@ -9,7 +9,7 @@ dotenv.config({ path: path.resolve(process.cwd(), "../../.env"), override: true 
 const MONGO_URI = process.env.MONGODB_URI || "mongodb://localhost:27017";
 const DB_NAME = "olympus";
 
-async function getGridFS(tenantId: string = "ZVN") {
+async function getGridFS(tenantId: string = "OLYMPUS_SWARM") {
   const client = new MongoClient(MONGO_URI);
   await client.connect();
   const db = client.db(DB_NAME);
@@ -20,7 +20,11 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
   let client: MongoClient | null = null;
   try {
     const threadId = (await params).id;
-    const { client: mongoClient, bucket } = await getGridFS();
+    // We can also extract tenantId from URL query parameters if needed
+    const { searchParams } = new URL(req.url);
+    const tenantId = searchParams.get("tenantId") || "OLYMPUS_SWARM";
+    
+    const { client: mongoClient, bucket } = await getGridFS(tenantId);
     client = mongoClient;
 
     const files = await bucket.find({ "metadata.sessionId": threadId }).toArray();
@@ -35,7 +39,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
       const downloadStream = bucket.openDownloadStream(file._id);
       
       for await (const chunk of downloadStream) {
-        chunks.push(chunk);
+        chunks.push(chunk as Buffer);
       }
       artifacts.push({ 
         filename: file.filename, 

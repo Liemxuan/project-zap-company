@@ -11,7 +11,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
     try {
         // Fetch from the local ZAP Claw instance which holds the Prisma/Postgres connection
         const CLAW_URL = process.env.NEXT_PUBLIC_CLAW_URL || "http://localhost:3900";
-        const response = await fetch(`${CLAW_URL}/api/history/${id}?accountType=OLYMPUS_HUD`);
+        const response = await fetch(`${CLAW_URL}/api/history/${id}?accountType=OLYMPUS_SWARM`);
         
         if (!response.ok) {
             throw new Error(`ZAP Claw returned ${response.status}`);
