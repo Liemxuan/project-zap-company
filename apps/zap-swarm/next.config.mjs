@@ -13,15 +13,4 @@ const nextConfig = {
   },
 };
 
-export default withSentryConfig(
-  nextConfig,
-  {
-    silent: true,
-    org: "zap-inc",
-    project: "zap-swarm",
-    widenClientFileUpload: true,
-    hideSourceMaps: true,
-    disableLogger: true,
-    automaticVercelMonitors: true,
-  }
-);
+export default nextConfig;
