@@ -79,47 +79,55 @@ export default function TraceExecution({ params }: { params: Promise<{ id: strin
     }
   ]);
 
-  // Fetch Real History (Phase 5: Live Data Integration)
-  useEffect(() => {
-    if (!resolvedParams.id) return;
-    const fetchHistory = async () => {
-      try {
-        const res = await fetch(`/api/swarm/history/${resolvedParams.id}`);
-        if (res.ok) {
-          const data = await res.json();
-          if (data.history && data.history.length > 0) {
-            setMessages(data.history.map((h: any) => ({
-              id: h.id.toString(),
-              role: h.role === 'user' ? 'user' : 'agent',
-              content: h.tool_name ? `[Tool: ${h.tool_name}]\n${h.content}` : h.content,
-              timestamp: new Date(h.created_at).toLocaleTimeString()
-            })));
-            setLogs(prev => prev + `\n> 📦 [system] Restored ${data.history.length} historical messages from database.\n`);
-          }
-        }
-      } catch (err) {
-        console.error("Failed to load history:", err);
-      }
-    };
-    fetchHistory();
-  }, [resolvedParams.id]);
+  // Phase 5: Unified Continuous Polling for State Consistency
+  const hasLoadedHistoryRef = useRef(false);
 
-  // OmniQueue Auto-Polling for DAG Visualizer
   useEffect(() => {
     if (!resolvedParams.id) return;
     
-    const fetchJobs = async () => {
+    const fetchState = async () => {
       try {
-        const res = await fetch(`/api/swarm/jobs?sessionId=${resolvedParams.id}`);
-        if (res.ok) {
-          const data = await res.json();
-          if (data.tasks) setJobs(data.tasks);
+        // 1. Fetch Real-time Queue Status
+        const resJobs = await fetch(`/api/swarm/jobs?sessionId=${resolvedParams.id}`);
+        if (resJobs.ok) {
+          const dataJobs = await resJobs.json();
+          if (dataJobs.tasks) setJobs(dataJobs.tasks);
         }
-      } catch (err) {}
+        
+        // 2. Fetch Immutable Conversation History
+        const resHist = await fetch(`/api/swarm/history/${resolvedParams.id}`);
+        if (resHist.ok) {
+          const dataHist = await resHist.json();
+          if (dataHist.history && dataHist.history.length > 0) {
+            setMessages(prev => {
+              const newMessages = dataHist.history.map((h: any) => ({
+                id: h.id.toString(),
+                role: h.role === 'user' ? 'user' : 'agent',
+                content: h.tool_name ? `[Tool: ${h.tool_name}]\n${h.content}` : h.content,
+                timestamp: new Date(h.created_at).toLocaleTimeString()
+              }));
+              
+              if (prev.length !== newMessages.length || prev[prev.length - 1]?.content !== newMessages[newMessages.length - 1]?.content) {
+                setIsTyping(false);
+                if (!hasLoadedHistoryRef.current) {
+                  setLogs((l: string) => l + `\n> 📦 [system] Restored ${dataHist.history.length} historical messages from database.\n`);
+                  hasLoadedHistoryRef.current = true;
+                } else if (newMessages.length > prev.length) {
+                  setLogs((l: string) => l + `> 📥 [system] Received new agent response via memory pipeline.\n`);
+                }
+                return newMessages;
+              }
+              return prev;
+            });
+          }
+        }
+      } catch (err) {
+        console.error("State sync failed:", err);
+      }
     };
 
-    fetchJobs();
-    const interval = setInterval(fetchJobs, 2500);
+    fetchState();
+    const interval = setInterval(fetchState, 2500);
     return () => clearInterval(interval);
   }, [resolvedParams.id]);
 
@@ -282,59 +290,7 @@ export default function TraceExecution({ params }: { params: Promise<{ id: strin
     }
   };
 
-  // State side-effect to monitor logs for agent replies and update chat history
-  useEffect(() => {
-    const replyRegex = /> 🤖 \[reply\] ([\s\S]*?)[\r\n]/g;
-    let match;
-    const foundReplies: string[] = [];
-
-    while ((match = replyRegex.exec(logs)) !== null) {
-      foundReplies.push(match[1].trim());
-    }
-
-    if (foundReplies.length > 0) {
-      const latestReply = foundReplies[foundReplies.length - 1];
-
-      // Detect HTML Artifacts
-      const htmlRegex = /```html\s*([\s\S]*?)```/g;
-      let htmlMatch;
-      while ((htmlMatch = htmlRegex.exec(latestReply)) !== null) {
-        const content = htmlMatch[1].trim();
-        setArtifacts(prev => {
-          if (prev.some(a => a.content === content)) return prev;
-          const newArtifact = { name: 'index.html', content, type: 'html' as const };
-          setActiveArtifactIndex(prev.length);
-          return [...prev, newArtifact];
-        });
-      }
-
-      // Detect Image Artifacts
-      const imageRegex = /> 🖼️ \[image\] ([\s\S]*?)[\r\n]/g;
-      let imgMatch;
-      while ((imgMatch = imageRegex.exec(latestReply)) !== null) {
-        const url = imgMatch[1].trim();
-        setArtifacts(prev => {
-          if (prev.some(a => a.content === url)) return prev;
-          const newArtifact = { name: 'generated_image.png', content: url, type: 'image' as const };
-          setActiveArtifactIndex(prev.length);
-          return [...prev, newArtifact];
-        });
-      }
-
-      setMessages(prev => {
-        const lastMsg = prev[prev.length - 1];
-        if (lastMsg && lastMsg.role === 'agent' && lastMsg.content === latestReply) return prev;
-
-        setIsTyping(false);
-        return [...prev, {
-          id: Date.now().toString(),
-          role: "agent",
-          content: latestReply,
-          timestamp: new Date().toLocaleTimeString()
-        }];
-      });
-    }
-  }, [logs]);
+  // SSE Log parsing removed: Phase 5 mandates polling from actual backend history
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -497,23 +453,23 @@ export default function TraceExecution({ params }: { params: Promise<{ id: strin
                     </button>
 
                     {todosOpen && (
-                      <div className="px-5 pb-5 flex flex-col gap-3.5 border-t border-outline/10 mt-2 pt-4">
-                        <div className="flex items-start gap-3 text-on-surface-variant hover:text-on-surface group cursor-pointer transition-colors">
-                          <Circle className="size-[14px] shrink-0 mt-0.5" strokeWidth={1.5} />
-                          <Text size="body-small">Extract repository metadata using OmniRouter API</Text>
-                        </div>
-                        <div className="flex items-start gap-3 text-on-surface-variant hover:text-on-surface group cursor-pointer transition-colors">
-                          <Circle className="size-[14px] shrink-0 mt-0.5" strokeWidth={1.5} />
-                          <Text size="body-small">Fetch README and repository information</Text>
-                        </div>
-                        <div className="flex items-start gap-3 text-on-surface-variant hover:text-on-surface group cursor-pointer transition-colors">
-                          <Circle className="size-[14px] shrink-0 mt-0.5" strokeWidth={1.5} />
-                          <Text size="body-small">Analyze repository structure and languages</Text>
-                        </div>
-                        <div className="flex items-start gap-3 text-on-surface-variant hover:text-on-surface group cursor-pointer transition-colors">
-                          <Circle className="size-[14px] shrink-0 mt-0.5" strokeWidth={1.5} />
-                          <Text size="body-small">Research Swarm functional overview and purpose</Text>
-                        </div>
+                      <div className="px-5 pb-5 flex flex-col gap-3.5 border-t border-outline/10 mt-2 pt-4 max-h-[250px] overflow-y-auto custom-scrollbar">
+                        {jobs.length > 0 ? jobs.map((job) => (
+                           <div key={job._id || Math.random().toString()} className="flex items-start gap-3 text-on-surface-variant hover:text-on-surface group cursor-pointer transition-colors">
+                             {job.status === "COMPLETED" ? (
+                               <Check className="size-[14px] shrink-0 mt-0.5 text-primary" strokeWidth={2} />
+                             ) : job.status === "FAILED" || job.status === "DEAD_LETTER" ? (
+                               <X className="size-[14px] shrink-0 mt-0.5 text-error" />
+                             ) : (
+                               <CircleDashed className={`size-[14px] shrink-0 mt-0.5 ${job.status === 'PENDING' ? 'animate-spin-slow text-primary/70' : ''}`} />
+                             )}
+                             <Text size="body-small" className={job.status === 'COMPLETED' ? 'line-through opacity-70' : ''}>
+                               {job.payload?.intent || job.payload?.messages?.[0]?.content?.slice(0, 60) + (job.payload?.messages?.[0]?.content?.length > 60 ? "..." : "") || `Task ${job._id}`}
+                             </Text>
+                           </div>
+                        )) : (
+                           <Text size="body-small" className="text-on-surface-variant/50 italic px-1">No active tasks in OmniQueue.</Text>
+                        )}
                       </div>
                     )}
                   </div>

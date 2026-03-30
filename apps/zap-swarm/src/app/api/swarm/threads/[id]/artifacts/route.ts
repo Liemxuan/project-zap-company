@@ -1,64 +1,85 @@
 import { NextResponse } from "next/server";
-import fs from "fs";
+import { MongoClient, GridFSBucket } from "mongodb";
+import dotenv from "dotenv";
 import path from "path";
 
-const VFS_ROOT = path.resolve(process.cwd(), "../../packages/zap-claw/.agent/vfs");
+dotenv.config({ path: path.resolve(process.cwd(), "../../zap-core/.env"), override: true });
+
+const MONGO_URI = process.env.MONGODB_URI || "mongodb://localhost:27017";
+const DB_NAME = "olympus";
+
+async function getGridFS(tenantId: string = "ZVN") {
+  const client = new MongoClient(MONGO_URI);
+  await client.connect();
+  const db = client.db(DB_NAME);
+  return { client, bucket: new GridFSBucket(db, { bucketName: `${tenantId}_SYS_ARTIFACTS` }) };
+}
 
 export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
+  let client: MongoClient | null = null;
   try {
     const threadId = (await params).id;
-    const threadVfsPath = path.join(VFS_ROOT, "tmp", threadId);
+    const { client: mongoClient, bucket } = await getGridFS();
+    client = mongoClient;
 
-    if (!fs.existsSync(threadVfsPath)) {
+    const files = await bucket.find({ "metadata.sessionId": threadId }).toArray();
+    
+    if (files.length === 0) {
       return NextResponse.json({ success: true, artifacts: [] });
     }
 
-    const files = fs.readdirSync(threadVfsPath).filter(f => !f.startsWith("."));
-    const artifacts = files.map(file => {
-      const content = fs.readFileSync(path.join(threadVfsPath, file), "utf-8");
-      return { filename: file, content };
-    });
+    const artifacts = [];
+    for (const file of files) {
+      const chunks: Buffer[] = [];
+      const downloadStream = bucket.openDownloadStream(file._id);
+      
+      for await (const chunk of downloadStream) {
+        chunks.push(chunk);
+      }
+      artifacts.push({ 
+        filename: file.filename, 
+        content: Buffer.concat(chunks).toString("utf-8") 
+      });
+    }
 
     return NextResponse.json({ success: true, artifacts });
   } catch (error: any) {
     console.error(`[api/swarm/threads/[id]/artifacts GET] Error:`, error);
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+  } finally {
+    if (client) await client.close();
   }
 }
 
 export async function POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
+  let client: MongoClient | null = null;
   try {
     const threadId = (await params).id;
     const body = await req.json();
-    const { filename, content } = body;
+    const { filename, content, tenantId = "ZVN" } = body;
 
     if (!filename || content === undefined) {
       return NextResponse.json({ success: false, error: "Missing filename or content" }, { status: 400 });
     }
 
-    const threadVfsPath = path.join(VFS_ROOT, "tmp", threadId);
-    
-    // Ensure directory exists
-    if (!fs.existsSync(threadVfsPath)) {
-      fs.mkdirSync(threadVfsPath, { recursive: true });
-    }
+    const { client: mongoClient, bucket } = await getGridFS(tenantId);
+    client = mongoClient;
 
-    const docPath = path.join(threadVfsPath, filename);
+    const uploadStream = bucket.openUploadStream(filename, {
+      metadata: { sessionId: threadId, type: filename.endsWith('.html') ? 'html' : 'text' }
+    });
     
-    // Prevent directory traversal attacks
-    if (!docPath.startsWith(threadVfsPath)) {
-      return NextResponse.json({ success: false, error: "Path traversal violation" }, { status: 403 });
-    }
+    uploadStream.end(Buffer.from(content, "utf-8"));
 
-    fs.writeFileSync(docPath, content, "utf-8");
-    
     return NextResponse.json({ 
       success: true, 
-      message: `${filename} written to VFS`,
-      uri: `tmp://${threadId}/${filename}`
+      message: `${filename} written to GridFS`,
+      uri: `gridfs://${tenantId}_SYS_ARTIFACTS/${filename}`
     });
   } catch (error: any) {
-    console.error("[api/swarm/threads/[id]/artifacts POST] Error:", error);
+    console.error(`[api/swarm/threads/[id]/artifacts POST] Error:`, error);
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+  } finally {
+    if (client) await client.close();
   }
 }

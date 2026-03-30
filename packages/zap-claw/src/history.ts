@@ -149,7 +149,55 @@ export async function appendMessage(
   // Still flush to DB asynchronously to not block the LLM loop
   prisma.interaction.create({
     data: cacheRecord
-  }).catch((e: any) => console.error("[history] DB Async flush error:", e));
+  })
+  .then(() => {
+     // Phase 7: Artifact System - Asynchronous GridFS extraction
+     if (role.toLowerCase() === 'assistant') {
+       import('mongodb').then(async ({ MongoClient, GridFSBucket }) => {
+          const MONGO_URI = process.env.MONGODB_URI || "mongodb://localhost:27017";
+          const client = new MongoClient(MONGO_URI);
+          try {
+            await client.connect();
+            const db = client.db('olympus');
+            // Use tenant/accountType isolated bucket
+            const tenantPrefix = (accountType === "OLYMPUS_HUD" || accountType === "PERSONAL") ? "ZVN" : accountType;
+            const bucket = new GridFSBucket(db, { bucketName: `${tenantPrefix}_SYS_ARTIFACTS` });
+
+            // Extract HTML Artifacts
+            const htmlRegex = /```html\s*([\s\S]*?)```/g;
+            let htmlMatch: RegExpExecArray | null;
+            let index = 0;
+            while ((htmlMatch = htmlRegex.exec(finalContent)) !== null) {
+              if (!htmlMatch[1]) continue;
+              const htmlContent = htmlMatch[1].trim();
+              const uploadStream = bucket.openUploadStream(index === 0 ? "index.html" : `index_${index}.html`, {
+                metadata: { sessionId: userId.toString(), type: 'html' }
+              });
+              uploadStream.end(Buffer.from(htmlContent, 'utf-8'));
+              index++;
+            }
+
+            // Extract Image Artifacts
+            const imageRegex = /> 🖼️ \[image\] ([\s\S]*?)[\r\n]/g;
+            let imgMatch: RegExpExecArray | null;
+            let imgIndex = 0;
+            while ((imgMatch = imageRegex.exec(finalContent)) !== null) {
+              if (!imgMatch[1]) continue;
+              const url = imgMatch[1].trim();
+              const uploadStream = bucket.openUploadStream(`generated_image_${imgIndex++}.png`, {
+                metadata: { sessionId: userId.toString(), type: 'image' }
+              });
+              uploadStream.end(Buffer.from(url, 'utf-8')); // Store the URL in the buffer
+            }
+          } catch (err) {
+            console.error("[history] Error extracting artifacts to GridFS:", err);
+          } finally {
+            await client.close();
+          }
+       }).catch(console.error);
+     }
+  })
+  .catch((e: any) => console.error("[history] DB Async flush error:", e));
 }
 
 
