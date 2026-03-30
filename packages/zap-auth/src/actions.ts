@@ -2,11 +2,25 @@
 
 import { cookies } from 'next/headers';
 import { prisma } from '@olympus/zap-db';
+import { SignJWT, jwtVerify } from 'jose';
+
+const JWT_SECRET = new TextEncoder().encode(
+    process.env.JWT_SECRET || 'zss-omega-delta-99-super-secret-key-2026'
+);
+
+async function signToken(payload: { sub: string; tenantId: string }) {
+    return await new SignJWT(payload)
+        .setProtectedHeader({ alg: 'HS256' })
+        .setIssuedAt()
+        .setExpirationTime('7d')
+        .sign(JWT_SECRET);
+}
 
 export async function loginAction(email: string, pass: string) {
     if (email === 'name@zap' && pass === '1234') {
+        const token = await signToken({ sub: 'mock-user-id-bypass', tenantId: 'ZVN' });
         const cookieStore = await cookies();
-        cookieStore.set('zap_session', 'mock-user-id-bypass', { 
+        cookieStore.set('zap_session', token, { 
             secure: process.env.NODE_ENV === 'production', 
             httpOnly: true, 
             path: '/',
@@ -22,8 +36,12 @@ export async function loginAction(email: string, pass: string) {
         });
 
         if (user && user.password === pass) {
+            // Employee -> Organization mappings usually dictate the tenant, defaulting to ZVN for now
+            const tenantId = user.employee?.organizationId || 'ZVN';
+            const token = await signToken({ sub: user.id, tenantId });
+            
             const cookieStore = await cookies();
-            cookieStore.set('zap_session', user.id, { 
+            cookieStore.set('zap_session', token, { 
                 secure: process.env.NODE_ENV === 'production', 
                 httpOnly: true, 
                 path: '/',
@@ -45,9 +63,18 @@ export async function logoutAction() {
 
 export async function getSession() {
     const cookieStore = await cookies();
-    const sessionId = cookieStore.get('zap_session')?.value;
-    if (!sessionId) return null;
+    const token = cookieStore.get('zap_session')?.value;
+    if (!token) return null;
     if (!prisma) return null; // Prisma unavailable (Turbopack engine resolution)
+
+    let sessionId = token;
+    try {
+        const { payload } = await jwtVerify(token, JWT_SECRET);
+        sessionId = payload.sub as string;
+    } catch (e) {
+        // Fallback for legacy unencrypted session cookies during migration
+        console.warn("[Auth] Legacy raw session cookie detected and permitted as fallback.");
+    }
 
     return await prisma.user.findUnique({
         where: { id: sessionId },

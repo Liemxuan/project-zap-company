@@ -1,5 +1,10 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { jwtVerify } from 'jose';
+
+const JWT_SECRET = new TextEncoder().encode(
+    process.env.JWT_SECRET || 'zss-omega-delta-99-super-secret-key-2026'
+);
 
 // ═══════════════════════════════════════════════════════════
 // ZAP Swarm Middleware Pipeline — Phase 2
@@ -60,13 +65,19 @@ const DEV_BYPASS_SESSIONS = new Set([
 ]);
 
 // ── Tenant Resolution ────────────────────────────────────
-// Maps session user IDs or cookie values to tenant contexts.
-// In production this would be a DB lookup; here we default to ZVN.
-function resolveTenantFromSession(sessionValue: string): string {
-    if (sessionValue === 'mock-user-id-bypass') return 'ZVN';
-    // Future: decode JWT or lookup user → tenant mapping
-    // For now, all authenticated users default to ZVN
-    return 'ZVN';
+// Extracts tenantId and userId securely from the JWT payload
+async function resolveTenantFromSession(sessionValue: string): Promise<{ tenantId: string, userId: string }> {
+    try {
+        const { payload } = await jwtVerify(sessionValue, JWT_SECRET);
+        return { 
+            tenantId: (payload.tenantId as string) || 'ZVN',
+            userId: (payload.sub as string) || 'unknown'
+        };
+    } catch (e) {
+        // Fallback for legacy raw string session migration
+        if (sessionValue === 'mock-user-id-bypass') return { tenantId: 'ZVN', userId: sessionValue };
+        return { tenantId: 'ZVN', userId: sessionValue };
+    }
 }
 
 // ── ZSS Request Fingerprinting ───────────────────────────
@@ -91,7 +102,7 @@ function isZSSBlocked(request: NextRequest): { blocked: boolean; reason?: string
 // ═══════════════════════════════════════════════════════════
 // Main Middleware Pipeline
 // ═══════════════════════════════════════════════════════════
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl;
 
     // ── Layer 1: Static / Internal Bypass ────────────────
@@ -162,8 +173,9 @@ export function middleware(request: NextRequest) {
         // Inject tenant context header for downstream API routes
         const session = request.cookies.get('zap_session');
         if (session?.value) {
-            const tenantId = resolveTenantFromSession(session.value);
+            const { tenantId, userId } = await resolveTenantFromSession(session.value);
             response.headers.set('X-ZAP-Tenant', tenantId);
+            response.headers.set('X-ZAP-User', userId);
             response.headers.set('X-ZAP-Session', session.value);
         } else {
             // Default tenant for unauthenticated API calls (telemetry, health)
@@ -191,8 +203,9 @@ export function middleware(request: NextRequest) {
     }
 
     // ── Layer 6: Tenant Injection for Pages ──────────────
-    const tenantId = resolveTenantFromSession(session.value);
+    const { tenantId, userId } = await resolveTenantFromSession(session.value);
     response.headers.set('X-ZAP-Tenant', tenantId);
+    response.headers.set('X-ZAP-User', userId);
     response.headers.set('X-ZAP-Session', session.value);
 
     return response;
