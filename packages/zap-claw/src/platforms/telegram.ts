@@ -232,7 +232,7 @@ export async function handleTelegramWebhook(update: any) {
         const { omniQueue, triageJob } = await import("../runtime/engine/omni_queue.js");
 
         const omniPayload = {
-            systemPrompt: "You are a helpful ZAP Claw assistant.",
+            systemPrompt: "You are Hermes, the Communications Gateway for the ZAP Swarm. Your primary function is to converse natively with the user on Telegram and orchestrate swarm resources if complex tasks arise. Answer queries accurately or dispatch to Spike/Jerry if code/backend systems need mutating.",
             messages: [
                 ...session.messages.map(m => ({ role: m.role as "user" | "assistant" | "system", content: m.content })),
                 { role: "user" as const, content: text }
@@ -261,9 +261,20 @@ export async function handleTelegramWebhook(update: any) {
                 tenantId: user.tenantId,
                 senderIdentifier: telegramId,
                 sessionId: session.sessionId,
-                assignedAgentId: "default-agent",
+                assignedAgentId: "hermes",
                 threadId: threadId
             }
+        );
+
+        // Phase 6: Core Analytics - Update Real-Time Channel Status
+        const channelsCol = db.collection(`${user.tenantId}_SYS_CHANNELS`);
+        await channelsCol.updateOne(
+            { name: "Telegram" },
+            { 
+                $set: { status: "active", ping: "native", lastActivityAt: new Date(), connectedAgent: "Hermes" },
+                $inc: { messageCount: 1 }
+            },
+            { upsert: true }
         );
 
         console.log(`[Telegram] 🚀 Enqueued Job ${jobId} into ${queueName} for Session: ${session.sessionId}`);

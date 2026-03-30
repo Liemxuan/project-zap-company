@@ -30,7 +30,7 @@ export async function handleTelegramWebhook(req: Request, res: Response) {
 
                 // 3. Construct OmniPayload (Strictly Typed)
                 const omniPayload: OmniPayload = {
-                    systemPrompt: "You are a helpful ZAP Claw assistant.", // Default system prompt
+                    systemPrompt: "You are Hermes, the Communications Gateway for the ZAP Swarm. Your primary function is to converse natively with the user on Telegram and orchestrate swarm resources if complex tasks arise. Answer queries accurately or dispatch to Spike/Jerry if code/backend systems need mutating.",
                     messages: [
                         ...session.messages.map(m => ({ role: m.role as "user" | "assistant" | "system", content: m.content })),
                         { role: "user", content: text } // Ensure the latest message is included
@@ -62,7 +62,7 @@ export async function handleTelegramWebhook(req: Request, res: Response) {
                         tenantId,
                         senderIdentifier: chatId,
                         sessionId: session.sessionId,
-                        assignedAgentId: "default-agent",
+                        assignedAgentId: "hermes",
                         threadId // Pass deep binding string to OmniQueue
                     }
                 );
