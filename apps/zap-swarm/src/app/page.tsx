@@ -16,26 +16,27 @@ export default function SwarmDashboard() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchTelemetry = async () => {
+    const safeFetch = async (url: string) => {
       try {
-        const [dockerRes, jobsRes, zssRes] = await Promise.all([
-          fetch("/api/swarm/docker"),
-          fetch("/api/swarm/jobs"),
-          fetch("/api/swarm/zss")
-        ]);
-
-        const dockerData = await dockerRes.json();
-        const jobsData = await jobsRes.json();
-        const zssData = await zssRes.json();
-
-        if (dockerData.containers) setContainers(dockerData.containers);
-        if (jobsData.tasks) setJobs(jobsData.tasks);
-        if (zssData.count !== undefined) setZssCount(zssData.count);
-      } catch (err) {
-        console.error("Failed to fetch swarm telemetry");
-      } finally {
-        setLoading(false);
+        const res = await fetch(url);
+        if (!res.ok) return null;
+        return await res.json();
+      } catch {
+        return null;
       }
+    };
+
+    const fetchTelemetry = async () => {
+      const [dockerData, jobsData, zssData] = await Promise.all([
+        safeFetch("/api/swarm/docker"),
+        safeFetch("/api/swarm/jobs"),
+        safeFetch("/api/swarm/zss")
+      ]);
+
+      if (dockerData?.containers) setContainers(dockerData.containers);
+      if (jobsData?.tasks) setJobs(jobsData.tasks);
+      if (zssData?.count !== undefined) setZssCount(zssData.count);
+      setLoading(false);
     };
 
     fetchTelemetry();

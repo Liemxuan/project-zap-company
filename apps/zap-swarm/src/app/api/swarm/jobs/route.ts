@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { MongoClient } from "mongodb";
 import path from "path";
 import dotenv from "dotenv";
+import { getTenantContext } from "@/lib/tenant";
 
 // Preload the env from core
 dotenv.config({ path: path.resolve(process.cwd(), "../../zap-core/.env"), override: true });
@@ -10,7 +11,7 @@ export async function GET(req: Request) {
     let client: MongoClient | null = null;
     try {
         const url = new URL(req.url);
-        const tenantId = url.searchParams.get("tenantId") || "ZVN";
+        const { tenantId } = await getTenantContext();
         const sessionId = url.searchParams.get("sessionId");
 
         const MONGO_URI = process.env.MONGODB_URI || "mongodb://localhost:27017";
