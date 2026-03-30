@@ -181,14 +181,13 @@ export async function handleTelegramWebhook(update: any) {
                 );
 
                 const message = [
-                    `**OpenClaw: access not configured.**`,
+                    `**Olympus Access Restricted.**`,
                     ``,
                     `Your Telegram user id: \`${telegramId}\``,
                     ``,
                     `Pairing code: \`${pairingCode}\``,
                     ``,
-                    `Ask the bot owner to approve with:`,
-                    `\`openclaw pairing approve telegram ${pairingCode}\``
+                    `Provide this code to the workspace administrator for authorization.`
                 ].join("\n");
 
                 sendTelegramMessage(chatId, message);
@@ -217,37 +216,7 @@ export async function handleTelegramWebhook(update: any) {
             return;
         }
 
-        // Handle explicit session termination
-        if (text.trim() === "/new") {
-            const { terminateSession } = await import("../gateway/session.js");
-            const terminated = await terminateSession(chatId);
-            if (terminated) {
-                sendTelegramMessage(chatId, "🧹 **Session Reset.** Context cleared. Ready for new input.");
-            } else {
-                sendTelegramMessage(chatId, "No active session to reset.");
-            }
-            return;
-        }
-
-        // Handle Job Approval for Complex Tasks
-        if (text.trim().startsWith("/approve ")) {
-            const jobId = text.split(" ")[1];
-            if (!jobId) {
-                sendTelegramMessage(chatId, "❌ Usage: `/approve <jobId>`");
-                return;
-            }
-
-            const { omniQueue } = await import("../runtime/engine/omni_queue.js");
-            // Assuming tenantId can be inferred from the user who sent it
-            const success = await omniQueue.approveJob(jobId, user.tenantId as string || "ZVN");
-
-            if (success) {
-                sendTelegramMessage(chatId, `✅ **Job Approved.**\nID: \`${jobId}\` has been placed into the processing queue.`);
-            } else {
-                sendTelegramMessage(chatId, `❌ **Approval Failed.**\nID: \`${jobId}\` not found or not in WAITING_APPROVAL state.`);
-            }
-            return;
-        }
+        // (Legacy OpenClaw /approve and /new commands removed - Native Engine now dynamically auto-spawns and manages threads)
 
         // Get or Create Native Mongoose Context Bound Session
         const { getOrCreateSession, appendMessage } = await import("../runtime/router/session.js");

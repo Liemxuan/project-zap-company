@@ -63,7 +63,9 @@
         "@types/mongoose": "^5.11.97",
         "@types/node": "^25.3.2",
         "@types/ws": "^8.5.10",
+        "jest": "^30.3.0",
         "prisma": "^6.19.2",
+        "ts-jest": "^29.4.6",
         "tsx": "^4.21.0",
         "typescript": "^5.9.3"
     }

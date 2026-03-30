@@ -24,9 +24,40 @@ export async function POST(req: Request) {
         const db = client.db(DB_NAME);
         const col = db.collection(`${tenantId}_SYS_OS_job_queue`);
 
+        let dynamicSystemPrompt = "You are a professional assistant.";
+        
+        try {
+            const fs = require("fs");
+            const AGENT_DIR = path.resolve(process.cwd(), "../../packages/zap-claw/.agent", agentId.toLowerCase());
+            
+            let soul = "";
+            let memory = "";
+            
+            if (fs.existsSync(path.join(AGENT_DIR, "soul.md"))) {
+                soul = fs.readFileSync(path.join(AGENT_DIR, "soul.md"), "utf-8");
+            }
+            if (fs.existsSync(path.join(AGENT_DIR, "memory.md"))) {
+                memory = fs.readFileSync(path.join(AGENT_DIR, "memory.md"), "utf-8");
+            }
+            
+            // Fetch global memory facts
+            const colMemory = db.collection("SYS_MEMORY");
+            const globalMemories = await colMemory.find({}).sort({ createdAt: -1 }).limit(10).toArray();
+            let globalMemoryStr = "";
+            if (globalMemories.length > 0) {
+                globalMemoryStr = "\n\n# GLOBAL FACTS & MEMORY\n" + globalMemories.map(m => `- [${m.agentSource || 'system'}] ${m.content}`).join("\n");
+            }
+
+            if (soul || memory || globalMemoryStr) {
+                dynamicSystemPrompt = `${soul}\n\n${memory}${globalMemoryStr}`;
+            }
+        } catch (e) {
+            console.error("Failed to inject context:", e);
+        }
+
         // Construct OmniPayload matching OmniRouter expectations
         const payload = {
-            systemPrompt: "You are a professional assistant.", // This will be enriched by the worker's agent config
+            systemPrompt: dynamicSystemPrompt,
             messages: [{ role: "user", content: message }],
             theme: "B_PRODUCTIVITY",
             intent: "GENERAL",

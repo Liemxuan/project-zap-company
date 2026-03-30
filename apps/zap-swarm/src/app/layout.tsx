@@ -31,6 +31,7 @@ import { ThemeProvider } from 'zap-design/src/components/ThemeContext';
 import { ThemeManager } from 'zap-design/src/components/ThemeManager';
 import { TooltipProvider } from 'zap-design/src/genesis/atoms/interactive/tooltip';
 import { Toaster } from 'zap-design/src/genesis/atoms/interactive/sonner';
+import { QueryProvider } from '../components/QueryProvider';
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   let initialCss = '';
@@ -100,11 +101,13 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       </head>
       <body className="antialiased h-screen overflow-hidden bg-layer-base text-on-surface selection:bg-primary/20" suppressHydrationWarning>
         <ThemeProvider>
-          <ThemeManager />
-          <TooltipProvider>
-            {children}
-          </TooltipProvider>
-          <Toaster position="bottom-right" richColors />
+          <QueryProvider>
+            <ThemeManager />
+            <TooltipProvider>
+              {children}
+            </TooltipProvider>
+            <Toaster position="bottom-right" richColors />
+          </QueryProvider>
         </ThemeProvider>
       </body>
     </html>

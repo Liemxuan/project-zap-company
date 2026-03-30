@@ -46,3 +46,22 @@ Because OpenPencil supports read **and write** via MCP, Agents have the authorit
 ## 5. Security Enclaves
 
 The OpenPencil MCP server has been hard-locked to `/Users/zap/Workspace/`. It cannot traverse into the OS Root (`/`) or system configuration directories. Agents attempting to pass paths outside of the Workspace boundary will receive a `PermissionDenied` error.
+
+## 6. Architecture & File Structure Mapping
+
+If you need to modify how the AI interacts with OpenPencil (or add new tools), reference the following directory mapping within the `open-pencil` workspace:
+
+### The MCP Router (Incoming/Outgoing)
+
+* **Path:** `packages/mcp/src/server.ts`
+* **Role:** Acts as the entry point for JSON-RPC connections. It initializes the `@modelcontextprotocol/sdk` server and handles native file I/O tools (like `open_file`, `save_file`, `new_document`), enforcing the security boundary constraints defined in Section 5.
+
+### The Execution Logic (The Brains)
+
+* **Path:** `packages/core/src/tools/schema.ts`
+* **Role:** Contains the standalone `ToolDef` objects (e.g., `get_node`, `set_fill`, `render`). These translate natural language or AI intentions into programmatic instructions against the OpenPencil `SceneGraph` API.
+
+### The Binary Codec (The Output)
+
+* **Path:** `packages/core/src/kiwi/` (Internal Logic)
+* **Role:** After tools manipulate the Scene Graph, calling `save_file` triggers the Kiwi codec. It mathematically compresses the active typescript state back into the raw `.fig` binary format to be persisted on the filesystem.

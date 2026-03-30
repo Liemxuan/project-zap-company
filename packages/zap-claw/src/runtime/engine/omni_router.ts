@@ -31,7 +31,7 @@ import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
 import { ChatOpenAI } from "@langchain/openai";
 import { HumanMessage, SystemMessage, AIMessage, BaseMessage, ToolMessage } from "@langchain/core/messages";
 
-export type OmniIntent = "REASONING" | "CODING" | "FAST_CHAT" | "LONG_CONTEXT" | "GENERAL";
+export type OmniIntent = "REASONING" | "CODING" | "FAST_CHAT" | "LONG_CONTEXT" | "GENERAL" | "ACP_SUBAGENT_SPAWN";
 export type ArbiterTheme = "A_ECONOMIC" | "B_PRODUCTIVITY" | "C_PRECISION";
 
 /**

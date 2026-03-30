@@ -1,5 +1,5 @@
+import { describe, it, expect, jest, beforeEach } from '@jest/globals';
 import { getOrCreateSession } from "../session.js";
-
 // Mock MongoDB model for isolated testing
 jest.mock("../session.js", () => ({
     getOrCreateSession: jest.fn()

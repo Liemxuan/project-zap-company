@@ -1,4 +1,5 @@
-import { Schema, model, models } from "mongoose";
+import mongoose from "mongoose";
+const { Schema, model, models } = mongoose;
 
 export interface ISession {
     sessionId: string;
@@ -34,6 +35,9 @@ const SessionSchema = new Schema<ISession>(
         timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
     }
 );
+
+// Enforce multi-tenant strict isolation via compound index
+SessionSchema.index({ tenantId: 1, channel: 1, chatId: 1, threadId: 1 }, { unique: true });
 
 export const Session = (models.SYS_CLAW_sessions as import("mongoose").Model<ISession>) || model<ISession>("SYS_CLAW_sessions", SessionSchema);
 

@@ -5,12 +5,29 @@ import { Text } from "zap-design/src/genesis/atoms/typography/text";
 import { AppShell } from "zap-design/src/zap/layout/AppShell";
 import { Clock } from "lucide-react";
 
+import { useQuery } from "@tanstack/react-query";
+
+interface SessionData {
+  id: string;
+  status: string;
+  turns: number;
+  createdAt: string;
+}
+
 export default function SessionsDashboard() {
-  const sessions = [
-    { id: "JERRY_SESSION_2026-03-29", status: "ACTIVE", turns: 14 },
-    { id: "SPIKE_SESSION_2026-03-29", status: "PENDING", turns: 2 },
-    { id: "HUD_SESSION_2026-03-28", status: "COMPLETED", turns: 8 },
-  ];
+  const { data, isLoading, error } = useQuery<{ success: boolean; sessions: SessionData[] }>({
+    queryKey: ['swarm-sessions'],
+    queryFn: async () => {
+      const res = await fetch('/api/swarm/sessions');
+      if (!res.ok) throw new Error('Network response was not ok');
+      return res.json();
+    }
+  });
+
+  if (isLoading) return <div className="text-on-surface-variant animate-pulse p-8">Loading Active Sessions...</div>;
+  if (error) return <div className="text-state-error bg-state-error/10 p-8 rounded-lg">Failed to connect to SYS_OS_job_queue.</div>;
+
+  const sessions = data?.sessions || [];
 
   return (
     <AppShell>

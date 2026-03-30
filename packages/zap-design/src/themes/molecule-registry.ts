@@ -70,6 +70,7 @@ const Progress = dynamic(() => import('../app/design/zap/molecules/progress/page
 const Tabs = dynamic(() => import('../app/design/zap/molecules/tabs/page'), { ssr: false });
 const Tooltip = dynamic(() => import('../app/design/zap/molecules/tooltip/page'), { ssr: false });
 const ThemeHeaderShowcase = dynamic(() => import('../app/design/zap/molecules/theme-header/page'), { ssr: false });
+const CleanShellPage = dynamic(() => import('../app/design/zap/molecules/clean-shell/page'), { ssr: false });
 
 // Auth molecules
 const RememberMeCheckboxPage = dynamic(() => import('../app/design/zap/molecules/remember-me-checkbox/page'), { ssr: false });
@@ -108,6 +109,7 @@ export const MOLECULE_REGISTRY: Record<string, MoleculeEntry> = {
     'tabs': { id: 'tabs', label: 'Tabs', tier: 'L4 MOLECULE', status: 'Verified', type: 'page', component: Tabs, icon: 'tab', category: 'Navigation' },
     'tooltip': { id: 'tooltip', label: 'Tooltip', tier: 'L4 MOLECULE', status: 'Verified', type: 'page', component: Tooltip, icon: 'info', category: 'Feedback' },
     'theme-header': { id: 'theme-header', label: 'Theme Header', tier: 'L4 MOLECULE', status: 'Verified', type: 'page', component: ThemeHeaderShowcase, icon: 'web_asset', category: 'Navigation' },
+    'clean-shell': { id: 'clean-shell', label: 'Clean Shell', tier: 'L6 ORGANISM', status: 'Verified', type: 'page', component: CleanShellPage, icon: 'web_asset', category: 'Layouts' },
 
     // ── Auth molecules ──────────────────────────────────────────────────
     'remember-me-checkbox': { id: 'remember-me-checkbox', label: 'Remember Me Checkbox', tier: 'L4 MOLECULE', status: 'Verified', type: 'page', component: RememberMeCheckboxPage, icon: 'check_box', category: 'Auth' },

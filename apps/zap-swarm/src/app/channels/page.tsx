@@ -5,13 +5,30 @@ import { Text } from "zap-design/src/genesis/atoms/typography/text";
 import { AppShell } from "zap-design/src/zap/layout/AppShell";
 import { MessageSquare, Users } from "lucide-react";
 
+import { useQuery } from "@tanstack/react-query";
+
+interface ChannelData {
+  name: string;
+  status: string;
+  users: number;
+  ping: string;
+}
+
 export default function ChannelsDashboard() {
-  const channels = [
-    { name: "Telegram", status: "active", users: 142, ping: "12ms" },
-    { name: "WhatsApp", status: "pending", users: 0, ping: "-" },
-    { name: "Discord", status: "active", users: 89, ping: "45ms" },
-    { name: "iMessage", status: "active", users: 12, ping: "8ms" },
-  ];
+  const { data, isLoading, error } = useQuery<{ success: boolean; channels: ChannelData[] }>({
+    queryKey: ['swarm-channels'],
+    queryFn: async () => {
+      const res = await fetch('/api/swarm/channels');
+      if (!res.ok) throw new Error('Network response was not ok');
+      return res.json();
+    }
+  });
+
+  if (isLoading) return <div className="text-on-surface-variant animate-pulse p-8">Loading Channels Registry...</div>;
+  if (error) return <div className="text-state-error bg-state-error/10 p-8 rounded-lg">Failed to connect to SYS_CHANNELS collection.</div>;
+
+  const channels = data?.channels || [];
+
 
   return (
     <AppShell>

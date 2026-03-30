@@ -151,7 +151,7 @@ export const CORE_THEME: ThemeConfig = {
             'user-session',
             // Additional molecules
             'alert', 'breadcrumb', 'data-readout', 'dropdown-menu', 'form',
-            'pagination', 'progress', 'tabs', 'tooltip', 'theme-header',
+            'pagination', 'progress', 'tabs', 'tooltip', 'theme-header', 'clean-shell',
             // Auth molecules
             'remember-me-checkbox', 'social-login-buttons', 'config-bar',
         ],
@@ -217,7 +217,7 @@ export const METRO_THEME: ThemeConfig = {
             'user-session',
             // Additional molecules
             'alert', 'breadcrumb', 'data-readout', 'dropdown-menu', 'form',
-            'pagination', 'progress', 'tabs', 'tooltip', 'theme-header',
+            'pagination', 'progress', 'tabs', 'tooltip', 'theme-header', 'clean-shell',
             // Auth molecules
             'remember-me-checkbox', 'social-login-buttons', 'config-bar',
         ],

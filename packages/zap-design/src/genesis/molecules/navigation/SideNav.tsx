@@ -71,6 +71,7 @@ const NAV_DATA: Category[] = [
             'Merchant Workspace',
             'Design Audit',
             'Typography Architect',
+            'Presentation Presets',
             'Data Grid',
             'Kanban Board',
             'Navigation Menu',
@@ -263,6 +264,7 @@ const getHref = (item: string, theme: string, activeWorkspaceId?: string | null,
             'Inspector System': `/design/${theme}/organisms/inspector`,
             'Design Audit': '/design/audit',
             'Typography Architect': `/design/${theme}/labs/typography-architect`,
+            'Presentation Presets': `/design/${theme}/features/ppt-presets`,
 
             // Static fallbacks
             'Wireframe': `/design/${theme}/template`,
@@ -370,7 +372,7 @@ export interface SideNavProps {
 }
 
 export const SideNav: React.FC<SideNavProps> = ({ showDevWrapper = false }) => {
-    const { theme, setTheme, devMode, setDevMode, sidebarState, setSidebarState, openCategories, setOpenCategories, isThemeLocked } = useTheme();
+    const { theme, setTheme, devMode, setDevMode, sidebarState, setSidebarState, openCategories, setOpenCategories, isThemeLocked, setIsThemeLocked } = useTheme();
     const isDev = showDevWrapper && devMode;
     const pathname = usePathname();
     const searchParams = useSearchParams();

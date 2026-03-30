@@ -23,14 +23,19 @@ export async function GET(req: Request) {
             query["historyContext.sessionId"] = sessionId;
         }
 
-        // Fetch pending or completed tasks from the active OmniQueue
-        const tasks = await db.collection("SYS_OS_dead_letters")
+        const activeJobs = await db.collection(`${tenantId}_SYS_OS_job_queue`)
+            .find(query)
+            .sort({ createdAt: -1 })
+            .limit(100)
+            .toArray();
+
+        const dlqJobs = await db.collection("SYS_OS_dead_letters")
             .find(query)
             .sort({ timestamp: -1 })
             .limit(100)
             .toArray();
 
-        return NextResponse.json({ tasks });
+        return NextResponse.json({ tasks: [...activeJobs, ...dlqJobs] });
     } catch (error: any) {
         return NextResponse.json({ error: `MongoDB query failed: ${error.message}` }, { status: 500 });
     } finally {

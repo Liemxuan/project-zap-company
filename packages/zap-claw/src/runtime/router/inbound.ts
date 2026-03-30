@@ -36,7 +36,7 @@ export async function handleTelegramWebhook(req: Request, res: Response) {
                         { role: "user", content: text } // Ensure the latest message is included
                     ],
                     theme: "A_ECONOMIC", // Default to economic theme
-                    intent: "FAST_CHAT"  // Default to fast chat
+                    intent: threadId ? "ACP_SUBAGENT_SPAWN" : "FAST_CHAT" // Native Thread Inference
                 };
 
                 // 4. Triage & Enqueue
@@ -62,7 +62,8 @@ export async function handleTelegramWebhook(req: Request, res: Response) {
                         tenantId,
                         senderIdentifier: chatId,
                         sessionId: session.sessionId,
-                        assignedAgentId: "default-agent"
+                        assignedAgentId: "default-agent",
+                        threadId // Pass deep binding string to OmniQueue
                     }
                 );
 

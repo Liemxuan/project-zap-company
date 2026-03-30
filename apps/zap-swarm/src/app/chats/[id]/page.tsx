@@ -164,10 +164,52 @@ export default function TraceExecution({ params }: { params: Promise<{ id: strin
   }, [resolvedParams.id]);
 
   // Artifacts State
-  const [artifacts, setArtifacts] = useState<{name: string, content: string, type: 'html' | 'image'}[]>([]);
+  const [artifacts, setArtifacts] = useState<{name: string, content: string, type: 'html' | 'image' | 'text'}[]>([]);
   const [activeArtifactIndex, setActiveArtifactIndex] = useState<number | null>(null);
   const [previewMode, setPreviewMode] = useState<'code' | 'preview'>('preview');
   const [showArtifacts, setShowArtifacts] = useState(true);
+
+  // VFS Artifacts Sync
+  useEffect(() => {
+    if (!resolvedParams.id) return;
+    
+    const fetchArtifacts = async () => {
+      try {
+        const res = await fetch(`/api/swarm/threads/${resolvedParams.id}/artifacts`);
+        if (res.ok) {
+          const data = await res.json();
+          if (data.artifacts) {
+             const parsed = data.artifacts.map((a: any) => ({
+                 name: a.filename,
+                 content: a.content,
+                 type: a.filename.endsWith('.html') ? 'html' : a.filename.match(/\\.(png|jpg|jpeg|gif|webp)$/i) ? 'image' : 'text'
+             }));
+             
+             setArtifacts(prev => {
+                const newArr = [...prev];
+                let changed = false;
+                
+                parsed.forEach((p: any) => {
+                   const existingIdx = newArr.findIndex(existing => existing.name === p.name);
+                   if (existingIdx === -1) {
+                      newArr.push(p);
+                      changed = true;
+                   } else if (newArr[existingIdx].content !== p.content) {
+                      newArr[existingIdx] = p;
+                      changed = true;
+                   }
+                });
+                return changed ? newArr : prev;
+             });
+          }
+        }
+      } catch (err) {}
+    };
+
+    fetchArtifacts();
+    const interval = setInterval(fetchArtifacts, 2500);
+    return () => clearInterval(interval);
+  }, [resolvedParams.id]);
 
   // Handle SSE Terminal Trace
   useEffect(() => {
@@ -348,17 +390,22 @@ export default function TraceExecution({ params }: { params: Promise<{ id: strin
   const [todosOpen, setTodosOpen] = useState(true);
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(logs);
+    const textToCopy = activeArtifactIndex === null ? logs : activeArtifactIndex === -1 ? JSON.stringify(jobs, null, 2) : artifacts[activeArtifactIndex].content;
+    navigator.clipboard.writeText(textToCopy);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
   const handleDownload = () => {
-    const blob = new Blob([logs], { type: 'text/plain' });
+    const content = activeArtifactIndex === null ? logs : activeArtifactIndex === -1 ? JSON.stringify(jobs, null, 2) : artifacts[activeArtifactIndex].content;
+    const filename = activeArtifactIndex === null ? `system_trace_${resolvedParams.id}.log` : activeArtifactIndex === -1 ? `omni_queue_dag.json` : artifacts[activeArtifactIndex].name;
+    const type = activeArtifactIndex === null || activeArtifactIndex === -1 ? 'text/plain' : artifacts[activeArtifactIndex].type === 'html' ? 'text/html' : 'application/octet-stream';
+
+    const blob = new Blob([content], { type });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `system_trace_${resolvedParams.id}.log`;
+    a.download = filename;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -368,8 +415,20 @@ export default function TraceExecution({ params }: { params: Promise<{ id: strin
   const handleOpenNewWindow = () => {
     const newWindow = window.open('', '_blank');
     if (newWindow) {
-      newWindow.document.write(`<pre style="background:#000;color:#0f0;padding:20px;margin:0;min-height:100vh;">${logs}</pre>`);
-      newWindow.document.title = `Trace: ${resolvedParams.id}`;
+      if (activeArtifactIndex === null) {
+         newWindow.document.write(`<pre style="background:#000;color:#0f0;padding:20px;margin:0;min-height:100vh;">${logs}</pre>`);
+      } else if (activeArtifactIndex === -1) {
+         newWindow.document.write(`<pre>${JSON.stringify(jobs, null, 2)}</pre>`);
+      } else {
+         if (artifacts[activeArtifactIndex].type === 'html') {
+             newWindow.document.write(artifacts[activeArtifactIndex].content);
+         } else if (artifacts[activeArtifactIndex].type === 'image') {
+             newWindow.document.write(`<img src="${artifacts[activeArtifactIndex].content}" style="max-width:100%; height:auto;" />`);
+         } else {
+             newWindow.document.write(`<pre>${artifacts[activeArtifactIndex].content}</pre>`);
+         }
+      }
+      newWindow.document.title = (activeArtifactIndex === null ? `Trace: ${resolvedParams.id}` : activeArtifactIndex === -1 ? `DAG: ${resolvedParams.id}` : artifacts[activeArtifactIndex].name) ?? 'Preview';
     }
   };
 
