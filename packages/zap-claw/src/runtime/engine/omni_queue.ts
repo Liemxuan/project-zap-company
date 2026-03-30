@@ -219,9 +219,18 @@ export class OmniQueueManager {
             let response: any;
             
             if (job.payload.intent?.startsWith("DAG_STAGE_")) {
-                const delay = job.payload.contextParams?.simulateDelay || 2000;
-                await new Promise(resolve => setTimeout(resolve, delay));
-                response = { text: `Simulated DAG Node completed after ${delay}ms` };
+                // Phase 3: Real DAG node dispatch through OmniRouter
+                // Optional test delay for /test-dag workflows (non-blocking warmup)
+                const testDelay = job.payload.contextParams?.simulateDelay;
+                if (testDelay && typeof testDelay === 'number' && testDelay > 0) {
+                    await logTrace(`> ⏳ [DAG] Node warmup delay: ${testDelay}ms`);
+                    await new Promise(resolve => setTimeout(resolve, Math.min(testDelay, 10000))); // Cap at 10s
+                }
+                
+                const { generateOmniContent } = await import('./omni_router.js');
+                await logTrace(`> 🕸️ [DAG] Executing node ${job._id} via OmniRouter (intent: ${job.payload.intent})`);
+                response = await generateOmniContent(job.config, job.payload);
+                await logTrace(`> ✅ [DAG] Node ${job._id} completed. Model: ${response.modelId}`);
             } else {
                 const { generateOmniContent } = await import('./omni_router.js');
                 response = await generateOmniContent(job.config, job.payload);
