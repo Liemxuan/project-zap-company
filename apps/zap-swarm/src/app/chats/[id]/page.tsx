@@ -79,70 +79,30 @@ export default function TraceExecution({ params }: { params: Promise<{ id: strin
     }
   ]);
 
-  // Demo Injection for trace-1
+  // Fetch Real History (Phase 5: Live Data Integration)
   useEffect(() => {
-    if (resolvedParams.id === 'trace-1' && messages.length === 1) {
-       setLogs(prev => prev + `
-> 👤 [user] create a minimalist skincare landing page for a brand called CAREN. include a hero image.
-> ⚙️ [system] Enqueueing job to OmniQueue (ID: job_z8x2)...
-> ⚙️ [system] Agent Spike assigned. Processing multi-modal request...
-> ⚙️ [system] Loading image generation skill...
-> ✅ [skill] /mnt/skills/public/image-generation/scripts/generate.py --prompt "Premium minimalist skincare product bottle, white background, soft lighting" --output /outputs/caren-hero.jpg
-> 🖼️ [image] /Users/zap/.gemini/antigravity/brain/b5ddbb9f-2d3d-4725-836a-4bbefa28f6c3/caren_skincare_hero_1774783072864.png
-> ⚙️ [system] Skill execution successful. Generating landing page structure...
-> 🤖 [reply] I have designed the 'Pure Beauty' landing page for CAREN. You can preview the minimalist aesthetic and the generated hero asset in the Artifacts pane.
-
-\`\`\`html
-<!DOCTYPE html>
-<html>
-<head>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body { font-family: 'Inter', sans-serif; }
-        h1, h2 { font-family: 'Playfair+Display', serif; }
-    </style>
-</head>
-<body className="bg-[#fcfbf9] text-[#2d2d2d]">
-    <nav className="p-8 flex justify-between items-center bg-white/50 backdrop-blur-md sticky top-0 z-50">
-        <div className="text-2xl tracking-[0.3em] font-light">C A R E N</div>
-        <div className="flex gap-8 text-[11px] uppercase tracking-widest font-medium opacity-60">
-            <span>Collection</span>
-            <span>About</span>
-            <span>Journal</span>
-        </div>
-        <button className="px-6 py-2 bg-[#2d2d2d] text-white text-[10px] uppercase tracking-widest rounded-none">Shop Now</button>
-    </nav>
-
-    <main className="max-w-6xl mx-auto px-8 py-20">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-20 items-center">
-            <div className="space-y-8">
-                <div className="text-[11px] uppercase tracking-[0.4em] text-primary/60 font-medium">New Collection</div>
-                <h1 className="text-7xl leading-tight">Pure Beauty, <span className="italic text-primary/40">Simplified</span></h1>
-                <p className="text-lg font-light leading-relaxed opacity-70 max-w-md">Discover the art of less. Our minimalist skincare routine delivers maximum results with carefully curated, clean ingredients that honor your skins natural balance.</p>
-                <div className="pt-8">
-                    <button className="flex items-center gap-4 text-[11px] uppercase tracking-[0.3em] font-bold border-b border-[#2d2d2d] pb-2 hover:gap-8 transition-all">
-                        Explore Collection
-                        <svg className="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
-                    </button>
-                </div>
-            </div>
-            <div className="relative group">
-                <div className="absolute -inset-4 border border-[#2d2d2d]/5 rounded-none -z-10 group-hover:inset-0 transition-all duration-700"></div>
-                <img src="/Users/zap/.gemini/antigravity/brain/b5ddbb9f-2d3d-4725-836a-4bbefa28f6c3/caren_skincare_hero_1774783072864.png" className="w-full h-auto shadow-2xl grayscale-[0.2] hover:grayscale-0 transition-all duration-1000" />
-            </div>
-        </div>
-    </main>
-
-    <footer className="mt-40 border-t border-black/5 p-20 text-center">
-        <div className="text-2xl tracking-[0.3em] font-light opacity-20">C A R E N</div>
-    </footer>
-</body>
-</html>
-\`\`\`
-`);
-    }
-  }, [resolvedParams.id, messages.length]);
+    if (!resolvedParams.id) return;
+    const fetchHistory = async () => {
+      try {
+        const res = await fetch(`/api/swarm/history/${resolvedParams.id}`);
+        if (res.ok) {
+          const data = await res.json();
+          if (data.history && data.history.length > 0) {
+            setMessages(data.history.map((h: any) => ({
+              id: h.id.toString(),
+              role: h.role === 'user' ? 'user' : 'agent',
+              content: h.tool_name ? `[Tool: ${h.tool_name}]\n${h.content}` : h.content,
+              timestamp: new Date(h.created_at).toLocaleTimeString()
+            })));
+            setLogs(prev => prev + `\n> 📦 [system] Restored ${data.history.length} historical messages from database.\n`);
+          }
+        }
+      } catch (err) {
+        console.error("Failed to load history:", err);
+      }
+    };
+    fetchHistory();
+  }, [resolvedParams.id]);
 
   // OmniQueue Auto-Polling for DAG Visualizer
   useEffect(() => {

@@ -16,7 +16,7 @@ export interface Message {
   created_at?: number | Date;
 }
 
-export async function getHistory(userId: number, accountType: string = "PERSONAL", limit = 20): Promise<Message[]> {
+export async function getHistory(userId: string | number, accountType: string = "PERSONAL", limit = 20): Promise<Message[]> {
   const cacheKey = `thread_data:history:${userId}:${accountType}`;
   try {
     const cached = await ThreadDataMiddleware.lrange(cacheKey, 0, limit - 1);
@@ -91,7 +91,7 @@ function parserMessageFormatter(r: any): Message {
 
     return {
       id: r.id,
-      user_id: parseInt(r.sessionId || r.user_id?.toString() || "0", 10),
+      user_id: r.sessionId || r.user_id?.toString() || "0",
       role: r.role.toLowerCase() as any,
       content: content,
       tool_name,
@@ -100,7 +100,7 @@ function parserMessageFormatter(r: any): Message {
 }
 
 export async function appendMessage(
-  userId: number,
+  userId: string | number,
   role: 'user' | 'assistant' | 'tool' | 'system',
   content: string,
   accountType: string = "PERSONAL",
@@ -153,7 +153,7 @@ export async function appendMessage(
 }
 
 
-export async function pruneHistory(userId: number, keepLast = 200): Promise<void> {
+export async function pruneHistory(userId: string | number, keepLast = 200): Promise<void> {
   const toKeep = await prisma.interaction.findMany({
     where: { sessionId: userId.toString() },
     orderBy: { createdAt: 'desc' },

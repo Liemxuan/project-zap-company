@@ -1,4 +1,5 @@
 import express from 'express';
+import { Redis } from 'ioredis';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import { handleTelegramWebhook } from './platforms/telegram.js';
@@ -518,9 +519,38 @@ const HUDChatSchema = z.object({
 });
 
 // ==========================================
+// ZAP SWARM CHAT HISTORY INGESTION
+// ==========================================
+app.get('/api/history/:sessionId', async (req, res) => {
+    // allow CORS for Next.js dev server on :3000
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+    const sessionId = req.params.sessionId;
+    
+    // Dynamic import to avoid circular dependencies with Prisma/Redis connection flows if not needed
+    try {
+        const { getHistory } = await import('./history.js');
+        const history = await getHistory(sessionId, req.query.accountType as string || "PERSONAL", 100);
+        res.status(200).json({ success: true, history });
+    } catch (e: any) {
+        console.error("[History API] Error fetching history:", e);
+        res.status(500).json({ error: e.message || "Failed to fetch chat history." });
+    }
+});
+
+// Preflight CORS handler for /api/history
+app.options('/api/history/:sessionId', (req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    res.status(200).end();
+});
+
+// ==========================================
 // ZAP DESIGN HUD COMMAND INGESTION
 // ==========================================
-// Expects POST request from the ZAP Design Engine MasterVerticalShell Command Bar
 app.post('/api/hud/chat', async (req, res) => {
     // allow CORS for Next.js dev server on :3000
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
@@ -561,6 +591,93 @@ app.post('/api/hud/chat', async (req, res) => {
         console.error("[HUD Chat API] Error processing HUD request:", e);
         res.write(`data: ${JSON.stringify({ error: e.message || "Failed to process HUD command." })}\n\n`);
         res.end();
+    }
+});
+
+// ==========================================
+// ZAP SWARM ASYNC COMMAND INGESTION
+// ==========================================
+app.post('/api/swarm/chat', async (req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+    if (req.method === 'OPTIONS') {
+        res.status(200).end();
+        return;
+    }
+
+    const { sessionId, agentId, message, tenantId } = req.body;
+    
+    if (!sessionId || !agentId || !message) {
+        res.status(400).json({ error: "Missing required fields." });
+        return;
+    }
+
+    try {
+        // Enqueue the job for frontend tracking
+        const { MongoClient } = await import("mongodb");
+        const client = new MongoClient(process.env.MONGODB_URI || "mongodb://localhost:27017");
+        await client.connect();
+        const db = client.db("olympus");
+        const col = db.collection(`${tenantId || "ZVN"}_SYS_OS_job_queue`);
+        
+        const jobResult = await col.insertOne({
+            status: "PENDING",
+            queueName: "Queue-Short",
+            priority: 0,
+            tenantId: tenantId || "ZVN",
+            sourceChannel: "SWARM",
+            historyContext: { sessionId, assignedAgentId: agentId },
+            payload: { messages: [{ role: "user", content: message }] },
+            createdAt: new Date()
+        });
+        
+        const jobId = jobResult.insertedId;
+        await client.close();
+
+        // Return immediately so the UI doesn't block
+        res.status(200).json({ success: true, jobId, sessionId });
+
+        // Kick off background execution
+        setTimeout(async () => {
+            try {
+                const { AgentLoop } = await import('./agent.js');
+                const loop = new AgentLoop("tier_p3_heavy", agentId);
+                
+                const redis = new Redis(process.env.REDIS_URL || "redis://localhost:6379");
+                
+                const onStatus = async (msg: string) => {
+                    const formattedMsg = `> ⚙️ [system] ${msg}\r\n`;
+                    await redis.rpush(`zap:trace:${sessionId}:logs`, formattedMsg);
+                    await redis.publish(`zap:trace:${sessionId}`, formattedMsg);
+                };
+
+                await onStatus(`Agent ${agentId} assigned. Processing multi-modal request...`);
+                
+                const response = await loop.run(sessionId as any, message, "OLYMPUS_SWARM", sessionId, onStatus);
+
+                const replyMsg = `> 🤖 [reply] ${response}\r\n`;
+                await redis.rpush(`zap:trace:${sessionId}:logs`, replyMsg);
+                await redis.publish(`zap:trace:${sessionId}`, replyMsg);
+                
+                // Mark job complete
+                const updateClient = new MongoClient(process.env.MONGODB_URI || "mongodb://localhost:27017");
+                await updateClient.connect();
+                await updateClient.db("olympus").collection(`${tenantId || "ZVN"}_SYS_OS_job_queue`).updateOne(
+                    { _id: jobId },
+                    { $set: { status: "COMPLETED", completedAt: new Date() } }
+                );
+                await updateClient.close();
+                redis.quit();
+            } catch (err: any) {
+                console.error("[Swarm Async] Background execution failed:", err);
+            }
+        }, 100);
+
+    } catch (e: any) {
+        console.error("[Swarm Chat API] Error processing swarm request:", e);
+        res.status(500).json({ error: e.message || "Failed to process swarm command." });
     }
 });
 
