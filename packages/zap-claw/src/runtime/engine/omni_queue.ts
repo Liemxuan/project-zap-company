@@ -38,7 +38,7 @@ export interface OmniJob {
     _id?: ObjectId;
     queueName: QueueName;
     priority: QueuePriority;
-    status: "PENDING" | "PROCESSING" | "COMPLETED" | "FAILED" | "WAITING_APPROVAL" | "BLOCKED";
+    status: "PENDING" | "PROCESSING" | "COMPLETED" | "FAILED" | "WAITING_APPROVAL" | "BLOCKED" | "CANCELLED";
     dependsOn?: ObjectId[];
     workflowId?: string;
     tenantId: string;
@@ -147,6 +147,79 @@ export class OmniQueueManager {
         return false;
     }
 
+    /**
+     * Cancel a job. If it belongs to a DAG workflow, cancel all PENDING/BLOCKED siblings.
+     */
+    async cancelJob(jobId: string, tenantId: string = "ZVN"): Promise<{ cancelled: number }> {
+        const db = this.client.db(DB_NAME);
+        const col = db.collection<OmniJob>(getQueueCollection(tenantId));
+
+        const job = await col.findOne({ _id: new ObjectId(jobId) });
+        if (!job) return { cancelled: 0 };
+
+        let cancelled = 0;
+
+        // Cancel the target job if it's in a cancellable state
+        if (["PENDING", "BLOCKED", "WAITING_APPROVAL"].includes(job.status)) {
+            await col.updateOne(
+                { _id: job._id },
+                { $set: { status: "CANCELLED", completedAt: new Date(), errorMap: "Cancelled by operator" } }
+            );
+            cancelled++;
+            console.log(`[OmniQueue] 🛑 Job ${jobId} cancelled.`);
+        }
+
+        // Cascade cancel across the DAG workflow
+        if (job.workflowId) {
+            const res = await col.updateMany(
+                {
+                    workflowId: job.workflowId,
+                    status: { $in: ["PENDING", "BLOCKED", "WAITING_APPROVAL"] }
+                },
+                { $set: { status: "CANCELLED", completedAt: new Date(), errorMap: `Cascade cancel from job ${jobId}` } }
+            );
+            cancelled += res.modifiedCount;
+            console.log(`[OmniQueue] 🛑 DAG Workflow ${job.workflowId}: ${res.modifiedCount} sibling jobs cancelled.`);
+        }
+
+        return { cancelled };
+    }
+
+    /**
+     * Reap stale jobs stuck in PROCESSING for longer than maxAgeMs (default 30 min).
+     * Moves them back to PENDING if retries remain, or FAILED otherwise.
+     */
+    async reapStaleJobs(tenantId: string = "ZVN", maxAgeMs: number = 30 * 60 * 1000): Promise<number> {
+        const db = this.client.db(DB_NAME);
+        const col = db.collection<OmniJob>(getQueueCollection(tenantId));
+        const cutoff = new Date(Date.now() - maxAgeMs);
+
+        const staleJobs = await col.find({
+            status: "PROCESSING",
+            startedAt: { $lt: cutoff }
+        }).toArray();
+
+        let reaped = 0;
+        for (const job of staleJobs) {
+            const retries = job.retryCount || 0;
+            if (retries < 3) {
+                await col.updateOne(
+                    { _id: job._id },
+                    { $set: { status: "PENDING", retryCount: retries + 1, errorMap: "Reaped: exceeded max processing time" } }
+                );
+            } else {
+                await col.updateOne(
+                    { _id: job._id },
+                    { $set: { status: "FAILED", completedAt: new Date(), errorMap: "Reaped: exceeded max processing time after 3 retries" } }
+                );
+            }
+            reaped++;
+            console.log(`[OmniQueue] 🧹 Reaped stale job ${job._id} (age: ${Math.round((Date.now() - (job.startedAt?.getTime() || 0)) / 1000)}s)`);
+        }
+
+        return reaped;
+    }
+
     async getJobStatus(jobId: string, tenantId: string = "ZVN"): Promise<OmniJob | null> {
         const db = this.client.db(DB_NAME);
         const col = db.collection<OmniJob>(getQueueCollection(tenantId));
@@ -215,25 +288,34 @@ export class OmniQueueManager {
                 }
             }
 
-            // Processing logic using standard router
+            // Processing logic using standard router with per-node timeout
             let response: any;
+            const TIMEOUT_MS = job.queueName === "Queue-Complex" ? 15 * 60 * 1000 : 5 * 60 * 1000; // 15 min complex, 5 min standard
+
+            const executeWithTimeout = async (fn: () => Promise<any>, timeoutMs: number): Promise<any> => {
+                return Promise.race([
+                    fn(),
+                    new Promise((_, reject) =>
+                        setTimeout(() => reject(new Error(`JOB_TIMEOUT: Exceeded ${Math.round(timeoutMs / 1000)}s execution limit`)), timeoutMs)
+                    )
+                ]);
+            };
             
             if (job.payload.intent?.startsWith("DAG_STAGE_")) {
                 // Phase 3: Real DAG node dispatch through OmniRouter
-                // Optional test delay for /test-dag workflows (non-blocking warmup)
                 const testDelay = job.payload.contextParams?.simulateDelay;
                 if (testDelay && typeof testDelay === 'number' && testDelay > 0) {
                     await logTrace(`> ⏳ [DAG] Node warmup delay: ${testDelay}ms`);
-                    await new Promise(resolve => setTimeout(resolve, Math.min(testDelay, 10000))); // Cap at 10s
+                    await new Promise(resolve => setTimeout(resolve, Math.min(testDelay, 10000)));
                 }
                 
                 const { generateOmniContent } = await import('./omni_router.js');
                 await logTrace(`> 🕸️ [DAG] Executing node ${job._id} via OmniRouter (intent: ${job.payload.intent})`);
-                response = await generateOmniContent(job.config, job.payload);
+                response = await executeWithTimeout(() => generateOmniContent(job.config, job.payload), TIMEOUT_MS);
                 await logTrace(`> ✅ [DAG] Node ${job._id} completed. Model: ${response.modelId}`);
             } else {
                 const { generateOmniContent } = await import('./omni_router.js');
-                response = await generateOmniContent(job.config, job.payload);
+                response = await executeWithTimeout(() => generateOmniContent(job.config, job.payload), TIMEOUT_MS);
             }
 
             await col.updateOne(

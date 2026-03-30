@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { MongoClient } from "mongodb";
 import path from "path";
 import dotenv from "dotenv";
+import { logger } from "@/lib/logger";
 
 // Preload the env from core
 dotenv.config({ path: path.resolve(process.cwd(), "../../zap-core/.env"), override: true });
@@ -19,6 +20,7 @@ export async function GET() {
 
         return NextResponse.json({ count });
     } catch (error: any) {
+        logger.error("ZSS audit query failed", { error: error.message });
         return NextResponse.json({ error: `MongoDB query failed: ${error.message}` }, { status: 500 });
     } finally {
         if (client) await client.close();

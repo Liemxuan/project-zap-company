@@ -4,7 +4,7 @@ import { Heading } from "zap-design/src/genesis/atoms/typography/headings";
 import { Text } from "zap-design/src/genesis/atoms/typography/text";
 import { AppShell } from "zap-design/src/zap/layout/AppShell";
 import { ThemeHeader } from "zap-design/src/genesis/molecules/layout/ThemeHeader";
-import { Puzzle, RefreshCw } from "lucide-react";
+import { Puzzle, RefreshCw, Activity, CheckCircle, XCircle, Clock } from "lucide-react";
 import { Button } from "zap-design/src/genesis/atoms/interactive/button";
 
 import { useQuery } from "@tanstack/react-query";
@@ -14,6 +14,22 @@ interface SkillData {
   cat: string;
   desc: string;
   path: string;
+}
+
+interface ExecutionStats {
+  total: number;
+  dispatched: number;
+  completed: number;
+  failed: number;
+}
+
+interface ExecutionRecord {
+  _id: string;
+  skillName: string;
+  status: string;
+  agentId: string;
+  timestamp: string;
+  input: string;
 }
 
 export default function SkillsDashboard() {
@@ -26,7 +42,19 @@ export default function SkillsDashboard() {
     }
   });
 
+  const { data: execData } = useQuery<{ success: boolean; executions: ExecutionRecord[]; stats: ExecutionStats }>({
+    queryKey: ['swarm-skill-executions'],
+    queryFn: async () => {
+      const res = await fetch('/api/swarm/skills/executions?limit=10');
+      if (!res.ok) throw new Error('Network response was not ok');
+      return res.json();
+    },
+    refetchInterval: 10_000, // poll every 10s
+  });
+
   const skills = data?.skills || [];
+  const stats = execData?.stats || { total: 0, dispatched: 0, completed: 0, failed: 0 };
+  const recentExecs = execData?.executions || [];
 
   return (
     <AppShell>
@@ -39,7 +67,8 @@ export default function SkillsDashboard() {
         />
         
         <main className="flex-1 overflow-y-auto p-8">
-          <div className="flex justify-between items-center mb-8 bg-layer-cover p-6 rounded-[var(--card-radius,12px)] border border-outline/10 shadow-[var(--shadow-elevation-1,0_1px_2px_rgba(0,0,0,0.05))]">
+          {/* ── Header Card ──────────────────────────── */}
+          <div className="flex justify-between items-center mb-6 bg-layer-cover p-6 rounded-[var(--card-radius,12px)] border border-outline/10 shadow-[var(--shadow-elevation-1,0_1px_2px_rgba(0,0,0,0.05))]">
             <div className="flex flex-col gap-1 max-w-2xl">
               <Heading level={3} className="text-on-surface">Capability Plugins</Heading>
               <Text size="body-small" className="text-on-surface-variant">
@@ -56,6 +85,75 @@ export default function SkillsDashboard() {
               {isFetching ? 'Scanning...' : 'Resync Skills Directory'}
             </Button>
           </div>
+
+          {/* ── Execution Health Panel ────────────────── */}
+          <div className="grid grid-cols-4 gap-4 mb-6">
+            <StatCard 
+              label="Total Executions" 
+              value={stats.total} 
+              icon={<Activity className="size-4" />}
+              color="text-primary"
+              bgColor="bg-primary/10"
+            />
+            <StatCard 
+              label="In Flight" 
+              value={stats.dispatched} 
+              icon={<Clock className="size-4" />}
+              color="text-state-warning"
+              bgColor="bg-state-warning/10"
+            />
+            <StatCard 
+              label="Completed" 
+              value={stats.completed} 
+              icon={<CheckCircle className="size-4" />}
+              color="text-state-success"
+              bgColor="bg-state-success/10"
+            />
+            <StatCard 
+              label="Failed" 
+              value={stats.failed} 
+              icon={<XCircle className="size-4" />}
+              color="text-state-error"
+              bgColor="bg-state-error/10"
+            />
+          </div>
+
+          {/* ── Recent Executions Table ───────────────── */}
+          {recentExecs.length > 0 && (
+            <div className="mb-8 bg-layer-cover rounded-[var(--card-radius,12px)] border border-outline/10 shadow-[var(--shadow-elevation-1,0_1px_2px_rgba(0,0,0,0.05))] overflow-hidden">
+              <div className="px-5 py-3 border-b border-outline/5">
+                <Heading level={4} className="text-on-surface text-sm">Recent Executions</Heading>
+              </div>
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="text-left text-on-surface-variant/70 border-b border-outline/5">
+                    <th className="px-5 py-2 font-medium">Skill</th>
+                    <th className="px-5 py-2 font-medium">Agent</th>
+                    <th className="px-5 py-2 font-medium">Status</th>
+                    <th className="px-5 py-2 font-medium">Input</th>
+                    <th className="px-5 py-2 font-medium">Time</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {recentExecs.map((exec) => (
+                    <tr key={exec._id} className="border-b border-outline/5 last:border-0 hover:bg-layer-cover/50 transition-colors">
+                      <td className="px-5 py-2.5 font-mono text-xs text-on-surface">{exec.skillName}</td>
+                      <td className="px-5 py-2.5 text-on-surface-variant">{exec.agentId}</td>
+                      <td className="px-5 py-2.5">
+                        <StatusBadge status={exec.status} />
+                      </td>
+                      <td className="px-5 py-2.5 text-on-surface-variant/70 truncate max-w-[200px]" title={exec.input}>
+                        {exec.input?.substring(0, 60) || '—'}
+                      </td>
+                      <td className="px-5 py-2.5 text-on-surface-variant/60 text-xs font-mono">
+                        {formatRelativeTime(exec.timestamp)}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
 
           {isLoading && <div className="text-on-surface-variant animate-pulse p-4">Scanning Master File System...</div>}
           {error && <div className="text-state-error bg-state-error/10 p-4 rounded-lg">Failed to connect to SYS_SKILLS collection.</div>}
@@ -88,4 +186,49 @@ export default function SkillsDashboard() {
       </div>
     </AppShell>
   );
+}
+
+// ── Sub-components ──────────────────────────────────
+
+function StatCard({ label, value, icon, color, bgColor }: {
+  label: string; value: number; icon: React.ReactNode; color: string; bgColor: string;
+}) {
+  return (
+    <div className="bg-layer-cover p-4 rounded-[var(--card-radius,12px)] border border-outline/10 shadow-[var(--shadow-elevation-1,0_1px_2px_rgba(0,0,0,0.05))]">
+      <div className="flex items-center gap-2 mb-2">
+        <div className={`size-7 ${bgColor} rounded-md flex items-center justify-center ${color}`}>
+          {icon}
+        </div>
+        <Text size="label-small" className="text-on-surface-variant">{label}</Text>
+      </div>
+      <Heading level={2} className={`${color} text-2xl font-bold tabular-nums`}>
+        {value.toLocaleString()}
+      </Heading>
+    </div>
+  );
+}
+
+function StatusBadge({ status }: { status: string }) {
+  const config: Record<string, { bg: string; text: string; label: string }> = {
+    DISPATCHED: { bg: 'bg-state-warning/10', text: 'text-state-warning', label: 'In Flight' },
+    COMPLETED: { bg: 'bg-state-success/10', text: 'text-state-success', label: 'Completed' },
+    FAILED: { bg: 'bg-state-error/10', text: 'text-state-error', label: 'Failed' },
+  };
+  const c = config[status] || { bg: 'bg-outline/10', text: 'text-on-surface-variant', label: status };
+  return (
+    <span className={`px-2 py-0.5 rounded text-xs font-semibold ${c.bg} ${c.text}`}>
+      {c.label}
+    </span>
+  );
+}
+
+function formatRelativeTime(timestamp: string): string {
+  const now = Date.now();
+  const then = new Date(timestamp).getTime();
+  const diffMs = now - then;
+  
+  if (diffMs < 60_000) return 'just now';
+  if (diffMs < 3_600_000) return `${Math.floor(diffMs / 60_000)}m ago`;
+  if (diffMs < 86_400_000) return `${Math.floor(diffMs / 3_600_000)}h ago`;
+  return `${Math.floor(diffMs / 86_400_000)}d ago`;
 }

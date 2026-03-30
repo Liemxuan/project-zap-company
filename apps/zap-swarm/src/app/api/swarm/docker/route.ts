@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import http from "http";
+import { logger } from "@/lib/logger";
 
 const fetchDockerAPI = (path: string): Promise<string> => {
     return new Promise((resolve, reject) => {
@@ -39,6 +40,7 @@ export async function GET() {
 
         return NextResponse.json({ containers: swarmContainers });
     } catch (error: any) {
+        logger.error("Docker telemetry failed", { error: error.message });
         return NextResponse.json({ error: `Docker unix socket telemetry failed: ${error.message}` }, { status: 500 });
     }
 }
