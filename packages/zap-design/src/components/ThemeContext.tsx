@@ -44,6 +44,8 @@ type ThemeContextType = {
     setTypographyOverrides: (state: TypographyOverrides | null) => void;
     openCategories: OpenCategoriesState;
     setOpenCategories: React.Dispatch<React.SetStateAction<OpenCategoriesState>>;
+    isThemeLocked: boolean;
+    setIsThemeLocked: (state: boolean) => void;
 };
 
 const ThemeContext = React.createContext<ThemeContextType | undefined>(undefined);
@@ -52,32 +54,49 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     const [theme, setTheme] = React.useState<AppTheme>('metro');
 
     // Sync theme with pathname after mount to fix hydration SSR mismatch
+    const [isThemeLocked, setIsThemeLocked] = React.useState<boolean>(false);
+
     React.useEffect(() => {
+        const lockedState = localStorage.getItem('zap-theme-lock') === 'true';
+        setIsThemeLocked(lockedState);
+
         const path = window.location.pathname;
-        let nextTheme: AppTheme | null = null;
-        if (path.includes('/core')) nextTheme = 'core';
-        else if (path.includes('/metro')) nextTheme = 'metro';
-        else if (path.includes('/neo')) nextTheme = 'neo';
-        else if (path.includes('/wix')) nextTheme = 'wix';
-        
-        if (nextTheme) {
-            setTheme(nextTheme);
-            localStorage.setItem('zap-theme', nextTheme);
+        if (lockedState) {
+            const saved = (localStorage.getItem('zap-theme') as AppTheme) || 'metro';
+            setTheme(saved);
+            
+            // Rewrite URL to prevent layout mismatches if hard-changed via address bar
+            if (path.includes('/design/') && !path.includes(`/design/${saved}`)) {
+                const newPath = path.replace(/\/design\/(core|metro|neo|wix)/, `/design/${saved}`);
+                if (newPath !== path) window.history.replaceState(null, '', newPath);
+            }
         } else {
-            const saved = localStorage.getItem('zap-theme') as AppTheme;
-            if (saved === 'core' || saved === 'neo' || saved === 'wix' || saved === 'metro') {
-                setTheme(saved);
+            let nextTheme: AppTheme | null = null;
+            if (path.includes('/core')) nextTheme = 'core';
+            else if (path.includes('/metro')) nextTheme = 'metro';
+            else if (path.includes('/neo')) nextTheme = 'neo';
+            else if (path.includes('/wix')) nextTheme = 'wix';
+            
+            if (nextTheme) {
+                setTheme(nextTheme);
+                localStorage.setItem('zap-theme', nextTheme);
             } else {
-                setTheme('metro');
-                localStorage.setItem('zap-theme', 'metro');
+                const saved = localStorage.getItem('zap-theme') as AppTheme;
+                if (saved === 'core' || saved === 'neo' || saved === 'wix' || saved === 'metro') {
+                    setTheme(saved);
+                } else {
+                    setTheme('metro');
+                    localStorage.setItem('zap-theme', 'metro');
+                }
             }
         }
     }, []);
 
-    // Also persist theme whenever it changes
+    // Persist theme and lock whenever they change
     React.useEffect(() => {
         localStorage.setItem('zap-theme', theme);
-    }, [theme]);
+        localStorage.setItem('zap-theme-lock', isThemeLocked.toString());
+    }, [theme, isThemeLocked]);
 
     const [devMode, setDevMode] = React.useState(false);
 
@@ -255,7 +274,8 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
             sidebarState, setSidebarState,
             inspectorState, setInspectorState,
             typographyOverrides, setTypographyOverrides,
-            openCategories, setOpenCategories
+            openCategories, setOpenCategories,
+            isThemeLocked, setIsThemeLocked
         }}>
             {children}
         </ThemeContext.Provider>

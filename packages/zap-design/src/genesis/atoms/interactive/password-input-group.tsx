@@ -31,9 +31,9 @@ export function PasswordInputGroup({ className, ...props }: PasswordInputGroupPr
         aria-label={isVisible ? "Hide password" : "Show password"}
       >
         {isVisible ? (
-          <EyeOff className="size-4 animate-in fade-in zoom-in-75 duration-200" />
+          <EyeOff className="size-4 animate-in fade-in zoom-in-75 duration-200" aria-hidden="true" />
         ) : (
-          <Eye className="size-4 animate-in fade-in zoom-in-75 duration-200" />
+          <Eye className="size-4 animate-in fade-in zoom-in-75 duration-200" aria-hidden="true" />
         )}
       </button>
     </div>

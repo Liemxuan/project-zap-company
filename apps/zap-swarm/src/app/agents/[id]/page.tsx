@@ -3,9 +3,10 @@
 import Link from "next/link";
 import { ArrowLeft, Save, ShieldAlert, Sparkles, Sliders, Lock } from "lucide-react";
 import { use, useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Heading } from "zap-design/src/genesis/atoms/typography/headings";
 import { Text } from "zap-design/src/genesis/atoms/typography/text";
+import { AppShell } from "zap-design/src/zap/layout/AppShell";
 
 export default function AgentDetail({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = use(params);
@@ -155,13 +156,14 @@ export default function AgentDetail({ params }: { params: Promise<{ id: string }
                       <div className="flex flex-col gap-4">
                          <div className="flex flex-col gap-2">
                             <Text size="label-small" weight="bold" className="text-on-surface-variant">Max Identical Iterations (Loop Engine Check)</Text>
-                            <input type="number" defaultValue="3" className="w-max bg-layer-base border border-outline/10 px-4 py-2 rounded-[var(--input-border-radius,8px)] text-on-surface focus:border-primary focus:outline-none" />
+                            <input type="number" defaultValue="3" aria-label="Max Identical Iterations" className="w-max bg-layer-base border border-outline/10 px-4 py-2 rounded-[var(--input-border-radius,8px)] text-on-surface focus:border-primary focus:outline-none" />
                          </div>
                          
                          <div className="flex flex-col gap-2 mt-4">
                            <Text size="label-small" weight="bold" className="text-on-surface-variant">System Prompt Identity</Text>
                            <textarea 
                              rows={6}
+                             aria-label="System Prompt"
                              defaultValue="You are Spike, the primary structural builder..." 
                              className="w-full bg-layer-base border border-outline/10 px-5 py-4 text-sm text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/20 rounded-[var(--input-border-radius,8px)] font-mono resize-y"
                            />

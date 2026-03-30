@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AuthLayout } from "zap-design/src/genesis/templates/auth/AuthLayout";
 import { LoginForm } from "zap-design/src/genesis/organisms/auth/LoginForm";
 import { Orbit } from "lucide-react";
@@ -9,13 +9,22 @@ import { Text } from "zap-design/src/genesis/atoms/typography/text";
 
 export function SwarmAuthGate({ children }: { children: React.ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isInitializing, setIsInitializing] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
 
   // Form states
   const [merchantName, setMerchantName] = useState("ZAP Core");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("tom@zap.vn");
+  const [password, setPassword] = useState("1234");
   const [rememberMe, setRememberMe] = useState(true);
+
+ 
+  useEffect(() => {
+    if (typeof window !== "undefined" && sessionStorage.getItem("swarm_auth") === "true") {
+      setIsAuthenticated(true);
+    }
+    setIsInitializing(false);
+  }, []);
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -23,9 +32,14 @@ export function SwarmAuthGate({ children }: { children: React.ReactNode }) {
     // Simulate network delay
     setTimeout(() => {
       setIsProcessing(false);
+      sessionStorage.setItem("swarm_auth", "true");
       setIsAuthenticated(true);
     }, 1200);
   };
+
+  if (isInitializing) {
+    return null;
+  }
 
   if (isAuthenticated) {
     return <>{children}</>;

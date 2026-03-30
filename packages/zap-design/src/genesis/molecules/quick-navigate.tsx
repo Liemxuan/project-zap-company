@@ -67,7 +67,7 @@ export function QuickNavigate({ className }: QuickNavigateProps) {
                       <span className="text-muted-foreground flex items-center gap-1.5 line-clamp-1 truncate">Select Workspace...</span>
                     )}
                   </div>
-                  <ChevronDown className="pointer-events-none size-4 text-muted-foreground shrink-0 opacity-50" />
+                  <ChevronDown className="pointer-events-none size-4 text-muted-foreground shrink-0 opacity-50" aria-hidden="true" />
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-[280px] p-1 rounded-[length:var(--select-border-radius,var(--radius-shape-small,8px))] bg-[color:var(--select-bg,var(--color-surface-container-highest))] text-on-surface shadow-md border border-[length:var(--select-border-width,var(--layer-border-width,1px))] border-outline-variant mt-2 z-[200]" align="start">

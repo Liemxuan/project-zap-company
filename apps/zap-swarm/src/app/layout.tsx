@@ -31,7 +31,6 @@ import { ThemeProvider } from 'zap-design/src/components/ThemeContext';
 import { ThemeManager } from 'zap-design/src/components/ThemeManager';
 import { TooltipProvider } from 'zap-design/src/genesis/atoms/interactive/tooltip';
 import { Toaster } from 'zap-design/src/genesis/atoms/interactive/sonner';
-import { SwarmAuthGate } from '../components/SwarmAuthGate';
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   let initialCss = '';
@@ -103,9 +102,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <ThemeProvider>
           <ThemeManager />
           <TooltipProvider>
-            <SwarmAuthGate>
-              {children}
-            </SwarmAuthGate>
+            {children}
           </TooltipProvider>
           <Toaster position="bottom-right" richColors />
         </ThemeProvider>

@@ -370,7 +370,7 @@ export interface SideNavProps {
 }
 
 export const SideNav: React.FC<SideNavProps> = ({ showDevWrapper = false }) => {
-    const { theme, setTheme, devMode, setDevMode, sidebarState, setSidebarState, openCategories, setOpenCategories } = useTheme();
+    const { theme, setTheme, devMode, setDevMode, sidebarState, setSidebarState, openCategories, setOpenCategories, isThemeLocked } = useTheme();
     const isDev = showDevWrapper && devMode;
     const pathname = usePathname();
     const searchParams = useSearchParams();
@@ -517,7 +517,7 @@ export const SideNav: React.FC<SideNavProps> = ({ showDevWrapper = false }) => {
     React.useEffect(() => {
         if (!pathname) return;
         const activeLayout = THEMES.find(t => pathname.includes(`/${t}/`));
-        if (activeLayout && activeLayout !== theme) {
+        if (activeLayout && activeLayout !== theme && !isThemeLocked) {
             setTheme(activeLayout);
         }
 
@@ -820,10 +820,22 @@ export const SideNav: React.FC<SideNavProps> = ({ showDevWrapper = false }) => {
                 <div className="mt-auto px-6 pb-3 pt-3 flex flex-col gap-3 bg-transparent border-t border-black">
                     {/* Theme Switcher */}
                     <div className="flex w-full bg-layer-dialog border border-outline-variant/50 rounded-[var(--button-border-radius,9999px)] p-1 shadow-inner gap-0.5">
+                        <Button 
+                            onClick={() => setIsThemeLocked(!isThemeLocked)}
+                            title={isThemeLocked ? "Global Theme Settings Locked" : "Lock Theme Globally"}
+                            visualStyle={isThemeLocked ? "solid" : "ghost"}
+                            color={isThemeLocked ? "primary" : "secondary"}
+                            size="tiny"
+                            className="w-8 shrink-0 flex items-center justify-center !rounded-[var(--button-border-radius,9999px)] transition-all"
+                            tabIndex={-1}
+                        >
+                            <Icon name={isThemeLocked ? "lock" : "lock_open"} size={14} />
+                        </Button>
                         {THEMES.map(t => (
                             <Button
                                 key={t}
                                 onClick={() => {
+                                    if (isThemeLocked) return;
                                     React.startTransition(() => {
                                         setTheme(t as AppTheme);
                                         // Update local storage to force preference
@@ -840,7 +852,8 @@ export const SideNav: React.FC<SideNavProps> = ({ showDevWrapper = false }) => {
                                 visualStyle={(mounted ? theme : 'metro') === t ? 'tonal' : 'ghost'}
                                 color="secondary"
                                 size="tiny"
-                                className="flex-1 w-auto min-w-0" // Flexible inner pills
+                                disabled={isThemeLocked}
+                                className={`flex-1 w-auto min-w-0 ${isThemeLocked ? 'opacity-40 cursor-not-allowed' : ''}`} // Flexible inner pills
                             >
                                 {t}
                             </Button>

@@ -77,9 +77,9 @@ export function WorkflowGraph({ jobs }: WorkflowGraphProps) {
                              <div className="flex items-center gap-1.5 w-full justify-between">
                                 <span className="text-[10px] uppercase font-bold tracking-wider text-on-surface-variant">Task {job._id.slice(-4)}</span>
                                 <div className="flex items-center gap-1.5">
-                                    <span className="text-[9px] uppercase font-bold tracking-widest opacity-80" style={{
-                                        color: isCompleted ? '#10b981' : isPending ? '#3b82f6' : 'inherit'
-                                    }}>{job.status}</span>
+                                    <span className={`text-[9px] uppercase font-bold tracking-widest opacity-80 ${isCompleted ? 'text-[#10b981]' : isPending ? 'text-[#3b82f6]' : 'text-inherit'}`}>
+                                        {job.status}
+                                    </span>
                                     {isCompleted && <CheckCircle2 className="size-3 text-emerald-500" />}
                                     {isPending && <Clock className="size-3 text-blue-500 animate-pulse" />}
                                     {isBlocked && <CircleDashed className="size-3 text-on-surface-variant opacity-50" />}

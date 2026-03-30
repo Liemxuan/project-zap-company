@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Users, Activity, Terminal, Loader2 } from "lucide-react";
+import { Users, Activity, Terminal, Loader2, Bot } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Heading } from "zap-design/src/genesis/atoms/typography/headings";
@@ -128,20 +128,32 @@ export default function SwarmDashboard() {
                 <Link
                   key={job._id}
                   href={`/chats/${job.assignedAgentId}`}
-                  className="group flex flex-col md:flex-row md:items-center justify-between p-4 bg-transparent border border-transparent hover:border-outline/5 hover:bg-layer-panel transition-all cursor-pointer rounded-[var(--card-radius,12px)] m-1 shadow-[var(--shadow-elevation-1,0_1px_2px_rgba(0,0,0,0.05))] hover:shadow-[var(--shadow-elevation-2,0_4px_6px_rgba(0,0,0,0.08))]"
+                  className="group flex gap-4 p-4 hover:bg-layer-panel transition-all cursor-pointer rounded-[var(--card-radius,12px)] m-1 shadow-sm hover:shadow-md"
                 >
-                  <div className="flex flex-col gap-1">
-                    <Text size="body-medium" weight="bold" className="text-on-surface group-hover:text-primary transition-colors truncate max-w-xl">
-                      {typeof job.payload === 'object' ? (job.payload.intent || job.payload.systemPrompt || JSON.stringify(job.payload)) : String(job.payload)}
-                    </Text>
-                    <Text size="dev-note" className="text-transform-secondary text-on-surface-variant mt-1.5 flex items-center gap-2">
-                      <span className="px-2 py-0.5 bg-layer-panel border border-outline/5 rounded-[4px]">{job.assignedAgentId?.toUpperCase()}</span>
-                      {new Date(job.timestamp).toLocaleString()}
-                    </Text>
+                  <div className="size-8 shrink-0 rounded-[var(--button-border-radius,8px)] bg-primary/10 border border-primary/20 flex flex-col items-center justify-center text-primary mt-1 shadow-[0_2px_8px_rgba(var(--color-primary-rgb),0.1)]">
+                    <Bot className="size-4" />
                   </div>
-                  <div className="flex items-center gap-2 mt-2 md:mt-0 px-3 py-1.5 bg-layer-panel border border-outline/5 rounded-[var(--badge-border-radius,6px)]">
-                    <div className={`size-2 rounded-full ${job.status === 'PENDING_MCP_DISPATCH' ? 'bg-primary' : 'bg-success'}`}></div>
-                    <Text size="label-small" weight="bold" className="text-transform-tertiary text-on-surface-variant">{job.status}</Text>
+
+                  <div className="flex flex-col max-w-[85%] items-start">
+                    <div className="flex items-center gap-2 mb-1 px-1">
+                      <Text size="label-large" className="text-on-surface-variant font-medium">
+                        {job.assignedAgentId ? job.assignedAgentId.replace(/^AGNT-OLY-/i, '').replace(/-/g, ' ').replace(/\b\w/g, (c: string) => c.toUpperCase()) : 'OmniRouter AI'}
+                      </Text>
+                      <span className="text-on-surface-variant/40 text-[10px]">•</span>
+                      <Text size="label-medium" className="text-on-surface-variant/70 uppercase">
+                        {new Date(job.timestamp).toLocaleTimeString()}
+                      </Text>
+                      <span className="text-on-surface-variant/40 text-[10px]">•</span>
+                      <div className="flex items-center gap-1.5">
+                        <div className={`size-1.5 rounded-full ${job.status === 'PENDING_MCP_DISPATCH' ? 'bg-primary' : 'bg-success'}`}></div>
+                        <Text size="label-small" className="text-on-surface-variant/70">{job.status}</Text>
+                      </div>
+                    </div>
+                    <div className="p-4 bg-layer-cover text-on-surface rounded-[var(--layer-3-border-radius,16px)] rounded-tl-sm shadow-[var(--shadow-elevation-1,0_1px_3px_rgba(0,0,0,0.08))] border border-outline/5 group-hover:border-primary/30 transition-colors">
+                      <Text size="dev-wrapper" className="antialiased leading-relaxed line-clamp-2 md:line-clamp-3">
+                        {typeof job.payload === 'object' ? (job.payload.intent || job.payload.systemPrompt || JSON.stringify(job.payload)) : String(job.payload)}
+                      </Text>
+                    </div>
                   </div>
                 </Link>
               ))}

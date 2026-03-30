@@ -24,9 +24,9 @@ export async function GET(req: Request) {
         }
 
         // Fetch pending or completed tasks from the active OmniQueue
-        const tasks = await db.collection(`${tenantId}_SYS_OS_job_queue`)
+        const tasks = await db.collection("SYS_OS_dead_letters")
             .find(query)
-            .sort({ createdAt: -1 })
+            .sort({ timestamp: -1 })
             .limit(100)
             .toArray();
 
