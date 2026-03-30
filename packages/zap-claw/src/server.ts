@@ -2,7 +2,8 @@ import express from 'express';
 import { Redis } from 'ioredis';
 import bodyParser from 'body-parser';
 import cors from 'cors';
-import { handleTelegramWebhook } from './platforms/telegram.js';
+import { handleTelegramWebhook as legacyTelegramWebhook } from './platforms/telegram.js';
+import { handleTelegramWebhook as nativeTelegramWebhook } from './runtime/router/inbound.js';
 import { MongoClient } from "mongodb";
 import dotenv from 'dotenv';
 import morgan from 'morgan';
@@ -497,16 +498,18 @@ app.post('/api/test-key', async (req, res) => {
 });
 
 // ==========================================
-// TELEGRAM OMNI-CHANNEL WEBHOOK
+// TELEGRAM OMNI-CHANNEL WEBHOOK (PRJ-016: Native Router)
 // ==========================================
-// Expects POST request containing Telegram Update JSON
-app.post('/webhook/telegram', async (req, res) => {
+// Native Olympus routing — bypasses OpenClaw entirely.
+// Legacy handler preserved at /webhook/telegram/legacy for rollback.
+app.post('/webhook/telegram', nativeTelegramWebhook);
+
+app.post('/webhook/telegram/legacy', async (req, res) => {
     try {
-        await handleTelegramWebhook(req.body);
-        // Always return 200 OK so Telegram doesn't retry
+        await legacyTelegramWebhook(req.body);
         res.status(200).send('OK');
     } catch (error) {
-        console.error(`[Server API] 🚨 Error processing Telegram webhook:`, error);
+        console.error(`[Server API] 🚨 Legacy Telegram webhook error:`, error);
         res.status(500).send('Internal Server Error');
     }
 });
