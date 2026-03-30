@@ -12,6 +12,89 @@ const DB_NAME = "olympus";
 const SKILLS_DIR = path.resolve(process.cwd(), "../../.agent/skills");
 const CLAW_URL = process.env.NEXT_PUBLIC_CLAW_URL || "http://localhost:3900";
 
+// ── Skill Taxonomy Engine ──────────────────────────────────
+// Maps directory prefixes → group, primary agent, base tags
+
+type SkillGroup = "ZAP Engine" | "Frontend" | "Backend" | "DevOps" | "DeerFlow" | "GSD" | "Agent" | "Workflow" | "MCP" | "Research";
+type AgentTag = "spike" | "jerry" | "ralph" | "cso" | "operator" | "any";
+
+interface SkillClassification {
+    group: SkillGroup;
+    agent: AgentTag;
+    tags: string[];
+}
+
+const PREFIX_RULES: Array<{ prefix: string; group: SkillGroup; agent: AgentTag; baseTags: string[] }> = [
+    { prefix: "zap-",          group: "ZAP Engine",  agent: "spike",    baseTags: ["design-system", "m3", "tokens"] },
+    { prefix: "frontend-",    group: "Frontend",    agent: "spike",    baseTags: ["react", "ui", "components"] },
+    { prefix: "backend-",     group: "Backend",     agent: "spike",    baseTags: ["api", "server", "database"] },
+    { prefix: "devops-",      group: "DevOps",      agent: "operator", baseTags: ["infra", "deployment", "server"] },
+    { prefix: "df-",          group: "DeerFlow",    agent: "ralph",    baseTags: ["research", "analysis", "content"] },
+    { prefix: "gsd-",         group: "GSD",         agent: "any",      baseTags: ["planning", "workflow", "project"] },
+    { prefix: "agent-",       group: "Agent",       agent: "cso",      baseTags: ["swarm", "automation", "agent"] },
+    { prefix: "mcp-",         group: "MCP",         agent: "cso",      baseTags: ["integration", "mcp", "protocol"] },
+    { prefix: "workflow-",    group: "Workflow",    agent: "any",      baseTags: ["process", "documentation", "standards"] },
+    { prefix: "nano-",        group: "DeerFlow",    agent: "ralph",    baseTags: ["generation", "image", "ai"] },
+];
+
+// Content-derived tags: scan SKILL.md for high-signal keywords
+const CONTENT_TAG_PATTERNS: Array<{ regex: RegExp; tag: string }> = [
+    { regex: /\btesting\b|\btest\b|\bvitest\b|\bjest\b/i, tag: "testing" },
+    { regex: /\bsecurity\b|\bzss\b|\bauth\b/i, tag: "security" },
+    { regex: /\banimation\b|\bmotion\b|\bframer/i, tag: "animation" },
+    { regex: /\btailwind\b/i, tag: "tailwind" },
+    { regex: /\bmongodb\b|\bprisma\b|\bdatabase\b/i, tag: "database" },
+    { regex: /\bredis\b/i, tag: "cache" },
+    { regex: /\bdocker\b|\bk8s\b|\bkubernetes\b/i, tag: "containers" },
+    { regex: /\bgit\b|\bbranch\b|\bcommit\b/i, tag: "git" },
+    { regex: /\bdiagram\b|\bvisuali/i, tag: "visualization" },
+    { regex: /\baudit\b|\breview\b/i, tag: "audit" },
+    { regex: /\brefactor\b|\bsimplif/i, tag: "refactoring" },
+    { regex: /\bdebug\b/i, tag: "debugging" },
+    { regex: /\bpodcast\b|\baudio\b/i, tag: "media" },
+    { regex: /\bvideo\b|\bslide\b|\bppt\b/i, tag: "media" },
+    { regex: /\bnotebook\b|\bresearch\b/i, tag: "research" },
+];
+
+function classifySkill(dirName: string, content: string): SkillClassification {
+    // 1. Match by prefix
+    let group: SkillGroup = "Workflow";
+    let agent: AgentTag = "any";
+    let tags: string[] = [];
+
+    for (const rule of PREFIX_RULES) {
+        if (dirName.startsWith(rule.prefix)) {
+            group = rule.group;
+            agent = rule.agent;
+            tags = [...rule.baseTags];
+            break;
+        }
+    }
+
+    // Special overrides for non-prefixed skills
+    if (group === "Workflow") {
+        if (dirName.includes("debug")) { group = "Workflow"; agent = "jerry"; tags.push("debugging"); }
+        else if (dirName.includes("review") || dirName.includes("audit")) { group = "Workflow"; agent = "jerry"; tags.push("audit"); }
+        else if (dirName.includes("plan") || dirName.includes("writing")) { group = "Workflow"; agent = "any"; tags.push("planning"); }
+        else if (dirName.includes("test")) { group = "Workflow"; agent = "jerry"; tags.push("testing"); }
+        else if (dirName.includes("motion") || dirName.includes("animation")) { group = "Frontend"; agent = "spike"; tags.push("animation"); }
+        else if (dirName.includes("design") || dirName.includes("ui-ux")) { group = "Frontend"; agent = "spike"; tags.push("design"); }
+    }
+
+    // 2. Content-derived tags (deduplicated)
+    const excerpt = content.substring(0, 3000); // Only scan first 3k chars for perf
+    for (const pat of CONTENT_TAG_PATTERNS) {
+        if (pat.regex.test(excerpt) && !tags.includes(pat.tag)) {
+            tags.push(pat.tag);
+        }
+    }
+
+    // 3. Always add the agent as a tag for filtering
+    if (!tags.includes(agent)) tags.push(agent);
+
+    return { group, agent, tags };
+}
+
 export async function GET() {
   let client: MongoClient | null = null;
   try {
@@ -38,14 +121,17 @@ export async function GET() {
           return null;
         }
 
-        // Extremely native frontmatter extraction without extra dependencies
         const nameMatch = content.match(/name:\s*(.+)/);
         const descMatch = content.match(/description:\s*(.+)/);
+        const { group, agent, tags } = classifySkill(dir.name, content);
         
         return {
           name: nameMatch ? nameMatch[1].trim() : dir.name,
+          dirName: dir.name,
           desc: descMatch ? descMatch[1].trim() : "No description provided.",
-          cat: dir.name.includes('zap') ? 'ZAP Native' : dir.name.includes('df-') ? 'Analysis' : 'Workflow',
+          group,
+          agent,
+          tags,
           path: `../../.agent/skills/${dir.name}`
         };
       }).filter(Boolean);
