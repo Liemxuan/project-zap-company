@@ -163,18 +163,24 @@ export async function appendMessage(
             const tenantPrefix = (accountType === "OLYMPUS_HUD" || accountType === "PERSONAL") ? "ZVN" : accountType;
             const bucket = new GridFSBucket(db, { bucketName: `${tenantPrefix}_SYS_ARTIFACTS` });
 
-            // Extract HTML Artifacts
-            const htmlRegex = /```html\s*([\s\S]*?)```/g;
-            let htmlMatch: RegExpExecArray | null;
-            let index = 0;
-            while ((htmlMatch = htmlRegex.exec(finalContent)) !== null) {
-              if (!htmlMatch[1]) continue;
-              const htmlContent = htmlMatch[1].trim();
-              const uploadStream = bucket.openUploadStream(index === 0 ? "index.html" : `index_${index}.html`, {
-                metadata: { sessionId: userId.toString(), type: 'html' }
+            // Extract Code Artifacts (html, tsx, ts, jsx, js, css, json, md)
+            const codeBlockRegex = /```(html|tsx|ts|jsx|js|css|json|markdown|md)\s*([\s\S]*?)```/g;
+            let codeMatch: RegExpExecArray | null;
+            let counts: Record<string, number> = {};
+
+            while ((codeMatch = codeBlockRegex.exec(finalContent)) !== null) {
+              const cap = codeMatch[1];
+              if (!cap || !codeMatch[2]) continue;
+              const lang = cap.toLowerCase() === 'markdown' ? 'md' : cap.toLowerCase();
+              const contentValue = codeMatch[2].trim();
+              
+              counts[lang] = (counts[lang] || 0) + 1;
+              const filename = counts[lang] === 1 ? `index.${lang}` : `component_${counts[lang]}.${lang}`;
+
+              const uploadStream = bucket.openUploadStream(filename, {
+                metadata: { sessionId: userId.toString(), type: lang }
               });
-              uploadStream.end(Buffer.from(htmlContent, 'utf-8'));
-              index++;
+              uploadStream.end(Buffer.from(contentValue, 'utf-8'));
             }
 
             // Extract Image Artifacts

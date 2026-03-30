@@ -766,7 +766,7 @@ export default function TraceExecution({ params }: { params: Promise<{ id: strin
                         </div>
                       </div>
                     </div>
-                  ) : previewMode === 'preview' ? (
+                  ) : previewMode === 'preview' && artifacts[activeArtifactIndex].type === 'html' ? (
                     <iframe 
                       title="Artifact Preview"
                       srcDoc={artifacts[activeArtifactIndex].content}
@@ -774,10 +774,16 @@ export default function TraceExecution({ params }: { params: Promise<{ id: strin
                       sandbox="allow-scripts allow-forms allow-same-origin"
                     />
                   ) : (
-                    <div className="p-6 overflow-y-auto h-full bg-layer-base custom-scrollbar">
-                      <pre className="text-on-surface-variant font-mono text-[11px] leading-relaxed whitespace-pre-wrap word-break selection:bg-primary/30">
-                        {artifacts[activeArtifactIndex].content}
-                      </pre>
+                    <div className="p-6 overflow-y-auto h-full bg-layer-base custom-scrollbar flex-1 relative">
+                      {artifacts[activeArtifactIndex].name.endsWith('.md') || artifacts[activeArtifactIndex].name.endsWith('.markdown') ? (
+                         <div className="prose prose-sm prose-invert max-w-none text-on-surface">
+                            <Text size="body-medium" className="whitespace-pre-wrap">{artifacts[activeArtifactIndex].content}</Text>
+                         </div>
+                      ) : (
+                         <pre className="text-on-surface-variant font-mono text-[11px] leading-relaxed whitespace-pre-wrap word-break selection:bg-primary/30">
+                           {artifacts[activeArtifactIndex].content}
+                         </pre>
+                      )}
                     </div>
                   )}
                 </div>

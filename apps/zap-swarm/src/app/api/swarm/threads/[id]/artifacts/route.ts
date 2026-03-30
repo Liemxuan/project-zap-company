@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import path from "path";
 import { logger } from "@/lib/logger";
 
-dotenv.config({ path: path.resolve(process.cwd(), "../../zap-core/.env"), override: true });
+dotenv.config({ path: path.resolve(process.cwd(), "../../.env"), override: true });
 
 const MONGO_URI = process.env.MONGODB_URI || "mongodb://localhost:27017";
 const DB_NAME = "olympus";
