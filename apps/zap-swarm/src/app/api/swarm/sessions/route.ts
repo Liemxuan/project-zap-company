@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { MongoClient } from "mongodb";
 import path from "path";
 import dotenv from "dotenv";
+import { logger } from "@/lib/logger";
 
 dotenv.config({ path: path.resolve(process.cwd(), "../../zap-core/.env"), override: true });
 
@@ -49,7 +50,7 @@ export async function GET() {
 
     return NextResponse.json({ success: true, sessions: formattedSessions });
   } catch (error: any) {
-    console.error(`[api/swarm/sessions] Error:`, error);
+    logger.error(`[api/swarm/sessions] Error:`, error);
     return NextResponse.json({ error: `Failed to fetch sessions: ${error.message}` }, { status: 500 });
   } finally {
     if (client) await client.close();

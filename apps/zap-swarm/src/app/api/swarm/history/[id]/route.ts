@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { logger } from "@/lib/logger";
 
 export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
@@ -19,7 +20,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
         const data = await response.json();
         return NextResponse.json(data);
     } catch (error: any) {
-        console.error(`[api/swarm/history] Error fetching history for ${id}:`, error);
+        logger.error(`[api/swarm/history] Error fetching history for ${id}:`, error);
         return NextResponse.json({ error: `Failed to fetch history: ${error.message}` }, { status: 500 });
     }
 }

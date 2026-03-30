@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { MongoClient } from "mongodb";
 import path from "path";
 import dotenv from "dotenv";
+import { logger } from "@/lib/logger";
 
 dotenv.config({ path: path.resolve(process.cwd(), "../../zap-core/.env"), override: true });
 
@@ -33,7 +34,7 @@ export async function GET() {
 
     return NextResponse.json({ success: true, servers: servers.map((s: any) => ({ ...s, _id: s._id.toString() })) });
   } catch (error: any) {
-    console.error(`[api/swarm/mcp GET] Error:`, error);
+    logger.error(`[api/swarm/mcp GET] Error:`, error);
     return NextResponse.json({ success: true, servers: defaultServers });
   } finally {
     if (client) await client.close();
@@ -61,7 +62,7 @@ export async function PUT(req: Request) {
 
     return NextResponse.json({ success: true, message: `MCP Server '${name}' updated.` });
   } catch (error: any) {
-    console.error(`[api/swarm/mcp PUT] Error:`, error);
+    logger.error(`[api/swarm/mcp PUT] Error:`, error);
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   } finally {
     if (client) await client.close();

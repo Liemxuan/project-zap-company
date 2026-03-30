@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
+import { logger } from "@/lib/logger";
 
 // Maps to .agent directories in olympus-root/packages/zap-claw/.agent
 const AGENTS_DIR = path.resolve(process.cwd(), "../../packages/zap-claw/.agent");
@@ -38,7 +39,7 @@ export async function GET() {
 
     return NextResponse.json({ success: true, agents });
   } catch (error: any) {
-    console.error("[api/swarm/agents] Error:", error);
+    logger.error("[api/swarm/agents] Error:", error);
     return NextResponse.json({ error: `Failed to fetch agents: ${error.message}` }, { status: 500 });
   }
 }

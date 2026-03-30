@@ -3,6 +3,7 @@ import { MongoClient } from "mongodb";
 import path from "path";
 import dotenv from "dotenv";
 import { getTenantContext } from "@/lib/tenant";
+import { logger } from "@/lib/logger";
 
 dotenv.config({ path: path.resolve(process.cwd(), "../../zap-core/.env"), override: true });
 
@@ -66,7 +67,7 @@ export async function GET() {
 
         return NextResponse.json({ success: true, channels: enriched });
     } catch (error: any) {
-        console.error(`[api/swarm/channels] Error:`, error);
+        logger.error(`[api/swarm/channels] Error:`, error);
         return NextResponse.json(
             { success: false, error: error.message, channels: [] },
             { status: 500 }

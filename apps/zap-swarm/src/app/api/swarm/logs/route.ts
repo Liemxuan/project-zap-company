@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import Redis from "ioredis";
+import { logger } from "@/lib/logger";
 
 // This endpoint streams execution logs over SSE (Server-Sent Events)
 export async function GET(req: Request) {
@@ -21,7 +22,7 @@ export async function GET(req: Request) {
                 try {
                     controller.enqueue(new TextEncoder().encode(`data: ${JSON.stringify({ logs: data })}\n\n`));
                 } catch (e) {
-                    console.error("SSE Error writing to stream", e);
+                    logger.error("SSE Error writing to stream", e);
                 }
             };
 

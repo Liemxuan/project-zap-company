@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { MongoClient } from "mongodb";
 import path from "path";
 import dotenv from "dotenv";
+import { logger } from "@/lib/logger";
 
 // Preload the env from core
 dotenv.config({ path: path.resolve(process.cwd(), "../../zap-core/.env"), override: true });
@@ -79,7 +80,7 @@ export async function POST(req: Request) {
         return NextResponse.json(data);
 
     } catch (error: any) {
-        console.error("[api/swarm/chat] Error:", error);
+        logger.error("[api/swarm/chat] Error:", error);
         return NextResponse.json({ error: `Failed to enqueue chat job: ${error.message}` }, { status: 500 });
     }
 }

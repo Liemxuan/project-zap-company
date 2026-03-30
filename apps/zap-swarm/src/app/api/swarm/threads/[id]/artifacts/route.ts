@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { MongoClient, GridFSBucket } from "mongodb";
 import dotenv from "dotenv";
 import path from "path";
+import { logger } from "@/lib/logger";
 
 dotenv.config({ path: path.resolve(process.cwd(), "../../zap-core/.env"), override: true });
 
@@ -44,7 +45,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
 
     return NextResponse.json({ success: true, artifacts });
   } catch (error: any) {
-    console.error(`[api/swarm/threads/[id]/artifacts GET] Error:`, error);
+    logger.error(`[api/swarm/threads/[id]/artifacts GET] Error:`, error);
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   } finally {
     if (client) await client.close();
@@ -77,7 +78,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       uri: `gridfs://${tenantId}_SYS_ARTIFACTS/${filename}`
     });
   } catch (error: any) {
-    console.error(`[api/swarm/threads/[id]/artifacts POST] Error:`, error);
+    logger.error(`[api/swarm/threads/[id]/artifacts POST] Error:`, error);
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   } finally {
     if (client) await client.close();

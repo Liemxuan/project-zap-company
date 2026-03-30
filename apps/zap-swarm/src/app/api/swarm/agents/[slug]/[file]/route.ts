@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
+import { logger } from "@/lib/logger";
 
 const AGENT_DIR = path.resolve(process.cwd(), "../../packages/zap-claw/.agent");
 
@@ -17,7 +18,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ slug: st
     const content = fs.readFileSync(docPath, "utf-8");
     return NextResponse.json({ success: true, content });
   } catch (error: any) {
-    console.error(`[api/swarm/agent/[slug]/[file] GET] Error:`, error);
+    logger.error(`[api/swarm/agent/[slug]/[file] GET] Error:`, error);
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }
@@ -43,7 +44,7 @@ export async function PUT(req: Request, { params }: { params: Promise<{ slug: st
     
     return NextResponse.json({ success: true, message: `${filename} updated successfully` });
   } catch (error: any) {
-    console.error("[api/swarm/agent/[slug]/[file] PUT] Error:", error);
+    logger.error("[api/swarm/agent/[slug]/[file] PUT] Error:", error);
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }

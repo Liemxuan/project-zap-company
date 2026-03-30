@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { MongoClient } from "mongodb";
 import path from "path";
 import dotenv from "dotenv";
+import { logger } from "@/lib/logger";
 
 // Preload the env from core
 dotenv.config({ path: path.resolve(process.cwd(), "../../zap-core/.env"), override: true });
@@ -36,7 +37,7 @@ export async function GET(req: Request) {
 
         return NextResponse.json({ success: true, memories });
     } catch (error: any) {
-        console.error("[api/swarm/memory] Error fetching memories:", error);
+        logger.error("[api/swarm/memory] Error fetching memories:", error);
         return NextResponse.json({ error: `MongoDB query failed: ${error.message}` }, { status: 500 });
     } finally {
         if (client) await client.close();

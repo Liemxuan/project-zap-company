@@ -4,6 +4,7 @@ import path from "path";
 import fs from "fs";
 import dotenv from "dotenv";
 import { getTenantContext } from "@/lib/tenant";
+import { logger } from "@/lib/logger";
 
 dotenv.config({ path: path.resolve(process.cwd(), "../../zap-core/.env"), override: true });
 
@@ -152,7 +153,7 @@ export async function GET() {
     skills = await col.find({}).toArray();
     return NextResponse.json({ success: true, skills: skills.map(s => ({ ...s, _id: s._id.toString() })) });
   } catch (error: any) {
-    console.error(`[api/swarm/skills GET] Error:`, error);
+    logger.error(`[api/swarm/skills GET] Error:`, error);
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   } finally {
     if (client) await client.close();
@@ -277,7 +278,7 @@ export async function POST(req: Request) {
       sessionId,
     });
   } catch (error: any) {
-    console.error(`[api/swarm/skills POST] Error:`, error);
+    logger.error(`[api/swarm/skills POST] Error:`, error);
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   } finally {
     if (client) await client.close();
