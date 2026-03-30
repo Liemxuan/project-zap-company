@@ -47,6 +47,7 @@ export async function getSession() {
     const cookieStore = await cookies();
     const sessionId = cookieStore.get('zap_session')?.value;
     if (!sessionId) return null;
+    if (!prisma) return null; // Prisma unavailable (Turbopack engine resolution)
 
     return await prisma.user.findUnique({
         where: { id: sessionId },

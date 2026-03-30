@@ -1,12 +1,20 @@
-import { PrismaClient } from '@prisma/zap-db-client'
-
-const globalForPrisma = globalThis as unknown as {
-  prisma: PrismaClient | undefined
+let PrismaClient: any;
+try {
+  PrismaClient = require('@prisma/zap-db-client').PrismaClient;
+} catch (e) {
+  // Turbopack + pnpm: engine binary resolution can fail.
+  // Pages that don't use Prisma should not be blocked.
+  console.warn('[zap-db] PrismaClient import failed, database calls will be unavailable:', (e as Error).message);
+  PrismaClient = null;
 }
 
-export const prisma = globalForPrisma.prisma ?? new PrismaClient()
+const globalForPrisma = globalThis as unknown as {
+  prisma: any | undefined
+}
 
-if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
+export const prisma = globalForPrisma.prisma ?? (PrismaClient ? new PrismaClient() : null);
 
-export * from '@prisma/zap-db-client'
+if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
+
 export * from './api'
+
