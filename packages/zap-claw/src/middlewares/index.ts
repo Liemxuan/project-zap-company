@@ -8,3 +8,4 @@ export * from "./fallback.js";
 export * from "./sandbox.js";
 export * from "./memory_inject.js";
 export * from "./loop_detection.js";
+export * from "./context_summarize.js";
