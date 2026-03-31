@@ -12,3 +12,4 @@ export * from "./context_summarize.js";
 export * from "./subagent_limit.js";
 export * from "./title_autogen.js";
 export * from "./followup_suggest.js";
+export * from "./deerflow_pipeline.js";
