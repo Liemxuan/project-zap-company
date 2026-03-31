@@ -6,3 +6,4 @@ export * from "./hitl.js";
 export * from "./uploads.js";
 export * from "./fallback.js";
 export * from "./sandbox.js";
+export * from "./memory_inject.js";
