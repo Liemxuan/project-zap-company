@@ -9,6 +9,7 @@ import dotenv from 'dotenv';
 import morgan from 'morgan';
 import { mountMemoryRoutes } from './lib/memory_routes.js';
 import { SafeExecutor } from './security/safe-executor.js';
+import { redactSecrets } from './security/log_redaction.js';
 import { z } from 'zod';
 
 dotenv.config();
@@ -21,7 +22,14 @@ app.use(cors());
 // SOP-033: Exclude webhook/payment from global JSON parsing to allow Stripe signature validation
 app.use('/webhook/payment', bodyParser.raw({ type: 'application/json' }));
 app.use(bodyParser.json());
-app.use(morgan('dev'));
+// BLAST-IRONCLAD: Redact secrets from HTTP request logs
+app.use(morgan((tokens, req, res) => {
+    const method = tokens.method(req, res) || '';
+    const url = redactSecrets(tokens.url(req, res) || '');
+    const status = tokens.status(req, res) || '';
+    const time = tokens['response-time'](req, res) || '';
+    return `${method} ${url} ${status} ${time}ms`;
+}));
 
 import { syncRouter } from './api/sync_routes.js';
 import { webhookRouter } from './api/webhooks.js';
@@ -38,7 +46,32 @@ startSyncWorker().catch(err => console.error("Sync Worker threw unhandled error:
 // Serve the static frontend Web Dashboards from the /public directory
 app.use(express.static('public'));
 
-// Mount Memory v2 + Heartbeat
+// BLAST-IRONCLAD: Agent JWT token issuance endpoint
+import { issueAgentJwt, requireAgentJwt, selfTest as jwtSelfTest } from './security/agent_jwt.js';
+
+app.post('/api/agent/token', (req, res) => {
+    const { agentId, tenantId, role, secret } = req.body;
+    if (!agentId || !tenantId) {
+        res.status(400).json({ error: 'Missing agentId or tenantId' });
+        return;
+    }
+    // Simple shared-secret gate for token issuance
+    const issueSecret = process.env.AGENT_JWT_ISSUE_SECRET || 'zap-swarm-boot';
+    if (secret !== issueSecret) {
+        res.status(403).json({ error: 'Invalid issuance secret' });
+        return;
+    }
+    const token = issueAgentJwt({ agentId, tenantId, role: role || 'AGENT' });
+    res.json({ success: true, token, expiresIn: '24h' });
+});
+
+// JWT health check
+app.get('/api/agent/jwt-health', (_req, res) => {
+    res.json({ healthy: jwtSelfTest() });
+});
+
+// Mount Memory v2 + Heartbeat (with optional JWT gating)
+app.use('/api/memory', requireAgentJwt);
 mountMemoryRoutes(app, { name: 'gateway', role: 'API Gateway', port: parseInt(PORT as string) || 3001 });
 
 const MONGO_URI = process.env.MONGODB_URI || "";

@@ -1,5 +1,6 @@
 import { MongoClient, ObjectId } from 'mongodb';
 import type { OmniPayload, LLMConfig, OmniResponse } from './omni_router.js';
+import { redactSecrets } from '../../security/log_redaction.js';
 
 const MONGO_URI = process.env.MONGODB_URI || "mongodb://localhost:27017";
 const DB_NAME = "olympus";
@@ -244,7 +245,7 @@ export class OmniQueueManager {
         const redis = new (await import('ioredis')).Redis(process.env.REDIS_URL || "redis://localhost:6379");
         
         const logTrace = async (msg: string) => {
-            const formatted = `\r\n${msg}\r\n`;
+            const formatted = `\r\n${redactSecrets(msg)}\r\n`;
             await redis.rpush(`zap:trace:${sessionId}:logs`, formatted);
             await redis.publish(`zap:trace:${sessionId}`, formatted);
             await redis.expire(`zap:trace:${sessionId}:logs`, 3600);
@@ -322,6 +323,13 @@ export class OmniQueueManager {
                 { _id: job._id },
                 { $set: { status: "COMPLETED", result: response, completedAt: new Date() } }
             );
+            // BLAST-IRONCLAD: Post-completion token accounting
+            if (response.tokensUsed && job.config.agentId) {
+                const { recordUsage } = await import('../../security/token_budgets.js');
+                await recordUsage(job.config.agentId, response.tokensUsed.total).catch((e: any) =>
+                    console.error("[ZSS] Budget accounting failed:", e.message)
+                );
+            }
             console.log(`[OmniQueue] ✅ Job ${job._id} completed successfully.`);
             await logTrace(`> ✅ [OmniQueue] Job ${job._id} completed.`);
 

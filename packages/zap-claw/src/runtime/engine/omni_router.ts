@@ -378,6 +378,19 @@ export async function enqueueOmniJob(
 }
 
 export async function generateOmniContent(config: LLMConfig, payload: OmniPayload): Promise<OmniResponse> {
+    // BLAST-IRONCLAD: Pre-dispatch budget gate
+    if (config.agentId) {
+        const { checkBudget } = await import('../../security/token_budgets.js');
+        const budget = await checkBudget(config.agentId);
+        if (!budget.allowed) {
+            console.error(`[ZSS] 🛑 BUDGET_EXHAUSTED: Agent ${config.agentId} has used ${budget.used}/${budget.cap} tokens this month.`);
+            throw new Error(`BUDGET_EXHAUSTED: Agent ${config.agentId} has exceeded monthly token cap (${budget.cap} tokens).`);
+        }
+        if (budget.status === "WARNED") {
+            console.warn(`[ZSS] ⚠️ Agent ${config.agentId} at 90%+ budget (${budget.remaining.toLocaleString()} tokens remaining of ${budget.cap.toLocaleString()})`);
+        }
+    }
+
     const { theme, tag, forceModel } = payload;
     
     // Phase 5: DeerFlow Handlebars Context Injection
