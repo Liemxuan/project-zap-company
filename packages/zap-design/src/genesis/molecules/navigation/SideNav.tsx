@@ -13,7 +13,8 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';import
     FileText,
     Database,
     Activity,
-    Orbit
+    Orbit,
+    MessageSquare
 } from 'lucide-react';
 import { Icon } from '../../../genesis/atoms/icons/Icon';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '../../../genesis/molecules/accordion';

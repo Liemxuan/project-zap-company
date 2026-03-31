@@ -3,8 +3,8 @@
 import { Heading } from "zap-design/src/genesis/atoms/typography/headings";
 import { Text } from "zap-design/src/genesis/atoms/typography/text";
 import { AppShell } from "zap-design/src/zap/layout/AppShell";
-import { Clock } from "lucide-react";
-
+import { Clock, ExternalLink } from "lucide-react";
+import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 
 interface SessionData {
@@ -14,6 +14,13 @@ interface SessionData {
   createdAt: string;
 }
 
+const statusStyle = (status: string) => {
+  if (status === 'COMPLETED') return 'bg-state-success/10 text-state-success';
+  if (status === 'PENDING')   return 'bg-state-warning/10 text-state-warning';
+  if (status === 'RUNNING')   return 'bg-primary/10 text-primary';
+  return 'bg-outline/10 text-on-surface-variant';
+};
+
 export default function SessionsDashboard() {
   const { data, isLoading, error } = useQuery<{ success: boolean; sessions: SessionData[] }>({
     queryKey: ['swarm-sessions'],
@@ -21,7 +28,8 @@ export default function SessionsDashboard() {
       const res = await fetch('/api/swarm/sessions');
       if (!res.ok) throw new Error('Network response was not ok');
       return res.json();
-    }
+    },
+    refetchInterval: 8000,
   });
 
   if (isLoading) return <div className="text-on-surface-variant animate-pulse p-8">Loading Active Sessions...</div>;
@@ -46,21 +54,33 @@ export default function SessionsDashboard() {
 
         <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
           {sessions.map((s) => (
-            <div key={s.id} className="bg-layer-cover shadow-[var(--shadow-elevation-1,0_1px_3px_rgba(0,0,0,0.1))] p-5 rounded-[var(--card-radius,12px)] border border-[var(--color-outline-variant,rgba(0,0,0,0.05))] flex justify-between items-center group">
+            <Link
+              key={s.id}
+              href={`/chats/${s.id}`}
+              className="bg-layer-cover shadow-[var(--shadow-elevation-1,0_1px_3px_rgba(0,0,0,0.1))] p-5 rounded-[var(--card-radius,12px)] border border-[var(--color-outline-variant,rgba(0,0,0,0.05))] flex justify-between items-center group hover:border-primary/40 hover:shadow-[var(--shadow-elevation-2,0_4px_12px_rgba(0,0,0,0.15))] transition-all duration-200 cursor-pointer"
+            >
               <div className="flex items-center gap-4">
-                <div className="size-10 bg-primary/10 rounded-[var(--button-border-radius,8px)] flex justify-center items-center">
+                <div className="size-10 bg-primary/10 rounded-[var(--button-border-radius,8px)] flex justify-center items-center group-hover:bg-primary/20 transition-colors">
                   <Clock className="size-5 text-primary" />
                 </div>
                 <div>
-                  <Heading level={4} className="text-on-surface mb-0.5">{s.id}</Heading>
+                  <Heading level={4} className="text-on-surface mb-0.5 flex items-center gap-2">
+                    {s.id}
+                    <ExternalLink className="size-3 text-on-surface-variant opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </Heading>
                   <Text size="body-small" className="text-on-surface-variant">Context Depth: {s.turns} turns</Text>
                 </div>
               </div>
-              <span className={`px-2 py-0.5 rounded text-xs font-bold tracking-wide ${s.status === 'ACTIVE' ? 'bg-state-success/10 text-state-success' : s.status === 'PENDING' ? 'bg-state-warning/10 text-state-warning' : 'bg-outline/10 text-on-surface-variant'}`}>
+              <span className={`px-2 py-0.5 rounded text-xs font-bold tracking-wide ${statusStyle(s.status)}`}>
                 {s.status}
               </span>
-            </div>
+            </Link>
           ))}
+          {sessions.length === 0 && (
+            <div className="col-span-3 text-center py-16 text-on-surface-variant">
+              No sessions found. Start a chat with an agent to create one.
+            </div>
+          )}
         </section>
       </div>
     </AppShell>

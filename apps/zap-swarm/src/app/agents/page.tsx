@@ -8,7 +8,8 @@ import { ThemeHeader } from "zap-design/src/genesis/molecules/layout/ThemeHeader
 import { Inspector } from "zap-design/src/zap/layout/Inspector";
 import { InspectorAccordion } from "zap-design/src/zap/organisms/laboratory/InspectorAccordion";
 import { Button } from "zap-design/src/genesis/atoms/interactive/button";
-import { Settings2, BarChart3, Search, Bot, ChevronRight, ChevronDown, X, Edit3 } from "lucide-react";
+import { Settings2, BarChart3, Search, Bot, ChevronRight, ChevronDown, X, Edit3, MessageSquare } from "lucide-react";
+import Link from "next/link";
 
 import { useQuery } from "@tanstack/react-query";
 
@@ -124,7 +125,7 @@ function AgentsCanvas({ onSelectAgent }: { onSelectAgent: (name: string) => void
   return (
     <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
       {agents.map((agent) => (
-        <div key={agent.name} onClick={() => onSelectAgent(agent.name)} className="bg-layer-cover shadow-[var(--shadow-elevation-1,0_1px_3px_rgba(0,0,0,0.1))] p-5 rounded-[var(--card-radius,12px)] border border-[var(--color-outline-variant,rgba(0,0,0,0.05))] hover:-translate-y-1 hover:shadow-[var(--shadow-elevation-2,0_4px_6px_rgba(0,0,0,0.1))] transition-all cursor-pointer group">
+        <div key={agent.name} onClick={() => onSelectAgent(agent.name)} className="bg-layer-cover shadow-[var(--shadow-elevation-1,0_1px_3px_rgba(0,0,0,0.1))] p-5 rounded-[var(--card-radius,12px)] border border-[var(--color-outline-variant,rgba(0,0,0,0.05))] hover:-translate-y-1 hover:shadow-[var(--shadow-elevation-2,0_4px_6px_rgba(0,0,0,0.1))] transition-all cursor-pointer group flex flex-col">
           <div className="flex justify-between items-start mb-4">
             <div className="size-10 bg-primary/10 rounded-[var(--button-border-radius,8px)] flex justify-center items-center group-hover:bg-primary/20 transition-colors">
               <Bot className="size-5 text-primary" />
@@ -134,10 +135,17 @@ function AgentsCanvas({ onSelectAgent }: { onSelectAgent: (name: string) => void
             </span>
           </div>
           <Heading level={4} className="text-on-surface mb-1 truncate">{agent.name}</Heading>
-          <Text size="body-small" className="text-on-surface-variant block mb-2">{agent.role}</Text>
-          <div className="flex justify-between pt-3 border-t border-[var(--color-outline-variant,rgba(0,0,0,0.05))] mt-auto">
+          <Text size="body-small" className="text-on-surface-variant block mb-3">{agent.role}</Text>
+          <div className="flex justify-between items-center pt-3 border-t border-[var(--color-outline-variant,rgba(0,0,0,0.05))] mt-auto">
             <Text size="label-small" weight="bold" className="text-state-warning">Port: {agent.port}</Text>
-            <Text size="label-small" className="text-on-surface-variant border border-outline/10 px-1.5 py-0.5 rounded-sm">Uptime: {agent.uptime}</Text>
+            <Link
+              href={`/chats/${agent.name}`}
+              onClick={(e) => e.stopPropagation()}
+              className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-primary/10 hover:bg-primary/20 text-primary transition-colors text-[12px] font-semibold"
+            >
+              <MessageSquare className="size-3" />
+              Chat
+            </Link>
           </div>
         </div>
       ))}

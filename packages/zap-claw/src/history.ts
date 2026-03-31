@@ -1,5 +1,6 @@
 import { prisma } from './db/client.js';
 import { Redis } from "ioredis";
+import { randomUUID } from "crypto";
 
 // Task 5.1: ThreadData KV Caching
 // Ephemeral Redis layer where active conversational context lives during bursts.
@@ -123,7 +124,6 @@ export async function appendMessage(
     finalContent = finalContent.substring(0, MAX_PAYLOAD_SIZE) + "\n\n... [TRUNCATED BY SYSTEM DUE TO PAYLOAD LIMIT]";
   }
 
-  const { randomUUID } = require('crypto');
   const cacheRecord = {
     id: randomUUID(),
     sessionId: userId.toString(),

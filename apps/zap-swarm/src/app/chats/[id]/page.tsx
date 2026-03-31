@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { TerminalSquare, Send, Bot, User, Paperclip, Loader2, Download, Files, Code2, Eye, ExternalLink, Copy, X, ChevronDown, Circle, CircleDashed, GraduationCap, ArrowUp, Zap, Lightbulb, Rocket, Check, Blocks, Brain, LineChart, Mic2 } from "lucide-react";
 import { use, useEffect, useState, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Heading } from "zap-design/src/genesis/atoms/typography/headings";
 import { Text } from "zap-design/src/genesis/atoms/typography/text";
@@ -18,6 +19,7 @@ type ChatMessage = {
 
 export default function TraceExecution({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = use(params);
+  const router = useRouter();
   const [logs, setLogs] = useState<string>("> Booting trace interface connection...\n");
   const bottomRef = useRef<HTMLDivElement>(null);
   const chatBottomRef = useRef<HTMLDivElement>(null);
@@ -86,16 +88,18 @@ export default function TraceExecution({ params }: { params: Promise<{ id: strin
     if (!resolvedParams.id) return;
     
     const fetchState = async () => {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 4000);
       try {
         // 1. Fetch Real-time Queue Status
-        const resJobs = await fetch(`/api/swarm/jobs?sessionId=${resolvedParams.id}`);
+        const resJobs = await fetch(`/api/swarm/jobs?sessionId=${resolvedParams.id}`, { signal: controller.signal });
         if (resJobs.ok) {
           const dataJobs = await resJobs.json();
           if (dataJobs.tasks) setJobs(dataJobs.tasks);
         }
         
         // 2. Fetch Immutable Conversation History
-        const resHist = await fetch(`/api/swarm/history/${resolvedParams.id}`);
+        const resHist = await fetch(`/api/swarm/history/${resolvedParams.id}`, { signal: controller.signal });
         if (resHist.ok) {
           const dataHist = await resHist.json();
           if (dataHist.history && dataHist.history.length > 0) {
@@ -121,13 +125,18 @@ export default function TraceExecution({ params }: { params: Promise<{ id: strin
             });
           }
         }
-      } catch (err) {
-        console.error("State sync failed:", err);
+      } catch (err: any) {
+        if (err?.name !== 'AbortError') {
+          console.error("State sync failed:", err);
+          setLogs((l: string) => l + `> ⚠️ [system] State sync failed: ${err?.message || 'Network error'}. Retrying...\n`);
+        }
+      } finally {
+        clearTimeout(timeout);
       }
     };
 
     fetchState();
-    const interval = setInterval(fetchState, 2500);
+    const interval = setInterval(fetchState, 8000);
     return () => clearInterval(interval);
   }, [resolvedParams.id]);
 
@@ -142,8 +151,10 @@ export default function TraceExecution({ params }: { params: Promise<{ id: strin
     if (!resolvedParams.id) return;
     
     const fetchArtifacts = async () => {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 4000);
       try {
-        const res = await fetch(`/api/swarm/threads/${resolvedParams.id}/artifacts`);
+        const res = await fetch(`/api/swarm/threads/${resolvedParams.id}/artifacts`, { signal: controller.signal });
         if (res.ok) {
           const data = await res.json();
           if (data.artifacts) {
@@ -171,11 +182,15 @@ export default function TraceExecution({ params }: { params: Promise<{ id: strin
              });
           }
         }
-      } catch (err) {}
+      } catch (err) {
+        // Silent — artifact polling is non-critical
+      } finally {
+        clearTimeout(timeout);
+      }
     };
 
     fetchArtifacts();
-    const interval = setInterval(fetchArtifacts, 2500);
+    const interval = setInterval(fetchArtifacts, 8000);
     return () => clearInterval(interval);
   }, [resolvedParams.id]);
 
@@ -272,14 +287,19 @@ export default function TraceExecution({ params }: { params: Promise<{ id: strin
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           sessionId,
-          agentId: "Spike", // Default for structural tasks
+          agentId: resolvedParams.id, // Use the agent from the URL — Jerry=/chats/Jerry, Spike=/chats/Spike
           message: currentInput,
-          tenantId: "ZVN",
+          tenantId: "OLYMPUS_SWARM",
           contextParams: currentSkillTag ? selectedSkillContext : undefined
         })
       });
 
-      if (!response.ok) throw new Error(`API Error: ${response.statusText}`);
+      if (!response.ok) {
+        // Surface the real error body from claw, not just the HTTP status text
+        let errMsg = response.statusText;
+        try { const errBody = await response.json(); errMsg = errBody.error || errMsg; } catch {}
+        throw new Error(`API Error: ${errMsg}`);
+      }
 
       const data = await response.json();
       setLogs(prev => prev + `> ✅ [system] Job enqueued (ID: ${data.jobId}). Waiting for agent execution...\n`);
@@ -363,6 +383,13 @@ export default function TraceExecution({ params }: { params: Promise<{ id: strin
             {/* Functional Chat Header */}
             <div className="h-[50px] shrink-0 border-b border-outline/10 flex items-center justify-between px-6 bg-layer-base/50 backdrop-blur-md relative z-20">
               <div className="flex items-center gap-2">
+                <button 
+                  onClick={() => router.back()} 
+                  className="flex items-center justify-center size-8 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors rounded-md border-r border-outline/10 mr-2"
+                  title="Close session and return"
+                >
+                  <X className="size-4" />
+                </button>
                 <Text size="label-large" className="text-on-surface font-medium">OmniRouter Trace: {resolvedParams.id}</Text>
               </div>
               <div className="flex bg-transparent items-center gap-4">
@@ -458,7 +485,7 @@ export default function TraceExecution({ params }: { params: Promise<{ id: strin
                            <div key={job._id || Math.random().toString()} className="flex items-start gap-3 text-on-surface-variant hover:text-on-surface group cursor-pointer transition-colors">
                              {job.status === "COMPLETED" ? (
                                <Check className="size-[14px] shrink-0 mt-0.5 text-primary" strokeWidth={2} />
-                             ) : job.status === "FAILED" || job.status === "DEAD_LETTER" ? (
+                             ) : (job.status as string) === "FAILED" || (job.status as string) === "DEAD_LETTER" ? (
                                <X className="size-[14px] shrink-0 mt-0.5 text-error" />
                              ) : (
                                <CircleDashed className={`size-[14px] shrink-0 mt-0.5 ${job.status === 'PENDING' ? 'animate-spin-slow text-primary/70' : ''}`} />
@@ -685,25 +712,25 @@ export default function TraceExecution({ params }: { params: Promise<{ id: strin
                 )}
               </div>
 
-              {/* Middle: Editor Toggles */}
-              <div className="flex items-center bg-layer-panel rounded-md border border-outline/10 p-0.5 absolute left-1/2 -translate-x-1/2 hidden md:flex">
-                <button 
-                  onClick={() => setPreviewMode('code')}
-                  title="Switch to Code View"
-                  className={`group p-1.5 rounded-[4px] transition-all relative ${previewMode === 'code' ? 'bg-layer-cover text-on-surface shadow-sm' : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest'}`}
-                >
-                  <Code2 className="size-3.5" aria-hidden="true" />
-                  <div className="absolute bottom-[-30px] left-1/2 -translate-x-1/2 px-2 py-1 bg-layer-panel border border-outline/10 text-[10px] text-on-surface rounded opacity-0 group-hover:opacity-100 whitespace-nowrap pointer-events-none transition-opacity">View Code</div>
-                </button>
-                <button 
-                  onClick={() => setPreviewMode('preview')}
-                  title="Switch to Preview Mode"
-                  className={`group p-1.5 rounded-[4px] transition-all relative ${previewMode === 'preview' ? 'bg-layer-cover text-on-surface shadow-sm' : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest'}`}
-                >
-                  <Eye className="size-3.5" aria-hidden="true" />
-                  <div className="absolute bottom-[-30px] left-1/2 -translate-x-1/2 px-2 py-1 bg-layer-panel border border-outline/10 text-[10px] text-on-surface rounded opacity-0 group-hover:opacity-100 whitespace-nowrap pointer-events-none transition-opacity">Preview Mode</div>
-                </button>
-              </div>
+              {/* Middle: Editor Toggles — compact icons matching reference design */}
+              {activeArtifactIndex !== null && activeArtifactIndex !== -1 && artifacts[activeArtifactIndex]?.type !== 'image' && (
+                <div className="absolute left-1/2 -translate-x-1/2 hidden md:flex items-center bg-layer-panel border border-outline/10 rounded-md p-0.5 gap-0.5">
+                  <button
+                    onClick={() => setPreviewMode('code')}
+                    title="View Code"
+                    className={`p-1.5 rounded-[4px] transition-all ${previewMode === 'code' ? 'bg-layer-cover text-on-surface shadow-sm' : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest'}`}
+                  >
+                    <Code2 className="size-3.5" />
+                  </button>
+                  <button
+                    onClick={() => setPreviewMode('preview')}
+                    title="Preview Mode"
+                    className={`p-1.5 rounded-[4px] transition-all ${previewMode === 'preview' ? 'bg-layer-cover text-on-surface shadow-sm' : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest'}`}
+                  >
+                    <Eye className="size-3.5" />
+                  </button>
+                </div>
+              )}
 
               {/* Right: Sandbox Actions */}
               <div className="flex items-center gap-1">
@@ -751,41 +778,58 @@ export default function TraceExecution({ params }: { params: Promise<{ id: strin
                   )}
                 </div>
               ) : (
-                <div className="h-full flex flex-col overflow-hidden bg-white">
-                  {artifacts[activeArtifactIndex].type === 'image' ? (
-                    <div className="flex-1 flex items-center justify-center p-8 bg-layer-canvas">
-                      <div className="relative group max-w-full max-h-full shadow-2xl overflow-hidden border border-outline/10">
-                        <img 
-                          src={artifacts[activeArtifactIndex].content} 
-                          alt="Generated Artifact" 
-                          className="max-w-full max-h-full object-contain"
-                        />
-                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-4">
-                           <button title="Download Image" className="p-3 bg-white/20 backdrop-blur-md rounded-full text-white hover:bg-white/40"><Download className="size-5" /> </button>
-                           <button title="Open in New Window" className="p-3 bg-white/20 backdrop-blur-md rounded-full text-white hover:bg-white/40"><ExternalLink className="size-5" /> </button>
-                        </div>
+                <div className="h-full flex flex-col p-4 bg-layer-canvas overflow-hidden">
+                  <div className="h-full flex flex-col overflow-hidden bg-[#0f1115] rounded-xl border border-outline/20 shadow-[0_20px_40px_rgba(0,0,0,0.5)] relative">
+                    
+                    {/* Floating Window Header */}
+                    <div className="h-12 bg-[#1a1d24] border-b border-[#2e333e] px-4 flex items-center justify-between shrink-0">
+                      <div className="flex items-center gap-2 w-16">
+                        <div className="size-3 rounded-full bg-[#ef4444]" />
+                        <div className="size-3 rounded-full bg-[#eab308]" />
+                        <div className="size-3 rounded-full bg-[#22c55e]" />
                       </div>
+                      <Text size="label-small" className="text-[#94a3b8] font-semibold tracking-widest uppercase text-[11px]">
+                        {previewMode === 'preview' 
+                          ? (artifacts[activeArtifactIndex].name.endsWith('.md') || artifacts[activeArtifactIndex].name.endsWith('.markdown')) ? 'MARKDOWN PREVIEW' : 'LIVE RENDER'
+                          : 'SOURCE CODE'}
+                      </Text>
+                      <div className="w-16" /> {/* Balance spacer */}
                     </div>
-                  ) : previewMode === 'preview' && artifacts[activeArtifactIndex].type === 'html' ? (
-                    <iframe 
-                      title="Artifact Preview"
-                      srcDoc={artifacts[activeArtifactIndex].content}
-                      className="w-full h-full border-none"
-                      sandbox="allow-scripts allow-forms allow-same-origin"
-                    />
-                  ) : (
-                    <div className="p-6 overflow-y-auto h-full bg-layer-base custom-scrollbar flex-1 relative">
-                      {artifacts[activeArtifactIndex].name.endsWith('.md') || artifacts[activeArtifactIndex].name.endsWith('.markdown') ? (
-                         <div className="prose prose-sm prose-invert max-w-none text-on-surface">
-                            <Text size="body-medium" className="whitespace-pre-wrap">{artifacts[activeArtifactIndex].content}</Text>
-                         </div>
+
+                    {/* Window Content */}
+                    <div className="flex-1 relative overflow-hidden bg-[#0f1115] flex flex-col">
+                      {artifacts[activeArtifactIndex].type === 'image' ? (
+                        <div className="w-full h-full flex items-center justify-center p-8 bg-[#0f1115]">
+                          <img 
+                            src={artifacts[activeArtifactIndex].content} 
+                            alt="Generated Artifact" 
+                            className="max-w-full max-h-full object-contain rounded-md shadow-2xl"
+                          />
+                        </div>
+                      ) : previewMode === 'preview' && artifacts[activeArtifactIndex].type === 'html' ? (
+                        <iframe 
+                          title="Artifact Preview"
+                          srcDoc={artifacts[activeArtifactIndex].content}
+                          className="w-full h-full border-none bg-white"
+                          sandbox="allow-scripts allow-forms allow-same-origin"
+                        />
+                      ) : previewMode === 'preview' && (artifacts[activeArtifactIndex].name.endsWith('.md') || artifacts[activeArtifactIndex].name.endsWith('.markdown')) ? (
+                        <div className="p-8 overflow-y-auto h-full custom-scrollbar flex-1 relative bg-[#0f1115]">
+                          <div className="prose prose-sm prose-invert max-w-none">
+                            <Text size="body-medium" className="text-[#f8fafc] whitespace-pre-wrap leading-relaxed">
+                              {artifacts[activeArtifactIndex].content}
+                            </Text>
+                          </div>
+                        </div>
                       ) : (
-                         <pre className="text-on-surface-variant font-mono text-[11px] leading-relaxed whitespace-pre-wrap word-break selection:bg-primary/30">
-                           {artifacts[activeArtifactIndex].content}
-                         </pre>
+                        <div className="p-6 overflow-y-auto h-full custom-scrollbar flex-1 relative bg-[#0f1115]">
+                          <pre className="text-[#e2e8f0] font-mono text-[13px] leading-relaxed whitespace-pre-wrap word-break selection:bg-primary/30">
+                            {artifacts[activeArtifactIndex].content}
+                          </pre>
+                        </div>
                       )}
                     </div>
-                  )}
+                  </div>
                 </div>
               )}
             </div>
