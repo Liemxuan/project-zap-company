@@ -231,9 +231,9 @@ export class OmniQueueManager {
         const db = this.client.db(DB_NAME);
         const col = db.collection<OmniJob>(getQueueCollection(tenantId));
 
-        // Find and lock the next job (Priority 0 first, then oldest)
+        // Find and lock the next job (Priority 0 first, then oldest). Ignore spawn jobs (which lack queueName).
         const job = await col.findOneAndUpdate(
-            { status: "PENDING" },
+            { status: "PENDING", queueName: { $exists: true } },
             { $set: { status: "PROCESSING", startedAt: new Date() } },
             { sort: { priority: 1, createdAt: 1 }, returnDocument: "after" }
         );

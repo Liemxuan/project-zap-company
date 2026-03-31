@@ -11,7 +11,7 @@ import * as hydraHandoff from "./hydra_handoff.js";
 import * as subagentTask from "./task.js";
 import * as writeTodos from "./write_todos.js";
 import * as analyzeAsset from "./analyze_asset.js";
-
+import * as spawnTool from "./spawn.js";
 // ── Types ─────────────────────────────────────────────────────────────────────
 
 export interface ToolResult {
@@ -77,6 +77,10 @@ const registry: Record<string, RegistryEntry> = {
     analyze_asset: {
         definition: analyzeAsset.definition,
         handler: (input, _userId, botName) => analyzeAsset.handler(input, botName),
+    },
+    spawn: {
+        definition: spawnTool.definition,
+        handler: (input, userId, botName) => spawnTool.handler(input, userId, botName),
     }
 };
 
@@ -97,7 +101,7 @@ export function getAvailableTools(botName: string): ChatCompletionTool[] {
     }
 
     // Other bots only get the safe base tools
-    const safeTools = ["get_current_time", "remember", "recall", "forget", "brave_search", "view_file", "deploy_hydra_team", "task", "write_todos", "analyze_asset"];
+    const safeTools = ["get_current_time", "remember", "recall", "forget", "brave_search", "view_file", "deploy_hydra_team", "task", "write_todos", "analyze_asset", "spawn"];
     return safeTools.map(name => registry[name]!.definition);
 }
 
