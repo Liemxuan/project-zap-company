@@ -47,6 +47,7 @@ export interface LoginFormProps {
     onForgotPassword?: () => void;
     onAppleLogin?: () => void;
     onGoogleLogin?: () => void;
+    onSignUp?: () => void;
     /** Composition visibility toggles — Inspector-driven */
     showMerchantName?: boolean;
     showEmail?: boolean;
@@ -54,6 +55,7 @@ export interface LoginFormProps {
     showRememberMe?: boolean;
     showSocialLogin?: boolean;
     showConfigBar?: boolean;
+    showSignUp?: boolean;
 }
 
 /**
@@ -80,12 +82,14 @@ export const LoginForm: React.FC<LoginFormProps> = ({
     onForgotPassword,
     onAppleLogin,
     onGoogleLogin,
+    onSignUp,
     showMerchantName = true,
     showEmail = true,
     showPassword = true,
     showRememberMe = true,
     showSocialLogin = true,
     showConfigBar = true,
+    showSignUp = false,
 }) => {
     return (
         <div
@@ -204,6 +208,20 @@ export const LoginForm: React.FC<LoginFormProps> = ({
                         )}
                     </Button>
                 </motion.div>
+
+                {/* Sign Up Button */}
+                {showSignUp && (
+                    <motion.div variants={itemShow} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                        <Button
+                            type="button"
+                            onClick={onSignUp}
+                            variant="secondary"
+                            className="w-full"
+                        >
+                            Create New Account
+                        </Button>
+                    </motion.div>
+                )}
 
                 {/* Social SSO */}
                 {showSocialLogin && (

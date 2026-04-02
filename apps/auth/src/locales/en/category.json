@@ -1,0 +1,19 @@
+{
+  "of": "Of",
+  "categories_matched": "Categories matched criteria.",
+  "title": "Category management",
+  "breadcrumb": "Inventory",
+  "badge": "Categories",
+  "search_placeholder": "Search categories...",
+  "filter": "Filters",
+  "show": "Show",
+  "records_per_table": "Records per table",
+  "previous": "Previous",
+  "next": "Next",
+  "table_name": "Name",
+  "table_slug": "Slug",
+  "table_products": "Products",
+  "table_status": "Status",
+  "status_active": "Active",
+  "status_inactive": "Inactive"
+}

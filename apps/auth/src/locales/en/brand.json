@@ -1,0 +1,21 @@
+{
+  "of": "Of",
+  "brands_matched": "Brands matched criteria.",
+  "title": "Brand management",
+  "breadcrumb": "Assembly",
+  "badge": "Brands",
+  "search_placeholder": "Search brands...",
+  "filter": "Filters",
+  "show": "Show",
+  "records_per_table": "Records per table",
+  "previous": "Previous",
+  "next": "Next",
+  "table_id": "ID",
+  "table_logo": "Logo",
+  "table_name": "Name",
+  "table_slug": "Slug",
+  "table_premium": "Premium",
+  "table_status": "Status",
+  "status_active": "Active",
+  "status_inactive": "Inactive"
+}

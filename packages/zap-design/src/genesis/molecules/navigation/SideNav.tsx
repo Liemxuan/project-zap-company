@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';import {
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'; import {
     ChevronDown,
     Palette,
     Box,
@@ -48,7 +48,7 @@ const NAV_DATA: Category[] = [
     // L1 to L4 are populated dynamically from their respective registries inside the component.
     {
         id: 'L5', title: 'L5: Organisms (3)', icon: Layout, items: [
-            'Inspector System', 
+            'Inspector System',
             'Login',
             { title: 'Tables', items: ['System Logs'] }
         ]
@@ -243,8 +243,22 @@ const buildMoleculeHrefs = (theme: string): Record<string, string> => {
     return hrefs;
 };
 
-const getHref = (item: string, theme: string, activeWorkspaceId?: string | null, currentPort?: string | null) => {
+const getHref = (item: string, theme: string, activeWorkspaceId?: string | null, currentPort?: string | null, pathname?: string | null) => {
     let finalPath = '';
+
+    // If we're in zap-auth workspace, try to detect merchant/lang prefix from current pathname
+    let prefix = '';
+    if (activeWorkspaceId === 'zap-auth' && pathname) {
+        const segments = pathname.split('/').filter(Boolean);
+        // Pattern: /[merchant]/[lang]/...
+        // Lang is usually 2 chars or matches en/vi/fr/ja
+        if (segments.length >= 1 && segments[0] !== 'auth' && segments[0] !== 'design') {
+            // If second segment looks like a language code
+            if (segments.length >= 2 && ['en', 'vi', 'fr', 'ja', 'es'].includes(segments[1].toLowerCase())) {
+                prefix = `/${segments[0]}/${segments[1]}`;
+            }
+        }
+    }
 
     // Check dynamic registries first (theme-aware)
     const foundationHrefs = buildFoundationHrefs(theme);
@@ -291,6 +305,11 @@ const getHref = (item: string, theme: string, activeWorkspaceId?: string | null,
             'Infrastructure': '/admin/infrastructure',
             'System Logs': `/design/${theme}/organisms/system-logs`,
             'User Management': `/auth/${theme}/user-management`,
+            'Products List': prefix ? `${prefix}/products` : `/auth/${theme}/products`,
+            'Categories List': prefix ? `${prefix}/categories` : `/auth/${theme}/categories`,
+            'Brands List': prefix ? `${prefix}/brands` : `/auth/${theme}/brands`,
+            'Locations List': prefix ? `${prefix}/locations` : `/auth/${theme}/locations`,
+            'Dining Option': prefix ? `${prefix}/dining-options` : `/auth/${theme}/dining-options`,
 
             // Pos/Kiosk/Web
             'Terminal': '/kiosk',
@@ -337,21 +356,21 @@ const getHref = (item: string, theme: string, activeWorkspaceId?: string | null,
     // If already fully qualified
     if (finalPath.startsWith('http')) return finalPath;
 
-    let targetPort = 3000;
-    if (finalPath.startsWith('/kiosk')) targetPort = 3100;
-    if (finalPath.startsWith('/storefront')) targetPort = 3300;
-    if (finalPath.startsWith('/inventory') || finalPath.startsWith('/ops')) targetPort = 4000;
-    if (finalPath.startsWith('/settings') || finalPath.startsWith('/provisioning')) targetPort = 4100;
-    if (finalPath.startsWith('/infrastructure') || finalPath.startsWith('/admin')) targetPort = 4500;
-    if (finalPath.startsWith('/auth/')) targetPort = 4700;
-    if (finalPath.startsWith('/mission-control')) targetPort = 3600;
-    if (finalPath.startsWith('/reports')) targetPort = 4200;
-    if (finalPath.startsWith('/swarm/') || finalPath === '/swarm/') targetPort = 3500;
-
-    // Use actual browser port post-hydration, fallback to registry port otherwise
-    // LocalStorage (which populates activeWorkspaceId) leaks across localhost ports, so we cannot trust it blindly.
     const activeWs = WORKSPACE_REGISTRY.find(w => w.id === activeWorkspaceId);
     const assumedPort = activeWs ? activeWs.port : 3000;
+
+    let targetPort = assumedPort;
+    if (finalPath.startsWith('/kiosk')) targetPort = 3200;
+    else if (finalPath.startsWith('/pos')) targetPort = 3100;
+    else if (finalPath.startsWith('/storefront')) targetPort = 3300;
+    else if (finalPath.startsWith('/inventory') || finalPath.startsWith('/ops')) targetPort = 4000;
+    else if (finalPath.startsWith('/settings') || finalPath.startsWith('/provisioning')) targetPort = 4100;
+    else if (finalPath.startsWith('/infrastructure') || finalPath.startsWith('/admin')) targetPort = 4500;
+    else if (finalPath.startsWith('/auth/')) targetPort = 4700;
+    else if (finalPath.startsWith('/mission-control')) targetPort = 3600;
+    else if (finalPath.startsWith('/reports')) targetPort = 4200;
+    else if (finalPath.startsWith('/swarm/') || finalPath === '/swarm/') targetPort = 3500;
+
     const evaluatingPort = currentPort ? parseInt(currentPort, 10) : assumedPort;
 
     if (evaluatingPort !== targetPort) {
@@ -442,6 +461,8 @@ export const SideNav: React.FC<SideNavProps> = ({ showDevWrapper = false }) => {
             if (activeWorkspaceId === 'zap-auth') {
                 return [
                     { id: 'auth-main', title: 'ZAP-AUTH MAIN', icon: Layout, items: ['Dashboard', 'Overview', 'Reports'] },
+                    { id: 'auth-products', title: 'PRODUCTS', icon: Box, items: ['Products List', 'Categories List', 'Brands List'] },
+                    { id: 'auth-location', title: 'LOCATION', icon: Database, items: ['Locations List', 'Dining Option'] },
                     { id: 'auth-prefs', title: 'SYSTEM PREFERENCES', icon: Columns, items: ['User Management', 'Settings', 'Access Control'] }
                 ];
             }
@@ -484,13 +505,13 @@ export const SideNav: React.FC<SideNavProps> = ({ showDevWrapper = false }) => {
         for (const category of EFFECTIVE_NAV) {
             for (const item of category.items) {
                 if (typeof item === 'string') {
-                    const href = getHref(item, theme, activeWorkspaceId, currentPort);
+                    const href = getHref(item, theme, activeWorkspaceId, currentPort, pathname);
                     if (href && (currentPathWithParams === href || pathname === href || pathname.startsWith(href + '/'))) {
                         if (href.length > bestMatch.length) bestMatch = href;
                     }
                 } else {
                     for (const subItem of item.items) {
-                        const href = getHref(subItem, theme, activeWorkspaceId, currentPort);
+                        const href = getHref(subItem, theme, activeWorkspaceId, currentPort, pathname);
                         if (href && (currentPathWithParams === href || pathname === href || pathname.startsWith(href + '/'))) {
                             if (href.length > bestMatch.length) bestMatch = href;
                         }
@@ -720,7 +741,7 @@ export const SideNav: React.FC<SideNavProps> = ({ showDevWrapper = false }) => {
                                         <div className="flex flex-col m-0 pl-8 overflow-hidden group/navlist space-y-[2px]">
                                             {category.items.map((item, itemIdx) => {
                                                 if (typeof item === 'string') {
-                                                    const href = getHref(item, theme, activeWorkspaceId, currentPort);
+                                                    const href = getHref(item, theme, activeWorkspaceId, currentPort, pathname);
                                                     const isItemActive = mounted && href !== '' && href === activeHref;
 
                                                     return (
@@ -778,7 +799,7 @@ export const SideNav: React.FC<SideNavProps> = ({ showDevWrapper = false }) => {
                                                                         className="flex flex-col border-l border-primary/20 ml-2 pl-3 space-y-0.5 overflow-hidden"
                                                                     >
                                                                         {item.items.map((subItem) => {
-                                                                            const href = getHref(subItem, theme, activeWorkspaceId, currentPort);
+                                                                            const href = getHref(subItem, theme, activeWorkspaceId, currentPort, pathname);
                                                                             const isItemActive = mounted && href !== '' && href === activeHref;
                                                                             return (
                                                                                 <Link
@@ -823,7 +844,7 @@ export const SideNav: React.FC<SideNavProps> = ({ showDevWrapper = false }) => {
                 <div className="mt-auto px-6 pb-3 pt-3 flex flex-col gap-3 bg-transparent border-t border-black">
                     {/* Theme Switcher */}
                     <div className="flex w-full bg-layer-dialog border border-outline-variant/50 rounded-[var(--button-border-radius,9999px)] p-1 shadow-inner gap-0.5">
-                        <Button 
+                        <Button
                             onClick={() => setIsThemeLocked(!isThemeLocked)}
                             title={isThemeLocked ? "Global Theme Settings Locked" : "Lock Theme Globally"}
                             visualStyle={isThemeLocked ? "solid" : "ghost"}

@@ -1,0 +1,21 @@
+{
+  "of": "Trên",
+  "brands_matched": "Thương hiệu khớp với tiêu chí.",
+  "title": "Quản lý thương hiệu",
+  "breadcrumb": "Lắp ráp",
+  "badge": "Thương hiệu",
+  "search_placeholder": "Tìm kiếm thương hiệu...",
+  "filter": "Bộ lọc",
+  "show": "Hiển thị",
+  "records_per_table": "Dòng mỗi trang",
+  "previous": "Trước",
+  "next": "Sau",
+  "table_id": "ID",
+  "table_logo": "Logo",
+  "table_name": "Tên",
+  "table_slug": "Slug",
+  "table_premium": "Premium",
+  "table_status": "Trạng thái",
+  "status_active": "Hoạt động",
+  "status_inactive": "Ngưng hoạt động"
+}

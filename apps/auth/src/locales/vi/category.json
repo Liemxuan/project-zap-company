@@ -1,0 +1,19 @@
+{
+  "of": "Trên",
+  "categories_matched": "Danh mục khớp với tiêu chí.",
+  "title": "Quản lý danh mục",
+  "breadcrumb": "Kho hàng",
+  "badge": "Danh mục",
+  "search_placeholder": "Tìm kiếm danh mục...",
+  "filter": "Bộ lọc",
+  "show": "Hiển thị",
+  "records_per_table": "Dòng mỗi trang",
+  "previous": "Trước",
+  "next": "Sau",
+  "table_name": "Tên",
+  "table_slug": "Slug",
+  "table_products": "Sản phẩm",
+  "table_status": "Trạng thái",
+  "status_active": "Hoạt động",
+  "status_inactive": "Ngưng hoạt động"
+}

@@ -7,12 +7,13 @@
         "purge:locks": "killall node ; rm -rf node_modules/.cache ; pnpm store prune || true",
         "prebuild": "pnpm run clean:pipe",
         "verify": "pnpm run prebuild && pnpm run build",
-        "dev": "TMPDIR=/tmp/next-tmp pnpm run -r --parallel dev",
-        "build": "TMPDIR=/tmp/next-tmp turbo run build --log-order=stream",
-        "lint": "TMPDIR=/tmp/next-tmp turbo run lint --log-order=stream",
+        "dev": "pnpm run -r --parallel dev",
+        "build": "turbo run build --log-order=stream",
+        "lint": "turbo run lint --log-order=stream",
         "reset-dev": "bash .agent/skills/devops-server-reset/reset-dev.sh"
     },
     "devDependencies": {
+        "cross-env": "^10.1.0",
         "prisma": "^6.19.2",
         "puppeteer": "^24.38.0",
         "tsx": "^4.21.0",

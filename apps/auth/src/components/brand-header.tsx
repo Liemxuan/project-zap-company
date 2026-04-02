@@ -1,12 +1,18 @@
-import { ShieldCheck } from 'lucide-react';
+import Image from 'next/image';
 import { Heading } from "zap-design/src/genesis/atoms/typography/headings";
 import { Text } from "zap-design/src/genesis/atoms/typography/text";
 
 export function BrandHeader() {
   return (
     <div className="flex flex-col items-center justify-center space-y-3 mb-8">
-      <div className="flex items-center justify-center w-12 h-12 bg-primary/10 rounded-2xl border border-primary/20">
-        <ShieldCheck className="w-6 h-6 text-primary" />
+      <div className="relative w-12 h-12 mb-1">
+        <Image 
+          src="/zap-logo.png" 
+          alt="ZAP" 
+          fill 
+          className="object-contain"
+          priority
+        />
       </div>
       <div className="text-center space-y-1">
         <Heading level={1} className="text-on-surface">ZAP Vault</Heading>
