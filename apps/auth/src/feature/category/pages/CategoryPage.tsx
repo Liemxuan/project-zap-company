@@ -42,7 +42,7 @@ export function CategoryPage({ merchant }: Props) {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
 
-  const { categories, loading, total } = useCategories(1, 100);
+  const { categories, loading, totalRecords, totalPages } = useCategories(currentPage, pageSize);
 
   if (tLoading) return null;
 
@@ -128,7 +128,8 @@ export function CategoryPage({ merchant }: Props) {
       filters={filters}
       currentPage={currentPage}
       pageSize={pageSize}
-      totalRecords={total}
+      totalRecords={totalRecords}
+      totalPages={totalPages}
       onFilterChange={(newFilters) => {
         setFilters(newFilters);
         setCurrentPage(1);
@@ -164,7 +165,7 @@ export function CategoryPage({ merchant }: Props) {
               title="Category Datagrid // Assembly"
               fullScreenHref="?fullscreen=true"
             >
-              <div className="w-full flex-1 flex flex-col rounded-b-xl overflow-hidden min-h-[600px] p-6 lg:p-12 pb-24">
+              <div className="w-full flex-1 flex flex-col rounded-b-xl overflow-visible min-h-[600px] p-6 lg:p-12 pb-24">
                 {tableContent}
               </div>
             </CanvasDesktop>

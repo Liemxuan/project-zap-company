@@ -4,9 +4,9 @@
  */
 
 import { httpService } from '@/core/api/http.service';
+import { API_ENDPOINTS } from '@/const';
 import type { ProductFilter, ProductResponse, Product } from '../models/product.model';
-
-const API_BASE_URL = 'https://crm-gateway-v1-c7wqwyi1.uc.gateway.dev/api/products';
+import type { CategoryResponse } from '../../category/models/category.model';
 
 /**
  * Fetch all products with optional filtering and pagination
@@ -31,14 +31,14 @@ export async function getProducts(
     },
   };
 
-  console.log('[Product API] Request to /api/products/list:', requestPayload);
+  console.log(`[Product API] Request to ${API_ENDPOINTS.PRODUCT_LIST}:`, requestPayload);
 
   const response = await httpService.post<ProductResponse>(
-    `${API_BASE_URL}/list`,
+    API_ENDPOINTS.PRODUCT_LIST,
     requestPayload
   );
 
-  console.log('[Product API] Response from /api/products/list:', response);
+  console.log(`[Product API] Response from ${API_ENDPOINTS.PRODUCT_LIST}:`, response);
 
   return response.data;
 }
@@ -48,13 +48,12 @@ export async function getProducts(
  * @param id - Product ID
  */
 export async function getProductById(id: string): Promise<Product | null> {
-  console.log(`[Product API] Request to /api/products/${id}`);
+  const url = API_ENDPOINTS.PRODUCT_GET.replace(':id', id);
+  console.log(`[Product API] Request to ${url}`);
 
-  const response = await httpService.get<Product>(
-    `${API_BASE_URL}/${id}`
-  );
+  const response = await httpService.get<Product>(url);
 
-  console.log(`[Product API] Response from /api/products/${id}:`, response);
+  console.log(`[Product API] Response from ${url}:`, response);
 
   return response.data;
 }
@@ -63,15 +62,18 @@ export async function getProductById(id: string): Promise<Product | null> {
  * Fetch product categories
  */
 export async function getProductCategories(): Promise<string[]> {
-  console.log('[Product API] Request to /api/products/categories');
+  const url = API_ENDPOINTS.CATEGORY_LIST;
+  console.log(`[Product API] Request to ${url}`);
 
-  const response = await httpService.get<string[]>(
-    `${API_BASE_URL}/categories`
-  );
+  const response = await httpService.post<CategoryResponse>(url, { page_index: 1, page_size: 100 });
 
-  console.log('[Product API] Response from /api/products/categories:', response);
+  console.log(`[Product API] Response from ${url}:`, response);
 
-  return response.data;
+  if (response.data && response.data.items) {
+    return response.data.items.map(cat => cat.name);
+  }
+
+  return [];
 }
 
 /**
@@ -81,14 +83,12 @@ export async function getProductCategories(): Promise<string[]> {
 export async function createProduct(
   productData: Omit<Product, 'id' | 'createdAt' | 'updatedAt'>
 ): Promise<Product> {
-  console.log('[Product API] Request to /api/products (POST):', productData);
+  const url = API_ENDPOINTS.PRODUCT_CREATE;
+  console.log(`[Product API] Request to ${url} (POST):`, productData);
 
-  const response = await httpService.post<Product>(
-    `${API_BASE_URL}`,
-    productData
-  );
+  const response = await httpService.post<Product>(url, productData);
 
-  console.log('[Product API] Response from /api/products (POST):', response);
+  console.log(`[Product API] Response from ${url} (POST):`, response);
 
   return response.data;
 }
@@ -102,14 +102,12 @@ export async function updateProduct(
   id: string,
   productData: Partial<Omit<Product, 'id' | 'createdAt'>>
 ): Promise<Product> {
-  console.log(`[Product API] Request to /api/products/${id} (PUT):`, productData);
+  const url = API_ENDPOINTS.PRODUCT_UPDATE.replace(':id', id);
+  console.log(`[Product API] Request to ${url} (PUT):`, productData);
 
-  const response = await httpService.put<Product>(
-    `${API_BASE_URL}/${id}`,
-    productData
-  );
+  const response = await httpService.put<Product>(url, productData);
 
-  console.log(`[Product API] Response from /api/products/${id} (PUT):`, response);
+  console.log(`[Product API] Response from ${url} (PUT):`, response);
 
   return response.data;
 }
@@ -119,11 +117,10 @@ export async function updateProduct(
  * @param id - Product ID
  */
 export async function deleteProduct(id: string): Promise<void> {
-  console.log(`[Product API] Request to /api/products/${id} (DELETE)`);
+  const url = API_ENDPOINTS.PRODUCT_DELETE.replace(':id', id);
+  console.log(`[Product API] Request to ${url} (DELETE)`);
 
-  await httpService.delete<void>(
-    `${API_BASE_URL}/${id}`
-  );
+  await httpService.delete<void>(url);
 
-  console.log(`[Product API] Response from /api/products/${id} (DELETE): Success`);
+  console.log(`[Product API] Response from ${url} (DELETE): Success`);
 }

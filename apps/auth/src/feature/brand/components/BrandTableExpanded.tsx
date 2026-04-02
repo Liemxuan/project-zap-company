@@ -54,7 +54,7 @@ function BrandRow({
   onToggle: () => void;
   t: (key: string, fallback?: string) => string;
 }) {
-  const pillVariant = brand.is_premium ? 'success' : 'outline';
+  const pillVariant = brand.is_premium ? 'success' : 'neutral';
 
   return (
     <>
@@ -87,7 +87,7 @@ function BrandRow({
         </TableCell>
 
         {/* name */}
-        <TableCell className="min-w-[200px] whitespace-nowrap text-left py-4 font-medium text-[11px]">
+        <TableCell className="w-full min-w-[200px] whitespace-nowrap text-left py-4 font-medium text-[11px]">
           {brand.name}
         </TableCell>
 
@@ -109,7 +109,7 @@ function BrandRow({
         </TableCell>
 
         {/* actions */}
-        <TableCell className="w-16 whitespace-nowrap text-right py-4" onClick={(e) => e.stopPropagation()}>
+        <TableCell className="w-16 whitespace-nowrap text-right py-4 sticky right-0 bg-layer-canvas group-hover:bg-surface-variant/50 transition-colors z-10 shadow-[-4px_0_8px_-4px_rgba(0,0,0,0.1)]" onClick={(e) => e.stopPropagation()}>
           <QuickActionsDropdown
             actions={[
               { label: t('action_view', 'View'), icon: Eye, onClick: () => console.log('View', brand.id) },
@@ -223,11 +223,10 @@ function FilterPanel({
                 whileHover={{ x: 2 }}
                 onClick={() => toggleFilter(status)}
                 aria-pressed={selected}
-                className={`flex w-full items-center justify-between gap-2 border border-[length:max(var(--button-border-width,1px),1px)] rounded-[length:var(--button-border-radius,var(--radius-btn,4px))] px-3 py-2 text-sm transition-colors font-dev text-transform-tertiary ${
-                  selected
+                className={`flex w-full items-center justify-between gap-2 border border-[length:max(var(--button-border-width,1px),1px)] rounded-[length:var(--button-border-radius,var(--radius-btn,4px))] px-3 py-2 text-sm transition-colors font-dev text-transform-tertiary ${selected
                     ? 'border-primary bg-primary/10 text-primary'
                     : 'border-border text-muted-foreground hover:border-primary/40 hover:bg-surface-variant/40'
-                }`}
+                  }`}
               >
                 <span className="capitalize">{status}</span>
                 {selected && <Check className="h-3.5 w-3.5" />}
@@ -250,6 +249,7 @@ interface BrandTableExpandedProps {
   currentPage?: number;
   pageSize?: number;
   totalRecords?: number;
+  totalPages?: number;
   onPageChange?: (page: number) => void;
   onPageSizeChange?: (pageSize: number) => void;
   isFilterActive?: boolean;
@@ -267,6 +267,7 @@ export function BrandTableExpanded({
   currentPage = 1,
   pageSize = 10,
   totalRecords = brands.length,
+  totalPages: totalPagesProp,
   onPageChange,
   onPageSizeChange,
   isFilterActive,
@@ -307,18 +308,18 @@ export function BrandTableExpanded({
     });
   }, [filters, searchQuery, brands]);
 
-  const totalPages = Math.ceil(filteredBrands.length / pageSize);
-  const paginatedBrands = useMemo(() => {
-    const start = (currentPage - 1) * pageSize;
-    return filteredBrands.slice(start, start + pageSize);
-  }, [filteredBrands, currentPage, pageSize]);
+  const totalPages = totalPagesProp ?? Math.ceil(filteredBrands.length / pageSize);
+
+  // For client-side fallback if no totalPages is provided, we still slice
+  // But if totalPages is provided, we assume the server already paginated
+  const displayBrands = totalPagesProp ? brands : filteredBrands.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
   const activeFilters = filters.status.length;
   const hasActiveFilter = activeFilters > 0 || searchQuery.trim() !== '';
 
   if (loading) {
     return (
-      <main className={cn('w-full bg-layer-canvas border-outline-variant overflow-hidden border-[length:var(--table-border-width,var(--card-border-width,1px))] rounded-[length:var(--table-border-radius,var(--radius-card,8px))] flex flex-col min-h-[500px] items-center justify-center', className)}>
+      <main className={cn('w-full bg-layer-canvas border-outline-variant overflow-hidden border-[length:var(--table-border-width,var(--card-border-width,1px))] rounded-[length:var(--table-border-radius,var(--radius-card,8px))] flex flex-col min-h-[400px] items-center justify-center', className)}>
         <p className="font-body text-transform-secondary text-muted-foreground">Loading brands...</p>
       </main>
     );
@@ -338,7 +339,7 @@ export function BrandTableExpanded({
   }
 
   return (
-    <main className={cn('w-full bg-layer-canvas flex flex-col border-[length:var(--table-border-width,var(--card-border-width,1px))] rounded-[length:var(--table-border-radius,var(--radius-card,8px))] border-outline-variant overflow-hidden min-h-[500px]', className)}>
+    <main className={cn('w-full bg-layer-canvas flex flex-col border-[length:var(--table-border-width,var(--card-border-width,1px))] rounded-[length:var(--table-border-radius,var(--radius-card,8px))] border-outline-variant overflow-visible', className)}>
       <div className={cn('hidden', lang)} />
 
       {/* Toolbar */}
@@ -386,7 +387,7 @@ export function BrandTableExpanded({
       </div>
 
       {/* Content */}
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex-1 flex overflow-hidden">
         <AnimatePresence initial={false}>
           {showFilters && !isFilterActive && (
             <motion.div
@@ -408,7 +409,7 @@ export function BrandTableExpanded({
         </AnimatePresence>
 
         <div className="flex-1 flex flex-col bg-layer-cover overflow-hidden min-w-0">
-          <div className="flex-1 overflow-auto rounded-none border-0">
+          <div className="flex-1 overflow-auto rounded-none border-0 overflow-y-visible">
             <Table className="w-full relative bg-transparent">
               <TableHeader className="bg-layer-panel top-0 z-10 sticky border-b border-border shadow-sm h-12">
                 <TableRow className="border-b-0 hover:bg-transparent">
@@ -419,13 +420,13 @@ export function BrandTableExpanded({
                   <TableHead className="min-w-[150px] text-left bg-layer-panel font-display font-semibold text-[10px] h-12" style={{ textTransform: 'lowercase' }}>slug</TableHead>
                   <TableHead className="w-24 text-center bg-layer-panel font-display font-semibold text-[10px] h-12" style={{ textTransform: 'lowercase' }}>premium</TableHead>
                   <TableHead className="w-20 text-center bg-layer-panel font-display font-semibold text-[10px] h-12" style={{ textTransform: 'lowercase' }}>status</TableHead>
-                  <TableHead className="w-16 text-right bg-layer-panel font-display font-semibold text-[10px] h-12" style={{ textTransform: 'lowercase' }}>actions</TableHead>
+                  <TableHead className="w-16 text-right bg-layer-panel font-display font-semibold text-[10px] h-12 sticky right-0 z-30 shadow-[-4px_0_8px_-4px_rgba(0,0,0,0.1)]" style={{ textTransform: 'lowercase' }}>actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 <AnimatePresence mode="popLayout">
-                  {paginatedBrands.length > 0 ? (
-                    paginatedBrands.map((brand) => (
+                  {displayBrands.length > 0 ? (
+                    displayBrands.map((brand) => (
                       <BrandRow
                         key={brand.id}
                         brand={brand}

@@ -26,31 +26,32 @@ export const API_ENDPOINTS = {
   REGISTER_CHECK_MERCHANT_URL: '/register/check-merchant-url',
   REGISTER_SEND_OTP: '/register/send-otp',
   REGISTER_CHECK_OTP: '/register/check-otp',
+  REGISTER_SIGNUP: '/auth/signup',
 
   // Products
   PRODUCT_LIST: '/products/list',
   PRODUCT_GET: '/products/:id',
-  PRODUCT_CREATE: '/api/products',
-  PRODUCT_UPDATE: '/api/products/:id',
-  PRODUCT_DELETE: '/api/products/:id',
+  PRODUCT_CREATE: '/products',
+  PRODUCT_UPDATE: '/products/:id',
+  PRODUCT_DELETE: '/products/:id',
 
   // Categories
-  CATEGORY_LIST: '/api/categories/list',
+  CATEGORY_LIST: '/categories/list',
 
   // Brands
-  BRAND_LIST: '/api/brands/list',
+  BRAND_LIST: '/brands/list',
 
   // Units
-  UNIT_LIST: '/api/units/list',
+  UNIT_LIST: '/units/list',
 
   // Modifier Groups
-  MODIFIER_GROUP_LIST: '/api/modifiergroups/list',
+  MODIFIER_GROUP_LIST: '/modifiergroups/list',
 
   // Locations
-  LOCATION_LIST: '/api/location-list',
+  LOCATION_LIST: '/location-list',
 
   // Dining Options
-  DINING_OPTION_LIST: '/api/dining-option-list',
+  DINING_OPTION_LIST: '/dining-option-list',
 } as const;
 
 // Supported Languages

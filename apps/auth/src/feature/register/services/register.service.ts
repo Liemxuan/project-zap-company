@@ -93,8 +93,9 @@ export async function checkOtpRegisterService(
  * Server action for direct signup submission
  */
 export async function signupAction(values: SignupFormValues): Promise<SignupResponse> {
+  const url = `${API_BASE_URL}${API_ENDPOINTS.REGISTER_SIGNUP}`;
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}/api/auth/signup`, {
+    const response = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

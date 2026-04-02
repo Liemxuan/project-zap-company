@@ -4,17 +4,19 @@ import { useState, useEffect, useCallback } from 'react';
 import { Brand, BrandFilter, BrandResponse } from '../models/brand.model';
 import { getBrands } from '../services/brand.service';
 
-export function useBrands(initialPage = 1, pageSize = 10) {
+export function useBrands(initialPage = 1, initialPageSize = 10) {
   const [brands, setBrands] = useState<Brand[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [page, setPage] = useState(initialPage);
-  const [total, setTotal] = useState(0);
+  const [pageIndex, setPageIndex] = useState(initialPage);
+  const [totalRecords, setTotalRecords] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const [pageSize, setPageSize] = useState(initialPageSize);
   const [filter, setFilter] = useState<BrandFilter>({});
 
   // Sync internal page state with initialPage prop when it changes
   useEffect(() => {
-    setPage(initialPage);
+    setPageIndex(initialPage);
   }, [initialPage]);
 
   // Fetch brands when filter or page changes
@@ -23,31 +25,36 @@ export function useBrands(initialPage = 1, pageSize = 10) {
       setLoading(true);
       setError(null);
       try {
-        const response = await getBrands(filter, page, pageSize);
+        const response = await getBrands(filter, pageIndex, pageSize);
         setBrands(response.items);
-        setTotal(response.total);
+        setTotalRecords(response.total_record);
+        setTotalPages(response.total_page);
+        setPageIndex(response.page_index);
+        setPageSize(response.page_size);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to fetch brands');
         setBrands([]);
+        setTotalRecords(0);
+        setTotalPages(0);
       } finally {
         setLoading(false);
       }
     };
 
     fetchBrands();
-  }, [filter, page, pageSize]);
+  }, [filter, pageIndex, pageSize]);
 
   const handleSearch = useCallback((searchQuery: string) => {
-    setPage(1);
+    setPageIndex(1);
     setFilter((prev) => ({ ...prev, search: searchQuery }));
   }, []);
 
   const handlePageChange = useCallback((newPage: number) => {
-    setPage(newPage);
+    setPageIndex(newPage);
   }, []);
 
   const handleClearFilters = useCallback(() => {
-    setPage(1);
+    setPageIndex(1);
     setFilter({});
   }, []);
 
@@ -55,8 +62,9 @@ export function useBrands(initialPage = 1, pageSize = 10) {
     brands,
     loading,
     error,
-    page,
-    total,
+    pageIndex,
+    totalRecords,
+    totalPages,
     pageSize,
     filter,
     handleSearch,

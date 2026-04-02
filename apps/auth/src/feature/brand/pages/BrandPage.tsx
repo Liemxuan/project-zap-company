@@ -12,6 +12,7 @@ import { BrandTableExpanded, type BrandFilters } from '../components/BrandTableE
 import { useBrands } from '../hooks/use-brands';
 import { useTranslation } from '../../../hooks/use-translation';
 import { DataFilter, FilterGroup } from 'zap-design/src/genesis/molecules/data-filter';
+import { CanvasDesktop } from 'zap-design/src/components/dev/CanvasDesktop';
 
 type DataFilterGroup = {
   id: string;
@@ -41,7 +42,7 @@ export function BrandPage({ merchant }: Props) {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
 
-  const { brands, loading, total } = useBrands(1, 100);
+  const { brands, loading, totalRecords, totalPages } = useBrands(currentPage, pageSize);
 
   if (tLoading) return null;
 
@@ -117,7 +118,8 @@ export function BrandPage({ merchant }: Props) {
       filters={filters}
       currentPage={currentPage}
       pageSize={pageSize}
-      totalRecords={total}
+      totalRecords={totalRecords}
+      totalPages={totalPages}
       onFilterChange={(newFilters) => {
         setFilters(newFilters);
         setCurrentPage(1);
@@ -149,9 +151,14 @@ export function BrandPage({ merchant }: Props) {
 
         <div className="flex-1 overflow-auto pt-8 px-4 lg:pt-16 lg:px-24 pb-24 flex flex-col relative z-0 bg-white">
           {!isFullscreen ? (
-            <div className="w-full flex-1 flex flex-col rounded-b-xl overflow-hidden min-h-[600px] p-6 lg:p-12 pb-24">
-              {tableContent}
-            </div>
+            <CanvasDesktop
+              title={t('canvas_title', 'Brand Datagrid // Assembly')}
+              fullScreenHref="?fullscreen=true"
+            >
+              <div className="w-full flex-1 flex flex-col rounded-b-xl overflow-visible min-h-[600px] p-6 lg:p-12 pb-24">
+                {tableContent}
+              </div>
+            </CanvasDesktop>
           ) : (
             <div className="flex-1 flex flex-col min-h-0">
               {tableContent}

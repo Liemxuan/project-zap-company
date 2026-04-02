@@ -43,7 +43,7 @@ export function ProductPage({ merchant }: Props) {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
 
-  const { products, loading, total } = useProducts(1, 100);
+  const { products, loading, totalRecords, totalPages } = useProducts(currentPage, pageSize);
 
   // Derive filter groups
   const baseGroups: DataFilterGroup[] = [
@@ -135,7 +135,8 @@ export function ProductPage({ merchant }: Props) {
       filters={filters}
       currentPage={currentPage}
       pageSize={pageSize}
-      totalRecords={total}
+      totalRecords={totalRecords}
+      totalPages={totalPages}
       onFilterChange={(newFilters) => {
         setFilters(newFilters);
         setCurrentPage(1);
@@ -173,7 +174,7 @@ export function ProductPage({ merchant }: Props) {
               title={t('canvas_title', 'Product Datagrid // Assembly')}
               fullScreenHref="?fullscreen=true"
             >
-              <div className="w-full flex-1 flex flex-col rounded-b-xl overflow-hidden min-h-[600px] p-6 lg:p-12 pb-24">
+              <div className="w-full flex-1 flex flex-col rounded-b-xl overflow-visible min-h-[600px] p-6 lg:p-12 pb-24">
                 {tableContent}
               </div>
             </CanvasDesktop>

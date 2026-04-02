@@ -87,7 +87,7 @@ function CategoryRow({
         </TableCell>
 
         {/* category_name */}
-        <TableCell className="min-w-[200px] whitespace-nowrap text-left py-4 font-medium text-[11px]">
+        <TableCell className="w-full min-w-[200px] whitespace-nowrap text-left py-4 font-medium text-[11px]">
           {category.name}
         </TableCell>
 
@@ -115,7 +115,7 @@ function CategoryRow({
         </TableCell>
 
         {/* actions */}
-        <TableCell className="w-16 whitespace-nowrap text-right py-4" onClick={(e) => e.stopPropagation()}>
+        <TableCell className="w-16 whitespace-nowrap text-right py-4 sticky right-0 bg-layer-canvas group-hover:bg-surface-variant/50 transition-colors z-10 shadow-[-4px_0_8px_-4px_rgba(0,0,0,0.1)]" onClick={(e) => e.stopPropagation()}>
           <QuickActionsDropdown
             actions={[
               { label: t('action_view', 'View'), icon: Eye, onClick: () => console.log('View', category.id) },
@@ -258,6 +258,7 @@ interface CategoryTableExpandedProps {
   currentPage?: number;
   pageSize?: number;
   totalRecords?: number;
+  totalPages?: number;
   onPageChange?: (page: number) => void;
   onPageSizeChange?: (pageSize: number) => void;
   isFilterActive?: boolean;
@@ -275,6 +276,7 @@ export function CategoryTableExpanded({
   currentPage = 1,
   pageSize = 10,
   totalRecords = categories.length,
+  totalPages: totalPagesProp,
   onPageChange,
   onPageSizeChange,
   isFilterActive,
@@ -315,11 +317,11 @@ export function CategoryTableExpanded({
     });
   }, [filters, searchQuery, categories]);
 
-  const totalPages = Math.ceil(filteredCategories.length / pageSize);
-  const paginatedCategories = useMemo(() => {
-    const start = (currentPage - 1) * pageSize;
-    return filteredCategories.slice(start, start + pageSize);
-  }, [filteredCategories, currentPage, pageSize]);
+  const totalPages = totalPagesProp ?? Math.ceil(filteredCategories.length / pageSize);
+  
+  // For client-side fallback if no totalPages is provided, we still slice
+  // But if totalPages is provided, we assume the server already paginated
+  const displayCategories = totalPagesProp ? categories : filteredCategories.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
   const activeFilters = filters.status.length;
   const hasActiveFilter = activeFilters > 0 || searchQuery.trim() !== '';
@@ -346,7 +348,7 @@ export function CategoryTableExpanded({
   }
 
   return (
-    <main className={cn('w-full bg-layer-canvas flex flex-col border-[length:var(--table-border-width,var(--card-border-width,1px))] rounded-[length:var(--table-border-radius,var(--radius-card,8px))] border-outline-variant overflow-hidden min-h-[500px]', className)}>
+    <main className={cn('w-full bg-layer-canvas flex flex-col border-[length:var(--table-border-width,var(--card-border-width,1px))] rounded-[length:var(--table-border-radius,var(--radius-card,8px))] border-outline-variant overflow-visible', className)}>
       <div className={cn('hidden', lang)} />
 
       {/* Toolbar */}
@@ -394,7 +396,7 @@ export function CategoryTableExpanded({
       </div>
 
       {/* Content */}
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex overflow-visible">
         <AnimatePresence initial={false}>
           {showFilters && !isFilterActive && (
             <motion.div
@@ -416,7 +418,7 @@ export function CategoryTableExpanded({
         </AnimatePresence>
 
         <div className="flex-1 flex flex-col bg-layer-cover overflow-hidden min-w-0">
-          <div className="flex-1 overflow-auto rounded-none border-0">
+          <div className="flex-1 overflow-auto rounded-none border-0 overflow-y-visible">
             <Table className="w-full relative bg-transparent">
               <TableHeader className="bg-layer-panel top-0 z-10 sticky border-b border-border shadow-sm h-12">
                 <TableRow className="border-b-0 hover:bg-transparent">
@@ -427,13 +429,13 @@ export function CategoryTableExpanded({
                   <TableHead className="w-20 text-center bg-layer-panel font-display font-semibold text-[10px] h-12" style={{ textTransform: 'lowercase' }}>item</TableHead>
                   <TableHead className="w-32 text-left bg-layer-panel font-display font-semibold text-[10px] h-12" style={{ textTransform: 'lowercase' }}>channel</TableHead>
                   <TableHead className="w-28 text-center bg-layer-panel font-display font-semibold text-[10px] h-12" style={{ textTransform: 'lowercase' }}>status</TableHead>
-                  <TableHead className="w-16 text-right bg-layer-panel font-display font-semibold text-[10px] h-12" style={{ textTransform: 'lowercase' }}>actions</TableHead>
+                  <TableHead className="w-16 text-right bg-layer-panel font-display font-semibold text-[10px] h-12 sticky right-0 z-30 shadow-[-4px_0_8px_-4px_rgba(0,0,0,0.1)]" style={{ textTransform: 'lowercase' }}>actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 <AnimatePresence mode="popLayout">
-                  {paginatedCategories.length > 0 ? (
-                    paginatedCategories.map((category) => (
+                  {displayCategories.length > 0 ? (
+                    displayCategories.map((category) => (
                       <CategoryRow
                         key={category.id}
                         category={category}

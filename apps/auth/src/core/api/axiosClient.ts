@@ -6,8 +6,13 @@
 import axios, { InternalAxiosRequestConfig, AxiosResponse } from 'axios';
 import { STORAGE_KEYS } from '@/const';
 
+// Use proxy in development to avoid CORS issues
+const baseURL = process.env.NODE_ENV === 'development'
+  ? '/api/proxy'
+  : process.env.NEXT_PUBLIC_API_URL;
+
 const axiosClient = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  baseURL,
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',

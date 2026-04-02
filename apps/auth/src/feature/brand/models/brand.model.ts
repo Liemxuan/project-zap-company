@@ -22,6 +22,9 @@ export interface BrandFilter {
 }
 
 export interface BrandResponse {
+  total_page: number;
+  total_record: number;
+  page_index: number;
+  page_size: number;
   items: Brand[];
-  total: number;
 }

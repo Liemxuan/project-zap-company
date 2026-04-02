@@ -7,7 +7,7 @@ export interface Product {
   price: number;
   status: ProductStatus;
   description?: string;
-  sku?: string;
+  sku: string;
   stock?: number;
   image?: string;
   location?: string;

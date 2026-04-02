@@ -1,8 +1,7 @@
 'use server';
 
 import type { BrandFilter, BrandResponse } from '../models/brand.model';
-
-const API_BASE_URL = 'https://crm-gateway-v1-c7wqwyi1.uc.gateway.dev/api/brands';
+import { API_BASE_URL, API_ENDPOINTS } from '@/const';
 
 /**
  * Server action: Fetch all brands with optional filtering and pagination
@@ -19,10 +18,10 @@ export async function getBrandsServer(
     filters: {},
   };
 
-  console.log('[Brand API] Server Request to /api/brands/list:', requestPayload);
+  console.log(`[Brand API] Server Request to ${API_ENDPOINTS.BRAND_LIST}:`, requestPayload);
 
   try {
-    const response = await fetch(`${API_BASE_URL}/list`, {
+    const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.BRAND_LIST}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -37,17 +36,20 @@ export async function getBrandsServer(
     }
 
     const data = await response.json();
-    console.log('[Brand API] Server Response from /api/brands/list:', data);
+    console.log(`[Brand API] Server Response from ${API_ENDPOINTS.BRAND_LIST}:`, data);
 
     // API returns wrapped response, extract data
     if (data.success && data.data) {
-      return {
-        items: data.data.items,
-        total: data.data.total,
-      };
+      return data.data;
     }
 
-    return data;
+    return { 
+      items: [], 
+      total_page: 0, 
+      total_record: 0, 
+      page_index: page, 
+      page_size: pageSize 
+    } as BrandResponse;
   } catch (error) {
     console.error('[Brand API] Server Error fetching brands:', error);
     throw error;

@@ -1,8 +1,7 @@
 'use server';
 
 import type { CategoryFilter, CategoryResponse } from '../models/category.model';
-
-const API_BASE_URL = 'https://crm-gateway-v1-c7wqwyi1.uc.gateway.dev/api/categories';
+import { API_BASE_URL, API_ENDPOINTS } from '@/const';
 
 /**
  * Server action: Fetch all categories with optional filtering and pagination
@@ -19,10 +18,10 @@ export async function getCategoriesServer(
     filters: {},
   };
 
-  console.log('[Category API] Server Request to /api/categories/list:', requestPayload);
+  console.log(`[Category API] Server Request to ${API_ENDPOINTS.CATEGORY_LIST}:`, requestPayload);
 
   try {
-    const response = await fetch(`${API_BASE_URL}/list`, {
+    const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.CATEGORY_LIST}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -37,17 +36,20 @@ export async function getCategoriesServer(
     }
 
     const data = await response.json();
-    console.log('[Category API] Server Response from /api/categories/list:', data);
+    console.log(`[Category API] Server Response from ${API_ENDPOINTS.CATEGORY_LIST}:`, data);
 
     // API returns wrapped response, extract data
     if (data.success && data.data) {
-      return {
-        items: data.data.items,
-        total: data.data.total,
-      };
+      return data.data;
     }
 
-    return data;
+    return { 
+      items: [], 
+      total_page: 0, 
+      total_record: 0, 
+      page_index: page, 
+      page_size: pageSize 
+    } as CategoryResponse;
   } catch (error) {
     console.error('[Category API] Server Error fetching categories:', error);
     throw error;

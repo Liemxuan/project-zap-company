@@ -22,6 +22,9 @@ export interface CategoryFilter {
 }
 
 export interface CategoryResponse {
+  total_page: number;
+  total_record: number;
+  page_index: number;
+  page_size: number;
   items: Category[];
-  total: number;
 }
