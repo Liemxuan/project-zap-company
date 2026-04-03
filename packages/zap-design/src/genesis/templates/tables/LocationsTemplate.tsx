@@ -3,7 +3,8 @@ import { useSearchParams } from 'next/navigation';
 import { useTheme } from '../../../components/ThemeContext';
 import { ComponentSandboxTemplate } from '../../../zap/layout/ComponentSandboxTemplate';
 import { CanvasDesktop } from '../../../components/dev/CanvasDesktop';
-import { LocationsTable, SAMPLE_LOCATIONS, Filters } from '../../../zap/organisms/locations-table';
+import { ListTable, ListItem, Filters } from '../../../zap/organisms/list-table';
+import { SAMPLE_LOCATIONS } from '../../../zap/organisms/locations-table';
 import { DataFilter, FilterGroup } from '../../molecules/data-filter';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../../molecules/accordion';
 import { Icon } from '../../atoms/icons/Icon';
@@ -13,7 +14,7 @@ import { Inspector } from '../../../zap/layout/Inspector';
 
 /**
  * Locations (Layout) Showcase
- * Renders LocationsTable inside the L6 CanvasDesktop layout
+ * Renders ListTable inside the L6 CanvasDesktop layout
  * Route: /design/[theme]/organisms/locations
  */
 export default function LocationsTemplate() {
@@ -22,26 +23,42 @@ export default function LocationsTemplate() {
     const searchParams = useSearchParams();
     const isFullscreen = searchParams.get('fullscreen') === 'true';
 
+    // Map Locations to generic ListItem
+    const MAPPED_LOCATIONS: ListItem[] = SAMPLE_LOCATIONS.map(loc => ({
+        id: loc.id,
+        media_url: loc.media_url,
+        variant_name: loc.location_name,
+        sku_code: loc.address,
+        barcode: loc.phone,
+        category_id: loc.region,
+        product_type: loc.location_type,
+        sale_price: 0,
+        qty_on_hand: 0,
+        uom_id: loc.manager,
+        warehouse_id: loc.operating_hours,
+        status_id: loc.status_id === 'Renovation' ? 'Hidden' : (loc.status_id === 'Closed' ? 'Out of Stock' : loc.status_id)
+    }));
+
     const [filters, setFilters] = useState<Filters>({
-        region: [],
-        locationType: [],
+        category: [],
+        productType: [],
         status: [],
     });
 
-    // Derive filter groups from the SAMPLE_LOCATIONS
+    // Derive filter groups from the MAPPED_LOCATIONS
     const baseGroups: FilterGroup[] = [
         {
-            id: 'region',
+            id: 'category',
             title: 'Region',
-            options: Array.from(new Set(SAMPLE_LOCATIONS.map(p => p.region))).map(region => ({
+            options: Array.from(new Set(MAPPED_LOCATIONS.map(p => p.category_id))).map(region => ({
                 id: region,
                 label: region,
             }))
         },
         {
-            id: 'locationType',
+            id: 'productType',
             title: 'Location Type',
-            options: Array.from(new Set(SAMPLE_LOCATIONS.map(p => p.location_type))).map(type => ({
+            options: Array.from(new Set(MAPPED_LOCATIONS.map(p => p.product_type))).map(type => ({
                 id: type,
                 label: type,
             }))
@@ -49,7 +66,7 @@ export default function LocationsTemplate() {
         {
             id: 'status',
             title: 'Status',
-            options: Array.from(new Set(SAMPLE_LOCATIONS.map(p => p.status_id))).map(status => ({
+            options: Array.from(new Set(MAPPED_LOCATIONS.map(p => p.status_id))).map(status => ({
                 id: status,
                 label: status,
             }))
@@ -78,9 +95,19 @@ export default function LocationsTemplate() {
         });
     };
 
+    const labels = {
+        addItem: "Add Location",
+        itemName: "Location Name",
+        itemCode: "Address",
+        category: "Region",
+        type: "Loc Type",
+        inventory: "Manager / Hours",
+        price: "Revenue"
+    };
+
     const rightDrawerContent = inspectorState === 'expanded' && (
         <div className="h-full border-l border-border bg-layer-panel hidden md:flex flex-col shrink-0 z-20 relative">
-            <Inspector title="E-COMMERCE LAB" width={320}>
+            <Inspector title="LOCATIONS LAB" width={320}>
                 <div className="flex flex-col gap-0 w-full px-4 pt-4">
                     <Accordion type="single" collapsible variant="navigation" value={inspectorState === 'expanded' ? "item-1" : ""} onValueChange={(val: string) => { if (val !== "item-1") setInspectorState('collapsed'); }} className="bg-transparent w-full space-y-2">
                         <AccordionItem value="item-1" className="border-none m-0">
@@ -102,6 +129,17 @@ export default function LocationsTemplate() {
                 </div>
             </Inspector>
         </div>
+    );
+
+    const tableComponent = (
+        <ListTable
+            initialItems={MAPPED_LOCATIONS}
+            filters={filters}
+            onFilterChange={setFilters}
+            onToggleFilters={() => setInspectorState(inspectorState === 'expanded' ? 'collapsed' : 'expanded')}
+            isFilterActive={inspectorState === 'expanded'}
+            labels={labels}
+        />
     );
 
     const layoutContent = (
@@ -177,12 +215,7 @@ export default function LocationsTemplate() {
 
                 {/* Table Content */}
                 <div className="flex-1 overflow-auto pt-8 px-4 lg:pt-11 lg:px-12 pb-16 flex flex-col relative z-0 min-w-0">
-                    <LocationsTable
-                        filters={filters}
-                        onFilterChange={setFilters}
-                        onToggleFilters={() => setInspectorState(inspectorState === 'expanded' ? 'collapsed' : 'expanded')}
-                        isFilterActive={inspectorState === 'expanded'}
-                    />
+                    {tableComponent}
                 </div>
             </div>
 
@@ -229,12 +262,7 @@ export default function LocationsTemplate() {
                     />
 
                     <div className="flex-1 overflow-auto pt-8 px-4 lg:pt-11 lg:px-12 pb-16 flex flex-col relative z-0 bg-layer-base min-w-0">
-                        <LocationsTable
-                            filters={filters}
-                            onFilterChange={setFilters}
-                            onToggleFilters={() => setInspectorState(inspectorState === 'expanded' ? 'collapsed' : 'expanded')}
-                            isFilterActive={inspectorState === 'expanded'}
-                        />
+                        {tableComponent}
                     </div>
                 </div>
 

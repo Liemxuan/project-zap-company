@@ -57,7 +57,7 @@ const NAV_DATA: Category[] = [
     {
         id: 'L6', title: 'L6: Layouts', icon: Columns, items: [
             { title: 'Authentication', items: ['Sign-in A', 'Sign-in B'] },
-            { title: 'Tables', items: ['system logs', 'Product List', 'Locations'] }
+            { title: 'Tables', items: ['system logs', 'Product List', 'Locations', 'Categories'] }
         ]
     },
     {
@@ -279,6 +279,7 @@ const getHref = (item: string, theme: string, activeWorkspaceId?: string | null,
             'system logs': `/design/${theme}/organisms/system-logs-layout`,
             'Product List': `/design/${theme}/organisms/product-list`,
             'Locations': `/design/${theme}/organisms/locations`,
+            'Categories': `/design/${theme}/organisms/categories`,
 
             // L5 Organisms — use theme path
             'Data Grid': `/design/${theme}/organisms/data-grid`,

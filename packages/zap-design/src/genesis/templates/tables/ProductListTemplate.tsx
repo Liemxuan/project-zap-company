@@ -3,7 +3,7 @@ import { useSearchParams } from 'next/navigation';
 import { useTheme } from '../../../components/ThemeContext';
 import { ComponentSandboxTemplate } from '../../../zap/layout/ComponentSandboxTemplate';
 import { CanvasDesktop } from '../../../components/dev/CanvasDesktop';
-import { ProductListTable, SAMPLE_PRODUCTS, Filters } from '../../../zap/organisms/product-list-table';
+import { ListTable, SAMPLE_DATA, ListItem, Filters } from '../../../zap/organisms/list-table';
 import { DataFilter, FilterGroup } from '../../molecules/data-filter';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../../molecules/accordion';
 import { Icon } from '../../atoms/icons/Icon';
@@ -13,7 +13,7 @@ import { Inspector } from '../../../zap/layout/Inspector';
 
 /**
  * Product List (Layout) Showcase
- * Renders ProductListTable inside the L6 CanvasDesktop layout
+ * Renders ListTable inside the L6 CanvasDesktop layout
  * Route: /design/[theme]/organisms/product-list
  */
 export default function ProductListTemplate() {
@@ -28,12 +28,12 @@ export default function ProductListTemplate() {
         status: [],
     });
 
-    // Derive filter groups from the SAMPLE_PRODUCTS
+    // Derive filter groups from the SAMPLE_DATA
     const baseGroups: FilterGroup[] = [
         {
             id: 'category',
             title: 'Category',
-            options: Array.from(new Set(SAMPLE_PRODUCTS.map(p => p.category_id))).map(cat => ({
+            options: Array.from(new Set(SAMPLE_DATA.map(p => p.category_id))).map(cat => ({
                 id: cat,
                 label: cat,
             }))
@@ -41,7 +41,7 @@ export default function ProductListTemplate() {
         {
             id: 'productType',
             title: 'Product Type',
-            options: Array.from(new Set(SAMPLE_PRODUCTS.map(p => p.product_type))).map(type => ({
+            options: Array.from(new Set(SAMPLE_DATA.map(p => p.product_type))).map(type => ({
                 id: type,
                 label: type,
             }))
@@ -49,7 +49,7 @@ export default function ProductListTemplate() {
         {
             id: 'status',
             title: 'Status',
-            options: Array.from(new Set(SAMPLE_PRODUCTS.map(p => p.status_id))).map(status => ({
+            options: Array.from(new Set(SAMPLE_DATA.map(p => p.status_id))).map(status => ({
                 id: status,
                 label: status,
             }))
@@ -177,7 +177,7 @@ export default function ProductListTemplate() {
 
                 {/* Table Content */}
                 <div className="flex-1 overflow-auto pt-8 px-4 lg:pt-11 lg:px-12 pb-16 flex flex-col relative z-0 min-w-0">
-                    <ProductListTable
+                    <ListTable
                         filters={filters}
                         onFilterChange={setFilters}
                         onToggleFilters={() => setInspectorState(inspectorState === 'expanded' ? 'collapsed' : 'expanded')}
@@ -229,7 +229,7 @@ export default function ProductListTemplate() {
                     />
 
                     <div className="flex-1 overflow-auto pt-8 px-4 lg:pt-11 lg:px-12 pb-16 flex flex-col relative z-0 bg-layer-base min-w-0">
-                        <ProductListTable
+                        <ListTable
                             filters={filters}
                             onFilterChange={setFilters}
                             onToggleFilters={() => setInspectorState(inspectorState === 'expanded' ? 'collapsed' : 'expanded')}
