@@ -1,0 +1,23 @@
+{
+  "title": "unit assembly",
+  "canvas_title": "Unit Datagrid // Assembly",
+  "breadcrumb": "zap inc. / management / assembly",
+  "badge": "verified",
+  "filter": "filter",
+  "search_placeholder": "search units...",
+  "table_id": "id",
+  "table_name": "unit_name",
+  "table_abbreviation": "abbreviation",
+  "table_status": "status",
+  "table_actions": "actions",
+  "action_view": "View",
+  "action_edit": "Edit",
+  "action_delete": "Delete",
+  "no_data": "zero results matched",
+  "show": "show",
+  "all": "all",
+  "records_per_table": "entries per view",
+  "status_active": "Active",
+  "status_inactive": "Inactive",
+  "no_description": "no description available for this unit..."
+}

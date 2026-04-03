@@ -8,8 +8,8 @@
         "prebuild": "pnpm run clean:pipe",
         "verify": "pnpm run prebuild && pnpm run build",
         "dev": "pnpm run -r --parallel dev",
-        "build": "turbo run build --log-order=stream",
-        "lint": "turbo run lint --log-order=stream",
+        "build": "cross-env TMPDIR=/tmp/next-tmp turbo run build --log-order=stream",
+        "lint": "cross-env TMPDIR=/tmp/next-tmp turbo run lint --log-order=stream",
         "reset-dev": "bash .agent/skills/devops-server-reset/reset-dev.sh"
     },
     "devDependencies": {

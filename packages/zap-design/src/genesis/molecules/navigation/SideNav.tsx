@@ -299,17 +299,23 @@ const getHref = (item: string, theme: string, activeWorkspaceId?: string | null,
             'User Profile Header': `/design/${theme}/organisms/user-profile-header`,
             'Authentication Scaffolds': `/design/${theme}/organisms/auth-scaffold`,
             'Login': `/design/${theme}/organisms/login`,
+            'Table List': `/design/${theme}/organisms/table-list`,
 
             // L7 Pages
             'Signin': `/auth/${theme}/signin`,
             'Infrastructure': '/admin/infrastructure',
             'System Logs': `/design/${theme}/organisms/system-logs`,
             'User Management': `/auth/${theme}/user-management`,
+            /* 
             'Products List': prefix ? `${prefix}/products` : `/auth/${theme}/products`,
             'Categories List': prefix ? `${prefix}/categories` : `/auth/${theme}/categories`,
             'Brands List': prefix ? `${prefix}/brands` : `/auth/${theme}/brands`,
             'Locations List': prefix ? `${prefix}/locations` : `/auth/${theme}/locations`,
             'Dining Option': prefix ? `${prefix}/dining-options` : `/auth/${theme}/dining-options`,
+            */
+            'Product Management': `/auth/${theme}/product-management`,
+            'Catalog Vault': `/auth/${theme}/catalog-vault`,
+            'Brand Vault': `/auth/${theme}/brand-vault`,
 
             // Pos/Kiosk/Web
             'Terminal': '/kiosk',
@@ -460,9 +466,12 @@ export const SideNav: React.FC<SideNavProps> = ({ showDevWrapper = false }) => {
             }
             if (activeWorkspaceId === 'zap-auth') {
                 return [
+                    /* 
                     { id: 'auth-main', title: 'ZAP-AUTH MAIN', icon: Layout, items: ['Dashboard', 'Overview', 'Reports'] },
                     { id: 'auth-products', title: 'PRODUCTS', icon: Box, items: ['Products List', 'Categories List', 'Brands List'] },
                     { id: 'auth-location', title: 'LOCATION', icon: Database, items: ['Locations List', 'Dining Option'] },
+                    */
+                    { id: 'auth-main', title: 'ZAP-AUTH MAIN', icon: Layout, items: ['Dashboard', 'Overview', 'Reports', 'Product Management', 'Catalog Vault', 'Brand Vault'] },
                     { id: 'auth-prefs', title: 'SYSTEM PREFERENCES', icon: Columns, items: ['User Management', 'Settings', 'Access Control'] }
                 ];
             }

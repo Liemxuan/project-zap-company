@@ -5,11 +5,13 @@
   "main": "index.ts",
   "dependencies": {
     "@olympus/zap-db": "workspace:^",
+    "cross-env": "^10.1.0",
     "framer-motion": "12.38.0",
     "jose": "^6.2.2",
     "lucide-react": "0.575.0",
     "next": "16.1.6",
-    "next-auth": "5.0.0-beta.19"
+    "next-auth": "5.0.0-beta.19",
+    "zustand": "^5.0.12"
   },
   "peerDependencies": {
     "react": "^19.0.0",

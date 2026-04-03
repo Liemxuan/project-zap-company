@@ -1,0 +1,23 @@
+{
+  "title": "nhóm tùy chọn",
+  "canvas_title": "Bảng Nhóm Tùy Chọn // Assembly",
+  "breadcrumb": "zap inc. / quản lý / assembly",
+  "badge": "đã xác minh",
+  "filter": "Bộ lọc",
+  "search_placeholder": "Tìm kiếm nhóm tùy chọn...",
+  "table_id": "id",
+  "table_name": "tên nhóm tùy chọn",
+  "table_selection": "số lượng chọn",
+  "table_options": "tùy chọn",
+  "table_status": "trạng thái",
+  "table_actions": "thao tác",
+  "action_view": "Xem",
+  "action_edit": "Sửa",
+  "action_delete": "Xóa",
+  "no_data": "Không tìm thấy nhóm tùy chọn nào phù hợp.",
+  "show": "Hiển thị",
+  "all": "Tất cả",
+  "records_per_table": "bản ghi mỗi trang",
+  "selection": "lựa chọn",
+  "options": "tùy chọn"
+}

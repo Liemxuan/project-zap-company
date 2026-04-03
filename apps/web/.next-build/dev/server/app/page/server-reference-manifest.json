@@ -1,5 +1,23 @@
 {
   "node": {
+<<<<<<< HEAD
+=======
+    "000353c8baa99c085d682bb116b686b5ff3d7258d2": {
+      "workers": {
+        "app/page": {
+          "moduleId": "[project]/apps/web/.next-internal/server/app/page/actions.js { ACTIONS_MODULE0 => \"[project]/packages/zap-auth/src/actions.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false,
+          "exportedName": "getProductsAction",
+          "filename": "packages/zap-auth/src/actions.ts"
+        }
+      },
+      "layer": {
+        "app/page": "rsc"
+      },
+      "exportedName": "getProductsAction",
+      "filename": "packages/zap-auth/src/actions.ts"
+    },
+>>>>>>> f7717326141b2f59363fa25d147f244a9701d7fb
     "0040408527341e042f46683839ef498edf2961d089": {
       "workers": {
         "app/page": {

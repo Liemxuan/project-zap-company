@@ -45,6 +45,7 @@ const SystemLogsTable = dynamic(() => import('../zap/organisms/system-logs-table
 const SystemLogsTemplate = dynamic(() => import('../genesis/templates/tables/SystemLogsTemplate'), { ssr: false });
 const UserManagementTable = dynamic(() => import('@/genesis/organisms/auth/UserManagementTable').then(m => ({ default: m.UserManagementTable })), { ssr: false });
 
+
 // ─── REGISTRY ───────────────────────────────────────────────────────────────────
 
 export const ORGANISM_REGISTRY: Record<string, OrganismEntry> = {

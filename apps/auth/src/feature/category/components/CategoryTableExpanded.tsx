@@ -269,7 +269,7 @@ interface CategoryTableExpandedProps {
 }
 
 export function CategoryTableExpanded({
-  categories,
+  categories = [],
   loading,
   filters: filtersProp,
   onFilterChange,

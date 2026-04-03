@@ -1,0 +1,23 @@
+{
+  "title": "modifier groups",
+  "canvas_title": "Modifier Group Datagrid // Assembly",
+  "breadcrumb": "zap inc. / management / assembly",
+  "badge": "verified",
+  "filter": "Filter",
+  "search_placeholder": "Search modifier groups...",
+  "table_id": "id",
+  "table_name": "modifier_group_name",
+  "table_selection": "selection",
+  "table_options": "options",
+  "table_status": "status",
+  "table_actions": "actions",
+  "action_view": "View",
+  "action_edit": "Edit",
+  "action_delete": "Delete",
+  "no_data": "No modifier groups match your filters.",
+  "show": "Show",
+  "all": "All",
+  "records_per_table": "records per table",
+  "selection": "selection",
+  "options": "options"
+}

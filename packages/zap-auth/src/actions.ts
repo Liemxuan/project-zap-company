@@ -209,3 +209,9 @@ export async function apiCallWithAuth(
 
     return response;
 }
+
+export async function getProductsAction() {
+    return await prisma.product.findMany({
+        orderBy: { createdAt: 'desc' }
+    });
+}

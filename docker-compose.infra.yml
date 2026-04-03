@@ -1,0 +1,35 @@
+services:
+  redis:
+    image: redis:7-alpine
+    container_name: zap-redis-infra
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+    networks:
+      - zap-net
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: zap-postgres-infra
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: zap_db
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    networks:
+      - zap-net
+
+  mongodb:
+    image: mongo:7
+    container_name: zap-mongodb-infra
+    ports:
+      - "27017:27017"
+    restart: unless-stopped
+    networks:
+      - zap-net
+
+networks:
+  zap-net:
+    driver: bridge

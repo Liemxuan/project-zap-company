@@ -1,0 +1,23 @@
+{
+  "title": "đơn vị tính",
+  "canvas_title": "Bảng Đơn Vị Tính // Assembly",
+  "breadcrumb": "zap inc. / quản lý / assembly",
+  "badge": "đã xác minh",
+  "filter": "Bộ lọc",
+  "search_placeholder": "Tìm kiếm đơn vị tính...",
+  "table_id": "id",
+  "table_name": "tên đơn vị",
+  "table_abbreviation": "viết tắt",
+  "table_status": "trạng thái",
+  "table_actions": "thao tác",
+  "action_view": "Xem",
+  "action_edit": "Sửa",
+  "action_delete": "Xóa",
+  "no_data": "Không tìm thấy kết quả nào",
+  "show": "Hiển thị",
+  "all": "Tất cả",
+  "records_per_table": "bản ghi mỗi trang",
+  "status_active": "Hoạt động",
+  "status_inactive": "Ngừng hoạt động",
+  "no_description": "không có mô tả cho đơn vị này..."
+}
