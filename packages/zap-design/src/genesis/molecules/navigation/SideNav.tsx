@@ -324,6 +324,8 @@ const getHref = (item: string, theme: string, activeWorkspaceId?: string | null,
             'Registry': `/design/${theme}/mission-control/swarm/registry`,
 
             // Swarm Command Center (:3500)
+            'Telemetry Monitor': '/swarm/monitor',
+            'Port Registry': '/swarm/ports',
             'Swarm Dashboard': '/swarm/',
             'New Chat': '/swarm/chats/new',
             'System Models': '/swarm/models',
@@ -523,7 +525,7 @@ const SideNavContent: React.FC<SideNavProps> = ({ showDevWrapper = false }) => {
             }
             if (activeWorkspaceId === 'zap-swarm') {
                 return [
-                    { id: 'swarm-telemetry', title: 'CORE TELEMETRY', icon: Activity, items: ['Swarm Dashboard', 'Active Sessions', 'Cost Intelligence', 'Execution History'] },
+                    { id: 'swarm-telemetry', title: 'CORE TELEMETRY', icon: Activity, items: ['Telemetry Monitor', 'Port Registry', 'Swarm Dashboard', 'Active Sessions', 'Cost Intelligence', 'Execution History'] },
                     { id: 'swarm-deerflow', title: 'GENERAL SETTING', icon: Settings, items: ['New Chat', 'System Models', 'Agent Roster', 'API Keys', 'Skills Library', 'Communication', 'Financial', 'Tools'] },
                     { id: 'swarm-security', title: 'SECURITY & OPS', icon: Database, items: ['Security Posture', 'Audit Log', 'Swarm Jobs'] }
                 ];
