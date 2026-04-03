@@ -332,7 +332,7 @@ const MasterVerticalShellContent = ({
                                 disabled={isProcessing || !command.trim()}
                                 className={`w-10 h-10 border-2 border-black flex items-center justify-center transition-colors shadow-none
                                     ${isProcessing ? 'bg-zinc-300 opacity-50 cursor-not-allowed' : 'bg-acid-yellow hover:bg-yellow-400'}
-                               `}
+                              `}
                             >
                                 <Icon name={isProcessing ? "hourglass_empty" : "arrow_upward"} size={20} className={isProcessing ? "animate-pulse" : ""} />
                             </button>

@@ -85,7 +85,7 @@ export function UserHero({
         :global(.dark) .transparent-blur {
           background: rgba(0, 0, 0, 0.2);
         }
-     `}</style>
+    `}</style>
     </div>
   );
 }

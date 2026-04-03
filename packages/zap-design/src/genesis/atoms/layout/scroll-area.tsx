@@ -15,7 +15,7 @@ function ScrollArea({
       data-slot="scroll-area"
       className={cn(
         "relative overflow-hidden",
-        "bg-surface text-on-surface font-body",
+        "bg-surface text-on-surface font-body text-transform-secondary",
         "h-[length:var(--scroll-area-height,200px)]",
         "w-[length:var(--scroll-area-width,250px)]",
         "rounded-[length:var(--scroll-area-border-radius,8px)]",

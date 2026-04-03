@@ -82,7 +82,7 @@ export const Select: React.FC<SelectProps> = ({ options, value, onChange, placeh
             >
                 <button
                     type="button"
-                    className="w-full h-full focus:outline-none flex items-center justify-between px-3 bg-transparent text-on-surface font-body"
+                    className="w-full h-full focus:outline-none flex items-center justify-between px-3 bg-transparent text-on-surface font-body text-transform-secondary"
                     aria-haspopup="listbox"
                     aria-expanded={isOpen ? true : false}
                     aria-label={placeholder || "Select option"}

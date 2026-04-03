@@ -139,7 +139,7 @@ export function CoreLayoutBody({ platform: _platform }: CoreLayoutBodyProps) {
                             <h3 className="text-xs font-black uppercase tracking-widest">CSS Implementation</h3>
                         </div>
                         <div className="p-6 bg-[#0E1117] overflow-x-auto text-left" style={Object.assign({}, { backgroundColor: '#0E1117' })}>
-                            <code className="text-[12px] font-mono leading-loose text-slate-300 whitespace-pre">
+                            <code className="text-[12px] font-mono text-transform-tertiary leading-loose text-slate-300 whitespace-pre">
 <span className="text-tertiary">.grid-container</span> {`{`}
     <span className="text-secondary">display</span>: grid;
     <span className="text-secondary">grid-template-columns</span>: <span className="text-primary">repeat</span>(12, 1fr);
@@ -151,7 +151,7 @@ export function CoreLayoutBody({ platform: _platform }: CoreLayoutBodyProps) {
                         </div>
                         <div className="p-4 bg-layer-dialog border-t border-outline-variant/50 flex justify-between items-center text-sm">
                             <span className="text-muted-foreground text-xs uppercase tracking-wider font-bold">Standardized Grid Wrap</span>
-                            <span className="text-xs font-mono text-primary font-bold">grid-cols-12 max-w-[1440px] gap-6 mx-auto</span>
+                            <span className="text-xs font-mono text-transform-tertiary text-primary font-bold">grid-cols-12 max-w-[1440px] gap-6 mx-auto</span>
                         </div>
                     </div>
                 </div>

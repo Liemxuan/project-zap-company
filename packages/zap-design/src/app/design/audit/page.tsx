@@ -337,7 +337,7 @@ export default function DesignAuditPage() {
                                                             {comp.status}
                                                         </span>
                                                     </td>
-                                                    <td className="px-6 py-5 text-center font-dev font-bold">
+                                                    <td className="px-6 py-5 text-center font-dev text-transform-tertiary font-bold">
                                                         {comp.usageCount}
                                                     </td>
                                                     <td className="px-6 py-5">

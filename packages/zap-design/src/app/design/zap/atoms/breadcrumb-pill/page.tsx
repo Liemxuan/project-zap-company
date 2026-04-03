@@ -1,14 +1,14 @@
-
 'use client';
 
 import React from 'react';
 import { ComponentSandboxTemplate } from '../../../../../zap/layout/ComponentSandboxTemplate';
-import { Wrapper } from '../../../../../components/dev/Wrapper';
 import { BreadcrumbPill } from '../../../../../genesis/atoms/indicators/BreadcrumbPill';
+import { CanvasBody } from '../../../../../zap/layout/CanvasBody';
+import { SectionHeader } from '../../../../../zap/sections/atoms/foundations/components';
 
 const SAMPLE_LABELS = [
-    'DASHBOARD', 'ANALYTICS', 'REPORTS', 'SETTINGS',
-    'ATOMS', 'MOLECULES', 'ORGANISMS', 'FOUNDATIONS'
+    'Dashboard', 'Analytics', 'Reports', 'Settings',
+    'Atoms', 'Molecules', 'Organisms', 'Foundations'
 ];
 
 export default function BreadcrumbPillSandboxPage() {
@@ -30,41 +30,43 @@ export default function BreadcrumbPillSandboxPage() {
                 "Fully rounded (rounded-full) pill shape.",
             ]}
         >
-            <div className="w-full space-y-10 animate-in fade-in duration-500 pb-8">
-
-                {/* Single Pills */}
-                <div className="space-y-2">
-                    <span className="text-label-small font-semibold text-muted-foreground uppercase tracking-widest">Individual Breadcrumb Pills</span>
-                    <span className="text-label-small font-dev text-muted-foreground block">
-                        Each pill renders with <code>label</code> prop
-                    </span>
-                    <Wrapper identity={{ displayName: "BreadcrumbPill", type: "Atom", filePath: "genesis/atoms/indicators/BreadcrumbPill.tsx" }}>
-                        <div className="bg-layer-panel border border-card-border rounded-lg p-6 flex flex-wrap gap-3">
+            <CanvasBody flush={false} coverTitle="Breadcrumb Pill Atoms" coverBadge="L2 // ATOMS">
+                <CanvasBody.Section flush={false} className="w-full animate-in fade-in duration-500">
+                    <SectionHeader
+                        number="01"
+                        title="Individual Pill Instances"
+                        icon="widgets"
+                        description="Isolated BreadcrumbPill atoms rendering with a single label prop."
+                        id="individual-pills"
+                    />
+                    <CanvasBody.Demo minHeight="min-h-[160px]" centered={true}>
+                        <div className="flex flex-wrap gap-4 items-center justify-center p-8 bg-layer-panel border border-outline-variant/20 rounded-xl">
                             {SAMPLE_LABELS.map((label) => (
                                 <BreadcrumbPill key={label} label={label} />
                             ))}
                         </div>
-                    </Wrapper>
-                </div>
+                    </CanvasBody.Demo>
+                </CanvasBody.Section>
 
-                {/* Breadcrumb Trail */}
-                <div className="space-y-2">
-                    <span className="text-label-small font-semibold text-muted-foreground uppercase tracking-widest">Breadcrumb Trail Pattern</span>
-                    <span className="text-label-small font-dev text-muted-foreground block">
-                        Pills chained with separators to form navigation breadcrumbs
-                    </span>
-                    <Wrapper identity={{ displayName: "BreadcrumbPill (Trail)", type: "Atom", filePath: "genesis/atoms/indicators/BreadcrumbPill.tsx" }}>
-                        <div className="bg-layer-panel border border-card-border rounded-lg p-6 flex items-center gap-1">
-                            <BreadcrumbPill label="HOME" />
-                            <span className="text-muted-foreground text-label-small mx-1">›</span>
-                            <BreadcrumbPill label="DESIGN" />
-                            <span className="text-muted-foreground text-label-small mx-1">›</span>
-                            <BreadcrumbPill label="ATOMS" />
+                <CanvasBody.Section flush={false} className="w-full mt-10">
+                    <SectionHeader
+                        number="02"
+                        title="Breadcrumb Trail Pattern"
+                        icon="navigation"
+                        description="Standard navigation pattern with chained pills using directional separators."
+                        id="trail-pattern"
+                    />
+                    <CanvasBody.Demo minHeight="min-h-[160px]" centered={true}>
+                        <div className="flex items-center gap-2 p-8 bg-layer-panel border border-outline-variant/20 rounded-xl">
+                            <BreadcrumbPill label="Home" />
+                            <span className="text-muted-foreground font-body text-xs mx-1">›</span>
+                            <BreadcrumbPill label="Design" />
+                            <span className="text-muted-foreground font-body text-xs mx-1">›</span>
+                            <BreadcrumbPill label="Atoms" />
                         </div>
-                    </Wrapper>
-                </div>
-
-            </div>
+                    </CanvasBody.Demo>
+                </CanvasBody.Section>
+            </CanvasBody>
         </ComponentSandboxTemplate>
     );
 }

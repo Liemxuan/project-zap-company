@@ -43,7 +43,7 @@ export const PageHeader = ({
     const paddingBottom = tabs ? 'pb-2 md:pb-3' : 'pb-4 md:pb-6';
 
     return (
-        <div className={`relative w-full flex flex-col overflow-hidden ${showBackground ? 'border-b border-border/50 bg-layer-cover z-30' : 'bg-transparent border-transparent'}`}>
+        <div className={`relative w-full flex flex-col overflow-hidden ${showBackground ? 'bg-layer-cover z-30' : 'bg-transparent border-transparent'}`}>
             <Wrapper identity={{ displayName: "Page Header", filePath: "zap/layout/PageHeader.tsx", type: "Wrapped Snippet", architecture: "L2: Cover" }}>
                 <div className={`relative z-10 w-full flex flex-col md:flex-row justify-between items-start md:items-end gap-4 md:gap-0 px-5 md:px-12 ${paddingTop} ${paddingBottom}`}>
                     <Wrapper identity={{ displayName: "Page Title Area", filePath: "zap/layout/PageHeader.tsx", type: "Wrapped Snippet", architecture: "L2: Cover" }} className="w-auto">

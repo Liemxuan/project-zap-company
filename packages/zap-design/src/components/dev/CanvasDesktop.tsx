@@ -359,7 +359,7 @@ export const CanvasDesktop = ({
                                     <div className="w-3 h-3 rounded-full bg-[#F4BF4F] border border-black/10 shadow-sm" />
                                     <div className="w-3 h-3 rounded-full bg-[#61C554] border border-black/10 shadow-sm" />
                                 </div>
-                                <span className="text-[10px] font-bold font-display tracking-[0.25em] uppercase opacity-60 ml-2 flex-1 text-center text-on-surface-variant">
+ <span className="text-[10px] font-bold font-display text-transform-primary tracking-[0.25em] opacity-60 ml-2 flex-1 text-center text-on-surface-variant">
                                     {title}
                                 </span>
                                 <div className="w-[60px]" /> {/* Spacer for symmetry */}

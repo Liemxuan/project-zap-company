@@ -76,7 +76,7 @@ export function MultiSelect({
         <div
           // This acts as the visual input container
           className={cn(
-            "flex min-h-[var(--input-height,36px)] w-full items-center justify-between rounded-[var(--input-border-radius,8px)] border-[length:var(--input-border-width,1px)] border-[color:var(--input-border-filled,transparent)] bg-[color:var(--input-bg-filled,var(--color-surface-container-high))] px-3 py-1 shadow-sm ring-offset-[color:var(--input-focus-ring-offset,transparent)] cursor-text font-body text-sm font-normal text-transform-primary transition-all",
+            "flex min-h-[var(--input-height,36px)] w-full items-center justify-between rounded-[var(--input-border-radius,8px)] border-[length:var(--input-border-width,1px)] border-[color:var(--input-border-filled,transparent)] bg-[color:var(--input-bg-filled,var(--color-surface-container-high))] px-3 py-1 shadow-sm ring-offset-[color:var(--input-focus-ring-offset,transparent)] cursor-text font-body text-transform-secondary text-sm font-normal text-transform-primary transition-all",
             open ? "ring-[length:var(--input-focus-width,2px)] ring-[color:var(--input-focus-ring,var(--color-primary-fixed-dim))] border-[color:var(--input-focus-border,var(--color-primary))]" : "",
             className
           )}
@@ -112,7 +112,7 @@ export function MultiSelect({
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               onKeyDown={handleKeyDown}
-              className="flex-1 bg-transparent py-1 px-1 outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 min-w-[120px] font-body text-sm font-normal text-transform-primary"
+              className="flex-1 bg-transparent py-1 px-1 outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 min-w-[120px] font-body text-transform-secondary text-sm font-normal text-transform-primary"
               placeholder={selected.length === 0 ? placeholder : undefined}
             />
           </div>
@@ -149,7 +149,7 @@ export function MultiSelect({
                             setInputValue("")
                           }
                         }}
-                        className="w-full h-10 px-4 py-2 flex items-center justify-center rounded-[var(--input-border-radius,8px)] bg-secondary-container text-on-secondary-container hover:bg-secondary-container/90 font-body text-xs font-medium text-transform-tertiary transition-colors cursor-pointer data-[selected=true]:bg-secondary-container/90 data-[selected=true]:text-on-secondary-container"
+                        className="w-full h-10 px-4 py-2 flex items-center justify-center rounded-[var(--input-border-radius,8px)] bg-secondary-container text-on-secondary-container hover:bg-secondary-container/90 font-body text-transform-secondary text-xs font-medium text-transform-tertiary transition-colors cursor-pointer data-[selected=true]:bg-secondary-container/90 data-[selected=true]:text-on-secondary-container"
                       >
                         <span className="material-symbols-outlined text-[16px] mr-2">add</span>
                         Add New Item

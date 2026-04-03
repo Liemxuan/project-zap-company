@@ -1,0 +1,11 @@
+/Users/zap/Workspace/olympus/rust/target/debug/deps/cookie_factory-01757ce28d6a62a1.d: /Users/zap/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cookie-factory-0.3.2/src/lib.rs /Users/zap/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cookie-factory-0.3.2/src/gen.rs /Users/zap/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cookie-factory-0.3.2/src/internal.rs /Users/zap/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cookie-factory-0.3.2/src/bytes.rs /Users/zap/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cookie-factory-0.3.2/src/combinator.rs /Users/zap/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cookie-factory-0.3.2/src/multi.rs /Users/zap/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cookie-factory-0.3.2/src/sequence.rs
+
+/Users/zap/Workspace/olympus/rust/target/debug/deps/libcookie_factory-01757ce28d6a62a1.rmeta: /Users/zap/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cookie-factory-0.3.2/src/lib.rs /Users/zap/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cookie-factory-0.3.2/src/gen.rs /Users/zap/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cookie-factory-0.3.2/src/internal.rs /Users/zap/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cookie-factory-0.3.2/src/bytes.rs /Users/zap/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cookie-factory-0.3.2/src/combinator.rs /Users/zap/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cookie-factory-0.3.2/src/multi.rs /Users/zap/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cookie-factory-0.3.2/src/sequence.rs
+
+/Users/zap/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cookie-factory-0.3.2/src/lib.rs:
+/Users/zap/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cookie-factory-0.3.2/src/gen.rs:
+/Users/zap/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cookie-factory-0.3.2/src/internal.rs:
+/Users/zap/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cookie-factory-0.3.2/src/bytes.rs:
+/Users/zap/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cookie-factory-0.3.2/src/combinator.rs:
+/Users/zap/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cookie-factory-0.3.2/src/multi.rs:
+/Users/zap/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cookie-factory-0.3.2/src/sequence.rs:

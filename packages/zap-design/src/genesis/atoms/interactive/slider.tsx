@@ -69,14 +69,14 @@ function Slider({
         <div className="flex items-center justify-between">
           <label
             data-slot="slider-label"
-            className="font-body text-xs font-bold text-transform-tertiary uppercase tracking-wide"
+ className="font-body text-transform-secondary text-xs font-bold text-transform-tertiary tracking-wide"
           >
             {label}
           </label>
           {showValue && (
             <div
               data-slot="slider-value-badge"
-              className="bg-secondary-container text-on-secondary-container px-2.5 py-1 rounded-[var(--radius)] font-body text-xs font-semibold min-w-[36px] text-center"
+              className="bg-secondary-container text-on-secondary-container px-2.5 py-1 rounded-[var(--radius)] font-body text-transform-secondary text-xs font-semibold min-w-[36px] text-center"
             >
               {displayValue[0]}
             </div>
@@ -141,7 +141,7 @@ function Slider({
       {info && (
         <div
           data-slot="slider-info"
-          className="flex items-start gap-4 p-4 mt-2 rounded-xl bg-surface-container-lowest border border-outline-variant text-muted-foreground text-sm font-body"
+          className="flex items-start gap-4 p-4 mt-2 rounded-xl bg-surface-container-lowest border border-outline-variant text-muted-foreground text-sm font-body text-transform-secondary"
         >
           <span className="material-symbols-outlined text-[18px] opacity-60 mt-[1px]">
             tune

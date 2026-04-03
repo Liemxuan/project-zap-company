@@ -6,6 +6,8 @@ import { DataReadout, type DataReadoutItem } from '../../../../../genesis/molecu
 import { DataFilter, type FilterGroup } from '../../../../../genesis/molecules/data-filter';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '../../../../../genesis/molecules/accordion';
 import { Icon } from '../../../../../genesis/atoms/icons/Icon';
+import { CanvasBody } from '../../../../../zap/layout/CanvasBody';
+import { SectionHeader } from '../../../../../zap/sections/SectionHeader';
 
 export default function DataReadoutSandbox() {
 
@@ -35,7 +37,7 @@ export default function DataReadoutSandbox() {
 
     const inheritanceData: DataReadoutItem[] = [
         { id: '1', label: 'colors (l1):', tags: ['bg-surface-variant', 'border-outline-variant'], type: 'tags', tagColor: 'primary' },
-        { id: '2', label: 'typography (l1/l2):', tags: ['text-label-medium uppercase tracking-widest', 'font-mono text-label-medium'], type: 'tags', tagColor: 'secondary' },
+ { id: '2', label: 'typography (l1/l2):', tags: ['text-label-medium tracking-widest', 'font-mono text-transform-tertiary text-label-medium'], type: 'tags', tagColor: 'secondary' },
     ];
 
     const filterData: FilterGroup[] = [
@@ -103,7 +105,7 @@ export default function DataReadoutSandbox() {
                 return {
                     accordion: "bg-transparent w-full",
                     item: "border-none",
-                    trigger: "px-4 py-3 hover:no-underline hover:bg-surface-variant font-mono uppercase text-body-small font-bold tracking-tight text-on-surface",
+ trigger: "px-4 py-3 hover:no-underline hover:bg-surface-variant font-mono text-transform-tertiary text-body-small font-bold tracking-tight text-on-surface",
                     content: "bg-transparent px-4 pb-4 pt-1",
                     variant: "default" as const
                 };
@@ -111,7 +113,7 @@ export default function DataReadoutSandbox() {
                 return {
                     accordion: "bg-transparent w-full space-y-2",
                     item: "border-none",
-                    trigger: "px-4 py-3 flex items-center gap-2 rounded-lg bg-surface-variant hover:bg-surface-variant/80 font-mono text-label-medium uppercase tracking-widest text-on-surface font-bold transition-colors m-0",
+ trigger: "px-4 py-3 flex items-center gap-2 rounded-lg bg-surface-variant hover:bg-surface-variant/80 font-mono text-transform-tertiary text-label-medium tracking-widest text-on-surface font-bold transition-colors m-0",
                     content: "bg-transparent px-4 pb-4 pt-2",
                     variant: "navigation" as const
                 };
@@ -120,7 +122,7 @@ export default function DataReadoutSandbox() {
                 return {
                     accordion: "bg-surface-container rounded-t-lg border border-outline-variant shadow-sm w-full",
                     item: "border-none",
-                    trigger: "px-4 py-3 hover:no-underline hover:bg-surface-variant font-mono uppercase text-body-small font-bold tracking-tight text-on-surface",
+ trigger: "px-4 py-3 hover:no-underline hover:bg-surface-variant font-mono text-transform-tertiary text-body-small font-bold tracking-tight text-on-surface",
                     content: "bg-surface rounded-b-lg px-4 pb-4 pt-1",
                     variant: "default" as const
                 };
@@ -182,7 +184,7 @@ export default function DataReadoutSandbox() {
             }
             foundationInheritance={{
                 colorTokens: ['bg-surface-variant', 'border-outline-variant'],
-                typographyScales: ['text-label-medium uppercase tracking-widest', 'font-mono text-label-medium'],
+ typographyScales: ['text-label-medium tracking-widest', 'font-mono text-transform-tertiary text-label-medium'],
             }}
             platformConstraints={{
                 web: 'Responsive container block. Scrolls horizontally on long code values.',
@@ -193,11 +195,15 @@ export default function DataReadoutSandbox() {
                 'Code values must use monospace font.',
             ]}
         >
-            <div className="w-full flex flex-col gap-10 py-8 items-center bg-surface-container-lowest">
+            
+            <CanvasBody flush={false}>
+                <CanvasBody.Section>
+                    <SectionHeader number="1" id="data-readout" title="DataReadout Sandbox" description="Interactive components for DataReadout" icon="widgets" />
+                    <CanvasBody.Demo className="w-full flex flex-col gap-10 py-8 items-center bg-surface-container-lowest">
 
                 {/* ── VARIANT 1: Data Terminal */}
                 <div className="w-full max-w-sm flex flex-col gap-2">
-                    <span className="text-label-small font-bold tracking-widest text-on-surface-variant text-transform-secondary font-dev px-1">
+                    <span className="text-label-small font-bold tracking-widest text-on-surface-variant text-transform-secondary font-dev text-transform-tertiary px-1">
                         VARIANT — DATA TERMINAL
                     </span>
                     <Accordion type="single" collapsible defaultValue="item-1" className={layout.accordion} variant={layout.variant}>
@@ -217,7 +223,7 @@ export default function DataReadoutSandbox() {
 
                 {/* ── VARIANT 2: Identity Record */}
                 <div className="w-full max-w-sm flex flex-col gap-2">
-                    <span className="text-label-small font-bold tracking-widest text-on-surface-variant text-transform-secondary font-dev px-1">
+                    <span className="text-label-small font-bold tracking-widest text-on-surface-variant text-transform-secondary font-dev text-transform-tertiary px-1">
                         VARIANT — USER PROFILE
                     </span>
                     <Accordion type="single" collapsible defaultValue="item-1" className={layout.accordion} variant={layout.variant}>
@@ -237,7 +243,7 @@ export default function DataReadoutSandbox() {
 
                 {/* ── VARIANT 3: Telemetry */}
                 <div className="w-full max-w-sm flex flex-col gap-2">
-                    <span className="text-label-small font-bold tracking-widest text-on-surface-variant text-transform-secondary font-dev px-1">
+                    <span className="text-label-small font-bold tracking-widest text-on-surface-variant text-transform-secondary font-dev text-transform-tertiary px-1">
                         VARIANT — SYSTEM SPEC
                     </span>
                     <Accordion type="single" collapsible defaultValue="item-1" className={layout.accordion} variant={layout.variant}>
@@ -257,7 +263,7 @@ export default function DataReadoutSandbox() {
 
                 {/* ── VARIANT 4: Data Filter */}
                 <div className="w-full max-w-sm flex flex-col gap-2">
-                    <span className="text-label-small font-bold tracking-widest text-on-surface-variant lowercase font-dev px-1">
+ <span className="text-label-small font-bold tracking-widest text-on-surface-variant font-dev text-transform-tertiary px-1">
                         VARIANT — DATA FILTER
                     </span>
                     <Accordion type="single" collapsible defaultValue="item-1" className={layout.accordion} variant={layout.variant}>
@@ -280,7 +286,7 @@ export default function DataReadoutSandbox() {
 
                 {/* ── VARIANT 5: Inheritance Map */}
                 <div className="w-full max-w-sm flex flex-col gap-2">
-                    <span className="text-label-small font-bold tracking-widest text-on-surface-variant text-transform-secondary font-dev px-1">
+                    <span className="text-label-small font-bold tracking-widest text-on-surface-variant text-transform-secondary font-dev text-transform-tertiary px-1">
                         VARIANT — INHERITANCE MAP
                     </span>
                     <Accordion type="single" collapsible defaultValue="item-1" className={layout.accordion} variant={layout.variant}>
@@ -298,7 +304,10 @@ export default function DataReadoutSandbox() {
                     </Accordion>
                 </div>
 
-            </div>
+                </CanvasBody.Demo>
+                </CanvasBody.Section>
+            </CanvasBody>
+        
         </ComponentSandboxTemplate>
     );
 }

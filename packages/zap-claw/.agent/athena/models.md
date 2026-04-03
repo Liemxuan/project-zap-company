@@ -1,23 +1,31 @@
-# ⚡ MODELS: LLM Connection & Routing
+# ⚡ SYSTEM ROUTING MATRIX (ATHENA)
 
+<!-- ⚠️ DYNAMICALLY COMPILED VIA SYNC_AGENT_PROFESSION.TS ⚠️ -->
 **Target System:** OLYMPUS
+**Strict Profession Lock:** `DEEP_RESEARCHER`
 
-## 1. Connection Strategy (3-Tier Fallback)
+## 1. Provider Tier Mapping
 
-All AI inference strictly utilizes the Gemini model family. To ensure maximum uptime, connection routing follows a strict provider cascade:
+| Priority | Provider Tier | Assigned To | Engine Strategy |
+| :--- | :--- | :--- | :--- |
+| **Primary** | `ULTRA` | `kayvietnam@gmail.com` | Zero-latency, unthrottled high-priority lanes. |
+| **Secondary** | `PRO` | `tom@zap.vn` | High-limit, stable backup pool. |
+| **Tertiary** | `OPENROUTER` | `tom@two.vn` | Hard fallback. Last resort rate-limit bridging. |
 
-1. **Primary Provider:** `Google Ultra` (`PROV-ULTRA-01` | kayvietnam@gmail.com)
-2. **Secondary Fallback:** `Google Pro` (`PROV-PRO-01` | tom@zap.vn)
-3. **Tertiary Fallback:** `OpenRouter` (`PROV-OPENR-01` | tom@two.vn)
+## 2. Intelligence Assignments (Locked)
 
-## 2. Active Network Config (Precision Tier)
+Based on the [DEEP_RESEARCHER] profession bounds, this agent is restricted to the following runtime limits:
 
-- **Connection Model:** `Omni-Router (Internal Default)`
-- **Primary Tier Model:** `gemini-3.1-pro` (Deep reasoning & multi-source synthesis)
-- **Fast Brain Model:** `gemini-3-flash` (Rapid triage, source classification)
-- **Embedding Model:** `gemini-embedding-2-preview` (ChromaDB vector generation)
-- **Vision Engine:** `gemini-3.0-pro-vision` (Document & image analysis)
+| Objective | Bound Engine | Registry Identifier | Trigger Tags |
+| :--- | :--- | :--- | :--- |
+| **Deep Thinking / Complex Matrix** | Execution Core | `deep-research-pro-preview-12-2025` | `deep-research, autonomous, long-context, osint, r-and-d, deep-search` |
+| **High-Velocity Tasking** | Specialized Secondary | `gemini-2.5-pro` | `autonomous` |
+| **Swarm Heartbeat Tracker** | Gemini 4M Context | `gemini-2.5-pro` | `4m-context, log-ingestion` |
+| **Data Visualization** | Nano Banana 2 | `gemini-3.1-flash-image-preview` | `image-generation, ui-mockups` |
+| **Memory Sync Cortex** | Embeddings 2 | `gemini-embedding-2-preview` | `rag, semantic-search` |
 
-## 3. Override Warning
+## 3. Omni-Router Enforcements
+- **Integrity Bounds:** Operating strictly within `Deep RAG gathering, Google Search crawling, citing sources.` bounds.
+- **BYOK Lockout:** This agent is barred from independent OPENAI_API_KEY overwrites to preserve swarm telemetry.
 
-- **Platform Integrity (Olympus Only):** Olympus agents MUST NEVER use BYOK fallback. They are strictly bound to the internal Omni-Router infrastructure to ensure system-wide telemetry is not blinded.
+*Compiled dynamically on 2026-03-31T08:00:06.826Z*

@@ -44,7 +44,7 @@ const PropertyRow: React.FC<PropertyRowProps> = ({ label, value, unit = '', isOv
                     initial={{ scale: 1.2, opacity: 0.6 }}
                     animate={{ scale: 1, opacity: 1 }}
                     transition={{ type: 'spring', stiffness: 500, damping: 20 }}
-                    className="text-[9px] font-dev font-bold text-primary bg-primary/10 px-1.5 py-0.5 rounded-full min-w-[28px] text-center"
+                    className="text-[9px] font-dev text-transform-tertiary font-bold text-primary bg-primary/10 px-1.5 py-0.5 rounded-full min-w-[28px] text-center"
                 >
                     {value}{unit}
                 </motion.span>
@@ -106,7 +106,7 @@ export const InspectorLayer: React.FC<InspectorLayerProps> = ({
             <div className="space-y-4 pt-1">
                 {/* Layer identity badge */}
                 <div className="flex items-center gap-2 px-2 py-1.5 rounded-md bg-primary/5 border border-primary/10">
-                    <span className="text-[9px] font-dev font-bold text-primary">{layer.token}</span>
+                    <span className="text-[9px] font-dev text-transform-tertiary font-bold text-primary">{layer.token}</span>
                 </div>
 
                 {/* ── Background ── */}

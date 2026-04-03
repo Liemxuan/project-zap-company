@@ -1,93 +1,146 @@
 'use client';
 
-import React from 'react';
-import { MasterVerticalShell } from '../../../../../zap/layout/MasterVerticalShell';
-import { InteractiveElementsBody } from '../../../../../zap/sections/atoms/interactive/body';
+import React, { useState } from 'react';
+import { ComponentSandboxTemplate } from '../../../../../zap/layout/ComponentSandboxTemplate';
+import { Button } from '../../../../../genesis/atoms/interactive/button';
+import { Switch } from '../../../../../genesis/atoms/interactive/switch';
+import { Icon } from '../../../../../genesis/atoms/icons/Icon';
+import { cn } from '../../../../../lib/utils';
+import { CanvasBody } from '../../../../../zap/layout/CanvasBody';
+import { SectionHeader } from '../../../../../zap/sections/SectionHeader';
+import { BORDER_RADIUS_TOKENS, BORDER_WIDTH_TOKENS } from '../../../../../zap/sections/atoms/foundations/schema';
 
-import { Wrapper } from '../../../../../components/dev/Wrapper';
+export default function InteractiveSandboxPage() {
+    const [borderRadius, setBorderRadius] = useState(BORDER_RADIUS_TOKENS[0].value); // Default to sharp
+    const [borderWidth, setBorderWidth] = useState(BORDER_WIDTH_TOKENS[1].value); // Default to 1px
+    const [switchState, setSwitchState] = useState(true);
 
-export default function InteractiveElementsPage() {
+    const inspectorControls = (
+        <div className="space-y-6">
+            <div className="space-y-4 pb-4 border-b border-border/50">
+                <h4 className="text-label-small text-transform-primary font-display font-bold text-muted-foreground tracking-wider uppercase">Foundation Tokens</h4>
+                
+                <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-1.5">
+                        <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Button Radius</label>
+                        <select 
+                            className="w-full bg-layer-panel border border-border/50 rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-primary"
+                            value={borderRadius}
+                            onChange={(e) => setBorderRadius(e.target.value)}
+                        >
+                            {BORDER_RADIUS_TOKENS.map(t => (
+                                <option key={t.name} value={t.value}>{t.name}</option>
+                            ))}
+                        </select>
+                    </div>
+                    <div className="space-y-1.5">
+                        <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Stroke Weight</label>
+                        <select 
+                            className="w-full bg-layer-panel border border-border/50 rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-primary"
+                            value={borderWidth}
+                            onChange={(e) => setBorderWidth(e.target.value)}
+                        >
+                            {BORDER_WIDTH_TOKENS.map(t => (
+                                <option key={t.name} value={t.value}>{t.name}</option>
+                            ))}
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
 
     return (
-        <MasterVerticalShell
-            breadcrumbs={[
-                { label: 'SYSTEMS' },
-                { label: 'CORE' },
-                { label: 'INTERACTIVE ELEMENTS', active: true }
+        <ComponentSandboxTemplate
+            componentName="Interactive"
+            tier="L3 ATOM"
+            status="Verified"
+            filePath="src/genesis/atoms/interactive/Button.tsx"
+            importPath="@/genesis/atoms/interactive/Button"
+            inspectorControls={inspectorControls}
+            foundationInheritance={{
+                colorTokens: ['--md-sys-color-primary', '--md-sys-color-on-primary'],
+                typographyScales: ['--font-label-medium']
+            }}
+            platformConstraints={{
+                web: "Accessible touch targets with minimum 44px hit-box area.",
+                mobile: "Supports haptic feedback and active state visual confirmation."
+            }}
+            foundationRules={[
+                "Buttons must use --font-label-medium for high-density action signaling.",
+                "Active states must provide a minimum 2px vertical displacement."
             ]}
-            activeItem="Interactive Elements"
-            inspectorTitle="Button States"
-            inspectorContent={
-                <div className="space-y-6">
-                    {/* Button States */}
-                    <div className="space-y-4">
-                        {/* Hover State */}
-                        <Wrapper identity={{ displayName: "Hover State", type: "Wrapped Snippet", filePath: "app/debug/zap/atoms/interactive/page.tsx" }}>
-                            <div className="border border-black p-4 bg-white shadow-[2px_2px_0px_0px_black] space-y-2">
-                                <div className="flex items-center gap-2">
-                                    <div className="w-2 h-2 rounded-full bg-blue-500"></div>
-                                    <h4 className="text-label-small font-black uppercase tracking-widest">Hover</h4>
-                                </div>
-                                <p className="text-label-small text-slate-500 font-medium leading-relaxed">
-                                    Translates toward the viewer by 2px. Background and border may transition. Gives physical pressed feedback.
-                                </p>
-                                <code className="text-[9px] bg-zinc-50 border border-black/10 px-2 py-1 block font-dev text-transform-tertiary">
-                                    translate(-2px, -2px); box-shadow: 2px 2px 0 black;
-                                </code>
-                            </div>
-                        </Wrapper>
-
-                        {/* Active State */}
-                        <Wrapper identity={{ displayName: "Active State", type: "Wrapped Snippet", filePath: "app/debug/zap/atoms/interactive/page.tsx" }}>
-                            <div className="border border-black p-4 bg-white shadow-[2px_2px_0px_0px_black] space-y-2">
-                                <div className="flex items-center gap-2">
-                                    <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                                    <h4 className="text-label-small font-black uppercase tracking-widest">Active</h4>
-                                </div>
-                                <p className="text-label-small text-slate-500 font-medium leading-relaxed">
-                                    Provides tactile feedback on click. Background color darkens slightly for visual confirmation.
-                                </p>
-                                <code className="text-[9px] bg-zinc-50 border border-black/10 px-2 py-1 block font-dev text-transform-tertiary">
-                                    translate(0, 0); box-shadow: none;
-                                </code>
-                            </div>
-                        </Wrapper>
-                    </div>
-
-
-
-                    {/* Technical Specs */}
-                    <Wrapper identity={{ displayName: "Specifications", type: "Wrapped Snippet", filePath: "app/debug/zap/atoms/interactive/page.tsx" }}>
-                        <div className="border border-black p-4 space-y-3">
-                            <h3 className="text-label-small font-black uppercase tracking-widest border-b border-black pb-2">Specifications</h3>
-                            {[
-                                { label: 'Border Radius', value: '0px' },
-                                { label: 'Border Weight', value: '1–2px' },
-                                { label: 'Shadow', value: '2px 2px black' },
-                                { label: 'Font', value: 'Space Grotesk' },
-                                { label: 'Min Height', value: '40px' },
-                            ].map((row) => (
-                                <div key={row.label} className="flex justify-between items-center text-label-medium">
-                                    <span className="text-slate-500">{row.label}</span>
-                                    <span className="font-black">{row.value}</span>
-                                </div>
-                            ))}
-                        </div>
-                    </Wrapper>
-
-                    {/* CTA */}
-                    <Wrapper identity={{ displayName: "Form Patterns CTA", type: "Wrapped Snippet", filePath: "app/debug/zap/atoms/interactive/page.tsx" }}>
-                        <div className="bg-black text-white border border-black p-4">
-                            <p className="text-label-medium font-bold italic mb-2">&quot;Using these in a form?&quot;</p>
-                            <a className="text-label-small font-black uppercase text-primary underline underline-offset-4" href="#">
-                                View Form Patterns →
-                            </a>
-                        </div>
-                    </Wrapper>
-                </div>
-            }
         >
-            <InteractiveElementsBody />
-        </MasterVerticalShell>
+            <CanvasBody flush={false}>
+                <CanvasBody.Section>
+                    <SectionHeader id="button-facets" 
+                        number="01"
+                        title="Button Facets"
+                        icon="smart_button"
+                        description="Tactile action foundations testing spatial L2 layer restoration."
+                    />
+                    <CanvasBody.Demo centered>
+                        <div className="w-full max-w-2xl p-12 bg-layer-panel border border-border/40 shadow-xl rounded-2xl flex flex-col md:flex-row items-center justify-center gap-12" style={{ borderRadius: '24px' }}>
+                           <div className="flex flex-col items-center gap-4">
+                                <Button 
+                                    className="px-8 py-4 h-auto text-lg font-black uppercase tracking-widest shadow-xl flex items-center gap-3 transition-all duration-200"
+                                    style={{ 
+                                        borderRadius: borderRadius,
+                                        borderWidth: borderWidth,
+                                        borderColor: 'var(--md-sys-color-outline-variant)'
+                                    } as any}
+                                >
+                                    <Icon name="bolt" size="md" />
+                                    Launch Protocol
+                                </Button>
+                                <span className="text-[10px] font-bold text-muted-foreground uppercase opacity-40">Primary Action</span>
+                           </div>
+                           <div className="flex flex-col items-center gap-4">
+                                <Button 
+                                    variant="outline"
+                                    className="px-8 py-4 h-auto text-lg font-black uppercase tracking-widest shadow-sm flex items-center gap-3 transition-all duration-200"
+                                    style={{ 
+                                        borderRadius: borderRadius,
+                                        borderWidth: borderWidth,
+                                        borderColor: 'var(--md-sys-color-outline)'
+                                    } as any}
+                                >
+                                    <Icon name="terminal" size="md" />
+                                    Debug Logs
+                                </Button>
+                                <span className="text-[10px] font-bold text-muted-foreground uppercase opacity-40">Secondary View</span>
+                           </div>
+                        </div>
+                    </CanvasBody.Demo>
+                </CanvasBody.Section>
+
+                <CanvasBody.Section className="pb-16">
+                    <SectionHeader id="binary-controls" 
+                        number="02"
+                        title="Binary Controls"
+                        icon="toggle_on"
+                        description="Structural testing for stateful switches and toggles."
+                    />
+                    <CanvasBody.Demo>
+                        <div className="w-full max-w-4xl p-8 bg-layer-panel border border-border/40 rounded-xl flex items-center justify-around">
+                            <div className="flex flex-col items-center gap-4">
+                                <Switch checked={switchState} onCheckedChange={setSwitchState} />
+                                <span className="text-[10px] font-bold text-muted-foreground uppercase opacity-40">System Status</span>
+                            </div>
+                            <div className="flex flex-col items-center gap-4">
+                                <Button variant="secondary" size="icon" className="h-12 w-12 rounded-xl">
+                                    <Icon name="power_settings_new" size="md" />
+                                </Button>
+                                <span className="text-[10px] font-bold text-muted-foreground uppercase opacity-40">Hard Power</span>
+                            </div>
+                            <div className="flex flex-col items-center gap-4 opacity-50 grayscale">
+                                <Switch checked={false} disabled />
+                                <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Locked Area</span>
+                            </div>
+                        </div>
+                    </CanvasBody.Demo>
+                </CanvasBody.Section>
+            </CanvasBody>
+        </ComponentSandboxTemplate>
     );
 }

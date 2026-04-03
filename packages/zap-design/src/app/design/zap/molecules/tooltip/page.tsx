@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react';
 import { ComponentSandboxTemplate } from '../../../../../zap/layout/ComponentSandboxTemplate';
-import { Wrapper } from '../../../../../components/dev/Wrapper';
 import { Slider } from '../../../../../genesis/atoms/interactive/slider';
 
 import {
@@ -12,6 +11,8 @@ import {
     TooltipTrigger,
 } from '../../../../../genesis/atoms/interactive/tooltip';
 import { Button } from '../../../../../genesis/atoms/interactive/buttons';
+import { CanvasBody } from '../../../../../zap/layout/CanvasBody';
+import { SectionHeader } from '../../../../../zap/sections/SectionHeader';
 
 export default function TooltipSandboxPage() {    const [paddingX, setPaddingX] = useState([12]);
     const [paddingY, setPaddingY] = useState([6]);
@@ -19,9 +20,9 @@ export default function TooltipSandboxPage() {    const [paddingX, setPaddingX] 
 
     // Fetch initial settings
     const inspectorControls = (
-        <Wrapper identity={{ displayName: "Inspector Controls Container", type: "Container", filePath: "zap/molecules/tooltip" }}>
+        
             <div className="space-y-4">
-                <Wrapper identity={{ displayName: "Tooltip Structural Settings", type: "Docs Link", filePath: "zap/molecules/tooltip/page.tsx" }}>
+                
                     <div className="space-y-6">
                         <h4 className="text-label-small text-transform-primary font-display font-bold text-on-surface-variant text-transform-secondary tracking-wider">Sandbox Variables</h4>
 
@@ -51,9 +52,9 @@ export default function TooltipSandboxPage() {    const [paddingX, setPaddingX] 
                             </div>
                         </div>
                     </div>
-                </Wrapper>
+                
             </div>
-        </Wrapper>
+        
     );
     return (
         <ComponentSandboxTemplate
@@ -70,9 +71,11 @@ export default function TooltipSandboxPage() {    const [paddingX, setPaddingX] 
             platformConstraints={{ web: "N/A", mobile: "N/A" }}
             foundationRules={[]}
         >
-            <div 
-                className="w-full flex items-center justify-center min-h-[400px] p-12 bg-layer-panel shadow-sm border border-outline-variant rounded-xl"
-            >
+            
+            <CanvasBody flush={false}>
+                <CanvasBody.Section>
+                    <SectionHeader number="1" id="tooltip" title="Tooltip Sandbox" description="Interactive components for Tooltip" icon="widgets" />
+                    <CanvasBody.Demo className="w-full flex items-center justify-center min-h-[400px] p-12 bg-layer-panel shadow-sm border border-outline-variant rounded-xl">
                 <TooltipProvider delayDuration={0}>
                     <Tooltip open={true}>
                         <TooltipTrigger asChild>
@@ -89,7 +92,10 @@ export default function TooltipSandboxPage() {    const [paddingX, setPaddingX] 
                         </TooltipContent>
                     </Tooltip>
                 </TooltipProvider>
-            </div>
+                </CanvasBody.Demo>
+                </CanvasBody.Section>
+            </CanvasBody>
+        
         </ComponentSandboxTemplate>
     );
 }

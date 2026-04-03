@@ -1,6 +1,7 @@
 import { MongoClient, ObjectId } from 'mongodb';
 import type { OmniPayload, LLMConfig, OmniResponse } from './omni_router.js';
 import { redactSecrets } from '../../security/log_redaction.js';
+import { getGlobalMongoClient } from "../../db/mongo_client.js";
 
 const MONGO_URI = process.env.MONGODB_URI || "mongodb://localhost:27017";
 const DB_NAME = "olympus";
@@ -64,17 +65,16 @@ export interface OmniJob {
 }
 
 export class OmniQueueManager {
-    private client: MongoClient;
+    private clientPromise: Promise<MongoClient>;
     private isProcessing: boolean = false;
 
     constructor() {
-        this.client = new MongoClient(MONGO_URI);
+        this.clientPromise = getGlobalMongoClient(MONGO_URI);
     }
 
     async connect(tenantId: string = "ZVN") {
-        await this.client.connect();
         // Ensure index for fast queue polling
-        const db = this.client.db(DB_NAME);
+        const db = (await this.clientPromise).db(DB_NAME);
         await db.collection(getQueueCollection(tenantId)).createIndex({ status: 1, priority: 1, createdAt: 1 });
     }
 
@@ -89,7 +89,7 @@ export class OmniQueueManager {
         chatId?: number,
         historyContext?: OmniJob["historyContext"]
     ): Promise<string> {
-        const db = this.client.db(DB_NAME);
+        const db = (await this.clientPromise).db(DB_NAME);
         const col = db.collection<OmniJob>(getQueueCollection(tenantId));
 
         const isComplex = queueName === "Queue-Complex";
@@ -135,7 +135,7 @@ export class OmniQueueManager {
      * Approves a Complex job that is in WAITING_APPROVAL state.
      */
     async approveJob(jobId: string, tenantId: string = "ZVN"): Promise<boolean> {
-        const db = this.client.db(DB_NAME);
+        const db = (await this.clientPromise).db(DB_NAME);
         const col = db.collection<OmniJob>(getQueueCollection(tenantId));
         const res = await col.updateOne(
             { _id: new ObjectId(jobId), status: "WAITING_APPROVAL" },
@@ -152,7 +152,7 @@ export class OmniQueueManager {
      * Cancel a job. If it belongs to a DAG workflow, cancel all PENDING/BLOCKED siblings.
      */
     async cancelJob(jobId: string, tenantId: string = "ZVN"): Promise<{ cancelled: number }> {
-        const db = this.client.db(DB_NAME);
+        const db = (await this.clientPromise).db(DB_NAME);
         const col = db.collection<OmniJob>(getQueueCollection(tenantId));
 
         const job = await col.findOne({ _id: new ObjectId(jobId) });
@@ -187,20 +187,21 @@ export class OmniQueueManager {
     }
 
     /**
-     * Reap stale jobs stuck in PROCESSING for longer than maxAgeMs (default 30 min).
-     * Moves them back to PENDING if retries remain, or FAILED otherwise.
+     * Reap stale jobs stuck in PROCESSING or WAITING_APPROVAL.
      */
     async reapStaleJobs(tenantId: string = "ZVN", maxAgeMs: number = 30 * 60 * 1000): Promise<number> {
-        const db = this.client.db(DB_NAME);
+        const db = (await this.clientPromise).db(DB_NAME);
         const col = db.collection<OmniJob>(getQueueCollection(tenantId));
-        const cutoff = new Date(Date.now() - maxAgeMs);
+        
+        let reaped = 0;
 
+        // 1. Reap PROCESSING jobs (standard 30min timeout)
+        const cutoff = new Date(Date.now() - maxAgeMs);
         const staleJobs = await col.find({
             status: "PROCESSING",
             startedAt: { $lt: cutoff }
         }).toArray();
 
-        let reaped = 0;
         for (const job of staleJobs) {
             const retries = job.retryCount || 0;
             if (retries < 3) {
@@ -218,18 +219,36 @@ export class OmniQueueManager {
             console.log(`[OmniQueue] 🧹 Reaped stale job ${job._id} (age: ${Math.round((Date.now() - (job.startedAt?.getTime() || 0)) / 1000)}s)`);
         }
 
+        // Sub-Phase 2B: HITL Deadlock Prevention (Reap WAITING_APPROVAL jobs older than 5 minutes)
+        const hitlCutoff = new Date(Date.now() - (5 * 60 * 1000));
+        const deadlockedJobs = await col.find({
+            status: "WAITING_APPROVAL",
+            suspendedAt: { $lt: hitlCutoff }
+        }).toArray();
+
+        for (const job of deadlockedJobs) {
+            await col.updateOne(
+                { _id: job._id },
+                { $set: { status: "FAILED", completedAt: new Date(), errorMap: "Failed: HITL Suspend Deadlock (No user approval received within 300s)" } }
+            );
+            reaped++;
+            console.log(`[OmniQueue] 🔒 HITL Timeout: Cancelled job ${job._id} due to human authorization deadlock.`);
+            
+            // Optionally, we could emit a websocket event here if we wanted to visually dismiss the prompt
+        }
+
         return reaped;
     }
 
     async getJobStatus(jobId: string, tenantId: string = "ZVN"): Promise<OmniJob | null> {
-        const db = this.client.db(DB_NAME);
+        const db = (await this.clientPromise).db(DB_NAME);
         const col = db.collection<OmniJob>(getQueueCollection(tenantId));
         return await col.findOne({ _id: new ObjectId(jobId) });
     }
 
     // A simple worker loop that grabs the highest priority PENDING job
     async processNextJob(tenantId: string = "ZVN"): Promise<boolean> {
-        const db = this.client.db(DB_NAME);
+        const db = (await this.clientPromise).db(DB_NAME);
         const col = db.collection<OmniJob>(getQueueCollection(tenantId));
 
         // Find and lock the next job (Priority 0 first, then oldest). Ignore spawn jobs (which lack queueName).
@@ -319,10 +338,39 @@ export class OmniQueueManager {
                 response = await executeWithTimeout(() => generateOmniContent(job.config, job.payload), TIMEOUT_MS);
             }
 
+            // Sub-Phase 2B: HITL Suspend/Resume Integrity Wrap
+            let finalStatus: "COMPLETED" | "WAITING_APPROVAL" = "COMPLETED";
+            let pendingApprovalReason = "";
+            let suspendedToolCall = null;
+
+            if (response.toolCalls && response.toolCalls.length > 0) {
+                // Check if any tool call hits the High-Risk bounds
+                const highRiskTools = ["run_command", "execute_bash", "replace_file_content", "multi_replace_file_content", "invoke_local_mcp"];
+                for (const tc of response.toolCalls) {
+                    const funcName = tc.function?.name || tc.name;
+                    if (highRiskTools.includes(funcName)) {
+                        finalStatus = "WAITING_APPROVAL";
+                        suspendedToolCall = tc;
+                        pendingApprovalReason = `Execution paused. High-risk tool [${funcName}] requires human authorization.`;
+                        await logTrace(`> ⚠️ [HITL Safeguard] Suspending execution: Tool ${funcName} requires approval.`);
+                        break;
+                    }
+                }
+            }
+
+            const updateDoc: any = {
+                status: finalStatus,
+                result: response,
+                suspendedToolCall
+            };
+            if (finalStatus === "COMPLETED") updateDoc.completedAt = new Date();
+            if (finalStatus === "WAITING_APPROVAL") updateDoc.suspendedAt = new Date();
+
             await col.updateOne(
                 { _id: job._id },
-                { $set: { status: "COMPLETED", result: response, completedAt: new Date() } }
+                { $set: updateDoc }
             );
+
             // BLAST-IRONCLAD: Post-completion token accounting
             if (response.tokensUsed && job.config.agentId) {
                 const { recordUsage } = await import('../../security/token_budgets.js');
@@ -330,32 +378,37 @@ export class OmniQueueManager {
                     console.error("[ZSS] Budget accounting failed:", e.message)
                 );
             }
-            console.log(`[OmniQueue] ✅ Job ${job._id} completed successfully.`);
-            await logTrace(`> ✅ [OmniQueue] Job ${job._id} completed.`);
+
+            if (finalStatus === "COMPLETED") {
+                console.log(`[OmniQueue] ✅ Job ${job._id} completed successfully.`);
+                await logTrace(`> ✅ [OmniQueue] Job ${job._id} completed.`);
+
+                // Phase 5: DeerFlow DAG Dependent Unblocking (Only unblock if actually completed, not suspended)
+                const dependents = await col.find({ status: "BLOCKED", dependsOn: job._id }).toArray();
+                for (const dep of dependents) {
+                    const updatedDepends = dep.dependsOn!.filter(id => !id.equals(job._id!));
+                    if (updatedDepends.length === 0) {
+                        await col.updateOne({ _id: dep._id }, { $set: { status: "PENDING", dependsOn: [] } });
+                        console.log(`[OmniQueue] 🚀 DAG Node Unblocked: Job ${dep._id}`);
+                        await logTrace(`> 🚀 [OmniQueue] DAG Execution: Unblocked dependent Job ${dep._id}`);
+                    } else {
+                        await col.updateOne({ _id: dep._id }, { $set: { dependsOn: updatedDepends } });
+                    }
+                }
+            }
 
             if (response.text) {
                 await logTrace(`> 🤖 [reply] ${response.text}`);
             }
 
-            // Phase 5: DeerFlow DAG Dependent Unblocking
-            const dependents = await col.find({ status: "BLOCKED", dependsOn: job._id }).toArray();
-            for (const dep of dependents) {
-                const updatedDepends = dep.dependsOn!.filter(id => !id.equals(job._id!));
-                if (updatedDepends.length === 0) {
-                    await col.updateOne({ _id: dep._id }, { $set: { status: "PENDING", dependsOn: [] } });
-                    console.log(`[OmniQueue] 🚀 DAG Node Unblocked: Job ${dep._id}`);
-                    await logTrace(`> 🚀 [OmniQueue] DAG Execution: Unblocked dependent Job ${dep._id}`);
-                } else {
-                    await col.updateOne({ _id: dep._id }, { $set: { dependsOn: updatedDepends } });
-                }
-            }
-
             // Emit instant cross-process/cross-module push notification for the WSS Daemon
             import('../../gateway/wss.js').then(({ websocketNotifier }) => {
-                websocketNotifier.emit('job_completed', {
+                websocketNotifier.emit(finalStatus === "WAITING_APPROVAL" ? 'hitl_challenge' : 'job_completed', {
                     jobId: job._id.toString(),
                     tenantId: job.tenantId,
-                    status: "COMPLETED",
+                    status: finalStatus,
+                    reason: pendingApprovalReason,
+                    suspendedToolCall,
                     result: response
                 });
             }).catch(e => console.error("[OmniQueue] Failed to notify Gateway WSS:", e.message));
@@ -464,7 +517,7 @@ export class OmniQueueManager {
 
     // Phase 5: DeerFlow DAG Queue Ingress
     async enqueueWorkflowDAG(tenantId: string, workflowDef: Array<{ id: string; dependsOn: string[]; payload: OmniPayload; config: LLMConfig; queueName: QueueName; priority: QueuePriority }>) {
-        const db = this.client.db(DB_NAME);
+        const db = (await this.clientPromise).db(DB_NAME);
         const col = db.collection<OmniJob>(getQueueCollection(tenantId));
         
         const workflowId = `WF_${new ObjectId().toString()}`;

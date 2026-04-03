@@ -20,7 +20,7 @@ const JWT_SECRET = new TextEncoder().encode(
 // ── Rate Limiter (in-memory sliding window) ──────────────
 // Production: swap for Redis INCR + EXPIRE
 const RATE_LIMIT_WINDOW_MS = 60_000; // 1 minute
-const RATE_LIMIT_MAX_REQUESTS = 120; // per IP per window
+const RATE_LIMIT_MAX_REQUESTS = 2400; // per IP per window
 const rateLimitStore = new Map<string, { count: number; resetAt: number }>();
 
 function checkRateLimit(ip: string): { allowed: boolean; remaining: number; resetAt: number } {

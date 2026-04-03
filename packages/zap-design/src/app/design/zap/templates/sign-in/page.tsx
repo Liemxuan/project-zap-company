@@ -18,7 +18,7 @@ export default function SignInSandboxPage() {
             }
             foundationInheritance={{
                 colorTokens: ["bg-layer-panel", "bg-layer-0", "bg-layer-surface"],
-                typographyScales: ["font-body", "text-transform-primary"]
+                typographyScales: ["font-body text-transform-secondary", "text-transform-primary"]
             }}
             platformConstraints={{ web: "N/A", mobile: "N/A" }}
             foundationRules={[]}

@@ -111,23 +111,23 @@ export default function ThemeHomePage() {
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div className="bg-layer-panel rounded-xl p-5 border border-outline-variant/20">
                                 <p className="text-[10px] font-black text-transform-secondary tracking-widest text-muted-foreground mb-2">COLORS</p>
-                                <p className="text-sm text-foreground">Source: <code className="font-dev text-primary">{theme.tokens.colors.sourceColor}</code></p>
-                                <p className="text-sm text-foreground">Scheme: <code className="font-dev text-primary">{theme.tokens.colors.scheme}</code></p>
+                                <p className="text-sm text-foreground">Source: <code className="font-dev text-transform-tertiary text-primary">{theme.tokens.colors.sourceColor}</code></p>
+                                <p className="text-sm text-foreground">Scheme: <code className="font-dev text-transform-tertiary text-primary">{theme.tokens.colors.scheme}</code></p>
                             </div>
                             <div className="bg-layer-panel rounded-xl p-5 border border-outline-variant/20">
                                 <p className="text-[10px] font-black text-transform-secondary tracking-widest text-muted-foreground mb-2">TYPOGRAPHY</p>
-                                <p className="text-sm text-foreground">Primary: <code className="font-dev text-primary">{theme.tokens.typography.primaryFont.split(',')[0]}</code></p>
-                                <p className="text-sm text-foreground">Secondary: <code className="font-dev text-primary">{theme.tokens.typography.secondaryFont.split(',')[0]}</code></p>
+                                <p className="text-sm text-foreground">Primary: <code className="font-dev text-transform-tertiary text-primary">{theme.tokens.typography.primaryFont.split(',')[0]}</code></p>
+                                <p className="text-sm text-foreground">Secondary: <code className="font-dev text-transform-tertiary text-primary">{theme.tokens.typography.secondaryFont.split(',')[0]}</code></p>
                             </div>
                             <div className="bg-layer-panel rounded-xl p-5 border border-outline-variant/20">
                                 <p className="text-[10px] font-black text-transform-secondary tracking-widest text-muted-foreground mb-2">GEOMETRY</p>
-                                <p className="text-sm text-foreground">Radius: <code className="font-dev text-primary">{theme.tokens.geometry.borderRadius}</code></p>
-                                <p className="text-sm text-foreground">Border: <code className="font-dev text-primary">{theme.tokens.geometry.cardBorderWidth}px</code></p>
+                                <p className="text-sm text-foreground">Radius: <code className="font-dev text-transform-tertiary text-primary">{theme.tokens.geometry.borderRadius}</code></p>
+                                <p className="text-sm text-foreground">Border: <code className="font-dev text-transform-tertiary text-primary">{theme.tokens.geometry.cardBorderWidth}px</code></p>
                             </div>
                             <div className="bg-layer-panel rounded-xl p-5 border border-outline-variant/20">
                                 <p className="text-[10px] font-black text-transform-secondary tracking-widest text-muted-foreground mb-2">MOTION</p>
-                                <p className="text-sm text-foreground">Curve: <code className="font-dev text-primary">{theme.tokens.motion.curve}</code></p>
-                                <p className="text-sm text-foreground">Duration: <code className="font-dev text-primary">{theme.tokens.motion.durationMs}ms</code></p>
+                                <p className="text-sm text-foreground">Curve: <code className="font-dev text-transform-tertiary text-primary">{theme.tokens.motion.curve}</code></p>
+                                <p className="text-sm text-foreground">Duration: <code className="font-dev text-transform-tertiary text-primary">{theme.tokens.motion.durationMs}ms</code></p>
                             </div>
                         </div>
                     </section>

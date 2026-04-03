@@ -26,7 +26,6 @@ export const definition: any = {
         priority: {
           type: "number",
           description: "Job priority: 0=critical, 1=high, 2=normal, 3=low",
-          enum: [0, 1, 2, 3],
         },
         depends_on: {
           type: "array",

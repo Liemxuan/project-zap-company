@@ -106,7 +106,7 @@ export function DataGrid<TData, TValue>({
                 return (
                   <DropdownMenuCheckboxItem
                     key={column.id}
-                    className="capitalize font-body text-transform-secondary"
+ className=" font-body text-transform-secondary"
                     checked={column.getIsVisible()}
                     onCheckedChange={(value) => column.toggleVisibility(!!value)}
                   >
@@ -167,7 +167,7 @@ export function DataGrid<TData, TValue>({
       {/* PAGINATION: L4 Molecule Enforcement */}
       <div className="flex items-center justify-between py-4">
         <div className="flex-1 text-sm text-on-surface-variant font-body text-transform-secondary">
-          {table.getFilteredSelectedRowModel().rows.length} of{" "}
+          {table.getFilteredSelectedRowModel().rows.length} of{""}
           {table.getFilteredRowModel().rows.length} row(s) selected.
         </div>
         <div className="flex items-center">

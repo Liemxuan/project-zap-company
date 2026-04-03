@@ -26,7 +26,7 @@ export default function GatewayForensicsPage() {
         return () => clearInterval(interval);
     }, []);
 
-    if (!data) return <div className="flex items-center justify-center p-24 text-on-surface font-mono animate-pulse">Initializing Gateway Telemetry...</div>;
+    if (!data) return <div className="flex items-center justify-center p-24 text-on-surface font-mono text-transform-tertiary animate-pulse">Initializing Gateway Telemetry...</div>;
 
     return (
         <div className="flex h-full flex-col bg-surface text-on-surface pb-24">
@@ -42,7 +42,7 @@ export default function GatewayForensicsPage() {
                                 <Key className="h-6 w-6 text-purple-400" />
                                 Gateway Matrix
                             </h1>
-                            <p className="text-xs font-mono text-purple-400/80 mt-1 uppercase tracking-wider">High-Density Telemetry</p>
+ <p className="text-xs font-mono text-transform-tertiary text-purple-400/80 mt-1 tracking-wider">High-Density Telemetry</p>
                         </div>
                     </div>
                 </div>
@@ -55,19 +55,19 @@ export default function GatewayForensicsPage() {
                     <div className="p-6 bg-surface-variant/30 border border-outline/10 rounded-xl relative overflow-hidden group">
                         <div className="absolute inset-0 bg-gradient-to-br from-rose-500/5 to-transparent border border-rose-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity" />
                         <h3 className="text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Ultra Pool Keys</h3>
-                        <div className="text-4xl font-black text-rose-400 font-mono">{data.ultraKeys}</div>
+                        <div className="text-4xl font-black text-rose-400 font-mono text-transform-tertiary">{data.ultraKeys}</div>
                     </div>
                     
                     <div className="p-6 bg-surface-variant/30 border border-outline/10 rounded-xl relative overflow-hidden group">
                         <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent border border-blue-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity" />
                         <h3 className="text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Pro Pool Keys</h3>
-                        <div className="text-4xl font-black text-blue-400 font-mono">{data.proKeys}</div>
+                        <div className="text-4xl font-black text-blue-400 font-mono text-transform-tertiary">{data.proKeys}</div>
                     </div>
 
                     <div className="p-6 bg-surface-variant/30 border border-outline/10 rounded-xl relative overflow-hidden group">
                         <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-transparent border border-purple-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity" />
                         <h3 className="text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Dead Keys Detained</h3>
-                        <div className="text-4xl font-black text-purple-400 font-mono">{data.deadKeys}</div>
+                        <div className="text-4xl font-black text-purple-400 font-mono text-transform-tertiary">{data.deadKeys}</div>
                     </div>
                 </div>
 
@@ -81,13 +81,13 @@ export default function GatewayForensicsPage() {
                     {data.blockedProjects.length === 0 ? (
                         <div className="p-8 border border-white/5 bg-white/[0.01] rounded-xl text-center flex flex-col items-center justify-center">
                             <Activity className="h-8 w-8 text-green-500/50 mb-3" />
-                            <p className="font-mono text-green-400/80 uppercase tracking-widest text-sm">Matrix is Clear. No captchas detected.</p>
+ <p className="font-mono text-transform-tertiary text-green-400/80 tracking-widest text-sm">Matrix is Clear. No captchas detected.</p>
                         </div>
                     ) : (
                         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                             {data.blockedProjects.map((proj: string, i: number) => (
                                 <div key={i} className="p-4 bg-red-500/10 border border-red-500/30 rounded-lg flex items-center justify-between">
-                                    <span className="font-mono text-red-300 text-sm">{proj}</span>
+                                    <span className="font-mono text-transform-tertiary text-red-300 text-sm">{proj}</span>
                                     <span className="text-xs font-bold text-red-500 uppercase tracking-widest animate-pulse">Quarantined</span>
                                 </div>
                             ))}
@@ -98,7 +98,7 @@ export default function GatewayForensicsPage() {
                 {/* System Metrics */}
                 <section className="bg-surface-variant/20 border border-outline/10 rounded-xl p-8">
                      <h2 className="text-lg font-bold text-white mb-6">Omni-Router State</h2>
-                     <div className="grid grid-cols-2 md:grid-cols-4 gap-6 font-mono text-sm">
+                     <div className="grid grid-cols-2 md:grid-cols-4 gap-6 font-mono text-transform-tertiary text-sm">
                          <div>
                              <div className="text-on-surface-variant/60 text-xs mb-1 uppercase tracking-wider">Redis Database</div>
                              <div className="text-green-400">Connected</div>

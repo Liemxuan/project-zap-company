@@ -1,274 +1,121 @@
 'use client';
-import { parseCssToNumber } from '../../../../../lib/utils';
 
-import React, { useState, useEffect } from 'react';
-import { useTheme } from '../../../../../components/ThemeContext';
+import React, { useState } from 'react';
 import { ComponentSandboxTemplate } from '../../../../../zap/layout/ComponentSandboxTemplate';
-import { Wrapper } from '../../../../../components/dev/Wrapper';
-import { Select as ZapSelect } from '../../../../../genesis/atoms/interactive/option-select';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '../../../../../genesis/atoms/interactive/select';
-import { Slider } from '../../../../../genesis/atoms/interactive/slider';
-import { ThemePublisher } from '../../../../../components/dev/ThemePublisher';
-import { useBorderProperties } from '../../../../../zap/sections/atoms/border_radius/use-border-properties';
-import { BORDER_RADIUS_TOKENS, BORDER_WIDTH_TOKENS, ZAP_LAYER_MAP } from '../../../../../zap/sections/atoms/foundations/schema';
-import { toast } from 'sonner';
+import { Icon } from '../../../../../genesis/atoms/icons/Icon';
+import { cn } from '../../../../../lib/utils';
+import { CanvasBody } from '../../../../../zap/layout/CanvasBody';
+import { SectionHeader } from '../../../../../zap/sections/SectionHeader';
+import { BORDER_RADIUS_TOKENS, BORDER_WIDTH_TOKENS } from '../../../../../zap/sections/atoms/foundations/schema';
 
 export default function SelectSandboxPage() {
-    const { theme: appTheme } = useTheme();
-    const activeTheme = appTheme === 'core' ? 'core' : 'metro';
-    
-    const [height, setHeight] = useState([40]);
-    const [isSubmitting, setIsSubmitting] = useState(false);
-
-    const {
-        state,
-        setComponentOverride,
-        clearComponentOverride,
-        hydrateState,
-        getEffectiveProps
-    } = useBorderProperties();
-
-    useEffect(() => {
-        let mounted = true;
-        const loadSettings = async () => {
-            try {
-                const res = await fetch(`/api/border_radius/publish?theme=${activeTheme}`);
-                if (res.ok && mounted) {
-                    const data = await res.json();
-                    if (data.success && data.data && data.data.state) {
-                        hydrateState(data.data.state);
-                    }
-                }
-            } catch (err) {
-                console.error("Failed to load border radius settings:", err);
-            }
-        };
-        loadSettings();
-        return () => { mounted = false; };
-    }, [activeTheme, hydrateState]);
-
-    const effectiveProps = getEffectiveProps('Select');
-    
-    const previewRadius = BORDER_RADIUS_TOKENS.find(t => t.token === effectiveProps.radius)?.value.split(' ')[0] || '8px';
-    const previewWidth = BORDER_WIDTH_TOKENS.find(t => t.token === effectiveProps.width)?.value.split(' ')[0] || '1px';
-    const previewBgLayer = state.components['Select']?.bg || '';
-    const previewBgTokenDef = ZAP_LAYER_MAP.find(L => L.zapToken === previewBgLayer);
-    const previewBgCssVar = previewBgTokenDef 
-        ? `var(--color-${previewBgTokenDef.m3Token.replace('bg-', '')})` 
-        : 'var(--color-surface-container-highest)';
-
-    const renderRadiusSelect = (value: string, onChange: (val: string) => void) => {
-        const safeValue = value === '' ? 'inherit' : value;
-        const options = [
-            { label: '(Inherit Universal)', value: 'inherit' },
-            ...BORDER_RADIUS_TOKENS.map(t => ({ label: `${t.name} (${t.token})`, value: t.token }))
-        ];
-        return (
-            <ZapSelect 
-                value={safeValue} 
-                onChange={(val) => onChange(val === 'inherit' ? '' : val)}
-                options={options}
-                placeholder="(Inherit Universal)"
-                className={`w-full bg-layer-base ${value !== '' ? 'border-primary/50 text-primary' : 'border-border/30 text-foreground'}`}
-            />
-        );
-    };
-
-    const renderWidthSelect = (value: string, onChange: (val: string) => void) => {
-        const safeValue = value === '' ? 'inherit' : value;
-        const options = [
-            { label: '(Inherit Universal)', value: 'inherit' },
-            ...BORDER_WIDTH_TOKENS.map(t => ({ label: `${t.name} (${t.token})`, value: t.token }))
-        ];
-        return (
-            <ZapSelect 
-                value={safeValue} 
-                onChange={(val) => onChange(val === 'inherit' ? '' : val)}
-                options={options}
-                placeholder="(Inherit Universal)"
-                className={`w-full bg-layer-base ${value !== '' ? 'border-primary/50 text-primary' : 'border-border/30 text-foreground'}`}
-            />
-        );
-    };
-
-    const renderBgSelect = (value: string, onChange: (val: string) => void) => {
-        const safeValue = value === '' ? 'inherit' : value;
-        const options = [
-            { label: '(L4 Default)', value: 'inherit' },
-            ...ZAP_LAYER_MAP.map(L => ({ label: `${L.zapLayer} (${L.zapToken})`, value: L.zapToken }))
-        ];
-        return (
-            <ZapSelect 
-                value={safeValue} 
-                onChange={(val) => onChange(val === 'inherit' ? '' : val)}
-                options={options}
-                placeholder="(L4 Default)"
-                className={`w-full bg-layer-base ${value !== '' ? 'border-primary/50 text-primary' : 'border-border/30 text-foreground'}`}
-            />
-        );
-    };
-
+    const [borderRadius, setBorderRadius] = useState(BORDER_RADIUS_TOKENS[4].value);
+    const [borderWidth, setBorderWidth] = useState(BORDER_WIDTH_TOKENS[1].value);
+    const [height, setHeight] = useState('48px');
 
     const inspectorControls = (
-        <Wrapper identity={{ displayName: "Inspector Controls Container", type: "Container", filePath: "zap/atoms/select/page.tsx" }}>
-            <div className="space-y-4">
-                <Wrapper identity={{ displayName: "Select Structural Settings", type: "Docs Link", filePath: "zap/atoms/select/page.tsx" }}>
-                    <div className="space-y-6">
-                        <h4 className="text-label-small text-transform-primary font-display font-bold text-muted-foreground tracking-wider uppercase">Sandbox Variables</h4>
-
-                        <div className="space-y-4">
-                            <div className="space-y-2">
-                                <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-muted-foreground uppercase">
-                                    <span>--select-height</span>
-                                    <span className="font-bold">{height[0]}px</span>
-                                </div>
-                                <Slider value={height} onValueChange={setHeight} min={16} max={128} step={1} className="w-full" />
-                            </div>
-
-                            <div className="space-y-1">
-                                <span className="text-label-small text-muted-foreground flex justify-between">
-                                    <span>Width Override</span>
-                                    <span className="font-bold">{previewWidth}</span>
-                                </span>
-                                {renderWidthSelect(
-                                    state.components['Select']?.width || '', 
-                                    (val) => {
-                                        if (val === '') clearComponentOverride('Select', 'width');
-                                        else setComponentOverride('Select', 'width', val);
-                                    }
-                                )}
-                            </div>
-
-                            <div className="space-y-1">
-                                <span className="text-label-small text-muted-foreground flex justify-between">
-                                    <span>Radius Override</span>
-                                    <span className="font-bold">{previewRadius}</span>
-                                </span>
-                                {renderRadiusSelect(
-                                    state.components['Select']?.radius || '', 
-                                    (val) => {
-                                        if (val === '') clearComponentOverride('Select', 'radius');
-                                        else setComponentOverride('Select', 'radius', val);
-                                    }
-                                )}
-                            </div>
-
-                            <div className="space-y-1">
-                                <span className="text-label-small text-muted-foreground flex justify-between">
-                                    <span>Color / Layer</span>
-                                    <span className="font-bold whitespace-nowrap overflow-hidden text-ellipsis ml-2 max-w-[120px]">{previewBgTokenDef ? previewBgTokenDef.zapLayer : 'L4 Default'}</span>
-                                </span>
-                                {renderBgSelect(
-                                    state.components['Select']?.bg || '', 
-                                    (val) => {
-                                        if (val === '') clearComponentOverride('Select', 'bg');
-                                        else setComponentOverride('Select', 'bg', val);
-                                    }
-                                )}
-                            </div>
-
-
-                        </div>
+        <div className="space-y-6">
+            <div className="space-y-4 pb-4 border-b border-border/50">
+                <h4 className="text-label-small text-transform-primary font-display font-bold text-muted-foreground tracking-wider uppercase">Foundation Tokens</h4>
+                
+                <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-1.5">
+                        <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Border Radius</label>
+                        <select 
+                            className="w-full bg-layer-panel border border-border/50 rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-primary"
+                            value={borderRadius}
+                            onChange={(e) => setBorderRadius(e.target.value)}
+                        >
+                            {BORDER_RADIUS_TOKENS.map(t => (
+                                <option key={t.name} value={t.value}>{t.name}</option>
+                            ))}
+                        </select>
                     </div>
-                </Wrapper>
+                    <div className="space-y-1.5">
+                        <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Border Width</label>
+                        <select 
+                            className="w-full bg-layer-panel border border-border/50 rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-primary"
+                            value={borderWidth}
+                            onChange={(e) => setBorderWidth(e.target.value)}
+                        >
+                            {BORDER_WIDTH_TOKENS.map(t => (
+                                <option key={t.name} value={t.value}>{t.name}</option>
+                            ))}
+                        </select>
+                    </div>
+                </div>
+
+                <div className="space-y-1.5">
+                    <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Height Offset</label>
+                    <select 
+                        className="w-full bg-layer-panel border border-border/50 rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-primary"
+                        value={height}
+                        onChange={(e) => setHeight(e.target.value)}
+                    >
+                        {['32px', '40px', '48px', '56px', '64px'].map(h => (
+                            <option key={h} value={h}>{h}</option>
+                        ))}
+                    </select>
+                </div>
             </div>
-        </Wrapper>
+        </div>
     );
 
-    const handleLoadedVariables = React.useCallback((variables: Record<string, string>) => {
-        if (variables['--select-height']) setHeight([parseCssToNumber(variables['--select-height'])]);
-    }, []);
-
-    const handlePublish = async () => {
-        setIsSubmitting(true);
-        try {
-            // Publish local component values
-            const variables = {
-                '--select-height': `${height[0]}px`
-            };
-            const res1 = await fetch('/api/theme/publish', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ theme: activeTheme, variables })
-            });
-
-            // Publish global border radius
-            const res2 = await fetch('/api/border_radius/publish', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ theme: activeTheme, state })
-            });
-
-            if (res1.ok && res2.ok) {
-                toast.success(`Published Select to ${activeTheme}`);
-            } else {
-                toast.error('Failed to publish');
-            }
-        } catch (err) {
-            console.error(err);
-            toast.error('Network error during publish');
-        } finally {
-            setIsSubmitting(false);
-        }
+    const handleLoadedVariables = (variables: Record<string, string>) => {
+        if (variables['--select-height']) setHeight(variables['--select-height']);
+        if (variables['--select-border-width']) setBorderWidth(variables['--select-border-width']);
+        if (variables['--select-border-radius']) setBorderRadius(variables['--select-border-radius']);
     };
 
     return (
         <ComponentSandboxTemplate
             componentName="Select"
             tier="L3 ATOM"
-            status="Beta"
-            filePath="src/components/ui/select.tsx"
-            importPath="@/components/ui/select"
+            status="Verified"
+            filePath="src/genesis/atoms/interactive/select.tsx"
+            importPath="@/genesis/atoms/interactive/select"
             inspectorControls={inspectorControls}
-            inspectorFooter={
-                <ThemePublisher 
-                    theme={activeTheme} 
-                    filePath="src/components/ui/select.tsx" 
-                    onPublish={handlePublish} 
-                    isLoading={isSubmitting} 
-                />
-            }
             foundationInheritance={{
-                colorTokens: ['--md-sys-color-primary'],
-                typographyScales: ['--font-body']
+                colorTokens: ['--md-sys-color-primary', '--md-sys-color-surface-container'],
+                typographyScales: ['--font-body (bodyLarge)']
             }}
             platformConstraints={{
-                web: "N/A",
-                mobile: "N/A"
+                web: "Accessible dropdown with keyboard navigation support.",
+                mobile: "Touch targets require adequate height. Standard 48px recommended."
             }}
             foundationRules={[
-                "Arbitrary Token Syntax Only."
-            ]} 
+                "Select must use M3 shape tokens.",
+                "Ensure clear distinction between focus and default states."
+            ]}
             onLoadedVariables={handleLoadedVariables}
         >
-            <style 
-                key={`sandbox-styles-${previewWidth}-${previewRadius}-${height[0]}-${previewBgLayer}`}
-                dangerouslySetInnerHTML={{ __html: `
-                :root {
-                    --select-border-width: ${previewWidth};
-                    --select-border-radius: ${previewRadius};
-                    --select-height: ${height[0]}px;
-                    --select-bg: ${previewBgCssVar};
-                }
-            ` }} />
-            <div 
-                className="w-full space-y-12 animate-in fade-in duration-500 pb-16 select-preview-sandbox"
-            >
-                <div className="p-12 bg-layer-panel shadow-sm border-[length:var(--card-border-width)] border-outline-variant rounded-[length:var(--card-radius)] flex flex-col items-center justify-center text-on-surface w-full min-h-[160px]">
-                   <div className="flex justify-center w-full">
-                       <Select defaultValue="1">
-                           <SelectTrigger className="w-80">
-                               <SelectValue placeholder="Select an option" />
-                           </SelectTrigger>
-                           <SelectContent>
-                               <SelectItem value="1">Primary Option</SelectItem>
-                               <SelectItem value="2">Secondary Option</SelectItem>
-                           </SelectContent>
-                       </Select>
-                   </div>
-                </div>
-            </div>
+            <CanvasBody flush={false}>
+                <CanvasBody.Section>
+                    <SectionHeader id="interactive-preview" 
+                        number="01"
+                        title="Interactive Preview"
+                        icon="visibility"
+                        description="Live-configured dropdown testing design token inheritance."
+                    />
+                    <CanvasBody.Demo centered>
+                        <div className="w-full max-w-sm p-12 bg-layer-panel border border-border/40 shadow-xl rounded-2xl flex flex-col items-center justify-center" style={{ borderRadius }}>
+                           <div className="flex justify-center w-full">
+                               <Select defaultValue="1">
+                                   <SelectTrigger className="w-full" style={{ borderRadius, borderWidth, height } as any}>
+                                       <SelectValue placeholder="Select an option" />
+                                   </SelectTrigger>
+                                   <SelectContent>
+                                       <SelectItem value="1">Primary Option</SelectItem>
+                                       <SelectItem value="2">Secondary Option</SelectItem>
+                                       <SelectItem value="3">Tertiary Option</SelectItem>
+                                   </SelectContent>
+                               </Select>
+                           </div>
+                        </div>
+                    </CanvasBody.Demo>
+                </CanvasBody.Section>
+            </CanvasBody>
         </ComponentSandboxTemplate>
     );
 }
-

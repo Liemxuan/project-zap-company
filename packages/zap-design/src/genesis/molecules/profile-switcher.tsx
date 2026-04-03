@@ -42,7 +42,7 @@ export function ProfileSwitcher({
     return (
         <Wrapper identity={{ displayName: 'ProfileSwitcher', filePath: 'components/ui/profile-switcher.tsx', type: 'Molecule', architecture: 'L4: Molecules' }}>
             <div className={cn("flex flex-col gap-2 w-full max-w-[320px]", className)} {...props}>
-                <span className="font-body text-[12px] font-bold tracking-wider text-transform-tertiary uppercase">
+ <span className="font-body text-transform-secondary text-[12px] font-bold tracking-wider text-transform-tertiary ">
                     PROFILE SWITCHER
                 </span>
                 

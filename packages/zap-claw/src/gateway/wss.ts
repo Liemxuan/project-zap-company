@@ -56,6 +56,16 @@ export class GatewayWebSocketServer {
         websocketNotifier.on('job_completed', (data: any) => {
             this.broadcast('chat', data);
         });
+
+        // Sub-Phase 2A: M3 Artifact Creation Emitter bridging
+        websocketNotifier.on('artifact_created', (data: any) => {
+            this.broadcast('artifact', data);
+        });
+
+        // Sub-Phase 2B: HITL Challenge Emitter bridging
+        websocketNotifier.on('hitl_challenge', (data: any) => {
+            this.broadcast('hitl', data);
+        });
     }
 
     private handleMessage(ws: WebSocket, ctx: ClientContext, payload: any) {

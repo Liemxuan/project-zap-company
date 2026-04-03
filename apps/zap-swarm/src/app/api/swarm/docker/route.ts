@@ -1,3 +1,4 @@
+export const revalidate = 5;
 import { NextResponse } from "next/server";
 import http from "http";
 import { logger } from "@/lib/logger";

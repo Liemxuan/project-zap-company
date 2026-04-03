@@ -1,10 +1,10 @@
-
 'use client';
 
 import React, { useState } from 'react';
 import { ComponentSandboxTemplate } from '../../../../../zap/layout/ComponentSandboxTemplate';
-import { Wrapper } from '../../../../../components/dev/Wrapper';
 import { Tabs, type TabItem } from '../../../../../genesis/atoms/interactive/Tabs';
+import { CanvasBody } from '../../../../../zap/layout/CanvasBody';
+import { SectionHeader } from '../../../../../zap/sections/SectionHeader';
 
 const DEMO_TABS: TabItem[] = [
     { id: 'overview', label: 'OVERVIEW' },
@@ -31,50 +31,50 @@ export default function TabsSandboxPage() {
             filePath="src/genesis/atoms/interactive/Tabs.tsx"
             importPath="@/genesis/atoms/interactive/Tabs"
             foundationInheritance={{
-                colorTokens: ['--color-primary', '--color-on-surface-variant', '--color-surface-container'],
+                colorTokens: ['--color-primary', '--color-on-surface-variant'],
                 typographyScales: ['--font-display']
             }}
             platformConstraints={{ web: "Full support", mobile: "Horizontal scroll" }}
             foundationRules={[
-                "Tabs use animated underline via Framer Motion LayoutGroup scoped by useId().",
+                "Tabs use animated underline via Framer Motion.",
                 "Active tab text uses --color-primary.",
-                "Active state features an explicit 2-pixel primary-color Neo-Brutal line."
+                "Active state features an explicit 2-pixel primary Neo-Brutal line."
             ]}
         >
-            <div className="w-full space-y-10 animate-in fade-in duration-500 pb-8">
-
-                {/* Standard Tabs */}
-                <div className="space-y-2">
-                    <span className="text-label-small font-semibold text-muted-foreground uppercase tracking-widest">Standard Navigation Tabs</span>
-                    <span className="text-label-small font-dev text-muted-foreground block">
-                        4-tab layout with spring-animated underline · Active: <code>{activeTab}</code>
-                    </span>
-                    <Wrapper identity={{ displayName: "Tabs", type: "Atom", filePath: "genesis/atoms/interactive/Tabs.tsx" }}>
-                        <div className="bg-layer-panel border border-card-border rounded-lg p-6 w-full">
+            <CanvasBody flush={false}>
+                <CanvasBody.Section>
+                    <SectionHeader id="standard-navigation" 
+                        number="01"
+                        title="Standard Navigation"
+                        icon="tabs"
+                        description="Core 4-tab layout with spring-animated layout transitions."
+                    />
+                    <CanvasBody.Demo>
+                        <div className="bg-layer-panel border border-border/40 rounded-xl p-8 w-full max-w-2xl shadow-xl">
                             <Tabs tabs={DEMO_TABS} activeTab={activeTab} onChange={setActiveTab} />
-                            <div className="mt-6 p-4 bg-layer-surface rounded-md border border-border/30">
-                                <p className="text-body-small text-muted-foreground font-dev">
-                                    Content for <strong className="text-primary">{activeTab}</strong> tab
+                            <div className="mt-8 p-6 bg-layer-surface/50 border border-border/30 rounded-lg">
+                                <p className="text-bodySmall text-muted-foreground font-body">
+                                    Displaying active content for <span className="text-primary font-bold">{activeTab}</span> pane.
                                 </p>
                             </div>
                         </div>
-                    </Wrapper>
-                </div>
+                    </CanvasBody.Demo>
+                </CanvasBody.Section>
 
-                {/* Compact Tabs */}
-                <div className="space-y-2">
-                    <span className="text-label-small font-semibold text-muted-foreground uppercase tracking-widest">Compact Time-Range Tabs</span>
-                    <span className="text-label-small font-dev text-muted-foreground block">
-                        3-tab compact layout · Active: <code>{compactTab}</code>
-                    </span>
-                    <Wrapper identity={{ displayName: "Tabs (Compact)", type: "Atom", filePath: "genesis/atoms/interactive/Tabs.tsx" }}>
-                        <div className="bg-layer-panel border border-card-border rounded-lg p-6 w-full max-w-sm">
+                <CanvasBody.Section className="pb-16">
+                    <SectionHeader id="compact-controls" 
+                        number="02"
+                        title="Compact Controls"
+                        icon="view_week"
+                        description="Reduced footprint tabs ideal for filtering and scope switching."
+                    />
+                    <CanvasBody.Demo>
+                        <div className="bg-layer-panel border border-border/40 rounded-xl p-6 w-full max-w-sm shadow-lg">
                             <Tabs tabs={COMPACT_TABS} activeTab={compactTab} onChange={setCompactTab} />
                         </div>
-                    </Wrapper>
-                </div>
-
-            </div>
+                    </CanvasBody.Demo>
+                </CanvasBody.Section>
+            </CanvasBody>
         </ComponentSandboxTemplate>
     );
 }

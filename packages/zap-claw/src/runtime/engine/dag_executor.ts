@@ -1,3 +1,4 @@
+import { getGlobalMongoClient } from "../../db/mongo_client.js";
 // packages/zap-claw/src/runtime/engine/dag_executor.ts
 
 interface DAGJob {
@@ -38,7 +39,7 @@ export async function startDAGExecutor(tenantId: string = 'ZVN', pollIntervalMs:
   const { MongoClient } = await import('mongodb');
   const { executeSerializedLane } = await import('../serialized_lane.js');
 
-  const client = new MongoClient(process.env.MONGODB_URI || "mongodb://localhost:27017");
+  const client = await getGlobalMongoClient(process.env.MONGODB_URI || "mongodb://localhost:27017");
   const db = client.db("zap_swarm");
   const col = db.collection(`${tenantId}_SYS_OS_job_queue`);
 
@@ -93,5 +94,4 @@ export async function startDAGExecutor(tenantId: string = 'ZVN', pollIntervalMs:
     }
   }, pollIntervalMs);
 
-  return { stop: () => { clearInterval(interval); client.close(); } };
 }

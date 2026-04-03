@@ -1,11 +1,13 @@
 "use client";
 
+export const dynamic = 'force-dynamic';
+
 import { useState, useMemo } from "react";
 import { Heading } from "zap-design/src/genesis/atoms/typography/headings";
 import { Text } from "zap-design/src/genesis/atoms/typography/text";
 import { AppShell } from "zap-design/src/zap/layout/AppShell";
 import { ThemeHeader } from "zap-design/src/genesis/molecules/layout/ThemeHeader";
-import { Orbit, Activity, Server, KeyRound, AlertTriangle, CheckCircle2, Search, X, RefreshCw, Box } from "lucide-react";
+import { Orbit, Activity, Server, KeyRound, AlertTriangle, CheckCircle2, Search, X, RefreshCw, Box, Play, Target } from "lucide-react";
 import { motion } from "framer-motion";
 import { Button } from "zap-design/src/genesis/atoms/interactive/button";
 import { useQuery } from "@tanstack/react-query";
@@ -17,6 +19,10 @@ interface FleetKey {
   status: string;
   allocation: string;
   provider: string;
+  projectId?: string;
+  agentId?: string;
+  merchantId?: string;
+  assignedTo?: string;
   lastUsedAt?: string;
   errors?: number;
 }
@@ -24,6 +30,73 @@ interface FleetKey {
 export default function FleetDashboard() {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTier, setActiveTier] = useState<string | null>(null);
+  const [isTesting, setIsTesting] = useState(false);
+  const [testingKey, setTestingKey] = useState<string | null>(null);
+  const [isTestingDeadKeys, setIsTestingDeadKeys] = useState(false);
+
+  const handleTestSingleKey = async (keyHash: string, provider: string) => {
+    setTestingKey(keyHash);
+    try {
+      const CLAW_URL = process.env.NEXT_PUBLIC_CLAW_URL || "http://localhost:3900";
+      const res = await fetch(`${CLAW_URL}/api/admin/test-single-key`, { 
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ keyHash, provider })
+      });
+      const data = await res.json();
+      if (data.success) {
+        alert(`✅ DIAGNOSTIC PING SUCCESS\n\nKey: ${keyHash.slice(-6)}\nResponse: ${data.text}\nStatus: ${data.status}`);
+      } else {
+        alert(`❌ DIAGNOSTIC PING FAILED\n\nKey: ${keyHash.slice(-6)}\nError: ${data.error}`);
+      }
+    } catch (e: any) {
+      alert(`❌ CONNECTION FAILED\n${e.message}`);
+    } finally {
+      setTestingKey(null);
+      refetch();
+    }
+  };
+
+  const handleTestRouter = async () => {
+    setIsTesting(true);
+    try {
+      const CLAW_URL = process.env.NEXT_PUBLIC_CLAW_URL || "http://localhost:3900";
+      const res = await fetch(`${CLAW_URL}/api/admin/test-omnirouter`, { method: "POST" });
+      const data = await res.json();
+      if (data.success) {
+        alert(`✅ SEQUENCE OPERATING NATIVELY\n\nModel:\n${data.model}\n\nResponse:\n${data.text}`);
+      } else {
+        alert(`❌ SEQUENCE FAILURE\n${data.error}`);
+      }
+    } catch (e: any) {
+      alert(`❌ CONNECTION FAILED\n${e.message}`);
+    } finally {
+      setIsTesting(false);
+      refetch();
+    }
+  };
+
+  const handleTestDeadKeys = async () => {
+    setIsTestingDeadKeys(true);
+    try {
+      const CLAW_URL = process.env.NEXT_PUBLIC_CLAW_URL || "http://localhost:3900";
+      const res = await fetch(`${CLAW_URL}/api/admin/bulk-test-dead-keys`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      });
+      const data = await res.json();
+      if (data.success) {
+        alert(`✅ BULK DIAGNOSTIC COMPLETE\n\nTested Keys: ${data.totalTested}\nRevived: ${data.revived.length}\nHashes: ${data.revived.join(', ')}`);
+      } else {
+        alert(`❌ BULK DIAGNOSTIC FAILED\n\nError: ${data.error}`);
+      }
+    } catch (err: any) {
+      alert(`⚠️ NETWORK ERROR\n\nGateway could not be reached: ${err.message}`);
+    } finally {
+      setIsTestingDeadKeys(false);
+      refetch();
+    }
+  };
 
   // Fetch real-time fleet data
   const { data, isLoading, isFetching, error, refetch } = useQuery<{ success: boolean; keys: FleetKey[] }>({
@@ -72,9 +145,15 @@ export default function FleetDashboard() {
           title="API Fleet Matrix"
           badge={`${activeCount} Active Units`}
           liveIndicator={true}
+          rightSlot={
+            <Button variant="secondary" onClick={handleTestRouter} disabled={isTesting} className="h-8 px-4 text-xs font-semibold tracking-wide border-outline/20 hover:bg-primary/10 hover:text-primary transition-colors">
+              {isTesting ? <Activity className="size-3.5 mr-1.5 animate-spin" /> : <Target className="size-3.5 mr-1.5" />}
+              {isTesting ? "Testing Sequence..." : "Test OmniRouter Sequence"}
+            </Button>
+          }
         />
 
-        <main className="flex-1 overflow-y-auto p-8 pt-6">
+        <main className="flex-1 overflow-y-auto px-5 md:px-12 py-8">
           
           {/* ── Fleet Tier Monitors ────────────────────────── */}
           <div className="grid grid-cols-4 gap-4 mb-8">
@@ -147,6 +226,10 @@ export default function FleetDashboard() {
                     </button>
                   )}
                 </div>
+                <Button variant="secondary" onClick={handleTestDeadKeys} disabled={isTestingDeadKeys || deadCount === 0} className="h-8 px-3 text-xs gap-1.5 border border-outline/10 text-amber-500 hover:bg-amber-500/10 hover:border-amber-500/30">
+                  <Activity className={`size-3 ${isTestingDeadKeys ? 'animate-spin' : ''}`} />
+                  {isTestingDeadKeys ? "Diagnosing Fleet..." : "Revive Dead Fleet"}
+                </Button>
                 
                 <Button variant="secondary" onClick={() => refetch()} disabled={isFetching} className="h-8 px-3 text-xs gap-1.5 border border-outline/10">
                   <RefreshCw className={`size-3 ${isFetching ? 'animate-spin text-primary' : 'text-on-surface-variant'}`} />
@@ -172,7 +255,16 @@ export default function FleetDashboard() {
                    <Text size="body-small" className="text-on-surface-variant">No drones found matching current parameters.</Text>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 gap-2">
+                <div className="flex flex-col gap-2 relative">
+                  <div className="flex items-center justify-between px-4 py-2 border-b border-outline/5 text-on-surface-variant/50 text-[10px] uppercase tracking-widest font-bold sticky top-0 bg-layer-cover backdrop-blur-md z-20 mb-1">
+                    <div className="pl-14">Drone Registry</div>
+                    <div className="flex items-center gap-8">
+                      <div className="w-56 text-left hidden md:block">Project Name</div>
+                      <div className="w-40 text-left hidden lg:block">Assigned</div>
+                      <div className="w-48 text-left">Allocation</div>
+                      <div className="w-24 text-center">Status</div>
+                    </div>
+                  </div>
                   {filteredKeys.map((k, i) => (
                     <motion.div 
                       key={k._id || i}
@@ -190,26 +282,38 @@ export default function FleetDashboard() {
                             {k.provider || "GENERIC"} <span className="text-on-surface-variant/40 px-1">•</span> {k.tier || "GENERIC"} TIER
                           </Text>
                           <Text size="body-small" className="text-on-surface-variant font-mono text-[11px] opacity-70 group-hover:opacity-100 transition-opacity">
-                            {k.keyHash || 'hash_unavailable'}
+                            {k.keyHash ? `***********${k.keyHash.slice(-6)}` : 'hash_unavailable'}
                           </Text>
                         </div>
                       </div>
 
                       <div className="flex items-center gap-8">
-                        {k.errors !== undefined && k.errors > 0 && (
-                          <div className="text-right">
-                             <Text size="label-small" className="text-on-surface-variant/50 text-[10px] uppercase tracking-wider">Err / Drops</Text>
-                             <Text size="body-small" weight="bold" className="text-state-warning text-xs mt-0.5">{k.errors}</Text>
-                          </div>
-                        )}
-                        
-                        <div className="text-right w-32 border-l border-outline/5 pl-6">
-                           <Text size="label-small" className="text-on-surface-variant/50 text-[10px] uppercase tracking-wider">Allocation</Text>
-                           <Text size="body-small" weight="bold" className="text-on-surface text-xs mt-0.5 truncate">{k.allocation || "MERCHANT_SHARED"}</Text>
+                        <div className="text-left w-56 hidden md:block">
+                           <Text size="body-small" className="text-on-surface text-xs whitespace-nowrap" title={k.projectId || "Generic Pool"}>{k.projectId || "Generic Pool"}</Text>
+                        </div>
+
+                        <div className="text-left w-40 border-l border-outline/5 pl-6 hidden lg:block">
+                           <Text size="body-small" className="text-on-surface text-xs whitespace-nowrap" title={k.assignedTo || k.agentId || k.merchantId || "Global Fleet"}>{k.assignedTo || k.agentId || k.merchantId || "Global Fleet"}</Text>
                         </div>
                         
-                        <div className={`shrink-0 w-24 text-center px-3 py-1.5 rounded-[var(--button-border-radius,6px)] text-[10px] uppercase font-bold tracking-widest ${k.status === 'DEAD' ? 'bg-state-error/10 text-state-error' : 'bg-state-success/10 text-state-success'}`}>
-                          {k.status || "ACTIVE"}
+                        <div className="text-left w-48 border-l border-outline/5 pl-6">
+                           <Text size="body-small" className="text-on-surface text-xs whitespace-nowrap" title={k.allocation || "Merchant Shared"}>
+                             {k.allocation ? k.allocation.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ') : "Merchant Shared"}
+                           </Text>
+                        </div>
+                        
+                        <div className="flex items-center justify-end gap-2 w-32">
+                          <div className={`text-center px-3 py-1.5 rounded-[var(--button-border-radius,6px)] text-[10px] uppercase font-bold tracking-widest ${k.status === 'DEAD' ? 'bg-state-error/10 text-state-error' : 'bg-state-success/10 text-state-success'}`}>
+                            {k.status || "ACTIVE"}
+                          </div>
+                          <button 
+                            onClick={(e) => { e.stopPropagation(); handleTestSingleKey(k.keyHash, k.provider); }}
+                            disabled={testingKey === k.keyHash}
+                            className="p-1.5 rounded-[var(--button-border-radius,6px)] bg-layer-base border border-outline/10 hover:bg-outline/10 transition-colors"
+                            title="Ping Key Diagnostics"
+                          >
+                            {testingKey === k.keyHash ? <Activity className="size-3.5 animate-spin text-primary" /> : <Play className="size-3.5 text-on-surface-variant group-hover:text-primary transition-colors" />}
+                          </button>
                         </div>
                       </div>
                     </motion.div>

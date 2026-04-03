@@ -53,15 +53,7 @@ export const AppShell = ({ children, inspector }: AppShellProps) => {
 
             {/* Right Area (Full-Height Inspector) */}
             {inspector && !isInspectorCollapsed && (
-                <div className="relative h-full shrink-0 border-l border-border/50 z-20" data-region="inspector">
-                    {/* Toggle straddles the border — half in nav, half in inspector */}
-                    <button
-                        onClick={() => setInspectorState('collapsed')}
-                        title="Collapse Inspector"
-                        className="absolute left-0 top-3.5 -translate-x-1/2 z-[60] w-5 h-5 bg-transparent text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/50 border border-outline rounded-[var(--button-border-radius,8px)] flex items-center justify-center hover:scale-110 active:scale-95 transition-all duration-200 outline-none"
-                    >
-                        <Icon name="chevron_right" size={14} weight={700} />
-                    </button>
+                <div className="relative h-full shrink-0 z-20" data-region="inspector">
                     {inspector}
                 </div>
             )}

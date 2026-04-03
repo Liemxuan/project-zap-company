@@ -82,7 +82,7 @@ export default function MetroBilling() {
 
         <div className="flex items-center justify-between p-4 border border-border rounded-btn bg-surface-container">
             <div className="flex items-center gap-4">
-                <div className="w-12 h-8 bg-surface border border-border rounded flex items-center justify-center font-display text-primary font-bold">
+                <div className="w-12 h-8 bg-surface border border-border rounded flex items-center justify-center font-display text-transform-primary text-primary font-bold">
                     VISA
                 </div>
                 <div className="flex flex-col">

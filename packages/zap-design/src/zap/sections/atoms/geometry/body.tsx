@@ -163,7 +163,7 @@ export const GeometryBody = ({ theme }: GeometryBodyProps) => {
                                     <div key={control.key} className="space-y-3">
                                         <div className="flex justify-between items-center">
                                             <label className="text-xs font-medium text-theme-base">{control.label}</label>
-                                            <span className="text-xs font-bold font-dev bg-layer-canvas px-2 py-0.5 rounded border border-border">
+                                            <span className="text-xs font-bold font-dev text-transform-tertiary bg-layer-canvas px-2 py-0.5 rounded border border-border">
                                                 {settings[control.key as keyof GeometrySettings]}px
                                             </span>
                                         </div>

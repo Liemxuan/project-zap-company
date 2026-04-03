@@ -2,9 +2,10 @@
 
 import React, { useState } from 'react';
 import { ComponentSandboxTemplate } from '../../../../../zap/layout/ComponentSandboxTemplate';
-import { Wrapper } from '../../../../../components/dev/Wrapper';
 import { ThemeHeader } from '../../../../../genesis/molecules/layout/ThemeHeader';
 import { type TabItem } from '../../../../../genesis/atoms/interactive/Tabs';
+import { CanvasBody } from '../../../../../zap/layout/CanvasBody';
+import { SectionHeader } from '../../../../../zap/sections/SectionHeader';
 
 const DEMO_TABS: TabItem[] = [
     { id: 'overview', label: 'Overview' },
@@ -24,7 +25,7 @@ export default function ThemeHeaderPage() {
             importPath="@/genesis/molecules/layout/ThemeHeader"
             foundationInheritance={{
                 colorTokens: ['bg-layer-cover', 'border-outline-variant/50', 'text-on-surface text-transform-primary'],
-                typographyScales: ['font-display', 'text-transform-primary', 'font-body'],
+                typographyScales: ['font-display', 'text-transform-primary', 'font-body text-transform-secondary'],
             }}
             platformConstraints={{
                 web: 'Full-width sticky header at top of Canvas. Breadcrumb → Display Title → Badge → Tabs. The live indicator pulses when real-time data is active.',
@@ -38,10 +39,14 @@ export default function ThemeHeaderPage() {
                 'Title must use the ThemeHeader — never repeat a raw h1 inside the page content area.',
             ]}
         >
-            <div className="w-full flex flex-col gap-10 py-8">
+            
+            <CanvasBody flush={false}>
+                <CanvasBody.Section>
+                    <SectionHeader number="1" id="layout" title="ThemeHeader Sandbox" description="Interactive components for ThemeHeader" icon="widgets" />
+                    <CanvasBody.Demo className="w-full flex flex-col gap-10 py-8">
 
                 {/* ── VARIANT 1: Minimal (title + breadcrumb only) */}
-                <Wrapper identity={{ displayName: 'Minimal Variant', type: 'Demo', filePath: 'zap/molecules/layout/page.tsx' }}>
+                
                     <div className="flex flex-col gap-2">
                         <span className="text-label-small font-bold tracking-widest text-on-surface-variant text-transform-secondary font-dev text-transform-tertiary px-1">
                             VARIANT — MINIMAL (breadcrumb + title + badge)
@@ -55,10 +60,10 @@ export default function ThemeHeaderPage() {
                             />
                         </div>
                     </div>
-                </Wrapper>
+                
 
                 {/* ── VARIANT 2: With Tabs */}
-                <Wrapper identity={{ displayName: 'With Tabs Variant', type: 'Demo', filePath: 'zap/molecules/layout/page.tsx' }}>
+                
                     <div className="flex flex-col gap-2">
                         <span className="text-label-small font-bold tracking-widest text-on-surface-variant text-transform-secondary font-dev text-transform-tertiary px-1">
                             VARIANT — WITH TABS
@@ -75,10 +80,10 @@ export default function ThemeHeaderPage() {
                             />
                         </div>
                     </div>
-                </Wrapper>
+                
 
                 {/* ── VARIANT 3: With Live Indicator */}
-                <Wrapper identity={{ displayName: 'Live Indicator Variant', type: 'Demo', filePath: 'zap/molecules/layout/page.tsx' }}>
+                
                     <div className="flex flex-col gap-2">
                         <span className="text-label-small font-bold tracking-widest text-on-surface-variant text-transform-secondary font-dev text-transform-tertiary px-1">
                             VARIANT — LIVE INDICATOR (real-time data stream)
@@ -95,10 +100,10 @@ export default function ThemeHeaderPage() {
                             />
                         </div>
                     </div>
-                </Wrapper>
+                
 
                 {/* ── PROP MAP */}
-                <Wrapper identity={{ displayName: 'Prop Reference', type: 'Docs', filePath: 'zap/molecules/layout/page.tsx' }}>
+                
                     <div className="flex flex-col gap-2">
                         <span className="text-label-small font-bold tracking-widest text-on-surface-variant text-transform-secondary font-dev text-transform-tertiary px-1">
                             PROP REFERENCE
@@ -145,9 +150,12 @@ export default function ThemeHeaderPage() {
                             </div>
                         </div>
                     </div>
-                </Wrapper>
+                
 
-            </div>
+                </CanvasBody.Demo>
+                </CanvasBody.Section>
+            </CanvasBody>
+        
         </ComponentSandboxTemplate>
     );
 }

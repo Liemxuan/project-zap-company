@@ -1,113 +1,76 @@
 'use client';
 
 import React, { useState } from 'react';
-import { parseCssToNumber } from '../../../../../lib/utils';
 import { ComponentSandboxTemplate } from '../../../../../zap/layout/ComponentSandboxTemplate';
-import { Wrapper } from '../../../../../components/dev/Wrapper';
 import { CardsSection } from '../../../../../zap/sections/molecules/containment/CardsSection';
-import { Slider } from '../../../../../genesis/atoms/interactive/slider';
+import { CanvasBody } from '../../../../../zap/layout/CanvasBody';
+import { SectionHeader } from '../../../../../zap/sections/SectionHeader';
+import { BORDER_RADIUS_TOKENS, BORDER_WIDTH_TOKENS } from '../../../../../zap/sections/atoms/foundations/schema';
 
 export default function CardSandboxPage() {
-    // ── L1 Inspector State ──────────────────────────────────────────
-    // Defaults mirror CSS fallback: --card-border-* → --layer-border-* → hardcoded
-    const [borderWidth, setBorderWidth] = useState([1]);
-    const [borderRadius, setBorderRadius] = useState([16]);
-    const [padding, setPadding] = useState([24]);
-    const [sourceWidth, setSourceWidth] = useState<'card' | 'layer' | 'default'>('default');
-    const [sourceRadius, setSourceRadius] = useState<'card' | 'layer' | 'default'>('default');
-    const [sourcePadding, setSourcePadding] = useState<'card' | 'default'>('default');
+    const [borderWidth, setBorderWidth] = useState(BORDER_WIDTH_TOKENS[1].value);
+    const [borderRadius, setBorderRadius] = useState(BORDER_RADIUS_TOKENS[4].value);
+    const [padding, setPadding] = useState('24px');
 
-    // ── Source label helper ─────────────────────────────────────────
-    const sourceLabel = (src: string) =>
-        src === 'card' ? '← L3 published' : src === 'layer' ? '← L1 foundation' : '← default';
-
-    // ── L1 Inspector Controls ───────────────────────────────────────
     const inspectorControls = (
-        <Wrapper identity={{ displayName: "Inspector Controls Container", type: "Container", filePath: "zap/atoms/card/page.tsx" }}>
-            <div className="space-y-4">
-                <Wrapper identity={{ displayName: "Card L1 Controls", type: "Docs Link", filePath: "zap/atoms/card/page.tsx" }}>
-                    <div className="space-y-6">
-                        <h4 className="text-label-small text-transform-primary font-display font-bold text-muted-foreground tracking-wider uppercase">L1 Foundation Controls</h4>
-
-                        {/* --card-border-width */}
-                        <div className="space-y-2">
-                            <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-muted-foreground uppercase">
-                                <span>--card-border-width</span>
-                                <div className="flex items-center gap-2">
-                                    <span className="font-bold">{borderWidth[0]}px</span>
-                                    <span className="text-primary/60 normal-case">{sourceLabel(sourceWidth)}</span>
-                                </div>
-                            </div>
-                            <Slider value={borderWidth} onValueChange={setBorderWidth} min={0} max={8} step={1} className="w-full" />
-                        </div>
-
-                        {/* --card-border-radius */}
-                        <div className="space-y-2">
-                            <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-muted-foreground uppercase">
-                                <span>--card-border-radius</span>
-                                <div className="flex items-center gap-2">
-                                    <span className="font-bold">{borderRadius[0]}px</span>
-                                    <span className="text-primary/60 normal-case">{sourceLabel(sourceRadius)}</span>
-                                </div>
-                            </div>
-                            <Slider value={borderRadius} onValueChange={setBorderRadius} min={0} max={64} step={1} className="w-full" />
-                        </div>
-
-                        {/* --spacing-card-pad */}
-                        <div className="space-y-2">
-                            <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-muted-foreground uppercase">
-                                <span>--spacing-card-pad</span>
-                                <div className="flex items-center gap-2">
-                                    <span className="font-bold">{padding[0]}px</span>
-                                    <span className="text-primary/60 normal-case">{sourceLabel(sourcePadding)}</span>
-                                </div>
-                            </div>
-                            <Slider value={padding} onValueChange={setPadding} min={0} max={64} step={1} className="w-full" />
-                        </div>
-
-                        {/* Cascade info */}
-                        <div className="p-3 text-label-small font-dev text-muted-foreground bg-layer-surface border border-border/50 rounded-md space-y-1">
-                            <p><strong>L1</strong> → <code>--layer-border-*</code> (Border & Radius foundation)</p>
-                            <p><strong>L3</strong> → <code>--card-border-*</code>, <code>--card-border-radius</code> (component override)</p>
-                            <p className="pt-1 text-muted-foreground/60">Sliders seed from L3 if published, else fall through to L1 foundation values.</p>
-                        </div>
+        <div className="space-y-6">
+            <div className="space-y-4 pb-4 border-b border-border/50">
+                <h4 className="text-label-small text-transform-primary font-display font-bold text-muted-foreground tracking-wider uppercase">Foundation Tokens</h4>
+                
+                <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-1.5">
+                        <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Border Radius</label>
+                        <select 
+                            className="w-full bg-layer-panel border border-border/50 rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-primary"
+                            value={borderRadius}
+                            onChange={(e) => setBorderRadius(e.target.value)}
+                        >
+                            {BORDER_RADIUS_TOKENS.map(t => (
+                                <option key={t.name} value={t.value}>{t.name}</option>
+                            ))}
+                        </select>
                     </div>
-                </Wrapper>
+                    <div className="space-y-1.5">
+                        <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Border Width</label>
+                        <select 
+                            className="w-full bg-layer-panel border border-border/50 rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-primary"
+                            value={borderWidth}
+                            onChange={(e) => setBorderWidth(e.target.value)}
+                        >
+                            {BORDER_WIDTH_TOKENS.map(t => (
+                                <option key={t.name} value={t.value}>{t.name}</option>
+                            ))}
+                        </select>
+                    </div>
+                </div>
+
+                <div className="space-y-1.5">
+                    <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Internal Padding</label>
+                    <select 
+                        className="w-full bg-layer-panel border border-border/50 rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-primary"
+                        value={padding}
+                        onChange={(e) => setPadding(e.target.value)}
+                    >
+                        {['12px', '16px', '24px', '32px', '48px'].map(p => (
+                            <option key={p} value={p}>{p}</option>
+                        ))}
+                    </select>
+                </div>
             </div>
-        </Wrapper>
+
+            <div className="p-3 text-[10px] font-bold text-muted-foreground bg-layer-panel border border-border/50 rounded uppercase tracking-tighter leading-tight">
+                <p><strong>L1</strong> → Universal Tokens</p>
+                <p><strong>L3</strong> → Component Overrides</p>
+                <p className="pt-2 opacity-60">Controls above seed primary L3 variables with M3 token fallbacks.</p>
+            </div>
+        </div>
     );
 
-    // ── Load saved values: L3 component → L1 foundation → hardcoded default ──
     const handleLoadedVariables = (variables: Record<string, string>) => {
-        // Width cascade: --card-border-width → --layer-border-width → 1px
-        if (variables['--card-border-width']) {
-            setBorderWidth([parseCssToNumber(variables['--card-border-width'])]);
-            setSourceWidth('card');
-        } else if (variables['--layer-border-width']) {
-            setBorderWidth([parseCssToNumber(variables['--layer-border-width'])]);
-            setSourceWidth('layer');
-        }
-        // Radius cascade: --card-border-radius → --layer-border-radius → 16px
-        if (variables['--card-border-radius']) {
-            setBorderRadius([parseCssToNumber(variables['--card-border-radius'])]);
-            setSourceRadius('card');
-        } else if (variables['--layer-border-radius']) {
-            setBorderRadius([parseCssToNumber(variables['--layer-border-radius'])]);
-            setSourceRadius('layer');
-        }
-        // Padding: --spacing-card-pad → 24px (no L1 foundation equivalent)
-        if (variables['--spacing-card-pad']) {
-            setPadding([parseCssToNumber(variables['--spacing-card-pad'])]);
-            setSourcePadding('card');
-        }
+        if (variables['--card-border-width']) setBorderWidth(variables['--card-border-width']);
+        if (variables['--card-border-radius']) setBorderRadius(variables['--card-border-radius']);
+        if (variables['--spacing-card-pad']) setPadding(variables['--spacing-card-pad']);
     };
-
-    // ── CSS var injection (L1 → L3 cascade) ─────────────────────────
-    const cssVars = {
-        '--card-border-width': `${borderWidth[0]}px`,
-        '--card-border-radius': `${borderRadius[0]}px`,
-        '--spacing-card-pad': `${padding[0]}px`,
-    } as React.CSSProperties;
 
     return (
         <ComponentSandboxTemplate
@@ -118,36 +81,44 @@ export default function CardSandboxPage() {
             importPath="@/zap/sections/molecules/containment/CardsSection"
             inspectorControls={inspectorControls}
             foundationInheritance={{
-                colorTokens: [
-                    'bg-layer-panel (L3 section container)',
-                    'bg-layer-dialog (L4 elevated/filled cards)',
-                    'bg-card (outlined card)',
-                    'bg-primary-container / bg-secondary-container / bg-tertiary-container (icon badges)',
-                ],
+                colorTokens: ['bg-layer-panel', 'bg-layer-dialog', 'bg-card'],
                 typographyScales: ['text-foreground', 'text-muted-foreground'],
             }}
             platformConstraints={{
-                web: 'User Mini Cards grid is 3-col on desktop, 2-col on tablet, 1-col on mobile. Standard Cards are 3-col on desktop, 1-col on mobile.',
-                mobile: 'Cards stack vertically. Padding and gaps reduce. Touch targets remain accessible.',
+                web: 'Grid is 3-col on desktop, 1-col on mobile.',
+                mobile: 'Cards stack vertically with reduced padding.',
             }}
             foundationRules={[
                 'Section containers use bg-layer-panel (L3 surface).',
-                'Inner cards that need elevation use bg-layer-dialog (L4 surface).',
-                'Outlined cards use bg-card with border — no layer tag needed.',
-                'Buttons inside cards are EXEMPT from layer tagging — they use M3 color roles.',
-                'Border radius cascades: --card-border-radius → --layer-border-radius → 16px',
-                'Border width cascades: --card-border-width → --layer-border-width → 1px',
+                'Inner cards use bg-layer-dialog (L4 surface).',
+                'Outlined cards use bg-card.',
             ]}
             publishPayload={{
-                '--card-border-width': `${borderWidth[0]}px`,
-                '--card-border-radius': `${borderRadius[0]}px`,
-                '--spacing-card-pad': `${padding[0]}px`,
+                '--card-border-width': borderWidth,
+                '--card-border-radius': borderRadius,
+                '--spacing-card-pad': padding,
             }}
             onLoadedVariables={handleLoadedVariables}
         >
-            <div className="w-full flex flex-col gap-8 py-8" style={cssVars}>
-                <CardsSection />
-            </div>
+            <CanvasBody flush={false}>
+                <CanvasBody.Section>
+                    <SectionHeader id="containment-showcase" 
+                        number="01"
+                        title="Containment Showcase"
+                        icon="dashboard"
+                        description="M3 containment roles applying L2 spatial restoration to L3/L4 surfaces."
+                    />
+                    <CanvasBody.Demo>
+                        <div className="w-full flex flex-col gap-8 py-8" style={{
+                            '--card-border-width': borderWidth,
+                            '--card-border-radius': borderRadius,
+                            '--spacing-card-pad': padding,
+                        } as any}>
+                            <CardsSection />
+                        </div>
+                    </CanvasBody.Demo>
+                </CanvasBody.Section>
+            </CanvasBody>
         </ComponentSandboxTemplate>
     );
 }

@@ -1,114 +1,138 @@
 'use client';
 
-import React from 'react';
-import { MasterVerticalShell } from '../../../../../zap/layout/MasterVerticalShell';
-import { LayoutPrimitivesBody } from '../../../../../zap/sections/atoms/layout/body';
-import { Wrapper } from '../../../../../components/dev/Wrapper';
+import React, { useState } from 'react';
+import { ComponentSandboxTemplate } from '../../../../../zap/layout/ComponentSandboxTemplate';
+import { SPACING_SCALE } from '../../../../../zap/sections/atoms/foundations/schema';
+import { Icon } from '../../../../../genesis/atoms/icons/Icon';
+import { cn } from '../../../../../lib/utils';
+import { CanvasBody } from '../../../../../zap/layout/CanvasBody';
+import { SectionHeader } from '../../../../../zap/sections/SectionHeader';
 
-export default function LayoutPrimitivesPage() {
+export default function LayoutSandboxPage() {
+    const [selectedSpacing, setSelectedSpacing] = useState(SPACING_SCALE[2].value);
+
+    const inspectorControls = (
+        <div className="space-y-6">
+            <div className="space-y-4 pb-4 border-b border-border/50">
+                <h4 className="text-label-small text-transform-primary font-display font-bold text-muted-foreground tracking-wider uppercase">Foundation Tokens</h4>
+                
+                <div className="space-y-4">
+                    <div className="space-y-1.5">
+                        <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Spacing Unit</label>
+                        <select 
+                            className="w-full bg-layer-panel border border-border/50 rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-primary"
+                            value={selectedSpacing}
+                            onChange={(e) => setSelectedSpacing(Number(e.target.value))}
+                        >
+                            {SPACING_SCALE.map(t => (
+                                <option key={t.name} value={t.value}>{t.name}</option>
+                            ))}
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
 
     return (
-        <MasterVerticalShell
-            breadcrumbs={[
-                { label: 'SYSTEMS' },
-                { label: 'CORE' },
-                { label: 'GRIDS & SPACING', active: true }
+        <ComponentSandboxTemplate
+            componentName="Grids & Spacing"
+            tier="L3 ATOM"
+            status="Verified"
+            filePath="src/zap/sections/atoms/foundations/schema.ts"
+            importPath="@/zap/sections/atoms/foundations/schema"
+            inspectorControls={inspectorControls}
+            foundationInheritance={{
+                colorTokens: ['--md-sys-color-primary', '--md-sys-color-outline-variant'],
+                typographyScales: []
+            }}
+            platformConstraints={{
+                web: "Fluid 12-column grid with fixed 24px baseline gutters.",
+                mobile: "Single-column fluid stack with 16px safe-area margins."
+            }}
+            foundationRules={[
+                "All spacing must be an increment of the 8px baseline unit.",
+                "Vertical rhythm must be maintained across L1, L2, and L3 layers."
             ]}
-            activeItem="Grids & Spacing"
-            inspectorTitle="Grid Implementation"
-            inspectorContent={
-                <div className="space-y-6">
-                    {/* Grid Implementation — Code Snippet */}
-                    <Wrapper identity={{ displayName: "Grid Implementation", filePath: "app/debug/zap/layout/page.tsx", type: "Atom/View", architecture: "SYSTEMS // CORE" }}>
-                        <div className="border border-black p-4 bg-primary/10 space-y-4">
-                            <div className="flex items-center gap-2 mb-2">
-                                <span className="material-symbols-outlined text-primary bg-black p-1 text-body-small">code</span>
-                                <h3 className="text-label-small font-black uppercase tracking-tighter">Grid Implementation</h3>
-                            </div>
-                            <div className="space-y-2">
-                                <div className="bg-white border border-black p-3">
-                                    <p className="text-label-small font-dev text-transform-tertiary text-slate-500 mb-2 border-b border-slate-200 pb-1">CSS Grid</p>
-                                    <code className="text-label-small font-dev text-transform-tertiary block text-slate-800 whitespace-pre leading-relaxed">
-                                        {`.grid-container {
-      display: grid;
-      grid-template-columns: repeat(12, 1fr);
-      gap: 24px;
-      max-width: 1440px;
-      margin: 0 auto;
-    }`}
-                                    </code>
-                                </div>
-                                <button className="w-full text-label-small font-black uppercase bg-black text-white py-2 border border-black hover:bg-primary hover:text-black transition-colors">
-                                    Copy Snippet
-                                </button>
-                            </div>
-                        </div>
-                    </Wrapper>
-
-                    {/* Responsive Breakpoints */}
-                    <Wrapper identity={{ displayName: "Responsive Breakpoints", filePath: "app/debug/zap/layout/page.tsx", type: "Atom/View", architecture: "SYSTEMS // CORE" }}>
-                        <div className="border border-black p-4 space-y-4">
-                            <div className="flex items-center gap-2 mb-2">
-                                <span className="material-symbols-outlined text-body-small">devices</span>
-                                <h3 className="text-label-small font-black uppercase tracking-tighter">Responsive Breakpoints</h3>
-                            </div>
-                            <div className="space-y-3">
-                                {[
-                                    { icon: 'desktop_windows', label: 'Desktop', value: '≥ 1024px' },
-                                    { icon: 'tablet_mac', label: 'Tablet', value: '≥ 768px' },
-                                    { icon: 'smartphone', label: 'Mobile', value: '< 768px' },
-                                ].map((row) => (
-                                    <Wrapper key={row.label} identity={{ displayName: `Breakpoint: ${row.label}`, filePath: "app/debug/zap/atoms/layout/page.tsx", type: "Wrapped Snippet" }}>
-                                        <div className="flex items-center justify-between p-2 border border-black bg-zinc-50">
-                                            <div className="flex items-center gap-2">
-                                                <span className="material-symbols-outlined text-body-small text-slate-500">{row.icon}</span>
-                                                <span className="text-label-medium font-bold">{row.label}</span>
-                                            </div>
-                                            <span className="text-label-small font-dev text-transform-tertiary bg-white border border-black px-1">{row.value}</span>
+        >
+            <CanvasBody flush={false}>
+                <CanvasBody.Section>
+                    <SectionHeader id="spacing-scale" 
+                        number="01"
+                        title="Spacing Scale"
+                        icon="straighten"
+                        description="8pt baseline increments testing spatial L2 layer restoration."
+                    />
+                    <CanvasBody.Demo>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 w-full max-w-5xl items-center">
+                            <div className="space-y-8 p-8 bg-layer-panel border border-border/40 rounded-2xl shadow-sm">
+                                {SPACING_SCALE.map((s) => (
+                                    <div key={s.name} className="flex items-center gap-6 group">
+                                        <div className="w-16 shrink-0 flex flex-col">
+                                            <span className="text-[10px] font-bold text-primary uppercase tracking-widest">{s.name}</span>
+                                            <span className="text-[8px] font-mono text-muted-foreground opacity-40">{s.value}</span>
                                         </div>
-                                    </Wrapper>
+                                        <div 
+                                            className="h-4 bg-primary rounded-sm transition-all duration-300 group-hover:scale-y-125"
+                                            style={{ width: s.value }}
+                                        />
+                                    </div>
                                 ))}
                             </div>
-                            <p className="text-label-medium text-slate-500 leading-tight mt-2">
-                                Breakpoints are mobile-first. Default styles apply to all widths until a min-width override is met.
-                            </p>
-                        </div>
-                    </Wrapper>
-
-                    {/* Layout Specs */}
-                    <Wrapper identity={{ displayName: "Layout Specs", filePath: "app/debug/zap/layout/page.tsx", type: "Atom/View", architecture: "SYSTEMS // CORE" }}>
-                        <div className="border border-black p-4 space-y-3">
-                            <h3 className="text-label-small font-black uppercase tracking-widest border-b border-black pb-2">Layout Specs</h3>
-                            {[
-                                { label: 'Container Max', value: '1440px' },
-                                { label: 'Gutter Width', value: '24px (1.5rem)' },
-                                { label: 'Base Unit', value: '8px' },
-                            ].map((row) => (
-                                <Wrapper key={row.label} identity={{ displayName: `Layout Spec: ${row.label}`, filePath: "app/debug/zap/atoms/layout/page.tsx", type: "Wrapped Snippet" }}>
-                                    <div className="flex justify-between items-center text-label-medium">
-                                        <span className="text-slate-500">{row.label}</span>
-                                        <span className="font-bold">{row.value}</span>
+                            <div className="flex flex-col gap-6">
+                                <div className="p-8 bg-layer-panel border border-border/40 rounded-2xl flex flex-col items-center justify-center gap-6">
+                                    <div className="flex gap-4">
+                                        <div className="w-16 h-16 bg-primary/10 border border-primary/20 rounded shadow-inner" style={{ padding: selectedSpacing }}>
+                                            <div className="w-full h-full bg-primary rounded-sm" />
+                                        </div>
+                                        <div className="w-16 h-16 bg-primary/10 border border-primary/20 rounded shadow-inner flex items-center justify-center">
+                                            <div className="bg-primary rounded-sm transition-all" style={{ width: selectedSpacing, height: selectedSpacing }} />
+                                        </div>
                                     </div>
-                                </Wrapper>
-                            ))}
+                                    <span className="text-[10px] font-bold text-muted-foreground uppercase opacity-40 tracking-widest">Live Dynamic Padding: {selectedSpacing}</span>
+                                </div>
+                            </div>
                         </div>
-                    </Wrapper>
+                    </CanvasBody.Demo>
+                </CanvasBody.Section>
 
-                    {/* CTA */}
-                    <Wrapper identity={{ displayName: "Grid Extension CTA", filePath: "app/debug/zap/layout/page.tsx", type: "Atom/View", architecture: "SYSTEMS // CORE" }}>
-                        <div className="bg-black text-white border border-black p-4">
-                            <p className="text-label-medium font-bold italic mb-2">&quot;Need to inspect the grid in your browser?&quot;</p>
-                            <a className="text-label-small font-black uppercase text-primary underline underline-offset-4" href="#">
-                                Download Grid Extension
-                            </a>
+                <CanvasBody.Section className="pb-16">
+                    <SectionHeader id="grid-architecture" 
+                        number="02"
+                        title="Grid Architecture"
+                        icon="grid_on"
+                        description="Structural column alignment testing across the 12pt desktop grid."
+                    />
+                    <CanvasBody.Demo>
+                        <div className="w-full max-w-5xl space-y-6">
+                            <div className="w-full h-48 bg-layer-panel border border-border/40 rounded-2xl relative p-6 flex gap-6 overflow-hidden">
+                                {Array.from({ length: 12 }).map((_, i) => (
+                                    <div key={i} className="flex-1 bg-primary/5 border-x border-primary/10 h-full flex flex-col items-center pt-2">
+                                        <span className="text-[8px] font-mono text-primary/30">{i + 1}</span>
+                                    </div>
+                                ))}
+                                <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-px bg-primary/10" />
+                                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                                    <div className="bg-layer-surface border border-primary/30 px-3 py-1 rounded shadow-lg">
+                                        <span className="text-[10px] font-bold text-primary uppercase">24px Gutter System</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="grid grid-cols-3 gap-6">
+                                <div className="h-12 bg-layer-panel border border-border/40 rounded-xl flex items-center justify-center">
+                                    <span className="text-[10px] font-bold text-muted-foreground uppercase opacity-40">Span 4</span>
+                                </div>
+                                <div className="h-12 bg-layer-panel border border-border/40 rounded-xl flex items-center justify-center">
+                                    <span className="text-[10px] font-bold text-muted-foreground uppercase opacity-40">Span 4</span>
+                                </div>
+                                <div className="h-12 bg-layer-panel border border-border/40 rounded-xl flex items-center justify-center">
+                                    <span className="text-[10px] font-bold text-muted-foreground uppercase opacity-40">Span 4</span>
+                                </div>
+                            </div>
                         </div>
-                    </Wrapper>
-                </div>
-            }
-        >
-            <Wrapper identity={{ displayName: "LayoutPrimitivesPage (L1)", filePath: "zap/atoms/layout/page.tsx", type: "Template/Page", architecture: "L1: ATOM VIEW" }}>
-                <LayoutPrimitivesBody />
-            </Wrapper>
-        </MasterVerticalShell>
+                    </CanvasBody.Demo>
+                </CanvasBody.Section>
+            </CanvasBody>
+        </ComponentSandboxTemplate>
     );
 }

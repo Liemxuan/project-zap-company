@@ -4,6 +4,7 @@ import path from "path";
 import dotenv from "dotenv";
 import { getTenantContext } from "@/lib/tenant";
 import { logger } from "@/lib/logger";
+import { getGlobalMongoClient } from "../../../../../lib/mongo";
 
 dotenv.config({ path: path.resolve(process.cwd(), "../../zap-core/.env"), override: true });
 
@@ -27,8 +28,7 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: "Missing required field: jobId" }, { status: 400 });
         }
 
-        client = new MongoClient(MONGO_URI, { serverSelectionTimeoutMS: 3000 });
-        await client.connect();
+        client = await getGlobalMongoClient();
         const db = client.db(DB_NAME);
         const col = db.collection(`${tenantId}_SYS_OS_job_queue`);
 
@@ -73,6 +73,5 @@ export async function POST(req: Request) {
         logger.error("Cancel job failed", { error: error.message });
         return NextResponse.json({ success: false, error: error.message }, { status: 500 });
     } finally {
-        if (client) await client.close();
     }
 }

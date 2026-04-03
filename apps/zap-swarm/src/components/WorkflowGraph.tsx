@@ -11,6 +11,7 @@ export interface OmniJobGraphNode {
     dependsOn: string[];
     payload: any;
     queueName: string;
+    intent?: string;
 }
 
 interface WorkflowGraphProps {

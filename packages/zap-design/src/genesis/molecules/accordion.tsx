@@ -40,10 +40,10 @@ const accordionTriggerVariants = cva(
     {
         variants: {
             variant: {
-                default: 'py-4 gap-2.5 text-on-surface text-transform-primary font-display text-transform-primary font-medium',
-                outline: 'py-4 gap-2.5 text-on-surface text-transform-primary font-display text-transform-primary font-medium',
-                solid: 'py-4 gap-2.5 text-on-surface text-transform-primary font-display text-transform-primary font-medium',
-                navigation: 'py-2.5 px-3 gap-3 rounded-lg text-titleSmall tracking-tight text-on-surface-variant text-transform-primary font-display font-medium hover:bg-on-surface/5 hover:text-on-surface data-[state=open]:bg-primary/10 data-[state=open]:text-on-surface data-[state=open]:ring-1 data-[state=open]:ring-primary/20',
+                default: 'py-4 text-on-surface text-transform-primary font-display font-medium',
+                outline: 'py-4 text-on-surface text-transform-primary font-display font-medium',
+                solid: 'py-4 text-on-surface text-transform-primary font-display font-medium',
+                navigation: 'py-2.5 px-3 rounded-lg text-titleSmall tracking-tight text-on-surface-variant text-transform-primary font-display font-medium hover:bg-on-surface/5 hover:text-on-surface data-[state=open]:bg-primary/10 data-[state=open]:text-on-surface data-[state=open]:ring-1 data-[state=open]:ring-primary/20',
             },
             indicator: {
                 arrow: '[&[data-state=open]>svg]:rotate-180',

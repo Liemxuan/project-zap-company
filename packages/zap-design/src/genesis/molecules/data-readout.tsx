@@ -55,7 +55,7 @@ export const DataReadout: React.FC<DataReadoutProps> = ({ items, className }) =>
                                 ))}
                             </div>
                         ) : item.type === 'code' ? (
-                            <div className="bg-[color:var(--select-bg,var(--color-surface-container-highest))] border border-[length:var(--select-border-width,var(--layer-border-width,1px))] border-outline-variant rounded-[length:var(--select-border-radius,var(--radius-shape-small,8px))] p-2.5 font-mono text-[11px] text-on-surface w-full overflow-x-auto whitespace-nowrap shadow-sm">
+                            <div className="bg-[color:var(--select-bg,var(--color-surface-container-highest))] border border-[length:var(--select-border-width,var(--layer-border-width,1px))] border-outline-variant rounded-[length:var(--select-border-radius,var(--radius-shape-small,8px))] p-2.5 font-mono text-transform-tertiary text-[11px] text-on-surface w-full overflow-x-auto whitespace-nowrap shadow-sm">
                                 {item.value}
                             </div>
                         ) : (

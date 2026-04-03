@@ -43,3 +43,22 @@ export interface AgentProfile {
         selfHealingBrainId: string;
     };
 }
+
+export interface SysOsActiveSession {
+    _id?: string;
+    tenantId: string;
+    sessionKey: string; // Format: provider:channelId:threadId
+    assignedAgentId: string;
+    sandboxMode: boolean;
+    lastActive: Date;
+}
+
+export interface SysOsBinding {
+    _id?: string;
+    tenantId: string;
+    platform: "telegram" | "discord" | "api";
+    peerId?: string;
+    parentThreadId?: string;
+    agentId: string;
+    priority: number; // 0-100, highest wins
+}

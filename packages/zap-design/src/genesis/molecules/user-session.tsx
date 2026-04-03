@@ -169,7 +169,7 @@ export function UserSession({
                                          '--dropdown-radius': '12px',
                                          '--dropdown-border-width': '1px'
                                     } as React.CSSProperties}>
-                                        <DropdownMenuLabel className="font-display">My Account</DropdownMenuLabel>
+                                        <DropdownMenuLabel className="font-display text-transform-primary">My Account</DropdownMenuLabel>
                                         <DropdownMenuSeparator />
                                         <DropdownMenuItem className="cursor-pointer gap-2">
                                             <User className="size-4" />

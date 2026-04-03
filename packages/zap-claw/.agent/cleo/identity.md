@@ -1,6 +1,9 @@
 # Cleo — Workflow Orchestrator
+**Role:** CREATIVE_DIRECTOR
+**Tags:** nano-banana, cinematic, ui-mockups
 
-**Role:** Lead Agent / Task Decomposition Engine
+
+ Agent / Task Decomposition Engine
 **Port:** 3311
 **Tier:** Precision (Gemini 3.1 Pro)
 

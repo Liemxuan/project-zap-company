@@ -28,7 +28,7 @@ export default function CombatLoginPage() {
     const { form, isProcessing, error, onSubmit, onSocialSignIn } = useSigninForm();
 
     return (
-        <div className="grid lg:grid-cols-2 grow min-h-screen font-body bg-layer-canvas">
+        <div className="grid lg:grid-cols-2 grow min-h-screen font-body text-transform-secondary bg-layer-canvas">
             
             {/* Left Side: Authentication Form (The Truth) */}
             <div className="flex justify-center items-center p-8 lg:p-12 order-2 lg:order-1 outline-none">
@@ -55,7 +55,7 @@ export default function CombatLoginPage() {
                             type="button"
                             onClick={() => onSocialSignIn('apple')}
                             visualStyle="outline" variant="flat" 
-                            className="w-full h-11 border-border hover:bg-surface-container-low text-on-surface font-bold font-body text-sm transition-all shadow-sm flex items-center justify-center gap-2"
+                            className="w-full h-11 border-border hover:bg-surface-container-low text-on-surface font-bold font-body text-transform-secondary text-sm transition-all shadow-sm flex items-center justify-center gap-2"
                         >
                             <AppleIcon className="size-5" />
                             Apple
@@ -64,7 +64,7 @@ export default function CombatLoginPage() {
                             type="button"
                             onClick={() => onSocialSignIn('google')}
                             visualStyle="outline" variant="flat" 
-                            className="w-full h-11 border-border hover:bg-surface-container-low text-on-surface font-bold font-body text-sm transition-all shadow-sm flex items-center justify-center gap-2"
+                            className="w-full h-11 border-border hover:bg-surface-container-low text-on-surface font-bold font-body text-transform-secondary text-sm transition-all shadow-sm flex items-center justify-center gap-2"
                         >
                             <GoogleIcon className="size-5" />
                             Google
@@ -138,7 +138,7 @@ export default function CombatLoginPage() {
                         <GenesisButton 
                             type="submit"
                             disabled={isProcessing}
-                            className={`w-full h-12 bg-primary text-on-primary font-bold font-body text-sm shadow-lg shadow-primary/20 ${isProcessing ? 'opacity-90 cursor-not-allowed' : 'hover:bg-primary/90 transition-all'}`} 
+                            className={`w-full h-12 bg-primary text-on-primary font-bold font-body text-transform-secondary text-sm shadow-lg shadow-primary/20 ${isProcessing ? 'opacity-90 cursor-not-allowed' : 'hover:bg-primary/90 transition-all'}`} 
                             variant="flat"
                         >
                             {isProcessing ? (

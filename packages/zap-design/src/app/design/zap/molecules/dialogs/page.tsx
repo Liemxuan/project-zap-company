@@ -3,13 +3,14 @@
 import React, { useState, useEffect } from 'react';
 import { useTheme } from '../../../../../components/ThemeContext';
 import { ComponentSandboxTemplate } from '../../../../../zap/layout/ComponentSandboxTemplate';
-import { Wrapper } from '../../../../../components/dev/Wrapper';
 import { DialogsSection } from '../../../../../zap/sections/molecules/containment/DialogsSection';
 import { Select as ZapSelect } from '../../../../../genesis/atoms/interactive/option-select';
 import { ThemePublisher } from '../../../../../components/dev/ThemePublisher';
 import { useBorderProperties } from '../../../../../zap/sections/atoms/border_radius/use-border-properties';
 import { BORDER_RADIUS_TOKENS, BORDER_WIDTH_TOKENS } from '../../../../../zap/sections/atoms/foundations/schema';
 import { toast } from 'sonner';
+import { CanvasBody } from '../../../../../zap/layout/CanvasBody';
+import { SectionHeader } from '../../../../../zap/sections/SectionHeader';
 
 export default function DialogsPage() {
     const { theme: appTheme } = useTheme();
@@ -84,11 +85,11 @@ export default function DialogsPage() {
     };
 
     const inspectorControls = (
-        <Wrapper identity={{ displayName: "Inspector Controls Container", type: "Container", filePath: "zap/molecules/dialogs/page.tsx" }}>
+        
             <div className="space-y-4">
-                <Wrapper identity={{ displayName: "Dialog Structural Settings", type: "Docs Link", filePath: "zap/molecules/dialogs/page.tsx" }}>
+                
                     <div className="space-y-6">
-                        <h4 className="text-label-small text-transform-primary font-display font-bold text-on-surface-variant text-transform-secondary tracking-wider uppercase">Sandbox Variables</h4>
+ <h4 className="text-label-small text-transform-primary font-display font-bold text-on-surface-variant text-transform-secondary tracking-wider ">Sandbox Variables</h4>
                         <div className="space-y-4">
                             <div className="space-y-1">
                                 <span className="text-label-small text-on-surface-variant text-transform-secondary flex justify-between">
@@ -119,9 +120,9 @@ export default function DialogsPage() {
                             </div>
                         </div>
                     </div>
-                </Wrapper>
+                
             </div>
-        </Wrapper>
+        
     );
 
     const handlePublish = async () => {
@@ -192,15 +193,16 @@ export default function DialogsPage() {
                 'Destructive actions use bg-error with text-error-foreground — never hardcoded hex.',
             ]}
         >
-            <div 
-                className="w-full flex flex-col gap-8 py-8"
-                style={Object.assign({}, {
-                    '--dialog-border-width': previewWidth,
-                    '--dialog-border-radius': previewRadius,
-                } as React.CSSProperties)}
-            >
+            
+            <CanvasBody flush={false}>
+                <CanvasBody.Section>
+                    <SectionHeader number="1" id="dialogs" title="Dialogs Sandbox" description="Interactive components for Dialogs" icon="widgets" />
+                    <CanvasBody.Demo className="w-full flex flex-col gap-8 py-8">
                 <DialogsSection />
-            </div>
+                </CanvasBody.Demo>
+                </CanvasBody.Section>
+            </CanvasBody>
+        
         </ComponentSandboxTemplate>
     );
 }

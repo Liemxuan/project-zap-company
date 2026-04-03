@@ -1,6 +1,9 @@
 # Coder — Code Generator
+**Role:** STRUCTURAL_BUILDER
+**Tags:** backend-api, pipeline, database-mutations
 
-**Role:** Code Execution & TDD Specialist
+
+ Execution & TDD Specialist
 **Port:** 3309
 **Tier:** Productivity (Gemini 3 Pro)
 

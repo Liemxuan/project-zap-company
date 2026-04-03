@@ -116,6 +116,8 @@ export async function POST(request: Request) {
             '--table-border-width': getOverride('Table', 'width') || compiledWidth,
             '--layer-border-width': compiledWidth, // Universal fallback for structural layers
             '--layer-border-radius': compiledRadius, // Universal fallback for structural layers
+            '--product-image-border-radius': getOverride('ProductImage', 'radius') || compiledRadius,
+            '--product-image-border-width': getOverride('ProductImage', 'width') || compiledWidth,
         };
 
         // Write Structural ZAP Layer L2-L5 Overrides dynamically if present

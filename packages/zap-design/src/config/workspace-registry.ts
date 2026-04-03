@@ -1,54 +1,31 @@
 /**
- * ZAP WORKSPACE REGISTRY
+ * ZAP WORKSPACE REGISTRY (V4.2 - RADAR COMPLETE EYES)
  * ─────────────────────────────────────────────────────────────
- * Single source of truth for all Olympus workspaces.
- * Consumed by: Context Switcher, Mission Control, Health Monitor, Spotlight.
- *
- * Port Allocation Bands:
- *   DESIGN     :3000–3099
- *   POS        :3100–3499
- *   AGENT      :3500–3999
- *   OPERATION  :4000–4499
- *   INFRA      :4500–4699
- *   HUMAN      :4700–4999
- *   REF        :5000–6999
+ * Single source of truth for all Olympus workspaces, agent fleet,
+ * and data vaults. If it runs in the Swarm, it has eyes here.
  */
 
-// ─── Types ───────────────────────────────────────────────────
-
 export type WorkspaceDomain =
-  | 'DESIGN'
-  | 'POS'
-  | 'AGENT'
-  | 'OPERATION'
-  | 'INFRA'
-  | 'HUMAN'
-  | 'REF';
+  | 'MERCHANT'    // The storefronts & tools we sell to customers
+  | 'AGENT'       // The Swarm UI
+  | 'FLEET'       // The Headless Docker Agents
+  | 'DESIGN'      // ZAP Design Engine & Foundations
+  | 'CONTROL'     // Internal ZAP tooling & global operations
+  | 'VAULT'       // Data Stores & Memory
+  | 'REF';        // Legacy/Archive
 
 export interface WorkspaceEntry {
-  /** Unique slug, e.g. "pos-terminal" */
   id: string;
-  /** Human-readable name */
   name: string;
-  /** Primary domain grouping */
   domain: WorkspaceDomain;
-  /** Sub-category within the domain */
   sub: string;
-  /** Assigned port */
   port: number;
-  /** Internal route path (if hosted within zap-design server) */
   route?: string;
-  /** Monorepo folder relative to olympus root */
   folder?: string;
-  /** If true, opens in a new browser tab */
   external?: boolean;
-  /** Endpoint to ping for health checks (relative to localhost:port) */
   healthEndpoint: string;
-  /** Short description */
   description: string;
-  /** Lucide icon name */
   icon: string;
-  /** Searchable tags for Spotlight */
   tags: string[];
 }
 
@@ -57,254 +34,368 @@ export interface PortRange {
   end: number;
 }
 
-// ─── Port Ranges ─────────────────────────────────────────────
-
 export const PORT_RANGES: Record<WorkspaceDomain, PortRange> = {
   DESIGN:    { start: 3000, end: 3099 },
-  POS:       { start: 3100, end: 3499 },
+  MERCHANT:  { start: 3100, end: 3499 },
   AGENT:     { start: 3500, end: 3999 },
-  OPERATION: { start: 4000, end: 4499 },
-  INFRA:     { start: 4500, end: 4699 },
-  HUMAN:     { start: 4700, end: 4999 },
+  CONTROL:   { start: 4000, end: 4699 },
   REF:       { start: 5000, end: 6999 },
+  VAULT:     { start: 7000, end: 7999 },
+  FLEET:     { start: 8000, end: 9999 },
 };
-
-// ─── Domain Metadata ─────────────────────────────────────────
 
 export const DOMAIN_META: Record<WorkspaceDomain, { label: string; icon: string; color: string }> = {
-  DESIGN:    { label: 'Design',        icon: 'palette',       color: '#7C4DFF' },
-  POS:       { label: 'Point of Sale', icon: 'shopping_cart', color: '#00BFA5' },
-  AGENT:     { label: 'Agent',         icon: 'smart_toy',     color: '#FF6D00' },
-  OPERATION: { label: 'Operations',    icon: 'tune',          color: '#2979FF' },
-  INFRA:     { label: 'Infrastructure',icon: 'dns',           color: '#546E7A' },
-  HUMAN:     { label: 'Human',         icon: 'verified_user', color: '#D50000' },
-  REF:       { label: 'Reference',     icon: 'menu_book',     color: '#9E9E9E' },
+  MERCHANT:  { label: 'Merchant Suite', icon: 'storefront',    color: '#00BFA5' },
+  AGENT:     { label: 'Agent Hub',      icon: 'psychology',    color: '#FF6D00' },
+  FLEET:     { label: 'Swarm Fleet',    icon: 'smart_toy',     color: '#FF9100' },
+  DESIGN:    { label: 'Design Engine',  icon: 'palette',       color: '#7C4DFF' },
+  CONTROL:   { label: 'Control Plane',  icon: 'tune',          color: '#2979FF' },
+  VAULT:     { label: 'Data Vault',     icon: 'database',      color: '#546E7A' },
+  REF:       { label: 'Reference',      icon: 'menu_book',     color: '#9E9E9E' },
 };
 
-// ─── Registry ────────────────────────────────────────────────
-
 export const WORKSPACE_REGISTRY: WorkspaceEntry[] = [
-  // ── DESIGN (:3000) ─────────────────────────────────────────
+  // ══════════════════════════════════════════════════════════
+  // ZAP INTERNAL: THE FOUNDATION
+  // ══════════════════════════════════════════════════════════
   {
     id: 'zap-design',
-    name: 'ZAP Design Engine',
+    name: '[ZAP] Design Engine',
     domain: 'DESIGN',
-    sub: 'L1-L7',
+    sub: 'ENGINE',
     port: 3000,
     folder: 'packages/zap-design',
     healthEndpoint: '/',
-    description: 'L1–L7 component system, foundations, atoms, molecules',
+    description: 'Internal foundry where the Vietnam team builds UI components',
     icon: 'palette',
-    tags: ['design', 'components', 'atoms', 'molecules', 'foundations', 'tokens', 'theme'],
+    tags: ['design', 'components', 'atoms', 'theme', 'zap-internal'],
   },
 
-  // ── POS (:3100–3400) ──────────────────────────────────────
+  // ══════════════════════════════════════════════════════════
+  // MERCHANT: REVENUE SUITE
+  // ══════════════════════════════════════════════════════════
   {
     id: 'pos-terminal',
-    name: 'POS Terminal',
-    domain: 'POS',
+    name: '[MERCHANT] POS Terminal',
+    domain: 'MERCHANT',
     sub: 'POS',
     port: 3100,
     folder: 'apps/pos',
     healthEndpoint: '/',
-    description: 'Point of Sale application',
+    description: 'In-store physical checkout module for their staff',
     icon: 'monitor',
-    tags: ['pos', 'sales', 'terminal', 'checkout'],
+    tags: ['pos', 'sales', 'terminal', 'checkout', 'merchant-facing'],
   },
   {
     id: 'kiosk',
-    name: 'Kiosk',
-    domain: 'POS',
+    name: '[MERCHANT] Kiosk',
+    domain: 'MERCHANT',
     sub: 'KIOSK',
     port: 3200,
     folder: 'apps/kiosk',
     healthEndpoint: '/',
-    description: 'Customer-facing kiosk',
+    description: 'Customer-facing self-service touch module',
     icon: 'tablet_mac',
-    tags: ['kiosk', 'customer', 'self-service'],
+    tags: ['kiosk', 'customer', 'self-service', 'merchant-facing'],
   },
   {
     id: 'web-app',
-    name: 'Web App',
-    domain: 'POS',
+    name: '[MERCHANT] Web App',
+    domain: 'MERCHANT',
     sub: 'WEB',
     port: 3300,
     folder: 'apps/web',
     healthEndpoint: '/',
-    description: 'Main web frontend',
+    description: 'The merchant\'s consumer-facing storefront',
     icon: 'public',
-    tags: ['web', 'frontend', 'storefront'],
+    tags: ['web', 'frontend', 'storefront', 'revenue', 'merchant-facing'],
   },
   {
     id: 'portal',
-    name: 'Portal',
-    domain: 'POS',
-    sub: 'APP',
+    name: '[MERCHANT] Customer Portal',
+    domain: 'MERCHANT',
+    sub: 'LOYALTY',
     port: 3400,
     folder: 'apps/portal',
     healthEndpoint: '/',
-    description: 'Portal application',
+    description: 'Consumer loyalty and account portal',
     icon: 'dashboard',
-    tags: ['portal', 'dashboard', 'app'],
+    tags: ['portal', 'dashboard', 'loyalty', 'merchant-facing'],
+  },
+  {
+    id: 'merchant-admin',
+    name: '[MERCHANT] Admin Ops',
+    domain: 'MERCHANT',
+    sub: 'ADMIN',
+    port: 4700,
+    folder: 'apps/settings',
+    healthEndpoint: '/',
+    description: 'Where our merchants log in to manage their specific accounts/roles',
+    icon: 'tune',
+    tags: ['admin', 'roles', 'account', 'operations', 'merchant-facing'],
   },
 
-  // ── AGENT (:3500–3900) ────────────────────────────────────
+  // ══════════════════════════════════════════════════════════
+  // ZAP INTERNAL: AGENT HUB & ORCHESTRATION
+  // ══════════════════════════════════════════════════════════
   {
     id: 'zap-swarm',
-    name: 'ZAP Swarm Command',
+    name: '[ZAP] Swarm Monitor',
     domain: 'AGENT',
-    sub: 'WORKSPACE',
+    sub: 'MONITOR',
     port: 3500,
     folder: 'apps/zap-swarm',
     healthEndpoint: '/',
-    description: 'Standalone Swarm Command Center (DeerFlow UI)',
-    icon: 'smart_toy',
-    tags: ['swarm', 'command', 'agent', 'deerflow'],
-  },
-  {
-    id: 'merchant-hub',
-    name: 'Merchant Hub',
-    domain: 'AGENT',
-    sub: 'WORKSPACE',
-    port: 3501,
-    folder: 'apps/merchant',
-    healthEndpoint: '/',
-    description: 'Merchant Digital Workspace for Swarm Operations',
-    icon: 'storefront',
-    tags: ['merchant', 'workspace', 'hub', 'swarm', 'agent'],
-  },
-  {
-    id: 'mission-control',
-    name: 'Mission Control',
-    domain: 'AGENT',
-    sub: 'DASHBOARD',
-    port: 3600,
-    route: '/mission-control',
-    folder: 'packages/zap-design',
-    healthEndpoint: '/',
-    description: 'Swarm pulse & port monitoring radar',
-    icon: 'radar',
-    tags: ['mission', 'control', 'dashboard', 'radar', 'monitoring'],
-  },
-  {
-    id: 'zap-ai',
-    name: 'ZAP-AI',
-    domain: 'AGENT',
-    sub: 'AI',
-    port: 3700,
-    folder: 'packages/zap-ai',
-    healthEndpoint: '/health',
-    description: 'LangChain/AI package',
+    description: 'Internal dashboard to monitor agent fleets globally',
     icon: 'psychology',
-    tags: ['ai', 'langchain', 'intelligence', 'llm'],
+    tags: ['swarm', 'command', 'agent', 'deerflow', 'zap-internal'],
   },
   {
-    id: 'agent-swarm',
-    name: 'Agent Swarm',
+    id: 'kairos-daemon',
+    name: '[ZAP] Kairos Daemon',
     domain: 'AGENT',
-    sub: 'SWARM',
-    port: 3800,
-    route: '/design/swarm',
-    folder: 'packages/zap-design',
+    sub: 'RUST',
+    port: 3999,
+    folder: 'rust/crates/gateway',
     healthEndpoint: '/',
-    description: 'Fleet monitoring & job tickets',
-    icon: 'group',
-    tags: ['swarm', 'fleet', 'agents', 'jobs', 'tickets'],
+    description: 'Native Rust Daemon that orchestrates the entire agent fleet',
+    icon: 'radar',
+    tags: ['rust', 'kairos', 'gateway', 'zap-internal', 'backend'],
   },
 
-  // ── OPERATION (:4000–4200) ────────────────────────────────
+  // ══════════════════════════════════════════════════════════
+  // ZAP INTERNAL: CONTROL PLANE
+  // ══════════════════════════════════════════════════════════
   {
     id: 'operations',
-    name: 'Operations',
-    domain: 'OPERATION',
-    sub: 'SALES',
-    port: 4000,
+    name: '[ZAP] Global Ops',
+    domain: 'CONTROL',
+    sub: 'CRM',
+    port: 4200,
     folder: 'apps/operations',
     healthEndpoint: '/',
-    description: 'Managing sales, orders, PO, PR, inventory',
+    description: 'How WE run Olympus (Targeting, global CRM, billing)',
     icon: 'inventory_2',
-    tags: ['operations', 'sales', 'orders', 'purchase', 'inventory', 'po', 'pr'],
+    tags: ['operations', 'sales', 'crm', 'tenant', 'zap-internal'],
   },
-  {
-    id: 'settings',
-    name: 'Settings',
-    domain: 'OPERATION',
-    sub: 'SETTING',
-    port: 4100,
-    folder: 'apps/settings',
-    healthEndpoint: '/',
-    description: 'Merchants, locations, timezone, system, devices, gateway, keys, MCP',
-    icon: 'tune',
-    tags: ['settings', 'merchants', 'location', 'timezone', 'devices', 'gateway', 'keys', 'mcp'],
-  },
-  {
-    id: 'reports',
-    name: 'Reports',
-    domain: 'OPERATION',
-    sub: 'REPORT',
-    port: 4200,
-    folder: 'apps/reports',
-    healthEndpoint: '/',
-    description: 'Financial reporting, history, sales projections, cost analysis',
-    icon: 'bar_chart',
-    tags: ['reports', 'financial', 'history', 'sales', 'projection', 'cost', 'analytics'],
-  },
-
-  // ── INFRA (:4500–4600) ────────────────────────────────────
   {
     id: 'infrastructure',
-    name: 'Infrastructure',
-    domain: 'INFRA',
+    name: '[ZAP] Infrastructure',
+    domain: 'CONTROL',
     sub: 'DASHBOARD',
-    port: 4500,
+    port: 4300,
     route: '/admin/infrastructure',
     folder: 'packages/zap-design',
     healthEndpoint: '/',
-    description: 'Pipeline health, DB telemetry',
+    description: 'Monitoring the health of our cloud and databases',
     icon: 'monitoring',
-    tags: ['infrastructure', 'pipeline', 'telemetry', 'health'],
+    tags: ['infrastructure', 'pipeline', 'telemetry', 'health', 'zap-internal'],
   },
+  {
+    id: 'mission-control',
+    name: '[ZAP] Mission Control',
+    domain: 'CONTROL',
+    sub: 'RADAR',
+    port: 4600,
+    route: '/mission-control',
+    folder: 'packages/zap-design',
+    healthEndpoint: '/',
+    description: 'Global port radar and service pulse',
+    icon: 'radar',
+    tags: ['mission', 'control', 'dashboard', 'radar', 'zap-internal'],
+  },
+
+  // ══════════════════════════════════════════════════════════
+  // CORE VAULT SERVICES
+  // ══════════════════════════════════════════════════════════
   {
     id: 'zap-db',
-    name: 'ZAP-DB',
-    domain: 'INFRA',
+    name: '[VAULT] PostgreSQL',
+    domain: 'VAULT',
     sub: 'DB',
-    port: 4600,
+    port: 5432,
     folder: 'packages/zap-db',
-    healthEndpoint: '/health',
-    description: 'Database/Prisma layer',
-    icon: 'database',
-    tags: ['database', 'prisma', 'postgres', 'mongo', 'db'],
-  },
-
-  // ── HUMAN (:4700) ─────────────────────────────────────────
-  {
-    id: 'zap-auth',
-    name: 'ZAP Auth Vault',
-    domain: 'HUMAN',
-    sub: 'AUTH',
-    port: 4700,
-    route: '/auth/metro/user-management',
-    folder: 'packages/zap-auth',
-    healthEndpoint: '/health',
-    description: 'Authentication package',
-    icon: 'shield',
-    tags: ['auth', 'authentication', 'security', 'login', 'session'],
-  },
-
-  // ── REF (:5000–6000) ──────────────────────────────────────
-  {
-    id: 'legacy-ref',
-    name: 'ZAP Legacy Reference',
-    domain: 'REF',
-    sub: 'LEGACY',
-    port: 5000,
-    external: true,
     healthEndpoint: '/',
-    description: 'Prototype reference (graveyard)',
-    icon: 'archive',
-    tags: ['legacy', 'reference', 'prototype', 'graveyard'],
+    description: 'Cloud PostgreSQL Multi-Tenant Database',
+    icon: 'database',
+    tags: ['database', 'postgres', 'vault'],
   },
+  {
+    id: 'redis',
+    name: '[VAULT] Redis Inbox',
+    domain: 'VAULT',
+    sub: 'BROKER',
+    port: 6379,
+    folder: 'docker',
+    healthEndpoint: '/',
+    description: 'High-speed message broker for job ticketing',
+    icon: 'archive',
+    tags: ['redis', 'broker', 'vault'],
+  },
+  {
+    id: 'chromadb',
+    name: '[VAULT] ChromaDB',
+    domain: 'VAULT',
+    sub: 'VECTOR',
+    port: 8000,
+    folder: 'docker',
+    healthEndpoint: '/',
+    description: 'The semantic memory store for the Swarm fleet',
+    icon: 'database',
+    tags: ['chroma', 'vector', 'memory', 'agent'],
+  },
+
+  // ══════════════════════════════════════════════════════════
+  // ZAP-CLAW FLEET (DOCKERIZED WORKERS)
+  // ══════════════════════════════════════════════════════════
+  {
+    id: 'agent-jerry',
+    name: '[FLEET] Jerry',
+    domain: 'FLEET',
+    sub: 'WATCHDOG',
+    port: 8100,
+    folder: 'docker',
+    healthEndpoint: '/',
+    description: 'Internal watchdog monitoring code sanity',
+    icon: 'shield',
+    tags: ['agent', 'jerry', 'watchdog', 'docker'],
+  },
+  {
+    id: 'agent-spike',
+    name: '[FLEET] Spike',
+    domain: 'FLEET',
+    sub: 'BUILDER',
+    port: 8101,
+    folder: 'docker',
+    healthEndpoint: '/',
+    description: 'Structural component integration builder',
+    icon: 'smart_toy',
+    tags: ['agent', 'spike', 'builder', 'docker'],
+  },
+  {
+    id: 'agent-thomas',
+    name: '[FLEET] Thomas',
+    domain: 'FLEET',
+    sub: 'FINANCE',
+    port: 8102,
+    folder: 'docker',
+    healthEndpoint: '/',
+    description: 'Analytics and financial reporting handler',
+    icon: 'smart_toy',
+    tags: ['agent', 'thomas', 'finance', 'docker'],
+  },
+  {
+    id: 'agent-athena',
+    name: '[FLEET] Athena',
+    domain: 'FLEET',
+    sub: 'ARCHITECT',
+    port: 8103,
+    folder: 'docker',
+    healthEndpoint: '/',
+    description: 'System-wide architectural review',
+    icon: 'smart_toy',
+    tags: ['agent', 'athena', 'architect', 'docker'],
+  },
+  {
+    id: 'agent-hermes',
+    name: '[FLEET] Hermes',
+    domain: 'FLEET',
+    sub: 'ROUTER',
+    port: 8104,
+    folder: 'docker',
+    healthEndpoint: '/',
+    description: 'API routing and integration logic',
+    icon: 'smart_toy',
+    tags: ['agent', 'hermes', 'router', 'docker'],
+  },
+  {
+    id: 'agent-hawk',
+    name: '[FLEET] Hawk',
+    domain: 'FLEET',
+    sub: 'SECURITY',
+    port: 8105,
+    folder: 'docker',
+    healthEndpoint: '/',
+    description: 'Threat detection and endpoint auditing',
+    icon: 'smart_toy',
+    tags: ['agent', 'hawk', 'security', 'docker'],
+  },
+  {
+    id: 'agent-nova',
+    name: '[FLEET] Nova',
+    domain: 'FLEET',
+    sub: 'CREATOR',
+    port: 8106,
+    folder: 'docker',
+    healthEndpoint: '/',
+    description: 'Content and UI copy generation',
+    icon: 'smart_toy',
+    tags: ['agent', 'nova', 'copy', 'docker'],
+  },
+  {
+    id: 'agent-raven',
+    name: '[FLEET] Raven',
+    domain: 'FLEET',
+    sub: 'EXTRACTION',
+    port: 8107,
+    folder: 'docker',
+    healthEndpoint: '/',
+    description: 'Deep data parsing and file extraction',
+    icon: 'smart_toy',
+    tags: ['agent', 'raven', 'parser', 'docker'],
+  },
+  {
+    id: 'agent-scout',
+    name: '[FLEET] Scout',
+    domain: 'FLEET',
+    sub: 'OSINT',
+    port: 8108,
+    folder: 'docker',
+    healthEndpoint: '/',
+    description: 'Open-Source intelligence and web research',
+    icon: 'smart_toy',
+    tags: ['agent', 'scout', 'research', 'docker'],
+  },
+  {
+    id: 'agent-coder',
+    name: '[FLEET] Coder',
+    domain: 'FLEET',
+    sub: 'ENGINEER',
+    port: 8109,
+    folder: 'docker',
+    healthEndpoint: '/',
+    description: 'Execution loop programming',
+    icon: 'smart_toy',
+    tags: ['agent', 'coder', 'engineer', 'docker'],
+  },
+  {
+    id: 'agent-architect',
+    name: '[FLEET] Architect',
+    domain: 'FLEET',
+    sub: 'SCALER',
+    port: 8110,
+    folder: 'docker',
+    healthEndpoint: '/',
+    description: 'System scaling and infrastructure design',
+    icon: 'smart_toy',
+    tags: ['agent', 'architect', 'infra', 'docker'],
+  },
+  {
+    id: 'agent-cleo',
+    name: '[FLEET] Cleo',
+    domain: 'FLEET',
+    sub: 'UX',
+    port: 8111,
+    folder: 'docker',
+    healthEndpoint: '/',
+    description: 'User experience and M3 design token compliance',
+    icon: 'smart_toy',
+    tags: ['agent', 'cleo', 'design', 'docker'],
+  },
+
+  // ══════════════════════════════════════════════════════════
+  // REFERENCE & LEGACY
+  // ══════════════════════════════════════════════════════════
   {
     id: 'metronic-ref',
     name: 'Metronic Reference',
@@ -315,27 +406,21 @@ export const WORKSPACE_REGISTRY: WorkspaceEntry[] = [
     healthEndpoint: '/',
     description: 'Tailwind/React mirroring source',
     icon: 'menu_book',
-    tags: ['metronic', 'reference', 'tailwind', 'mirror'],
-  },
+    tags: ['metronic', 'reference'],
+  }
 ];
 
-// ─── Helpers ─────────────────────────────────────────────────
-
-/** Get all workspaces for a given domain */
 export const getWorkspacesByDomain = (domain: WorkspaceDomain): WorkspaceEntry[] =>
   WORKSPACE_REGISTRY.filter(w => w.domain === domain);
 
-/** Get a single workspace by ID */
 export const getWorkspaceById = (id: string): WorkspaceEntry | undefined =>
   WORKSPACE_REGISTRY.find(w => w.id === id);
 
-/** Get the full URL for a workspace */
 export const getWorkspaceUrl = (workspace: WorkspaceEntry): string => {
   if (workspace.route) return `http://localhost:${workspace.port}${workspace.route}`;
   return `http://localhost:${workspace.port}`;
 };
 
-/** Get all unique domains in registry order */
 export const getDomains = (): WorkspaceDomain[] => {
   const seen = new Set<WorkspaceDomain>();
   return WORKSPACE_REGISTRY.reduce<WorkspaceDomain[]>((acc, w) => {
@@ -347,7 +432,6 @@ export const getDomains = (): WorkspaceDomain[] => {
   }, []);
 };
 
-/** Search workspaces by fuzzy tag match */
 export const searchWorkspaces = (query: string): WorkspaceEntry[] => {
   const q = query.toLowerCase().trim();
   if (!q) return WORKSPACE_REGISTRY;

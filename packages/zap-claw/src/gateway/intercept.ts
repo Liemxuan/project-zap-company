@@ -7,29 +7,30 @@ import "dotenv/config";
 const MONGO_URI = process.env.MONGODB_URI || "";
 const DB_NAME = "olympus";
 
-// Simulate an incoming omni-channel payload
-interface IncomingMessage {
-    channel: "WHATSAPP" | "TELEGRAM" | "ZALO" | "IMESSAGE" | "CLI";
-    senderIdentifier: string; // Simplistic identifier for this mock (e.g. "Tom")
-    tenantId: "ZVN" | "PHO24" | "OLYMPUS"; // Derived from the webhook or port origin
-    payload: string;
-    sessionId?: string; // Optional trackable session bounding box
-}
+import type { ZapSwarmEvent } from "./schema.js";
 
-export async function receiveMessage(msg: IncomingMessage): Promise<OmniResponse | string | undefined> {
-    console.log(`[Gateway] Intercepted [${msg.channel}] message from [${msg.senderIdentifier}]...`);
+// Use the standardized Omni-Channel Event Schema
+
+export async function receiveMessage(msg: ZapSwarmEvent): Promise<OmniResponse | string | undefined> {
+    console.log(`[Gateway] Intercepted [${msg.channel}] message from [${msg.sender.username}]...`);
     const client = new MongoClient(MONGO_URI, { serverSelectionTimeoutMS: 5000 });
 
     try {
         await client.connect();
         const db = client.db(DB_NAME);
 
+        // Security / Ingress Control: Require Mentions in groups (Mention Gating protocol)
+        if (!msg.route.isDirectMessage && !msg.message.hasMention) {
+            console.log(`[Gateway] 🛡️ Ignored group chatter without explicit mention.`);
+            return undefined;
+        }
+
         // Use generic collection and filter by tenantId
         const collectionName = `SYS_OS_users`;
         const usersCol = db.collection(collectionName);
 
         console.log(`[Gateway] Querying Entity Matrix: ${collectionName} for ${msg.tenantId}`);
-        const user = await usersCol.findOne({ name: msg.senderIdentifier, tenantId: msg.tenantId });
+        const user = await usersCol.findOne({ name: msg.sender.username, tenantId: msg.tenantId });
 
         if (!user) {
             console.error(`[Gateway] ❌ Unknown Sender. Security rejection.`);
@@ -49,7 +50,7 @@ export async function receiveMessage(msg: IncomingMessage): Promise<OmniResponse
                 assignedTier = user.overrideModelTier;
                 console.log(`[Gateway] 🎩 Sorting Hat Bypass: User forced Tier ${assignedTier}`);
             } else {
-                const payloadLower = msg.payload.toLowerCase();
+                const payloadLower = msg.message.text.toLowerCase();
                 const highLogicKeywords = ["write", "analyze", "explain", "code", "projection", "report", "debug", "audit"];
                 const isHighLogic = highLogicKeywords.some(kw => payloadLower.includes(kw));
 
@@ -72,15 +73,15 @@ export async function receiveMessage(msg: IncomingMessage): Promise<OmniResponse
             const reply = await executeSerializedLane(
                 user,
                 msg.tenantId,
-                msg.senderIdentifier,
-                msg.payload,
+                msg.sender.username,
+                msg.message.text,
                 assignedTier,
                 msg.sessionId
             );
             console.log(`[Gateway] Pipeline Pre-processing Complete.\n`);
 
             if (typeof reply === "string") return reply;
-            const formattedReply = routeEgress(reply, msg.channel);
+            const formattedReply = await routeEgress(reply, msg.channel);
             console.log(`[Gateway] ✅ Egress formatted for ${msg.channel}.`);
             return formattedReply;
 
@@ -110,9 +111,10 @@ async function runMocks() {
     console.log(`======================================================`);
     await receiveMessage({
         channel: "WHATSAPP",
-        senderIdentifier: "Tom",
         tenantId: "ZVN",
-        payload: "Hey, what is our Q3 revenue looking like?"
+        sender: { id: "user_tom123", username: "Tom" },
+        message: { text: "Hey, what is our Q3 revenue looking like?", hasMention: true },
+        route: { threadId: "dm_tom", isDirectMessage: true, timestamp: Date.now() }
     });
 
     console.log(`======================================================`);
@@ -120,9 +122,10 @@ async function runMocks() {
     console.log(`======================================================`);
     await receiveMessage({
         channel: "TELEGRAM",
-        senderIdentifier: "Kevin",
         tenantId: "PHO24",
-        payload: "I'm sick, can't come in today."
+        sender: { id: "user_kevin88", username: "Kevin" },
+        message: { text: "I'm sick, can't come in today.", hasMention: false },
+        route: { threadId: "kitchen_group", isDirectMessage: false, timestamp: Date.now() }
     });
 }
 

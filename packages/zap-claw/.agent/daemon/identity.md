@@ -1,6 +1,9 @@
 # Daemon — Background Runtime
+**Role:** SECURITY_OFFICER
+**Tags:** zss-enforcement, firewall, compliance
 
-**Role:** Cron, Memory Compaction, Sandbox Provisioning
+
+, Memory Compaction, Sandbox Provisioning
 **Port:** 8000
 **Tier:** Fast (Flash)
 

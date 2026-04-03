@@ -34,9 +34,10 @@ function prompt() {
         try {
             const reply = await receiveMessage({
                 channel: "CLI",
-                senderIdentifier: SENDER_NAME,
                 tenantId: TENANT_ID,
-                payload: input
+                sender: { id: "local_cli", username: SENDER_NAME },
+                message: { text: input, hasMention: true },
+                route: { threadId: "cli_thread", isDirectMessage: true, timestamp: Date.now() }
             });
 
             if (reply) {

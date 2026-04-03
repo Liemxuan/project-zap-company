@@ -30,7 +30,7 @@ export const InspectorAccordion: React.FC<InspectorAccordionProps> = ({
             className={cn("bg-transparent w-full space-y-2", className)}
         >
             <AccordionItem value="item" className="border-none m-0">
-                <AccordionTrigger className="px-4 py-3 flex items-center gap-2 rounded-lg bg-surface-variant hover:bg-surface-variant/80 font-mono text-[11px] uppercase tracking-widest text-on-surface font-bold transition-colors m-0 w-full min-w-0">
+ <AccordionTrigger className="px-4 py-3 flex items-center gap-2 rounded-lg bg-surface-variant hover:bg-surface-variant/80 font-mono text-transform-tertiary text-[11px] tracking-widest text-on-surface font-bold transition-colors m-0 w-full min-w-0">
                     <div className="flex items-center gap-2 overflow-hidden flex-1 text-left min-w-0">
                         {icon && (
                             typeof icon === 'string' ? (

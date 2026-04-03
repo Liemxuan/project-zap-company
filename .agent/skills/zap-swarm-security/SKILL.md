@@ -80,6 +80,14 @@ Do not build agents that are entirely open-ended.
 * Default timeout: 3 seconds (max: 10 seconds).
 * Built-in trusted skills bypass the sandbox entirely for zero overhead.
 
+### J. Matrix-Only Principle (Arbiter Isolation)
+**Internal agents MUST NEVER hold or load isolated API keys.**
+* Module: `packages/zap-claw/src/runtime/engine/omni_router.ts`
+* **Rule:** Isolated Google or OpenRouter API keys in `.env` are strictly forbidden for agentic tasks. 
+* **Enforcement:** All internal OLYMPUS calls must be routed via the **Distributed Matrix Arbiter** (105 keys).
+* **Isolation:** By removing keys from the agent's environment, we prevent "Ghost Key" drift and ensure 100% of the fleet is load-balanced and observable.
+* **Failover:** The Arbiter handles all 429 rate-limiting events at the infrastructure tier, providing seamless recovery without exposing failures back to the cognitive Agent Loop.
+
 ## 3. Security Module Registry
 
 | Module | Path | Phase |
@@ -89,3 +97,4 @@ Do not build agents that are entirely open-ended.
 | Token Budgets | `src/security/token_budgets.ts` | IRONCLAD Phase 2 |
 | Agent JWT | `src/security/agent_jwt.ts` | IRONCLAD Phase 3 |
 | Skill Sandbox | `src/security/skill_sandbox.ts` | IRONCLAD Phase 6 |
+| Matrix Arbiter | `src/runtime/engine/omni_router.ts` | Matrix Hardening |

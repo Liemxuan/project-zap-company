@@ -115,6 +115,7 @@ When you receive a user prompt containing an `@Shortcut` or when you encounter a
 | [sop-034-olympus-data-architecture.md](sops/sop-034-olympus-data-architecture.md) | **`@sop-034`** | SOP-034-OLYMPUS-DATA-ARCHITECTURE |
 | [sop-035-olympus-memory-system.md](sops/sop-035-olympus-memory-system.md) | **`@sop-035`** | SOP-035-OLYMPUS_MEMORY_SYSTEM |
 | [sop-036-gemini-model-fleet-mapping.md](sops/sop-036-gemini-model-fleet-mapping.md) | **`@sop-036`** | SOP-036-GEMINI-MODEL-FLEET-MAPPING |
+| [sop-037-canvas-architecture.md](sops/sop-037-canvas-architecture.md) | **`@sop-037`** | SOP-037: Canvas Architecture Guidelines (L1-L5 Depth & Typography) |
 
 ## SUPERPOWERS
 

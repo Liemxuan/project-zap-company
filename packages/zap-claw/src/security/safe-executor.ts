@@ -142,8 +142,11 @@ export class SafeExecutor {
     this.validateArguments(args);
 
     try {
-      // Excecute strictly without shell interpretation
-      const { stdout, stderr } = await execFileAsync(command, args, {
+      // Excecute safely via our new native unshare sandbox wrapper
+      const sandboxPath = path.resolve(__dirname, '../../../../apps/zap-sandbox-cli/target/release/zap-sandbox-cli');
+      const wrapperArgs = [command, ...args];
+
+      const { stdout, stderr } = await execFileAsync(sandboxPath, wrapperArgs, {
         cwd: this.config.cwd,
         env: this.config.env,
         timeout: this.config.timeout,

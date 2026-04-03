@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { MongoClient } from "mongodb";
 import path from "path";
 import dotenv from "dotenv";
+import { getGlobalMongoClient } from "../../../lib/mongo";
 
 dotenv.config({ path: path.resolve(process.cwd(), "../../zap-core/.env"), override: true });
 
@@ -25,15 +26,13 @@ export async function GET() {
     const mongoStart = Date.now();
     let mongoClient: MongoClient | null = null;
     try {
-        mongoClient = new MongoClient(MONGO_URI, { serverSelectionTimeoutMS: 3000 });
-        await mongoClient.connect();
+        mongoClient = await getGlobalMongoClient();
         await mongoClient.db("olympus").command({ ping: 1 });
         checks.mongodb = { status: "ok", latencyMs: Date.now() - mongoStart };
     } catch (err: any) {
         checks.mongodb = { status: "fail", latencyMs: Date.now() - mongoStart, error: err.message };
         allHealthy = false;
     } finally {
-        if (mongoClient) await mongoClient.close().catch(() => {});
     }
 
     // 2. ZAP Claw Check

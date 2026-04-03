@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { ComponentSandboxTemplate } from '../../../../../zap/layout/ComponentSandboxTemplate';
-import { Wrapper } from '../../../../../components/dev/Wrapper';
 import { CanvasBody } from '../../../../../zap/layout/CanvasBody';
 
 export default function CanvasBodyPage() {
@@ -37,7 +36,7 @@ export default function CanvasBodyPage() {
             <div className="w-full flex flex-col gap-12 py-8">
 
                 {/* ── Layer Stack Visual */}
-                <Wrapper identity={{ displayName: 'Layer Stack Reference', type: 'Docs', filePath: 'zap/molecules/canvas-body/page.tsx' }}>
+                
                     <div className="flex flex-col gap-2">
                         <span className="text-label-small font-bold tracking-widest text-on-surface-variant text-transform-secondary font-dev text-transform-tertiary px-1">
                             M3 SPATIAL DEPTH — LAYER STACK
@@ -46,29 +45,29 @@ export default function CanvasBodyPage() {
                             {/* L1 */}
                             <div className="bg-layer-canvas p-5 flex flex-col gap-3 border-b border-outline-variant/30">
                                 <div className="flex items-center justify-between">
-                                    <span className="text-label-small font-bold font-dev tracking-widest text-on-surface-variant">L1 — CANVAS FLOOR</span>
-                                    <code className="text-label-small font-dev text-primary bg-primary/10 px-2 py-0.5 rounded">bg-layer-canvas</code>
+                                    <span className="text-label-small font-bold font-dev text-transform-tertiary tracking-widest text-on-surface-variant">L1 — CANVAS FLOOR</span>
+                                    <code className="text-label-small font-dev text-transform-tertiary text-primary bg-primary/10 px-2 py-0.5 rounded">bg-layer-canvas</code>
                                 </div>
                                 <span className="text-label-medium text-on-surface-variant">surface-container-low · The outermost page background. Provided by the Canvas atom.</span>
                                 {/* L2 */}
                                 <div className="bg-layer-cover rounded-xl border border-outline-variant/50 p-4 flex flex-col gap-3">
                                     <div className="flex items-center justify-between">
-                                        <span className="text-label-small font-bold font-dev tracking-widest text-on-surface-variant">L2 — COVER CARD</span>
-                                        <code className="text-label-small font-dev text-primary bg-primary/10 px-2 py-0.5 rounded">bg-layer-cover</code>
+                                        <span className="text-label-small font-bold font-dev text-transform-tertiary tracking-widest text-on-surface-variant">L2 — COVER CARD</span>
+                                        <code className="text-label-small font-dev text-transform-tertiary text-primary bg-primary/10 px-2 py-0.5 rounded">bg-layer-cover</code>
                                     </div>
                                     <span className="text-label-medium text-on-surface-variant">surface-container · The main content card. CanvasBody root.</span>
                                     {/* L3 */}
                                     <div className="bg-layer-panel rounded-xl border border-outline-variant/40 p-4 flex flex-col gap-3">
                                         <div className="flex items-center justify-between">
-                                            <span className="text-label-small font-bold font-dev tracking-widest text-on-surface-variant">L3 — SECTION PANEL</span>
-                                            <code className="text-label-small font-dev text-primary bg-primary/10 px-2 py-0.5 rounded">bg-layer-panel</code>
+                                            <span className="text-label-small font-bold font-dev text-transform-tertiary tracking-widest text-on-surface-variant">L3 — SECTION PANEL</span>
+                                            <code className="text-label-small font-dev text-transform-tertiary text-primary bg-primary/10 px-2 py-0.5 rounded">bg-layer-panel</code>
                                         </div>
                                         <span className="text-label-medium text-on-surface-variant">surface-container-high · Content sections. CanvasBody.Section.</span>
                                         {/* L4 */}
                                         <div className="bg-layer-dialog rounded-lg border border-outline-variant/30 p-4">
                                             <div className="flex items-center justify-between mb-1">
-                                                <span className="text-label-small font-bold font-dev tracking-widest text-on-surface-variant">L4 — DEMO FRAME</span>
-                                                <code className="text-label-small font-dev text-primary bg-primary/10 px-2 py-0.5 rounded">bg-layer-dialog</code>
+                                                <span className="text-label-small font-bold font-dev text-transform-tertiary tracking-widest text-on-surface-variant">L4 — DEMO FRAME</span>
+                                                <code className="text-label-small font-dev text-transform-tertiary text-primary bg-primary/10 px-2 py-0.5 rounded">bg-layer-dialog</code>
                                             </div>
                                             <span className="text-label-medium text-on-surface-variant">surface-container-highest · Preview boxes. CanvasBody.Demo. Ceiling.</span>
                                         </div>
@@ -77,10 +76,10 @@ export default function CanvasBodyPage() {
                             </div>
                         </div>
                     </div>
-                </Wrapper>
+                
 
                 {/* ── Live Demo: Full Composition */}
-                <Wrapper identity={{ displayName: 'Live Composition Demo', type: 'Demo', filePath: 'zap/molecules/canvas-body/page.tsx' }}>
+                
                     <div className="flex flex-col gap-2">
                         <span className="text-label-small font-bold tracking-widest text-on-surface-variant text-transform-secondary font-dev text-transform-tertiary px-1">
                             LIVE — CanvasBody + Section + Demo (nested live rendering)
@@ -89,10 +88,10 @@ export default function CanvasBodyPage() {
                             <CanvasBody.Section label="SECTION ONE — FONT FAMILIES">
                                 <div className="flex flex-col gap-4">
                                     <CanvasBody.Demo label="DISPLAY FONT — Inter" minHeight="min-h-[120px]">
-                                        <p className="font-display text-3xl text-on-surface">The quick brown fox jumps</p>
+                                        <p className="font-display text-transform-primary text-3xl text-on-surface">The quick brown fox jumps</p>
                                     </CanvasBody.Demo>
                                     <CanvasBody.Demo label="BODY FONT — Inter" minHeight="min-h-[80px]">
-                                        <p className="font-body text-body-medium text-on-surface">Consistent type hierarchy starts with the right surface.</p>
+                                        <p className="font-body text-transform-secondary text-body-medium text-on-surface">Consistent type hierarchy starts with the right surface.</p>
                                     </CanvasBody.Demo>
                                 </div>
                             </CanvasBody.Section>
@@ -104,7 +103,7 @@ export default function CanvasBodyPage() {
                                         { label: 'Tertiary', cls: 'bg-tertiary text-on-tertiary' },
                                         { label: 'Error', cls: 'bg-error text-on-error' },
                                     ].map(({ label, cls }) => (
-                                        <div key={label} className={`rounded-lg p-4 flex items-center justify-center text-label-medium font-bold font-dev tracking-widest ${cls}`}>
+                                        <div key={label} className={`rounded-lg p-4 flex items-center justify-center text-label-medium font-bold font-dev text-transform-tertiary tracking-widest ${cls}`}>
                                             {label}
                                         </div>
                                     ))}
@@ -112,10 +111,10 @@ export default function CanvasBodyPage() {
                             </CanvasBody.Section>
                         </CanvasBody>
                     </div>
-                </Wrapper>
+                
 
                 {/* ── Prop Map */}
-                <Wrapper identity={{ displayName: 'Prop Reference', type: 'Docs', filePath: 'zap/molecules/canvas-body/page.tsx' }}>
+                
                     <div className="flex flex-col gap-2">
                         <span className="text-label-small font-bold tracking-widest text-on-surface-variant text-transform-secondary font-dev text-transform-tertiary px-1">
                             PROP REFERENCE
@@ -162,7 +161,7 @@ export default function CanvasBodyPage() {
                             </div>
                         </div>
                     </div>
-                </Wrapper>
+                
 
             </div>
         </ComponentSandboxTemplate>

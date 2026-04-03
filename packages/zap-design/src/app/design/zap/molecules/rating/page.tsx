@@ -2,15 +2,16 @@
 
 import React, { useState } from 'react';
 import { ComponentSandboxTemplate } from '../../../../../zap/layout/ComponentSandboxTemplate';
-import { Wrapper } from '../../../../../components/dev/Wrapper';
 import { Rating } from '../../../../../genesis/molecules/rating';
+import { CanvasBody } from '../../../../../zap/layout/CanvasBody';
+import { SectionHeader } from '../../../../../zap/sections/SectionHeader';
 
 export default function RatingSandboxPage() {    const [value, setValue] = useState(3);
 
     const inspectorControls = (
-        <Wrapper identity={{ displayName: "Inspector Controls Container", type: "Container", filePath: "zap/molecules/rating/page.tsx" }}>
+        
             <div className="space-y-4">
-                <Wrapper identity={{ displayName: "Rating Settings", type: "Docs Link", filePath: "zap/molecules/rating/page.tsx" }}>
+                
                     <div className="space-y-6">
                         <h4 className="text-label-small text-transform-primary font-display font-bold text-on-surface-variant text-transform-secondary tracking-wider">Sandbox Controls</h4>
                         
@@ -22,9 +23,9 @@ export default function RatingSandboxPage() {    const [value, setValue] = useSt
                             <p className="text-label-small text-on-surface-variant text-transform-secondary font-body">Use the interaction preview to assign a rating score.</p>
                         </div>
                     </div>
-                </Wrapper>
+                
             </div>
-        </Wrapper>
+        
     );
 
     return (
@@ -37,16 +38,20 @@ export default function RatingSandboxPage() {    const [value, setValue] = useSt
             inspectorControls={inspectorControls}
             foundationInheritance={{
                 colorTokens: ['text-primary', 'fill-primary', 'text-border'],
-                typographyScales: ['font-body', 'font-display', 'text-label-small', 'text-transform-tertiary']
+                typographyScales: ['font-body text-transform-secondary', 'font-display text-transform-primary', 'text-label-small', 'text-transform-tertiary']
             }}
             platformConstraints={{ web: "Supported", mobile: "Touch Supported" }}
             foundationRules={[
-                "Uses font-body and text-transform-tertiary for labels", 
+                "Uses font-body text-transform-secondary and text-transform-tertiary for labels", 
                 "Score typography tied to primary palette",
                 "Stars utilize Lucide with fill-primary mappings"
             ]}
         >
-            <div className="w-full flex flex-col items-center justify-center min-h-[400px] p-12 bg-layer-panel shadow-sm border border-outline-variant rounded-xl gap-12">
+            
+            <CanvasBody flush={false}>
+                <CanvasBody.Section>
+                    <SectionHeader number="1" id="rating" title="Rating Sandbox" description="Interactive components for Rating" icon="widgets" />
+                    <CanvasBody.Demo className="w-full flex flex-col items-center justify-center min-h-[400px] p-12 bg-layer-panel shadow-sm border border-outline-variant rounded-xl gap-12">
                 <div className="w-[60%] flex gap-4 flex-col max-w-[280px]">
                     <Rating 
                         label="RATING" 
@@ -64,7 +69,10 @@ export default function RatingSandboxPage() {    const [value, setValue] = useSt
                         disabled
                     />
                 </div>
-            </div>
+                </CanvasBody.Demo>
+                </CanvasBody.Section>
+            </CanvasBody>
+        
         </ComponentSandboxTemplate>
     );
 }

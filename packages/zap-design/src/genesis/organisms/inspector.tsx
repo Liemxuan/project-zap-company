@@ -270,7 +270,7 @@ export const L5Inspector: React.FC<InspectorProps> = ({
                         <div className="space-y-4 pt-2">
                             {onCustomVariableChange && customVariableLabel && customVariableValue !== undefined && (
                                 <div className="space-y-2">
-                                    <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-muted-foreground uppercase">
+ <div className="flex justify-between items-center text-[10px] font-dev text-transform-tertiary text-muted-foreground ">
                                         <span>{customVariableLabel}</span>
                                         <span className="font-bold">{customVariableValue[0]}</span>
                                     </div>

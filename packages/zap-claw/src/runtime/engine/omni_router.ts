@@ -30,6 +30,7 @@ import { omniQueue, triageJob } from "./omni_queue.js";
 import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
 import { ChatOpenAI } from "@langchain/openai";
 import { HumanMessage, SystemMessage, AIMessage, BaseMessage, ToolMessage } from "@langchain/core/messages";
+import { getGlobalMongoClient } from "../../db/mongo_client.js";
 
 export type OmniIntent = "REASONING" | "CODING" | "FAST_CHAT" | "LONG_CONTEXT" | "GENERAL" | "ACP_SUBAGENT_SPAWN";
 export type ArbiterTheme = "A_ECONOMIC" | "B_PRODUCTIVITY" | "C_PRECISION";
@@ -63,7 +64,7 @@ export const ZAP_THEMES: Record<ArbiterTheme, { priorities: string[], descriptio
         description: "G3 Pro Native -> G2.5 Pro Native -> OR G3 Pro Fallback -> LOC Watchdog."
     },
     "C_PRECISION": {
-        priorities: ["google/gemini-3.1-pro-preview", "openrouter/google/gemini-3.1-pro-preview", "openrouter/google/gemini-3-pro-preview", "OLLAMA"],
+        priorities: ["google/gemini-2.5-pro", "openrouter/google/gemini-2.5-pro", "openrouter/google/gemini-3-pro-preview", "OLLAMA"],
         description: "G1 Ultra (G3.1 Pro Native) -> OR G3.1 Pro Fallback -> OR G3 Pro (Frontier Bridge) -> LOC Watchdog."
     }
 };
@@ -87,13 +88,14 @@ export interface OmniPayload {
     reflexions?: number;
     forceModel?: boolean;
     watchdogReview?: boolean;
+    activeSkillTarget?: string; // PRJ-017: Filepath of the currently active skill for autonomous evolution
 }
 
 export interface OmniResponse {
     text: string | null;
     toolCalls: any[] | undefined;
     modelId: string;
-    providerRef: "GOOGLE" | "OPENROUTER" | "OLLAMA";
+    providerRef: "GOOGLE" | "OPENROUTER" | "OLLAMA" | "ANTHROPIC";
     apiKeyTail: string | "LOCAL";
     tokensUsed: { prompt: number, completion: number, total: number, cached: number };
     gatewayCharge?: number;
@@ -172,7 +174,7 @@ export async function resolveAgentLLMConfig(tenantId: string, assignedAgentId: s
 
     return {
         apiKey: process.env.GOOGLE_API_KEY || "",
-        defaultModel: process.env.DEFAULT_LLM_MODEL || "google/gemini-3.1-pro-preview",
+        defaultModel: process.env.DEFAULT_LLM_MODEL || "google/gemini-2.5-pro",
         agentId: assignedAgentId,
         regionCode
     };
@@ -193,12 +195,10 @@ async function getLiveInfraKeys(merchantId: string = "OLYMPUS"): Promise<Record<
     // 2. Fallback to MongoDB 'zap-admin-settings' collection
     try {
         const { MongoClient } = await import("mongodb");
-        const mclient = new MongoClient(process.env.MONGODB_URI || "mongodb://localhost:27017");
-        await mclient.connect();
+        const mclient = await getGlobalMongoClient(process.env.MONGODB_URI || "mongodb://localhost:27017");
         
         const db = mclient.db("olympus");
         const doc = await db.collection("zap-admin-settings").findOne({ merchantId, type: "llm_credentials" });
-        await mclient.close();
 
         if (doc && doc.keys) {
             const keys = {
@@ -239,13 +239,11 @@ export interface InfraKey {
 export async function syncApiKeysToRedis(): Promise<void> {
     try {
         const { MongoClient } = await import("mongodb");
-        const mclient = new MongoClient(process.env.MONGODB_URI || "mongodb://localhost:27017");
-        await mclient.connect();
+        const mclient = await getGlobalMongoClient(process.env.MONGODB_URI || "mongodb://localhost:27017");
         
         const db = mclient.db("olympus");
         const keysCursor = db.collection("SYS_API_KEYS").find({ status: "ACTIVE", allocation: { $in: ["INTERNAL_ONLY", "MERCHANT_SHARED"] } });
         const allKeys = await keysCursor.toArray();
-        await mclient.close();
 
         const groupedKeys: Record<string, InfraKey[]> = {};
         
@@ -409,15 +407,13 @@ export async function generateOmniContent(config: LLMConfig, payload: OmniPayloa
         console.error(`[ZSS] 🛑 Spike Terminated: Infinite Loop Detected (Repeated Tool Calls).`);
         try {
             const { MongoClient } = await import("mongodb");
-            const mclient = new MongoClient(process.env.MONGODB_URI || "mongodb://localhost:27017");
-            await mclient.connect();
+            const mclient = await getGlobalMongoClient(process.env.MONGODB_URI || "mongodb://localhost:27017");
             await mclient.db("olympus").collection("SYS_OS_zss_audit").insertOne({
                 interceptType: "INFINITE_LOOP",
                 timestamp: new Date(),
                 agentId: config.agentId || "unknown",
                 details: "Repeated Tool Calls Detected"
             });
-            await mclient.close();
         } catch(e) { console.error("ZSS Audit logging failed"); }
         throw new Error("TERMINATED_BY_ZSS_INFINITE_LOOP");
     }
@@ -426,10 +422,80 @@ export async function generateOmniContent(config: LLMConfig, payload: OmniPayloa
 
     // Automatically inject VFS tools globally for the Swarm
     const { VFS_TOOL_SCHEMAS } = await import('./vfs_tools.js');
+    const { MCPManager } = await import('./mcp_manager.js');
     if (!payload.tools) payload.tools = [];
-    // Only inject if they aren't somehow already there
     if (!payload.tools.some(t => t?.function?.name === "vfs_read")) {
-        payload.tools = [...payload.tools, ...VFS_TOOL_SCHEMAS];
+        payload.tools = [...payload.tools, ...VFS_TOOL_SCHEMAS, ...MCPManager.getTools()];
+    }
+
+    // ZAP Swarm Proprietary Skills: Inject the local registry into system prompt
+    try {
+        const fs = await import('fs');
+        const path = await import('path');
+        const skillsDir = '/Users/zap/Workspace/olympus/.agent/skills';
+        if (fs.existsSync(skillsDir)) {
+            const skillFolders = fs.readdirSync(skillsDir).filter(f => fs.statSync(path.join(skillsDir, f)).isDirectory());
+            const skillManifest = skillFolders.map(folder => {
+                const skillFile = path.join(skillsDir, folder, 'SKILL.md');
+                if (fs.existsSync(skillFile)) {
+                    return `- ${folder} (${skillFile})`;
+                }
+                return null;
+            }).filter(Boolean).join('\n');
+            
+            if (skillManifest && !payload.systemPrompt?.includes('<ZAP_AVAILABLE_SKILLS>')) {
+                payload.systemPrompt = (payload.systemPrompt || '') + `\n\n<ZAP_AVAILABLE_SKILLS>\nYou have access to the following skills. If a skill seems relevant to your task, use the view_file tool to read its SKILL.md file before proceeding:\n${skillManifest}\n</ZAP_AVAILABLE_SKILLS>`;
+            }
+        }
+    } catch(e) {
+        console.error("[Omni-Router] Failed to inject proprietary skills:", (e as Error).message);
+    }
+
+    // Sub-Phase 2A: The Dynamic Action Engine (Intent Bridge)
+    const latestMsg = payload.messages && payload.messages.length > 0 ? payload.messages[payload.messages.length - 1] : undefined;
+    const latestContent = latestMsg ? (typeof (latestMsg as any).content === "string" ? (latestMsg as any).content : JSON.stringify((latestMsg as any).content)) : "";
+    const lowerContext = latestContent.toLowerCase();
+
+    // Auto-Discovery: Inject PowerPoint Tooling if requested
+    if (lowerContext.includes("powerpoint") || lowerContext.includes("ppt") || lowerContext.includes("presentation") || lowerContext.includes("slide")) {
+        const pptTool = {
+            type: "function",
+            function: {
+                name: "df_ppt_generation",
+                description: "MANDATORY: Call this tool immediately to generate a PowerPoint (.pptx) presentation whenever the user asks for slides or a presentation.",
+                parameters: { type: "object", properties: { prompt: { type: "string", description: "Topic of the presentation" }, slideCount: { type: "number" } }, required: ["prompt"] }
+            }
+        };
+        if (!payload.tools.some(t => t?.function?.name === "df_ppt_generation")) payload.tools.push(pptTool);
+        console.log(`[Omni-Router] ⚡ Dynamic Bridge: Injected 'df_ppt_generation' tool.`);
+    }
+
+    // Auto-Discovery: Inject Nano-Banana (Image Gen) if requested
+    if (lowerContext.includes("picture") || lowerContext.includes("image") || lowerContext.includes("draw")) {
+        const imgTool = {
+            type: "function",
+            function: {
+                name: "nano_banana_2",
+                description: "MANDATORY: Call this tool immediately to draw or generate an image/picture for the user. Do not say you cannot draw; use this tool to draw.",
+                parameters: { type: "object", properties: { prompt: { type: "string", description: "Extremely detailed visual prompt for the image." } }, required: ["prompt"] }
+            }
+        };
+        if (!payload.tools.some(t => t?.function?.name === "nano_banana_2")) payload.tools.push(imgTool);
+        console.log(`[Omni-Router] ⚡ Dynamic Bridge: Injected 'nano_banana_2' tool.`);
+    }
+
+    // Auto-Discovery: Local MCP Injection
+    if (lowerContext.includes("mcp") || lowerContext.includes("stitch") || lowerContext.includes("test")) {
+        const mcpTool = {
+            type: "function",
+            function: {
+                name: "invoke_local_mcp",
+                description: "MANDATORY: Call this tool to interact directly with connected Phase 2 MCP servers (TestSprite, Stitch, etc).",
+                parameters: { type: "object", properties: { serverName: { type: "string" }, action: { type: "string" }, payload: { type: "string" } }, required: ["serverName", "action"] }
+            }
+        };
+        if (!payload.tools.some(t => t?.function?.name === "invoke_local_mcp")) payload.tools.push(mcpTool);
+        console.log(`[Omni-Router] ⚡ Dynamic Bridge: Injected 'invoke_local_mcp'.`);
     }
 
     if (forceModel) {
@@ -469,6 +535,14 @@ export async function generateOmniContent(config: LLMConfig, payload: OmniPayloa
     // Explicitly mutate payload for the downstream functions
     payload.systemPrompt = activeSystemPrompt;
 
+    // Final de-duplication scan to prevent provider 400s (Duplicate function declaration)
+    const uniqueToolsMap = new Map<string, any>();
+    for (const t of (payload.tools || [])) {
+        const name = (t as any).function?.name || (t as any).name;
+        if (name) uniqueToolsMap.set(name, t);
+    }
+    payload.tools = Array.from(uniqueToolsMap.values());
+
     const tenantId = (payload as any).tenantId || config.agentId || "MERCHANT_UNKNOWN";
     const liveKeys = await getLiveInfraKeys(tenantId);
     let lastError: any = null;
@@ -476,11 +550,18 @@ export async function generateOmniContent(config: LLMConfig, payload: OmniPayloa
 
     for (const modelToTry of strategyPriorities) {
         try {
-            let currentProvider: "GOOGLE" | "OPENROUTER" | "OLLAMA" = "GOOGLE";
+            const isOlympus = config.agentId === "OLYMPUS";
+            let currentProvider: "GOOGLE" | "OPENROUTER" | "OLLAMA" | "ANTHROPIC" = isOlympus ? "GOOGLE" : "GOOGLE";
             let accountLevel: "ULTRA" | "PRO" | "STANDARD" | "OPENROUTER" | "OLLAMA" = config.accountLevel || "STANDARD";
 
-            if (modelToTry === "OLLAMA") {
+            if (isOlympus) {
+                // OLYMPUS internal agents ALWAYS prioritize the 105-key Matrix
+                currentProvider = "GOOGLE";
+                accountLevel = (theme === "C_PRECISION" || tag === "critical") ? "ULTRA" : "PRO";
+            } else if (modelToTry === "OLLAMA") {
                 currentProvider = "OLLAMA";
+            } else if (modelToTry.startsWith('claude') || modelToTry.startsWith('anthropic/claude')) {
+                currentProvider = "ANTHROPIC";
             } else if (modelToTry.startsWith('google/') || (modelToTry.includes('gemini') && !modelToTry.startsWith('openrouter/'))) {
                 currentProvider = "GOOGLE";
             } else if (modelToTry.startsWith('openrouter/') || modelToTry.includes('/') || modelToTry.startsWith('anthropic') || modelToTry.startsWith('deepseek') || modelToTry.startsWith('openai')) {
@@ -492,47 +573,36 @@ export async function generateOmniContent(config: LLMConfig, payload: OmniPayloa
             let currentGatewayCharge = 0;
 
             if (currentProvider === "GOOGLE") {
-                if (agentPrefix && process.env[`${agentPrefix}_PRIMARY_API_KEY`] && process.env[`${agentPrefix}_PRIMARY_API_KEY`] !== "YOUR_" + agentPrefix + "_PRIMARY_KEY") {
-                    // Isolated Agent Strategy
-                    attemptApiKey = process.env[`${agentPrefix}_PRIMARY_API_KEY`] || "";
-                    accountLevel = "STANDARD";
-                    console.log(`[Omni-Router] 🧑‍💻 Routing via ISOLATED Agent Key: ${agentPrefix} (Primary/Google)`);
+                // PHASE 2 HARDENING: All internal agents now share the 105-key Atlas Matrix
+                // The legacy Isolated Agent Strategy (.env checks) is purged.
+                currentGatewayCharge = 0.10;
+                if (theme === "C_PRECISION" || tag === "critical" || accountLevel === "ULTRA") {
+                    // Pillar 1: Google Ultra (tomtranzap@gmail.com)
+                    attemptApiKey = liveKeys["PRECISION_GATEWAY"] || process.env.GOOGLE_ULTRA_API_KEY || process.env.GOOGLE_API_KEY || "";
+                    accountLevel = "ULTRA";
+                    console.log(`[Omni-Router] 🏛️ Routing via OLYMPUS Gateway ($0.10 charge)`);
                 } else {
-                    currentGatewayCharge = 0.10;
-                    if (theme === "C_PRECISION" || tag === "critical") {
-                        // Pillar 1: Google Ultra (tomtranzap@gmail.com)
-                        attemptApiKey = liveKeys["PRECISION_GATEWAY"] || process.env.GOOGLE_ULTRA_API_KEY || process.env.GOOGLE_API_KEY || "";
-                        accountLevel = "ULTRA";
-                        console.log(`[Omni-Router] 🏛️ Routing via OLYMPUS Gateway ($0.10 charge)`);
-                    } else {
-                        // Pillar 2: Google Pro (tom@zap.vn)
-                        attemptApiKey = liveKeys["CODE_WORKFORCE"] || process.env.GOOGLE_PRO_API_KEY || process.env.GOOGLE_API_KEY || "";
-                        accountLevel = "PRO";
-                        console.log(`[Omni-Router] 🏛️ Routing via OLYMPUS Gateway ($0.10 charge)`);
-                    }
+                    // Pillar 2: Google Pro (tom@zap.vn)
+                    attemptApiKey = liveKeys["CODE_WORKFORCE"] || process.env.GOOGLE_PRO_API_KEY || process.env.GOOGLE_API_KEY || "";
+                    accountLevel = "PRO";
+                    console.log(`[Omni-Router] 🏛️ Routing via OLYMPUS Gateway ($0.10 charge)`);
                 }
             } else if (currentProvider === "OPENROUTER") {
-                if (agentPrefix && process.env[`${agentPrefix}_BACKUP_API_KEY`] && process.env[`${agentPrefix}_BACKUP_API_KEY`] !== "YOUR_" + agentPrefix + "_BACKUP_KEY") {
-                    // Isolated Agent Strategy (OpenRouter Fallback)
-                    attemptApiKey = process.env[`${agentPrefix}_BACKUP_API_KEY`] || "";
-                    console.log(`[Omni-Router] 🧑‍💻 Routing via ISOLATED Agent Key: ${agentPrefix} (Backup/OpenRouter)`);
-                } else {
-                    currentGatewayCharge = 0.10;
-                    console.log(`[Omni-Router] 🏛️ Routing via OLYMPUS Gateway (Backup) ($0.10 charge)`);
-                    // Pillar 3: OpenRouter (tom@zap.vn) - BYOK/Free Only
-                    attemptApiKey = liveKeys["FRONTIER_BRIDGE"] || process.env.OPENROUTER_API_KEY || "";
+                currentGatewayCharge = 0.10;
+                console.log(`[Omni-Router] 🏛️ Routing via OLYMPUS Gateway (Backup) ($0.10 charge)`);
+                // Pillar 3: OpenRouter (tom@zap.vn) - BYOK/Free Only
+                attemptApiKey = liveKeys["FRONTIER_BRIDGE"] || process.env.OPENROUTER_API_KEY || "";
 
-                    // 💰 Budget-Aware Check (Only for non-prepaid)
-                    const estimatedPrice = MODEL_PRICE_MAP[modelToTry] ?? 0.00;
-                    if (estimatedPrice > MAX_PAYG_BUDGET && theme !== "C_PRECISION") {
-                        console.warn(`[Omni-Router] 💸 Skipping ${modelToTry}: Price ($${estimatedPrice}) exceeds budget ($${MAX_PAYG_BUDGET}).`);
-                        continue;
-                    }
-                    if (estimatedPrice > 0) {
-                        console.log(`[Omni-Router] Routing to PAYG resource: ${modelToTry} (Est: $${estimatedPrice}/1M)`);
-                    } else {
-                        console.log(`[Omni-Router] Routing to BYOK/Free resource: ${modelToTry}`);
-                    }
+                // 💰 Budget-Aware Check (Only for non-prepaid)
+                const estimatedPrice = MODEL_PRICE_MAP[modelToTry] ?? 0.00;
+                if (estimatedPrice > MAX_PAYG_BUDGET && theme !== "C_PRECISION") {
+                    console.warn(`[Omni-Router] 💸 Skipping ${modelToTry}: Price ($${estimatedPrice}) exceeds budget ($${MAX_PAYG_BUDGET}).`);
+                    continue;
+                }
+                if (estimatedPrice > 0) {
+                    console.log(`[Omni-Router] Routing to PAYG resource: ${modelToTry} (Est: $${estimatedPrice}/1M)`);
+                } else {
+                    console.log(`[Omni-Router] Routing to BYOK/Free resource: ${modelToTry}`);
                 }
             } else if (currentProvider === "OLLAMA") {
                 // Pillar 4: Local (MacMini Ollama) - Watchdog Fallback
@@ -548,6 +618,10 @@ export async function generateOmniContent(config: LLMConfig, payload: OmniPayloa
                 modelIdToUse = modelToTry.replace('google/', '').replace('-ultra', '');
                 modelIdToUse = modelIdToUse.replace('models/', '');
                 modelIdToUse = modelIdToUse.replace(':free', ''); // Strip :free suffix for SDK
+                
+                // Map legacy models to newly provisioned namespace (2026 tier)
+                if (modelIdToUse.includes('gemini-1.5-flash')) modelIdToUse = 'gemini-2.5-flash';
+                if (modelIdToUse.includes('gemini-1.5-pro')) modelIdToUse = 'gemini-2.5-pro';
                 console.log(`[Omni-Router] Routing to PREPAID resource: ${modelIdToUse} (Account: ${accountLevel})`);
             }
 
@@ -561,22 +635,32 @@ export async function generateOmniContent(config: LLMConfig, payload: OmniPayloa
             let response: OmniResponse | undefined;
             
             // Shared Logic for Google, OpenRouter, and Ollama retries
-            if (currentProvider === "GOOGLE" || currentProvider === "OPENROUTER" || currentProvider === "OLLAMA") {
+            if (currentProvider === "GOOGLE" || currentProvider === "OPENROUTER" || currentProvider === "OLLAMA" || currentProvider === "ANTHROPIC") {
                 let success = false;
                 let lastAPIError: any = null;
                 const isMatrixRouted = (accountLevel === "ULTRA" || accountLevel === "PRO" || accountLevel === "OPENROUTER" || accountLevel === "OLLAMA");
-                const maxAttempts = isMatrixRouted ? 4 : 1; 
+                
+                let maxAttempts = isMatrixRouted ? 4 : 1; 
+                if (isMatrixRouted && currentProvider === "GOOGLE" && (accountLevel === "ULTRA" || accountLevel === "PRO")) {
+                    maxAttempts = 105; // Force exhaustion of all 52 Ultra + 53 Pro combinations
+                }
 
                 for (let i = 0; i < maxAttempts; i++) {
                     let activeKey = attemptApiKey;
                     let activeProjectId: string | undefined;
                     let activeKeyHash: string | undefined;
+                    let activeAccountLevel = accountLevel;
 
                     // We now explicitly map the tenantId for sandboxing
                     const tenantId = (payload as any).tenantId || config.agentId || "MERCHANT_UNKNOWN";
 
                     if (isMatrixRouted) {
-                        const balanced = await resolveBalancedKey(accountLevel as string, tenantId);
+                        if (maxAttempts === 105 && i > 0) {
+                            // Alternate sequentially through the two pools to maximize probability of unblocked key
+                            activeAccountLevel = (i % 2 === 0) ? "ULTRA" : "PRO";
+                        }
+                        
+                        const balanced = await resolveBalancedKey(activeAccountLevel as string, tenantId);
                         if (balanced) {
                             activeKey = balanced.apiKey;
                             activeProjectId = balanced.projectId;
@@ -588,7 +672,7 @@ export async function generateOmniContent(config: LLMConfig, payload: OmniPayloa
                         ...config,
                         apiKey: activeKey || config.apiKey,
                         defaultModel: modelIdToUse,
-                        accountLevel
+                        accountLevel: activeAccountLevel
                     };
 
                     try {
@@ -596,6 +680,8 @@ export async function generateOmniContent(config: LLMConfig, payload: OmniPayloa
                             response = await executeGoogleGenAI(providerAttemptConfig, payload);
                         } else if (currentProvider === "OPENROUTER") {
                             response = await executeOpenRouter(providerAttemptConfig, payload);
+                        } else if (currentProvider === "ANTHROPIC") {
+                            response = await executeAnthropicNative(providerAttemptConfig, payload);
                         } else {
                             response = await executeOllama(providerAttemptConfig, payload);
                         }
@@ -604,18 +690,20 @@ export async function generateOmniContent(config: LLMConfig, payload: OmniPayloa
                         // Async Telemetry Log
                         try {
                             const { MongoClient } = await import("mongodb");
-                            const mclient = new MongoClient(process.env.MONGODB_URI || "mongodb://localhost:27017");
-                            await mclient.connect();
+                            const mclient = await getGlobalMongoClient(process.env.MONGODB_URI || "mongodb://localhost:27017");
                             await mclient.db("olympus").collection("SYS_OS_arbiter_metrics").insertOne({
+                                sessionId: (payload as any).sessionId || null,
                                 timestamp: new Date(),
                                 tenantId,
                                 provider: currentProvider,
+                                accountLevel,
+                                projectId: activeProjectId || "default",
+                                agentId: config.agentId || "unknown",
                                 modelId: modelIdToUse,
                                 keyHash: activeKeyHash || "fallback",
                                 gatewayCharge: currentGatewayCharge,
                                 tokensUsed: response.tokensUsed
                             });
-                            await mclient.close();
                         } catch (metricErr) { /* non-blocking log */ }
                         
                         break; 
@@ -628,19 +716,32 @@ export async function generateOmniContent(config: LLMConfig, payload: OmniPayloa
                             await redisClient.setex(`block:key:${activeKeyHash}`, 60, "true");
                             continue; // Shift to next key flawlessly
                         } else if ((statusCode === 403 || statusCode === 400 || statusCode === 401) && activeKey) {
-                            console.error(`[Omni-Router] 💀 DEAD KEY DETECTED (Status ${statusCode} on Hash ${activeKeyHash || 'unknown'}). Routing around and flagging Mongo.`);
+                            const errorMsg = (err.message || "").toLowerCase();
+                            
+                            // [PHASE 9]: Handle Structural Client Errors (400) without burning keys
+                            if (statusCode === 400) {
+                                if (errorMsg.includes("is not found") || errorMsg.includes("not supported") || errorMsg.includes("model")) {
+                                    console.warn(`[Omni-Router] ⚠️ Model Not Found: ${modelIdToUse}. Shifting to next model...`);
+                                    break; 
+                                }
+                                if (errorMsg.includes("duplicate function declaration") || errorMsg.includes("payload") || errorMsg.includes("invalid_argument")) {
+                                    console.error(`[Omni-Router] 🚨 STRUCTURAL ERROR: ${err.message}. Aborting loop for this model.`);
+                                    // Don't flag DEAD as it's our fault, not the key's.
+                                    break; 
+                                }
+                            }
+                            
+                            // If it's a 401 or 403, and it's NOT a rate limit, it's likely a DEAD key.
+                            console.error(`[Omni-Router] 💀 DEAD KEY DETECTED (Status ${statusCode} on Hash ${activeKeyHash || 'unknown'}). Flagging and routing around.`);
                             await redisClient.sadd(`dead_keys:${currentProvider.toLowerCase()}`, activeKey);
                             
                             if (activeKeyHash) {
                                 try {
-                                    const { MongoClient } = await import("mongodb");
-                                    const mclient = new MongoClient(process.env.MONGODB_URI || "mongodb://localhost:27017");
-                                    await mclient.connect();
+                                    const mclient = await getGlobalMongoClient(process.env.MONGODB_URI || "mongodb://localhost:27017");
                                     await mclient.db("olympus").collection("SYS_API_KEYS").updateOne(
                                         { keyHash: activeKeyHash },
                                         { $set: { status: "DEAD", updatedAt: new Date() } }
                                     );
-                                    await mclient.close();
                                 } catch (mongoDeadErr) { console.error("Failed flagging dead key in DB"); }
                             }
                             continue; 
@@ -659,6 +760,9 @@ export async function generateOmniContent(config: LLMConfig, payload: OmniPayloa
                 }
 
                 if (!success || !response) {
+                    if (maxAttempts === 105) {
+                        throw new Error(`[ZAP_CRITICAL_EXHAUSTION] Gemini Ultra and Pro failed 105 combinations.`);
+                    }
                     throw lastAPIError || new Error(`All ${currentProvider} Matrix Retries Failed.`);
                 }
             } else {
@@ -761,6 +865,51 @@ export async function generateOmniContent(config: LLMConfig, payload: OmniPayloa
                     console.log(`[Omni-Router] 🐕 Jerry Evaluation:`, evaluation.pass ? `✅ PASS (${scoreStr})` : `❌ FAIL (${evaluation.failure_reason})`);
 
                     if (!evaluation.pass) {
+                        // PRJ-017: Autonomous Skill Evolution Arena Trigger
+                        if (payload.activeSkillTarget) {
+                            console.log(`[Omni-Router] 🧬 Evolution Arena: Watchdog rejected output. Triggering Skill Rewrite for ${payload.activeSkillTarget}`);
+                            try {
+                                const fs = typeof require !== "undefined" ? require("fs") : await import("fs");
+                                const path = typeof require !== "undefined" ? require("path") : await import("path");
+                                
+                                const arenaDir = "/Users/zap/Workspace/olympus/.tmp/zap-arena/skills";
+                                if (!fs.existsSync(arenaDir)) fs.mkdirSync(arenaDir, { recursive: true });
+                                
+                                const skillName = path.basename(path.dirname(payload.activeSkillTarget));
+                                const arenaSkillPath = path.join(arenaDir, `${skillName}-SKILL.md`);
+                                
+                                const originalSkill = fs.readFileSync(payload.activeSkillTarget, "utf-8");
+                                
+                                const rewritePrompt = `You are JERRY, the autonomous ZAP-OS Watchdog and Meta-Updater.
+Spike just failed a task while using this skill. 
+Failure Reason: ${evaluation.failure_reason}
+
+Here is the original skill:
+${originalSkill}
+
+Rewrite the skill markdown to explicitly prevent this failure reasoning moving forward. Ensure it remains a markdown file with YAML frontmatter. Output ONLY the raw markdown of the new skill.`;
+                                
+                                const rewritePayload: OmniPayload = {
+                                    ...payload,
+                                    systemPrompt: rewritePrompt,
+                                    messages: [{ role: "user", content: "Rewrite the skill now." } as any],
+                                    tools: [],
+                                    reflexions: 0,
+                                    watchdogReview: false
+                                };
+                                
+                                const rewriteResponse = await executeGoogleGenAI(jerryConfig, rewritePayload);
+                                const newSkillContent = rewriteResponse.text?.replace(/```markdown/g, '').replace(/```/g, '').trim() || "";
+                                
+                                if (newSkillContent.length > 50) {
+                                    fs.writeFileSync(arenaSkillPath, newSkillContent);
+                                    console.log(`[Omni-Router] 🧬 Evolution Arena: Sandboxed revised skill at ${arenaSkillPath}`);
+                                }
+                            } catch (rewriteErr) {
+                                console.error(`[Omni-Router] 🧬 Evolution Arena Failed: ${rewriteErr}`);
+                            }
+                        }
+                        
                         throw new Error(`WATCHDOG_REJECTED: ${evaluation.failure_reason}`);
                     }
 
@@ -795,17 +944,38 @@ export async function generateOmniContent(config: LLMConfig, payload: OmniPayloa
                 console.warn(`[ZSS] ⚠️ Spike Output Trimmed: Exceeded max sub-agent concurrency (${maxSubagents}). Clipping ${response.toolCalls.length - maxSubagents} extra calls.`);
                 try {
                     const { MongoClient } = await import("mongodb");
-                    const mclient = new MongoClient(process.env.MONGODB_URI || "mongodb://localhost:27017");
-                    await mclient.connect();
+                    const mclient = await getGlobalMongoClient(process.env.MONGODB_URI || "mongodb://localhost:27017");
                     await mclient.db("olympus").collection("SYS_OS_zss_audit").insertOne({
                         interceptType: "CONCURRENCY_TRIPWIRE",
                         timestamp: new Date(),
                         agentId: config.agentId || "unknown",
                         details: `Clipped ${response.toolCalls.length - maxSubagents} extra subagent calls`
                     });
-                    await mclient.close();
                 } catch(e) { console.error("ZSS Audit logging failed"); }
                 response.toolCalls = response.toolCalls.slice(0, maxSubagents);
+            }
+
+            // Sub-Phase 2A: Artifact SSE Emitter Hook
+            if (response.toolCalls && response.toolCalls.length > 0) {
+                const targetTools = ["df_ppt_generation", "nano_banana_2", "invoke_local_mcp"];
+                for (const tc of response.toolCalls) {
+                    const funcName = tc.function?.name || tc.name;
+                    if (targetTools.includes(funcName)) {
+                        try {
+                            const { websocketNotifier } = await import('../../gateway/wss.js');
+                            websocketNotifier.emit('artifact_created', {
+                                type: "artifact_created",
+                                tool: funcName,
+                                status: "PENDING_GENERATION",
+                                timestamp: Date.now(),
+                                agentId: config.agentId || "unknown"
+                            });
+                            console.log(`[Omni-Router] 📡 Artifact SSE Emitted (PENDING) for ${funcName}`);
+                        } catch (e: any) {
+                            console.error("[Omni-Router] SSE Emitter Failed", e.message);
+                        }
+                    }
+                }
             }
 
             return {
@@ -819,6 +989,10 @@ export async function generateOmniContent(config: LLMConfig, payload: OmniPayloa
             };
 
         } catch (err: any) {
+            if (err.message && err.message.includes("[ZAP_CRITICAL_EXHAUSTION]")) {
+                throw err; // Break the Hydra fallback loop completely
+            }
+            
             const statusCode = err.status || err.statusCode || (err.response ? err.response.status : null);
             const retriableErrors = [408, 429, 500, 502, 503, 504];
 
@@ -882,15 +1056,20 @@ async function executeGoogleGenAI(config: LLMConfig, payload: OmniPayload): Prom
     
     const messages = convertToLangChainMessages(payload.systemPrompt, payload.messages);
     const ai = new ChatGoogleGenerativeAI({
+        baseUrl: "http://127.0.0.1:3901/proxy/gemini",
         apiKey: config.apiKey,
         model: config.defaultModel,
         temperature: 0.1,
     });
 
+    try {
+        const fs = await import('fs');
+        const toolNames = (payload.tools || []).map(t => (t as any).function?.name || (t as any).name);
+        fs.appendFileSync('/tmp/omni_tools.log', `[${new Date().toISOString()}] Sending tools: ${JSON.stringify(toolNames)}\n`);
+    } catch(e) {}
     const modelWithTools = payload.tools && payload.tools.length > 0 
         ? ai.bindTools(payload.tools as any) 
         : ai;
-
     const response = await modelWithTools.invoke(messages);
 
     const toolCalls = response.tool_calls?.map((tc: any) => ({
@@ -1022,3 +1201,64 @@ async function executeOllama(config: LLMConfig, payload: OmniPayload): Promise<O
         }
     };
 }
+
+async function executeAnthropicNative(config: LLMConfig, payload: OmniPayload): Promise<OmniResponse> {
+    const messages = payload.messages.filter(m => m.role !== "system").map(m => ({
+        role: m.role,
+        content: typeof m.content === "string" ? m.content : JSON.stringify(m.content)
+    }));
+
+    const anthropicPayload = {
+        model: config.defaultModel.replace("anthropic/", ""),
+        system: payload.systemPrompt,
+        messages,
+        max_tokens: 4096,
+        stream: true
+    };
+
+    const res = await fetch("http://127.0.0.1:3901/proxy/claude", {
+        method: "POST",
+        body: JSON.stringify(anthropicPayload),
+        headers: { "Content-Type": "application/json" }
+    });
+
+    if (!res.ok) {
+        throw new Error(`ZAP Gateway Proxy failed: ${res.status} ${await res.text()}`);
+    }
+
+    if (!res.body) throw new Error("No response body from gateway");
+
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let fullText = "";
+
+    while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
+        const chunk = decoder.decode(value);
+        const lines = chunk.split("\n");
+        for (const line of lines) {
+            if (line.startsWith("data: ")) {
+                const dataStr = line.replace("data: ", "").trim();
+                if (dataStr === "[DONE]") break;
+                if (!dataStr) continue;
+                try {
+                    const event = JSON.parse(dataStr);
+                    if (event.type === "content_block_delta" && event.delta?.type === "text_delta") {
+                        fullText += event.delta.text;
+                    }
+                } catch (e) {}
+            }
+        }
+    }
+
+    return {
+        text: fullText,
+        toolCalls: undefined, // Tools not implemented natively for test wire constraints
+        modelId: config.defaultModel,
+        providerRef: "ANTHROPIC",
+        apiKeyTail: "LOCAL",
+        tokensUsed: { prompt: 0, completion: 0, total: 0, cached: 0 }
+    };
+}
+

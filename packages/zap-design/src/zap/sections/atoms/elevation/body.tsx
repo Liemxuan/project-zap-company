@@ -263,14 +263,14 @@ export const ElevationBody = ({ platform }: ElevationBodyProps) => {
                         <div className="flex items-center justify-between mb-3">
                             <div className="flex items-center gap-2">
                                 <span className="text-xs font-black text-foreground tracking-widest">L5: MODALS</span>
-                                <span className="text-[10px] font-dev bg-foreground/10 text-foreground px-1.5 py-0.5 rounded">z-3000</span>
+                                <span className="text-[10px] font-dev text-transform-tertiary bg-foreground/10 text-foreground px-1.5 py-0.5 rounded">z-3000</span>
                             </div>
                             <div className="flex items-center gap-2">
                                 <span className="text-[10px] text-muted-foreground">M3 Level 5</span>
                                 <span className="text-[10px] font-bold bg-foreground/10 text-foreground px-2 py-0.5 rounded-full">14% tint</span>
                             </div>
                         </div>
-                        <p className="text-[10px] text-foreground/80 mb-3 font-dev">Blocking full-screen prompts · bg-layer-modal</p>
+                        <p className="text-[10px] text-foreground/80 mb-3 font-dev text-transform-tertiary">Blocking full-screen prompts · bg-layer-modal</p>
 
                         {/* L4: DIALOGS */}
                         <div 
@@ -279,14 +279,14 @@ export const ElevationBody = ({ platform }: ElevationBodyProps) => {
                             <div className="flex items-center justify-between mb-3">
                                 <div className="flex items-center gap-2">
                                     <span className="text-xs font-black text-foreground tracking-widest">L4: DIALOGS</span>
-                                    <span className="text-[10px] font-dev bg-foreground/10 text-foreground px-1.5 py-0.5 rounded">z-2000+</span>
+                                    <span className="text-[10px] font-dev text-transform-tertiary bg-foreground/10 text-foreground px-1.5 py-0.5 rounded">z-2000+</span>
                                 </div>
                                 <div className="flex items-center gap-2">
                                     <span className="text-[10px] text-muted-foreground">M3 Level 4</span>
                                     <span className="text-[10px] font-bold bg-foreground/10 text-foreground px-2 py-0.5 rounded-full">12% tint</span>
                                 </div>
                             </div>
-                            <p className="text-[10px] text-foreground/80 mb-3 font-dev">Modal dialogs, popovers, confirmations · bg-layer-dialog</p>
+                            <p className="text-[10px] text-foreground/80 mb-3 font-dev text-transform-tertiary">Modal dialogs, popovers, confirmations · bg-layer-dialog</p>
 
                             {/* L3: PANELS */}
                             <div 
@@ -295,14 +295,14 @@ export const ElevationBody = ({ platform }: ElevationBodyProps) => {
                                 <div className="flex items-center justify-between mb-3">
                                     <div className="flex items-center gap-2">
                                         <span className="text-xs font-black text-foreground tracking-widest">L3: PANELS</span>
-                                        <span className="text-[10px] font-dev bg-foreground/10 text-foreground px-1.5 py-0.5 rounded">z-1000+</span>
+                                        <span className="text-[10px] font-dev text-transform-tertiary bg-foreground/10 text-foreground px-1.5 py-0.5 rounded">z-1000+</span>
                                     </div>
                                     <div className="flex items-center gap-2">
                                         <span className="text-[10px] text-muted-foreground">M3 Level 3</span>
                                         <span className="text-[10px] font-bold bg-foreground/10 text-foreground px-2 py-0.5 rounded-full">11% tint</span>
                                     </div>
                                 </div>
-                                <p className="text-[10px] text-foreground/80 mb-3 font-dev">UI cards, nav, inspector, headers · bg-layer-panel</p>
+                                <p className="text-[10px] text-foreground/80 mb-3 font-dev text-transform-tertiary">UI cards, nav, inspector, headers · bg-layer-panel</p>
 
                                 {/* L2: COVER */}
                                 <div 
@@ -311,14 +311,14 @@ export const ElevationBody = ({ platform }: ElevationBodyProps) => {
                                     <div className="flex items-center justify-between mb-3">
                                         <div className="flex items-center gap-2">
                                             <span className="text-xs font-black text-foreground tracking-widest">L2: COVER</span>
-                                            <span className="text-[10px] font-dev bg-foreground/10 text-foreground px-1.5 py-0.5 rounded">z-100</span>
+                                            <span className="text-[10px] font-dev text-transform-tertiary bg-foreground/10 text-foreground px-1.5 py-0.5 rounded">z-100</span>
                                         </div>
                                         <div className="flex items-center gap-2">
                                             <span className="text-[10px] text-muted-foreground">M3 Level 2</span>
                                             <span className="text-[10px] font-bold bg-foreground/10 text-foreground px-2 py-0.5 rounded-full">8% tint</span>
                                         </div>
                                     </div>
-                                    <p className="text-[10px] text-foreground/80 mb-3 font-dev">Content surfaces, sandboxes · bg-layer-cover</p>
+                                    <p className="text-[10px] text-foreground/80 mb-3 font-dev text-transform-tertiary">Content surfaces, sandboxes · bg-layer-cover</p>
 
                                     {/* L1: CANVAS */}
                                     <div 
@@ -327,14 +327,14 @@ export const ElevationBody = ({ platform }: ElevationBodyProps) => {
                                         <div className="flex items-center justify-between mb-3">
                                             <div className="flex items-center gap-2">
                                                 <span className="text-xs font-black text-foreground tracking-widest">L1: CANVAS</span>
-                                                <span className="text-[10px] font-dev bg-foreground/10 text-foreground px-1.5 py-0.5 rounded">z-10</span>
+                                                <span className="text-[10px] font-dev text-transform-tertiary bg-foreground/10 text-foreground px-1.5 py-0.5 rounded">z-10</span>
                                             </div>
                                             <div className="flex items-center gap-2">
                                                 <span className="text-[10px] text-muted-foreground">M3 Level 1</span>
                                                 <span className="text-[10px] font-bold bg-foreground/10 text-foreground px-2 py-0.5 rounded-full">5% tint</span>
                                             </div>
                                         </div>
-                                        <p className="text-[10px] text-foreground/80 mb-3 font-dev">Base routing floor, page canvas · bg-layer-canvas</p>
+                                        <p className="text-[10px] text-foreground/80 mb-3 font-dev text-transform-tertiary">Base routing floor, page canvas · bg-layer-canvas</p>
 
                                         {/* L0: BASE */}
                                         <div 
@@ -343,14 +343,14 @@ export const ElevationBody = ({ platform }: ElevationBodyProps) => {
                                             <div className="flex items-center justify-between">
                                                 <div className="flex items-center gap-2">
                                                     <span className="text-xs font-black text-foreground tracking-widest">L0: BASE</span>
-                                                    <span className="text-[10px] font-dev bg-foreground/10 text-foreground px-1.5 py-0.5 rounded">z-0</span>
+                                                    <span className="text-[10px] font-dev text-transform-tertiary bg-foreground/10 text-foreground px-1.5 py-0.5 rounded">z-0</span>
                                                 </div>
                                                 <div className="flex items-center gap-2">
                                                     <span className="text-[10px] text-muted-foreground">M3 Level 0</span>
                                                     <span className="text-[10px] font-bold bg-foreground/10 text-foreground px-2 py-0.5 rounded-full">0% tint</span>
                                                 </div>
                                             </div>
-                                            <p className="text-[10px] text-foreground/80 mt-1 font-dev">Absolute root document background · bg-layer-base</p>
+                                            <p className="text-[10px] text-foreground/80 mt-1 font-dev text-transform-tertiary">Absolute root document background · bg-layer-base</p>
                                         </div>
 
                                     </div>

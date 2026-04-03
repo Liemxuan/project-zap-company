@@ -1,3 +1,4 @@
+export const revalidate = 3600;
 import { NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
@@ -19,7 +20,7 @@ export async function GET() {
         const name = dirent.name.charAt(0).toUpperCase() + dirent.name.slice(1);
         
         let role = "Agent";
-        let port = 3900 + index;
+        const port = 3900 + index;
         
         // Attempt to parse metadata from soul.md or identity.md if we wanted to be rigorous,
         // but for now we default role based on common zap-claw names

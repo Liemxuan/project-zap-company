@@ -179,7 +179,7 @@ function LogRow({
           </Pill>
         </TableCell>
 
-        <TableCell className="w-28 font-dev text-muted-foreground text-left py-4">
+        <TableCell className="w-28 font-dev text-transform-tertiary text-muted-foreground text-left py-4">
           {formattedTime}
         </TableCell>
 
@@ -192,14 +192,14 @@ function LogRow({
         </TableCell>
 
         <TableCell
-          className={`w-24 text-right font-dev font-semibold py-4 ${
+          className={`w-24 text-right font-dev text-transform-tertiary font-semibold py-4 ${
             statusStyles[log.status] ?? "text-muted-foreground"
           }`}
         >
           {log.status}
         </TableCell>
 
-        <TableCell className="w-24 pr-7 text-right font-dev text-muted-foreground py-4">
+        <TableCell className="w-24 pr-7 text-right font-dev text-transform-tertiary text-muted-foreground py-4">
           {log.duration}
         </TableCell>
       </TableRow>
@@ -220,12 +220,12 @@ function LogRow({
                     <p className="mb-2 text-[length:var(--table-font-size,0.625rem)] font-display font-semibold text-transform-primary tracking-wide text-muted-foreground">
                       Message
                     </p>
-                    <p className="rounded-[length:var(--table-border-radius,var(--radius-card,8px))] bg-layer-cover p-3 font-dev text-foreground border border-[length:var(--table-border-width,var(--card-border-width,1px))] border-outline-variant/30">
+                    <p className="rounded-[length:var(--table-border-radius,var(--radius-card,8px))] bg-layer-cover p-3 font-dev text-transform-tertiary text-foreground border border-[length:var(--table-border-width,var(--card-border-width,1px))] border-outline-variant/30">
                       {log.message}
                     </p>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4 font-dev">
+                  <div className="grid grid-cols-2 gap-4 font-dev text-transform-tertiary">
                     <div>
                       <p className="mb-1 text-[length:var(--table-font-size,0.625rem)] font-display font-semibold text-transform-primary tracking-wide text-muted-foreground">
                         Duration
@@ -248,7 +248,7 @@ function LogRow({
                     </p>
                     <div className="flex flex-wrap gap-2">
                       {log.tags.map((tag) => (
-                        <Badge key={tag} variant="outline" className="font-dev">
+                        <Badge key={tag} variant="outline" className="font-dev text-transform-tertiary">
                           {tag}
                         </Badge>
                       ))}
@@ -508,7 +508,7 @@ export function SystemLogsTable({
             <Filter className="h-4 w-4 mr-2" />
             <span className="font-display font-medium text-xs text-transform-primary">Filter</span>
             {activeFilters > 0 && (
-              <Badge className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center p-0 text-xs bg-destructive text-destructive-foreground z-20">
+              <Badge className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center p-0 text-xs rounded-full bg-error text-on-error border-none z-20">
                 {activeFilters}
               </Badge>
             )}
@@ -592,7 +592,7 @@ export function SystemLogsTable({
           <div className="flex items-center gap-2">
             <span className="text-transform-secondary">Show</span>
             <Select defaultValue="10">
-              <SelectTrigger size="sm" className="w-20 font-medium font-body bg-layer-panel text-on-surface hover:bg-layer-dialog">
+              <SelectTrigger size="sm" className="w-20 font-medium font-body text-transform-secondary bg-layer-panel text-on-surface hover:bg-layer-dialog">
                 <SelectValue placeholder="10" />
               </SelectTrigger>
               <SelectContent>

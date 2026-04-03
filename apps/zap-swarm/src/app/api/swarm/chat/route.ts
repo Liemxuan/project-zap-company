@@ -1,8 +1,10 @@
+export const dynamic = "force-dynamic";
 import { NextResponse } from "next/server";
 import { MongoClient } from "mongodb";
 import path from "path";
 import dotenv from "dotenv";
 import { logger } from "@/lib/logger";
+import { getGlobalMongoClient } from "../../../../lib/mongo";
 
 dotenv.config({ path: path.resolve(process.cwd(), "../../zap-core/.env"), override: true });
 
@@ -14,37 +16,46 @@ export async function POST(req: Request) {
     let client: MongoClient | null = null;
     try {
         const body = await req.json();
-        const { sessionId, agentId, message, contextParams, tenantId = "OLYMPUS_SWARM" } = body;
+        const { sessionId, agentId, message, contextParams, tenantId: bodyTenantId, modelId, attachments } = body;
+        
+        // Identity Resolution
+        const userId = req.headers.get("X-ZAP-User");
+        const tenantId = req.headers.get("X-ZAP-Tenant") || bodyTenantId || "OLYMPUS_SWARM";
+
+        if (!userId) {
+            return NextResponse.json({ error: "Authentication required. Please log in." }, { status: 401 });
+        }
 
         if (!sessionId || !agentId || !message) {
             return NextResponse.json({ error: "Missing required fields: sessionId, agentId, or message" }, { status: 400 });
         }
 
-        // Test DAG bypass — direct Mongo insert for visualizer testing only
+        // Test DAG bypass 
         if (message.trim().startsWith('/test-dag')) {
-            client = new MongoClient(MONGO_URI);
-            await client.connect();
+            client = await getGlobalMongoClient();
             const db = client.db(DB_NAME);
             const col = db.collection(`${tenantId}_SYS_OS_job_queue`);
+            // eslint-disable-next-line @typescript-eslint/no-require-imports
             const { ObjectId } = require('mongodb');
             const nodeA = new ObjectId(); const nodeB = new ObjectId();
             const nodeC = new ObjectId(); const nodeD = new ObjectId();
             const mockConfig = { apiKey: process.env.GOOGLE_API_KEY || "", defaultModel: "google/gemini-1.5-flash", agentId };
             await col.insertMany([
-                { _id: nodeA, status: "PENDING",  dependsOn: [],           workflowId: `WF_${nodeA}`, tenantId, config: mockConfig, queueName: "Queue-Short", priority: 0, createdAt: new Date(), historyContext: { sessionId, assignedAgentId: agentId }, payload: { intent: "DAG_STAGE_1_INITIALIZER",  messages: [{ role: "user", content: message }] } },
-                { _id: nodeB, status: "BLOCKED",  dependsOn: [nodeA],       workflowId: `WF_${nodeA}`, tenantId, config: mockConfig, queueName: "Queue-Short", priority: 0, createdAt: new Date(), historyContext: { sessionId, assignedAgentId: agentId }, payload: { intent: "DAG_STAGE_2_PARALLEL_A", messages: [{ role: "user", content: message }] } },
-                { _id: nodeC, status: "BLOCKED",  dependsOn: [nodeA],       workflowId: `WF_${nodeA}`, tenantId, config: mockConfig, queueName: "Queue-Short", priority: 0, createdAt: new Date(), historyContext: { sessionId, assignedAgentId: agentId }, payload: { intent: "DAG_STAGE_2_PARALLEL_B", messages: [{ role: "user", content: message }] } },
-                { _id: nodeD, status: "BLOCKED",  dependsOn: [nodeB, nodeC], workflowId: `WF_${nodeA}`, tenantId, config: mockConfig, queueName: "Queue-Short", priority: 0, createdAt: new Date(), historyContext: { sessionId, assignedAgentId: agentId }, payload: { intent: "DAG_STAGE_3_AGGREGATOR",  messages: [{ role: "user", content: message }] } },
+                { _id: nodeA, status: "PENDING",  dependsOn: [],           workflowId: `WF_${nodeA}`, tenantId, config: mockConfig, queueName: "Queue-Short", priority: 0, createdAt: new Date(), historyContext: { sessionId, assignedAgentId: agentId, from: userId, to: agentId }, payload: { intent: "DAG_STAGE_1_INITIALIZER",  messages: [{ role: "user", content: message }] } },
+                { _id: nodeB, status: "BLOCKED",  dependsOn: [nodeA],       workflowId: `WF_${nodeA}`, tenantId, config: mockConfig, queueName: "Queue-Short", priority: 0, createdAt: new Date(), historyContext: { sessionId, assignedAgentId: agentId, from: userId, to: agentId }, payload: { intent: "DAG_STAGE_2_PARALLEL_A", messages: [{ role: "user", content: message }] } },
+                { _id: nodeC, status: "BLOCKED",  dependsOn: [nodeA],       workflowId: `WF_${nodeA}`, tenantId, config: mockConfig, queueName: "Queue-Short", priority: 0, createdAt: new Date(), historyContext: { sessionId, assignedAgentId: agentId, from: userId, to: agentId }, payload: { intent: "DAG_STAGE_2_PARALLEL_B", messages: [{ role: "user", content: message }] } },
+                { _id: nodeD, status: "BLOCKED",  dependsOn: [nodeB, nodeC], workflowId: `WF_${nodeA}`, tenantId, config: mockConfig, queueName: "Queue-Short", priority: 0, createdAt: new Date(), historyContext: { sessionId, assignedAgentId: agentId, from: userId, to: agentId }, payload: { intent: "DAG_STAGE_3_AGGREGATOR",  messages: [{ role: "user", content: message }] } },
             ]);
             return NextResponse.json({ success: true, jobId: nodeA.toString(), sessionId });
         }
+
 
         // Primary: route through claw — it executes AgentLoop which marks jobs COMPLETED
         try {
             const clawRes = await fetch(`${CLAW_URL}/api/swarm/chat`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ sessionId, agentId, message, tenantId, contextParams }),
+                body: JSON.stringify({ sessionId, agentId, message, tenantId, contextParams, modelId, attachments }),
                 signal: AbortSignal.timeout(4000), // 4s connect timeout
             });
             if (clawRes.ok) {
@@ -61,8 +72,7 @@ export async function POST(req: Request) {
         }
 
         // Fallback: direct Mongo enqueue (job stays PENDING until claw comes back up)
-        client = new MongoClient(MONGO_URI, { serverSelectionTimeoutMS: 3000 });
-        await client.connect();
+        client = await getGlobalMongoClient();
         const db = client.db(DB_NAME);
         const col = db.collection(`${tenantId}_SYS_OS_job_queue`);
         const jobResult = await col.insertOne({
@@ -71,8 +81,8 @@ export async function POST(req: Request) {
             priority: 0,
             tenantId,
             sourceChannel: "SWARM",
-            historyContext: { sessionId, assignedAgentId: agentId },
-            payload: { messages: [{ role: "user", content: message }], intent: "SWARM_CHAT", ...(contextParams && { contextParams }) },
+            historyContext: { sessionId, assignedAgentId: agentId, from: userId, to: agentId },
+            payload: { messages: [{ role: "user", content: message }], intent: "SWARM_CHAT", ...(contextParams && { contextParams }), ...(attachments && { attachments }) },
             createdAt: new Date()
         });
 
@@ -82,6 +92,5 @@ export async function POST(req: Request) {
         logger.error("[api/swarm/chat] Error:", error);
         return NextResponse.json({ error: `Failed to enqueue chat job: ${error.message}` }, { status: 500 });
     } finally {
-        if (client) await client.close();
     }
 }

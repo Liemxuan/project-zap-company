@@ -1,9 +1,11 @@
+export const revalidate = 86400;
 import { NextResponse } from "next/server";
 import { MongoClient } from "mongodb";
 import path from "path";
 import dotenv from "dotenv";
 import { getTenantContext } from "@/lib/tenant";
 import { logger } from "@/lib/logger";
+import { getGlobalMongoClient } from "../../../../lib/mongo";
 
 dotenv.config({ path: path.resolve(process.cwd(), "../../zap-core/.env"), override: true });
 
@@ -19,7 +21,9 @@ const SEED_CHANNELS = [
     { name: "Telegram", status: "offline", users: 0, ping: "-", messageCount: 0, connectedAgent: null },
     { name: "WhatsApp", status: "not_configured", users: 0, ping: "-", messageCount: 0, connectedAgent: null },
     { name: "Discord",  status: "not_configured", users: 0, ping: "-", messageCount: 0, connectedAgent: null },
-    { name: "iMessage", status: "not_configured", users: 0, ping: "-", messageCount: 0, connectedAgent: null },
+    { name: "Slack",    status: "not_configured", users: 0, ping: "-", messageCount: 0, connectedAgent: null },
+    { name: "Zalo",     status: "not_configured", users: 0, ping: "-", messageCount: 0, connectedAgent: null },
+    { name: "Line",     status: "not_configured", users: 0, ping: "-", messageCount: 0, connectedAgent: null },
 ];
 
 export async function GET() {
@@ -27,17 +31,17 @@ export async function GET() {
     try {
         const { tenantId } = await getTenantContext();
         
-        client = new MongoClient(MONGO_URI, { serverSelectionTimeoutMS: 3000 });
-        await client.connect();
+        client = await getGlobalMongoClient();
         const db = client.db(DB_NAME);
         const colName = `${tenantId}_SYS_CHANNELS`;
         const col = db.collection(colName);
 
         let channels = await col.find({}).toArray();
+        const existingNames = channels.map(c => c.name);
+        const missingFromSeed = SEED_CHANNELS.filter(s => !existingNames.includes(s.name));
 
-        // Seed only if collection is completely empty (first boot)
-        if (channels.length === 0) {
-            const docsToInsert = SEED_CHANNELS.map(c => ({
+        if (missingFromSeed.length > 0) {
+            const docsToInsert = missingFromSeed.map(c => ({
                 ...c,
                 tenantId,
                 createdAt: new Date(),
@@ -73,6 +77,5 @@ export async function GET() {
             { status: 500 }
         );
     } finally {
-        if (client) await client.close();
     }
 }

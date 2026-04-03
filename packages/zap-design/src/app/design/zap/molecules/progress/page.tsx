@@ -2,19 +2,20 @@
 
 import React, { useState } from 'react';
 import { ComponentSandboxTemplate } from '../../../../../zap/layout/ComponentSandboxTemplate';
-import { Wrapper } from '../../../../../components/dev/Wrapper';
 import { Slider } from '../../../../../genesis/atoms/interactive/slider';
 
 import { Progress } from '../../../../../genesis/atoms/interactive/progress';
+import { CanvasBody } from '../../../../../zap/layout/CanvasBody';
+import { SectionHeader } from '../../../../../zap/sections/SectionHeader';
 
 export default function ProgressSandboxPage() {    const [height, setHeight] = useState([4]);
     const [radius, setRadius] = useState([9999]);
 
     // Fetch initial settings
     const inspectorControls = (
-        <Wrapper identity={{ displayName: "Inspector Controls Container", type: "Container", filePath: "zap/molecules/progress" }}>
+        
             <div className="space-y-4">
-                <Wrapper identity={{ displayName: "Progress Structural Settings", type: "Docs Link", filePath: "zap/molecules/progress/page.tsx" }}>
+                
                     <div className="space-y-6">
                         <h4 className="text-label-small text-transform-primary font-display font-bold text-on-surface-variant text-transform-secondary tracking-wider">Sandbox Variables</h4>
 
@@ -36,9 +37,9 @@ export default function ProgressSandboxPage() {    const [height, setHeight] = u
                             </div>
                         </div>
                     </div>
-                </Wrapper>
+                
             </div>
-        </Wrapper>
+        
     );
     return (
         <ComponentSandboxTemplate
@@ -55,18 +56,19 @@ export default function ProgressSandboxPage() {    const [height, setHeight] = u
             platformConstraints={{ web: "N/A", mobile: "N/A" }}
             foundationRules={[]}
         >
-            <div 
-                className="w-full flex items-center justify-center min-h-[400px] p-12 bg-layer-panel shadow-sm border border-outline-variant rounded-xl"
-                style={Object.assign({}, {
-                     '--progress-height': `${height[0]}px`,
-                     '--progress-radius': `${radius[0]}px`,
-                } as React.CSSProperties)}
-            >
+            
+            <CanvasBody flush={false}>
+                <CanvasBody.Section>
+                    <SectionHeader number="1" id="progress" title="Progress Sandbox" description="Interactive components for Progress" icon="widgets" />
+                    <CanvasBody.Demo className="w-full flex items-center justify-center min-h-[400px] p-12 bg-layer-panel shadow-sm border border-outline-variant rounded-xl">
                 <div className="w-[60%] flex gap-4 flex-col">
-                    <p className="font-display text-body-small">Uploading file...</p>
+                    <p className="font-display text-transform-primary text-body-small">Uploading file...</p>
                     <Progress value={60} className="w-full" />
                 </div>
-            </div>
+                </CanvasBody.Demo>
+                </CanvasBody.Section>
+            </CanvasBody>
+        
         </ComponentSandboxTemplate>
     );
 }

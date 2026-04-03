@@ -1,19 +1,31 @@
-# ⚡ MODELS: LLM Connection & Routing
+# ⚡ SYSTEM ROUTING MATRIX (HAWK)
 
+<!-- ⚠️ DYNAMICALLY COMPILED VIA SYNC_AGENT_PROFESSION.TS ⚠️ -->
 **Target System:** OLYMPUS
+**Strict Profession Lock:** `E2E_QA_TESTER`
 
-## 1. Connection Strategy (3-Tier Fallback)
+## 1. Provider Tier Mapping
 
-1. **Primary Provider:** `Google Ultra` (`PROV-ULTRA-01` | kayvietnam@gmail.com)
-2. **Secondary Fallback:** `Google Pro` (`PROV-PRO-01` | tom@zap.vn)
-3. **Tertiary Fallback:** `OpenRouter` (`PROV-OPENR-01` | tom@two.vn)
+| Priority | Provider Tier | Assigned To | Engine Strategy |
+| :--- | :--- | :--- | :--- |
+| **Primary** | `ULTRA` | `kayvietnam@gmail.com` | Zero-latency, unthrottled high-priority lanes. |
+| **Secondary** | `PRO` | `tom@zap.vn` | High-limit, stable backup pool. |
+| **Tertiary** | `OPENROUTER` | `tom@two.vn` | Hard fallback. Last resort rate-limit bridging. |
 
-## 2. Active Network Config (Security Tier)
+## 2. Intelligence Assignments (Locked)
 
-- **Connection Model:** `Omni-Router (Internal Default)`
-- **Primary Scan Model:** `gemini-2.5-flash-lite` (ZSS janitor scan — P2 tier, <400ms SLA)
-- **Deep Forensics Model:** `gemini-3.1-pro` (Post-mortem analysis & threat pattern extraction)
+Based on the [E2E_QA_TESTER] profession bounds, this agent is restricted to the following runtime limits:
 
-## 3. Override Warning
+| Objective | Bound Engine | Registry Identifier | Trigger Tags |
+| :--- | :--- | :--- | :--- |
+| **Deep Thinking / Complex Matrix** | Execution Core | `gemini-2.5-computer-use-preview-10-2025` | `computer-use, browser-automation, playwright, dom-navigation, automated-tests` |
+| **High-Velocity Tasking** | Specialized Secondary | `gemini-3.1-pro-preview` | `browser-automation` |
+| **Swarm Heartbeat Tracker** | Gemini 4M Context | `gemini-2.5-pro` | `4m-context, log-ingestion` |
+| **Data Visualization** | Nano Banana 2 | `gemini-3.1-flash-image-preview` | `image-generation, ui-mockups` |
+| **Memory Sync Cortex** | Embeddings 2 | `gemini-embedding-2-preview` | `rag, semantic-search` |
 
-- **Platform Integrity (Olympus Only):** Olympus agents MUST NEVER use BYOK fallback. Security scanning results must never leave the internal Omni-Router telemetry.
+## 3. Omni-Router Enforcements
+- **Integrity Bounds:** Operating strictly within `Playwright automation, dev-browser driving, DOM validation.` bounds.
+- **BYOK Lockout:** This agent is barred from independent OPENAI_API_KEY overwrites to preserve swarm telemetry.
+
+*Compiled dynamically on 2026-03-31T08:00:52.520Z*

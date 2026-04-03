@@ -76,7 +76,7 @@ export function AuthSplitLayout({
                 <div className="relative z-20 mt-auto p-12 text-white">
                     <div className="flex items-center gap-2 mb-4 opacity-70">
                         <Building2 size={24} />
-                        <span className="font-display font-medium tracking-wide">ZAP VIBRANIUM INC.</span>
+                        <span className="font-display text-transform-primary font-medium tracking-wide">ZAP VIBRANIUM INC.</span>
                     </div>
                 </div>
             </motion.div>

@@ -104,30 +104,75 @@ export function chunkMessage(text: string, limit: number): string[] {
     return chunks;
 }
 
+import type { SwarmChannel } from "./schema.js";
+
 /**
  * The unified Egress Router.
  * Takes the raw OmniResponse and routes it to the specific platform formatter.
+ * Implements BLAST-1 Ephemeral Canvas Link injection.
  */
-export function routeEgress(reply: OmniResponse, channel: "WHATSAPP" | "TELEGRAM" | "ZALO" | "IMESSAGE" | "CLI"): string {
-    const rawText = reply.text || "";
+export async function routeEgress(reply: OmniResponse & { canvasId?: string }, channel: SwarmChannel): Promise<string> {
+    let rawText = reply.text || "";
 
-    console.log(`[Egress Router] 📤 Dispatching message to channel: [${channel}]`);
-
-    switch (channel) {
-        case "WHATSAPP":
-            return formatForWhatsApp(rawText);
-        case "TELEGRAM":
-            return formatForTelegramHTML(rawText);
-        case "ZALO":
-        case "IMESSAGE":
-            // These platforms prefer plain text or handle raw strings cleanly
-            return stripMarkdown(rawText);
-        case "CLI":
-            // Passthrough for CLI testing (already renders markdown natively)
-            return rawText;
-        default:
-            return rawText;
+    if (reply.canvasId) {
+        const HOST = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+        rawText += `\n\n[Visual Canvas Ready] ✨\nTap to securely view your interactive data:\n${HOST}/canvas/${reply.canvasId}`;
     }
+
+    console.log(`[Egress Router] 📤 Dispatching message to natively linked channel API: [${channel}]`);
+
+    let finalPayload = rawText;
+
+    try {
+        switch (channel) {
+            case "WHATSAPP":
+                finalPayload = formatForWhatsApp(rawText);
+                break;
+            case "TELEGRAM":
+                finalPayload = formatForTelegramHTML(rawText);
+                break;
+            case "ZALO":
+            case "IMESSAGE":
+                finalPayload = stripMarkdown(rawText);
+                break;
+            case "SLACK":
+                finalPayload = rawText;
+                if (process.env.SLACK_WEBHOOK_URL) {
+                    await fetch(process.env.SLACK_WEBHOOK_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ text: finalPayload })
+                    });
+                    console.log(`[Egress] ✅ Live Slack API Push Successful`);
+                } else {
+                    console.warn(`[Egress] ⚠️ SLACK_WEBHOOK_URL not set. Emitting to stdout.`);
+                }
+                break;
+            case "DISCORD":
+                finalPayload = rawText;
+                if (process.env.DISCORD_WEBHOOK_URL) {
+                    await fetch(process.env.DISCORD_WEBHOOK_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ content: finalPayload })
+                    });
+                    console.log(`[Egress] ✅ Live Discord API Push Successful`);
+                } else {
+                    console.warn(`[Egress] ⚠️ DISCORD_WEBHOOK_URL not set. Emitting to stdout.`);
+                }
+                break;
+            case "CLI":
+                finalPayload = rawText;
+                break;
+            default:
+                finalPayload = rawText;
+                break;
+        }
+    } catch (e: any) {
+        console.error(`[Egress Router] ❌ Live dispatch failed for ${channel}:`, e.message);
+    }
+
+    return finalPayload;
 }
 
 // ===============================================
@@ -146,26 +191,22 @@ export function runEgressMocks() {
     console.log("======================================================");
     console.log("--- EGRESS TEST 1: WHATSAPP Formatter ---");
     console.log("======================================================");
-    const whatsapp = routeEgress(mockReply, "WHATSAPP");
-    console.log(whatsapp);
+    routeEgress(mockReply, "WHATSAPP").then(r => console.log(r));
 
     console.log("\n======================================================");
     console.log("--- EGRESS TEST 2: TELEGRAM (HTML) Formatter ---");
     console.log("======================================================");
-    const telegram = routeEgress(mockReply, "TELEGRAM");
-    console.log(telegram);
+    routeEgress(mockReply, "TELEGRAM").then(r => console.log(r));
 
     console.log("\n======================================================");
     console.log("--- EGRESS TEST 3: ZALO Formatter (Plain text) ---");
     console.log("======================================================");
-    const zalo = routeEgress(mockReply, "ZALO");
-    console.log(zalo);
+    routeEgress(mockReply, "ZALO").then(r => console.log(r));
 
     console.log("\n======================================================");
     console.log("--- EGRESS TEST 4: CLI Formatter (passthrough) ---");
     console.log("======================================================");
-    const cli = routeEgress(mockReply, "CLI");
-    console.log(cli);
+    routeEgress(mockReply, "CLI").then(r => console.log(r));
 }
 
 // Only run if called directly from the terminal

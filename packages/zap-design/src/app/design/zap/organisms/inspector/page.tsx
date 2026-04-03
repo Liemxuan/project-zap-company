@@ -6,6 +6,8 @@ import { ComponentSandboxTemplate } from '../../../../../zap/layout/ComponentSan
 import { L5Inspector } from '../../../../../genesis/organisms/inspector';
 import { Wrapper } from '../../../../../components/dev/Wrapper';
 import { ThemePublisher } from '../../../../../components/dev/ThemePublisher';
+import { Slider } from '../../../../../genesis/atoms/interactive/slider';
+import { parseCssToNumber } from '../../../../../lib/utils';
 
 export default function InspectorSandboxPage() {
     const { theme: appTheme } = useTheme();
@@ -17,6 +19,15 @@ export default function InspectorSandboxPage() {
     
     // Custom Sandbox Variable
     const [mockPanelWidth, setMockPanelWidth] = useState([320]);
+
+    // Structural CSS overrides mimicking NavLink
+    const [borderWidth, setBorderWidth] = useState([1]);
+    const [borderRadius, setBorderRadius] = useState([8]);
+
+    const handleLoadedVariables = (variables: Record<string, string>) => {
+        if (variables['--input-border-width']) setBorderWidth([parseCssToNumber(variables['--input-border-width'])]);
+        if (variables['--input-border-radius']) setBorderRadius([parseCssToNumber(variables['--input-border-radius'])]);
+    };
 
     // Mock Border State (since useBorderProperties hook requires a real context we just mock it for display)
     const mockBorderState = {
@@ -47,10 +58,36 @@ export default function InspectorSandboxPage() {
             onDisabledChange={setDisabled}
             docsLabel="Inspector Architecture Protocol"
             docsHref="vscode://file/Users/zap/Workspace/olympus/packages/zap-design/src/genesis/organisms/inspector.tsx"
-        />
+        >
+            <Wrapper identity={{ displayName: "Dropdown Structural Settings", type: "Control Row", filePath: "zap/organisms/inspector/page.tsx" }}>
+                <div className="space-y-6 pt-4 border-t border-border/50">
+                    <h4 className="text-label-small text-transform-primary font-display font-bold text-muted-foreground tracking-wider">Dropdown Config</h4>
+                    
+                    <div className="space-y-2">
+                        <div className="flex justify-between items-center text-label-small font-secondary text-transform-secondary text-muted-foreground">
+                            <span>Input Border Width</span>
+                            <span className="font-bold">{borderWidth[0]}px</span>
+                        </div>
+                        <Slider value={borderWidth} onValueChange={setBorderWidth} min={0} max={4} step={1} className="w-full" />
+                    </div>
+
+                    <div className="space-y-2">
+                        <div className="flex justify-between items-center text-label-small font-secondary text-transform-secondary text-muted-foreground">
+                            <span>Input Corner Radius</span>
+                            <span className="font-bold">{borderRadius[0]}px</span>
+                        </div>
+                        <Slider value={borderRadius} onValueChange={setBorderRadius} min={0} max={32} step={1} className="w-full" />
+                    </div>
+                </div>
+            </Wrapper>
+        </L5Inspector>
     );
 
     return (
+        <div className="contents" style={Object.assign({
+            '--input-border-width': `${borderWidth[0]}px`,
+            '--input-border-radius': `${borderRadius[0]}px`,
+        })}>
         <ComponentSandboxTemplate
             componentName="L5 Inspector Sandbox"
             tier="L5 ORGANISM"
@@ -58,6 +95,11 @@ export default function InspectorSandboxPage() {
             filePath="src/genesis/organisms/inspector.tsx"
             importPath="@/genesis/organisms/inspector"
             inspectorControls={inspectorControls}
+            publishPayload={{
+                '--input-border-width': `${borderWidth[0]}px`,
+                '--input-border-radius': `${borderRadius[0]}px`,
+            }}
+            onLoadedVariables={handleLoadedVariables}
             foundationInheritance={{
                 colorTokens: ['--md-sys-color-primary'],
                 typographyScales: ['--font-display']
@@ -85,7 +127,7 @@ export default function InspectorSandboxPage() {
                         <p className="font-body text-bodyMedium text-transform-secondary text-surface-foreground/80">
                             The L5 Inspector to the right controls my width and settings in real-time.
                         </p>
-                        <div className="flex gap-2 text-label-small font-dev font-bold">
+                        <div className="flex gap-2 text-label-small font-dev text-transform-tertiary font-bold">
                             <span className="px-2 py-1 bg-surface-base rounded border border-border/50">Color: {color}</span>
                             <span className="px-2 py-1 bg-surface-base rounded border border-border/50">Size: {size}</span>
                         </div>
@@ -98,5 +140,6 @@ export default function InspectorSandboxPage() {
                 </Wrapper>
             </div>
         </ComponentSandboxTemplate>
+        </div>
     );
 }

@@ -1,6 +1,9 @@
 # Gateway — OmniRouter Entry Point
+**Role:** SYSTEM_ARCHITECT
+**Tags:** api-routing, network-mesh, rate-limiter
 
-**Role:** Traffic Classification & Fleet Arbitrage
+
+ Classification & Fleet Arbitrage
 **Port:** 3001
 **Tier:** Fast (Flash)
 

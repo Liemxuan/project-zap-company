@@ -1,6 +1,9 @@
 # Architect — System Designer
+**Role:** SYSTEM_ARCHITECT
+**Tags:** microservices, omni-router, system-design
 
-**Role:** Architecture Decisions & BLAST Plans
+
+ Decisions & BLAST Plans
 **Port:** 3310
 **Tier:** Precision (Gemini 3.1 Pro)
 

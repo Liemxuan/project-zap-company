@@ -107,7 +107,7 @@ export const BorderRadiusInspector = ({
     };
 
     return (
-        <div className="font-body select-none pb-4 flex flex-col gap-1">
+        <div className="font-body text-transform-secondary select-none pb-4 flex flex-col gap-1">
             {/* ── Universal Controls ── */}
             <InspectorAccordion title="Universal Settings" icon="tune" defaultOpen={true}>
                 <div className="p-3 bg-layer-dialog rounded-lg border border-border/20 space-y-4">

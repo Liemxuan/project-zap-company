@@ -5,45 +5,46 @@ import { ComponentSandboxTemplate } from '../../../../../zap/layout/ComponentSan
 import { CleanShell } from '../../../../../genesis/molecules/clean-shell/CleanShell';
 import { CleanShellCover } from '../../../../../genesis/molecules/clean-shell/CleanShellCover';
 import { CleanShellInspector } from '../../../../../genesis/molecules/clean-shell/CleanShellInspector';
-import { Wrapper } from '../../../../../components/dev/Wrapper';
 import { ThemeHeader } from '../../../../../genesis/molecules/layout/ThemeHeader';
+import { CanvasBody } from '../../../../../zap/layout/CanvasBody';
+import { SectionHeader } from '../../../../../zap/sections/SectionHeader';
 
 export default function CleanShellSandboxPage() {
     const inspectorControls = (
-        <Wrapper identity={{ displayName: "Inspector Controls Container", type: "Container", filePath: "zap/molecules/clean-shell/page.tsx" }}>
+        
             <div className="space-y-4">
-                <Wrapper identity={{ displayName: "Clean Shell Structural Settings", type: "Docs Link", filePath: "zap/molecules/clean-shell/page.tsx" }}>
+                
                     <div className="space-y-6">
-                        <h4 className="text-label-small text-transform-primary font-display font-bold text-muted-foreground tracking-wider uppercase">Extracted Figma Properties</h4>
+ <h4 className="text-label-small text-transform-primary font-display font-bold text-muted-foreground tracking-wider ">Extracted Figma Properties</h4>
 
                         <div className="space-y-4">
                             <div className="space-y-2">
-                                <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-muted-foreground uppercase">
+ <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-muted-foreground ">
                                     <span>--shell-width</span>
                                     <span className="font-bold">1440px</span>
                                 </div>
-                                <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-muted-foreground uppercase">
+ <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-muted-foreground ">
                                     <span>--shell-height</span>
                                     <span className="font-bold">1024px</span>
                                 </div>
-                                <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-muted-foreground uppercase">
+ <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-muted-foreground ">
                                     <span>--sidebar-width</span>
                                     <span className="font-bold">280px (L2)</span>
                                 </div>
-                                <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-muted-foreground uppercase">
+ <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-muted-foreground ">
                                     <span>--header-height</span>
                                     <span className="font-bold">56px (h-14)</span>
                                 </div>
-                                <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-muted-foreground uppercase">
+ <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-muted-foreground ">
                                     <span>--shell-bg</span>
                                     <span className="font-bold">bg-layer-1</span>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </Wrapper>
+                
             </div>
-        </Wrapper>
+        
     );
 
     return (
@@ -67,7 +68,11 @@ export default function CleanShellSandboxPage() {
                 "Strict OpenPencil Dimension Extraction"
             ]}
         >
-            <div className="w-full space-y-12 animate-in fade-in duration-500 pb-16">
+            
+            <CanvasBody flush={false}>
+                <CanvasBody.Section>
+                    <SectionHeader number="1" id="clean-shell" title="Clean Shell Sandbox" description="Interactive components for Clean Shell" icon="widgets" />
+                    <CanvasBody.Demo className="w-full space-y-12 animate-in fade-in duration-500 pb-16">
                 <div className="p-12 flex flex-col items-center justify-center gap-4 text-on-surface w-full bg-layer-panel/50 rounded-xl">
                     <div className="transform scale-50 origin-top border border-outline shadow-2xl overflow-hidden rounded-xl">
                         <CleanShell>
@@ -76,7 +81,7 @@ export default function CleanShellSandboxPage() {
                                 header={<ThemeHeader title="Workspace" breadcrumb="ZAP Design Engine / Clean Shell" />}
                             >
                                 <div className="text-center space-y-4 max-w-lg mb-12">
-                                    <h2 className="text-displaySmall font-display font-bold text-foreground">OpenPencil Grid Pipeline</h2>
+                                    <h2 className="text-displaySmall font-display text-transform-primary font-bold text-foreground">OpenPencil Grid Pipeline</h2>
                                     <p className="text-bodyLarge text-muted-foreground">
                                         Mock children injected natively using the strict <code>CleanShellCover</code> wrapper component.
                                     </p>
@@ -124,7 +129,10 @@ export default function CleanShellSandboxPage() {
                         </CleanShell>
                     </div>
                 </div>
-            </div>
+                </CanvasBody.Demo>
+                </CanvasBody.Section>
+            </CanvasBody>
+        
         </ComponentSandboxTemplate>
     );
 }

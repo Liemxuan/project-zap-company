@@ -3,6 +3,7 @@ import fs from "fs/promises";
 import path from "path";
 import { exec } from "child_process";
 import { promisify } from "util";
+import { getGlobalMongoClient } from "../../../../../../lib/mongo";
 
 const execAsync = promisify(exec);
 
@@ -60,8 +61,7 @@ export async function POST(
     // BLAST-IRONCLAD: Audit trail for agent reconfiguration
     try {
       const { MongoClient } = await import("mongodb");
-      const mclient = new MongoClient(process.env.MONGODB_URI || "mongodb://localhost:27017");
-      await mclient.connect();
+      const mclient = await getGlobalMongoClient();
       await mclient.db("olympus").collection("SYS_OS_approvals").insertOne({
         type: "agent_sync",
         agentId,
@@ -70,7 +70,6 @@ export async function POST(
         approvedBy: "dashboard_user",
         source: "swarm_ui"
       });
-      await mclient.close();
     } catch (auditErr) {
       console.error("[IRONCLAD] Audit trail write failed:", auditErr);
     }

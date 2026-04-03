@@ -61,7 +61,7 @@ export const TagInput = React.forwardRef<HTMLInputElement, TagInputProps>(
     return (
       <div
         className={cn(
-          "flex min-h-[var(--input-height,36px)] w-full flex-wrap items-center gap-2 rounded-[var(--input-border-radius,8px)] border-[length:var(--input-border-width,1px)] border-[color:var(--input-border-filled,transparent)] bg-[color:var(--input-bg-filled,var(--color-surface-container-high))] px-3 py-1 shadow-sm transition-all focus-within:ring-[length:var(--input-focus-width,2px)] focus-within:ring-[color:var(--input-focus-ring,var(--color-primary-fixed-dim))] focus-within:border-[color:var(--input-focus-border,var(--color-primary))] focus-within:outline-none font-body text-sm font-normal text-transform-primary",
+          "flex min-h-[var(--input-height,36px)] w-full flex-wrap items-center gap-2 rounded-[var(--input-border-radius,8px)] border-[length:var(--input-border-width,1px)] border-[color:var(--input-border-filled,transparent)] bg-[color:var(--input-bg-filled,var(--color-surface-container-high))] px-3 py-1 shadow-sm transition-all focus-within:ring-[length:var(--input-focus-width,2px)] focus-within:ring-[color:var(--input-focus-ring,var(--color-primary-fixed-dim))] focus-within:border-[color:var(--input-focus-border,var(--color-primary))] focus-within:outline-none font-body text-transform-secondary text-sm font-normal text-transform-primary",
           className
         )}
       >
@@ -93,7 +93,7 @@ export const TagInput = React.forwardRef<HTMLInputElement, TagInputProps>(
               }}
               onKeyDown={handleKeyDown}
               placeholder={tags.length === 0 ? placeholder : undefined}
-              className="flex-1 bg-transparent px-1 py-1 outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 min-w-[120px] font-body text-sm font-normal text-transform-primary"
+              className="flex-1 bg-transparent px-1 py-1 outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 min-w-[120px] font-body text-transform-secondary text-sm font-normal text-transform-primary"
               autoComplete="off"
               {...props}
             />

@@ -42,7 +42,7 @@ export const Tabs: React.FC<TabsProps> = ({ tabs, activeTab, onChange, className
                                 relative px-6 py-3 font-bold text-[13px] text-transform-primary font-display tracking-wider
                                 transition-colors outline-none rounded-t-[length:var(--radius-shape-small,8px)]
                                 ${isActive ? 'text-primary' : 'text-on-surface-variant hover:text-primary'}
-                           `}
+                          `}
                         >
                             {/* Animated Focus Keyboard Highlight */}
                             {focusedTab === tab.id && (

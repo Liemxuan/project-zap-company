@@ -1,0 +1,1522 @@
+
+Running 33 tests using 4 workers
+
+  ✓   2 [chromium] › tests/phase-b-new-chat.spec.ts:36:5 › renders agent selector grid on /chats/new (703ms)
+  ✓   4 [chromium] › tests/phase-c-research-plan.spec.ts:77:5 › Research Plan panel is collapsed by default with no jobs (1.4s)
+  ✘   3 [chromium] › tests/phase-a-streaming.spec.ts:58:5 › shows typing spinner on status:working event (5.1s)
+  ✘   1 [chromium] › tests/phase-d-shortcuts.spec.ts:29:7 › Phase D — Keyboard Shortcuts › Cmd+K focuses the chat textarea (6.0s)
+  ✘   5 [chromium] › tests/phase-b-new-chat.spec.ts:48:5 › OmniRouter card is the first item in the grid (5.4s)
+  ✘   6 [chromium] › tests/phase-c-research-plan.spec.ts:90:5 › Research Plan panel appears and expands when jobs event arrives (5.3s)
+  ✓   9 [chromium] › tests/phase-b-new-chat.spec.ts:48:5 › OmniRouter card is the first item in the grid (retry #1) (716ms)
+  ✘   7 [chromium] › tests/phase-a-streaming.spec.ts:58:5 › shows typing spinner on status:working event (retry #1) (4.6s)
+  ✘   8 [chromium] › tests/phase-d-shortcuts.spec.ts:29:7 › Phase D — Keyboard Shortcuts › Cmd+K focuses the chat textarea (retry #1) (6.1s)
+  ✘  11 [chromium] › tests/phase-b-new-chat.spec.ts:62:5 › renders an agent card for each agent returned by the API (5.2s)
+  ✘  10 [chromium] › tests/phase-c-research-plan.spec.ts:90:5 › Research Plan panel appears and expands when jobs event arrives (retry #1) (5.7s)
+  ✘  12 [chromium] › tests/phase-a-streaming.spec.ts:72:5 › renders streaming bubble when reply_preview arrives (5.7s)
+  ✘  14 [chromium] › tests/phase-b-new-chat.spec.ts:62:5 › renders an agent card for each agent returned by the API (retry #1) (5.6s)
+  ✘  15 [chromium] › tests/phase-c-research-plan.spec.ts:109:5 › step count is displayed in panel header (5.4s)
+  ✓  17 [chromium] › tests/phase-b-new-chat.spec.ts:76:5 › shows skeleton loading cards before agents load (251ms)
+  ✘  18 [chromium] › tests/phase-b-new-chat.spec.ts:89:5 › clicking OmniRouter navigates to a random chat_xxx session (3.3s)
+  ✘  16 [chromium] › tests/phase-a-streaming.spec.ts:72:5 › renders streaming bubble when reply_preview arrives (retry #1) (6.3s)
+  ✘  19 [chromium] › tests/phase-c-research-plan.spec.ts:109:5 › step count is displayed in panel header (retry #1) (5.7s)
+  ✓  22 [chromium] › tests/phase-c-research-plan.spec.ts:124:5 › shows RESEARCH label for intent containing 'search' (363ms)
+  ✘  20 [chromium] › tests/phase-b-new-chat.spec.ts:89:5 › clicking OmniRouter navigates to a random chat_xxx session (retry #1) (3.5s)
+  ✓  23 [chromium] › tests/phase-c-research-plan.spec.ts:129:5 › shows RESEARCH label for intent containing 'fetch' (310ms)
+  ✘  21 [chromium] › tests/phase-a-streaming.spec.ts:93:5 › typing spinner disappears once reply_preview fires (5.7s)
+  ✘  24 [chromium] › tests/phase-c-research-plan.spec.ts:137:5 › shows ANALYSIS label for intent containing 'analyse' (5.3s)
+  ✘  25 [chromium] › tests/phase-b-new-chat.spec.ts:106:5 › clicking Jerry card navigates to /chats/Jerry (5.2s)
+  ✘  26 [chromium] › tests/phase-a-streaming.spec.ts:93:5 › typing spinner disappears once reply_preview fires (retry #1) (6.0s)
+  ✘  27 [chromium] › tests/phase-c-research-plan.spec.ts:137:5 › shows ANALYSIS label for intent containing 'analyse' (retry #1) (5.6s)
+  ✘  28 [chromium] › tests/phase-b-new-chat.spec.ts:106:5 › clicking Jerry card navigates to /chats/Jerry (retry #1) (5.4s)
+  ✘  13 [chromium] › tests/phase-d-shortcuts.spec.ts:42:7 › Phase D — Keyboard Shortcuts › Enter triggers handleSendMessage when not holding Shift (30.0s)
+  ✘  29 [chromium] › tests/phase-a-streaming.spec.ts:110:5 › streaming bubble is replaced by settled message on messages event (5.7s)
+  ✘  30 [chromium] › tests/phase-c-research-plan.spec.ts:145:5 › shows SYNTHESIS label for intent containing 'write' (5.6s)
+  ✘  31 [chromium] › tests/phase-b-new-chat.spec.ts:121:5 › active agent shows green status dot (5.2s)
+  ✘  33 [chromium] › tests/phase-a-streaming.spec.ts:110:5 › streaming bubble is replaced by settled message on messages event (retry #1) (6.2s)
+  ✘  36 [chromium] › tests/phase-a-streaming.spec.ts:152:5 › EventSource connects to the SSE stream endpoint (1.4s)
+  ✘  34 [chromium] › tests/phase-c-research-plan.spec.ts:145:5 › shows SYNTHESIS label for intent containing 'write' (retry #1) (5.6s)
+  ✘  35 [chromium] › tests/phase-b-new-chat.spec.ts:121:5 › active agent shows green status dot (retry #1) (5.5s)
+  ✘  37 [chromium] › tests/phase-a-streaming.spec.ts:152:5 › EventSource connects to the SSE stream endpoint (retry #1) (1.7s)
+  ✘  38 [chromium] › tests/phase-c-research-plan.spec.ts:153:5 › shows EXECUTE label for intent containing 'deploy' (5.6s)
+  ✘  39 [chromium] › tests/phase-b-new-chat.spec.ts:133:5 › idle agent shows amber status dot (5.2s)
+  ✘  40 [chromium] › tests/phase-a-streaming.spec.ts:177:5 › historical messages from SSE messages event appear in the chat feed (5.7s)
+  ✘  41 [chromium] › tests/phase-c-research-plan.spec.ts:153:5 › shows EXECUTE label for intent containing 'deploy' (retry #1) (5.7s)
+  ✘  42 [chromium] › tests/phase-b-new-chat.spec.ts:133:5 › idle agent shows amber status dot (retry #1) (5.4s)
+  ✓  45 [chromium] › tests/phase-b-new-chat.spec.ts:147:5 › Back link navigates to / (423ms)
+  ✘  43 [chromium] › tests/phase-a-streaming.spec.ts:177:5 › historical messages from SSE messages event appear in the chat feed (retry #1) (6.1s)
+  ✘  32 [chromium] › tests/phase-d-shortcuts.spec.ts:42:7 › Phase D — Keyboard Shortcuts › Enter triggers handleSendMessage when not holding Shift (retry #1) (30.1s)
+  ✘  44 [chromium] › tests/phase-c-research-plan.spec.ts:161:5 › shows MEMORY label for intent containing 'store' (5.4s)
+  ✘  46 [chromium] › tests/phase-b-new-chat.spec.ts:161:5 › agent card shows uptime text (5.2s)
+  ✘  48 [chromium] › tests/phase-c-research-plan.spec.ts:161:5 › shows MEMORY label for intent containing 'store' (retry #1) (5.6s)
+  ✘  49 [chromium] › tests/phase-b-new-chat.spec.ts:161:5 › agent card shows uptime text (retry #1) (5.4s)
+  ✘  50 [chromium] › tests/phase-c-research-plan.spec.ts:169:5 › shows TASK label for unrecognised intent (5.7s)
+  ✘  51 [chromium] › tests/phase-c-research-plan.spec.ts:169:5 › shows TASK label for unrecognised intent (retry #1) (5.6s)
+  ✘  52 [chromium] › tests/phase-c-research-plan.spec.ts:177:5 › step numbers are displayed for each job (5.4s)
+  ✘  47 [chromium] › tests/phase-d-shortcuts.spec.ts:56:7 › Phase D — Keyboard Shortcuts › Shift+Enter does not trigger handleSendMessage (30.0s)
+  ✘  53 [chromium] › tests/phase-c-research-plan.spec.ts:177:5 › step numbers are displayed for each job (retry #1) (5.6s)
+  ✘  55 [chromium] › tests/phase-c-research-plan.spec.ts:192:5 › clicking the panel header toggles the step list (5.4s)
+  ✘  56 [chromium] › tests/phase-c-research-plan.spec.ts:192:5 › clicking the panel header toggles the step list (retry #1) (6.0s)
+  ✘  57 [chromium] › tests/phase-c-research-plan.spec.ts:213:5 › RUNNING job shows animate-spin status icon (5.6s)
+  ✘  54 [chromium] › tests/phase-d-shortcuts.spec.ts:56:7 › Phase D — Keyboard Shortcuts › Shift+Enter does not trigger handleSendMessage (retry #1) (30.3s)
+  ✓  59 [chromium] › tests/phase-d-shortcuts.spec.ts:68:7 › Phase D — Keyboard Shortcuts › Esc globally cancels typing/working execution (526ms)
+  ✘  58 [chromium] › tests/phase-c-research-plan.spec.ts:213:5 › RUNNING job shows animate-spin status icon (retry #1) (5.8s)
+
+
+  1) [chromium] › tests/phase-a-streaming.spec.ts:58:5 › shows typing spinner on status:working event 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('[data-testid="typing-indicator"], .animate-spin, .animate-bounce').first()
+    Expected: visible
+    Timeout: 4000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 4000ms[22m
+    [2m  - waiting for locator('[data-testid="typing-indicator"], .animate-spin, .animate-bounce').first()[22m
+
+
+      64 |   // It contains a Loader2 icon (animate-spin) or a set of bouncing dots
+      65 |   const spinner = page.locator('[data-testid="typing-indicator"], .animate-spin, .animate-bounce').first();
+    > 66 |   await expect(spinner).toBeVisible({ timeout: 4000 });
+         |                         ^
+      67 | });
+      68 |
+      69 | // ─────────────────────────────────────────────────────────────────────────────
+        at /Users/zap/Workspace/olympus/apps/zap-swarm/tests/phase-a-streaming.spec.ts:66:25
+
+    Error Context: test-results/phase-a-streaming-shows-ty-51a65-ner-on-status-working-event-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('[data-testid="typing-indicator"], .animate-spin, .animate-bounce').first()
+    Expected: visible
+    Timeout: 4000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 4000ms[22m
+    [2m  - waiting for locator('[data-testid="typing-indicator"], .animate-spin, .animate-bounce').first()[22m
+
+
+      64 |   // It contains a Loader2 icon (animate-spin) or a set of bouncing dots
+      65 |   const spinner = page.locator('[data-testid="typing-indicator"], .animate-spin, .animate-bounce').first();
+    > 66 |   await expect(spinner).toBeVisible({ timeout: 4000 });
+         |                         ^
+      67 | });
+      68 |
+      69 | // ─────────────────────────────────────────────────────────────────────────────
+        at /Users/zap/Workspace/olympus/apps/zap-swarm/tests/phase-a-streaming.spec.ts:66:25
+
+    Error Context: test-results/phase-a-streaming-shows-ty-51a65-ner-on-status-working-event-chromium-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/phase-a-streaming-shows-ty-51a65-ner-on-status-working-event-chromium-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/phase-a-streaming-shows-ty-51a65-ner-on-status-working-event-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [chromium] › tests/phase-a-streaming.spec.ts:72:5 › renders streaming bubble when reply_preview arrives 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('text=Here is the answer you were looking for')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for locator('text=Here is the answer you were looking for')[22m
+
+
+      81 |
+      82 |   // Streaming bubble should contain the preview text
+    > 83 |   await expect(page.locator("text=" + previewText)).toBeVisible({ timeout: 5000 });
+         |                                                     ^
+      84 |
+      85 |   // Blinking cursor span should be present alongside the streaming text
+      86 |   const cursor = page.locator(".animate-pulse").first();
+        at /Users/zap/Workspace/olympus/apps/zap-swarm/tests/phase-a-streaming.spec.ts:83:53
+
+    Error Context: test-results/phase-a-streaming-renders--83bc6--when-reply-preview-arrives-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('text=Here is the answer you were looking for')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for locator('text=Here is the answer you were looking for')[22m
+
+
+      81 |
+      82 |   // Streaming bubble should contain the preview text
+    > 83 |   await expect(page.locator("text=" + previewText)).toBeVisible({ timeout: 5000 });
+         |                                                     ^
+      84 |
+      85 |   // Blinking cursor span should be present alongside the streaming text
+      86 |   const cursor = page.locator(".animate-pulse").first();
+        at /Users/zap/Workspace/olympus/apps/zap-swarm/tests/phase-a-streaming.spec.ts:83:53
+
+    Error Context: test-results/phase-a-streaming-renders--83bc6--when-reply-preview-arrives-chromium-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/phase-a-streaming-renders--83bc6--when-reply-preview-arrives-chromium-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/phase-a-streaming-renders--83bc6--when-reply-preview-arrives-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [chromium] › tests/phase-a-streaming.spec.ts:93:5 › typing spinner disappears once reply_preview fires 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('text=Partial answer...')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for locator('text=Partial answer...')[22m
+
+
+      100 |
+      101 |   // Wait for preview to appear, then verify no spinner (isTyping set to false by reply_preview handler)
+    > 102 |   await expect(page.locator("text=Partial answer...")).toBeVisible({ timeout: 5000 });
+          |                                                        ^
+      103 |   const typingDots = page.locator('[data-testid="typing-indicator"]');
+      104 |   await expect(typingDots).not.toBeVisible();
+      105 | });
+        at /Users/zap/Workspace/olympus/apps/zap-swarm/tests/phase-a-streaming.spec.ts:102:56
+
+    Error Context: test-results/phase-a-streaming-typing-s-945ba-rs-once-reply-preview-fires-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('text=Partial answer...')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for locator('text=Partial answer...')[22m
+
+
+      100 |
+      101 |   // Wait for preview to appear, then verify no spinner (isTyping set to false by reply_preview handler)
+    > 102 |   await expect(page.locator("text=Partial answer...")).toBeVisible({ timeout: 5000 });
+          |                                                        ^
+      103 |   const typingDots = page.locator('[data-testid="typing-indicator"]');
+      104 |   await expect(typingDots).not.toBeVisible();
+      105 | });
+        at /Users/zap/Workspace/olympus/apps/zap-swarm/tests/phase-a-streaming.spec.ts:102:56
+
+    Error Context: test-results/phase-a-streaming-typing-s-945ba-rs-once-reply-preview-fires-chromium-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/phase-a-streaming-typing-s-945ba-rs-once-reply-preview-fires-chromium-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/phase-a-streaming-typing-s-945ba-rs-once-reply-preview-fires-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) [chromium] › tests/phase-a-streaming.spec.ts:110:5 › streaming bubble is replaced by settled message on messages event 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('text=Final complete answer from the agent.')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for locator('text=Final complete answer from the agent.')[22m
+
+
+      138 |
+      139 |   // Settled message should appear
+    > 140 |   await expect(page.locator(`text=${settledContent}`)).toBeVisible({ timeout: 5000 });
+          |                                                        ^
+      141 |
+      142 |   // Streaming bubble (blinking cursor) should be gone
+      143 |   // The cursor is a span with animate-pulse that only exists inside the streaming bubble
+        at /Users/zap/Workspace/olympus/apps/zap-swarm/tests/phase-a-streaming.spec.ts:140:56
+
+    Error Context: test-results/phase-a-streaming-streamin-6a9bc-d-message-on-messages-event-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('text=Final complete answer from the agent.')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for locator('text=Final complete answer from the agent.')[22m
+
+
+      138 |
+      139 |   // Settled message should appear
+    > 140 |   await expect(page.locator(`text=${settledContent}`)).toBeVisible({ timeout: 5000 });
+          |                                                        ^
+      141 |
+      142 |   // Streaming bubble (blinking cursor) should be gone
+      143 |   // The cursor is a span with animate-pulse that only exists inside the streaming bubble
+        at /Users/zap/Workspace/olympus/apps/zap-swarm/tests/phase-a-streaming.spec.ts:140:56
+
+    Error Context: test-results/phase-a-streaming-streamin-6a9bc-d-message-on-messages-event-chromium-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/phase-a-streaming-streamin-6a9bc-d-message-on-messages-event-chromium-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/phase-a-streaming-streamin-6a9bc-d-message-on-messages-event-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  5) [chromium] › tests/phase-a-streaming.spec.ts:152:5 › EventSource connects to the SSE stream endpoint 
+
+    Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBe[2m([22m[32mexpected[39m[2m) // Object.is equality[22m
+
+    Expected: [32mtrue[39m
+    Received: [31mfalse[39m
+
+      169 |   await page.waitForTimeout(1000);
+      170 |
+    > 171 |   expect(streamRequested).toBe(true);
+          |                           ^
+      172 | });
+      173 |
+      174 | // ─────────────────────────────────────────────────────────────────────────────
+        at /Users/zap/Workspace/olympus/apps/zap-swarm/tests/phase-a-streaming.spec.ts:171:27
+
+    Error Context: test-results/phase-a-streaming-EventSou-0bdf8--to-the-SSE-stream-endpoint-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBe[2m([22m[32mexpected[39m[2m) // Object.is equality[22m
+
+    Expected: [32mtrue[39m
+    Received: [31mfalse[39m
+
+      169 |   await page.waitForTimeout(1000);
+      170 |
+    > 171 |   expect(streamRequested).toBe(true);
+          |                           ^
+      172 | });
+      173 |
+      174 | // ─────────────────────────────────────────────────────────────────────────────
+        at /Users/zap/Workspace/olympus/apps/zap-swarm/tests/phase-a-streaming.spec.ts:171:27
+
+    Error Context: test-results/phase-a-streaming-EventSou-0bdf8--to-the-SSE-stream-endpoint-chromium-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/phase-a-streaming-EventSou-0bdf8--to-the-SSE-stream-endpoint-chromium-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/phase-a-streaming-EventSou-0bdf8--to-the-SSE-stream-endpoint-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  6) [chromium] › tests/phase-a-streaming.spec.ts:177:5 › historical messages from SSE messages event appear in the chat feed 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('text=What is the capital of France?')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for locator('text=What is the capital of France?')[22m
+
+
+      190 |   await page.goto(`/chats/${SESSION_ID}`);
+      191 |
+    > 192 |   await expect(page.locator("text=What is the capital of France?")).toBeVisible({ timeout: 5000 });
+          |                                                                     ^
+      193 |   await expect(page.locator("text=The capital of France is Paris.")).toBeVisible({ timeout: 5000 });
+      194 | });
+      195 |
+        at /Users/zap/Workspace/olympus/apps/zap-swarm/tests/phase-a-streaming.spec.ts:192:69
+
+    Error Context: test-results/phase-a-streaming-historic-74a2f-ent-appear-in-the-chat-feed-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('text=What is the capital of France?')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for locator('text=What is the capital of France?')[22m
+
+
+      190 |   await page.goto(`/chats/${SESSION_ID}`);
+      191 |
+    > 192 |   await expect(page.locator("text=What is the capital of France?")).toBeVisible({ timeout: 5000 });
+          |                                                                     ^
+      193 |   await expect(page.locator("text=The capital of France is Paris.")).toBeVisible({ timeout: 5000 });
+      194 | });
+      195 |
+        at /Users/zap/Workspace/olympus/apps/zap-swarm/tests/phase-a-streaming.spec.ts:192:69
+
+    Error Context: test-results/phase-a-streaming-historic-74a2f-ent-appear-in-the-chat-feed-chromium-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/phase-a-streaming-historic-74a2f-ent-appear-in-the-chat-feed-chromium-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/phase-a-streaming-historic-74a2f-ent-appear-in-the-chat-feed-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  7) [chromium] › tests/phase-b-new-chat.spec.ts:62:5 › renders an agent card for each agent returned by the API 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('text=Jerry')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for locator('text=Jerry')[22m
+
+
+      66 |   // Wait for skeleton cards to resolve
+      67 |   for (const agent of MOCK_AGENTS) {
+    > 68 |     await expect(page.locator(`text=${agent.name}`)).toBeVisible({ timeout: 5000 });
+         |                                                      ^
+      69 |     await expect(page.locator(`text=${agent.role}`)).toBeVisible({ timeout: 3000 });
+      70 |   }
+      71 | });
+        at /Users/zap/Workspace/olympus/apps/zap-swarm/tests/phase-b-new-chat.spec.ts:68:54
+
+    Error Context: test-results/phase-b-new-chat-renders-a-fec9b-h-agent-returned-by-the-API-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('text=Jerry')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for locator('text=Jerry')[22m
+
+
+      66 |   // Wait for skeleton cards to resolve
+      67 |   for (const agent of MOCK_AGENTS) {
+    > 68 |     await expect(page.locator(`text=${agent.name}`)).toBeVisible({ timeout: 5000 });
+         |                                                      ^
+      69 |     await expect(page.locator(`text=${agent.role}`)).toBeVisible({ timeout: 3000 });
+      70 |   }
+      71 | });
+        at /Users/zap/Workspace/olympus/apps/zap-swarm/tests/phase-b-new-chat.spec.ts:68:54
+
+    Error Context: test-results/phase-b-new-chat-renders-a-fec9b-h-agent-returned-by-the-API-chromium-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/phase-b-new-chat-renders-a-fec9b-h-agent-returned-by-the-API-chromium-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/phase-b-new-chat-renders-a-fec9b-h-agent-returned-by-the-API-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  8) [chromium] › tests/phase-b-new-chat.spec.ts:89:5 › clicking OmniRouter navigates to a random chat_xxx session 
+
+    TimeoutError: page.waitForURL: Timeout 3000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation until "load"
+    ============================================================
+
+       97 |
+       98 |   // Wait for navigation — should land on /chats/chat_...
+    >  99 |   await page.waitForURL(/\/chats\/chat_/, { timeout: 3000 });
+          |              ^
+      100 |   expect(page.url()).toMatch(/\/chats\/chat_\d+_/);
+      101 | });
+      102 |
+        at /Users/zap/Workspace/olympus/apps/zap-swarm/tests/phase-b-new-chat.spec.ts:99:14
+
+    Error Context: test-results/phase-b-new-chat-clicking--0b604-o-a-random-chat-xxx-session-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TimeoutError: page.waitForURL: Timeout 3000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation until "load"
+    ============================================================
+
+       97 |
+       98 |   // Wait for navigation — should land on /chats/chat_...
+    >  99 |   await page.waitForURL(/\/chats\/chat_/, { timeout: 3000 });
+          |              ^
+      100 |   expect(page.url()).toMatch(/\/chats\/chat_\d+_/);
+      101 | });
+      102 |
+        at /Users/zap/Workspace/olympus/apps/zap-swarm/tests/phase-b-new-chat.spec.ts:99:14
+
+    Error Context: test-results/phase-b-new-chat-clicking--0b604-o-a-random-chat-xxx-session-chromium-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/phase-b-new-chat-clicking--0b604-o-a-random-chat-xxx-session-chromium-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/phase-b-new-chat-clicking--0b604-o-a-random-chat-xxx-session-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  9) [chromium] › tests/phase-b-new-chat.spec.ts:106:5 › clicking Jerry card navigates to /chats/Jerry 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('text=Jerry')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for locator('text=Jerry')[22m
+
+
+      108 |   await page.goto("/chats/new");
+      109 |
+    > 110 |   await expect(page.locator("text=Jerry")).toBeVisible({ timeout: 5000 });
+          |                                            ^
+      111 |
+      112 |   await page.locator("text=Jerry").first().click();
+      113 |
+        at /Users/zap/Workspace/olympus/apps/zap-swarm/tests/phase-b-new-chat.spec.ts:110:44
+
+    Error Context: test-results/phase-b-new-chat-clicking--d632b-rd-navigates-to-chats-Jerry-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('text=Jerry')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for locator('text=Jerry')[22m
+
+
+      108 |   await page.goto("/chats/new");
+      109 |
+    > 110 |   await expect(page.locator("text=Jerry")).toBeVisible({ timeout: 5000 });
+          |                                            ^
+      111 |
+      112 |   await page.locator("text=Jerry").first().click();
+      113 |
+        at /Users/zap/Workspace/olympus/apps/zap-swarm/tests/phase-b-new-chat.spec.ts:110:44
+
+    Error Context: test-results/phase-b-new-chat-clicking--d632b-rd-navigates-to-chats-Jerry-chromium-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/phase-b-new-chat-clicking--d632b-rd-navigates-to-chats-Jerry-chromium-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/phase-b-new-chat-clicking--d632b-rd-navigates-to-chats-Jerry-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  10) [chromium] › tests/phase-b-new-chat.spec.ts:121:5 › active agent shows green status dot ──────
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('text=Jerry')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for locator('text=Jerry')[22m
+
+
+      123 |   await page.goto("/chats/new");
+      124 |
+    > 125 |   await expect(page.locator("text=Jerry")).toBeVisible({ timeout: 5000 });
+          |                                            ^
+      126 |
+      127 |   // The status dot for an active agent should have the green class (bg-green-400)
+      128 |   const jerryCard = page.locator("button[type='button']", { hasText: "Jerry" });
+        at /Users/zap/Workspace/olympus/apps/zap-swarm/tests/phase-b-new-chat.spec.ts:125:44
+
+    Error Context: test-results/phase-b-new-chat-active-agent-shows-green-status-dot-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('text=Jerry')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for locator('text=Jerry')[22m
+
+
+      123 |   await page.goto("/chats/new");
+      124 |
+    > 125 |   await expect(page.locator("text=Jerry")).toBeVisible({ timeout: 5000 });
+          |                                            ^
+      126 |
+      127 |   // The status dot for an active agent should have the green class (bg-green-400)
+      128 |   const jerryCard = page.locator("button[type='button']", { hasText: "Jerry" });
+        at /Users/zap/Workspace/olympus/apps/zap-swarm/tests/phase-b-new-chat.spec.ts:125:44
+
+    Error Context: test-results/phase-b-new-chat-active-agent-shows-green-status-dot-chromium-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/phase-b-new-chat-active-agent-shows-green-status-dot-chromium-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/phase-b-new-chat-active-agent-shows-green-status-dot-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  11) [chromium] › tests/phase-b-new-chat.spec.ts:133:5 › idle agent shows amber status dot ────────
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('text=Spike')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for locator('text=Spike')[22m
+
+
+      135 |   await page.goto("/chats/new");
+      136 |
+    > 137 |   await expect(page.locator("text=Spike")).toBeVisible({ timeout: 5000 });
+          |                                            ^
+      138 |
+      139 |   const spikeCard = page.locator("button[type='button']", { hasText: "Spike" });
+      140 |   const amberDot = spikeCard.locator(".bg-amber-400");
+        at /Users/zap/Workspace/olympus/apps/zap-swarm/tests/phase-b-new-chat.spec.ts:137:44
+
+    Error Context: test-results/phase-b-new-chat-idle-agent-shows-amber-status-dot-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('text=Spike')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for locator('text=Spike')[22m
+
+
+      135 |   await page.goto("/chats/new");
+      136 |
+    > 137 |   await expect(page.locator("text=Spike")).toBeVisible({ timeout: 5000 });
+          |                                            ^
+      138 |
+      139 |   const spikeCard = page.locator("button[type='button']", { hasText: "Spike" });
+      140 |   const amberDot = spikeCard.locator(".bg-amber-400");
+        at /Users/zap/Workspace/olympus/apps/zap-swarm/tests/phase-b-new-chat.spec.ts:137:44
+
+    Error Context: test-results/phase-b-new-chat-idle-agent-shows-amber-status-dot-chromium-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/phase-b-new-chat-idle-agent-shows-amber-status-dot-chromium-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/phase-b-new-chat-idle-agent-shows-amber-status-dot-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  12) [chromium] › tests/phase-b-new-chat.spec.ts:161:5 › agent card shows uptime text ─────────────
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('text=3h 12m')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for locator('text=3h 12m')[22m
+
+
+      163 |   await page.goto("/chats/new");
+      164 |
+    > 165 |   await expect(page.locator("text=3h 12m")).toBeVisible({ timeout: 5000 });
+          |                                             ^
+      166 |   await expect(page.locator("text=1h 5m")).toBeVisible({ timeout: 3000 });
+      167 | });
+      168 |
+        at /Users/zap/Workspace/olympus/apps/zap-swarm/tests/phase-b-new-chat.spec.ts:165:45
+
+    Error Context: test-results/phase-b-new-chat-agent-card-shows-uptime-text-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('text=3h 12m')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for locator('text=3h 12m')[22m
+
+
+      163 |   await page.goto("/chats/new");
+      164 |
+    > 165 |   await expect(page.locator("text=3h 12m")).toBeVisible({ timeout: 5000 });
+          |                                             ^
+      166 |   await expect(page.locator("text=1h 5m")).toBeVisible({ timeout: 3000 });
+      167 | });
+      168 |
+        at /Users/zap/Workspace/olympus/apps/zap-swarm/tests/phase-b-new-chat.spec.ts:165:45
+
+    Error Context: test-results/phase-b-new-chat-agent-card-shows-uptime-text-chromium-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/phase-b-new-chat-agent-card-shows-uptime-text-chromium-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/phase-b-new-chat-agent-card-shows-uptime-text-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  13) [chromium] › tests/phase-c-research-plan.spec.ts:90:5 › Research Plan panel appears and expands when jobs event arrives 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('text=RESEARCH PLAN')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for locator('text=RESEARCH PLAN')[22m
+
+
+       98 |   // Panel header should appear
+       99 |   const panelHeader = page.locator("text=RESEARCH PLAN");
+    > 100 |   await expect(panelHeader).toBeVisible({ timeout: 5000 });
+          |                             ^
+      101 |
+      102 |   // Step list should be visible (expanded by default when jobs arrive)
+      103 |   await expect(page.locator("text=Research market trends")).toBeVisible({ timeout: 3000 });
+        at /Users/zap/Workspace/olympus/apps/zap-swarm/tests/phase-c-research-plan.spec.ts:100:29
+
+    Error Context: test-results/phase-c-research-plan-Rese-d330b-nds-when-jobs-event-arrives-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('text=RESEARCH PLAN')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for locator('text=RESEARCH PLAN')[22m
+
+
+       98 |   // Panel header should appear
+       99 |   const panelHeader = page.locator("text=RESEARCH PLAN");
+    > 100 |   await expect(panelHeader).toBeVisible({ timeout: 5000 });
+          |                             ^
+      101 |
+      102 |   // Step list should be visible (expanded by default when jobs arrive)
+      103 |   await expect(page.locator("text=Research market trends")).toBeVisible({ timeout: 3000 });
+        at /Users/zap/Workspace/olympus/apps/zap-swarm/tests/phase-c-research-plan.spec.ts:100:29
+
+    Error Context: test-results/phase-c-research-plan-Rese-d330b-nds-when-jobs-event-arrives-chromium-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/phase-c-research-plan-Rese-d330b-nds-when-jobs-event-arrives-chromium-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/phase-c-research-plan-Rese-d330b-nds-when-jobs-event-arrives-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  14) [chromium] › tests/phase-c-research-plan.spec.ts:109:5 › step count is displayed in panel header 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('text=3 steps')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for locator('text=3 steps')[22m
+
+
+      116 |   await openChatWithJobs(page, tasks);
+      117 |
+    > 118 |   await expect(page.locator("text=3 steps")).toBeVisible({ timeout: 5000 });
+          |                                              ^
+      119 | });
+      120 |
+      121 | // ─────────────────────────────────────────────────────────────────────────────
+        at /Users/zap/Workspace/olympus/apps/zap-swarm/tests/phase-c-research-plan.spec.ts:118:46
+
+    Error Context: test-results/phase-c-research-plan-step-e2132-s-displayed-in-panel-header-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('text=3 steps')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for locator('text=3 steps')[22m
+
+
+      116 |   await openChatWithJobs(page, tasks);
+      117 |
+    > 118 |   await expect(page.locator("text=3 steps")).toBeVisible({ timeout: 5000 });
+          |                                              ^
+      119 | });
+      120 |
+      121 | // ─────────────────────────────────────────────────────────────────────────────
+        at /Users/zap/Workspace/olympus/apps/zap-swarm/tests/phase-c-research-plan.spec.ts:118:46
+
+    Error Context: test-results/phase-c-research-plan-step-e2132-s-displayed-in-panel-header-chromium-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/phase-c-research-plan-step-e2132-s-displayed-in-panel-header-chromium-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/phase-c-research-plan-step-e2132-s-displayed-in-panel-header-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  15) [chromium] › tests/phase-c-research-plan.spec.ts:137:5 › shows ANALYSIS label for intent containing 'analyse' 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('text=ANALYSIS')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for locator('text=ANALYSIS')[22m
+
+
+      137 | test("shows ANALYSIS label for intent containing 'analyse'", async ({ page }) => {
+      138 |   await openChatWithJobs(page, [makeTask({ intent: "Analyse the dataset for patterns" })]);
+    > 139 |   await expect(page.locator("text=ANALYSIS")).toBeVisible({ timeout: 5000 });
+          |                                               ^
+      140 | });
+      141 |
+      142 | // ─────────────────────────────────────────────────────────────────────────────
+        at /Users/zap/Workspace/olympus/apps/zap-swarm/tests/phase-c-research-plan.spec.ts:139:47
+
+    Error Context: test-results/phase-c-research-plan-show-10cb9--intent-containing-analyse--chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('text=ANALYSIS')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for locator('text=ANALYSIS')[22m
+
+
+      137 | test("shows ANALYSIS label for intent containing 'analyse'", async ({ page }) => {
+      138 |   await openChatWithJobs(page, [makeTask({ intent: "Analyse the dataset for patterns" })]);
+    > 139 |   await expect(page.locator("text=ANALYSIS")).toBeVisible({ timeout: 5000 });
+          |                                               ^
+      140 | });
+      141 |
+      142 | // ─────────────────────────────────────────────────────────────────────────────
+        at /Users/zap/Workspace/olympus/apps/zap-swarm/tests/phase-c-research-plan.spec.ts:139:47
+
+    Error Context: test-results/phase-c-research-plan-show-10cb9--intent-containing-analyse--chromium-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/phase-c-research-plan-show-10cb9--intent-containing-analyse--chromium-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/phase-c-research-plan-show-10cb9--intent-containing-analyse--chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  16) [chromium] › tests/phase-c-research-plan.spec.ts:145:5 › shows SYNTHESIS label for intent containing 'write' 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('text=SYNTHESIS')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for locator('text=SYNTHESIS')[22m
+
+
+      145 | test("shows SYNTHESIS label for intent containing 'write'", async ({ page }) => {
+      146 |   await openChatWithJobs(page, [makeTask({ intent: "Write a summary report" })]);
+    > 147 |   await expect(page.locator("text=SYNTHESIS")).toBeVisible({ timeout: 5000 });
+          |                                                ^
+      148 | });
+      149 |
+      150 | // ─────────────────────────────────────────────────────────────────────────────
+        at /Users/zap/Workspace/olympus/apps/zap-swarm/tests/phase-c-research-plan.spec.ts:147:48
+
+    Error Context: test-results/phase-c-research-plan-show-00292-or-intent-containing-write--chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('text=SYNTHESIS')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for locator('text=SYNTHESIS')[22m
+
+
+      145 | test("shows SYNTHESIS label for intent containing 'write'", async ({ page }) => {
+      146 |   await openChatWithJobs(page, [makeTask({ intent: "Write a summary report" })]);
+    > 147 |   await expect(page.locator("text=SYNTHESIS")).toBeVisible({ timeout: 5000 });
+          |                                                ^
+      148 | });
+      149 |
+      150 | // ─────────────────────────────────────────────────────────────────────────────
+        at /Users/zap/Workspace/olympus/apps/zap-swarm/tests/phase-c-research-plan.spec.ts:147:48
+
+    Error Context: test-results/phase-c-research-plan-show-00292-or-intent-containing-write--chromium-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/phase-c-research-plan-show-00292-or-intent-containing-write--chromium-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/phase-c-research-plan-show-00292-or-intent-containing-write--chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  17) [chromium] › tests/phase-c-research-plan.spec.ts:153:5 › shows EXECUTE label for intent containing 'deploy' 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('text=EXECUTE')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for locator('text=EXECUTE')[22m
+
+
+      153 | test("shows EXECUTE label for intent containing 'deploy'", async ({ page }) => {
+      154 |   await openChatWithJobs(page, [makeTask({ intent: "Deploy the service to production" })]);
+    > 155 |   await expect(page.locator("text=EXECUTE")).toBeVisible({ timeout: 5000 });
+          |                                              ^
+      156 | });
+      157 |
+      158 | // ─────────────────────────────────────────────────────────────────────────────
+        at /Users/zap/Workspace/olympus/apps/zap-swarm/tests/phase-c-research-plan.spec.ts:155:46
+
+    Error Context: test-results/phase-c-research-plan-show-5017c-r-intent-containing-deploy--chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('text=EXECUTE')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for locator('text=EXECUTE')[22m
+
+
+      153 | test("shows EXECUTE label for intent containing 'deploy'", async ({ page }) => {
+      154 |   await openChatWithJobs(page, [makeTask({ intent: "Deploy the service to production" })]);
+    > 155 |   await expect(page.locator("text=EXECUTE")).toBeVisible({ timeout: 5000 });
+          |                                              ^
+      156 | });
+      157 |
+      158 | // ─────────────────────────────────────────────────────────────────────────────
+        at /Users/zap/Workspace/olympus/apps/zap-swarm/tests/phase-c-research-plan.spec.ts:155:46
+
+    Error Context: test-results/phase-c-research-plan-show-5017c-r-intent-containing-deploy--chromium-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/phase-c-research-plan-show-5017c-r-intent-containing-deploy--chromium-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/phase-c-research-plan-show-5017c-r-intent-containing-deploy--chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  18) [chromium] › tests/phase-c-research-plan.spec.ts:161:5 › shows MEMORY label for intent containing 'store' 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('text=MEMORY')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for locator('text=MEMORY')[22m
+
+
+      161 | test("shows MEMORY label for intent containing 'store'", async ({ page }) => {
+      162 |   await openChatWithJobs(page, [makeTask({ intent: "Store results in memory" })]);
+    > 163 |   await expect(page.locator("text=MEMORY")).toBeVisible({ timeout: 5000 });
+          |                                             ^
+      164 | });
+      165 |
+      166 | // ─────────────────────────────────────────────────────────────────────────────
+        at /Users/zap/Workspace/olympus/apps/zap-swarm/tests/phase-c-research-plan.spec.ts:163:45
+
+    Error Context: test-results/phase-c-research-plan-show-01e3a-or-intent-containing-store--chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('text=MEMORY')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for locator('text=MEMORY')[22m
+
+
+      161 | test("shows MEMORY label for intent containing 'store'", async ({ page }) => {
+      162 |   await openChatWithJobs(page, [makeTask({ intent: "Store results in memory" })]);
+    > 163 |   await expect(page.locator("text=MEMORY")).toBeVisible({ timeout: 5000 });
+          |                                             ^
+      164 | });
+      165 |
+      166 | // ─────────────────────────────────────────────────────────────────────────────
+        at /Users/zap/Workspace/olympus/apps/zap-swarm/tests/phase-c-research-plan.spec.ts:163:45
+
+    Error Context: test-results/phase-c-research-plan-show-01e3a-or-intent-containing-store--chromium-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/phase-c-research-plan-show-01e3a-or-intent-containing-store--chromium-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/phase-c-research-plan-show-01e3a-or-intent-containing-store--chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  19) [chromium] › tests/phase-c-research-plan.spec.ts:169:5 › shows TASK label for unrecognised intent 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('text=TASK')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for locator('text=TASK')[22m
+
+
+      169 | test("shows TASK label for unrecognised intent", async ({ page }) => {
+      170 |   await openChatWithJobs(page, [makeTask({ intent: "Do something unrecognised" })]);
+    > 171 |   await expect(page.locator("text=TASK")).toBeVisible({ timeout: 5000 });
+          |                                           ^
+      172 | });
+      173 |
+      174 | // ─────────────────────────────────────────────────────────────────────────────
+        at /Users/zap/Workspace/olympus/apps/zap-swarm/tests/phase-c-research-plan.spec.ts:171:43
+
+    Error Context: test-results/phase-c-research-plan-show-a3592-bel-for-unrecognised-intent-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('text=TASK')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for locator('text=TASK')[22m
+
+
+      169 | test("shows TASK label for unrecognised intent", async ({ page }) => {
+      170 |   await openChatWithJobs(page, [makeTask({ intent: "Do something unrecognised" })]);
+    > 171 |   await expect(page.locator("text=TASK")).toBeVisible({ timeout: 5000 });
+          |                                           ^
+      172 | });
+      173 |
+      174 | // ─────────────────────────────────────────────────────────────────────────────
+        at /Users/zap/Workspace/olympus/apps/zap-swarm/tests/phase-c-research-plan.spec.ts:171:43
+
+    Error Context: test-results/phase-c-research-plan-show-a3592-bel-for-unrecognised-intent-chromium-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/phase-c-research-plan-show-a3592-bel-for-unrecognised-intent-chromium-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/phase-c-research-plan-show-a3592-bel-for-unrecognised-intent-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  20) [chromium] › tests/phase-c-research-plan.spec.ts:177:5 › step numbers are displayed for each job 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('text=RESEARCH PLAN')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for locator('text=RESEARCH PLAN')[22m
+
+
+      181 |   ]);
+      182 |
+    > 183 |   await expect(page.locator("text=RESEARCH PLAN")).toBeVisible({ timeout: 5000 });
+          |                                                    ^
+      184 |   // Step numbers are rendered as mono text "1", "2"
+      185 |   await expect(page.locator("text=1").first()).toBeVisible({ timeout: 3000 });
+      186 |   await expect(page.locator("text=2").first()).toBeVisible({ timeout: 3000 });
+        at /Users/zap/Workspace/olympus/apps/zap-swarm/tests/phase-c-research-plan.spec.ts:183:52
+
+    Error Context: test-results/phase-c-research-plan-step-8d1b8--are-displayed-for-each-job-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('text=RESEARCH PLAN')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for locator('text=RESEARCH PLAN')[22m
+
+
+      181 |   ]);
+      182 |
+    > 183 |   await expect(page.locator("text=RESEARCH PLAN")).toBeVisible({ timeout: 5000 });
+          |                                                    ^
+      184 |   // Step numbers are rendered as mono text "1", "2"
+      185 |   await expect(page.locator("text=1").first()).toBeVisible({ timeout: 3000 });
+      186 |   await expect(page.locator("text=2").first()).toBeVisible({ timeout: 3000 });
+        at /Users/zap/Workspace/olympus/apps/zap-swarm/tests/phase-c-research-plan.spec.ts:183:52
+
+    Error Context: test-results/phase-c-research-plan-step-8d1b8--are-displayed-for-each-job-chromium-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/phase-c-research-plan-step-8d1b8--are-displayed-for-each-job-chromium-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/phase-c-research-plan-step-8d1b8--are-displayed-for-each-job-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  21) [chromium] › tests/phase-c-research-plan.spec.ts:192:5 › clicking the panel header toggles the step list 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('text=RESEARCH PLAN')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for locator('text=RESEARCH PLAN')[22m
+
+
+      194 |
+      195 |   const header = page.locator("text=RESEARCH PLAN");
+    > 196 |   await expect(header).toBeVisible({ timeout: 5000 });
+          |                        ^
+      197 |
+      198 |   // Steps should be visible (auto-expanded on jobs arrival)
+      199 |   await expect(page.locator("text=Research topic")).toBeVisible({ timeout: 3000 });
+        at /Users/zap/Workspace/olympus/apps/zap-swarm/tests/phase-c-research-plan.spec.ts:196:24
+
+    Error Context: test-results/phase-c-research-plan-clic-5547f-eader-toggles-the-step-list-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('text=RESEARCH PLAN')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for locator('text=RESEARCH PLAN')[22m
+
+
+      194 |
+      195 |   const header = page.locator("text=RESEARCH PLAN");
+    > 196 |   await expect(header).toBeVisible({ timeout: 5000 });
+          |                        ^
+      197 |
+      198 |   // Steps should be visible (auto-expanded on jobs arrival)
+      199 |   await expect(page.locator("text=Research topic")).toBeVisible({ timeout: 3000 });
+        at /Users/zap/Workspace/olympus/apps/zap-swarm/tests/phase-c-research-plan.spec.ts:196:24
+
+    Error Context: test-results/phase-c-research-plan-clic-5547f-eader-toggles-the-step-list-chromium-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/phase-c-research-plan-clic-5547f-eader-toggles-the-step-list-chromium-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/phase-c-research-plan-clic-5547f-eader-toggles-the-step-list-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  22) [chromium] › tests/phase-c-research-plan.spec.ts:213:5 › RUNNING job shows animate-spin status icon 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('text=RESEARCH PLAN')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for locator('text=RESEARCH PLAN')[22m
+
+
+      214 |   await openChatWithJobs(page, [makeTask({ intent: "Research topic", status: "RUNNING" })]);
+      215 |
+    > 216 |   await expect(page.locator("text=RESEARCH PLAN")).toBeVisible({ timeout: 5000 });
+          |                                                    ^
+      217 |
+      218 |   // The Loader2 spin icon should be present
+      219 |   const spinner = page.locator(".animate-spin").first();
+        at /Users/zap/Workspace/olympus/apps/zap-swarm/tests/phase-c-research-plan.spec.ts:216:52
+
+    Error Context: test-results/phase-c-research-plan-RUNN-21008-ws-animate-spin-status-icon-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('text=RESEARCH PLAN')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for locator('text=RESEARCH PLAN')[22m
+
+
+      214 |   await openChatWithJobs(page, [makeTask({ intent: "Research topic", status: "RUNNING" })]);
+      215 |
+    > 216 |   await expect(page.locator("text=RESEARCH PLAN")).toBeVisible({ timeout: 5000 });
+          |                                                    ^
+      217 |
+      218 |   // The Loader2 spin icon should be present
+      219 |   const spinner = page.locator(".animate-spin").first();
+        at /Users/zap/Workspace/olympus/apps/zap-swarm/tests/phase-c-research-plan.spec.ts:216:52
+
+    Error Context: test-results/phase-c-research-plan-RUNN-21008-ws-animate-spin-status-icon-chromium-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/phase-c-research-plan-RUNN-21008-ws-animate-spin-status-icon-chromium-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/phase-c-research-plan-RUNN-21008-ws-animate-spin-status-icon-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  23) [chromium] › tests/phase-d-shortcuts.spec.ts:29:7 › Phase D — Keyboard Shortcuts › Cmd+K focuses the chat textarea 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('textarea[placeholder=\'Send a message to Swarm...\']')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for locator('textarea[placeholder=\'Send a message to Swarm...\']')[22m
+
+
+      29 |   test("Cmd+K focuses the chat textarea", async ({ page }) => {
+      30 |     const textarea = page.locator("textarea[placeholder='Send a message to Swarm...']");
+    > 31 |     await expect(textarea).toBeVisible();
+         |                            ^
+      32 |
+      33 |     // Click outside to blur
+      34 |     await page.locator("body").click({ position: { x: 0, y: 0 } });
+        at /Users/zap/Workspace/olympus/apps/zap-swarm/tests/phase-d-shortcuts.spec.ts:31:28
+
+    Error Context: test-results/phase-d-shortcuts-Phase-D--073a8-K-focuses-the-chat-textarea-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('textarea[placeholder=\'Send a message to Swarm...\']')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for locator('textarea[placeholder=\'Send a message to Swarm...\']')[22m
+
+
+      29 |   test("Cmd+K focuses the chat textarea", async ({ page }) => {
+      30 |     const textarea = page.locator("textarea[placeholder='Send a message to Swarm...']");
+    > 31 |     await expect(textarea).toBeVisible();
+         |                            ^
+      32 |
+      33 |     // Click outside to blur
+      34 |     await page.locator("body").click({ position: { x: 0, y: 0 } });
+        at /Users/zap/Workspace/olympus/apps/zap-swarm/tests/phase-d-shortcuts.spec.ts:31:28
+
+    Error Context: test-results/phase-d-shortcuts-Phase-D--073a8-K-focuses-the-chat-textarea-chromium-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/phase-d-shortcuts-Phase-D--073a8-K-focuses-the-chat-textarea-chromium-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/phase-d-shortcuts-Phase-D--073a8-K-focuses-the-chat-textarea-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  24) [chromium] › tests/phase-d-shortcuts.spec.ts:42:7 › Phase D — Keyboard Shortcuts › Enter triggers handleSendMessage when not holding Shift 
+
+    [31mTest timeout of 30000ms exceeded.[39m
+
+    Error: locator.fill: Test timeout of 30000ms exceeded.
+    Call log:
+    [2m  - waiting for locator('textarea[placeholder=\'Send a message to Swarm...\']')[22m
+
+
+      42 |   test("Enter triggers handleSendMessage when not holding Shift", async ({ page }) => {
+      43 |     const textarea = page.locator("textarea[placeholder='Send a message to Swarm...']");
+    > 44 |     await textarea.fill("Hello Swarm");
+         |                    ^
+      45 |     
+      46 |     // Press Enter
+      47 |     await Promise.all([
+        at /Users/zap/Workspace/olympus/apps/zap-swarm/tests/phase-d-shortcuts.spec.ts:44:20
+
+    Error Context: test-results/phase-d-shortcuts-Phase-D--77b98-sage-when-not-holding-Shift-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    [31mTest timeout of 30000ms exceeded.[39m
+
+    Error: locator.fill: Test timeout of 30000ms exceeded.
+    Call log:
+    [2m  - waiting for locator('textarea[placeholder=\'Send a message to Swarm...\']')[22m
+
+
+      42 |   test("Enter triggers handleSendMessage when not holding Shift", async ({ page }) => {
+      43 |     const textarea = page.locator("textarea[placeholder='Send a message to Swarm...']");
+    > 44 |     await textarea.fill("Hello Swarm");
+         |                    ^
+      45 |     
+      46 |     // Press Enter
+      47 |     await Promise.all([
+        at /Users/zap/Workspace/olympus/apps/zap-swarm/tests/phase-d-shortcuts.spec.ts:44:20
+
+    Error Context: test-results/phase-d-shortcuts-Phase-D--77b98-sage-when-not-holding-Shift-chromium-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/phase-d-shortcuts-Phase-D--77b98-sage-when-not-holding-Shift-chromium-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/phase-d-shortcuts-Phase-D--77b98-sage-when-not-holding-Shift-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  25) [chromium] › tests/phase-d-shortcuts.spec.ts:56:7 › Phase D — Keyboard Shortcuts › Shift+Enter does not trigger handleSendMessage 
+
+    [31mTest timeout of 30000ms exceeded.[39m
+
+    Error: locator.fill: Test timeout of 30000ms exceeded.
+    Call log:
+    [2m  - waiting for locator('textarea[placeholder=\'Send a message to Swarm...\']')[22m
+
+
+      56 |     await page.route(INTERRUPT_API, async (route) => {
+      57 |       await route.fulfill({
+    > 58 |         status: 200,
+         |                    ^
+      59 |         body: JSON.stringify({ ok: true }),
+      60 |         contentType: "application/json",
+      61 |       });
+        at /Users/zap/Workspace/olympus/apps/zap-swarm/tests/phase-d-shortcuts.spec.ts:58:20
+
+    Error Context: test-results/phase-d-shortcuts-Phase-D--b4b16-t-trigger-handleSendMessage-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    [31mTest timeout of 30000ms exceeded.[39m
+
+    Error: locator.fill: Test timeout of 30000ms exceeded.
+    Call log:
+    [2m  - waiting for locator('textarea[placeholder=\'Send a message to Swarm...\']')[22m
+
+
+      56 |     await page.route(INTERRUPT_API, async (route) => {
+      57 |       await route.fulfill({
+    > 58 |         status: 200,
+         |                    ^
+      59 |         body: JSON.stringify({ ok: true }),
+      60 |         contentType: "application/json",
+      61 |       });
+        at /Users/zap/Workspace/olympus/apps/zap-swarm/tests/phase-d-shortcuts.spec.ts:58:20
+
+    Error Context: test-results/phase-d-shortcuts-Phase-D--b4b16-t-trigger-handleSendMessage-chromium-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/phase-d-shortcuts-Phase-D--b4b16-t-trigger-handleSendMessage-chromium-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/phase-d-shortcuts-Phase-D--b4b16-t-trigger-handleSendMessage-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  26) [chromium] › tests/phase-b-new-chat.spec.ts:48:5 › OmniRouter card is the first item in the grid 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoContainText[2m([22m[32mexpected[39m[2m)[22m failed
+
+    Locator: locator('button[type=\'button\']').first()
+    Expected substring: [32m"OmniRouter"[39m
+    Received string:    [31m"Select Workspace..."[39m
+    Timeout: 5000ms
+
+    Call log:
+    [2m  - Expect "toContainText" with timeout 5000ms[22m
+    [2m  - waiting for locator('button[type=\'button\']').first()[22m
+    [2m    9 × locator resolved to <button type="button" role="combobox" data-state="closed" aria-expanded="false" aria-haspopup="dialog" data-slot="popover-trigger" aria-controls="radix-_R_mu99bn5ritqlb_" class="cursor-pointer group focus-visible:outline-hidden has-data-[arrow=true]:justify-between whitespace-nowrap font-medium ring-offset-background disabled:pointer-events-none disabled:opacity-60 [&_svg]:shrink-0 data-[state=open]:bg-surface-variant px-[var(--button-padding-x,12px)] [&_svg:not([class*=size-])]:size-4 focus-visible:r…>…</button>[22m
+    [2m      - unexpected value "Select Workspace..."[22m
+
+
+      54 |   // Get all agent name labels and check OmniRouter is first
+      55 |   const cards = page.locator("button[type='button']");
+    > 56 |   await expect(cards.first()).toContainText("OmniRouter");
+         |                               ^
+      57 | });
+      58 |
+      59 | // ─────────────────────────────────────────────────────────────────────────────
+        at /Users/zap/Workspace/olympus/apps/zap-swarm/tests/phase-b-new-chat.spec.ts:56:31
+
+    Error Context: test-results/phase-b-new-chat-OmniRoute-70874--the-first-item-in-the-grid-chromium/error-context.md
+
+  25 failed
+    [chromium] › tests/phase-a-streaming.spec.ts:58:5 › shows typing spinner on status:working event 
+    [chromium] › tests/phase-a-streaming.spec.ts:72:5 › renders streaming bubble when reply_preview arrives 
+    [chromium] › tests/phase-a-streaming.spec.ts:93:5 › typing spinner disappears once reply_preview fires 
+    [chromium] › tests/phase-a-streaming.spec.ts:110:5 › streaming bubble is replaced by settled message on messages event 
+    [chromium] › tests/phase-a-streaming.spec.ts:152:5 › EventSource connects to the SSE stream endpoint 
+    [chromium] › tests/phase-a-streaming.spec.ts:177:5 › historical messages from SSE messages event appear in the chat feed 
+    [chromium] › tests/phase-b-new-chat.spec.ts:62:5 › renders an agent card for each agent returned by the API 
+    [chromium] › tests/phase-b-new-chat.spec.ts:89:5 › clicking OmniRouter navigates to a random chat_xxx session 
+    [chromium] › tests/phase-b-new-chat.spec.ts:106:5 › clicking Jerry card navigates to /chats/Jerry 
+    [chromium] › tests/phase-b-new-chat.spec.ts:121:5 › active agent shows green status dot ────────
+    [chromium] › tests/phase-b-new-chat.spec.ts:133:5 › idle agent shows amber status dot ──────────
+    [chromium] › tests/phase-b-new-chat.spec.ts:161:5 › agent card shows uptime text ───────────────
+    [chromium] › tests/phase-c-research-plan.spec.ts:90:5 › Research Plan panel appears and expands when jobs event arrives 
+    [chromium] › tests/phase-c-research-plan.spec.ts:109:5 › step count is displayed in panel header 
+    [chromium] › tests/phase-c-research-plan.spec.ts:137:5 › shows ANALYSIS label for intent containing 'analyse' 
+    [chromium] › tests/phase-c-research-plan.spec.ts:145:5 › shows SYNTHESIS label for intent containing 'write' 
+    [chromium] › tests/phase-c-research-plan.spec.ts:153:5 › shows EXECUTE label for intent containing 'deploy' 
+    [chromium] › tests/phase-c-research-plan.spec.ts:161:5 › shows MEMORY label for intent containing 'store' 
+    [chromium] › tests/phase-c-research-plan.spec.ts:169:5 › shows TASK label for unrecognised intent 
+    [chromium] › tests/phase-c-research-plan.spec.ts:177:5 › step numbers are displayed for each job 
+    [chromium] › tests/phase-c-research-plan.spec.ts:192:5 › clicking the panel header toggles the step list 
+    [chromium] › tests/phase-c-research-plan.spec.ts:213:5 › RUNNING job shows animate-spin status icon 
+    [chromium] › tests/phase-d-shortcuts.spec.ts:29:7 › Phase D — Keyboard Shortcuts › Cmd+K focuses the chat textarea 
+    [chromium] › tests/phase-d-shortcuts.spec.ts:42:7 › Phase D — Keyboard Shortcuts › Enter triggers handleSendMessage when not holding Shift 
+    [chromium] › tests/phase-d-shortcuts.spec.ts:56:7 › Phase D — Keyboard Shortcuts › Shift+Enter does not trigger handleSendMessage 
+  1 flaky
+    [chromium] › tests/phase-b-new-chat.spec.ts:48:5 › OmniRouter card is the first item in the grid 
+  7 passed (2.4m)

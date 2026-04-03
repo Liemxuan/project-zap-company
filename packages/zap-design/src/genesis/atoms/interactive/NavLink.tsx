@@ -9,18 +9,18 @@ import { cn } from '../../../lib/utils';
 import { motion } from 'framer-motion';
 
 const navLinkVariants = cva(
-    "relative flex items-center transition-all duration-300 outline-none transform-gpu w-full cursor-pointer",
+    "relative flex items-center transition-all duration-300 outline-none w-full cursor-pointer antialiased",
     {
         variants: {
             variant: {
                 default: "rounded-lg text-[13px] font-medium px-2 py-2 gap-3 group/navlist",
-                subItem: "py-1.5 pr-3 text-[12px] font-body text-transform-secondary block", // For atoms inside groups
+                subItem: "px-3 -ml-3 py-1.5 text-[12px] font-body text-transform-secondary block", // For atoms inside groups (aligned padding surface)
             },
             state: {
                 default: "text-muted-foreground hover:bg-muted/50 hover:text-foreground",
-                active: "text-primary font-bold bg-primary/10",
-                ghostHover: "text-muted-foreground/60 hover:text-foreground hover:translate-x-0.5 group-hover/navlist:opacity-40 hover:!opacity-100", // Unselected subItems
-                activeShifted: "text-primary font-bold translate-x-1" // Selected subItems
+                active: "text-primary font-bold bg-primary/10 ring-1 ring-primary/20",
+                ghostHover: "text-muted-foreground/60 hover:text-foreground hover:translate-x-0.5 group-hover/navlist:opacity-40 hover:!opacity-100 hover:bg-on-surface/5 rounded-md", // Unselected subItems (Second Focus)
+                activeShifted: "bg-primary-container text-on-primary-container font-bold shadow-[var(--md-sys-elevation-level1)] rounded-md border border-primary-container" // Selected subItems (Main Focus)
             }
         },
         defaultVariants: {
@@ -65,23 +65,28 @@ export const NavLink = React.forwardRef<HTMLAnchorElement, NavLinkProps>(({
         }
     }
 
+    const customStyle = {
+        borderRadius: 'var(--navlink-border-radius, 8px)',
+        borderWidth: 'var(--navlink-border-width, 0px)',
+        borderStyle: 'solid',
+        borderColor: isActive ? 'var(--color-primary-container)' : 'transparent',
+        ...(depth > 0 ? { paddingLeft: `${0.75 + (depth * 0.75)}rem` } : {}),
+        ...(props.style as React.CSSProperties)
+    };
+
     return (
         <Link
             href={href}
             ref={ref}
             data-sidebar-active={isActive}
             className={cn(navLinkVariants({ variant, state: computeState }), className)}
-            style={depth > 0 ? { paddingLeft: `${0.75 + (depth * 0.75)}rem` } : undefined}
+            style={customStyle}
             {...(props as React.AnchorHTMLAttributes<HTMLAnchorElement>)}
         >
-            {showIndicator && isActive && (
+            {showIndicator && isActive && variant === 'default' && (
                 <motion.div
                     layoutId={indicatorLayoutId}
-                    className={cn(
-                        variant === 'subItem' 
-                            ? "absolute left-[-17px] top-1/2 -translate-y-1/2 w-1 h-1 rounded-full bg-primary shadow-[0_0_6px_rgba(var(--sys-color-primary-rgb),0.5)]"
-                            : "absolute left-0 top-1/2 -translate-y-1/2 w-1 h-4 rounded-r-md bg-primary"
-                    )}
+                    className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-4 rounded-r-md bg-primary"
                 />
             )}
             {variant === 'default' ? (

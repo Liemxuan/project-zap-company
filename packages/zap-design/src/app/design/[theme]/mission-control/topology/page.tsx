@@ -26,7 +26,7 @@ export default function TopologyForensicsPage() {
         return () => clearInterval(interval);
     }, []);
 
-    if (!data) return <div className="flex items-center justify-center p-24 text-on-surface font-mono animate-pulse">Scanning System Topology...</div>;
+    if (!data) return <div className="flex items-center justify-center p-24 text-on-surface font-mono text-transform-tertiary animate-pulse">Scanning System Topology...</div>;
 
     const chart = `
     graph TD
@@ -102,7 +102,7 @@ export default function TopologyForensicsPage() {
                                 <GitMerge className="h-6 w-6 text-primary" />
                                 Topology Viewer
                             </h1>
-                            <p className="text-xs font-mono text-primary/80 mt-1 uppercase tracking-wider font-bold">Live System Flow</p>
+ <p className="text-xs font-mono text-transform-tertiary text-primary/80 mt-1 tracking-wider font-bold">Live System Flow</p>
                         </div>
                     </div>
                 </div>

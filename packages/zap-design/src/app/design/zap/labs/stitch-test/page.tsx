@@ -73,7 +73,7 @@ export default function StitchMagicTestPage() {
                                 .stitch-yellow { background-color: #fdf6b0; }
                                 .stitch-pink-bg { background-color: #ff577f; color: white; }
                                 .stitch-pink-text { color: #ff577f; }
-                           `}} />
+                          `}} />
 
                             <div className="relative flex flex-col stitch-mint w-full max-w-[480px] min-h-[850px] border-4 stitch-ink rounded-3xl overflow-hidden shrink-0">
                                 <div className="flex items-center p-4 pb-2 justify-between">

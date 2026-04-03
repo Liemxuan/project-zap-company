@@ -6,6 +6,8 @@ import { useTheme } from '../../../../../components/ThemeContext';
 import { ComponentSandboxTemplate } from '../../../../../zap/layout/ComponentSandboxTemplate';
 import { Slider } from '../../../../../genesis/atoms/interactive/slider';
 import { Switch } from '../../../../../genesis/atoms/interactive/switch';
+import { CanvasBody } from '../../../../../zap/layout/CanvasBody';
+import { SectionHeader } from '../../../../../zap/sections/SectionHeader';
 
 export default function ThemePublisherSandboxPage() {
     const { theme } = useTheme();
@@ -40,18 +42,18 @@ export default function ThemePublisherSandboxPage() {
                     </div>
 
                     <div className="space-y-4 mt-6">
-                        <h4 className="text-label-small font-bold text-transform-primary uppercase font-display tracking-wider">State Controls</h4>
+ <h4 className="text-label-small font-bold text-transform-primary font-display tracking-wider">State Controls</h4>
                         <div className="flex items-center justify-between">
                             <label className="text-body-small font-medium font-secondary text-transform-secondary text-brand-on-surface">Loading State</label>
-                            <Switch checked={isLoading} onCheckedChange={setIsLoading} />
+                            <Switch aria-label="Switch component" checked={isLoading} onCheckedChange={setIsLoading} />
                         </div>
                         <div className="flex items-center justify-between">
                             <label className="text-body-small font-medium font-secondary text-transform-secondary text-brand-on-surface">Disabled</label>
-                            <Switch checked={isDisabled} onCheckedChange={setIsDisabled} />
+                            <Switch aria-label="Switch component" checked={isDisabled} onCheckedChange={setIsDisabled} />
                         </div>
                         <div className="flex items-center justify-between">
                             <label className="text-body-small font-medium font-secondary text-transform-secondary text-brand-on-surface">Hide Dev Wrapper</label>
-                            <Switch checked={hideWrapper} onCheckedChange={setHideWrapper} />
+                            <Switch aria-label="Switch component" checked={hideWrapper} onCheckedChange={setHideWrapper} />
                         </div>
                     </div>
                 </div>
@@ -83,10 +85,14 @@ export default function ThemePublisherSandboxPage() {
                 .dynamic-radius-wrapper {
                     --button-border-radius: ${borderRadius[0]}px;
                 }
-            `}} />
-            <div
-                className="w-full flex items-center justify-center min-h-[400px] p-12 bg-layer-panel shadow-[0_0_15px_rgba(0,0,0,0.05)] border border-outline-variant rounded-xl dynamic-radius-wrapper"
-            >
+           `}} />
+            <CanvasBody flush={false}>
+                <CanvasBody.Section>
+                    <SectionHeader number="1" id="theme-publisher" title="Theme Publisher Sandbox" description="Interactive components for Theme Publisher" icon="widgets" />
+                    <CanvasBody.Demo className="w-full">
+                        <div
+                            className="w-full flex items-center justify-center min-h-[400px] p-12 bg-layer-panel shadow-[0_0_15px_rgba(0,0,0,0.05)] border border-outline-variant rounded-xl dynamic-radius-wrapper"
+                        >
                 <div className="max-w-md w-full relative">
                     <div className="text-center mb-8 px-4 font-secondary text-brand-on-surface">
                         <p className="text-body-small opacity-60 mb-2">Adjust the radius in the left sidebar to watch the dashed Inspector outline dynamically wrap the internal Genesis Button pill geometries.</p>
@@ -100,8 +106,11 @@ export default function ThemePublisherSandboxPage() {
                         hideWrapper={hideWrapper}
                         buttonProps={{ disabled: isDisabled }}
                     />
-                </div>
-            </div>
+                        </div>
+                    </div>
+                </CanvasBody.Demo>
+                </CanvasBody.Section>
+            </CanvasBody>
         </ComponentSandboxTemplate>
     );
 }

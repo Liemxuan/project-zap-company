@@ -5,6 +5,7 @@ import { Icon } from '../../../../genesis/atoms/icons/Icon';
 import { Wrapper } from '../../../../components/dev/Wrapper';
 import { Pill } from '../../../../genesis/atoms/status/pills';
 import { Canvas } from '../../../../genesis/atoms/surfaces/canvas';
+import { CanvasBody } from '../../../../zap/layout/CanvasBody';
 
 export const StatusIndicatorsBody = () => {
     return (
@@ -39,7 +40,7 @@ export const StatusIndicatorsBody = () => {
 
                     {/* 01. Pill.tsx */}
                     <Wrapper identity={{ displayName: "Pill Component Spec", filePath: "zap/sections/status/body.tsx", type: "Atom/View", architecture: "SYSTEMS // CORE" }}>
-                        <section className="bg-layer-cover border-[length:var(--card-border-width,0px)] border-card-border p-6 shadow-card rounded-card">
+                        <CanvasBody.Section flush={true} className="border-[length:var(--card-border-width,0px)] border-card-border p-6 shadow-card rounded-card">
                             <div className="flex items-center justify-between mb-6 pb-4">
                                 <Wrapper className="w-fit" identity={{ displayName: "Section Header: Pill.tsx", type: "Wrapped Snippet", filePath: "zap/sections/atoms/status/body.tsx" }}>
                                     <h2 className="text-xl font-black uppercase text-brand-midnight">Pill.tsx</h2>
@@ -149,12 +150,12 @@ export const StatusIndicatorsBody = () => {
                                     </ul>
                                 </div>
                             </div>
-                        </section>
+                        </CanvasBody.Section>
                     </Wrapper>
 
                     {/* 02. Avatar.tsx */}
                     <Wrapper identity={{ displayName: "Avatar Component Spec", filePath: "zap/sections/status/body.tsx", type: "Atom/View", architecture: "SYSTEMS // CORE" }}>
-                        <section className="bg-layer-cover border-[length:var(--card-border-width,0px)] border-card-border p-6 shadow-card rounded-card pb-24">
+                        <CanvasBody.Section flush={true} className="border-[length:var(--card-border-width,0px)] border-card-border p-6 shadow-card rounded-card pb-24">
                             <div className="flex items-center justify-between mb-6 pb-4">
                                 <Wrapper className="w-fit" identity={{ displayName: "Section Header: Avatar.tsx", type: "Wrapped Snippet", filePath: "zap/sections/atoms/status/body.tsx" }}>
                                     <h2 className="text-xl font-black uppercase text-brand-midnight">Avatar.tsx</h2>
@@ -234,7 +235,7 @@ export const StatusIndicatorsBody = () => {
                                     </div>
                                 </div>
                             </div>
-                        </section>
+                        </CanvasBody.Section>
                     </Wrapper>
                 </div>
             </Canvas>

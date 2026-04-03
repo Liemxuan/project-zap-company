@@ -56,7 +56,7 @@ export function QuickNavigate({ className }: QuickNavigateProps) {
                     className
                   )}
                 >
-                  <div className="flex items-center gap-1.5 pr-3 min-w-[140px]">
+                  <div className="flex items-center gap-1.5 pr-3 min-w-0">
                     {mounted && selectedItem ? (
                       <>
                         {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
@@ -110,7 +110,7 @@ export function QuickNavigate({ className }: QuickNavigateProps) {
                                   </div>
                                   <div className="flex flex-col gap-0.5 ml-1">
                                     <span className="font-semibold text-transform-secondary leading-tight">{ws.name}</span>
-                                    <span className="text-[11px] font-body text-muted-foreground leading-none">{ws.sub} • :{ws.port}</span>
+                                    <span className="text-[11px] font-body text-transform-secondary text-muted-foreground leading-none">{ws.sub} • :{ws.port}</span>
                                   </div>
                                   {isSelected && (
                                     <span className="pointer-events-none absolute right-2 flex size-4 items-center justify-center">

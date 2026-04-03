@@ -2,9 +2,10 @@
 
 import React, { useState } from 'react';
 import { ComponentSandboxTemplate } from '../../../../../zap/layout/ComponentSandboxTemplate';
-import { Wrapper } from '../../../../../components/dev/Wrapper';
 import { Slider } from '../../../../../genesis/atoms/interactive/slider';
 
+import { CanvasBody } from '../../../../../zap/layout/CanvasBody';
+import { SectionHeader } from '../../../../../zap/sections/SectionHeader';
 import {
     Tabs,
     TabsContent,
@@ -12,15 +13,16 @@ import {
     TabsTrigger,
 } from '../../../../../genesis/molecules/tabs';
 
-export default function TabsSandboxPage() {    const [padding, setPadding] = useState([4]);
+export default function TabsSandboxPage() {
+    const [padding, setPadding] = useState([4]);
     const [radius, setRadius] = useState([8]);
     const [gap, setGap] = useState([32]);
 
     // Fetch initial settings
     const inspectorControls = (
-        <Wrapper identity={{ displayName: "Inspector Controls Container", type: "Container", filePath: "zap/molecules/tabs" }}>
+        
             <div className="space-y-4">
-                <Wrapper identity={{ displayName: "Tabs Structural Settings", type: "Docs Link", filePath: "zap/molecules/tabs/page.tsx" }}>
+                
                     <div className="space-y-6">
                         <h4 className="text-label-small text-transform-primary font-display font-bold text-on-surface-variant text-transform-secondary tracking-wider">Sandbox Variables</h4>
 
@@ -50,9 +52,9 @@ export default function TabsSandboxPage() {    const [padding, setPadding] = use
                             </div>
                         </div>
                     </div>
-                </Wrapper>
+                
             </div>
-        </Wrapper>
+        
     );
     return (
         <ComponentSandboxTemplate
@@ -69,18 +71,15 @@ export default function TabsSandboxPage() {    const [padding, setPadding] = use
             platformConstraints={{ web: "N/A", mobile: "N/A" }}
             foundationRules={[]}
         >
-            <div 
-                className="w-full flex flex-col items-center justify-start py-12 gap-8"
-                style={Object.assign({}, {
-                    '--tabs-list-padding': `${padding[0]}px`,
-                    '--tabs-radius': `${radius[0]}px`,
-                    '--tabs-gap': `${gap[0]}px`,
-                } as React.CSSProperties)}
-            >
+            
+            <CanvasBody flush={false}>
+                <CanvasBody.Section>
+                    <SectionHeader number="1" id="tabs" title="Tabs Sandbox" description="Interactive components for Tabs" icon="widgets" />
+                    <CanvasBody.Demo className="w-full flex flex-col items-center justify-start py-12 gap-8">
                 
-                <Wrapper identity={{ displayName: "Default Sliding Pill Tabs", type: "Demo", filePath: "zap/molecules/tabs" }}>
+                
                     <div className="w-full flex flex-col flex-grow items-center justify-center min-h-[400px] p-12 bg-layer-canvas shadow-sm border border-outline-variant rounded-xl gap-4">
-                        <span className="text-label-medium font-bold font-display tracking-widest text-on-surface-variant text-transform-secondary uppercase text-transform-tertiary">Variant: Default (Pill Container)</span>
+ <span className="text-label-medium font-bold font-display text-transform-primary tracking-widest text-on-surface-variant text-transform-secondary text-transform-tertiary">Variant: Default (Pill Container)</span>
                         <Tabs defaultValue="account" className="w-[400px]">
                             <TabsList className="grid w-full grid-cols-2">
                                 <TabsTrigger value="account">Account</TabsTrigger>
@@ -94,11 +93,11 @@ export default function TabsSandboxPage() {    const [padding, setPadding] = use
                             </TabsContent>
                         </Tabs>
                     </div>
-                </Wrapper>
+                
 
-                <Wrapper identity={{ displayName: "Independent Buttons Tabs", type: "Demo", filePath: "zap/molecules/tabs" }}>
+                
                     <div className="w-full flex flex-col flex-grow items-center justify-center min-h-[400px] p-12 bg-layer-cover shadow-sm border border-outline-variant rounded-xl gap-4">
-                        <span className="text-label-medium font-bold font-display tracking-widest text-on-surface-variant text-transform-secondary uppercase text-transform-tertiary">Variant: Button (Independent)</span>
+ <span className="text-label-medium font-bold font-display text-transform-primary tracking-widest text-on-surface-variant text-transform-secondary text-transform-tertiary">Variant: Button (Independent)</span>
                         <Tabs defaultValue="music" className="w-[400px]">
                             <TabsList variant="button" className="flex justify-center w-full">
                                 <TabsTrigger value="music">Music</TabsTrigger>
@@ -116,11 +115,11 @@ export default function TabsSandboxPage() {    const [padding, setPadding] = use
                             </TabsContent>
                         </Tabs>
                     </div>
-                </Wrapper>
+                
 
-                <Wrapper identity={{ displayName: "Line Focus Tabs", type: "Demo", filePath: "zap/molecules/tabs" }}>
+                
                     <div className="w-full flex flex-col flex-grow items-center justify-center min-h-[400px] p-12 bg-layer-panel shadow-sm border border-outline-variant rounded-xl gap-4">
-                        <span className="text-label-medium font-bold font-display tracking-widest text-on-surface-variant text-transform-secondary uppercase text-transform-tertiary">Variant: Line (Underline Focus)</span>
+ <span className="text-label-medium font-bold font-display text-transform-primary tracking-widest text-on-surface-variant text-transform-secondary text-transform-tertiary">Variant: Line (Underline Focus)</span>
                         <Tabs defaultValue="overview" className="w-[400px]">
                             <TabsList variant="line" className="flex justify-start w-full border-b border-outline-variant">
                                 <TabsTrigger value="overview">Overview</TabsTrigger>
@@ -138,9 +137,12 @@ export default function TabsSandboxPage() {    const [padding, setPadding] = use
                             </TabsContent>
                         </Tabs>
                     </div>
-                </Wrapper>
                 
-            </div>
+                
+                </CanvasBody.Demo>
+                </CanvasBody.Section>
+            </CanvasBody>
+        
         </ComponentSandboxTemplate>
     );
 }

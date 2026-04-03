@@ -1,278 +1,152 @@
-
 'use client';
-import { parseCssToNumber } from '../../../../../lib/utils';
 
-import React, { useState, useEffect } from 'react';
-import { useTheme } from '../../../../../components/ThemeContext';
+import React, { useState } from 'react';
 import { ComponentSandboxTemplate } from '../../../../../zap/layout/ComponentSandboxTemplate';
-import { Wrapper } from '../../../../../components/dev/Wrapper';
 import { Pill } from '../../../../../genesis/atoms/status/pills';
-import { Slider } from '../../../../../genesis/atoms/interactive/slider';
-import { ThemePublisher } from '../../../../../components/dev/ThemePublisher';
-import { useBorderProperties } from '../../../../../zap/sections/atoms/border_radius/use-border-properties';
+import { Icon } from '../../../../../genesis/atoms/icons/Icon';
+import { cn } from '../../../../../lib/utils';
+import { CanvasBody } from '../../../../../zap/layout/CanvasBody';
+import { SectionHeader } from '../../../../../zap/sections/SectionHeader';
 import { BORDER_RADIUS_TOKENS, BORDER_WIDTH_TOKENS } from '../../../../../zap/sections/atoms/foundations/schema';
-import { Select } from '../../../../../genesis/atoms/interactive/option-select';
-import { toast } from 'sonner';
 
 export default function PillSandboxPage() {
-    const { theme: appTheme } = useTheme();
-    const activeTheme = appTheme === 'core' ? 'core' : 'metro';
-    const [height, setHeight] = useState([24]);
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [colors, setColors] = useState({
-        neutral: '',
-        primary: '',
-        success: '',
-        warning: '',
-        error: '',
-        info: ''
-    });
-
-    const {
-        state,
-        setComponentOverride,
-        clearComponentOverride,
-        hydrateState,
-        getEffectiveProps
-    } = useBorderProperties();
-
-    useEffect(() => {
-        let mounted = true;
-        const loadSettings = async () => {
-            try {
-                const res = await fetch(`/api/border_radius/publish?theme=${activeTheme}`);
-                if (res.ok && mounted) {
-                    const data = await res.json();
-                    if (data.success && data.data && data.data.state) {
-                        hydrateState(data.data.state);
-                    }
-                }
-            } catch (err) {
-                console.error("Failed to load border radius settings:", err);
-            }
-        };
-        loadSettings();
-        return () => { mounted = false; };
-    }, [activeTheme, hydrateState]);
-
-    // Live preview values
-    const effectiveProps = getEffectiveProps('Pill');
-    
-    // Extract pixel values from schema tokens to feed into inline styles for instant preview
-    const previewRadius = BORDER_RADIUS_TOKENS.find(t => t.token === effectiveProps.radius)?.value.split(' ')[0] || '9999px';
-    const previewWidth = BORDER_WIDTH_TOKENS.find(t => t.token === effectiveProps.width)?.value.split(' ')[0] || '0px';
-
-    const renderRadiusSelect = (value: string, onChange: (val: string) => void) => {
-        const safeValue = value === '' ? 'inherit' : value;
-        const options = [
-            { label: '(Inherit Universal)', value: 'inherit' },
-            ...BORDER_RADIUS_TOKENS.map(t => ({ label: `${t.name} (${t.token})`, value: t.token }))
-        ];
-        return (
-            <Select 
-                value={safeValue} 
-                onChange={(val) => onChange(val === 'inherit' ? '' : val)}
-                options={options}
-                placeholder="(Inherit Universal)"
-                className={`w-full bg-layer-base ${value !== '' ? 'border-primary/50 text-primary' : 'border-border/30 text-foreground'}`}
-            />
-        );
-    };
-
-    const renderWidthSelect = (value: string, onChange: (val: string) => void) => {
-        const safeValue = value === '' ? 'inherit' : value;
-        const options = [
-            { label: '(Inherit Universal)', value: 'inherit' },
-            ...BORDER_WIDTH_TOKENS.map(t => ({ label: `${t.name} (${t.token})`, value: t.token }))
-        ];
-        return (
-            <Select 
-                value={safeValue} 
-                onChange={(val) => onChange(val === 'inherit' ? '' : val)}
-                options={options}
-                placeholder="(Inherit Universal)"
-                className={`w-full bg-layer-base ${value !== '' ? 'border-primary/50 text-primary' : 'border-border/30 text-foreground'}`}
-            />
-        );
-    };
+    const [borderRadius, setBorderRadius] = useState('9999px'); // Default to full rounded for pills
+    const [borderWidth, setBorderWidth] = useState(BORDER_WIDTH_TOKENS[1].value);
+    const [height, setHeight] = useState('24px');
 
     const inspectorControls = (
-        <Wrapper identity={{ displayName: "Inspector Controls Container", type: "Container", filePath: "zap/atoms/pill/page.tsx" }}>
-            <div className="space-y-4">
-                <Wrapper identity={{ displayName: "Pill Structural Settings", type: "Docs Link", filePath: "zap/atoms/pill/page.tsx" }}>
-                    <div className="space-y-6">
-                        <h4 className="text-label-small text-transform-primary font-display font-bold text-muted-foreground tracking-wider uppercase">Sandbox Variables</h4>
-
-                        <div className="space-y-4">
-                            <div className="space-y-2">
-                                <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-muted-foreground uppercase">
-                                    <span>--pill-height</span>
-                                    <span className="font-bold">{height[0]}px</span>
-                                </div>
-                                <Slider value={height} onValueChange={setHeight} min={16} max={128} step={1} className="w-full" />
-                            </div>
-
-                            <div className="space-y-1">
-                                <span className="text-label-small text-muted-foreground flex justify-between">
-                                    <span>Width Override</span>
-                                    <span className="font-bold">{previewWidth}</span>
-                                </span>
-                                {renderWidthSelect(
-                                    state.components['Pill']?.width || '', 
-                                    (val) => {
-                                        if (val === '') clearComponentOverride('Pill', 'width');
-                                        else setComponentOverride('Pill', 'width', val);
-                                    }
-                                )}
-                            </div>
-
-                            <div className="space-y-1">
-                                <span className="text-label-small text-muted-foreground flex justify-between">
-                                    <span>Radius Override</span>
-                                    <span className="font-bold">{previewRadius}</span>
-                                </span>
-                                {renderRadiusSelect(
-                                    state.components['Pill']?.radius || '', 
-                                    (val) => {
-                                        if (val === '') clearComponentOverride('Pill', 'radius');
-                                        else setComponentOverride('Pill', 'radius', val);
-                                    }
-                                )}
-                            </div>
-
-                            {Object.entries(colors).map(([variant, color]) => (
-                                <div key={variant} className="space-y-2">
-                                    <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-muted-foreground uppercase">
-                                        <span>--color-{variant}</span>
-                                        <span className="font-bold">{color || 'Default'}</span>
-                                    </div>
-                                    <input 
-                                        type="color" 
-                                        value={color || `#${'000000'}`} 
-                                        onChange={(e) => setColors(prev => ({ ...prev, [variant]: e.target.value }))}
-                                        className="w-full h-8"
-                                        aria-label={`Color for ${variant}`}
-                                        title={`Color for ${variant}`}
-                                    />
-                                    <div className="flex justify-end">
-                                        <button 
-                                            onClick={() => setColors(prev => ({ ...prev, [variant]: '' }))}
-                                            className="text-label-small text-muted-foreground hover:text-primary transition-colors uppercase font-bold"
-                                        >
-                                            Reset {variant}
-                                        </button>
-                                    </div>
-                                </div>
+        <div className="space-y-6">
+            <div className="space-y-4 pb-4 border-b border-border/50">
+                <h4 className="text-label-small text-transform-primary font-display font-bold text-muted-foreground tracking-wider uppercase">Foundation Tokens</h4>
+                
+                <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-1.5">
+                        <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Border Radius</label>
+                        <select 
+                            className="w-full bg-layer-panel border border-border/50 rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-primary"
+                            value={borderRadius}
+                            onChange={(e) => setBorderRadius(e.target.value)}
+                        >
+                            <option value="9999px">Full (9999px)</option>
+                            {BORDER_RADIUS_TOKENS.map(t => (
+                                <option key={t.name} value={t.value}>{t.name}</option>
                             ))}
-                        </div>
+                        </select>
                     </div>
-                </Wrapper>
+                    <div className="space-y-1.5">
+                        <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Border Width</label>
+                        <select 
+                            className="w-full bg-layer-panel border border-border/50 rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-primary"
+                            value={borderWidth}
+                            onChange={(e) => setBorderWidth(e.target.value)}
+                        >
+                            {BORDER_WIDTH_TOKENS.map(t => (
+                                <option key={t.name} value={t.value}>{t.name}</option>
+                            ))}
+                        </select>
+                    </div>
+                </div>
+
+                <div className="space-y-1.5">
+                    <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Vertical Scale</label>
+                    <select 
+                        className="w-full bg-layer-panel border border-border/50 rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-primary"
+                        value={height}
+                        onChange={(e) => setHeight(e.target.value)}
+                    >
+                        {['16px', '20px', '24px', '28px', '32px'].map(h => (
+                            <option key={h} value={h}>{h}</option>
+                        ))}
+                    </select>
+                </div>
             </div>
-        </Wrapper>
+        </div>
     );
 
-            const handleLoadedVariables = React.useCallback((variables: Record<string, string>) => {
-                if (variables['--pill-height']) setHeight([parseCssToNumber(variables['--pill-height'])]);
-            }, []);
-            
-            const handlePublish = async () => {
-                setIsSubmitting(true);
-                try {
-                    // Publish specific height
-                    const res1 = await fetch('/api/theme/publish', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ theme: activeTheme, variables: { '--pill-height': height[0] + 'px' }})
-                    });
+    const handleLoadedVariables = (variables: Record<string, string>) => {
+        if (variables['--pill-height']) setHeight(variables['--pill-height']);
+        if (variables['--pill-border-width']) setBorderWidth(variables['--pill-border-width']);
+        if (variables['--pill-border-radius']) setBorderRadius(variables['--pill-border-radius']);
+    };
 
-                    // Publish border radius globally
-                    const res2 = await fetch('/api/border_radius/publish', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ theme: activeTheme, state })
-                    });
-
-                    if (res1.ok && res2.ok) {
-                        toast.success(`Pill Settings Published`, { description: `Successfully synced values to the ${activeTheme} theme.` });
-                    } else {
-                        throw new Error("Failed to publish one or more services");
-                    }
-                } catch (error) {
-                    console.error("Publish Error:", error);
-                    toast.error(`Publish Failed`, { description: `Failed to sync values.` });
-                } finally {
-                    setIsSubmitting(false);
-                }
-            };
-
-            const inspectorFooter = (
-                <ThemePublisher
-                    theme={activeTheme}
-                    onPublish={handlePublish}
-                    isLoading={isSubmitting}
-                    filePath={`app/design/zap/atoms/pill/page.tsx`}
-                />
-            );
-        
     return (
         <ComponentSandboxTemplate
             componentName="Pill"
             tier="L3 ATOM"
-            status="Beta"
+            status="Verified"
             filePath="src/genesis/atoms/status/pills.tsx"
             importPath="@/genesis/atoms/status/pills"
             inspectorControls={inspectorControls}
             foundationInheritance={{
-                colorTokens: ['--md-sys-color-primary'],
+                colorTokens: ['--md-sys-color-primary', '--md-sys-color-secondary-container'],
                 typographyScales: ['--font-body']
             }}
             platformConstraints={{
-                web: "N/A",
-                mobile: "N/A"
+                web: "Semantic status indicator with high-contrast color roles.",
+                mobile: "Ensure minimum visual depth for glanceable status recognition."
             }}
             foundationRules={[
-                "Arbitrary Token Syntax Only."
+                "Pills should typically use 9999px border radius for 'capsule' aesthetic.",
+                "Primary status must use --color-primary role for system visibility."
             ]}
-            inspectorFooter={inspectorFooter}
             onLoadedVariables={handleLoadedVariables}
         >
-            <style dangerouslySetInnerHTML={{ __html: `
-                .pill-preview-sandbox {
-                    --pill-border-width: ${previewWidth};
-                    --pill-border-radius: ${previewRadius};
-                    --pill-height: ${height[0]}px;
-                    ${colors.primary ? `--md-sys-color-primary: ${colors.primary};` : ''}
-                    ${colors.success ? `--color-state-success: ${colors.success};` : ''}
-                    ${colors.warning ? `--color-state-warning: ${colors.warning};` : ''}
-                    ${colors.error ? `--color-state-error: ${colors.error};` : ''}
-                    ${colors.info ? `--color-state-info: ${colors.info};` : ''}
-                    ${colors.neutral ? `
-                        --color-layer-panel: ${colors.neutral};
-                        --color-theme-base: ${colors.neutral};
-                        --color-card-border: ${colors.neutral};
-                    ` : ''}
-                }
-            ` }} />
-            <div 
-                id="pill-sandbox-container"
-                className="w-full space-y-12 animate-in fade-in duration-500 pb-16 pill-preview-sandbox"
-            >
-                <div className="p-12 bg-layer-panel shadow-sm border-[length:var(--card-border-width)] border-outline-variant rounded-[length:var(--card-radius)] flex flex-wrap gap-4 items-center justify-center text-on-surface w-full min-h-[160px]">
-                   <div className="flex flex-wrap gap-4 justify-center">
-                       <Pill variant="neutral">Neutral</Pill>
-                       <Pill variant="primary">Primary</Pill>
-                       <Pill variant="success">Success</Pill>
-                       <Pill variant="warning">Warning</Pill>
-                       <Pill variant="error">Error</Pill>
-                       <Pill variant="info">Info</Pill>
-                   </div>
-                   <div className="mt-8 flex flex-col items-center">
-                       <span className="font-display font-medium">Pill Sandbox Mounted (M3 Token Verification)</span>
-                       <span className="text-label-small font-mono">Dynamically mapped to Global Theme (Border: {previewWidth}, Radius: {previewRadius})</span>
-                   </div>
-                </div>
-            </div>
+            <CanvasBody flush={false}>
+                <CanvasBody.Section>
+                    <SectionHeader id="interactive-preview" 
+                        number="01"
+                        title="Interactive Preview"
+                        icon="capsule"
+                        description="Live-configured capsule testing spatial L2 layer restoration."
+                    />
+                    <CanvasBody.Demo centered>
+                        <div className="w-full max-w-sm p-12 bg-layer-panel border border-border/40 shadow-xl rounded-2xl flex flex-col items-center justify-center gap-8" style={{ borderRadius: '24px' }}>
+                           <div className="flex flex-wrap gap-3 justify-center" style={{ 
+                               '--pill-height': height,
+                               '--pill-border-width': borderWidth,
+                               '--pill-border-radius': borderRadius
+                           } as any}>
+                               <Pill variant="neutral">NEUTRAL</Pill>
+                               <Pill variant="primary">PRIMARY</Pill>
+                               <Pill variant="success">SUCCESS</Pill>
+                               <Pill variant="error">ERROR</Pill>
+                           </div>
+                        </div>
+                    </CanvasBody.Demo>
+                </CanvasBody.Section>
+
+                <CanvasBody.Section className="pb-16">
+                    <SectionHeader id="system-states" 
+                        number="02"
+                        title="System States"
+                        icon="monitor_heart"
+                        description="Comparative layout testing across M3 semantic roles and layout weights."
+                    />
+                    <CanvasBody.Demo>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 w-full max-w-4xl" style={{ 
+                            '--pill-height': height,
+                            '--pill-border-width': borderWidth,
+                            '--pill-border-radius': borderRadius
+                        } as any}>
+                            <div className="space-y-6">
+                                <div className="text-labelSmall font-body text-primary tracking-widest uppercase border-b border-border/50 pb-2">Fleet Telemetry</div>
+                                <div className="flex items-center gap-3">
+                                    <span className="text-bodySmall font-body font-bold">Node 0x3F:</span>
+                                    <Pill variant="info">ACTIVE</Pill>
+                                    <Pill variant="warning">LATENCY</Pill>
+                                </div>
+                            </div>
+                            <div className="space-y-6">
+                                <div className="text-labelSmall font-body text-primary tracking-widest uppercase border-b border-border/50 pb-2">Cortex Integrity</div>
+                                <div className="flex items-center gap-3">
+                                    <Pill variant="success">VERIFIED</Pill>
+                                    <Pill variant="error">FAILED</Pill>
+                                </div>
+                            </div>
+                        </div>
+                    </CanvasBody.Demo>
+                </CanvasBody.Section>
+            </CanvasBody>
         </ComponentSandboxTemplate>
     );
 }
-

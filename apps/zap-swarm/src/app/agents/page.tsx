@@ -1,5 +1,8 @@
 "use client";
 
+export const dynamic = 'force-dynamic';
+
+
 import { useState, Suspense } from "react";
 import { Heading } from "zap-design/src/genesis/atoms/typography/headings";
 import { Text } from "zap-design/src/genesis/atoms/typography/text";
@@ -8,7 +11,8 @@ import { ThemeHeader } from "zap-design/src/genesis/molecules/layout/ThemeHeader
 import { Inspector } from "zap-design/src/zap/layout/Inspector";
 import { InspectorAccordion } from "zap-design/src/zap/organisms/laboratory/InspectorAccordion";
 import { Button } from "zap-design/src/genesis/atoms/interactive/button";
-import { Settings2, BarChart3, Search, Bot, ChevronRight, ChevronDown, X, Edit3, MessageSquare } from "lucide-react";
+import { Avatar, AvatarFallback } from "zap-design/src/genesis/atoms/interactive/avatar";
+import { Settings2, BarChart3, Bot, ChevronRight, ChevronDown, X, Edit3, MessageSquare } from "lucide-react";
 import Link from "next/link";
 
 import { useQuery } from "@tanstack/react-query";
@@ -127,9 +131,16 @@ function AgentsCanvas({ onSelectAgent }: { onSelectAgent: (name: string) => void
       {agents.map((agent) => (
         <div key={agent.name} onClick={() => onSelectAgent(agent.name)} className="bg-layer-cover shadow-[var(--shadow-elevation-1,0_1px_3px_rgba(0,0,0,0.1))] p-5 rounded-[var(--card-radius,12px)] border border-[var(--color-outline-variant,rgba(0,0,0,0.05))] hover:-translate-y-1 hover:shadow-[var(--shadow-elevation-2,0_4px_6px_rgba(0,0,0,0.1))] transition-all cursor-pointer group flex flex-col">
           <div className="flex justify-between items-start mb-4">
-            <div className="size-10 bg-primary/10 rounded-[var(--button-border-radius,8px)] flex justify-center items-center group-hover:bg-primary/20 transition-colors">
-              <Bot className="size-5 text-primary" />
-            </div>
+            <Link 
+              href={`/agents/${agent.name}`} 
+              onClick={(e) => e.stopPropagation()}
+              className="transition-transform hover:scale-110 hover:ring-2 focus:ring-2 hover:ring-primary/50 focus:ring-primary/50 rounded-full"
+              title={`View ${agent.name} Full Profile`}
+            >
+              <Avatar size="default">
+                <AvatarFallback>{agent.name.substring(0,2).toLowerCase()}</AvatarFallback>
+              </Avatar>
+            </Link>
             <span className="px-2 py-0.5 rounded text-xs font-bold tracking-wide bg-state-success/10 text-state-success">
               {agent.status.toUpperCase()}
             </span>
@@ -158,10 +169,6 @@ function CommandDashboard() {
   const [telemetry, setTelemetry] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Search Provider State
-  const [searchProvider, setSearchProvider] = useState("InfoQuest");
-  const [searchApiKey, setSearchApiKey] = useState("");
-  
   // Selected Agent State
   const [selectedAgent, setSelectedAgent] = useState<string | null>(null);
   const [editingFile, setEditingFile] = useState<{ id: string, filename: string, content: string } | null>(null);
@@ -184,24 +191,15 @@ function CommandDashboard() {
     enabled: !!selectedAgent,
   });
 
-  const saveSearchConfig = async () => {
-    try {
-      await fetch('/api/admin/keys', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          tenantId: 'ZVN',
-          llmConfig: { provider: 'OPENROUTER' },
-          searchConfig: {
-            provider: searchProvider,
-            [`${searchProvider.toLowerCase() === 'infoquest' ? 'infoQuest' : searchProvider.toLowerCase()}ApiKey`]: searchApiKey
-          }
-        })
-      });
-    } catch(e) {
-      console.error(e);
+  const { data: skillsData } = useQuery<{ success: boolean; skills: any[] }>({
+    queryKey: ['swarm-skills'],
+    queryFn: async () => {
+      const res = await fetch('/api/swarm/skills');
+      if (!res.ok) return { success: false, skills: [] };
+      return res.json();
     }
-  };
+  });
+
 
   const handleSaveModal = async (newContent: string) => {
     if (!selectedAgent || !editingFile) return;
@@ -223,22 +221,56 @@ function CommandDashboard() {
   const inspectorContent = (
     <Inspector title="ZAP Inspector" width={320}>
       {selectedAgent && (
-        <InspectorAccordion title={`IDENTITY: ${selectedAgent.toUpperCase()}`} icon={Bot} defaultOpen>
-          <div className="flex flex-col gap-1 pb-1">
-            {agentFilesData?.files && agentFilesData.files.length > 0 ? (
-              agentFilesData.files.map(file => (
-                <ExpandableFileSnippet 
-                  key={file.id}
-                  title={file.filename} 
-                  content={file.content}
-                  onEdit={() => setEditingFile(file)}
-                />
-              ))
-            ) : (
-              <span className="text-on-surface-variant text-sm italic p-2">No files found.</span>
-            )}
-          </div>
-        </InspectorAccordion>
+        <>
+          <InspectorAccordion title={`IDENTITY: ${selectedAgent.toUpperCase()}`} icon={Bot} defaultOpen>
+            <div className="flex flex-col gap-1 pb-1">
+              {agentFilesData?.files && agentFilesData.files.length > 0 ? (
+                agentFilesData.files.map(file => (
+                  <ExpandableFileSnippet 
+                    key={file.id}
+                    title={file.filename} 
+                    content={file.content}
+                    onEdit={() => setEditingFile(file)}
+                  />
+                ))
+              ) : (
+                <span className="text-on-surface-variant text-sm italic p-2">No files found.</span>
+              )}
+            </div>
+          </InspectorAccordion>
+
+          <InspectorAccordion title={`SKILLS: ${selectedAgent.toUpperCase()}`} icon={Settings2} defaultOpen={false}>
+             <div className="flex flex-col gap-2 max-h-64 overflow-y-auto pr-1 custom-scrollbar">
+                {skillsData?.skills ? skillsData.skills
+                   .filter(s => s.agent === 'any' || s.agent === selectedAgent.toLowerCase())
+                   .map(skill => (
+                     <Link 
+                       href={`/skills?agent=${selectedAgent.toLowerCase()}`} 
+                       key={skill.name} 
+                       className="flex flex-col p-2 rounded-md bg-layer-cover border border-[var(--color-outline-variant,rgba(0,0,0,0.1))] hover:bg-outline/5 hover:border-primary/50 transition-all cursor-pointer group"
+                     >
+                        <Text size="label-small" weight="bold" className="text-on-surface truncate group-hover:text-primary transition-colors">{skill.name.toUpperCase()}</Text>
+                        <Text size="body-small" className="text-on-surface-variant line-clamp-2 mt-0.5 text-[10px] leading-tight opacity-70">
+                           {skill.description || `Mapped to ${skill.group}`}
+                        </Text>
+                     </Link>
+                   )) : (
+                     <span className="text-on-surface-variant text-xs italic">Inheriting default skills...</span>
+                   )}
+             </div>
+          </InspectorAccordion>
+
+          <InspectorAccordion title={`TOOLS: ${selectedAgent.toUpperCase()}`} icon={Settings2} defaultOpen={false}>
+             <div className="flex flex-col gap-2 p-1">
+                {['run_command', 'grep_search', 'view_file', 'replace_file_content', 'mcp_stitch', 'browser_subagent'].map(tool => (
+                   <div key={tool} className="flex justify-between items-center bg-primary/5 px-2 py-1.5 rounded-md border border-primary/10">
+                      <Text size="body-small" className="text-primary font-mono text-[11px]">{tool}</Text>
+                      <span className="w-1.5 h-1.5 rounded-full bg-state-success shadow-[0_0_4px_rgba(var(--sys-color-state-success-rgb),0.8)]" />
+                   </div>
+                ))}
+             </div>
+          </InspectorAccordion>
+        </>
       )}
 
       <InspectorAccordion title="Titan Memory Stats" icon={BarChart3} defaultOpen={!selectedAgent}>
@@ -258,39 +290,6 @@ function CommandDashboard() {
         </div>
       </InspectorAccordion>
 
-      <InspectorAccordion title="Search & Intelligence" icon={Search} defaultOpen={false}>
-        <div className="flex flex-col gap-4">
-          <div className="flex flex-col gap-2">
-            <Text size="body-small" className="text-on-surface-variant">Provider Engine</Text>
-            <select
-              title="Search Provider Override"
-              value={searchProvider}
-              onChange={(e) => setSearchProvider(e.target.value)}
-              className="bg-layer-base border border-[var(--color-outline-variant,rgba(0,0,0,0.2))] text-on-surface text-sm rounded-[var(--button-border-radius,8px)] p-2.5 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary w-full cursor-pointer"
-            >
-              <option value="InfoQuest">InfoQuest (Default)</option>
-              <option value="Brave">Brave Search API</option>
-              <option value="Perplexity">Perplexity API</option>
-            </select>
-          </div>
-          <div className="flex flex-col gap-2">
-            <Text size="body-small" className="text-on-surface-variant">API Key</Text>
-            <input 
-              type="password" 
-              value={searchApiKey}
-              onChange={(e) => setSearchApiKey(e.target.value)}
-              placeholder={`Enter ${searchProvider} Key...`}
-              className="bg-layer-base border border-[var(--color-outline-variant,rgba(0,0,0,0.2))] text-on-surface text-sm rounded-[var(--button-border-radius,8px)] p-2.5 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary w-full"
-            />
-          </div>
-          <button 
-             onClick={saveSearchConfig}
-             className="w-full bg-primary text-primary-foreground py-2 rounded-[var(--button-border-radius,8px)] font-medium text-sm hover:bg-primary/90 transition-colors shadow-sm"
-          >
-             Commit Provider
-          </button>
-        </div>
-      </InspectorAccordion>
 
     </Inspector>
   );
@@ -317,7 +316,7 @@ function CommandDashboard() {
         />
 
         {/* Content Canvas */}
-        <main className="flex-1 overflow-y-auto p-8">
+        <main className="flex-1 overflow-y-auto px-5 md:px-12 py-8">
           <AgentsCanvas onSelectAgent={setSelectedAgent} />
         </main>
         </div>
@@ -326,9 +325,9 @@ function CommandDashboard() {
   );
 }
 
-import dynamic from "next/dynamic";
+import nextDynamic from "next/dynamic";
 
-const CommandDashboardDynamic = dynamic(() => Promise.resolve(CommandDashboard), {
+const CommandDashboardDynamic = nextDynamic(() => Promise.resolve(CommandDashboard), {
   ssr: false,
   loading: () => <div className="p-8 text-on-surface">Initializing Command Center...</div>
 });

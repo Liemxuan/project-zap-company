@@ -139,7 +139,7 @@ const FontPickerPopup = ({
                                         ? 'bg-primary text-on-primary shadow-sm'
                                         : 'bg-on-surface/5 text-foreground hover:bg-on-surface/10'
                                     }
-                               `}
+                              `}
                             >
                                 {label}
                             </button>
@@ -163,7 +163,7 @@ const FontPickerPopup = ({
                                     ? 'bg-primary/10 border-l-4 border-primary'
                                     : 'hover:bg-on-surface/5 border-l-4 border-transparent'
                                 }
-                           `}
+                          `}
                         >
                             <span
                                 className="text-2xl font-bold text-foreground w-16 shrink-0"

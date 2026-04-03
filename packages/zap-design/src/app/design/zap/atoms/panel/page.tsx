@@ -1,106 +1,161 @@
-
 'use client';
-import { parseCssToNumber } from '../../../../../lib/utils';
 
 import React, { useState } from 'react';
 import { ComponentSandboxTemplate } from '../../../../../zap/layout/ComponentSandboxTemplate';
-import { Wrapper } from '../../../../../components/dev/Wrapper';
 import { Panel } from '../../../../../genesis/atoms/surfaces/panel';
-import { Slider } from '../../../../../genesis/atoms/interactive/slider';
+import { Icon } from '../../../../../genesis/atoms/icons/Icon';
+import { cn } from '../../../../../lib/utils';
+import { CanvasBody } from '../../../../../zap/layout/CanvasBody';
+import { SectionHeader } from '../../../../../zap/sections/SectionHeader';
+import { BORDER_RADIUS_TOKENS, BORDER_WIDTH_TOKENS } from '../../../../../zap/sections/atoms/foundations/schema';
 
 export default function PanelSandboxPage() {
-    const [height, setHeight] = useState([40]);
-    const [borderWidth, setBorderWidth] = useState([1]);
-    const [borderRadius, setBorderRadius] = useState([8]);
+    const [borderRadius, setBorderRadius] = useState(BORDER_RADIUS_TOKENS[2].value); // Default to medium rounded
+    const [borderWidth, setBorderWidth] = useState(BORDER_WIDTH_TOKENS[0].value); // Default to 0
+    const [elevation, setElevation] = useState('shadow-md');
 
     const inspectorControls = (
-        <Wrapper identity={{ displayName: "Inspector Controls Container", type: "Container", filePath: "zap/atoms/panel/page.tsx" }}>
-            <div className="space-y-4">
-                <Wrapper identity={{ displayName: "Panel Structural Settings", type: "Docs Link", filePath: "zap/atoms/panel/page.tsx" }}>
-                    <div className="space-y-6">
-                        <h4 className="text-label-small text-transform-primary font-display font-bold text-muted-foreground tracking-wider uppercase">Sandbox Variables</h4>
-
-                        <div className="space-y-4">
-                            <div className="space-y-2">
-                                <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-muted-foreground uppercase">
-                                    <span>--panel-height</span>
-                                    <span className="font-bold">{height[0]}px</span>
-                                </div>
-                                <Slider value={height} onValueChange={setHeight} min={16} max={128} step={1} className="w-full" />
-                            </div>
-
-                            <div className="space-y-2">
-                                <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-muted-foreground uppercase">
-                                    <span>--panel-border-width</span>
-                                    <span className="font-bold">{borderWidth[0]}px</span>
-                                </div>
-                                <Slider value={borderWidth} onValueChange={setBorderWidth} min={0} max={8} step={1} className="w-full" />
-                            </div>
-
-                            <div className="space-y-2">
-                                <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-muted-foreground uppercase">
-                                    <span>--panel-border-radius</span>
-                                    <span className="font-bold">{borderRadius[0]}px</span>
-                                </div>
-                                <Slider value={borderRadius} onValueChange={setBorderRadius} min={0} max={64} step={1} className="w-full" />
-                            </div>
-                        </div>
+        <div className="space-y-6">
+            <div className="space-y-4 pb-4 border-b border-border/50">
+                <h4 className="text-label-small text-transform-primary font-display font-bold text-muted-foreground tracking-wider uppercase">Foundation Tokens</h4>
+                
+                <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-1.5">
+                        <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Corner Shaping</label>
+                        <select 
+                            className="w-full bg-layer-panel border border-border/50 rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-primary"
+                            value={borderRadius}
+                            onChange={(e) => setBorderRadius(e.target.value)}
+                        >
+                            {BORDER_RADIUS_TOKENS.map(t => (
+                                <option key={t.name} value={t.value}>{t.name}</option>
+                            ))}
+                        </select>
                     </div>
-                </Wrapper>
+                    <div className="space-y-1.5">
+                        <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Surface Stroke</label>
+                        <select 
+                            className="w-full bg-layer-panel border border-border/50 rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-primary"
+                            value={borderWidth}
+                            onChange={(e) => setBorderWidth(e.target.value)}
+                        >
+                            {BORDER_WIDTH_TOKENS.map(t => (
+                                <option key={t.name} value={t.value}>{t.name}</option>
+                            ))}
+                        </select>
+                    </div>
+                </div>
+
+                <div className="space-y-1.5">
+                    <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Elevation Role</label>
+                    <select 
+                        className="w-full bg-layer-panel border border-border/50 rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-primary"
+                        value={elevation}
+                        onChange={(e) => setElevation(e.target.value)}
+                    >
+                        <option value="shadow-none">Level 0 (None)</option>
+                        <option value="shadow-sm">Level 1 (Low)</option>
+                        <option value="shadow-md">Level 2 (Med)</option>
+                        <option value="shadow-lg">Level 3 (High)</option>
+                        <option value="shadow-xl">Level 4 (Overlay)</option>
+                    </select>
+                </div>
             </div>
-        </Wrapper>
+        </div>
     );
 
-            const handleLoadedVariables = (variables: Record<string, string>) => {
-                if (variables['--panel-height']) setHeight([parseCssToNumber(variables['--panel-height'])]);
-                            if (variables['--panel-border-width']) setBorderWidth([parseCssToNumber(variables['--panel-border-width'])]);
-                            if (variables['--panel-border-radius']) setBorderRadius([parseCssToNumber(variables['--panel-border-radius'])]);
-            };
-        
+    const handleLoadedVariables = (variables: Record<string, string>) => {
+        if (variables['--panel-border-width']) setBorderWidth(variables['--panel-border-width']);
+        if (variables['--panel-border-radius']) setBorderRadius(variables['--panel-border-radius']);
+    };
+
     return (
         <ComponentSandboxTemplate
             componentName="Panel"
             tier="L3 ATOM"
-            status="Beta"
+            status="Verified"
             filePath="src/genesis/atoms/surfaces/panel.tsx"
             importPath="@/genesis/atoms/surfaces/panel"
             inspectorControls={inspectorControls}
             foundationInheritance={{
-                colorTokens: ['--md-sys-color-primary'],
-                typographyScales: ['--font-body']
+                colorTokens: ['--md-sys-color-surface-container', '--md-sys-color-outline-variant'],
+                typographyScales: []
             }}
             platformConstraints={{
-                web: "N/A",
-                mobile: "N/A"
+                web: "Generic surface container with configurable elevation and rounding.",
+                mobile: "Ensures visual separation through shadow or stroke on mobile retina displays."
             }}
             foundationRules={[
-                "Arbitrary Token Syntax Only."
-            ]} publishPayload={{ '--panel-height': height[0] + 'px',
-                        '--panel-border-width': borderWidth[0] + 'px',
-                        '--panel-border-radius': borderRadius[0] + 'px' }} onLoadedVariables={handleLoadedVariables}
+                "Panels should use --color-surface-container by default for L3 tiering.",
+                "Shadows must use --md-sys-color-shadow with varying opacity weights."
+            ]}
+            onLoadedVariables={handleLoadedVariables}
         >
-            <style dangerouslySetInnerHTML={{ __html: `
-                .panel-preview-sandbox {
-                    --panel-height: ${height[0]}px;
-                    --panel-border-width: ${borderWidth[0]}px;
-                    --panel-border-radius: ${borderRadius[0]}px;
-                }
-            ` }} />
-            <div 
-                className="w-full space-y-12 animate-in fade-in duration-500 pb-16 panel-preview-sandbox"
-            >
-                   <div className="flex gap-8">
-                       <Panel className="p-6 w-64 gap-4 text-center min-h-[length:var(--panel-height,auto)]">
-                           <span className="font-display font-medium text-brand-midnight">Standard Panel</span>
-                           <span className="text-label-small font-mono text-muted-foreground">Shadow active</span>
-                       </Panel>
-                       <Panel className="p-6 w-64 gap-4 text-center min-h-[length:var(--panel-height,auto)]" noShadow>
-                           <span className="font-display font-medium text-brand-midnight">No Shadow Panel</span>
-                           <span className="text-label-small font-mono text-muted-foreground">Radius: {borderRadius[0]}px</span>
-                       </Panel>
-                   </div>
-            </div>
+            <CanvasBody flush={false}>
+                <CanvasBody.Section>
+                    <SectionHeader id="interactive-preview" 
+                        number="01"
+                        title="Interactive Preview"
+                        icon="layers"
+                        description="Live-configured surface testing elevation and spatial L2 restoration."
+                    />
+                    <CanvasBody.Demo centered>
+                        <div className="w-full max-w-sm p-12 bg-layer-panel border border-border/40 shadow-xl rounded-2xl flex flex-col items-center justify-center gap-8" style={{ borderRadius: '24px' }}>
+                           <Panel 
+                               className={cn("w-48 h-48 flex items-center justify-center transition-all duration-300", elevation)}
+                               style={{ 
+                                   '--panel-border-width': borderWidth,
+                                   '--panel-border-radius': borderRadius,
+                                   backgroundColor: 'var(--md-sys-color-surface-container)',
+                                   borderRadius: borderRadius,
+                                   borderWidth: borderWidth,
+                                   borderColor: 'var(--md-sys-color-outline-variant)'
+                               } as any}
+                           >
+                               <div className="text-center font-display font-bold text-primary uppercase tracking-widest text-[10px]">
+                                   Surface L3
+                               </div>
+                           </Panel>
+                        </div>
+                    </CanvasBody.Demo>
+                </CanvasBody.Section>
+
+                <CanvasBody.Section className="pb-16">
+                    <SectionHeader id="architectural-matrix" 
+                        number="02"
+                        title="Architectural Matrix"
+                        icon="grid_view"
+                        description="Core structural scaling across ZAP-standard surface roles."
+                    />
+                    <CanvasBody.Demo>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 w-full max-w-4xl">
+                            <div className="space-y-6">
+                                <div className="text-labelSmall font-body text-primary tracking-widest uppercase border-b border-border/50 pb-2">Overlay Role</div>
+                                <Panel 
+                                    className="p-6 shadow-xl border border-border/10 bg-layer-surface"
+                                    style={{ borderRadius: borderRadius }}
+                                >
+                                    <div className="space-y-2">
+                                        <div className="h-4 w-1/2 bg-primary/10 rounded" />
+                                        <div className="h-2 w-full bg-muted/20 rounded" />
+                                        <div className="h-2 w-3/4 bg-muted/20 rounded" />
+                                    </div>
+                                </Panel>
+                            </div>
+                            <div className="space-y-6">
+                                <div className="text-labelSmall font-body text-primary tracking-widest uppercase border-b border-border/50 pb-2">Ghost Role</div>
+                                <Panel 
+                                    className="p-6 border border-border/40 bg-transparent flex items-center justify-center italic text-bodySmall text-muted-foreground"
+                                    style={{ borderRadius: borderRadius }}
+                                    noShadow
+                                >
+                                    Placeholder Surface (No Shadow)
+                                </Panel>
+                            </div>
+                        </div>
+                    </CanvasBody.Demo>
+                </CanvasBody.Section>
+            </CanvasBody>
         </ComponentSandboxTemplate>
     );
 }
-

@@ -58,6 +58,7 @@ const Dialogs = dynamic(
     () => import('../zap/sections/molecules/containment/DialogsSection').then(m => ({ default: m.DialogsSection })),
     { ssr: false }
 );
+const AiCardPage = dynamic(() => import('../app/design/zap/molecules/ai-card/page'), { ssr: false });
 
 // Additional zap-only molecules (their pages are self-contained)
 const Alert = dynamic(() => import('../app/design/zap/molecules/alert/page'), { ssr: false });
@@ -83,6 +84,7 @@ export const MOLECULE_REGISTRY: Record<string, MoleculeEntry> = {
     // ── Showcase (body-only, rendered inside catch-all layout) ───────────
     'cards': { id: 'cards', label: 'Cards', tier: 'L4 MOLECULE', status: 'Verified', type: 'showcase', component: Cards, icon: 'dashboard', category: 'Containment' },
     'dialogs': { id: 'dialogs', label: 'Dialogs', tier: 'L4 MOLECULE', status: 'Verified', type: 'page', component: Dialogs, icon: 'open_in_new', category: 'Containment' },
+    'ai-card': { id: 'ai-card', label: 'AI Card', tier: 'L4 MOLECULE', status: 'Verified', type: 'page', component: AiCardPage, icon: 'smart_toy', category: 'Containment' },
     'inputs': { id: 'inputs', label: 'Input Modules', tier: 'L4 MOLECULE', status: 'Verified', type: 'page', component: Inputs, icon: 'input', category: 'Forms' },
 
     // ── Page (self-contained with ComponentSandboxTemplate) ──────────────

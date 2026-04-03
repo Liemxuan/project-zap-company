@@ -84,7 +84,7 @@ export default function SystemLogsTemplate() {
                 <div className="flex flex-col gap-0 w-full px-4 pt-4">
                     <Accordion type="single" collapsible variant="navigation" value={inspectorState === 'expanded' ? "item-1" : ""} onValueChange={(val: string) => { if (val !== "item-1") setInspectorState('collapsed'); }} className="bg-transparent w-full space-y-2">
                         <AccordionItem value="item-1" className="border-none m-0">
-                            <AccordionTrigger className="px-4 py-3 flex items-center gap-2 rounded-lg bg-surface-variant hover:bg-surface-variant/80 font-mono text-[11px] uppercase tracking-widest text-on-surface font-bold transition-colors m-0 w-full min-w-0">
+ <AccordionTrigger className="px-4 py-3 flex items-center gap-2 rounded-lg bg-surface-variant hover:bg-surface-variant/80 font-mono text-transform-tertiary text-[11px] tracking-widest text-on-surface font-bold transition-colors m-0 w-full min-w-0">
                                 <div className="flex items-center gap-2 overflow-hidden flex-1 text-left min-w-0">
                                     <Icon name="filter_list" size={16} className="shrink-0 text-on-surface-variant opacity-70 group-data-[state=open]:text-primary transition-colors" />
                                     <span className="truncate">FILTERS</span>
@@ -112,7 +112,7 @@ export default function SystemLogsTemplate() {
                     <div className="w-6 h-6 rounded bg-primary flex items-center justify-center">
                         <Icon name="bolt" size={14} className="text-primary-foreground" />
                     </div>
-                    <span className="font-bold text-sm tracking-widest uppercase font-display text-on-surface">ZAP OS</span>
+ <span className="font-bold text-sm tracking-widest font-display text-transform-primary text-on-surface">ZAP OS</span>
                 </div>
                 <div className="flex-1 py-4 px-3 space-y-1 overflow-y-auto">
                     <div className="px-3 py-2.5 rounded-md hover:bg-surface-variant/40 flex items-center gap-3 text-sm text-on-surface cursor-pointer transition-colors">
@@ -163,12 +163,12 @@ export default function SystemLogsTemplate() {
                     <div className="flex items-center gap-3 lg:gap-4">
                         <button className="relative w-8 h-8 rounded-full hover:bg-surface-variant flex items-center justify-center transition-colors text-on-surface-variant">
                             <Icon name="notifications" size={18} />
-                            <span className="absolute top-2 right-2 w-1.5 h-1.5 bg-destructive rounded-full"></span>
+                            <span className="absolute top-2 right-2 w-1.5 h-1.5 bg-error rounded-full"></span>
                         </button>
                         <div className="h-6 w-px bg-border my-auto hidden sm:block" />
                         <div className="hidden sm:flex flex-col items-end">
                             <span className="text-xs font-bold leading-tight">us-west-1</span>
-                            <span className="text-[9px] tracking-widest uppercase text-green-500 font-dev mt-0.5 flex items-center gap-1">
+ <span className="text-[9px] tracking-widest text-green-500 font-dev text-transform-tertiary mt-0.5 flex items-center gap-1">
                                 <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
                                 Healthy
                             </span>
@@ -196,7 +196,7 @@ export default function SystemLogsTemplate() {
         <div className="flex flex-col gap-0 w-full min-w-[320px] px-4 pt-4">
             <Accordion type="single" collapsible variant="navigation" value={inspectorState === 'expanded' ? "item-1" : ""} onValueChange={(val: string) => { if (val !== "item-1") setInspectorState('collapsed'); }} className="bg-transparent w-full space-y-2">
                 <AccordionItem value="item-1" className="border-none m-0">
-                    <AccordionTrigger className="px-4 py-3 flex items-center gap-2 rounded-lg bg-surface-variant hover:bg-surface-variant/80 font-mono text-[11px] uppercase tracking-widest text-on-surface font-bold transition-colors m-0 w-full min-w-0">
+ <AccordionTrigger className="px-4 py-3 flex items-center gap-2 rounded-lg bg-surface-variant hover:bg-surface-variant/80 font-mono text-transform-tertiary text-[11px] tracking-widest text-on-surface font-bold transition-colors m-0 w-full min-w-0">
                         <div className="flex items-center gap-2 overflow-hidden flex-1 text-left min-w-0">
                             <Icon name="filter_list" size={16} className="shrink-0 text-on-surface-variant opacity-70 group-data-[state=open]:text-primary transition-colors" />
                             <span className="truncate">FILTERS</span>

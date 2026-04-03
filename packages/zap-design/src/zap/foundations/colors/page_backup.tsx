@@ -106,7 +106,7 @@ export default function MaterialKolorClone() {
 
 
     return (
-        <div className="flex h-screen w-full bg-layer-1 font-body text-on-surface overflow-hidden">
+        <div className="flex h-screen w-full bg-layer-1 font-body text-transform-secondary text-on-surface overflow-hidden">
 
             {/* INSPECTOR PANEL (Left Sidebar) */}
             <aside className="w-[320px] bg-white border-r border-zinc-200 flex flex-col flex-shrink-0 z-20">

@@ -4,7 +4,7 @@ import { extendTailwindMerge } from "tailwind-merge"
 const customTwMerge = extendTailwindMerge({
   extend: {
     classGroups: {
-      "text-transform": ["text-transform-primary", "text-transform-secondary", "text-transform-tertiary", "uppercase", "lowercase", "capitalize", "normal-case"],
+ "text-transform": ["text-transform-primary", "text-transform-secondary", "text-transform-tertiary", "", "", "", "normal-case"],
     },
   },
 })

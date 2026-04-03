@@ -50,7 +50,7 @@ export function DatePicker({
             id="date"
             variant={"outline"}
             className={cn(
-              "w-full justify-start text-left h-[var(--input-height,36px)] rounded-[var(--input-border-radius,8px)] border-[length:var(--input-border-width,1px)] border-[color:var(--input-border-filled,transparent)] bg-[color:var(--input-bg-filled,var(--color-surface-container-high))] hover:bg-[color:var(--input-bg-filled-focus,var(--color-surface-container-highest))] font-body text-sm font-normal text-transform-primary transition-all",
+              "w-full justify-start text-left h-[var(--input-height,36px)] rounded-[var(--input-border-radius,8px)] border-[length:var(--input-border-width,1px)] border-[color:var(--input-border-filled,transparent)] bg-[color:var(--input-bg-filled,var(--color-surface-container-high))] hover:bg-[color:var(--input-bg-filled-focus,var(--color-surface-container-highest))] font-body text-transform-secondary text-sm font-normal text-transform-primary transition-all",
               !date && "text-muted-foreground"
             )}
           >

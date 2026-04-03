@@ -2,10 +2,11 @@
 
 import React, { useState } from 'react';
 import { ComponentSandboxTemplate } from '../../../../../zap/layout/ComponentSandboxTemplate';
-import { Wrapper } from '../../../../../components/dev/Wrapper';
 import { UserSession } from '../../../../../genesis/molecules/user-session';
 import { Switch } from '../../../../../genesis/atoms/interactive/switch';
 import { ToggleGroup, ToggleGroupItem } from '../../../../../genesis/atoms/interactive/toggle-group';
+import { CanvasBody } from '../../../../../zap/layout/CanvasBody';
+import { SectionHeader } from '../../../../../zap/sections/SectionHeader';
 export default function UserSessionSandboxPage() {    
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -33,9 +34,9 @@ export default function UserSessionSandboxPage() {
     };
 
     const inspectorControls = (
-        <Wrapper identity={{ displayName: "Inspector Controls Container", type: "Container", filePath: "zap/molecules/user-session/page.tsx" }}>
+        
             <div className="space-y-4">
-                <Wrapper identity={{ displayName: "User Session Settings", type: "Docs Link", filePath: "zap/molecules/user-session/page.tsx" }}>
+                
                     <div className="space-y-6">
                         <h4 className="text-label-small text-transform-primary font-display font-bold text-on-surface-variant text-transform-secondary tracking-wider">Sandbox Controls</h4>
                         
@@ -49,7 +50,7 @@ export default function UserSessionSandboxPage() {
                             </div>
                             <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary">
                                 <span className={isLoggedIn ? 'text-primary font-bold' : ''}>Logged In State</span>
-                                <Switch checked={isLoggedIn} onCheckedChange={setIsLoggedIn} disabled={isLoading} />
+                                <Switch aria-label="Switch component" checked={isLoggedIn} onCheckedChange={setIsLoggedIn} disabled={isLoading} />
                             </div>
                             <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary">
                                 <span className={dropdownSide === 'top' ? 'text-primary font-bold' : ''}>Menu Orientation</span>
@@ -60,11 +61,11 @@ export default function UserSessionSandboxPage() {
                             </div>
                             <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary">
                                 <span className={isSmall ? 'text-primary font-bold' : ''}>Small Size Variant</span>
-                                <Switch checked={isSmall} onCheckedChange={setIsSmall} />
+                                <Switch aria-label="Switch component" checked={isSmall} onCheckedChange={setIsSmall} />
                             </div>
                             <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary">
                                 <span className={isGhost ? 'text-primary font-bold' : ''}>Ghost Variant (No BG)</span>
-                                <Switch checked={isGhost} onCheckedChange={setIsGhost} />
+                                <Switch aria-label="Switch component" checked={isGhost} onCheckedChange={setIsGhost} />
                             </div>
                             <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary">
                                 <span className={spacing !== 'between' ? 'text-primary font-bold' : ''}>Gap Spacing</span>
@@ -76,14 +77,14 @@ export default function UserSessionSandboxPage() {
                             </div>
                             <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary">
                                 <span className={showLabel ? 'text-primary font-bold' : ''}>Show Component Label</span>
-                                <Switch checked={showLabel} onCheckedChange={setShowLabel} />
+                                <Switch aria-label="Switch component" checked={showLabel} onCheckedChange={setShowLabel} />
                             </div>
                             <p className="text-label-small text-on-surface-variant text-transform-secondary font-body leading-relaxed">Toggle the state above to quickly preview Guest (unauthenticated) vs. Authenticated user block configurations.</p>
                         </div>
                     </div>
-                </Wrapper>
+                
             </div>
-        </Wrapper>
+        
     );
 
     const handleLoadedVariables = (variables: Record<string, string>) => {
@@ -122,11 +123,11 @@ export default function UserSessionSandboxPage() {
             inspectorControls={inspectorControls}
             foundationInheritance={{
                 colorTokens: ['bg-surface', 'border-outline-variant', 'text-on-surface text-transform-primary', 'bg-error'],
-                typographyScales: ['font-body', 'font-display', 'text-label-small', 'text-transform-tertiary']
+                typographyScales: ['font-body text-transform-secondary', 'font-display text-transform-primary', 'text-label-small', 'text-transform-tertiary']
             }}
             platformConstraints={{ web: "Supported", mobile: "Touch Supported" }}
             foundationRules={[
-                "Displays USER SESSION label with font-body and text-transform-tertiary", 
+                "Displays USER SESSION label with font-body text-transform-secondary and text-transform-tertiary", 
                 "Leverages standard Avatar and Button primitives under composition",
                 "Integrates strict M3 color variables for semantic state toggles"
             ]}
@@ -140,7 +141,10 @@ export default function UserSessionSandboxPage() {
             }}
             onLoadedVariables={handleLoadedVariables}
         >
-            <div className="w-full flex flex-col items-center justify-center min-h-[400px] p-6 lg:p-12 bg-layer-panel shadow-sm border border-outline-variant rounded-xl gap-8">
+            <CanvasBody flush={false}>
+                <CanvasBody.Section>
+                    <SectionHeader number="1" id="user-session" title="User Session Sandbox" description="Interactive components for User Session" icon="widgets" />
+                    <CanvasBody.Demo className="w-full flex flex-col items-center justify-center min-h-[400px] p-6 lg:p-12 bg-layer-panel shadow-sm border border-outline-variant rounded-xl gap-8">
                 <UserSession 
                     size={isSmall ? 'small' : 'default'}
                     variant={isGhost ? 'ghost' : 'default'}
@@ -159,7 +163,10 @@ export default function UserSessionSandboxPage() {
                     onLoginClick={handleLogin}
                     onLogoutClick={handleLogout}
                 />
-            </div>
+                </CanvasBody.Demo>
+                </CanvasBody.Section>
+            </CanvasBody>
+        
         </ComponentSandboxTemplate>
     );
 }

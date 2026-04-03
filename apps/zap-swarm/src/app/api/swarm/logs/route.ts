@@ -21,8 +21,8 @@ export async function GET(req: Request) {
             const sendEvent = (data: string) => {
                 try {
                     controller.enqueue(new TextEncoder().encode(`data: ${JSON.stringify({ logs: data })}\n\n`));
-                } catch (e) {
-                    logger.error("SSE Error writing to stream", e);
+                } catch (e: any) {
+                    logger.error("SSE Error writing to stream", { error: Array.isArray(e) ? e : e instanceof Error ? e.message : String(e) });
                 }
             };
 

@@ -99,7 +99,7 @@ const IOSScreenContent = ({ s }: { s: Record<string, string> }) => (
             <button aria-label="Back" className="p-1 rounded-full hover:opacity-70" style={{ color: s.onBg }}><ArrowLeft size={18} /></button>
             <button aria-label="More options" className="p-1 rounded-full hover:opacity-70" style={{ color: s.onBg }}><MoreVertical size={18} /></button>
         </div>
-        <h2 className="text-[30px] leading-tight text-center mb-5 font-display" style={{ color: s.primary }}>Monstera<br />Siltepecana</h2>
+        <h2 className="text-[30px] leading-tight text-center mb-5 font-display text-transform-primary" style={{ color: s.primary }}>Monstera<br />Siltepecana</h2>
         <div className="w-[200px] h-[200px] mx-auto rounded-[70px] shadow-inner mb-5 flex items-center justify-center text-[90px] overflow-hidden relative" style={{ backgroundColor: s.surfaceVariant }}>
             <div className="absolute inset-0 opacity-10" style={{ backgroundColor: s.shadow }} />🌿
         </div>
@@ -116,7 +116,7 @@ const IOSScreenContent = ({ s }: { s: Record<string, string> }) => (
                 </div>
             ))}
         </div>
-        <h3 className="text-[14px] mb-3 font-display" style={{ color: s.onBg }}>Care</h3>
+        <h3 className="text-[14px] mb-3 font-display text-transform-primary" style={{ color: s.onBg }}>Care</h3>
         <div className="flex flex-col gap-3 text-[11px] font-medium" style={{ color: s.onSurfaceVariant }}>
             {[{ label: 'Water every 1–2 weeks' }, { label: 'Feed once monthly' }, { label: 'Moderate indirect light' }].map((row, i) => (
                 <div key={i} className="flex items-center gap-3">
@@ -134,7 +134,7 @@ const IOSScreenContent = ({ s }: { s: Record<string, string> }) => (
 const AndroidScreenContent = ({ s }: { s: Record<string, string> }) => (
     <div className="flex-1 overflow-y-auto no-scrollbar flex flex-col px-5 pt-3 gap-3">
         <div className="flex justify-between items-center mb-1">
-            <h2 className="text-[26px] font-sans font-normal tracking-tight font-display">Today</h2>
+            <h2 className="text-[26px] font-sans font-normal tracking-tight font-display text-transform-primary">Today</h2>
             <div className="w-9 h-9 rounded-full flex items-center justify-center" style={{ backgroundColor: s.secondaryContainer, color: s.onSecondaryContainer }}>
                 <span className="material-symbols-outlined" style={{ fontSize: 18, fontVariationSettings: "'FILL' 0, 'wght' 400" }}>person</span>
             </div>
@@ -186,7 +186,7 @@ const TabletScreenContent = ({ s }: { s: Record<string, string> }) => (
             ))}
         </div>
         <div className="flex-1 overflow-y-auto no-scrollbar p-6 flex flex-col gap-5" style={{ backgroundColor: s.surfaceContainerLow }}>
-            <h2 className="text-[22px] tracking-tight font-display" style={{ color: s.onBg }}>My Garden</h2>
+            <h2 className="text-[22px] tracking-tight font-display text-transform-primary" style={{ color: s.onBg }}>My Garden</h2>
             <div className="rounded-[16px] p-4 flex gap-3" style={{ backgroundColor: s.tertiaryContainer, color: s.onTertiaryContainer }}>
                 <Leaf size={16} className="mt-0.5 shrink-0" />
                 <p className="text-[12px] leading-snug font-medium">Winter care: reduce watering frequency for all indoor plants.</p>
@@ -199,7 +199,7 @@ const TabletScreenContent = ({ s }: { s: Record<string, string> }) => (
                     { title: 'Bathroom', icon: '🌺', count: 2 },
                 ].map((room, i) => (
                     <div key={i} className="rounded-[16px] p-4 relative overflow-hidden" style={{ backgroundColor: s.primaryContainer, color: s.onPrimaryContainer }}>
-                        <h3 className="text-[14px] font-semibold mb-1 font-display" style={{ color: s.primary }}>{room.title}</h3>
+                        <h3 className="text-[14px] font-semibold mb-1 font-display text-transform-primary" style={{ color: s.primary }}>{room.title}</h3>
                         <p className="text-[11px] opacity-70">{room.count} plants</p>
                         <div className="absolute -bottom-2 -right-1 text-[50px] opacity-80">{room.icon}</div>
                     </div>
@@ -219,7 +219,7 @@ const DesktopScreenContent = ({ s }: { s: Record<string, string> }) => (
         <div className="flex flex-col py-2 px-1 gap-1 shrink-0 overflow-y-auto no-scrollbar" style={{ width: 200, backgroundColor: s.surfaceContainerHigh, color: s.onSurfaceVariant }}>
             <div className="flex items-center gap-2 px-3 py-2 mb-4">
                 <span className="material-symbols-outlined" style={{ fontSize: 22, color: s.primary, fontVariationSettings: "'FILL' 1, 'wght' 400" }}>eco</span>
-                <span className="text-[14px] font-bold font-display" style={{ color: s.onBg }}>Plantify</span>
+                <span className="text-[14px] font-bold font-display text-transform-primary" style={{ color: s.onBg }}>Plantify</span>
             </div>
             {[
                 { icon: 'home', label: 'Home', active: true },
@@ -236,7 +236,7 @@ const DesktopScreenContent = ({ s }: { s: Record<string, string> }) => (
         </div>
         <div className="flex-1 overflow-y-auto no-scrollbar p-8 flex flex-col gap-6" style={{ backgroundColor: s.surfaceContainerLow }}>
             <div className="flex items-center justify-between">
-                <h2 className="text-[24px] tracking-tight font-display" style={{ color: s.onBg }}>My Garden</h2>
+                <h2 className="text-[24px] tracking-tight font-display text-transform-primary" style={{ color: s.onBg }}>My Garden</h2>
                 <div className="flex gap-2">
                     <button className="rounded-full px-4 py-2 text-[11px] font-bold text-transform-secondary tracking-wider" style={{ backgroundColor: s.primary, color: s.onPrimary }}>Add Plant</button>
                 </div>
@@ -255,7 +255,7 @@ const DesktopScreenContent = ({ s }: { s: Record<string, string> }) => (
                     { title: 'Balcony', icon: '🌻', count: 3, tasks: 1 },
                 ].map((room, i) => (
                     <div key={i} className="rounded-[16px] p-4 relative overflow-hidden" style={{ backgroundColor: s.primaryContainer, color: s.onPrimaryContainer }}>
-                        <h3 className="text-[13px] font-semibold mb-1 font-display" style={{ color: s.primary }}>{room.title}</h3>
+                        <h3 className="text-[13px] font-semibold mb-1 font-display text-transform-primary" style={{ color: s.primary }}>{room.title}</h3>
                         <p className="text-[11px] opacity-70 mb-1">{room.count} plants</p>
                         {room.tasks > 0 && (
                             <span className="inline-block rounded-full px-2 py-0.5 text-[9px] font-bold" style={{ backgroundColor: s.primary, color: s.onPrimary }}>{room.tasks} tasks</span>
@@ -267,7 +267,7 @@ const DesktopScreenContent = ({ s }: { s: Record<string, string> }) => (
         </div>
         <div className="shrink-0 overflow-y-auto no-scrollbar p-5 flex flex-col gap-4 border-l" style={{ width: 220, backgroundColor: s.surfaceContainerHigh, borderColor: s.outlineVariant, color: s.onSurfaceVariant }}>
             {/* eslint-disable-next-line react/no-unescaped-entities */}
-            <h3 className="text-[14px] font-semibold font-display" style={{ color: s.onBg }}>Today's Tasks</h3>
+            <h3 className="text-[14px] font-semibold font-display text-transform-primary" style={{ color: s.onBg }}>Today's Tasks</h3>
             {[
                 { action: 'Water', plant: 'Monstera', room: 'Living Room' },
                 { action: 'Feed', plant: 'Hoya', room: 'Kitchen' },

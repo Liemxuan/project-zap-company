@@ -1,275 +1,162 @@
 'use client';
-import { parseCssToNumber } from '../../../../../lib/utils';
 
-import React, { useState, useEffect } from 'react';
-import { useTheme } from '../../../../../components/ThemeContext';
+import React, { useState } from 'react';
 import { ComponentSandboxTemplate } from '../../../../../zap/layout/ComponentSandboxTemplate';
-import { Slider } from '../../../../../genesis/atoms/interactive/slider';
 import { Switch } from '../../../../../genesis/atoms/interactive/switch';
 import { Label } from '../../../../../genesis/atoms/interactive/label';
-import { Wrapper } from '../../../../../components/dev/Wrapper';
-import { Select as ZapSelect } from '../../../../../genesis/atoms/interactive/option-select';
-import { ThemePublisher } from '../../../../../components/dev/ThemePublisher';
-import { useBorderProperties } from '../../../../../zap/sections/atoms/border_radius/use-border-properties';
+import { Icon } from '../../../../../genesis/atoms/icons/Icon';
+import { cn } from '../../../../../lib/utils';
+import { CanvasBody } from '../../../../../zap/layout/CanvasBody';
+import { SectionHeader } from '../../../../../zap/sections/SectionHeader';
 import { BORDER_RADIUS_TOKENS, BORDER_WIDTH_TOKENS } from '../../../../../zap/sections/atoms/foundations/schema';
-import { toast } from 'sonner';
 
-export default function SwitchSandbox() {
-    const { theme: appTheme } = useTheme();
-    const activeTheme = appTheme === 'core' ? 'core' : 'metro';
+export default function SwitchSandboxPage() {
+    const [borderRadius, setBorderRadius] = useState(BORDER_RADIUS_TOKENS[8].value); // Default to full pill
+    const [borderWidth, setBorderWidth] = useState(BORDER_WIDTH_TOKENS[1].value);
+    const [trackHeight, setTrackHeight] = useState('24px');
+    const [disabled, setDisabled] = useState(false);
 
-    // Dynamic Properties State
-    const [width, setWidth] = useState([44]);
-    const [height, setHeight] = useState([24]);
-    const [thumbSize, setThumbSize] = useState([20]);
-    const [isSubmitting, setIsSubmitting] = useState(false);
+    const inspectorControls = (
+        <div className="space-y-6">
+            <div className="space-y-4 pb-4 border-b border-border/50">
+                <h4 className="text-label-small text-transform-primary font-display font-bold text-muted-foreground tracking-wider uppercase">Foundation Tokens</h4>
+                
+                <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-1.5">
+                        <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Border Radius</label>
+                        <select 
+                            className="w-full bg-layer-panel border border-border/50 rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-primary"
+                            value={borderRadius}
+                            onChange={(e) => setBorderRadius(e.target.value)}
+                        >
+                            {BORDER_RADIUS_TOKENS.map(t => (
+                                <option key={t.name} value={t.value}>{t.name}</option>
+                            ))}
+                        </select>
+                    </div>
+                    <div className="space-y-1.5">
+                        <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Border Width</label>
+                        <select 
+                            className="w-full bg-layer-panel border border-border/50 rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-primary"
+                            value={borderWidth}
+                            onChange={(e) => setBorderWidth(e.target.value)}
+                        >
+                            {BORDER_WIDTH_TOKENS.map(t => (
+                                <option key={t.name} value={t.value}>{t.name}</option>
+                            ))}
+                        </select>
+                    </div>
+                </div>
 
-    // L1 Border Properties
-    const {
-        state,
-        setComponentOverride,
-        clearComponentOverride,
-        hydrateState,
-        getEffectiveProps
-    } = useBorderProperties();
+                <div className="space-y-1.5">
+                    <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Track Scale</label>
+                    <select 
+                        className="w-full bg-layer-panel border border-border/50 rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-primary"
+                        value={trackHeight}
+                        onChange={(e) => setTrackHeight(e.target.value)}
+                    >
+                        {['16px', '20px', '24px', '28px', '32px'].map(h => (
+                            <option key={h} value={h}>{h}</option>
+                        ))}
+                    </select>
+                </div>
+            </div>
 
-    // Hydrate L1 border state on mount
-    useEffect(() => {
-        let mounted = true;
-        const loadSettings = async () => {
-            try {
-                const res = await fetch(`/api/border_radius/publish?theme=${activeTheme}`);
-                if (res.ok && mounted) {
-                    const data = await res.json();
-                    if (data.success && data.data && data.data.state) {
-                        hydrateState(data.data.state);
-                    }
-                }
-            } catch (err) {
-                console.error("Failed to load border radius settings:", err);
-            }
-        };
-        loadSettings();
-        return () => { mounted = false; };
-    }, [activeTheme, hydrateState]);
-
-    // Compute effective values from L1
-    const effectiveProps = getEffectiveProps('Switch');
-    const previewRadius = BORDER_RADIUS_TOKENS.find(t => t.token === effectiveProps.radius)?.value.split(' ')[0] || '9999px';
-    const previewWidth = BORDER_WIDTH_TOKENS.find(t => t.token === effectiveProps.width)?.value.split(' ')[0] || '0px';
+            <div className="flex items-center justify-between">
+                <span className="text-label-medium font-bold text-muted-foreground uppercase tracking-widest text-[10px]">Disabled State</span>
+                <input 
+                    type="checkbox" 
+                    checked={disabled} 
+                    onChange={(e) => setDisabled(e.target.checked)} 
+                    className="accent-primary"
+                />
+            </div>
+        </div>
+    );
 
     const handleLoadedVariables = (variables: Record<string, string>) => {
-        if (variables['--switch-track-width']) setWidth([parseCssToNumber(variables['--switch-track-width'])]);
-        if (variables['--switch-track-height']) setHeight([parseCssToNumber(variables['--switch-track-height'])]);
-        if (variables['--switch-thumb-size']) setThumbSize([parseCssToNumber(variables['--switch-thumb-size'])]);
+        if (variables['--switch-track-height']) setTrackHeight(variables['--switch-track-height']);
+        if (variables['--switch-border-width']) setBorderWidth(variables['--switch-border-width']);
+        if (variables['--switch-border-radius']) setBorderRadius(variables['--switch-border-radius']);
     };
-
-    // Dual-publish handler
-    const handlePublish = async () => {
-        setIsSubmitting(true);
-        try {
-            // 1. Publish component-specific variables
-            const res1 = await fetch('/api/theme/publish', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    theme: activeTheme,
-                    variables: {
-                        '--switch-track-width': `${width[0]}px`,
-                        '--switch-track-height': `${height[0]}px`,
-                        '--switch-thumb-size': `${thumbSize[0]}px`
-                    }
-                })
-            });
-
-            // 2. Publish global border radius state (links back to L1)
-            const res2 = await fetch('/api/border_radius/publish', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ theme: activeTheme, state })
-            });
-
-            if (res1.ok && res2.ok) {
-                toast.success(`Published Switch variables to ${activeTheme}`);
-            } else {
-                toast.error('Failed to publish');
-            }
-        } catch (err) {
-            console.error(err);
-            toast.error('Network error during publish');
-        } finally {
-            setIsSubmitting(false);
-        }
-    };
-
-    // Token selector renderers
-    const renderRadiusSelect = (value: string, onChange: (val: string) => void) => {
-        const safeValue = value === '' ? 'inherit' : value;
-        const options = [
-            { label: '(Inherit Universal)', value: 'inherit' },
-            ...BORDER_RADIUS_TOKENS.map(t => ({ label: `${t.name} (${t.token})`, value: t.token }))
-        ];
-        return (
-            <ZapSelect
-                value={safeValue}
-                onChange={(val) => onChange(val === 'inherit' ? '' : val)}
-                options={options}
-                placeholder="(Inherit Universal)"
-                className={`w-full bg-layer-base ${value !== '' ? 'border-primary/50 text-primary' : 'border-border/30 text-foreground'}`}
-            />
-        );
-    };
-
-    const renderWidthSelect = (value: string, onChange: (val: string) => void) => {
-        const safeValue = value === '' ? 'inherit' : value;
-        const options = [
-            { label: '(Inherit Universal)', value: 'inherit' },
-            ...BORDER_WIDTH_TOKENS.map(t => ({ label: `${t.name} (${t.token})`, value: t.token }))
-        ];
-        return (
-            <ZapSelect
-                value={safeValue}
-                onChange={(val) => onChange(val === 'inherit' ? '' : val)}
-                options={options}
-                placeholder="(Inherit Universal)"
-                className={`w-full bg-layer-base ${value !== '' ? 'border-primary/50 text-primary' : 'border-border/30 text-foreground'}`}
-            />
-        );
-    };
-        
-    const inspectorControls = (
-        <Wrapper identity={{ displayName: "Inspector Controls Container", type: "Container", filePath: "zap/atoms/switch/page.tsx" }}>
-            <div className="space-y-4">
-                <Wrapper identity={{ displayName: "Switch Structural Settings", type: "Docs Link", filePath: "zap/atoms/switch/page.tsx" }}>
-                    <div className="space-y-6">
-                        <h4 className="text-label-small text-transform-primary font-display font-bold text-muted-foreground tracking-wider uppercase">Sandbox Variables</h4>
-
-                        <div className="space-y-4">
-                            <div className="space-y-2">
-                                <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-muted-foreground uppercase">
-                                    <span>--switch-track-width</span>
-                                    <span className="font-bold">{width[0]}px</span>
-                                </div>
-                                <Slider value={width} onValueChange={setWidth} min={30} max={80} step={2} className="w-full" />
-                            </div>
-
-                            <div className="space-y-2">
-                                <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-muted-foreground uppercase">
-                                    <span>--switch-track-height</span>
-                                    <span className="font-bold">{height[0]}px</span>
-                                </div>
-                                <Slider value={height} onValueChange={setHeight} min={16} max={40} step={2} className="w-full" />
-                            </div>
-
-                            <div className="space-y-2">
-                                <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-muted-foreground uppercase">
-                                    <span>--switch-thumb-size</span>
-                                    <span className="font-bold">{thumbSize[0]}px</span>
-                                </div>
-                                <Slider value={thumbSize} onValueChange={setThumbSize} min={12} max={36} step={2} className="w-full" />
-                            </div>
-                        </div>
-
-                        <div className="space-y-4 pt-4 border-t border-border/50">
-                            {/* Border Width — L1 token selector */}
-                            <div className="space-y-1">
-                                <span className="text-label-small text-muted-foreground flex justify-between">
-                                    <span>Width Override</span>
-                                    <span className="font-bold">{previewWidth}</span>
-                                </span>
-                                {renderWidthSelect(
-                                    state.components['Switch']?.width || '',
-                                    (val) => {
-                                        if (val === '') clearComponentOverride('Switch', 'width');
-                                        else setComponentOverride('Switch', 'width', val);
-                                    }
-                                )}
-                            </div>
-
-                            {/* Border Radius — L1 token selector */}
-                            <div className="space-y-1">
-                                <span className="text-label-small text-muted-foreground flex justify-between">
-                                    <span>Radius Override</span>
-                                    <span className="font-bold">{previewRadius}</span>
-                                </span>
-                                {renderRadiusSelect(
-                                    state.components['Switch']?.radius || '',
-                                    (val) => {
-                                        if (val === '') clearComponentOverride('Switch', 'radius');
-                                        else setComponentOverride('Switch', 'radius', val);
-                                    }
-                                )}
-                            </div>
-                        </div>
-                    </div>
-                </Wrapper>
-            </div>
-        </Wrapper>
-    );
 
     return (
         <ComponentSandboxTemplate
             componentName="Switch"
             tier="L3 ATOM"
-            status="Beta"
-            importPath="@/genesis/atoms/interactive/switch"
+            status="Verified"
             filePath="src/genesis/atoms/interactive/switch.tsx"
+            importPath="@/genesis/atoms/interactive/switch"
             inspectorControls={inspectorControls}
-            inspectorFooter={
-                <ThemePublisher
-                    theme={activeTheme}
-                    filePath="src/genesis/atoms/interactive/switch.tsx"
-                    onPublish={handlePublish}
-                    isLoading={isSubmitting}
-                />
-            }
             foundationInheritance={{
-                colorTokens: ['--md-sys-color-primary'],
+                colorTokens: ['--md-sys-color-primary', '--md-sys-color-surface-container-highest'],
                 typographyScales: ['--font-body']
             }}
             platformConstraints={{
-                web: "N/A",
-                mobile: "N/A"
+                web: "Accessible toggle switch with smooth Framer Motion transitions.",
+                mobile: "Minimum 48px touch target area for usability."
             }}
             foundationRules={[
-                "CSS var driven: --switch-track-width, --switch-track-height, --switch-thumb-size",
-                "Border radius & width inherit from L1 Universal via useBorderProperties",
-                "Dual-publish: component vars to theme + border state to L1 registry"
+                "Switch tracks must use --color-surface-container-highest in unchecked mode.",
+                "Checked state must transition to --color-primary track."
             ]}
             onLoadedVariables={handleLoadedVariables}
         >
-            <style dangerouslySetInnerHTML={{ __html: `
-                .switch-preview-sandbox {
-                    --switch-track-width: ${width[0]}px;
-                    --switch-track-height: ${height[0]}px;
-                    --switch-thumb-size: ${thumbSize[0]}px;
-                    --switch-border-radius: ${previewRadius};
-                    --switch-border-width: ${previewWidth};
-                }
-            ` }} />
-            <div
-                className="w-full space-y-12 animate-in fade-in duration-500 pb-16 switch-preview-sandbox"
-            >
-                <div className="w-full flex flex-col items-center justify-center p-12 bg-layer-panel shadow-sm border border-outline-variant rounded-[length:var(--card-border-radius,12px)] min-h-[400px]">
-                    <div className="w-full max-w-md bg-layer-dialog border border-outline-variant rounded-[length:var(--card-border-radius,12px)] shadow-xl overflow-hidden flex flex-col">
-                        
-                        <div className="p-6 border-b border-border/40">
-                            <h2 className="text-title-small font-semibold text-transform-primary mb-1">Network Settings</h2>
-                            <p className="text-body-small text-muted-foreground font-body leading-relaxed">
-                                Toggle system connectivity modes.
-                            </p>
+            <CanvasBody flush={false}>
+                <CanvasBody.Section>
+                    <SectionHeader id="interactive-preview" 
+                        number="01"
+                        title="Interactive Preview"
+                        icon="toggle_on"
+                        description="Live-configured toggle testing spatial L2 layer restoration."
+                    />
+                    <CanvasBody.Demo centered>
+                        <div className="w-full max-w-sm p-12 bg-layer-panel border border-border/40 shadow-xl rounded-2xl flex flex-col items-center justify-center gap-6" style={{ borderRadius: '24px' }}>
+                           <div className="flex items-center justify-between w-full p-4 bg-layer-surface/50 rounded-lg border border-border/20 shadow-sm">
+                               <Label htmlFor="preview-switch" className="text-labelLarge font-body text-primary cursor-pointer select-none">System Active</Label>
+                               <Switch 
+                                   id="preview-switch" 
+                                   disabled={disabled}
+                                   style={{ 
+                                       '--switch-track-height': trackHeight,
+                                       '--switch-track-width': `calc(${trackHeight} * 1.83)`,
+                                       '--switch-thumb-size': `calc(${trackHeight} * 0.83)`,
+                                       '--switch-border-width': borderWidth,
+                                       '--switch-border-radius': borderRadius
+                                   } as any}
+                               />
+                           </div>
                         </div>
+                    </CanvasBody.Demo>
+                </CanvasBody.Section>
 
-                        <div className="p-6 flex flex-col gap-4">
-                            <div className="flex items-center justify-between">
-                                <Label htmlFor="airplane-mode" className="text-body-small font-medium text-transform-secondary cursor-pointer">Airplane Mode</Label>
-                                <Switch id="airplane-mode" />
+                <CanvasBody.Section className="pb-16">
+                    <SectionHeader id="contextual-states" 
+                        number="02"
+                        title="Contextual States"
+                        icon="settings"
+                        description="Core behavioral states including disabled and restricted roles."
+                    />
+                    <CanvasBody.Demo>
+                        <div className="w-full max-w-xl space-y-4" style={{ 
+                            '--switch-track-height': trackHeight,
+                            '--switch-track-width': `calc(${trackHeight} * 1.83)`,
+                            '--switch-thumb-size': `calc(${trackHeight} * 0.83)`,
+                            '--switch-border-width': borderWidth,
+                            '--switch-border-radius': borderRadius
+                        } as any}>
+                            <div className="flex items-center justify-between p-4 bg-layer-panel border border-border/40 rounded-xl shadow-md">
+                                <span className="text-labelMedium font-body">Background Sync</span>
+                                <Switch defaultChecked />
+                            </div>
+                            <div className="flex items-center justify-between p-4 bg-layer-panel border border-border/40 rounded-xl opacity-40">
+                                <span className="text-labelMedium font-body">Legacy Mode (Disabled)</span>
+                                <Switch disabled />
                             </div>
                         </div>
-
-                    </div>
-                </div>
-            </div>
+                    </CanvasBody.Demo>
+                </CanvasBody.Section>
+            </CanvasBody>
         </ComponentSandboxTemplate>
     );
 }

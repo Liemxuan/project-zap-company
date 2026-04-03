@@ -1,1 +1,13 @@
-{}
+{
+  "[project]/packages/zap-design/src/components/ui/MermaidBox.tsx [app-client] (ecmascript, next/dynamic entry)": {
+    "id": "[project]/packages/zap-design/src/components/ui/MermaidBox.tsx [app-client] (ecmascript, next/dynamic entry)",
+    "files": [
+      "static/chunks/node_modules__pnpm_0~~o19p._.js",
+      "static/chunks/03h9_mermaid_dist_0n9dzf_._.js",
+      "static/chunks/13rm_lodash-es_0tt73q9._.js",
+      "static/chunks/node_modules__pnpm_0.85.ic._.js",
+      "static/chunks/packages_zap-design_src_components_ui_MermaidBox_tsx_0xd69_v._.js",
+      "static/chunks/packages_zap-design_src_components_ui_MermaidBox_tsx_015frbd._.js"
+    ]
+  }
+}

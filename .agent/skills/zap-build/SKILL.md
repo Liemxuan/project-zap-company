@@ -65,6 +65,14 @@ Run this against every `<Button>`, `<Input>`, `<EmailInput>`, `<PasswordInput>`,
 2. Load `http://localhost:3000/design/metro/molecules/theme-header` to guarantee you are rigorously using `<ThemeHeader>` (Variant Minimal) for top-level Page structural anchors instead of rolling a custom L3 `<header>`.
 3. If your layout headers, toolbars, or layer containers deviate in dimension or padding rules from the ones running on those two live sandbox URLs, you fail the build instantly. Fix it.
 
+### 6c. The Canvas Standard (PRD-037)
+When building or refactoring any Sandbox or Laboratory page, you MUST adhere to the following structural mandates:
+1. **Macro Architecture**: Replace legacy `div` containers with the canonical `<CanvasBody.Section>` and `<CanvasBody.Demo>` macro system.
+2. **L2 Surface Restoration**: Always set `<CanvasBody flush={false}>`. This is mandatory to prevent L3 atoms from floating on the L1 background by restoring the intermediate `bg-layer-cover` depth.
+3. **Header Standardization**: Utilize the `<SectionHeader>` component for all sections. 
+4. **Minimalist Aesthetics**: Propose and implement the removal of any `label` props on `<CanvasBody.Section>` to prioritize a clean, professional first impression.
+5. **Token-Bound Controls**: Foundation properties (e.g. Border Radius, Border Width) in the Inspector MUST use `<Select>` components bound to official `schema.ts` tokens, not arbitrary `Slider` controls.
+
 ## 7. The 4-Point Verification
 - Invoke `verification-before-completion`.
 - Run the Layer Audit, Typography Audit, Inspector Sync Audit, and perform a VFS State Dump into `shared://`.

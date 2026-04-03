@@ -11,8 +11,21 @@ import { mountMemoryRoutes } from './lib/memory_routes.js';
 import { SafeExecutor } from './security/safe-executor.js';
 import { redactSecrets } from './security/log_redaction.js';
 import { z } from 'zod';
+import { syncApiKeysToRedis } from './runtime/engine/omni_router.js';
 
 dotenv.config();
+
+// PHASE 0: Fleet Matrix Synchronization
+import { MCPManager } from './runtime/engine/mcp_manager.js';
+
+// Restore the 105-key fleet and MCP Tool Servers on boot
+(async () => {
+    console.log("🔄 [ZAP-OS] Syncing 105-key fleet matrix to Redis Speed Layer...");
+    await syncApiKeysToRedis();
+
+    console.log("🔄 [ZAP-OS] Booting Master MCP Fleet Servers...");
+    await MCPManager.init();
+})();
 
 const app = express();
 const PORT = process.env.PORT || 3900;
@@ -24,21 +37,25 @@ app.use('/webhook/payment', bodyParser.raw({ type: 'application/json' }));
 app.use(bodyParser.json());
 // BLAST-IRONCLAD: Redact secrets from HTTP request logs
 app.use(morgan((tokens, req, res) => {
-    const method = tokens.method(req, res) || '';
-    const url = redactSecrets(tokens.url(req, res) || '');
-    const status = tokens.status(req, res) || '';
-    const time = tokens['response-time'](req, res) || '';
+    const method = tokens.method?.(req, res) || '';
+    const url = redactSecrets(tokens.url?.(req, res) || '');
+    const status = tokens.status?.(req, res) || '';
+    const time = tokens['response-time']?.(req, res) || '';
     return `${method} ${url} ${status} ${time}ms`;
 }));
 
 import { syncRouter } from './api/sync_routes.js';
 import { webhookRouter } from './api/webhooks.js';
 import { inventoryRouter } from './api/inventory_routes.js';
+import { telemetryRouter } from './gateway/ingress_webhooks.js';
 import { startSyncWorker } from './workers/sync_drain_worker.js';
+import { chatV2Router } from './runtime/conversation/chat-v2-handler.js';
 
 app.use(syncRouter);
 app.use(webhookRouter);
 app.use(inventoryRouter);
+app.use(telemetryRouter);
+app.use(chatV2Router); // ConversationRuntime v2 — hook + permission pipeline
 
 // Start the background worker (this runs asynchronously and loops continuously in the background)
 startSyncWorker().catch(err => console.error("Sync Worker threw unhandled error:", err));
@@ -227,6 +244,164 @@ app.get('/api/models', async (req, res) => {
         res.status(500).json({ error: "Failed to load models list." });
     } finally {
         await client.close();
+    }
+});
+
+// ==========================================
+// Phase X: OmniRouter Diagnostic Matrix Endpoint
+// ==========================================
+import { generateOmniContent } from './runtime/engine/omni_router.js';
+
+app.post('/api/admin/test-omnirouter', async (req, res) => {
+    try {
+        const payload = {
+            intent: "TEST_ROUTER",
+            messages: [{ role: "user", content: "Acknowledge receipt and identify your model version in exactly one sentence." }],
+            systemPrompt: "You are the ZAP Swarm diagnostic engine. Respond with extreme brevity.",
+            theme: "C_PRECISION",
+            tools: [],
+            reflexions: 0,
+            tenantId: "OLYMPUS"
+        };
+        const config = {
+            apiKey: "",
+            defaultModel: "gemini-2.5-flash",
+            agentId: "DIAGNOSTIC_DRONE",
+            accountLevel: "ULTRA"
+        };
+        const result = await generateOmniContent(config as any, payload as any);
+        res.json({ success: true, text: result.text, model: result.modelId, tokens: result.tokensUsed });
+    } catch (err: any) {
+        console.error("[OmniRouter Test] Failure:", err);
+        res.status(500).json({ success: false, error: err.message });
+    }
+});
+
+// ==========================================
+// Phase X: Single Key Diagnostic Endpoint
+// ==========================================
+import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
+import { ChatOpenAI } from "@langchain/openai";
+
+app.post('/api/admin/test-single-key', async (req, res) => {
+    const { keyHash, provider } = req.body;
+    if (!keyHash || !provider) {
+        res.status(400).json({ error: "Missing keyHash or provider" });
+        return;
+    }
+
+    const client = new MongoClient(MONGO_URI);
+    try {
+        await client.connect();
+        const db = client.db(DB_NAME);
+        const keyDoc = await db.collection('SYS_API_KEYS').findOne({ keyHash });
+        if (!keyDoc) {
+             res.status(404).json({ error: "Key not found in database" });
+             return;
+        }
+
+        const apiKey = keyDoc.encryptedKey || keyDoc.apiKey;
+        if (!apiKey) {
+            res.status(400).json({ error: "Key payload is empty" });
+            return;
+        }
+
+        const safeProvider = provider.toUpperCase();
+
+        const pingModel = async (llm: any) => {
+             const response = await llm.invoke([{ role: "user", content: "Reply with the exact word: ALIVE" }]);
+             let revived = false;
+             if (keyDoc.status === 'DEAD') {
+                 await db.collection('SYS_API_KEYS').updateOne({ keyHash }, { $set: { status: 'ACTIVE' } });
+                 const redis = new Redis(process.env.REDIS_URL || "redis://localhost:6379");
+                 await redis.srem(`dead_keys:${provider.toLowerCase()}`, apiKey);
+                 redis.disconnect();
+                 revived = true;
+             }
+             return { response: response.content, revived };
+        };
+
+        if (safeProvider === "GOOGLE" || safeProvider === "GEMINI") {
+            const llm = new ChatGoogleGenerativeAI({
+                model: "gemini-2.5-flash",
+                apiKey: apiKey,
+                maxRetries: 0,
+            });
+            const { response, revived } = await pingModel(llm);
+            res.json({ success: true, text: response, status: "ALIVE", revived });
+        } else if (safeProvider === "OPENROUTER") {
+            const llm = new ChatOpenAI({
+                configuration: { baseURL: "https://openrouter.ai/api/v1" },
+                modelName: "google/gemini-2.5-flash",
+                openAIApiKey: apiKey,
+                maxRetries: 0,
+            });
+            const { response, revived } = await pingModel(llm);
+            res.json({ success: true, text: response, status: "ALIVE", revived });
+        } else {
+             res.json({ success: false, error: `Unsupported provider for direct testing: ${provider}` });
+        }
+    } catch (err: any) {
+        console.error(`[Single Key Test - ${keyHash}] Failure:`, err);
+        res.status(500).json({ success: false, error: err.message || "Unknown error" });
+    } finally {
+        await client.close();
+    }
+});
+
+// ==========================================
+// Phase 20b: Bulk Test & Revive DEAD Keys
+// ==========================================
+app.post('/api/admin/bulk-test-dead-keys', async (req, res) => {
+    const client = new MongoClient(MONGO_URI);
+    const redis = new Redis(process.env.REDIS_URL || "redis://localhost:6379");
+    try {
+        await client.connect();
+        const db = client.db(DB_NAME);
+        
+        const deadKeys = await db.collection('SYS_API_KEYS').find({ status: 'DEAD' }).toArray();
+        if (deadKeys.length === 0) {
+            res.json({ success: true, revived: [], message: "No DEAD keys found in registry." });
+            return;
+        }
+
+        const revivedHashes: string[] = [];
+        
+        for (const keyDoc of deadKeys) {
+            const provider = keyDoc.provider || "UNKNOWN";
+            const safeProvider = provider.toUpperCase();
+            const apiKey = keyDoc.encryptedKey || keyDoc.apiKey;
+            if (!apiKey) continue;
+
+            let isAlive = false;
+            try {
+                if (safeProvider === "GOOGLE" || safeProvider === "GEMINI") {
+                    const llm = new ChatGoogleGenerativeAI({ model: "gemini-2.5-flash", apiKey, maxRetries: 0 });
+                    await llm.invoke([{ role: "user", content: "Reply with ALIVE" }]);
+                    isAlive = true;
+                } else if (safeProvider === "OPENROUTER") {
+                    const llm = new ChatOpenAI({ configuration: { baseURL: "https://openrouter.ai/api/v1" }, modelName: "google/gemini-2.5-flash", openAIApiKey: apiKey, maxRetries: 0 });
+                    await llm.invoke([{ role: "user", content: "Reply with ALIVE" }]);
+                    isAlive = true;
+                }
+            } catch (err) {
+                // remains dead
+                console.log(`[Bulk Test] Key ${keyDoc.keyHash.slice(-6)} remains dead.`);
+            }
+
+            if (isAlive) {
+                await db.collection('SYS_API_KEYS').updateOne({ _id: keyDoc._id }, { $set: { status: 'ACTIVE' } });
+                await redis.srem(`dead_keys:${provider.toLowerCase()}`, apiKey);
+                revivedHashes.push(keyDoc.keyHash.slice(-6));
+            }
+        }
+        res.json({ success: true, revived: revivedHashes, totalTested: deadKeys.length });
+    } catch (err: any) {
+        console.error(`[Bulk Test Dead Keys] Failure:`, err);
+        res.status(500).json({ success: false, error: err.message || "Unknown error" });
+    } finally {
+        await client.close();
+        redis.disconnect();
     }
 });
 
@@ -643,11 +818,32 @@ app.post('/api/swarm/chat', async (req, res) => {
         return;
     }
 
-    const { sessionId, agentId, message, tenantId } = req.body;
+    const { sessionId, agentId, message, tenantId, mode, modelId, attachments } = req.body;
+    const modeTierMap: Record<string, "tier_p0_fast" | "tier_p3_heavy"> = {
+        "Flash":     "tier_p0_fast",
+        "Reasoning": "tier_p0_fast",
+        "Pro":       "tier_p3_heavy",
+        "Ultra":     "tier_p3_heavy",
+    };
+    const resolvedTier = modeTierMap[mode] ?? "tier_p3_heavy";
     
     if (!sessionId || !agentId || !message) {
         res.status(400).json({ error: "Missing required fields." });
         return;
+    }
+
+    let finalContent: any = message;
+    if (attachments && Array.isArray(attachments) && attachments.length > 0) {
+        finalContent = [{ type: "text", text: message }];
+        for (const att of attachments) {
+            if (att.type === "image" && att.data) {
+                finalContent.push({ type: "image", image: att.data });
+            } else if (att.type === "file" && att.data) {
+                finalContent.push({ type: "file", data: att.data, mimeType: att.mimeType });
+            } else if (att.type === "file" && att.text) {
+                finalContent.push({ type: "text", text: `[Attachment: ${att.name}]\n${att.text}` });
+            }
+        }
     }
 
     try {
@@ -665,7 +861,7 @@ app.post('/api/swarm/chat', async (req, res) => {
             tenantId: tenantId || "ZVN",
             sourceChannel: "SWARM",
             historyContext: { sessionId, assignedAgentId: agentId },
-            payload: { messages: [{ role: "user", content: message }] },
+            payload: { messages: [{ role: "user", content: finalContent }] },
             createdAt: new Date()
         });
         
@@ -677,37 +873,52 @@ app.post('/api/swarm/chat', async (req, res) => {
 
         // Kick off background execution
         setTimeout(async () => {
+            let redis: Redis | null = null;
+            let mongoClient: MongoClient | null = null;
             try {
-                const { AgentLoop } = await import('./agent.js');
-                const loop = new AgentLoop("tier_p3_heavy", agentId);
-                
-                const redis = new Redis(process.env.REDIS_URL || "redis://localhost:6379");
-                
+                redis = new Redis(process.env.REDIS_URL || "redis://localhost:6379");
+                mongoClient = new MongoClient(process.env.MONGODB_URI || "mongodb://localhost:27017");
+                await mongoClient.connect();
+                const db = mongoClient.db("olympus");
+                const jobCol = db.collection(`${tenantId || "ZVN"}_SYS_OS_job_queue`);
+
+                // Mark job as processing
+                await jobCol.updateOne({ _id: jobId }, { $set: { status: "PROCESSING", startedAt: new Date() } });
+
                 const onStatus = async (msg: string) => {
                     const formattedMsg = `> ⚙️ [system] ${msg}\r\n`;
-                    await redis.rpush(`zap:trace:${sessionId}:logs`, formattedMsg);
-                    await redis.publish(`zap:trace:${sessionId}`, formattedMsg);
+                    if (redis) {
+                        await redis.rpush(`zap:trace:${sessionId}:logs`, formattedMsg);
+                        await redis.publish(`zap:trace:${sessionId}`, formattedMsg);
+                    }
                 };
 
-                await onStatus(`Agent ${agentId} assigned. Processing multi-modal request...`);
-                
-                const response = await loop.run(sessionId as any, message, "OLYMPUS_SWARM", sessionId, onStatus);
+                await onStatus(`Agent ${agentId} assigned. Booting neural loop...`);
+
+                const { AgentLoop } = await import('./agent.js');
+                const loop = new AgentLoop(resolvedTier, agentId);
+
+                const response = await loop.run(sessionId as any, finalContent, "OLYMPUS_SWARM", sessionId, onStatus, modelId || undefined);
 
                 const replyMsg = `> 🤖 [reply] ${response}\r\n`;
                 await redis.rpush(`zap:trace:${sessionId}:logs`, replyMsg);
                 await redis.publish(`zap:trace:${sessionId}`, replyMsg);
                 
                 // Mark job complete
-                const updateClient = new MongoClient(process.env.MONGODB_URI || "mongodb://localhost:27017");
-                await updateClient.connect();
-                await updateClient.db("olympus").collection(`${tenantId || "ZVN"}_SYS_OS_job_queue`).updateOne(
+                await jobCol.updateOne(
                     { _id: jobId },
                     { $set: { status: "COMPLETED", completedAt: new Date() } }
                 );
-                await updateClient.close();
-                redis.quit();
             } catch (err: any) {
                 console.error("[Swarm Async] Background execution failed:", err);
+                const errMsg = `> 🚨 [error] Swarm logic failure: ${err.message}\r\n`;
+                if (redis) {
+                    await redis.rpush(`zap:trace:${sessionId}:logs`, errMsg);
+                    await redis.publish(`zap:trace:${sessionId}`, errMsg);
+                }
+            } finally {
+                if (redis) redis.quit();
+                if (mongoClient) await mongoClient.close();
             }
         }, 100);
 
@@ -725,6 +936,33 @@ app.options('/api/hud/chat', (req, res) => {
     res.status(200).end();
 });
 
+import { getCanvasSession } from './gateway/canvas.js';
+
+// ==========================================
+// Phase 26: Ephemeral Live Canvas Fetch
+// ==========================================
+app.get('/api/canvas/:canvasId', async (req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', '*'); // Ephemeral links can be opened anywhere
+    
+    const canvasId = req.params.canvasId;
+    if (!canvasId) {
+        res.status(400).json({ error: "Missing Target Canvas UUID." });
+        return;
+    }
+
+    try {
+        const session = await getCanvasSession(canvasId);
+        if (!session) {
+            // Security: Hard 404 for expired or invalid canvas UUIDs
+            res.status(404).json({ error: "Canvas Link Expired or Invalid." });
+            return;
+        }
+        res.status(200).json(session);
+    } catch (e: any) {
+        console.error("[Canvas API] Error fetching canvas:", e);
+        res.status(500).json({ error: "Internal Gateway Error" });
+    }
+});
 
 // ==========================================
 // OLY-SWARM-002: Swarm Telemetry & HUD Endpoints

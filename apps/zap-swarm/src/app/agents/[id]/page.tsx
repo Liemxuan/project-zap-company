@@ -1,5 +1,7 @@
 "use client";
 
+export const dynamic = 'force-dynamic';
+
 import React, { use, useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, BrainCircuit, Activity, Lock, MapPin, FileCode2, Terminal, Database, ShieldAlert, Sparkles, Building, Briefcase, Bot, Wrench, Fingerprint, LineChart, Code2 } from 'lucide-react';
@@ -22,6 +24,7 @@ export default function AgentProfile({ params }: { params: Promise<{ id: string 
     const [selectedRole, setSelectedRole] = useState("CHIEF_OF_STAFF");
     const [customTags, setCustomTags] = useState("");
     const [isCompiling, setIsCompiling] = useState(false);
+    const [agentMemories, setAgentMemories] = useState<any[]>([]);
     const [showSyncConfirm, setShowSyncConfirm] = useState(false);
     const [telemetry, setTelemetry] = useState<any>({
         tokens: "0.0 / 0.0",
@@ -31,6 +34,16 @@ export default function AgentProfile({ params }: { params: Promise<{ id: string 
     });
     const [terminalLogs, setTerminalLogs] = useState<string>("> Initializing Trace Stream for agent '" + resolvedParams.id + "'...\r\n");
     const terminalRef = useRef<HTMLDivElement>(null);
+
+    const fetchMemories = async () => {
+        try {
+            const res = await fetch(`/api/swarm/memory?agentId=${resolvedParams.id.toLowerCase()}`);
+            if (res.ok) {
+                const data = await res.json();
+                if (data.success) setAgentMemories(data.memories || []);
+            }
+        } catch (err) {}
+    };
 
     useEffect(() => {
         // Fetch real docker status in real-world
@@ -64,6 +77,8 @@ export default function AgentProfile({ params }: { params: Promise<{ id: string 
                     }
                 }
             });
+
+        fetchMemories();
 
         // 1. Fetch Real-time Telemetry
         const fetchTelemetry = async () => {
@@ -521,27 +536,46 @@ export default function AgentProfile({ params }: { params: Promise<{ id: string 
                                                     <Heading level={4} className="flex items-center gap-2 text-on-surface mb-2"><Database className="text-primary size-5" /> Memory</Heading>
                                                     <Text size="body-medium" className="text-on-surface-variant">Permanent vector long-term storage and artifacts. Facts indexed from past conversations.</Text>
                                                 </div>
-                                                <GenesisButton visualStyle="outline" className="text-sm border-destructive/50 text-destructive hover:bg-destructive hover:text-white" title="Wipe agent memory and reset identity" aria-label="Wipe Identity">Forget Identity / WIPE RAG</GenesisButton>
+                                                <GenesisButton 
+                                                    visualStyle="outline" 
+                                                    className="text-sm border-destructive/50 text-destructive hover:bg-destructive hover:text-white" 
+                                                    onClick={async () => {
+                                                        const res = await fetch(`/api/swarm/memory?agentId=${resolvedParams.id.toLowerCase()}`, { method: 'DELETE' });
+                                                        if (res.ok) fetchMemories();
+                                                    }}
+                                                    title="Wipe agent memory and reset identity" 
+                                                    aria-label="Wipe Identity"
+                                                >
+                                                    Forget Identity / WIPE RAG
+                                                </GenesisButton>
                                             </div>
                                             
                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                {[
-                                                    { cid: "conv-a81d9f-1", type: "architecture", content: "We are pivoting away from generic LLM endpoints and building the ZAP Omni-Router to parse everything via Matrix registry.", date: "4 hrs ago" },
-                                                    { cid: "conv-b9a23c-4", type: "security", content: "Always use ZSS (Zap Swarm Security) protocols when mounting Sandbox files. No root escalation allowed.", date: "1 day ago" },
-                                                    { cid: "conv-x8321a-2", type: "frontend", content: "Tailwind CSS variables must drop hardcoded heights in favor of M3 design tokens and responsive scaling functions.", date: "3 days ago" },
-                                                    { cid: "conv-f8319c-9", type: "preferences", content: "Tom prefers decisive execution over corporate fluff. Stop asking 'is there anything else I can do?'.", date: "1 week ago" }
-                                                ].map((memory, idx) => (
-                                                    <div key={idx} className="p-4 border border-outline/10 rounded-[12px] bg-layer-base flex flex-col gap-3 relative group">
-                                                        <div className="flex justify-between items-center pr-8">
-                                                            <Badge className="bg-surface-variant font-mono text-[10px] uppercase text-on-surface-variant tracking-wider">{memory.type}</Badge>
-                                                            <span className="text-[10px] text-on-surface-variant">{memory.date}</span>
+                                                {agentMemories.length > 0 ? (
+                                                    agentMemories.map((memory, idx) => (
+                                                        <div key={memory._id || idx} className="p-4 border border-outline/10 rounded-[12px] bg-layer-base flex flex-col gap-3 relative group">
+                                                            <div className="flex justify-between items-center pr-8">
+                                                                <Badge className="bg-surface-variant font-mono text-[10px] uppercase text-on-surface-variant tracking-wider">{memory.type || "global"}</Badge>
+                                                                <span className="text-[10px] text-on-surface-variant">
+                                                                    {memory.createdAt ? new Date(memory.createdAt).toLocaleDateString() : "Just now"}
+                                                                </span>
+                                                            </div>
+                                                            <p className="text-sm text-on-surface leading-relaxed mt-1">"{memory.content || memory.fact}"</p>
+                                                            <button 
+                                                                className="absolute top-4 right-4 text-on-surface-variant hover:text-destructive opacity-0 group-hover:opacity-100 transition-opacity" 
+                                                                title="Forget Memory Block"
+                                                                onClick={async () => {
+                                                                    const res = await fetch(`/api/swarm/memory?id=${memory._id}`, { method: 'DELETE' });
+                                                                    if (res.ok) fetchMemories();
+                                                                }}
+                                                            >
+                                                                <Lock className="size-4" />
+                                                            </button>
                                                         </div>
-                                                        <p className="text-sm text-on-surface leading-relaxed mt-1">"{memory.content}"</p>
-                                                        <button className="absolute top-4 right-4 text-on-surface-variant hover:text-destructive opacity-0 group-hover:opacity-100 transition-opacity" title="Forget Memory Block">
-                                                            <Lock className="size-4" />
-                                                        </button>
-                                                    </div>
-                                                ))}
+                                                    ))
+                                                ) : (
+                                                    <p className="text-sm text-on-surface-variant">No memories indexed yet.</p>
+                                                )}
                                             </div>
                                         </Card>
                                     </div>

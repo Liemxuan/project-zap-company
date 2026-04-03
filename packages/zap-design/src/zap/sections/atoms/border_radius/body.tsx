@@ -107,7 +107,7 @@ export const BorderRadiusBody = ({ getEffectiveProps }: BorderRadiusBodyProps) =
             <div className="flex flex-col gap-3 p-4 bg-layer-dialog border border-border/40 rounded-xl">
                 <div className="flex flex-col">
                     <span className="text-sm font-bold text-foreground">{componentName}</span>
-                    <span className="text-[10px] font-dev text-muted-foreground">{radius} · {width} · {style} · {opacity}</span>
+                    <span className="text-[10px] font-dev text-transform-tertiary text-muted-foreground">{radius} · {width} · {style} · {opacity}</span>
                 </div>
                 <div className="flex-1 flex items-center justify-center p-4 border border-border/20 bg-layer-base rounded-lg min-h-[160px]">
                     <div 
@@ -122,15 +122,15 @@ export const BorderRadiusBody = ({ getEffectiveProps }: BorderRadiusBodyProps) =
                             </>
                         ) : componentName === 'Input Field' ? (
                             <>
-                                <span className="opacity-70 font-dev text-[10px] tracking-wide">bg-surface</span>
-                                <div className={cn("bg-layer-modal shadow-sm text-foreground/80 border-border/40 px-1.5 py-0.5 text-[10px] font-dev ml-2", radius !== 'rounded-none' && radius !== 'rounded-[0px]' ? 'rounded-md' : 'rounded-none', width && width !== 'border-0' ? 'border' : 'border-0')} title="bg-layer-modal">
+                                <span className="opacity-70 font-dev text-transform-tertiary text-[10px] tracking-wide">bg-surface</span>
+                                <div className={cn("bg-layer-modal shadow-sm text-foreground/80 border-border/40 px-1.5 py-0.5 text-[10px] font-dev text-transform-tertiary ml-2", radius !== 'rounded-none' && radius !== 'rounded-[0px]' ? 'rounded-md' : 'rounded-none', width && width !== 'border-0' ? 'border' : 'border-0')} title="bg-layer-modal">
                                     ⌘K
                                 </div>
                             </>
                         ) : componentName === 'Badge' ? '3' : componentName === 'Checkbox' ? '✓' : componentName === 'Toggle' ? (
                             <div className={cn("w-4 h-4 bg-on-primary rounded-full ml-auto shadow-sm")} />
                         ) : componentName === 'Textarea' ? (
-                            <span className="opacity-50 font-dev text-[10px]">Type here...</span>
+                            <span className="opacity-50 font-dev text-transform-tertiary text-[10px]">Type here...</span>
                         ) : componentName}
                     </div>
                 </div>
