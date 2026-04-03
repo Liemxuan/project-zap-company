@@ -1,27 +1,56 @@
 'use client';
 
 import React from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { X } from 'lucide-react';
 
 interface InspectorProps {
     title?: string;
     children?: React.ReactNode;
     isOpen?: boolean;
+    onClose?: () => void;
     width?: number;
+    /** 'inline' sits inside the layout flow; 'fixed' slides in from the right edge of the screen */
+    variant?: 'inline' | 'fixed';
 }
 
 export const Inspector = ({
     title = 'Inspector',
     children,
     isOpen = true,
+    onClose,
     width = 280,
+    variant = 'inline',
 }: InspectorProps) => {
-    if (!isOpen) return null;
+    const isFixed = variant === 'fixed';
 
     return (
-        <aside
-            className="bg-layer-panel border-l-[length:var(--card-border-width,0px)] border-card-border-[length:var(--card-border-width,0px)] flex flex-col shrink-0 overflow-hidden z-20 h-full text-theme-base"
-            style={{ width }}
-        >
+        <AnimatePresence initial={false}>
+          {isOpen && isFixed && (
+            <motion.div
+              key="inspector-backdrop"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              onClick={onClose}
+              className="fixed inset-0 bg-black/40 z-40"
+            />
+          )}
+          {isOpen && (
+            <motion.aside
+                key="inspector"
+                initial={isFixed ? { x: width, opacity: 0 } : { width: 0, opacity: 0 }}
+                animate={isFixed ? { x: 0, opacity: 1 } : { width, opacity: 1 }}
+                exit={isFixed ? { x: width, opacity: 0 } : { width: 0, opacity: 0 }}
+                transition={{ duration: 0.25, ease: 'easeInOut' }}
+                style={isFixed ? { width } : undefined}
+                className={
+                  isFixed
+                    ? 'fixed top-0 right-0 h-screen bg-layer-panel border-l border-outline-variant flex flex-col overflow-hidden z-50 shadow-2xl text-theme-base'
+                    : 'bg-layer-panel border-l border-outline-variant flex flex-col shrink-0 overflow-hidden z-20 h-full text-theme-base'
+                }
+            >
             {/* Scrollable Workspace Container */}
             <div className="flex-1 overflow-y-auto">
                 <div className="p-4">
@@ -30,9 +59,15 @@ export const Inspector = ({
                         <h2 className="font-display font-medium text-theme-base text-titleMedium leading-[1.2] tracking-tight text-transform-primary">
                             {title}
                         </h2>
-                        <span className="material-symbols-outlined text-theme-base hover:rotate-90 cursor-pointer transition-transform text-[18px]">
-                            tune
-                        </span>
+                        {onClose && (
+                            <button
+                                onClick={onClose}
+                                className="flex items-center justify-center h-6 w-6 rounded hover:bg-surface-variant transition-colors text-on-surface-variant hover:text-foreground"
+                                aria-label="Close inspector"
+                            >
+                                <X size={14} />
+                            </button>
+                        )}
                     </div>
 
                     {/* Content Section */}
@@ -53,6 +88,8 @@ export const Inspector = ({
                     Create Update
                 </button>
             </div>
-        </aside>
+            </motion.aside>
+          )}
+        </AnimatePresence>
     );
 };

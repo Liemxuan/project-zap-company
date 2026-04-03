@@ -34,11 +34,11 @@
     "spacingFormGap": "24px !important",
     "spacingElementGap": "16px !important",
     "spacingCardPad": "24px !important",
-    "inputHeight": "34px !important",
+    "inputHeight": "44px !important",
     "buttonHeight": "34px !important",
     "buttonHeightLarge": "34px !important",
     "cardMaxWidth": "342px !important",
-    "fontDisplay": "var(--font-jetbrains), monospace !important",
+    "fontDisplay": "var(--font-roboto), sans-serif !important",
     "headingTransform": "uppercase !important",
     "fontBody": "var(--font-jetbrains), monospace !important",
     "bodyTransform": "lowercase !important",
@@ -68,8 +68,8 @@
     "indicatorHeight": "16px !important",
     "indicatorBorderWidth": "1px !important",
     "indicatorBorderRadius": "8px !important",
-    "inputBorderWidth": "0px !important",
-    "inputBorderRadius": "12px !important",
+    "inputBorderWidth": "1px !important",
+    "inputBorderRadius": "0px !important",
     "textareaMinHeight": "80px !important",
     "textareaBorderRadius": "12px !important",
     "textareaBorderWidth": "0px !important",
@@ -116,7 +116,7 @@
   "tokens": {
     "colors": {},
     "typography": {
-      "primaryFont": "var(--font-jetbrains), monospace",
+      "primaryFont": "var(--font-roboto), sans-serif",
       "primaryTransform": "uppercase",
       "secondaryFont": "var(--font-jetbrains), monospace",
       "secondaryTransform": "lowercase",
@@ -125,5 +125,5 @@
     },
     "physics": {}
   },
-  "updatedAt": "2026-03-20T09:35:45.073Z"
+  "updatedAt": "2026-04-02T09:20:42.702Z"
 }

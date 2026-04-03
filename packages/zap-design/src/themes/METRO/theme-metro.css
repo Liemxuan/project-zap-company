@@ -48,8 +48,8 @@
     --layer-4-border-width: 2px;
     --layer-5-border-width: 2px;
     --layer-5-border-radius: 13px;
-    --input-border-radius: 0px;
-    --input-height: 40px;
+    --input-border-radius: 0.25rem;
+    --input-height: 44px;
     --badge-height: 26px;
     --badge-border-width: 0px;
     --badge-border-radius: 0px;
@@ -196,7 +196,7 @@
     --merchant-header-height: 72px;
     --select-bg: var(--color-surface-container-highest);
     --textarea-bg: var(--color-surface-container-highest);
-    --input-bg: var(--color-surface-container-highest);
+    --input-bg: var(--color-surface-container-lowest);
     --toggle-bg: var(--color-surface-container-low);
     --dialog-bg: var(--color-surface-container-highest);
     --toggle-group-bg: var(--color-surface-container-high);

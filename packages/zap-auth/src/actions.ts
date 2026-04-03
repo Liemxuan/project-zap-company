@@ -116,3 +116,9 @@ export async function getPortalMetricsAction() {
         revenue: 12450.00 // Static Mock until Phase 9 Transaction Schema is built
     };
 }
+
+export async function getProductsAction() {
+    return await prisma.product.findMany({
+        orderBy: { createdAt: 'desc' }
+    });
+}

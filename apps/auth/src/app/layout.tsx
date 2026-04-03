@@ -41,7 +41,7 @@ export default function RootLayout({
 
   try {
     const settingsDir = path.join(process.cwd(), '../../packages/zap-design/.zap-settings');
-    
+
     // Load Typography for all themes
     const settingsFiles = fs.existsSync(settingsDir) ? fs.readdirSync(settingsDir) : [];
 
@@ -53,7 +53,7 @@ export default function RootLayout({
         try {
           const colorsData = JSON.parse(fs.readFileSync(colorsPath, 'utf-8'));
           if (colorsData.cssOutput) initialCss += '\n' + colorsData.cssOutput;
-        } catch (e) {}
+        } catch (e) { }
       }
     }
 
@@ -62,15 +62,15 @@ export default function RootLayout({
     for (const file of typoFiles) {
       const typoPath = path.join(settingsDir, file);
       const themeId = file.replace('typography-', '').replace('.json', '');
-      
+
       let typoData: Record<string, string> | null = null;
       if (fs.existsSync(typoPath)) {
         const typoRaw = fs.readFileSync(typoPath, 'utf-8');
         try {
           typoData = JSON.parse(typoRaw);
-        } catch (e) {}
+        } catch (e) { }
       }
-  
+
       if (typoData) {
         const typoVarsCss = `
           [data-zap-theme="${themeId}"] {
@@ -94,7 +94,7 @@ export default function RootLayout({
         try {
           const geoData = JSON.parse(fs.readFileSync(geoPath, 'utf-8'));
           if (geoData.cssOutput) initialCss += '\n' + geoData.cssOutput;
-        } catch (e) {}
+        } catch (e) { }
       }
     }
   } catch (e) {

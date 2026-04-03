@@ -257,3 +257,12 @@ Generic Tailwind classes (`rounded-md`, `p-4`) are forbidden on complex structur
 When projecting a new feature, architecture, or plan to the user, answers must be strictly decoupled into two distinct blocks:
 1. **Layer 1 (The Business Value):** Plain English. Explain what the feature *does* for the merchant, customer, or workflow. Zero technical jargon.
 2. **Layer 2 (The Technical Engine):** Unabridged technical jargon. The exact Docker architecture, Next.js routing logic, L1-L4 tokens, Postgres schemas, and security gates driving Layer 1.
+
+---
+
+## 16. Dev Environment Resiliency & Cross-Platform Execution
+
+**Origin:** ZAP-Claw Dev Environment Stability Fixes (April 2026).
+
+- **The Windows Shell Variable Trap:** Never hardcode inline shell variables (`PORT=3900 tsx...` or `TMPDIR=...`) inside `package.json` scripts. This silently fails or corrupts the environment on Windows, resulting in cascading server boot errors. **Rule:** All environment-injected scripts MUST be prefixed with `cross-env` (e.g., `cross-env PORT=3900 tsx...`) to guarantee OS-agnostic execution across the Swarm.
+- **The Redis Hard-Crash Vulnerability:** When a microservice (like ZAP Claw) attempts a synchronous, aggressive TCP connection to Redis on boot (e.g., `new Redis(url)`), a missing local Redis instance will throw an unhandled `ECONNREFUSED` exception, instantly terminating the Node process and taking down the entire `pnpm run dev` parallel cluster. **Rule:** Backend services must instantiate Redis with a resilient fallback wrapper (`lazyConnect: true` and a backing-off `retryStrategy`). A missing cache layer should degrade features gracefully with a warning, not fatally detonate the gateway.

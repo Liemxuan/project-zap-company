@@ -61,7 +61,7 @@
     "indicatorHeight": "16px !important",
     "indicatorBorderWidth": "0px !important",
     "indicatorBorderRadius": "8px !important",
-    "inputHeight": "42px !important",
+    "inputHeight": "44px !important",
     "inputBorderWidth": "1px !important",
     "inputBorderRadius": "12px !important",
     "textareaMinHeight": "130px !important",
@@ -209,8 +209,13 @@
     "navBorderWidth": "0px !important",
     "navBorderRadius": "0px !important",
     "navShowContent": "false !important",
-    "navDropdownSide": "top !important"
+    "navDropdownSide": "top !important",
+    "inputFocusBorder": "var(--color-primary) !important",
+    "inputFocusRing": "color-mix(in srgb, var(--color-primary) 80%, transparent) !important",
+    "inputErrorBorder": "var(--color-error) !important",
+    "inputErrorText": "var(--color-error) !important",
+    "inputErrorRing": "color-mix(in srgb, var(--color-error) 80%, transparent) !important"
   },
   "name": "METRO",
-  "updatedAt": "2026-03-29T23:49:13.084Z"
+  "updatedAt": "2026-04-02T04:33:21.310Z"
 }

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';import {
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'; import {
     ChevronDown,
     Palette,
     Box,
@@ -48,7 +48,7 @@ const NAV_DATA: Category[] = [
     // L1 to L4 are populated dynamically from their respective registries inside the component.
     {
         id: 'L5', title: 'L5: Organisms (3)', icon: Layout, items: [
-            'Inspector System', 
+            'Inspector System',
             'Login',
             { title: 'Tables', items: ['System Logs'] }
         ]
@@ -285,12 +285,16 @@ const getHref = (item: string, theme: string, activeWorkspaceId?: string | null,
             'User Profile Header': `/design/${theme}/organisms/user-profile-header`,
             'Authentication Scaffolds': `/design/${theme}/organisms/auth-scaffold`,
             'Login': `/design/${theme}/organisms/login`,
+            'Table List': `/design/${theme}/organisms/table-list`,
 
             // L7 Pages
             'Signin': `/auth/${theme}/signin`,
             'Infrastructure': '/admin/infrastructure',
             'System Logs': `/design/${theme}/organisms/system-logs`,
             'User Management': `/auth/${theme}/user-management`,
+            'Product Management': `/auth/${theme}/product-management`,
+            'Catalog Vault': `/auth/${theme}/catalog-vault`,
+            'Brand Vault': `/auth/${theme}/brand-vault`,
 
             // Pos/Kiosk/Web
             'Terminal': '/kiosk',
@@ -441,7 +445,7 @@ export const SideNav: React.FC<SideNavProps> = ({ showDevWrapper = false }) => {
             }
             if (activeWorkspaceId === 'zap-auth') {
                 return [
-                    { id: 'auth-main', title: 'ZAP-AUTH MAIN', icon: Layout, items: ['Dashboard', 'Overview', 'Reports'] },
+                    { id: 'auth-main', title: 'ZAP-AUTH MAIN', icon: Layout, items: ['Dashboard', 'Overview', 'Reports', 'Product Management', 'Catalog Vault', 'Brand Vault'] },
                     { id: 'auth-prefs', title: 'SYSTEM PREFERENCES', icon: Columns, items: ['User Management', 'Settings', 'Access Control'] }
                 ];
             }
@@ -823,7 +827,7 @@ export const SideNav: React.FC<SideNavProps> = ({ showDevWrapper = false }) => {
                 <div className="mt-auto px-6 pb-3 pt-3 flex flex-col gap-3 bg-transparent border-t border-black">
                     {/* Theme Switcher */}
                     <div className="flex w-full bg-layer-dialog border border-outline-variant/50 rounded-[var(--button-border-radius,9999px)] p-1 shadow-inner gap-0.5">
-                        <Button 
+                        <Button
                             onClick={() => setIsThemeLocked(!isThemeLocked)}
                             title={isThemeLocked ? "Global Theme Settings Locked" : "Lock Theme Globally"}
                             visualStyle={isThemeLocked ? "solid" : "ghost"}

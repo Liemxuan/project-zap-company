@@ -165,7 +165,7 @@ export function UserManagementTable() {
       <main className="w-full flex items-center justify-center min-h-[length:var(--table-min-height,25rem)] bg-layer-canvas border-outline-variant rounded-[length:var(--radius-card,8px)] border">
         <div className="flex flex-col items-center space-y-4 px-6 text-center">
           <Icon name="error_outline" size={48} className="text-destructive mb-2" />
-          <Heading level={4} className="text-foreground">Failed to Load User Vault</Heading>
+          <Heading level={4} className="text-foreground">Failed to Load User Vault !</Heading>
           <Text size="dev-note" className="bg-layer-panel text-muted-foreground p-4 break-all max-w-lg">
             {error}
           </Text>
@@ -249,8 +249,8 @@ export function UserManagementTable() {
                             onClick={() => toggleFilter("role", role)}
                             aria-pressed={selected}
                             className={`flex w-full items-center justify-between gap-2 border border-[length:max(var(--button-border-width,1px),1px)] rounded-[length:var(--button-border-radius,var(--radius-btn,4px))] px-3 py-2 text-sm transition-colors font-body text-transform-secondary ${selected
-                                ? "border-primary bg-primary/10 text-primary"
-                                : "border-border text-muted-foreground hover:border-primary/40 hover:bg-surface-variant/40"
+                              ? "border-primary bg-primary/10 text-primary"
+                              : "border-border text-muted-foreground hover:border-primary/40 hover:bg-surface-variant/40"
                               }`}
                           >
                             <span>{role}</span>
@@ -323,15 +323,15 @@ export function UserManagementTable() {
                             </p>
 
                             <span className="w-28 flex-shrink-0 truncate text-sm font-body text-transform-secondary font-medium text-foreground text-left">
-                              {user.employee 
-                                ? user.employee.assignedLevel === 0 ? "ZAP Core (L0)" 
-                                : user.employee.organization?.name 
-                                  ? `${user.employee.organization.name} (L1)` 
-                                  : user.employee.brand?.name 
-                                    ? `${user.employee.brand.name} (L2)` 
-                                    : user.employee.location?.name
-                                      ? `${user.employee.location.name} (L6)`
-                                      : '--'
+                              {user.employee
+                                ? user.employee.assignedLevel === 0 ? "ZAP Core (L0)"
+                                  : user.employee.organization?.name
+                                    ? `${user.employee.organization.name} (L1)`
+                                    : user.employee.brand?.name
+                                      ? `${user.employee.brand.name} (L2)`
+                                      : user.employee.location?.name
+                                        ? `${user.employee.location.name} (L6)`
+                                        : '--'
                                 : '--'}
                             </span>
 
@@ -359,11 +359,10 @@ export function UserManagementTable() {
                                   <p className="rounded-[length:var(--table-border-radius,var(--radius-card,8px))] bg-layer-cover p-3 font-dev text-transform-tertiary text-sm text-foreground border border-[length:var(--table-border-width,var(--card-border-width,1px))] border-outline-variant/30">
                                     ID: {user.id} <br />
                                     Last Updated: {new Date(user.updatedAt).toLocaleTimeString("en-US")} <br />
-                                    {user.employee ? `Employee Context: ${user.employee.id} | Department: ${user.employee.department} | Level: L${user.employee.assignedLevel} | Node: ${
-                                      user.employee.assignedLevel === 0 ? "ZAP Core" :
-                                      user.employee.organization?.name || 
-                                      user.employee.brand?.name || 
-                                      user.employee.location?.name || 'N/A'}` : 'No attached employee entity.'}
+                                    {user.employee ? `Employee Context: ${user.employee.id} | Department: ${user.employee.department} | Level: L${user.employee.assignedLevel} | Node: ${user.employee.assignedLevel === 0 ? "ZAP Core" :
+                                        user.employee.organization?.name ||
+                                        user.employee.brand?.name ||
+                                        user.employee.location?.name || 'N/A'}` : 'No attached employee entity.'}
                                   </p>
                                 </div>
                               </div>
