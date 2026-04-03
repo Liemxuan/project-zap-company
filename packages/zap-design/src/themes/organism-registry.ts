@@ -45,6 +45,8 @@ const SystemLogsTable = dynamic(() => import('../zap/organisms/system-logs-table
 const SystemLogsTemplate = dynamic(() => import('../genesis/templates/tables/SystemLogsTemplate'), { ssr: false });
 const ProductListTable = dynamic(() => import('../zap/organisms/product-list-table').then(m => ({ default: m.ProductListTable })), { ssr: false });
 const ProductListTemplate = dynamic(() => import('../genesis/templates/tables/ProductListTemplate'), { ssr: false });
+const LocationsTable = dynamic(() => import('../zap/organisms/locations-table').then(m => ({ default: m.LocationsTable })), { ssr: false });
+const LocationsTemplate = dynamic(() => import('../genesis/templates/tables/LocationsTemplate'), { ssr: false });
 const UserManagementTable = dynamic(() => import('@/genesis/organisms/auth/UserManagementTable').then(m => ({ default: m.UserManagementTable })), { ssr: false });
 const Body = dynamic(() => import('../genesis/templates/body/BodyOrganism').then(m => ({ default: m.BodyOrganism })), { ssr: false });
 const CanvasGuide = dynamic(() => import('../genesis/templates/canvas-guide/CanvasGuideOrganism').then(m => ({ default: m.CanvasGuideOrganism })), { ssr: false });
@@ -65,6 +67,7 @@ export const ORGANISM_REGISTRY: Record<string, OrganismEntry> = {
     'system-logs-layout': { id: 'system-logs-layout', label: 'system logs', tier: 'L6 LAYOUT', status: 'Verified', type: 'page', component: SystemLogsTemplate, icon: 'list_alt', category: 'Tables' },
     'system-logs': { id: 'system-logs', label: 'System Logs', tier: 'L7 PAGE', status: 'Verified', type: 'showcase', component: SystemLogsTable, icon: 'list_alt', category: 'Tables' },
     'product-list': { id: 'product-list', label: 'Product List', tier: 'L6 LAYOUT', status: 'Verified', type: 'page', component: ProductListTemplate, icon: 'inventory', category: 'Tables' },
+    'locations': { id: 'locations', label: 'Locations', tier: 'L6 LAYOUT', status: 'Verified', type: 'page', component: LocationsTemplate, icon: 'storefront', category: 'Tables' },
     'user-management': { id: 'user-management', label: 'User Management', tier: 'L5 ORGANISM', status: 'Verified', type: 'showcase', component: UserManagementTable, icon: 'manage_accounts', category: 'Tables' },
     'body': { id: 'body', label: 'Body', tier: 'L4 ORGANISM', status: 'Verified', type: 'showcase', component: Body, icon: 'grid_view', category: 'Layouts' },
     'canvas-guide': { id: 'canvas-guide', label: 'Canvas Guide', tier: 'L4 ORGANISM', status: 'Verified', type: 'page', component: CanvasGuide, icon: 'dashboard_customize', category: 'Layouts' },

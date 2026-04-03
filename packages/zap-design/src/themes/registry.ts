@@ -157,7 +157,7 @@ export const CORE_THEME: ThemeConfig = {
         ],
         hasOrganisms: [
             'dashboard', 'billing', 'kanban', 'login', 'body',
-            'profile', 'settings', 'activities', 'system-logs', 'system-logs-layout', 'user-management', 'merchant-workspace', 'signin-a', 'signin-b', 'canvas-guide', 'product-list'
+            'profile', 'settings', 'activities', 'system-logs', 'system-logs-layout', 'user-management', 'merchant-workspace', 'signin-a', 'signin-b', 'canvas-guide', 'product-list', 'locations'
         ],
         hasLabs: [
             'color-architect', 'typography-architect', 'swarm'
@@ -223,7 +223,7 @@ export const METRO_THEME: ThemeConfig = {
         ],
         hasOrganisms: [
             'dashboard', 'billing', 'kanban', 'login', 'body',
-            'profile', 'settings', 'activities', 'system-logs', 'system-logs-layout', 'user-management', 'merchant-workspace', 'signin-a', 'signin-b', 'canvas-guide', 'product-list'
+            'profile', 'settings', 'activities', 'system-logs', 'system-logs-layout', 'user-management', 'merchant-workspace', 'signin-a', 'signin-b', 'canvas-guide', 'product-list', 'locations'
         ],
         hasLabs: [
             'color-architect', 'typography-architect', 'swarm'
