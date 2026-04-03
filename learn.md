@@ -260,9 +260,52 @@ When projecting a new feature, architecture, or plan to the user, answers must b
 
 ---
 
-## 16. Dev Environment Resiliency & Cross-Platform Execution
+## 16. The Spatial Mockup & Typography Inheritance Protocols
 
-**Origin:** ZAP-Claw Dev Environment Stability Fixes (April 2026).
+**Origin:** Canvas Guide Architecture verification & SOP-037 documentation fix (April 2026).
 
-- **The Windows Shell Variable Trap:** Never hardcode inline shell variables (`PORT=3900 tsx...` or `TMPDIR=...`) inside `package.json` scripts. This silently fails or corrupts the environment on Windows, resulting in cascading server boot errors. **Rule:** All environment-injected scripts MUST be prefixed with `cross-env` (e.g., `cross-env PORT=3900 tsx...`) to guarantee OS-agnostic execution across the Swarm.
-- **The Redis Hard-Crash Vulnerability:** When a microservice (like ZAP Claw) attempts a synchronous, aggressive TCP connection to Redis on boot (e.g., `new Redis(url)`), a missing local Redis instance will throw an unhandled `ECONNREFUSED` exception, instantly terminating the Node process and taking down the entire `pnpm run dev` parallel cluster. **Rule:** Backend services must instantiate Redis with a resilient fallback wrapper (`lazyConnect: true` and a backing-off `retryStrategy`). A missing cache layer should degrade features gracefully with a warning, not fatally detonate the gateway.
+### 16.1 The Typography Casing Enforcer Fallback Trap
+If an overarching theme matrix (or root layout) lacks a defined casing structural token, or explicitly defines a destructive global case (like `text-transform: lowercase`), any text utilizing M3 typographic weight fonts (`font-display`, `font-body`, `font-dev`) will inherit the incorrect casing. 
+**The Fix:** Never write `<h3 className="font-display">` in isolation. The `typography-casing-enforcer.js --fix` script mathematically pairs these classes. You MUST couple them manually when writing code: `font-display text-transform-primary`, `font-body text-transform-secondary`, `font-dev text-transform-tertiary`. Failing to bond the pair leads to broken Title Casing and FOUT issues.
+
+### 16.2 Concentric Geometric Scaling on L1-L5 Mockups
+When rendering visual representations of the structural architecture (like placing an L2 `CanvasBody` inside an L1 `Canvas` wrapper for a documentation demo), raw token application can mathematically clip. 
+**The Math:** If a child (L2) has `rounded-[32px]` and the padding is `p-4` (16px), the parent wrapper (L1) MUST have at least a `48px` border radius (`rounded-[48px]`). Blindly applying the official `rounded-lg` (8px) L1 token to the parent in a confined demo block will cause the borders to collide and fail to "scale out evenly." When building architectural demo boundaries, temporarily inflate the outer boundary radii to preserve concentric wrapping.
+
+---
+
+## 17. Component Sandbox Architecture & Token Controls
+
+**Origin:** Accordion Atom refactor & Canvas Audit (April 2026).
+
+### 17.1 The Explicit L2 Surface Restoration
+By default, the `ComponentSandboxTemplate` (via `LaboratoryTemplate`) uses `flush={true}` on its `CanvasBody` to provide a clean L1 "Sandbox Floor." 
+**The Rule:** If an atomic component (L3) requires a standard card-like "Cover" background to match the application's look-and-feel, the developer MUST explicitly wrap the sandbox content in a `<CanvasBody flush={false}>` inside the page. This restores the `bg-layer-cover` surface and establishes the correct L1 -> L2 -> L3 spatial progression. Leaving an L3 atom floating directly on an L1 floor without a Cover card is an audit failure.
+
+### 17.2 Foundational Token Select Standard
+**The Rule:** Inspector controls for foundational properties (e.g., Border Radius, Border Width) MUST map to the canonical token sets defined in `schema.ts`.
+- **Component:** Use the Genesis `<Select>` atom.
+- **Data Source:** Bind to `BORDER_RADIUS_TOKENS` or `BORDER_WIDTH_TOKENS`.
+- **Constraint:** `Slider` controls with arbitrary numeric ranges (e.g., 0-64) are strictly forbidden for foundational tokens. They cause design drift and break the system's ability to lock to the M3 standard. Sliders are only permitted for non-foundational numeric properties like "Height" or "Opacity."
+
+### 17.3 Clean Sandbox Composition
+**The Rule:** Do not wrap demo components in redundant manual `div` cards inside a `CanvasBody.Demo` frame. If the `Demo` component (L4) has `bg-layer-dialog` and is centered, place the atom directly inside it. If you need a card-like look for the atom, the atom itself should sustain that look (via variants or its own container) or it should inherit it from the L3 Section / L4 Demo stack. Redundant `bg-white` manual wrappers sever the token cascade.
+
+## 18. The Atlas Matrix & Hardened Proxy Protocol
+
+**Origin:** Infrastructure Hardening (April 2026).
+
+### 18.1 The Matrix-First Mandate
+To eliminate 429 rate-limiting burnout and "Ghost Key" drift, all internal OLYMPUS agents MUST adhere to the **Matrix-First Protocol**. 
+- **Single Gateway:** Agents must never attempt to load individual API keys from localized `.env` files. 
+- **The 105-Key Pool:** All high-reasoning tasks are strictly routed through the 1M-context OLYMPUS Atlas Matrix (105 active Google Ultra/Pro units).
+- **Isolation:** If an agent logic requires a "private" API key, it is an architectural failure. Specialized tasks must be tiered in the Arbiter, not isolated by keys.
+
+### 18.2 The 60-Second Failover Circuit
+The `OmniRouter` (Arbiter) treats 429 errors from the provider as temporary health signals. 
+- **Dead List:** A failing key hash is instantly added to the Redis "Dead List" with a TTL of 60 seconds.
+- **Auto-Hop:** The router instantly shifts the active request to the next available unit in the matrix. 
+- **Resilience:** This failover must be transparent to the Agent Loop. If an agent "sees" the 429, the router layer has failed its contract.
+
+### 18.3 The Ghost Key Ban
+Writing `GOOGLE_API_KEY`, `OPENROUTER_API_KEY`, or `ANTHROPIC_API_KEY` to any `.env` file for the purposes of fueling an AI agent loop is a **CRITICAL AUDIT FAILURE**. Credentials must be managed solely within the OLYMPUS/Atlas infrastructure tier to ensure 100% observability and load distribution.

@@ -1,147 +1,134 @@
 'use client';
 
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { MasterVerticalShell } from '../../../../../zap/layout/MasterVerticalShell';
-import { Tabs, TabItem } from '../../../../../genesis/atoms/interactive/Tabs';
-import { TypographyWildPreview } from '../../../../../zap/sections/atoms/typography/wild-preview';
-import { TypographyBody } from '../../../../../zap/sections/atoms/typography/body';
-import { TypographyInspector, TypographyTemplate, LayeredStylizationSettings } from '../../../../../zap/sections/atoms/typography/inspector';
-import { TypographyPlaygroundShell } from '../../../../../zap/sections/atoms/typography/playground-shell';
-import { ALL_THEMES, TypographyThemeSchema } from '../../../../../zap/sections/atoms/typography/schema';
-import { Canvas } from '../../../../../genesis/atoms/surfaces/canvas';
-import { Wrapper } from '../../../../../components/dev/Wrapper';
+import { ComponentSandboxTemplate } from '../../../../../zap/layout/ComponentSandboxTemplate';
+import { TYPE_STYLES } from '../../../../../zap/sections/atoms/foundations/schema';
+import { Icon } from '../../../../../genesis/atoms/icons/Icon';
+import { cn } from '../../../../../lib/utils';
+import { CanvasBody } from '../../../../../zap/layout/CanvasBody';
+import { SectionHeader } from '../../../../../zap/sections/SectionHeader';
 
-const TYPOGRAPHY_TABS: TabItem[] = [
-  { id: 'preview', label: 'LIVE PREVIEW' },
-  { id: 'details', label: 'FONT DETAILS' },
-  { id: 'playground', label: 'PLAYGROUND' },
-];
+export default function TypographySandboxPage() {
+    const [selectedScale, setSelectedScale] = useState(TYPE_STYLES[0].name);
 
-export default function ZapTypographyPage() {
-  const [activeTab, setActiveTab] = useState<string>('preview');
+    const inspectorControls = (
+        <div className="space-y-6">
+            <div className="space-y-4 pb-4 border-b border-border/50">
+                <h4 className="text-label-small text-transform-primary font-display font-bold text-muted-foreground tracking-wider uppercase">Foundation Tokens</h4>
+                
+                <div className="space-y-4">
+                    <div className="space-y-1.5">
+                        <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Type Scale</label>
+                        <select 
+                            className="w-full bg-layer-panel border border-border/50 rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-primary"
+                            value={selectedScale}
+                            onChange={(e) => setSelectedScale(e.target.value)}
+                        >
+                            {TYPE_STYLES.map(s => (
+                                <option key={s.name} value={s.name}>{s.name}</option>
+                            ))}
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
 
-  // Playground state
-  const [activeTemplate, setActiveTemplate] = useState<TypographyTemplate>('basic');
-  const [customThemes, setCustomThemes] = useState<Record<string, TypographyThemeSchema>>({});
-  const [playgroundActiveAtom, setPlaygroundActiveAtom] = useState<string | null>(null);
+    const currentStyle = TYPE_STYLES.find(s => s.name === selectedScale) || TYPE_STYLES[0];
 
-  const currentThemeData = customThemes[activeTemplate] || ALL_THEMES.find(t => t.id === activeTemplate) || ALL_THEMES[0];
-
-  const handleUpdateTheme = (updatedTheme: TypographyThemeSchema) => {
-    setCustomThemes(prev => ({ ...prev, [activeTemplate]: updatedTheme }));
-  };
-
-  const handleUpdateActiveAtom = (newSettings: LayeredStylizationSettings) => {
-    if (!playgroundActiveAtom) return;
-    const newElements = { ...currentThemeData.elements, [playgroundActiveAtom]: newSettings };
-    handleUpdateTheme({ ...currentThemeData, elements: newElements });
-  };
-
-  const breadcrumbs = [
-    { label: 'SYSTEMS' },
-    { label: 'CORE' },
-    { label: 'TYPOGRAPHY', active: true }
-  ];
-
-  return (
-    <MasterVerticalShell
-      breadcrumbs={breadcrumbs}
-      inspectorTitle="Stylization Engine"
-      inspectorContent={
-        <TypographyInspector
-          activeTemplate={activeTemplate}
-          setActiveTemplate={setActiveTemplate}
-          activeAtom={playgroundActiveAtom}
-          settings={playgroundActiveAtom ? currentThemeData.elements[playgroundActiveAtom] : null}
-          onUpdateSettings={handleUpdateActiveAtom}
-        />
-      }
-    >
-      <Wrapper
-        identity={{
-          displayName: "TypographyPage (L1)",
-          filePath: "zap/atoms/typography/page.tsx",
-          type: "Template/Canvas",
-          architecture: "L1: CANVAS"
-        }}
-      >
-        <Canvas
-          className="transition-all duration-300 origin-center min-h-full flex flex-col pt-0"
+    return (
+        <ComponentSandboxTemplate
+            componentName="Typography"
+            tier="L3 ATOM"
+            status="Verified"
+            filePath="src/zap/sections/atoms/foundations/schema.ts"
+            importPath="@/zap/sections/atoms/foundations/schema"
+            inspectorControls={inspectorControls}
+            foundationInheritance={{
+                colorTokens: ['--md-sys-color-on-surface', '--md-sys-color-primary'],
+                typographyScales: TYPE_STYLES.map(s => `--font-${s.name.toLowerCase()}`)
+            }}
+            platformConstraints={{
+                web: "Accessible type scales mapping to M3 dynamic typography tokens.",
+                mobile: "Ensures line-height and font-size parity for readability."
+            }}
+            foundationRules={[
+                "All typography must map to the --md-sys-typescale-* namespace.",
+                "Display styles must use font-display for high-impact structural headers."
+            ]}
         >
-          {/* GLOBAL HEADER WRAPPING TABS & BACKGROUND */}
-          <div className="relative w-full border-b-[3px] border-brand-midnight flex flex-col bg-layer-canvas overflow-hidden">
-            {/* Dotted Background */}
-            <div className="absolute inset-0 pointer-events-none opacity-20 bg-[radial-gradient(circle,var(--color-brand-midnight)_1.5px,transparent_1.5px)] [background-size:16px_16px] [background-position:center]" />
+            <CanvasBody flush={false}>
+                <CanvasBody.Section>
+                    <SectionHeader id="interactive-preview" 
+                        number="01"
+                        title="Interactive Preview"
+                        icon="text_fields"
+                        description="Live-configured type scale testing spatial L2 layer restoration."
+                    />
+                    <CanvasBody.Demo centered>
+                        <div className="w-full max-w-2xl p-12 bg-layer-panel border border-border/40 shadow-xl rounded-2xl flex flex-col gap-8 transition-all duration-300" style={{ borderRadius: '24px' }}>
+                           <div className="space-y-4">
+                               <div className="flex justify-between items-end border-b border-border/10 pb-2">
+                                   <span className="text-labelSmall font-body text-primary uppercase tracking-widest font-bold">{currentStyle.name} Preview</span>
+                                   <span className="text-[10px] text-muted-foreground font-mono">{currentStyle.fontSizeRem} / {currentStyle.lineHeight}</span>
+                               </div>
+                               <div 
+                                   className="text-foreground transition-all duration-300"
+                                   style={{ 
+                                       fontSize: currentStyle.fontSizeRem,
+                                       lineHeight: currentStyle.lineHeight,
+                                       letterSpacing: `${currentStyle.letterSpacing}px`,
+                                       fontWeight: currentStyle.fontWeight,
+                                       fontFamily: currentStyle.name === 'Display' ? 'var(--font-display)' : 'var(--font-body)'
+                                   }}
+                               >
+                                   The quick brown fox jumps over the lazy dog. ZAP infrastructure protocols are online and verifying.
+                               </div>
+                           </div>
+                        </div>
+                    </CanvasBody.Demo>
+                </CanvasBody.Section>
 
-            <Wrapper title="Global Header">
-              <Wrapper title="Header Title Block">
-                <div className="relative z-10 w-full flex justify-between items-end px-12 pt-12 pb-8">
-                  <Wrapper title="Typography Title" className="w-auto">
-                    <div className="flex flex-col items-start pl-2">
-                      <h1 className="text-[64px] font-black uppercase tracking-tighter text-brand-midnight leading-[0.8] mb-3 [text-shadow:4px_4px_0px_var(--color-brand-yellow)]">
-                        {activeTab === 'preview' && activeTemplate === 'fun' ? 'FUN MODE' : null}
-                        {activeTab === 'preview' && activeTemplate !== 'fun' ? 'WILD MODE' : null}
-                        {activeTab === 'details' && 'TYPOGRAPHY'}
-                        {activeTab === 'playground' && 'PLAYGROUND'}
-                      </h1>
-                      <div className="bg-brand-midnight text-white px-3 py-1.5 text-body-small font-bold uppercase tracking-wide">
-                        {activeTab === 'preview' && 'EXPERIMENTAL TYPOGRAPHY PREVIEW'}
-                        {activeTab === 'details' && 'FOUNDATIONAL TYPE SYSTEM (LEVEL 1)'}
-                        {activeTab === 'playground' && 'STYLIZATION LAB'}
-                      </div>
-                    </div>
-                  </Wrapper>
-
-                  <Wrapper title="Live Status Indicator" className="w-auto">
-                    <div className="flex items-center gap-2 pr-2">
-                      {activeTab === 'preview' && (
-                        <>
-                          <motion.div
-                            animate={{ opacity: [1, 0.4, 1] }}
-                            transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
-                            className="w-3.5 h-3.5 rounded-full bg-red-500 border-2 border-brand-midnight"
-                          />
-                          <span className="text-label-medium font-black uppercase text-brand-midnight tracking-widest">LIVE PREVIEW</span>
-                        </>
-                      )}
-                    </div>
-                  </Wrapper>
-                </div>
-              </Wrapper>
-
-              <Wrapper title="Header Tabs">
-                <div className="relative z-10 px-12 pb-0">
-                  <Tabs
-                    tabs={TYPOGRAPHY_TABS}
-                    activeTab={activeTab}
-                    onChange={setActiveTab}
-                    className="w-full"
-                  />
-                </div>
-              </Wrapper>
-            </Wrapper>
-          </div>
-
-          <div className="p-12 flex-1 w-full flex flex-col items-center">
-            {activeTab === 'preview' && <TypographyWildPreview themeData={currentThemeData} />}
-
-            {activeTab === 'details' && <TypographyBody themeData={currentThemeData} />}
-
-            {activeTab === 'playground' && (
-              <div className="w-full max-w-5xl mx-auto">
-                <TypographyPlaygroundShell
-                  key={currentThemeData.id}
-                  theme={currentThemeData}
-                  onUpdateTheme={handleUpdateTheme}
-                  activeAtom={playgroundActiveAtom}
-                  setActiveAtom={setPlaygroundActiveAtom}
-                />
-              </div>
-            )}
-          </div>
-        </Canvas>
-      </Wrapper>
-    </MasterVerticalShell>
-  );
+                <CanvasBody.Section className="pb-16">
+                    <SectionHeader id="system-hierarchy" 
+                        number="02"
+                        title="System Hierarchy"
+                        icon="format_align_left"
+                        description="Structural testing across the full ZAP/M3 typography matrix."
+                    />
+                    <CanvasBody.Demo>
+                        <div className="w-full max-w-4xl space-y-12">
+                            {['Display', 'Headline', 'Title', 'Body', 'Label'].map(role => (
+                                <div key={role} className="space-y-4 p-8 bg-layer-panel border border-border/40 rounded-xl">
+                                    <div className="text-labelSmall font-body text-primary tracking-widest uppercase border-b border-border/50 pb-2 mb-6">{role} Scale</div>
+                                    <div className="space-y-10">
+                                        {TYPE_STYLES.filter(s => s.name.startsWith(role)).map(s => (
+                                            <div key={s.name} className="flex flex-col md:flex-row md:items-baseline gap-4 md:gap-12">
+                                                <div className="w-48 shrink-0 flex flex-col">
+                                                    <span className="text-labelMedium font-body font-bold text-primary">{s.name}</span>
+                                                    <span className="text-[10px] font-mono text-muted-foreground opacity-40">{s.fontSizeRem} · {s.fontWeight}</span>
+                                                </div>
+                                                <div 
+                                                    className="flex-1 text-foreground"
+                                                    style={{ 
+                                                        fontSize: s.fontSizeRem,
+                                                        lineHeight: s.lineHeight,
+                                                        letterSpacing: `${s.letterSpacing}px`,
+                                                        fontWeight: s.fontWeight,
+                                                        fontFamily: role === 'Display' || role === 'Headline' ? 'var(--font-display)' : 'var(--font-body)'
+                                                    }}
+                                                >
+                                                    ZAP Design Engine {s.name}
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </CanvasBody.Demo>
+                </CanvasBody.Section>
+            </CanvasBody>
+        </ComponentSandboxTemplate>
+    );
 }

@@ -1,14 +1,15 @@
 import { MongoClient, ObjectId } from 'mongodb';
 import { VFSBackend } from '../vfs_router.js';
+import { getGlobalMongoClient } from "../../../db/mongo_client.js";
 
 const MONGO_URI = process.env.MONGODB_URI || "mongodb://localhost:27017";
 const DB_NAME = "olympus";
 
 export class MongoAdapter implements VFSBackend {
-    private client: MongoClient;
+    private clientPromise: Promise<MongoClient>;
 
     constructor() {
-        this.client = new MongoClient(MONGO_URI);
+        this.clientPromise = getGlobalMongoClient(MONGO_URI);
     }
 
     private parseUri(uriPath: string) {
@@ -24,8 +25,7 @@ export class MongoAdapter implements VFSBackend {
 
     async read(uriPath: string): Promise<string> {
         const { collectionName, key } = this.parseUri(uriPath);
-        await this.client.connect();
-        const db = this.client.db(DB_NAME);
+        const db = (await this.clientPromise).db(DB_NAME);
         const col = db.collection(collectionName);
 
         const doc = await col.findOne({ _id: key as any });
@@ -39,8 +39,7 @@ export class MongoAdapter implements VFSBackend {
 
     async write(uriPath: string, content: string): Promise<void> {
         const { collectionName, key } = this.parseUri(uriPath);
-        await this.client.connect();
-        const db = this.client.db(DB_NAME);
+        const db = (await this.clientPromise).db(DB_NAME);
         const col = db.collection(collectionName);
 
         let parsedContent: any = { content };
@@ -69,8 +68,7 @@ export class MongoAdapter implements VFSBackend {
         const collectionName = parts[0] as string;
         const keyPrefix = parts.slice(1).join('/');
         
-        await this.client.connect();
-        const db = this.client.db(DB_NAME);
+        const db = (await this.clientPromise).db(DB_NAME);
         const col = db.collection(collectionName);
 
         // Find all documents where _id starts with keyPrefix

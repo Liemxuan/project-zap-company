@@ -3,13 +3,13 @@ import fs from "fs";
 import path from "path";
 
 // 1. Manually resolve the exact path of the .env file
-const envPath = "/Users/zap/Workspace/zap-core/.env";
+const envPath = path.resolve(process.cwd(), ".env");
 
 // 2. Load the env vars securely
 dotenv.config({ path: envPath, override: true });
 
 // 3. Import the resolver algorithm directly from zap-claw OM
-import { resolveBalancedKey } from "./src/runtime/engine/omni_router.js";
+import { resolveBalancedKey } from "./src/runtime/engine/omni_router.ts";
 
 async function runRotationTest() {
     console.log("=========================================");

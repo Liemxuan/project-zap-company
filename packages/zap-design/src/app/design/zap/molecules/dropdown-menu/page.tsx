@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react';
 import { ComponentSandboxTemplate } from '../../../../../zap/layout/ComponentSandboxTemplate';
-import { Wrapper } from '../../../../../components/dev/Wrapper';
 
 import {
     DropdownMenu,
@@ -13,7 +12,10 @@ import {
     DropdownMenuTrigger,
 } from '../../../../../genesis/molecules/dropdown-menu';
 import { Button } from '../../../../../genesis/atoms/interactive/buttons';
-import { Slider } from '../../../../../genesis/atoms/interactive/slider';
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '../../../../../genesis/atoms/interactive/select';
+import { BORDER_RADIUS_TOKENS, BORDER_WIDTH_TOKENS } from '../../../../../zap/sections/atoms/foundations/schema';
+import { CanvasBody } from '../../../../../zap/layout/CanvasBody';
+import { SectionHeader } from '../../../../../zap/sections/SectionHeader';
 
 export default function DropdownMenuSandboxPage() {    const [gap, setGap] = useState([2]);
     const [padding, setPadding] = useState([8]);
@@ -22,9 +24,9 @@ export default function DropdownMenuSandboxPage() {    const [gap, setGap] = use
 
     // Fetch initial settings
     const inspectorControls = (
-        <Wrapper identity={{ displayName: "Inspector Controls Container", type: "Container", filePath: "zap/molecules/dropdown-menu" }}>
+        
             <div className="space-y-4">
-                <Wrapper identity={{ displayName: "Dropdown Menu Structural Settings", type: "Docs Link", filePath: "zap/molecules/dropdown-menu/page.tsx" }}>
+                
                     <div className="space-y-6">
                         <h4 className="text-label-small text-transform-primary font-display font-bold text-on-surface-variant text-transform-secondary tracking-wider">Sandbox Variables</h4>
 
@@ -34,7 +36,14 @@ export default function DropdownMenuSandboxPage() {    const [gap, setGap] = use
                                     <span>--dropdown-gap</span>
                                     <span className="font-bold">{gap[0]}px</span>
                                 </div>
-                                <Slider value={gap} onValueChange={setGap} min={0} max={16} step={1} className="w-full" />
+                                <Select value={String(gap[0])} onValueChange={(v) => setGap([parseInt(v, 10) || 0])}>
+                                <SelectTrigger aria-label="Select token" className="w-full">
+                                    <SelectValue placeholder="Select value" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {BORDER_WIDTH_TOKENS.map(t => <SelectItem key={t.token} value={t.value.replace(/[^0-9.]/g, '')}>{t.name} ({t.value})</SelectItem>)}
+                                </SelectContent>
+                            </Select>
                             </div>
 
                             <div className="space-y-2">
@@ -42,7 +51,14 @@ export default function DropdownMenuSandboxPage() {    const [gap, setGap] = use
                                     <span>--dropdown-padding</span>
                                     <span className="font-bold">{padding[0]}px</span>
                                 </div>
-                                <Slider value={padding} onValueChange={setPadding} min={0} max={32} step={1} className="w-full" />
+                                <Select value={String(padding[0])} onValueChange={(v) => setPadding([parseInt(v, 10) || 0])}>
+                                <SelectTrigger aria-label="Select token" className="w-full">
+                                    <SelectValue placeholder="Select value" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {BORDER_WIDTH_TOKENS.map(t => <SelectItem key={t.token} value={t.value.replace(/[^0-9.]/g, '')}>{t.name} ({t.value})</SelectItem>)}
+                                </SelectContent>
+                            </Select>
                             </div>
 
                             <div className="space-y-2">
@@ -50,7 +66,14 @@ export default function DropdownMenuSandboxPage() {    const [gap, setGap] = use
                                     <span>--dropdown-radius</span>
                                     <span className="font-bold">{radius[0]}px</span>
                                 </div>
-                                <Slider value={radius} onValueChange={setRadius} min={0} max={32} step={1} className="w-full" />
+                                <Select value={String(radius[0])} onValueChange={(v) => setRadius([parseInt(v, 10) || 0])}>
+                                <SelectTrigger aria-label="Select token" className="w-full">
+                                    <SelectValue placeholder="Select value" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {BORDER_RADIUS_TOKENS.map(t => <SelectItem key={t.token} value={t.value.replace(/[^0-9.]/g, '')}>{t.name} ({t.value})</SelectItem>)}
+                                </SelectContent>
+                            </Select>
                             </div>
                             
                             <div className="space-y-2">
@@ -58,13 +81,20 @@ export default function DropdownMenuSandboxPage() {    const [gap, setGap] = use
                                     <span>--dropdown-border-width</span>
                                     <span className="font-bold">{borderWidth[0]}px</span>
                                 </div>
-                                <Slider value={borderWidth} onValueChange={setBorderWidth} min={0} max={8} step={1} className="w-full" />
+                                <Select value={String(borderWidth[0])} onValueChange={(v) => setBorderWidth([parseInt(v, 10) || 0])}>
+                                <SelectTrigger aria-label="Select token" className="w-full">
+                                    <SelectValue placeholder="Select value" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {BORDER_WIDTH_TOKENS.map(t => <SelectItem key={t.token} value={t.value.replace(/[^0-9.]/g, '')}>{t.name} ({t.value})</SelectItem>)}
+                                </SelectContent>
+                            </Select>
                             </div>
                         </div>
                     </div>
-                </Wrapper>
+                
             </div>
-        </Wrapper>
+        
     );
     return (
         <ComponentSandboxTemplate
@@ -81,9 +111,11 @@ export default function DropdownMenuSandboxPage() {    const [gap, setGap] = use
             platformConstraints={{ web: "N/A", mobile: "N/A" }}
             foundationRules={[]}
         >
-            <div 
-                className="w-full flex items-center justify-center min-h-[400px] p-12 bg-layer-panel shadow-sm border border-outline-variant rounded-xl"
-            >
+            
+            <CanvasBody flush={false}>
+                <CanvasBody.Section>
+                    <SectionHeader number="1" id="dropdown-menu" title="Dropdown Menu Sandbox" description="Interactive components for Dropdown Menu" icon="widgets" />
+                    <CanvasBody.Demo className="w-full flex items-center justify-center min-h-[400px] p-12 bg-layer-panel shadow-sm border border-outline-variant rounded-xl">
                 <DropdownMenu modal={false}>
                     <DropdownMenuTrigger asChild>
                         <Button variant="flat">Open Menu</Button>
@@ -105,7 +137,10 @@ export default function DropdownMenuSandboxPage() {    const [gap, setGap] = use
                         <DropdownMenuItem>Subscription</DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
-            </div>
+                </CanvasBody.Demo>
+                </CanvasBody.Section>
+            </CanvasBody>
+        
         </ComponentSandboxTemplate>
     );
 }

@@ -110,8 +110,8 @@ export default function InspectorOrganismPage() {
         >
             <div className="w-full h-full flex flex-col items-center justify-center py-16 px-12 space-y-8 bg-layer-panel border-r border-border scrollbar-hide">
                 <div className="max-w-2xl text-center space-y-6">
-                    <h1 className="text-4xl font-display font-medium text-foreground tracking-tight">The Inspector Framework</h1>
-                    <p className="font-body text-muted-foreground text-lg leading-relaxed">
+                    <h1 className="text-4xl font-display text-transform-primary font-medium text-foreground tracking-tight">The Inspector Framework</h1>
+                    <p className="font-body text-transform-secondary text-muted-foreground text-lg leading-relaxed">
                         This laboratory page demonstrates the standard L4-L7 Inspector protocol using authentic ZAP components.
                         The panel on the right runs a connected <code>&lt;L5Inspector&gt;</code> with standard bindings.
                     </p>
@@ -125,8 +125,8 @@ export default function InspectorOrganismPage() {
                             borderRadius: effectiveProps.radius === 'inherit' ? 'var(--radius-md)' : `var(${effectiveProps.radius})`
                         }) as React.CSSProperties}
                     >
-                        <h3 className="font-display font-bold text-2xl mb-2">Live Demo Sandbox</h3>
-                        <p className="font-body opacity-80">Adjust properties in the Inspector to see real-time updates.</p>
+                        <h3 className="font-display text-transform-primary font-bold text-2xl mb-2">Live Demo Sandbox</h3>
+                        <p className="font-body text-transform-secondary opacity-80">Adjust properties in the Inspector to see real-time updates.</p>
                     </div>
                 </div>
             </div>

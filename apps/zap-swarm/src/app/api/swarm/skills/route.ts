@@ -1,3 +1,4 @@
+export const revalidate = false;
 import { NextResponse } from "next/server";
 import { MongoClient } from "mongodb";
 import path from "path";
@@ -5,6 +6,7 @@ import fs from "fs";
 import dotenv from "dotenv";
 import { getTenantContext } from "@/lib/tenant";
 import { logger } from "@/lib/logger";
+import { getGlobalMongoClient } from "../../../../lib/mongo";
 
 dotenv.config({ path: path.resolve(process.cwd(), "../../zap-core/.env"), override: true });
 
@@ -26,16 +28,16 @@ interface SkillClassification {
 }
 
 const PREFIX_RULES: Array<{ prefix: string; group: SkillGroup; agent: AgentTag; baseTags: string[] }> = [
-    { prefix: "zap-",          group: "ZAP Engine",  agent: "spike",    baseTags: ["design-system", "m3", "tokens"] },
-    { prefix: "frontend-",    group: "Frontend",    agent: "spike",    baseTags: ["react", "ui", "components"] },
-    { prefix: "backend-",     group: "Backend",     agent: "spike",    baseTags: ["api", "server", "database"] },
-    { prefix: "devops-",      group: "DevOps",      agent: "operator", baseTags: ["infra", "deployment", "server"] },
-    { prefix: "df-",          group: "DeerFlow",    agent: "ralph",    baseTags: ["research", "analysis", "content"] },
-    { prefix: "gsd-",         group: "GSD",         agent: "any",      baseTags: ["planning", "workflow", "project"] },
-    { prefix: "agent-",       group: "Agent",       agent: "cso",      baseTags: ["swarm", "automation", "agent"] },
-    { prefix: "mcp-",         group: "MCP",         agent: "cso",      baseTags: ["integration", "mcp", "protocol"] },
-    { prefix: "workflow-",    group: "Workflow",    agent: "any",      baseTags: ["process", "documentation", "standards"] },
-    { prefix: "nano-",        group: "DeerFlow",    agent: "ralph",    baseTags: ["generation", "image", "ai"] },
+    { prefix: "zap-",          group: "ZAP Engine",  agent: "any",    baseTags: ["design-system", "m3", "tokens"] },
+    { prefix: "frontend-",    group: "Frontend",    agent: "any",    baseTags: ["react", "ui", "components"] },
+    { prefix: "backend-",     group: "Backend",     agent: "any",    baseTags: ["api", "server", "database"] },
+    { prefix: "devops-",      group: "DevOps",      agent: "any",    baseTags: ["infra", "deployment", "server"] },
+    { prefix: "df-",          group: "DeerFlow",    agent: "any",    baseTags: ["research", "analysis", "content"] },
+    { prefix: "gsd-",         group: "GSD",         agent: "any",    baseTags: ["planning", "workflow", "project"] },
+    { prefix: "agent-",       group: "Agent",       agent: "any",    baseTags: ["swarm", "automation", "agent"] },
+    { prefix: "mcp-",         group: "MCP",         agent: "any",    baseTags: ["integration", "mcp", "protocol"] },
+    { prefix: "workflow-",    group: "Workflow",    agent: "any",    baseTags: ["process", "documentation", "standards"] },
+    { prefix: "nano-",        group: "DeerFlow",    agent: "any",    baseTags: ["generation", "image", "ai"] },
 ];
 
 // Content-derived tags: scan SKILL.md for high-signal keywords
@@ -74,12 +76,12 @@ function classifySkill(dirName: string, content: string): SkillClassification {
 
     // Special overrides for non-prefixed skills
     if (group === "Workflow") {
-        if (dirName.includes("debug")) { group = "Workflow"; agent = "jerry"; tags.push("debugging"); }
-        else if (dirName.includes("review") || dirName.includes("audit")) { group = "Workflow"; agent = "jerry"; tags.push("audit"); }
+        if (dirName.includes("debug")) { group = "Workflow"; agent = "any"; tags.push("debugging"); }
+        else if (dirName.includes("review") || dirName.includes("audit")) { group = "Workflow"; agent = "any"; tags.push("audit"); }
         else if (dirName.includes("plan") || dirName.includes("writing")) { group = "Workflow"; agent = "any"; tags.push("planning"); }
-        else if (dirName.includes("test")) { group = "Workflow"; agent = "jerry"; tags.push("testing"); }
-        else if (dirName.includes("motion") || dirName.includes("animation")) { group = "Frontend"; agent = "spike"; tags.push("animation"); }
-        else if (dirName.includes("design") || dirName.includes("ui-ux")) { group = "Frontend"; agent = "spike"; tags.push("design"); }
+        else if (dirName.includes("test")) { group = "Workflow"; agent = "any"; tags.push("testing"); }
+        else if (dirName.includes("motion") || dirName.includes("animation")) { group = "Frontend"; agent = "any"; tags.push("animation"); }
+        else if (dirName.includes("design") || dirName.includes("ui-ux")) { group = "Frontend"; agent = "any"; tags.push("design"); }
     }
 
     // 2. Content-derived tags (deduplicated)
@@ -99,14 +101,15 @@ function classifySkill(dirName: string, content: string): SkillClassification {
 export async function GET() {
   let client: MongoClient | null = null;
   try {
-    client = new MongoClient(MONGO_URI);
-    await client.connect();
+    client = await getGlobalMongoClient();
     const db = client.db(DB_NAME);
     const col = db.collection("ZVN_SYS_SKILLS");
 
     let skills = await col.find({}).toArray();
 
     // Auto-seed/Sync from File System
+    console.log("[SKILLS DEBUG] SKILLS_DIR:", SKILLS_DIR, "Exists?", fs.existsSync(SKILLS_DIR));
+    
     if (fs.existsSync(SKILLS_DIR)) {
       const dirs = fs.readdirSync(SKILLS_DIR, { withFileTypes: true }).filter(d => d.isDirectory());
       const fsSkills = dirs.map(dir => {
@@ -133,6 +136,7 @@ export async function GET() {
           group,
           agent,
           tags,
+          content,
           path: `../../.agent/skills/${dir.name}`
         };
       }).filter(Boolean);
@@ -156,7 +160,6 @@ export async function GET() {
     logger.error(`[api/swarm/skills GET] Error:`, error);
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   } finally {
-    if (client) await client.close();
   }
 }
 
@@ -192,8 +195,7 @@ export async function POST(req: Request) {
     }
 
     // 1. Resolve skill from MongoDB
-    client = new MongoClient(MONGO_URI);
-    await client.connect();
+    client = await getGlobalMongoClient();
     const db = client.db(DB_NAME);
     const col = db.collection("ZVN_SYS_SKILLS");
 
@@ -281,7 +283,6 @@ export async function POST(req: Request) {
     logger.error(`[api/swarm/skills POST] Error:`, error);
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   } finally {
-    if (client) await client.close();
   }
 }
 

@@ -1,0 +1,119 @@
+warning: unused imports: `DateTime` and `Utc`
+ --> crates/vector/src/lib.rs:4:14
+  |
+4 | use chrono::{DateTime, Utc};
+  |              ^^^^^^^^  ^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: `vector` (lib) generated 1 warning (run `cargo fix --lib -p vector` to apply 1 suggestion)
+    Checking kairos v0.1.0 (/Users/zap/Workspace/olympus/rust/crates/kairos)
+error[E0433]: failed to resolve: use of undeclared type `Uuid`
+   --> crates/kairos/src/main.rs:121:29
+    |
+121 | ...   let ticket_id = Uuid::parse_str(thought["ticket_id"].as_str().unwrap_or_default()).unw...
+    |                       ^^^^ use of undeclared type `Uuid`
+    |
+help: consider importing one of these structs
+    |
+  1 + use sqlx::types::Uuid;
+    |
+  1 + use uuid::Uuid;
+    |
+
+error[E0277]: the trait bound `ZRange: From<(f64, f64)>` is not satisfied
+   --> crates/kairos/src/main.rs:139:35
+    |
+139 | ... redis.zrangebyscore("zap:jobs:scheduled", (f64::MIN, now as f64), true, None, None).await?;
+    |           ^^^^^^^^^^^^^ the trait `From<(f64, f64)>` is not implemented for `ZRange`
+    |
+    = help: the following other types implement trait `From<T>`:
+              `ZRange` implements `From<&ZRange>`
+              `ZRange` implements `From<&std::string::String>`
+              `ZRange` implements `From<&str>`
+              `ZRange` implements `From<i64>`
+              `ZRange` implements `From<std::string::String>`
+    = note: required for `(f64, f64)` to implement `Into<ZRange>`
+    = note: required for `ZRange` to implement `TryFrom<(f64, f64)>`
+
+error[E0277]: the trait bound `ZRange: From<bool>` is not satisfied
+   --> crates/kairos/src/main.rs:139:35
+    |
+139 | ...> = redis.zrangebyscore("zap:jobs:scheduled", (f64::MIN, now as f64), true, None, None).a...
+    |              ^^^^^^^^^^^^^ the trait `From<bool>` is not implemented for `ZRange`
+    |
+    = help: the following other types implement trait `From<T>`:
+              `ZRange` implements `From<&ZRange>`
+              `ZRange` implements `From<&std::string::String>`
+              `ZRange` implements `From<&str>`
+              `ZRange` implements `From<i64>`
+              `ZRange` implements `From<std::string::String>`
+    = note: required for `bool` to implement `Into<ZRange>`
+    = note: required for `ZRange` to implement `TryFrom<bool>`
+
+error[E0308]: mismatched types
+   --> crates/kairos/src/main.rs:139:101
+    |
+139 | ... redis.zrangebyscore("zap:jobs:scheduled", (f64::MIN, now as f64), true, None, None).await?;
+    |           ------------- arguments to this method are incorrect              ^^^^ expected `bool`, found `Option<_>`
+    |
+    = note: expected type `bool`
+               found enum `Option<_>`
+note: method defined here
+   --> /Users/zap/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/fred-9.4.0/src/commands/interfaces/sorted_sets.rs:432:6
+    |
+432 |   fn zrangebyscore<R, K, M, N>(
+    |      ^^^^^^^^^^^^^
+help: use `Option::is_some` to test if the `Option` has a value
+    |
+139 |     let jobs: Vec<String> = redis.zrangebyscore("zap:jobs:scheduled", (f64::MIN, now as f64), true, None.is_some(), None).await?;
+    |                                                                                                         ++++++++++
+
+error: this function depends on never type fallback being `()`
+   --> crates/kairos/src/main.rs:136:1
+    |
+136 | async fn poll_jobs(redis: &RedisClient, vector: &vector::VectorClient) -> Result<usize> {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = warning: this was previously accepted by the compiler but is being phased out; it will become a hard error in Rust 2024 and in a future release in all editions!
+    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/never-type-fallback.html>
+    = help: specify the types explicitly
+note: in edition 2024, the requirement `!: FromRedis` will fail
+   --> crates/kairos/src/main.rs:150:15
+    |
+150 |         redis.lpush("zap:jobs:processing", job_id).await?;
+    |               ^^^^^
+    = note: `#[deny(dependency_on_unit_never_type_fallback)]` (part of `#[deny(rust_2024_compatibility)]`) on by default
+help: use `()` annotations to avoid fallback changes
+    |
+150 |         redis.lpush::<(), _, _>("zap:jobs:processing", job_id).await?;
+    |                    ++++++++++++
+
+error[E0382]: borrow of moved value: `pg_pool`
+  --> crates/kairos/src/main.rs:84:55
+   |
+42 |     let pg_pool = sqlx::PgPool::connect(&db_url).await?;
+   |         ------- move occurs because `pg_pool` has type `Pool<Postgres>`, which does not implement the `Copy` trait
+43 |     let ticket_store = runtime::TicketStore::new(pg_pool);
+   |                                                  ------- value moved here
+...
+84 |             let res = sync_persistence(&redis_client, &pg_pool).await;
+   |                                                       ^^^^^^^^ value borrowed here after move
+   |
+help: consider cloning the value if the performance cost is acceptable
+   |
+43 |     let ticket_store = runtime::TicketStore::new(pg_pool.clone());
+   |                                                         ++++++++
+
+warning: unused variable: `store`
+   --> crates/kairos/src/main.rs:166:29
+    |
+166 | ...health(store: &runtime::TicketStore, vector: &vector::VectorClient) -> Result<()> {
+    |           ^^^^^ help: if this is intentional, prefix it with an underscore: `_store`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+Some errors have detailed explanations: E0277, E0308, E0382, E0433.
+For more information about an error, try `rustc --explain E0277`.
+warning: `kairos` (bin "kairosd") generated 1 warning
+error: could not compile `kairos` (bin "kairosd") due to 7 previous errors; 1 warning emitted

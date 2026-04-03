@@ -105,8 +105,8 @@ export default function SettingsTemplate() {
                             <label className="font-display text-labelLarge text-on-surface text-transform-primary">Theme Active</label>
                             <div className="border border-border rounded-lg p-4 bg-surface-container-lowest flex items-center justify-between">
                                 <div className="flex flex-col gap-1">
-                                    <span className="font-body text-bodyLarge text-on-surface">Global Theme Switcher</span>
-                                    <span className="font-body text-bodyMedium text-on-surface-variant">Toggle between Core, Brutal, and Metro themes globally.</span>
+                                    <span className="font-body text-transform-secondary text-bodyLarge text-on-surface">Global Theme Switcher</span>
+                                    <span className="font-body text-transform-secondary text-bodyMedium text-on-surface-variant">Toggle between Core, Brutal, and Metro themes globally.</span>
                                 </div>
 
                             </div>

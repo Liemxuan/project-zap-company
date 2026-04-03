@@ -21,7 +21,7 @@ export async function compileFlutterColors(theme: string, colors: Record<string,
             }
         }
     }
-    content += `}\n`;
+    content +=`}\n`;
     
     fs.writeFileSync(filePath, content, 'utf-8');
     console.log(`[FLUTTER SYNC] Synced ${theme} colors to ${filePath}`);
@@ -36,7 +36,7 @@ export async function compileFlutterTypography(theme: string, typographyState: {
     
     let content = `import 'package:flutter/material.dart';\n\nclass AppTypography {\n`;
     content += `  static const String primaryFont = '${typographyState.primaryFont || 'BeVietnamPro'}';\n`;
-    content += `}\n`;
+    content +=`}\n`;
     
     fs.writeFileSync(filePath, content, 'utf-8');
     console.log(`[FLUTTER SYNC] Synced ${theme} typography to ${filePath}`);
@@ -51,7 +51,7 @@ export async function compileFlutterRadius(theme: string, _radiusState: Record<s
     
     let content = `import 'package:flutter/material.dart';\n\nclass AppRadius {\n`;
     // We would parse the radius state logically here. Keeping it hollow for the mapping.
-    content += `}\n`;
+    content +=`}\n`;
     
     fs.writeFileSync(filePath, content, 'utf-8');
     console.log(`[FLUTTER SYNC] Synced ${theme} border radius to ${filePath}`);

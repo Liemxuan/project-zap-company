@@ -4,6 +4,7 @@ import path from "path";
 import dotenv from "dotenv";
 import { getTenantContext } from "@/lib/tenant";
 import { logger } from "@/lib/logger";
+import { getGlobalMongoClient } from "../../../../../lib/mongo";
 
 dotenv.config({ path: path.resolve(process.cwd(), "../../zap-core/.env"), override: true });
 
@@ -27,8 +28,7 @@ export async function GET(req: Request) {
         const status = url.searchParams.get("status");
         const limit = Math.min(parseInt(url.searchParams.get("limit") || "50", 10), 200);
 
-        client = new MongoClient(MONGO_URI, { serverSelectionTimeoutMS: 3000 });
-        await client.connect();
+        client = await getGlobalMongoClient();
         const db = client.db(DB_NAME);
         const col = db.collection("ZVN_SYS_SKILL_EXECUTIONS");
 
@@ -86,6 +86,5 @@ export async function GET(req: Request) {
         logger.error(`[api/swarm/skills/executions] Error:`, error);
         return NextResponse.json({ success: false, error: error.message }, { status: 500 });
     } finally {
-        if (client) await client.close();
     }
 }

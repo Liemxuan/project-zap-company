@@ -144,7 +144,7 @@ export const InputModulesShowcase = ({ cssVars }: InputModulesShowcaseProps) => 
                         {/* Email — Focused */}
                         <div className="space-y-2">
                             <span className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Email Address</span>
-                            <span className="text-[10px] font-dev text-muted-foreground block">Focused variant</span>
+                            <span className="text-[10px] font-dev text-transform-tertiary text-muted-foreground block">Focused variant</span>
                         <Wrapper identity={{ displayName: "Email Focused Card", type: "Wrapped Snippet", filePath: "zap/sections/molecules/inputs/InputModulesShowcase.tsx" }}>
                             <div className="bg-surface-container-high p-6 rounded-[var(--input-border-radius,8px)] border border-outline-variant/30 space-y-3">
                                 <EmailInput
@@ -163,7 +163,7 @@ export const InputModulesShowcase = ({ cssVars }: InputModulesShowcaseProps) => 
                         {/* Email — Error */}
                         <div className="space-y-2">
                             <span className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Email Address</span>
-                            <span className="text-[10px] font-dev text-muted-foreground block">Error variant</span>
+                            <span className="text-[10px] font-dev text-transform-tertiary text-muted-foreground block">Error variant</span>
                         <Wrapper identity={{ displayName: "Email Error Card", type: "Wrapped Snippet", filePath: "zap/sections/molecules/inputs/InputModulesShowcase.tsx" }}>
                             <div className="bg-surface-container-high p-6 rounded-[var(--input-border-radius,8px)] border border-outline-variant/30 space-y-3">
                                 <EmailInput
@@ -183,7 +183,7 @@ export const InputModulesShowcase = ({ cssVars }: InputModulesShowcaseProps) => 
                         {/* Email — Disabled */}
                         <div className="space-y-2">
                             <span className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Email Address</span>
-                            <span className="text-[10px] font-dev text-muted-foreground block">Disabled variant</span>
+                            <span className="text-[10px] font-dev text-transform-tertiary text-muted-foreground block">Disabled variant</span>
                         <Wrapper identity={{ displayName: "Email Disabled Card", type: "Wrapped Snippet", filePath: "zap/sections/molecules/inputs/InputModulesShowcase.tsx" }}>
                             <div className="bg-surface-container-high p-6 rounded-[var(--input-border-radius,8px)] border border-outline-variant/30 space-y-3">
                                 <EmailInput
@@ -200,7 +200,7 @@ export const InputModulesShowcase = ({ cssVars }: InputModulesShowcaseProps) => 
                         {/* Search — Empty */}
                         <div className="space-y-2">
                             <span className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Search</span>
-                            <span className="text-[10px] font-dev text-muted-foreground block">Empty state</span>
+                            <span className="text-[10px] font-dev text-transform-tertiary text-muted-foreground block">Empty state</span>
                         <Wrapper identity={{ displayName: "Search Empty Card", type: "Wrapped Snippet", filePath: "zap/sections/molecules/inputs/InputModulesShowcase.tsx" }}>
                             <div className="bg-surface-container-high p-6 rounded-[var(--input-border-radius,8px)] border border-outline-variant/30 space-y-3">
                                 <SearchInput
@@ -216,7 +216,7 @@ export const InputModulesShowcase = ({ cssVars }: InputModulesShowcaseProps) => 
                         {/* Search — With Query */}
                         <div className="space-y-2">
                             <span className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Search</span>
-                            <span className="text-[10px] font-dev text-muted-foreground block">Active with query</span>
+                            <span className="text-[10px] font-dev text-transform-tertiary text-muted-foreground block">Active with query</span>
                         <Wrapper identity={{ displayName: "Search Query Card", type: "Wrapped Snippet", filePath: "zap/sections/molecules/inputs/InputModulesShowcase.tsx" }}>
                             <div className="bg-surface-container-high p-6 rounded-[var(--input-border-radius,8px)] border border-outline-variant/30 space-y-3">
                                 <SearchInput
@@ -233,7 +233,7 @@ export const InputModulesShowcase = ({ cssVars }: InputModulesShowcaseProps) => 
                         {/* Password */}
                         <div className="space-y-2">
                             <span className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Password</span>
-                            <span className="text-[10px] font-dev text-muted-foreground block">Strength indicator</span>
+                            <span className="text-[10px] font-dev text-transform-tertiary text-muted-foreground block">Strength indicator</span>
                         <Wrapper identity={{ displayName: "Password Card", type: "Wrapped Snippet", filePath: "zap/sections/molecules/inputs/InputModulesShowcase.tsx" }}>
                             <div className="bg-surface-container-high p-6 rounded-[var(--input-border-radius,8px)] border border-outline-variant/30 space-y-3">
                                 <PasswordInput
@@ -271,7 +271,7 @@ export const InputModulesShowcase = ({ cssVars }: InputModulesShowcaseProps) => 
                         {/* Card Number */}
                         <div className="space-y-2">
                             <span className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Card Number</span>
-                            <span className="text-[10px] font-dev text-muted-foreground block">Credit card formatting</span>
+                            <span className="text-[10px] font-dev text-transform-tertiary text-muted-foreground block">Credit card formatting</span>
                         <Wrapper identity={{ displayName: "Card Number Card", type: "Wrapped Snippet", filePath: "zap/sections/molecules/inputs/InputModulesShowcase.tsx" }}>
                             <div className="bg-surface-container-high p-6 rounded-[var(--input-border-radius,8px)] border border-outline-variant/30 space-y-3">
                                 <CreditCardInput />
@@ -283,7 +283,7 @@ export const InputModulesShowcase = ({ cssVars }: InputModulesShowcaseProps) => 
                         {/* Currency */}
                         <div className="space-y-2">
                             <span className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Currency</span>
-                            <span className="text-[10px] font-dev text-muted-foreground block">Amount formatting</span>
+                            <span className="text-[10px] font-dev text-transform-tertiary text-muted-foreground block">Amount formatting</span>
                         <Wrapper identity={{ displayName: "Currency Card", type: "Wrapped Snippet", filePath: "zap/sections/molecules/inputs/InputModulesShowcase.tsx" }}>
                             <div className="bg-surface-container-high p-6 rounded-[var(--input-border-radius,8px)] border border-outline-variant/30 space-y-3">
                                 <CurrencyInput />
@@ -295,7 +295,7 @@ export const InputModulesShowcase = ({ cssVars }: InputModulesShowcaseProps) => 
                         {/* Phone Number */}
                         <div className="space-y-2">
                             <span className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Phone Number</span>
-                            <span className="text-[10px] font-dev text-muted-foreground block">Component Sandbox</span>
+                            <span className="text-[10px] font-dev text-transform-tertiary text-muted-foreground block">Component Sandbox</span>
                         <Wrapper identity={{ displayName: "Phone Number Card", type: "Wrapped Snippet", filePath: "zap/sections/molecules/inputs/InputModulesShowcase.tsx" }}>
                             <div className="bg-surface-container-high p-6 rounded-[var(--input-border-radius,8px)] border border-outline-variant/30 space-y-3">
                                 <PhoneNumberInput />
@@ -321,7 +321,7 @@ export const InputModulesShowcase = ({ cssVars }: InputModulesShowcaseProps) => 
                         {/* Single Date */}
                         <div className="space-y-2">
                             <span className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Date Picker</span>
-                            <span className="text-[10px] font-dev text-muted-foreground block">Component Sandbox</span>
+                            <span className="text-[10px] font-dev text-transform-tertiary text-muted-foreground block">Component Sandbox</span>
                         <Wrapper identity={{ displayName: "Select Date Card", type: "Wrapped Snippet", filePath: "zap/sections/molecules/inputs/InputModulesShowcase.tsx" }}>
                             <div className="bg-surface-container-high p-6 rounded-[var(--input-border-radius,8px)] border border-outline-variant/30 space-y-3">
                                 <DatePicker value={date} onChange={setDate} placeholder="Choose a day..." />
@@ -335,7 +335,7 @@ export const InputModulesShowcase = ({ cssVars }: InputModulesShowcaseProps) => 
                         {/* Date Range */}
                         <div className="space-y-2">
                             <span className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Date Range</span>
-                            <span className="text-[10px] font-dev text-muted-foreground block">Range selection</span>
+                            <span className="text-[10px] font-dev text-transform-tertiary text-muted-foreground block">Range selection</span>
                         <Wrapper identity={{ displayName: "Date Range Picker Card", type: "Wrapped Snippet", filePath: "zap/sections/molecules/inputs/InputModulesShowcase.tsx" }}>
                             <div className="bg-surface-container-high p-6 rounded-[var(--input-border-radius,8px)] border border-outline-variant/30 space-y-3">
                                 <DatePickerWithRange className="w-full" />
@@ -347,7 +347,7 @@ export const InputModulesShowcase = ({ cssVars }: InputModulesShowcaseProps) => 
                         {/* Select Time */}
                         <div className="space-y-2">
                             <span className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Time Picker</span>
-                            <span className="text-[10px] font-dev text-muted-foreground block">Component Sandbox</span>
+                            <span className="text-[10px] font-dev text-transform-tertiary text-muted-foreground block">Component Sandbox</span>
                         <Wrapper identity={{ displayName: "Select Time Card", type: "Wrapped Snippet", filePath: "zap/sections/molecules/inputs/InputModulesShowcase.tsx" }}>
                             <div className="bg-surface-container-high p-6 rounded-[var(--input-border-radius,8px)] border border-outline-variant/30 space-y-3">
                                 <TimePicker placeholder="10:30" />
@@ -373,7 +373,7 @@ export const InputModulesShowcase = ({ cssVars }: InputModulesShowcaseProps) => 
                         {/* Service Selection */}
                         <div className="space-y-2">
                             <span className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Service Selection</span>
-                            <span className="text-[10px] font-dev text-muted-foreground block">Entity layout</span>
+                            <span className="text-[10px] font-dev text-transform-tertiary text-muted-foreground block">Entity layout</span>
                         <Wrapper identity={{ displayName: "Service Selection Card", type: "Wrapped Snippet", filePath: "zap/sections/molecules/inputs/InputModulesShowcase.tsx" }}>
                             <div className="bg-surface-container-high p-6 rounded-[var(--input-border-radius,8px)] border border-outline-variant/30 space-y-3 col-span-1 md:col-span-3 lg:col-span-1">
                                 <Popover open={open} onOpenChange={setOpen}>
@@ -478,7 +478,7 @@ export const InputModulesShowcase = ({ cssVars }: InputModulesShowcaseProps) => 
                         {/* Multi-Select */}
                         <div className="space-y-2">
                             <span className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Multi-Select</span>
-                            <span className="text-[10px] font-dev text-muted-foreground block">Component Sandbox</span>
+                            <span className="text-[10px] font-dev text-transform-tertiary text-muted-foreground block">Component Sandbox</span>
                         <Wrapper identity={{ displayName: "Multi-Select Card", type: "Wrapped Snippet", filePath: "zap/sections/molecules/inputs/InputModulesShowcase.tsx" }}>
                             <div className="bg-surface-container-high p-6 rounded-[var(--input-border-radius,8px)] border border-outline-variant/30 space-y-3">
                                 <MultiSelect
@@ -495,7 +495,7 @@ export const InputModulesShowcase = ({ cssVars }: InputModulesShowcaseProps) => 
                         {/* Tag Input */}
                         <div className="space-y-2">
                             <span className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Tag Input</span>
-                            <span className="text-[10px] font-dev text-muted-foreground block">Interactive token input</span>
+                            <span className="text-[10px] font-dev text-transform-tertiary text-muted-foreground block">Interactive token input</span>
                         <Wrapper identity={{ displayName: "Tag Input Card", type: "Wrapped Snippet", filePath: "zap/sections/molecules/inputs/InputModulesShowcase.tsx" }}>
                             <div className="bg-surface-container-high p-6 rounded-[var(--input-border-radius,8px)] border border-outline-variant/30 space-y-3">
                                 <TagInput
@@ -524,7 +524,7 @@ export const InputModulesShowcase = ({ cssVars }: InputModulesShowcaseProps) => 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">
                             <span className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Enter Verification Code</span>
-                            <span className="text-[10px] font-dev text-muted-foreground block">One-Time Password</span>
+                            <span className="text-[10px] font-dev text-transform-tertiary text-muted-foreground block">One-Time Password</span>
                         <Wrapper identity={{ displayName: "OTP Card", type: "Wrapped Snippet", filePath: "zap/sections/molecules/inputs/InputModulesShowcase.tsx" }}>
                             <div className="bg-surface-container-high p-6 rounded-[var(--input-border-radius,8px)] border border-outline-variant/30 space-y-4">
                                 <InputOTP maxLength={6}>

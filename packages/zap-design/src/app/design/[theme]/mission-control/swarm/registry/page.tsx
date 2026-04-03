@@ -175,7 +175,7 @@ export default function ComponentRegistryDashboard() {
                             .bar-core { width: ${(stats.core / stats.total) * 100}%; }
                             .bar-metro { width: ${(stats.metro / stats.total) * 100}%; }
                             .bar-shared { width: ${(stats.shared / stats.total) * 100}%; }
-                        `}</style>
+                       `}</style>
                         <div className="flex h-2 w-full rounded-full overflow-hidden bg-muted">
                             <div className="bg-info h-full bar-core"></div>
                             <div className="bg-primary h-full bar-metro"></div>
@@ -479,7 +479,7 @@ export default function ComponentRegistryDashboard() {
                     background: var(--border);
                     border-radius: 10px;
                 }
-           `}</style>
+          `}</style>
             </div>
         </AppShell>
     );

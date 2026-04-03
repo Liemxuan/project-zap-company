@@ -138,14 +138,14 @@ export const CORE_THEME: ThemeConfig = {
             'checkbox', 'formatters', 'indicator', 'input', 'label', 'live-blinker',
             'navlink', 'panel', 'pill', 'property-box', 'radio', 'scroll-area', 'search-input',
             'select', 'separator', 'skeleton', 'slider', 'surface', 'switch',
-            'table', 'tabs', 'textarea', 'toggle'
+            'table', 'tabs', 'textarea', 'toggle', 'products-image'
         ],
         hasMolecules: [
             // Showcase molecules
-            'cards', 'dialogs', 'horizontal-navigation', 'inputs',
+            'cards', 'dialogs', 'horizontal-navigation', 'inputs', 'ai-card',
             // Sandbox molecules
             'dropzone',
-            'profile-switcher', 'quick-navigate', 'rating',
+            'quick-navigate', 'rating',
             'steppers',
             'side-nav',
             'user-session',
@@ -156,8 +156,8 @@ export const CORE_THEME: ThemeConfig = {
             'remember-me-checkbox', 'social-login-buttons', 'config-bar',
         ],
         hasOrganisms: [
-            'dashboard', 'billing', 'kanban', 'login',
-            'profile', 'settings', 'activities', 'system-logs', 'system-logs-layout', 'signin-a', 'signin-b'
+            'dashboard', 'billing', 'kanban', 'login', 'body',
+            'profile', 'settings', 'activities', 'system-logs', 'system-logs-layout', 'user-management', 'merchant-workspace', 'signin-a', 'signin-b', 'canvas-guide', 'product-list', 'locations'
         ],
         hasLabs: [
             'color-architect', 'typography-architect', 'swarm'
@@ -204,14 +204,14 @@ export const METRO_THEME: ThemeConfig = {
             'accordion', 'avatar', 'badge', 'breadcrumb-pill', 'button', 'canvas', 'card',
             'checkbox', 'indicator', 'input', 'label', 'live-blinker', 'navlink', 'panel', 'pill',
             'property-box', 'radio', 'scroll-area', 'search-input', 'select', 'separator', 'skeleton',
-            'slider', 'switch', 'table', 'tabs', 'textarea', 'toggle'
+            'slider', 'switch', 'table', 'tabs', 'textarea', 'toggle', 'products-image'
         ],
         hasMolecules: [
             // Showcase molecules
-            'cards', 'dialogs', 'horizontal-navigation', 'inputs',
+            'cards', 'dialogs', 'horizontal-navigation', 'inputs', 'ai-card',
             // Sandbox molecules
             'dropzone',
-            'profile-switcher', 'quick-navigate', 'rating',
+            'quick-navigate', 'rating',
             'steppers',
             'side-nav',
             'user-session',
@@ -222,8 +222,8 @@ export const METRO_THEME: ThemeConfig = {
             'remember-me-checkbox', 'social-login-buttons', 'config-bar',
         ],
         hasOrganisms: [
-            'dashboard', 'billing', 'kanban', 'login',
-            'profile', 'settings', 'activities', 'system-logs', 'system-logs-layout', 'user-management', 'merchant-workspace', 'signin-a', 'signin-b'
+            'dashboard', 'billing', 'kanban', 'login', 'body',
+            'profile', 'settings', 'activities', 'system-logs', 'system-logs-layout', 'user-management', 'merchant-workspace', 'signin-a', 'signin-b', 'canvas-guide', 'product-list', 'locations'
         ],
         hasLabs: [
             'color-architect', 'typography-architect', 'swarm'

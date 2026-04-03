@@ -56,7 +56,7 @@ export default function MetroKanbanPage() {
                     </div>
 
                     <div className="flex-1 w-full overflow-y-auto p-4 flex flex-col gap-2">
-                        <div className="font-display text-labelLarge text-on-surface-variant text-transform-secondary py-2">Nav Components</div>
+                        <div className="font-display text-transform-primary text-labelLarge text-on-surface-variant text-transform-secondary py-2">Nav Components</div>
                         <div className="bg-surface-container-highest h-10 rounded-btn w-full animate-pulse" />
                         <div className="bg-surface-container-highest h-10 rounded-btn w-full animate-pulse" />
                     </div>

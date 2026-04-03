@@ -153,7 +153,7 @@ export default function SwarmDashboardTable() {
                             // eslint-disable-next-line @typescript-eslint/no-explicit-any
                             ) : (tickets as any).error ? (
                                 <TableRow>
-                                    <TableCell colSpan={7} className="h-48 text-center text-error font-mono text-xs bg-error/5 p-10 leading-relaxed">
+                                    <TableCell colSpan={7} className="h-48 text-center text-error font-mono text-transform-tertiary text-xs bg-error/5 p-10 leading-relaxed">
                                         <div className="flex flex-col items-center gap-4">
                                             <div className="p-3 bg-error/10 rounded-full">
                                                 <Layers className="size-8 opacity-50" />

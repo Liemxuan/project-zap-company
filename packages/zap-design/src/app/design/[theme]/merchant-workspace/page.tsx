@@ -341,7 +341,7 @@ const SwarmSkeleton = () => (
       />
     </div>
     <div className="w-full flex-1 bg-layer-canvas overflow-hidden" style={Object.assign({}, { borderRadius: 'var(--layer-2-border-radius)' })}>
-      <div className="w-full h-full flex flex-col p-4 gap-1 font-mono text-sm">
+      <div className="w-full h-full flex flex-col p-4 gap-1 font-mono text-transform-tertiary text-sm">
         <Text size="body-small" className="text-muted-foreground/70">[08:00:21] Jerry executed routine stock check on DB-A.</Text>
         <Text size="body-small" className="text-muted-foreground/70">[08:05:14] Spike verified UI rendering against newly pushed CSS.</Text>
         <Text size="body-small" className="text-muted-foreground/70">[08:12:00] ZAP-AI processed 4 inbound customer emails.</Text>

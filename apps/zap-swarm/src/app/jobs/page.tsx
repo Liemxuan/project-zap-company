@@ -1,5 +1,7 @@
 "use client";
 
+export const dynamic = 'force-dynamic';
+
 import { useState } from "react";
 import { Heading } from "zap-design/src/genesis/atoms/typography/headings";
 import { Text } from "zap-design/src/genesis/atoms/typography/text";
@@ -113,7 +115,7 @@ export default function JobTicketDashboard() {
           liveIndicator={true}
         />
         
-        <main className="flex-1 overflow-y-auto p-8">
+        <main className="flex-1 overflow-y-auto px-5 md:px-12 py-8">
           <div className="flex justify-between items-center mb-8 bg-layer-cover p-6 rounded-[var(--card-radius,12px)] border border-outline/10 shadow-[var(--shadow-elevation-1,0_1px_2px_rgba(0,0,0,0.05))]">
             <div className="flex flex-col gap-1 max-w-2xl">
               <Heading level={3} className="text-on-surface">OmniRouter Global Registry</Heading>

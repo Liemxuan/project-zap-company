@@ -2,10 +2,11 @@
 
 import React, { useState } from 'react';
 import { ComponentSandboxTemplate } from '../../../../../zap/layout/ComponentSandboxTemplate';
-import { Wrapper } from '../../../../../components/dev/Wrapper';
 import { HorizontalNavigation } from '../../../../../genesis/molecules/navigation/HorizontalNavigation';
 import { Switch } from '../../../../../genesis/atoms/interactive/switch';
 import { ToggleGroup, ToggleGroupItem } from '../../../../../genesis/atoms/interactive/toggle-group';
+import { CanvasBody } from '../../../../../zap/layout/CanvasBody';
+import { SectionHeader } from '../../../../../zap/sections/SectionHeader';
 
 export default function HorizontalNavigationSandboxPage() {
     const [isLoggedIn, setIsLoggedIn] = useState(true);
@@ -16,20 +17,20 @@ export default function HorizontalNavigationSandboxPage() {
     const [dropdownSide, setDropdownSide] = useState<'top' | 'bottom'>('bottom');
 
     const inspectorControls = (
-        <Wrapper identity={{ displayName: "Inspector Controls Container", type: "Container", filePath: "zap/molecules/horizontal-navigation/page.tsx" }}>
+        
             <div className="space-y-4">
-                <Wrapper identity={{ displayName: "Navigation Settings", type: "Docs Link", filePath: "zap/molecules/horizontal-navigation/page.tsx" }}>
+                
                     <div className="space-y-6">
                         <h4 className="text-label-small text-transform-primary font-display font-bold text-on-surface-variant text-transform-secondary tracking-wider">Sandbox Controls</h4>
                         
                         <div className="space-y-4">
                             <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary">
                                 <span className={isLoggedIn ? 'text-primary font-bold' : ''}>Logged In State</span>
-                                <Switch checked={isLoggedIn} onCheckedChange={setIsLoggedIn} />
+                                <Switch aria-label="Switch component" checked={isLoggedIn} onCheckedChange={setIsLoggedIn} />
                             </div>
                             <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary mt-4">
                                 <span className={showContent ? 'text-primary font-bold' : ''}>Show Page Content</span>
-                                <Switch checked={showContent} onCheckedChange={setShowContent} />
+                                <Switch aria-label="Switch component" checked={showContent} onCheckedChange={setShowContent} />
                             </div>
                             <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary mt-4">
                                 <span className={dropdownSide === 'top' ? 'text-primary font-bold' : ''}>Menu Orientation</span>
@@ -40,21 +41,21 @@ export default function HorizontalNavigationSandboxPage() {
                             </div>
                             <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary mt-4">
                                 <span className={showBorder ? 'text-primary font-bold' : ''}>Border Width</span>
-                                <Switch checked={showBorder} onCheckedChange={setShowBorder} />
+                                <Switch aria-label="Switch component" checked={showBorder} onCheckedChange={setShowBorder} />
                             </div>
                             <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary mt-4">
                                 <span className={showRadius ? 'text-primary font-bold' : ''}>Border Radius</span>
-                                <Switch checked={showRadius} onCheckedChange={setShowRadius} />
+                                <Switch aria-label="Switch component" checked={showRadius} onCheckedChange={setShowRadius} />
                             </div>
                             <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary mt-4">
                                 <span className={isFullWidth ? 'text-primary font-bold' : ''}>Full Width Container</span>
-                                <Switch checked={isFullWidth} onCheckedChange={setIsFullWidth} />
+                                <Switch aria-label="Switch component" checked={isFullWidth} onCheckedChange={setIsFullWidth} />
                             </div>
                         </div>
                     </div>
-                </Wrapper>
+                
             </div>
-        </Wrapper>
+        
     );
 
     // ── Load saved values from Active Theme ──
@@ -87,7 +88,7 @@ export default function HorizontalNavigationSandboxPage() {
             inspectorControls={inspectorControls}
             foundationInheritance={{
                 colorTokens: ['bg-layer-panel', 'border-black'],
-                typographyScales: ['font-body', 'text-body-small']
+                typographyScales: ['font-body text-transform-secondary', 'text-body-small']
             }}
             platformConstraints={{ web: "Supported", mobile: "Touch Supported" }}
             foundationRules={[
@@ -106,8 +107,11 @@ export default function HorizontalNavigationSandboxPage() {
             }}
             onLoadedVariables={handleLoadedVariables}
         >
-            <div className={`w-full h-full flex items-start justify-center p-0 ${isFullWidth ? '' : 'md:p-12'} relative overflow-visible rounded-xl`}>
-                <Wrapper identity={{ displayName: "Horizontal Navigation Molecule", type: "Organism", filePath: "zap/molecules/horizontal-navigation/page.tsx" }}>
+            <CanvasBody flush={false}>
+                <CanvasBody.Section>
+                    <SectionHeader number="1" id="horizontal-navigation" title="Horizontal Navigation Sandbox" description="Interactive components for Horizontal Navigation" icon="widgets" />
+                    <CanvasBody.Demo className="">
+                
                     <div className={`w-full ${isFullWidth ? '' : 'max-w-[1240px]'} bg-background ${showBorder ? 'border border-outline-variant' : ''} ${showRadius ? 'rounded-xl overflow-hidden' : ''} ${showContent ? 'min-h-[400px]' : ''}`}>
                         <HorizontalNavigation 
                             isLoggedIn={isLoggedIn} 
@@ -118,7 +122,7 @@ export default function HorizontalNavigationSandboxPage() {
                         {showContent && (
                             <div className="p-8">
                                 <h2 className="text-title-medium font-bold font-display text-transform-primary mb-2">Page Content</h2>
-                                <p className="text-muted-foreground font-body">
+                                <p className="text-muted-foreground font-body text-transform-secondary">
                                     The horizontal navigation is mounted at the top of this layout wrapper. Use the Quick Navigate combobox or test the User Session authentication toggle using the Inspector controls in the sidebar.
                                 </p>
                                 <div className="mt-8 border-t border-outline-variant/50 pt-8 space-y-4">
@@ -129,8 +133,11 @@ export default function HorizontalNavigationSandboxPage() {
                             </div>
                         )}
                     </div>
-                </Wrapper>
-            </div>
+                
+                </CanvasBody.Demo>
+                </CanvasBody.Section>
+            </CanvasBody>
+        
         </ComponentSandboxTemplate>
     );
 }

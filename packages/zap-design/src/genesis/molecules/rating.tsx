@@ -17,12 +17,12 @@ export const Rating = React.forwardRef<HTMLDivElement, RatingProps>(
       <div ref={ref} className={cn("flex flex-col gap-3", className)} {...props}>
         <div className="flex items-center justify-between w-full">
           {label && (
-            <span className="font-body text-xs font-bold text-transform-tertiary uppercase text-on-surface-variant text-transform-secondary tracking-wider">
+ <span className="font-body text-xs font-bold text-transform-tertiary text-on-surface-variant text-transform-secondary tracking-wider">
               {label}
             </span>
           )}
           {showValue && (
-            <span className="font-body text-xs font-bold text-primary">
+            <span className="font-body text-transform-secondary text-xs font-bold text-primary">
               {value} / {max}
             </span>
           )}

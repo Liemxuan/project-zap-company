@@ -44,7 +44,7 @@ export function FoundationLogin({ appName, description, duties, onLogin }: Found
     }
 
     return (
-        <div className="grid lg:grid-cols-2 grow min-h-screen font-body bg-layer-canvas">
+        <div className="grid lg:grid-cols-2 grow min-h-screen font-body text-transform-secondary bg-layer-canvas">
             
             {/* Left Side: Authentication Form */}
             <div className="flex justify-center items-center p-8 lg:p-12 order-2 lg:order-1 outline-none">

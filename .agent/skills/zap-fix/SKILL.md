@@ -13,9 +13,12 @@ You must possess an Audit Table artifact containing `❌ FAILED` rows before exe
 ## 2. The Golden Rules of Execution
 When applying the fix, strictly follow the Universal Zap Mandates:
 1. **The Component Map Rules All:** Replace raw HTML tags (`<p>`, `<span>`, `<div>`) with ZAP Atomic Primitives (`<Heading>`, `<Text>`, `<GenesisCard>`).
-2. **Eradicate Ghost Classes:** Remove hardcoded sizing, casing, hex codes, or spacing arrays that override the internal atomic token mappings.
-3. **The Object.assign Bypass:** If dynamic runtime styles are explicitly required (e.g., a Sandbox Theme picker), wrap them strictly: `style={Object.assign({}, { borderRadius: 'var(--layer-2-border-radius)' })}`.
-4. **Ascension Depth:** If patching elevation/layers, you must ascend (e.g., L2 -> L3 -> L4). Never nest a `bg-layer-base` (L0) inside a `bg-layer-cover` (L2).
+2. **The Canvas Macro Standard:** In sandboxes/labs, replace `div` based implementations with `<CanvasBody.Section>` and `<CanvasBody.Demo>`.
+3. **L2 Restoration Mandate:** Ensure `<CanvasBody flush={false}>` is set to provide the mandatory `bg-layer-cover` depth.
+4. **Eradicate Ghost Classes:** Remove hardcoded sizing, casing, hex codes, or spacing arrays that override the internal atomic token mappings.
+5. **The Object.assign Bypass:** If dynamic runtime styles are explicitly required (e.g., a Sandbox Theme picker), wrap them strictly: `style={Object.assign({}, { borderRadius: 'var(--layer-2-border-radius)' })}`.
+6. **Ascension Depth:** If patching elevation/layers, you must ascend (e.g., L2 -> L3 -> L4). Never nest a `bg-layer-base` (L0) inside a `bg-layer-cover` (L2).
+7. **Token-Bound Selectors:** Replace `Slider` controls for tokens (Radius, Border) with `<Select>` bound to `schema.ts`.
 
 ## 3. Execution and Check-Off
 Use multi_replace_file_content or file patching to update the target files. 

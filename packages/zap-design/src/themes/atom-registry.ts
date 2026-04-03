@@ -45,6 +45,7 @@ const Slider = dynamic(() => import('../app/design/zap/atoms/slider/page'), { ss
 const TableAtom = dynamic(() => import('../app/design/zap/atoms/table/page'), { ssr: false });
 const TabsAtom = dynamic(() => import('../app/design/zap/atoms/tabs/page'), { ssr: false });
 const Switch = dynamic(() => import('../app/design/zap/atoms/switch/page'), { ssr: false });
+const ProductsImageAtom = dynamic(() => import('../app/design/zap/atoms/products-image/page'), { ssr: false });
 const SurfaceAtom = dynamic(() => import('../app/design/zap/atoms/surface/page'), { ssr: false });
 const Textarea = dynamic(() => import('../app/design/zap/atoms/textarea/page'), { ssr: false });
 const Toggle = dynamic(() => import('../app/design/zap/atoms/toggle/page'), { ssr: false });
@@ -68,6 +69,7 @@ export const ATOM_REGISTRY: Record<string, AtomEntry> = {
     'navlink':         { id: 'navlink',      label: 'NavLink',      tier: 'L3 ATOM', status: 'Verified', component: NavLinkAtom, icon: 'link',            category: 'Navigation' },
     'panel':           { id: 'panel',        label: 'Panel',        tier: 'L3 ATOM', status: 'Verified', component: Panel,       icon: 'view_sidebar',    category: 'Layout' },
     'pill':            { id: 'pill',         label: 'Pill',         tier: 'L3 ATOM', status: 'Verified', component: Pill,        icon: 'hdr_strong',      category: 'Data Display' },
+    'products-image':  { id: 'products-image', label: 'Products Image', tier: 'L3 ATOM', status: 'Verified', component: ProductsImageAtom, icon: 'image', category: 'Data Display' },
     'property-box':    { id: 'property-box', label: 'Property Box', tier: 'L3 ATOM', status: 'Verified', component: PropertyBoxAtom, icon: 'view_list',  category: 'Data Display' },
     'radio':           { id: 'radio',        label: 'Radio',        tier: 'L3 ATOM', status: 'Verified', component: Radio,       icon: 'radio_button_checked', category: 'Inputs' },
     'scroll-area':     { id: 'scroll-area',  label: 'Scroll Area',  tier: 'L3 ATOM', status: 'Verified', component: ScrollArea,  icon: 'swap_vert',       category: 'Layout' },

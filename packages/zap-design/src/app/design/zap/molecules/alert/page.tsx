@@ -2,13 +2,16 @@
 
 import React, { useState } from 'react';
 import { ComponentSandboxTemplate } from '../../../../../zap/layout/ComponentSandboxTemplate';
-import { Wrapper } from '../../../../../components/dev/Wrapper';
 
 import { Alert, AlertContent, AlertDescription, AlertTitle } from '../../../../../genesis/molecules/alert';
 import { CheckCircle, AlertTriangle, Info, XCircle, AppWindow, MessageSquare } from 'lucide-react';
+
 import { Slider } from '../../../../../genesis/atoms/interactive/slider';
+import { BORDER_RADIUS_TOKENS, BORDER_WIDTH_TOKENS } from '../../../../../zap/sections/atoms/foundations/schema';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../../../../genesis/atoms/interactive/select';
 import { ToggleGroup, ToggleGroupItem } from '../../../../../genesis/atoms/interactive/toggle-group';
+import { CanvasBody } from '../../../../../zap/layout/CanvasBody';
+import { SectionHeader } from '../../../../../zap/sections/SectionHeader';
 import { ThemePublisher } from '../../../../../components/dev/ThemePublisher';
 import { useTheme } from 'next-themes';
 import { toast } from 'sonner';
@@ -107,9 +110,9 @@ export default function AlertSandboxPage() {
 
     // Fetch initial settings
     const inspectorControls = (
-        <Wrapper identity={{ displayName: "Inspector Controls Container", type: "Container", filePath: "zap/molecules/alert" }}>
+        
             <div className="space-y-4">
-                <Wrapper identity={{ displayName: "Alert Structural Settings", type: "Docs Link", filePath: "zap/molecules/alert/page.tsx" }}>
+                
                     <div className="space-y-6">
                         <h4 className="text-label-small text-transform-primary font-display font-bold text-on-surface-variant text-transform-secondary tracking-wider">Sandbox Variables</h4>
 
@@ -119,7 +122,14 @@ export default function AlertSandboxPage() {
                                     <span>--alert-padding</span>
                                     <span className="font-bold">{padding[0]}px</span>
                                 </div>
-                                <Slider value={padding} onValueChange={setPadding} min={0} max={64} step={1} className="w-full" />
+                                <Select value={String(padding[0])} onValueChange={(v) => setPadding([parseInt(v, 10) || 0])}>
+                                <SelectTrigger aria-label="Select token" className="w-full">
+                                    <SelectValue placeholder="Select value" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {BORDER_WIDTH_TOKENS.map(t => <SelectItem key={t.token} value={t.value.replace(/[^0-9.]/g, '')}>{t.name} ({t.value})</SelectItem>)}
+                                </SelectContent>
+                            </Select>
                             </div>
 
                             <div className="space-y-2">
@@ -127,7 +137,14 @@ export default function AlertSandboxPage() {
                                     <span>--alert-gap</span>
                                     <span className="font-bold">{gap[0]}px</span>
                                 </div>
-                                <Slider value={gap} onValueChange={setGap} min={0} max={64} step={1} className="w-full" />
+                                <Select value={String(gap[0])} onValueChange={(v) => setGap([parseInt(v, 10) || 0])}>
+                                <SelectTrigger aria-label="Select token" className="w-full">
+                                    <SelectValue placeholder="Select value" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {BORDER_WIDTH_TOKENS.map(t => <SelectItem key={t.token} value={t.value.replace(/[^0-9.]/g, '')}>{t.name} ({t.value})</SelectItem>)}
+                                </SelectContent>
+                            </Select>
                             </div>
 
                             <div className="space-y-2">
@@ -135,7 +152,14 @@ export default function AlertSandboxPage() {
                                     <span>--alert-border-width</span>
                                     <span className="font-bold">{borderWidth[0]}px</span>
                                 </div>
-                                <Slider value={borderWidth} onValueChange={setBorderWidth} min={0} max={8} step={1} className="w-full" />
+                                <Select value={String(borderWidth[0])} onValueChange={(v) => setBorderWidth([parseInt(v, 10) || 0])}>
+                                <SelectTrigger aria-label="Select token" className="w-full">
+                                    <SelectValue placeholder="Select value" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {BORDER_WIDTH_TOKENS.map(t => <SelectItem key={t.token} value={t.value.replace(/[^0-9.]/g, '')}>{t.name} ({t.value})</SelectItem>)}
+                                </SelectContent>
+                            </Select>
                             </div>
 
                             <div className="space-y-2">
@@ -143,7 +167,14 @@ export default function AlertSandboxPage() {
                                     <span>--alert-radius</span>
                                     <span className="font-bold">{borderRadius[0]}px</span>
                                 </div>
-                                <Slider value={borderRadius} onValueChange={setBorderRadius} min={0} max={64} step={1} className="w-full" />
+                                <Select value={String(borderRadius[0])} onValueChange={(v) => setBorderRadius([parseInt(v, 10) || 0])}>
+                                <SelectTrigger aria-label="Select token" className="w-full">
+                                    <SelectValue placeholder="Select value" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {BORDER_RADIUS_TOKENS.map(t => <SelectItem key={t.token} value={t.value.replace(/[^0-9.]/g, '')}>{t.name} ({t.value})</SelectItem>)}
+                                </SelectContent>
+                            </Select>
                             </div>
                             <div className="space-y-2">
                                 <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary">
@@ -154,9 +185,9 @@ export default function AlertSandboxPage() {
                             </div>
                         </div>
                     </div>
-                </Wrapper>
+                
 
-                <Wrapper identity={{ displayName: "Contextual View Options", type: "Style Selection", filePath: "zap/molecules/alert/page.tsx" }}>
+                
                     <div className="space-y-4 pt-4 border-t border-outline-variant">
                             <span className="text-label-small text-transform-primary font-display font-bold text-on-surface-variant text-transform-secondary tracking-wider">Semantic Overrides</span>
                             <div className="space-y-4">
@@ -165,7 +196,7 @@ export default function AlertSandboxPage() {
                                         <span>--alert-bg</span>
                                     </div>
                                     <Select value={alertBg} onValueChange={setAlertBg}>
-                                        <SelectTrigger className="w-full text-label-small h-8">
+                                        <SelectTrigger aria-label="SelectTrigger component" className="w-full text-label-small h-8">
                                             <SelectValue placeholder="Default (Inherit from Variant)" />
                                         </SelectTrigger>
                                         <SelectContent>
@@ -182,7 +213,7 @@ export default function AlertSandboxPage() {
                                         <span>--alert-border</span>
                                     </div>
                                     <Select value={alertBorder} onValueChange={setAlertBorder}>
-                                        <SelectTrigger className="w-full text-label-small h-8">
+                                        <SelectTrigger aria-label="SelectTrigger component" className="w-full text-label-small h-8">
                                             <SelectValue placeholder="Default (Inherit from Variant)" />
                                         </SelectTrigger>
                                         <SelectContent>
@@ -199,7 +230,7 @@ export default function AlertSandboxPage() {
                                         <span>--alert-text</span>
                                     </div>
                                     <Select value={alertText} onValueChange={setAlertText}>
-                                        <SelectTrigger className="w-full text-label-small h-8">
+                                        <SelectTrigger aria-label="SelectTrigger component" className="w-full text-label-small h-8">
                                             <SelectValue placeholder="Default (Inherit from Variant)" />
                                         </SelectTrigger>
                                         <SelectContent>
@@ -232,9 +263,9 @@ export default function AlertSandboxPage() {
                             </ToggleGroup>
                         </div>
                     </div>
-                </Wrapper>
+                
             </div>
-        </Wrapper>
+        
     );
     return (
         <ComponentSandboxTemplate
@@ -254,14 +285,13 @@ export default function AlertSandboxPage() {
             }
             foundationInheritance={{
                 colorTokens: [],
-                typographyScales: ["font-display", "font-body", "text-transform-primary"]
+                typographyScales: ["font-display", "font-body text-transform-secondary", "text-transform-primary"]
             }}
             platformConstraints={{ web: "N/A", mobile: "N/A" }}
             foundationRules={[]}
         >
-            <div 
-                className="w-full p-12 bg-layer-panel shadow-sm border border-outline-variant rounded-xl flex items-center justify-center animate-in fade-in duration-500 pb-16"
-                style={Object.assign({}, {
+            <CanvasBody flush={false}>
+                <div style={Object.assign({}, {
                     '--alert-padding': `${padding[0]}px`,
                     '--alert-gap': `${gap[0]}px`,
                     '--alert-border-width': `${borderWidth[0]}px`,
@@ -270,12 +300,13 @@ export default function AlertSandboxPage() {
                     ...(alertBg && alertBg !== 'default' ? { '--alert-bg': alertBg } : {}),
                     ...(alertText && alertText !== 'default' ? { '--alert-text': alertText } : {}),
                     ...(alertBorder && alertBorder !== 'default' ? { '--alert-border': alertBorder } : {}),
-                } as React.CSSProperties)}
-            >
-                <div className="w-full max-w-4xl grid grid-cols-1 gap-6">
+                } as React.CSSProperties)}>
+                <CanvasBody.Section>
+                    <SectionHeader number="1" id="alert-overview" title="Alert Sandbox Overview" description="Testing boundaries and semantic overrides for L4 alerts." icon="warning" />
+                    <CanvasBody.Demo className="w-full max-w-4xl grid grid-cols-1 gap-6">
                     {/* Dynamic Interactive Sandbox */}
                     <div className="p-8 pb-12 rounded-xl bg-layer-panel border-b-4 border-outline-variant/30 flex flex-col gap-4 shadow-sm relative overflow-visible">
-                        <div className="absolute top-0 right-0 p-2 bg-layer-2 rounded-bl-lg border-b border-l border-outline-variant/30 text-label-small font-bold text-on-surface-variant text-transform-secondary font-dev tracking-widest uppercase">Interactive Sandbox</div>
+ <div className="absolute top-0 right-0 p-2 bg-layer-2 rounded-bl-lg border-b border-l border-outline-variant/30 text-label-small font-bold text-on-surface-variant text-transform-secondary font-dev text-transform-tertiary tracking-widest ">Interactive Sandbox</div>
                         <Alert variant={selectedVariant} visualStyle={visualStyle} style={Object.assign({}, {
                             ...(alertBg && alertBg !== 'default' ? { '--alert-bg': alertBg } : {}),
                             ...(alertText && alertText !== 'default' ? { '--alert-text': alertText } : {}),
@@ -293,16 +324,16 @@ export default function AlertSandboxPage() {
 
                     <div className="w-full flex items-center gap-4 py-4">
                         <div className="h-px bg-outline-variant flex-1" />
-                        <span className="text-label-small font-bold text-on-surface-variant text-transform-secondary font-display uppercase tracking-wider">L1-L3 Assemblies (Static Variants)</span>
+ <span className="text-label-small font-bold text-on-surface-variant text-transform-secondary font-display text-transform-primary tracking-wider">L1-L3 Assemblies (Static Variants)</span>
                         <div className="h-px bg-outline-variant flex-1" />
                     </div>
 
                     {/* L1 Surface Assembly */}
                     <div className="p-8 rounded-xl bg-layer-1 border border-outline-variant/30 flex flex-col gap-4 shadow-sm relative overflow-visible">
                         <div className="absolute top-0 right-0 py-1 pl-3 pr-2 bg-layer-2 rounded-bl-lg border-b border-l border-outline-variant/30 flex items-center gap-3">
-                            <span className="text-label-small font-bold text-on-surface-variant text-transform-secondary font-dev tracking-widest uppercase">L1 Surface</span>
+ <span className="text-label-small font-bold text-on-surface-variant text-transform-secondary font-dev text-transform-tertiary tracking-widest ">L1 Surface</span>
                             <Select value={l1Bg} onValueChange={setL1Bg}>
-                                <SelectTrigger className="h-6 text-label-small w-32 border-outline-variant/50">
+                                <SelectTrigger aria-label="SelectTrigger component" className="h-6 text-label-small w-32 border-outline-variant/50">
                                     <SelectValue placeholder="Alert Bg" />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -327,9 +358,9 @@ export default function AlertSandboxPage() {
                     {/* L2 Surface Assembly */}
                     <div className="p-8 rounded-xl bg-layer-2 border border-outline-variant/30 flex flex-col gap-4 shadow-md relative overflow-visible">
                         <div className="absolute top-0 right-0 py-1 pl-3 pr-2 bg-layer-3 rounded-bl-lg border-b border-l border-outline-variant/30 flex items-center gap-3">
-                            <span className="text-label-small font-bold text-on-surface-variant text-transform-secondary font-dev tracking-widest uppercase">L2 Surface</span>
+ <span className="text-label-small font-bold text-on-surface-variant text-transform-secondary font-dev text-transform-tertiary tracking-widest ">L2 Surface</span>
                             <Select value={l2Bg} onValueChange={setL2Bg}>
-                                <SelectTrigger className="h-6 text-label-small w-32 border-outline-variant/50">
+                                <SelectTrigger aria-label="SelectTrigger component" className="h-6 text-label-small w-32 border-outline-variant/50">
                                     <SelectValue placeholder="Alert Bg" />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -354,9 +385,9 @@ export default function AlertSandboxPage() {
                     {/* L3 Surface Assembly */}
                     <div className="p-8 rounded-xl bg-layer-3 border border-outline-variant/30 flex flex-col gap-4 shadow-lg relative overflow-visible">
                         <div className="absolute top-0 right-0 py-1 pl-3 pr-2 bg-surface text-on-surface rounded-bl-lg border-b border-l border-outline-variant/30 flex items-center gap-3">
-                            <span className="text-label-small font-bold font-dev tracking-widest uppercase">L3 Surface</span>
+ <span className="text-label-small font-bold font-dev text-transform-tertiary tracking-widest ">L3 Surface</span>
                             <Select value={l3Bg} onValueChange={setL3Bg}>
-                                <SelectTrigger className="h-6 text-label-small w-32 border-outline-variant/50">
+                                <SelectTrigger aria-label="SelectTrigger component" className="h-6 text-label-small w-32 border-outline-variant/50">
                                     <SelectValue placeholder="Alert Bg" />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -377,8 +408,10 @@ export default function AlertSandboxPage() {
                             </AlertContent>
                         </Alert>
                     </div>
+                    </CanvasBody.Demo>
+                </CanvasBody.Section>
                 </div>
-            </div>
+            </CanvasBody>
         </ComponentSandboxTemplate>
     );
 }

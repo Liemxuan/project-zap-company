@@ -1,9 +1,10 @@
 'use client';
 
+import { CanvasBody } from '../../../../../zap/layout/CanvasBody';
+import { SectionHeader } from '../../../../../zap/sections/SectionHeader';
 import React, { useState } from 'react';
 import { ComponentSandboxTemplate } from '../../../../../zap/layout/ComponentSandboxTemplate';
 import { Icon } from '../../../../../genesis/atoms/icons/Icon';
-import { Wrapper } from '../../../../../components/dev/Wrapper';
 import { Slider } from '../../../../../genesis/atoms/interactive/slider';
 import { Button } from '../../../../../genesis/atoms/interactive/buttons';
 import { Input } from '../../../../../genesis/atoms/interactive/inputs';
@@ -55,15 +56,15 @@ export default function FormSandboxPage() {
     };
 
     const inspectorControls = (
-        <Wrapper identity={{ displayName: "Inspector Controls Container", type: "Container", filePath: "zap/molecules/forms/page.tsx" }}>
+        
             <div className="space-y-4">
-                <Wrapper identity={{ displayName: "Form Structural Settings", type: "Docs Link", filePath: "zap/molecules/forms/page.tsx" }}>
+                
                     <div className="space-y-6">
-                        <h4 className="text-label-small text-transform-primary font-display font-bold text-on-surface-variant text-transform-secondary tracking-wider uppercase">Sandbox Variables</h4>
+ <h4 className="text-label-small text-transform-primary font-display font-bold text-on-surface-variant text-transform-secondary tracking-wider ">Sandbox Variables</h4>
 
                         <div className="space-y-4">
                             <div className="space-y-2">
-                                <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary uppercase">
+ <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary ">
                                     <span>--form-item-gap</span>
                                     <span className="font-bold">{gap[0]}px</span>
                                 </div>
@@ -71,7 +72,7 @@ export default function FormSandboxPage() {
                             </div>
 
                             <div className="space-y-2">
-                                <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary uppercase">
+ <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary ">
                                     <span>--input-height</span>
                                     <span className="font-bold">{inputHeight[0]}px</span>
                                 </div>
@@ -79,7 +80,7 @@ export default function FormSandboxPage() {
                             </div>
 
                             <div className="space-y-2">
-                                <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary uppercase">
+ <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary ">
                                     <span>--input-border-radius</span>
                                     <span className="font-bold">{inputRadius[0]}px</span>
                                 </div>
@@ -87,9 +88,9 @@ export default function FormSandboxPage() {
                             </div>
                         </div>
                     </div>
-                </Wrapper>
+                
             </div>
-        </Wrapper>
+        
     );
     return (
         <ComponentSandboxTemplate
@@ -113,24 +114,21 @@ export default function FormSandboxPage() {
                 "All spacings bind dynamically via CSS variables (e.g. var(--form-item-gap))."
             ]}
         >
-            <div
-                className="w-full space-y-12 animate-in fade-in duration-500 pb-16"
-                style={Object.assign({}, {
-                    '--form-item-gap': `${gap[0]}px`,
-                    '--input-height': `${inputHeight[0]}px`,
-                    '--input-border-radius': `${inputRadius[0]}px`
-                } as React.CSSProperties)}
-            >
-                <section className="space-y-6">
-                    <Wrapper identity={{ displayName: "Section Header", type: "Header", filePath: "zap/molecules/forms/page.tsx" }} className="w-fit inline-block">
+            
+            <CanvasBody flush={false}>
+                <CanvasBody.Section>
+                    <SectionHeader number="1" id="forms" title="Form Architecture Sandbox" description="Interactive components for Form Architecture" icon="widgets" />
+                    <CanvasBody.Demo className="w-full space-y-12 animate-in fade-in duration-500 pb-16">
+                <div className="space-y-6">
+                    
                         <div className="flex items-center justify-start gap-2 text-on-surface-variant text-transform-secondary pb-2 px-2">
                             <Icon name="design_services" size={14} className="opacity-60" />
-                            <h3 className="font-display text-titleSmall tracking-tight text-transform-primary uppercase">React Hook Form Assembly</h3>
+ <h3 className="font-display text-titleSmall tracking-tight text-transform-primary ">React Hook Form Assembly</h3>
                         </div>
-                    </Wrapper>
+                    
 
                     <div className="bg-layer-panel rounded-[24px] border border-outline-variant/50 p-8 md:p-12 relative overflow-hidden">
-                        <Wrapper identity={{ displayName: "States Grid Container", type: "Container", filePath: "zap/molecules/forms/page.tsx" }}>
+                        
                             <div className="max-w-md mx-auto">
                                 <Form {...form}>
                                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -142,7 +140,7 @@ export default function FormSandboxPage() {
                                                 <FormItem>
                                                     <FormLabel>Username</FormLabel>
                                                     <FormControl>
-                                                        <Input placeholder="Enter your username" {...field} />
+                                                        <Input aria-label="Input component" placeholder="Enter your username" {...field} />
                                                     </FormControl>
                                                     <FormDescription>
                                                         This is your public display name.
@@ -159,7 +157,7 @@ export default function FormSandboxPage() {
                                                 <FormItem>
                                                     <FormLabel>Password</FormLabel>
                                                     <FormControl>
-                                                        <Input type="password" placeholder="Enter secure password" {...field} />
+                                                        <Input aria-label="Input component" type="password" placeholder="Enter secure password" {...field} />
                                                     </FormControl>
                                                     <FormDescription>
                                                         Must contain at least 8 characters.
@@ -175,7 +173,7 @@ export default function FormSandboxPage() {
                                             render={({ field }) => (
                                                 <FormItem className="flex flex-row items-center space-x-3 space-y-0 p-4 border border-outline-variant rounded-[var(--input-border-radius,8px)]">
                                                     <FormControl>
-                                                        <Checkbox
+                                                        <Checkbox aria-label="Checkbox component"
                                                             checked={field.value}
                                                             onCheckedChange={field.onChange}
                                                         />
@@ -199,10 +197,13 @@ export default function FormSandboxPage() {
                                     </form>
                                 </Form>
                             </div>
-                        </Wrapper>
+                        
                     </div>
-                </section>
-            </div>
+                </div>
+                </CanvasBody.Demo>
+                </CanvasBody.Section>
+            </CanvasBody>
+        
         </ComponentSandboxTemplate>
     );
 }

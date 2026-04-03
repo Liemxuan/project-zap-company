@@ -1,3 +1,30 @@
+# BLAST-IRONCLAD Phase 5: Hardened Docker Fleet Configuration
+# Security directives: cap_drop ALL, no-new-privileges, tmpfs bounds,
+# memory limits, and PID limits on all containers.
+
+# Shared security anchors
+x-agent-security: &agent-security
+  cap_drop:
+    - ALL
+  security_opt:
+    - no-new-privileges:true
+  tmpfs:
+    - /tmp:mode=1777,size=256m
+  mem_limit: 1g
+  pids_limit: 128
+
+x-gateway-security: &gateway-security
+  cap_drop:
+    - ALL
+  cap_add:
+    - NET_BIND_SERVICE
+  security_opt:
+    - no-new-privileges:true
+  tmpfs:
+    - /tmp:mode=1777,size=512m
+  mem_limit: 2g
+  pids_limit: 256
+
 services:
   gateway:
     image: zap-claw-agent:latest
@@ -8,6 +35,7 @@ services:
     env_file: .env
     command: ["npm", "run", "gateway"]
     restart: unless-stopped
+    <<: *gateway-security
     networks:
       - default
       - zap-net
@@ -21,6 +49,7 @@ services:
     env_file: .env
     command: ["npm", "run", "daemon"]
     restart: unless-stopped
+    <<: *gateway-security
     networks:
       - default
       - zap-net
@@ -32,6 +61,7 @@ services:
     env_file: .env
     command: ["npm", "run", "jerry"]
     restart: unless-stopped
+    <<: *agent-security
     depends_on:
       - daemon
     networks:
@@ -45,6 +75,7 @@ services:
     env_file: .env
     command: ["npm", "run", "spike"]
     restart: unless-stopped
+    <<: *agent-security
     depends_on:
       - daemon
     networks:
@@ -58,6 +89,7 @@ services:
     env_file: .env
     command: ["npm", "run", "tommy"]
     restart: unless-stopped
+    <<: *agent-security
     depends_on:
       - daemon
     networks:
@@ -70,9 +102,10 @@ services:
     container_name: zap-claw-athena
     env_file: .env
     volumes:
-      - /Users/zap/.notebooklm:/root/.notebooklm
+      - /Users/zap/.notebooklm:/root/.notebooklm:ro
     command: ["npm", "run", "athena"]
     restart: unless-stopped
+    <<: *agent-security
     depends_on:
       - daemon
     networks:
@@ -86,6 +119,7 @@ services:
     env_file: .env
     command: ["npm", "run", "hermes"]
     restart: unless-stopped
+    <<: *agent-security
     depends_on:
       - daemon
     networks:
@@ -99,6 +133,7 @@ services:
     env_file: .env
     command: ["npm", "run", "hawk"]
     restart: unless-stopped
+    <<: *agent-security
     depends_on:
       - daemon
     networks:
@@ -112,6 +147,7 @@ services:
     env_file: .env
     command: ["npm", "run", "nova"]
     restart: unless-stopped
+    <<: *agent-security
     depends_on:
       - daemon
     networks:
@@ -125,6 +161,7 @@ services:
     env_file: .env
     command: ["npm", "run", "raven"]
     restart: unless-stopped
+    <<: *agent-security
     depends_on:
       - daemon
     networks:
@@ -138,6 +175,7 @@ services:
     env_file: .env
     command: ["npm", "run", "scout"]
     restart: unless-stopped
+    <<: *agent-security
     depends_on:
       - daemon
     networks:
@@ -151,6 +189,7 @@ services:
     env_file: .env
     command: ["npm", "run", "coder"]
     restart: unless-stopped
+    <<: *agent-security
     depends_on:
       - daemon
     networks:
@@ -164,6 +203,7 @@ services:
     env_file: .env
     command: ["npm", "run", "architect"]
     restart: unless-stopped
+    <<: *agent-security
     depends_on:
       - daemon
     networks:
@@ -177,6 +217,7 @@ services:
     env_file: .env
     command: ["npm", "run", "cleo"]
     restart: unless-stopped
+    <<: *agent-security
     depends_on:
       - daemon
     networks:

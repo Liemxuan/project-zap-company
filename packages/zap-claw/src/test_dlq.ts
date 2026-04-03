@@ -16,9 +16,10 @@ async function runDLQTest() {
     console.log("\n[Test Phase 1] 🚀 Sending failing message to trigger DLQ...");
     const result = await receiveMessage({
         channel: "CLI",
-        senderIdentifier: "Tom",
         tenantId: "ZVN",
-        payload: "This is a failing message that should trigger the DLQ!"
+        sender: { id: "local_cli", username: "Tom" },
+        message: { text: "This is a failing message that should trigger the DLQ!", hasMention: true },
+        route: { threadId: "dlq_test", isDirectMessage: true, timestamp: Date.now() }
     });
 
     console.log("\n[Test Phase 1 Result]:", result);

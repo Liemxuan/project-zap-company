@@ -1,0 +1,1 @@
+/Users/zap/Workspace/olympus/rust/target/debug/gateway: /Users/zap/Workspace/olympus/rust/crates/gateway/src/main.rs /Users/zap/Workspace/olympus/rust/crates/plugins/src/lib.rs /Users/zap/Workspace/olympus/rust/crates/runtime/src/lib.rs

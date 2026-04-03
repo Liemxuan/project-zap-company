@@ -3,6 +3,8 @@
 import React, { useState } from 'react';
 import { ComponentSandboxTemplate } from '../../../../../zap/layout/ComponentSandboxTemplate';
 import { ConfigBar } from '../../../../../genesis/molecules/forms/ConfigBar';
+import { CanvasBody } from '../../../../../zap/layout/CanvasBody';
+import { SectionHeader } from '../../../../../zap/sections/SectionHeader';
 
 export default function ConfigBarPage() {
     const [isDark, setIsDark] = useState(false);
@@ -22,9 +24,12 @@ export default function ConfigBarPage() {
             filePath="genesis/molecules/forms/ConfigBar.tsx"
             importPath="@/genesis/molecules/forms/ConfigBar"
         >
-            <div className="flex flex-col gap-8 p-6">
+            <CanvasBody flush={false}>
+                <CanvasBody.Section>
+                    <SectionHeader number="1" id="config-bar" title="Config Bar Sandbox" description="Interactive components for Config Bar" icon="widgets" />
+                    <CanvasBody.Demo className="flex flex-col gap-8 p-6">
                 <div className="space-y-4">
-                    <h3 className="text-labelLarge text-on-surface font-display">Interactive</h3>
+                    <h3 className="text-labelLarge text-on-surface font-display text-transform-primary">Interactive</h3>
                     <ConfigBar
                         activeLang={lang}
                         onCycleLang={cycleLang}
@@ -35,7 +40,10 @@ export default function ConfigBarPage() {
                         Lang: {lang} | Theme: {isDark ? 'Dark' : 'Light'}
                     </p>
                 </div>
-            </div>
+                </CanvasBody.Demo>
+                </CanvasBody.Section>
+            </CanvasBody>
+        
         </ComponentSandboxTemplate>
     );
 }

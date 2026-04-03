@@ -125,7 +125,7 @@ export const TypographyInspector: React.FC<TypographyInspectorProps> = ({
     };
 
     return (
-        <div className="font-body select-none pb-20 flex flex-col gap-0">
+        <div className="font-body text-transform-secondary select-none pb-20 flex flex-col gap-0">
             {/* TEMPLATE GALLERY */}
             <Wrapper identity={{ displayName: "Template Gallery", filePath: "zap/sections/atoms/typography/inspector.tsx", type: "Molecule" }}>
                 <InspectorAccordion title="Template Gallery" icon="photo_library" defaultOpen={!activeAtom}>

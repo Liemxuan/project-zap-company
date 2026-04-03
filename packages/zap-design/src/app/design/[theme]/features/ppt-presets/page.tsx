@@ -30,7 +30,7 @@ export default function PresentationPresetsShowcase() {
             <div className="flex-1 bg-layer-base p-8 w-full overflow-y-auto">
                 <div className="max-w-6xl mx-auto space-y-12 pb-24">
                     <div className="space-y-4">
-                        <h1 className="text-4xl font-display font-bold text-foreground tracking-tight">Presentation & Marketing Presets</h1>
+                        <h1 className="text-4xl font-display text-transform-primary font-bold text-foreground tracking-tight">Presentation & Marketing Presets</h1>
                         <p className="text-muted-foreground max-w-2xl text-lg">
                             Visual starting points for autonomous generation. Select a design constraint payload to configure NotebookLM and OmniQueue agents.
                         </p>
@@ -40,7 +40,7 @@ export default function PresentationPresetsShowcase() {
                         {(Object.keys(presetsByCategory) as PresentationCategory[]).map(category => (
                             <div key={category} className="space-y-6">
                                 <div className="flex items-center gap-4">
-                                    <h2 className="text-2xl font-display font-semibold text-foreground">{category}</h2>
+                                    <h2 className="text-2xl font-display text-transform-primary font-semibold text-foreground">{category}</h2>
                                     <div className="h-px bg-outline-variant flex-1" />
                                 </div>
                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -53,7 +53,7 @@ export default function PresentationPresetsShowcase() {
                                                         ? 'border-primary ring-2 ring-primary/20 shadow-md transform scale-[1.02]' 
                                                         : 'border-outline-variant hover:border-primary/50 hover:shadow-sm'
                                                     }
-                                                `}
+                                               `}
                                             >
                                             {/* Thumbnail Preview Area */}
                                             <div 
@@ -69,7 +69,7 @@ export default function PresentationPresetsShowcase() {
                                                     }}
                                                 >
                                                     <div className="text-center space-y-2">
-                                                        <div className="font-display font-black text-2xl tracking-tighter mix-blend-overlay">Aa</div>
+                                                        <div className="font-display text-transform-primary font-black text-2xl tracking-tighter mix-blend-overlay">Aa</div>
                                                         <div className="h-1 w-8 mx-auto bg-current rounded-full opacity-50" />
                                                     </div>
                                                 </div>
@@ -115,7 +115,7 @@ export default function PresentationPresetsShowcase() {
                                 <div className="flex items-center gap-2">
                                     <span className="inline-flex items-center rounded-sm border px-2.5 py-0.5 text-[10px] uppercase font-bold tracking-wider">{selectedPreset.category}</span>
                                 </div>
-                                <h3 className="text-2xl font-display font-bold text-foreground">{selectedPreset.title}</h3>
+                                <h3 className="text-2xl font-display text-transform-primary font-bold text-foreground">{selectedPreset.title}</h3>
                                 <p className="text-sm text-muted-foreground">{selectedPreset.description}</p>
                             </div>
 
@@ -126,7 +126,7 @@ export default function PresentationPresetsShowcase() {
                                         <Icon name="chat" size={14} /> Swarm Base Prompt
                                     </h4>
                                     <div className="p-3 bg-layer-base rounded border border-outline-variant/30">
-                                        <p className="text-xs font-mono text-muted-foreground leading-relaxed break-words">
+                                        <p className="text-xs font-mono text-transform-tertiary text-muted-foreground leading-relaxed break-words">
                                             &quot;{selectedPreset.basePrompt}&quot;
                                         </p>
                                     </div>
@@ -141,7 +141,7 @@ export default function PresentationPresetsShowcase() {
                                 <div className="space-y-4">
                                     {Object.entries(selectedPreset.style_guidelines).map(([key, value]) => (
                                         <div key={key} className="space-y-1.5">
-                                            <div className="text-[10px] uppercase font-dev text-primary/80 font-bold">{key.replace('_', ' ')}</div>
+ <div className="text-[10px] font-dev text-transform-tertiary text-primary/80 font-bold">{key.replace('_', ' ')}</div>
                                             <div className="text-sm text-foreground/90 leading-relaxed p-2.5 bg-layer-base rounded border border-outline-variant/20 shadow-inner">
                                                 {value as string}
                                             </div>

@@ -1,10 +1,13 @@
 'use client';
 
+import { CanvasBody } from '../../../../../zap/layout/CanvasBody';
+import { SectionHeader } from '../../../../../zap/sections/SectionHeader';
 import React, { useState } from 'react';
 import { parseCssToNumber } from '../../../../../lib/utils';
 import { ComponentSandboxTemplate } from '../../../../../zap/layout/ComponentSandboxTemplate';
-import { Wrapper } from '../../../../../components/dev/Wrapper';
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '../../../../../genesis/atoms/interactive/select';
 import { Slider } from '../../../../../genesis/atoms/interactive/slider';
+import { BORDER_RADIUS_TOKENS, BORDER_WIDTH_TOKENS } from '../../../../../zap/sections/atoms/foundations/schema';
 import { InputModulesShowcase } from '../../../../../zap/sections/molecules/inputs/InputModulesShowcase';
 
 export default function InputModulesV2Page() {
@@ -22,58 +25,72 @@ export default function InputModulesV2Page() {
 
     // ── L1 Inspector Controls ───────────────────────────────────────
     const inspectorControls = (
-        <Wrapper identity={{ displayName: "Inspector Controls Container", type: "Container", filePath: "zap/molecules/inputs/page.tsx" }}>
+        <>
             <div className="space-y-4">
-                <Wrapper identity={{ displayName: "Input L1 Controls", type: "Docs Link", filePath: "zap/molecules/inputs/page.tsx" }}>
+                
                     <div className="space-y-6">
-                        <h4 className="text-label-small text-transform-primary font-display font-bold text-on-surface-variant text-transform-secondary tracking-wider uppercase">L1 Foundation Controls</h4>
+ <h4 className="text-label-small text-transform-primary font-display font-bold text-on-surface-variant text-transform-secondary tracking-wider ">L1 Foundation Controls</h4>
 
                         {/* --input-border-width */}
                         <div className="space-y-2">
-                            <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary uppercase">
+ <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary ">
                                 <span>--input-border-width</span>
                                 <div className="flex items-center gap-2">
                                     <span className="font-bold">{borderWidth[0]}px</span>
                                     <span className="text-primary/60 normal-case">{sourceLabel(sourceWidth)}</span>
                                 </div>
                             </div>
-                            <Slider value={borderWidth} onValueChange={setBorderWidth} min={0} max={4} step={1} className="w-full" />
+                            <Select value={String(borderWidth[0])} onValueChange={(v) => setBorderWidth([parseInt(v, 10) || 0])}>
+                                <SelectTrigger aria-label="Select token" className="w-full">
+                                    <SelectValue placeholder="Select value" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {BORDER_WIDTH_TOKENS.map(t => <SelectItem key={t.token} value={t.value.replace(/[^0-9.]/g, '')}>{t.name} ({t.value})</SelectItem>)}
+                                </SelectContent>
+                            </Select>
                         </div>
 
                         {/* --input-border-radius */}
                         <div className="space-y-2">
-                            <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary uppercase">
+ <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary ">
                                 <span>--input-border-radius</span>
                                 <div className="flex items-center gap-2">
                                     <span className="font-bold">{borderRadius[0]}px</span>
                                     <span className="text-primary/60 normal-case">{sourceLabel(sourceRadius)}</span>
                                 </div>
                             </div>
-                            <Slider value={borderRadius} onValueChange={setBorderRadius} min={0} max={32} step={1} className="w-full" />
+                            <Select value={String(borderRadius[0])} onValueChange={(v) => setBorderRadius([parseInt(v, 10) || 0])}>
+                                <SelectTrigger aria-label="Select token" className="w-full">
+                                    <SelectValue placeholder="Select value" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {BORDER_RADIUS_TOKENS.map(t => <SelectItem key={t.token} value={t.value.replace(/[^0-9.]/g, '')}>{t.name} ({t.value})</SelectItem>)}
+                                </SelectContent>
+                            </Select>
                         </div>
 
                         {/* --input-height */}
                         <div className="space-y-2">
-                            <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary uppercase">
+ <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary ">
                                 <span>--input-height</span>
                                 <div className="flex items-center gap-2">
                                     <span className="font-bold">{inputHeight[0]}px</span>
                                     <span className="text-primary/60 normal-case">{sourceLabel(sourceHeight)}</span>
                                 </div>
                             </div>
-                            <Slider value={inputHeight} onValueChange={setInputHeight} min={28} max={56} step={2} className="w-full" />
+                            <Slider aria-label="Adjust value" value={inputHeight} onValueChange={setInputHeight} min={28} max={56} step={2} className="w-full" />
                         </div>
 
                         {/* Cascade info */}
-                        <div className="p-3 text-label-small font-dev text-on-surface-variant text-transform-secondary bg-layer-surface border border-outline-variant/50 rounded-md space-y-1">
+                        <div className="p-3 text-label-small font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary bg-layer-surface border border-outline-variant/50 rounded-md space-y-1">
                             <p><strong>L1</strong> → <code>--layer-border-*</code> (Border & Radius foundation)</p>
                             <p><strong>L4</strong> → <code>--input-border-*</code>, <code>--input-height</code> (component override)</p>
                             <p className="pt-1 text-on-surface-variant text-transform-secondary/60">Sliders seed from L4 if published, else fall through to L1 foundation values.</p>
                         </div>
                     </div>
-                </Wrapper>
+                
             </div>
-        </Wrapper>
+        </>
     );
 
     // ── Load saved values: L4 component → L1 foundation → hardcoded default ──
@@ -125,9 +142,9 @@ export default function InputModulesV2Page() {
                     'text-on-surface-variant text-transform-secondary (placeholders, hints)',
                 ],
                 typographyScales: [
-                    'font-display (section headings)',
-                    'font-body (descriptions, labels)',
-                    'font-dev (token annotations)',
+                    'font-display text-transform-primary (section headings)',
+                    'font-body text-transform-secondary (descriptions, labels)',
+                    'font-dev text-transform-tertiary (token annotations)',
                 ],
             }}
             platformConstraints={{
@@ -139,7 +156,7 @@ export default function InputModulesV2Page() {
                 'Border width cascades: --input-border-width → --layer-border-width → 1px',
                 'Border radius cascades: --input-border-radius → --layer-border-radius → 8px',
                 'Input height controlled by --input-height (default 40px).',
-                'Labels use font-body L2 typography. Section heads use Heading atoms.',
+                'Labels use font-body text-transform-secondary L2 typography. Section heads use Heading atoms.',
                 'All state text (errors, hints) uses Text atom with iso-100 scale.',
             ]}
             publishPayload={{
@@ -149,7 +166,14 @@ export default function InputModulesV2Page() {
             }}
             onLoadedVariables={handleLoadedVariables}
         >
-            <InputModulesShowcase cssVars={cssVars} />
+            <CanvasBody flush={false}>
+                <CanvasBody.Section>
+                    <SectionHeader number="1" id="inputs" title="Inputs Sandbox" description="Interactive components for Inputs" icon="widgets" />
+                    <CanvasBody.Demo className="w-full">
+                        <InputModulesShowcase cssVars={cssVars} />
+                    </CanvasBody.Demo>
+                </CanvasBody.Section>
+            </CanvasBody>
         </ComponentSandboxTemplate>
     );
 }

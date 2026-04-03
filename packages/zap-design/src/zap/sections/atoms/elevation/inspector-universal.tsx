@@ -30,7 +30,7 @@ const PropertyRow: React.FC<PropertyRowProps> = ({ label, value, unit = '', chil
                 initial={{ scale: 1.3, opacity: 0.5 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ type: 'spring', stiffness: 500, damping: 20 }}
-                className="text-[10px] font-dev font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-full min-w-[36px] text-center"
+                className="text-[10px] font-dev text-transform-tertiary font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-full min-w-[36px] text-center"
             >
                 {value}{unit}
             </motion.span>

@@ -35,7 +35,7 @@ export default async function AdminTrackerPage() {
   return (
     <div className="p-8 max-w-[1400px] mx-auto min-h-screen bg-layer-cover">
       <div className="mb-8 border-b pb-4" style={{ borderColor: 'var(--md-sys-color-outline-variant)' }}>
-        <h1 className="text-4xl font-black tracking-tight font-display">Olympus Mission Control</h1>
+        <h1 className="text-4xl font-black tracking-tight font-display text-transform-primary">Olympus Mission Control</h1>
         <p className="mt-2 text-sm" style={{ color: 'var(--md-sys-color-on-surface-variant)' }}>
           Real-time Database Tracker for B2B SaaS Ecosystem
         </p>
@@ -66,14 +66,14 @@ export default async function AdminTrackerPage() {
               <TableBody>
                 {personas.map((p) => (
                   <TableRow key={p.id}>
-                    <TableCell className="font-mono">{p.name}</TableCell>
+                    <TableCell className="font-mono text-transform-tertiary">{p.name}</TableCell>
                     <TableCell>{p.sector || 'UNIVERSAL'}</TableCell>
                     <TableCell>
                       <span className="px-2 py-1 rounded-full text-xs" style={{ backgroundColor: 'var(--md-sys-color-primary-container)', color: 'var(--md-sys-color-on-primary-container)' }}>
                         {p.status}
                       </span>
                     </TableCell>
-                    <TableCell className="font-mono text-xs text-muted-foreground truncate max-w-[150px]">{p.system_prompt || 'N/A'}</TableCell>
+                    <TableCell className="font-mono text-transform-tertiary text-xs text-muted-foreground truncate max-w-[150px]">{p.system_prompt || 'N/A'}</TableCell>
                     <TableCell className="text-xs whitespace-nowrap">{new Date(p.created_at).toUTCString()}</TableCell>
                     <TableCell className="text-xs whitespace-nowrap">{new Date(p.updated_at).toUTCString()}</TableCell>
                   </TableRow>
@@ -139,7 +139,7 @@ export default async function AdminTrackerPage() {
                 {subscriptions.map((s) => (
                   <TableRow key={s.id}>
                     <TableCell>{s.tenants.slug}</TableCell>
-                    <TableCell className="font-mono">{s.ai_personas.name}</TableCell>
+                    <TableCell className="font-mono text-transform-tertiary">{s.ai_personas.name}</TableCell>
                     <TableCell>{s.billing_cycle}</TableCell>
                     <TableCell>{s.status}</TableCell>
                     <TableCell className="text-xs whitespace-nowrap">{new Date(s.created_at).toUTCString()}</TableCell>
@@ -207,7 +207,7 @@ export default async function AdminTrackerPage() {
                 {interactions.map((i) => (
                   <TableRow key={i.id}>
                     <TableCell>User {i.users?.id.substring(0,8)}</TableCell>
-                    <TableCell className="font-mono">{i.ai_personas.name}</TableCell>
+                    <TableCell className="font-mono text-transform-tertiary">{i.ai_personas.name}</TableCell>
                     <TableCell>System Log</TableCell>
                     <TableCell>{Number(i.tokens_used).toLocaleString()}</TableCell>
                     <TableCell className="text-xs whitespace-nowrap">{new Date(i.created_at).toUTCString()}</TableCell>

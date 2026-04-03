@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { Suspense } from 'react';
 import Image from 'next/image';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'; import {
     ChevronDown,
@@ -13,13 +13,14 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'; impor
     FileText,
     Database,
     Activity,
-    Orbit,
-    MessageSquare
+    Settings,
+    Plus
 } from 'lucide-react';
 import { Icon } from '../../../genesis/atoms/icons/Icon';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '../../../genesis/molecules/accordion';
 import { cn } from '../../../lib/utils';
 import Link from 'next/link';
+import { NavLink } from '../../../genesis/atoms/interactive/NavLink';
 import { useTheme, AppTheme } from '../../../components/ThemeContext';
 import { ContainerDevWrapper } from '../../../components/dev/ContainerDevWrapper';
 import { Switch } from '../../../genesis/atoms/interactive/switch';
@@ -54,9 +55,9 @@ const NAV_DATA: Category[] = [
         ]
     },
     {
-        id: 'L6', title: 'L6: Layouts (3)', icon: Columns, items: [
+        id: 'L6', title: 'L6: Layouts', icon: Columns, items: [
             { title: 'Authentication', items: ['Sign-in A', 'Sign-in B'] },
-            { title: 'Tables', items: ['system logs'] }
+            { title: 'Tables', items: ['system logs', 'Product List', 'Locations'] }
         ]
     },
     {
@@ -290,6 +291,8 @@ const getHref = (item: string, theme: string, activeWorkspaceId?: string | null,
             'Sign-in A': `/design/${theme}/organisms/signin-a`,
             'Sign-in B': `/design/${theme}/organisms/signin-b`,
             'system logs': `/design/${theme}/organisms/system-logs-layout`,
+            'Product List': `/design/${theme}/organisms/product-list`,
+            'Locations': `/design/${theme}/organisms/locations`,
 
             // L5 Organisms — use theme path
             'Data Grid': `/design/${theme}/organisms/data-grid`,
@@ -347,12 +350,23 @@ const getHref = (item: string, theme: string, activeWorkspaceId?: string | null,
             'Registry': `/design/${theme}/mission-control/swarm/registry`,
 
             // Swarm Command Center (:3500)
+            'Telemetry Monitor': '/swarm/monitor',
+            'Port Registry': '/swarm/ports',
             'Swarm Dashboard': '/swarm/',
+            'New Chat': '/swarm/chats/new',
+            'System Models': '/swarm/models',
             'Agent Roster': '/swarm/agents',
             'API Keys': '/swarm/fleet',
             'Skills Library': '/swarm/skills',
             'Active Sessions': '/swarm/sessions',
-            'Channels Matrix': '/swarm/channels',
+            'Communication': '/swarm/channels',
+            'Financial': '/swarm/payments',
+            'Cost Intelligence': '/swarm/cost',
+            'Security Posture': '/swarm/security',
+            'Execution History': '/swarm/execution',
+            'Audit Log': '/swarm/approvals',
+            'Swarm Jobs': '/swarm/jobs',
+            'Tools': '/swarm/tools',
         };
         finalPath = map[item] || '';
     }
@@ -393,11 +407,76 @@ const getHref = (item: string, theme: string, activeWorkspaceId?: string | null,
     return finalPath;
 };
 
+import zapLogo from '../../../../public/zap-logo.png';
+
+const SwarmChatNavBody = ({ currentPath }: { currentPath: string }) => {
+    const [sessions, setSessions] = React.useState<any[]>([]);
+    const searchParams = useSearchParams();
+    const agentId = searchParams?.get('agent');
+    
+    React.useEffect(() => {
+        let mounted = true;
+        const fetchSessions = () => {
+            const url = agentId ? `/api/swarm/sessions?agent=${agentId}` : '/api/swarm/sessions';
+            fetch(url)
+                .then(res => res.json())
+                .then(data => {
+                    if(mounted && data.success) setSessions(data.sessions || []);
+                })
+                .catch(() => {});
+        };
+        fetchSessions();
+        const interval = setInterval(fetchSessions, 5000);
+        return () => { mounted = false; clearInterval(interval); };
+    }, [agentId]);
+
+
+    const getStatusTheme = (status: string) => {
+        if (status === 'COMPLETED') return "bg-state-success";
+        if (status === 'PENDING') return "bg-state-warning";
+        if (status === 'RUNNING') return "bg-primary";
+        return "bg-outline/20";
+    };
+
+    return (
+        <div className="flex flex-col space-y-2 w-full">
+            <Link href="/chats/new" className="w-full mb-2 block">
+                <div className="flex items-center gap-2 px-3 py-2.5 rounded-md transition-colors w-full overflow-hidden bg-primary/10 border border-primary/10 text-primary hover:bg-primary/20 group justify-center">
+                    <Plus size={14} className="group-hover:scale-110 transition-transform" /> 
+                    <span className="font-medium text-xs tracking-widest uppercase">NEW CHAT</span>
+                </div>
+            </Link>
+            
+            <div className="flex flex-col gap-0.5">
+                {sessions.map(s => {
+                    const isActive = currentPath === `/chats/${s.id}` || currentPath.endsWith(s.id);
+                    return (
+                        <Link 
+                            key={s.id} 
+                            href={`/chats/${s.id}`}
+                            className={cn(
+                                "flex items-center gap-2.5 px-3 py-2 rounded-md transition-colors w-full overflow-hidden",
+                                isActive ? "bg-primary/5 text-primary" : "hover:bg-on-surface/5 text-on-surface-variant font-medium",
+                                isActive ? "border-none" : "border-none"
+                            )}
+                        >
+                            <div className={cn("shrink-0 size-[5px] rounded-full", getStatusTheme(s.status))} />
+                            <span className={cn("font-display text-[10px] tracking-widest uppercase truncate flex-1 leading-tight", isActive ? "font-bold" : "font-semibold opacity-70")}>
+                                {s.title || (s.id.startsWith('chat_') ? s.id.toUpperCase() : s.id)}
+                            </span>
+                        </Link>
+                    )
+                })}
+            </div>
+        </div>
+    );
+};
+
 export interface SideNavProps {
     showDevWrapper?: boolean;
 }
 
-export const SideNav: React.FC<SideNavProps> = ({ showDevWrapper = false }) => {
+const SideNavContent: React.FC<SideNavProps> = ({ showDevWrapper = false }) => {
     const { theme, setTheme, devMode, setDevMode, sidebarState, setSidebarState, openCategories, setOpenCategories, isThemeLocked, setIsThemeLocked } = useTheme();
     const isDev = showDevWrapper && devMode;
     const pathname = usePathname();
@@ -477,8 +556,9 @@ export const SideNav: React.FC<SideNavProps> = ({ showDevWrapper = false }) => {
             }
             if (activeWorkspaceId === 'zap-swarm') {
                 return [
-                    { id: 'swarm-telemetry', title: 'CORE TELEMETRY', icon: Activity, items: ['Swarm Dashboard'] },
-                    { id: 'swarm-deerflow', title: 'DEERFLOW COMMAND', icon: Orbit, items: ['Agent Roster', 'API Keys', 'Skills Library', 'Active Sessions', 'Channels Matrix'] }
+                    { id: 'swarm-telemetry', title: 'CORE TELEMETRY', icon: Activity, items: ['Telemetry Monitor', 'Port Registry', 'Swarm Dashboard', 'Active Sessions', 'Cost Intelligence', 'Execution History'] },
+                    { id: 'swarm-deerflow', title: 'GENERAL SETTING', icon: Settings, items: ['New Chat', 'System Models', 'Agent Roster', 'API Keys', 'Skills Library', 'Communication', 'Financial', 'Tools'] },
+                    { id: 'swarm-security', title: 'SECURITY & OPS', icon: Database, items: ['Security Posture', 'Audit Log', 'Swarm Jobs'] }
                 ];
             }
 
@@ -636,60 +716,60 @@ export const SideNav: React.FC<SideNavProps> = ({ showDevWrapper = false }) => {
             onMouseLeave={() => setIsHovered(false)}
             data-region="sidebar"
             className={cn(
-                "group/sidebar relative flex flex-col h-full bg-layer-panel border-r border-black text-on-surface text-transform-primary transition-all duration-300 ease-in-out z-[100]",
+                "group/sidebar relative flex flex-col h-full bg-layer-panel border-r border-outline/5 text-on-surface text-transform-primary transition-all duration-300 ease-in-out z-[100]",
                 isMinified && !isPeeking ? "w-[72px]" : "w-[280px]",
                 isPeeking && "shadow-2xl translate-x-0"
             )}
         >
-            {/* Edge Toggle Icon - Metronic Reference */}
-            <button
-                onClick={toggleSidebar}
-                title={isExpanded ? "Collapse Sidebar" : "Expand Sidebar"}
-                className={cn(
-                    "absolute -right-2.5 top-3.5 z-[200] w-5 h-5 bg-transparent text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/50 border border-outline rounded-[var(--button-border-radius,8px)] flex items-center justify-center hover:scale-110 active:scale-95 transition-all duration-200 outline-none",
-                    !isExpanded && "opacity-0 group-hover/sidebar:opacity-100"
-                )}
-            >
-                <div className="flex items-center justify-center w-full h-full">
-                    <motion.div
-                        animate={{ rotate: isExpanded ? 0 : 180 }}
-                        transition={{ duration: 0.3, ease: "easeInOut" }}
-                        className="flex items-center justify-center translate-x-[-0.5px]"
-                    >
-                        <Icon name="chevron_left" size={14} weight={700} />
-                    </motion.div>
-                </div>
-            </button>
-
-            {/* Top Logo Area - Aligned to MetroHeader (50px) */}
             <div className={cn(
-                "h-[50px] flex items-center shrink-0 w-full overflow-hidden transition-all duration-300 border-b border-outline/10 gap-3 bg-layer-base/50 backdrop-blur-md relative z-20",
-                effectivelyExpanded ? "px-4" : "px-0 justify-center"
+                "h-[50px] flex items-center shrink-0 w-full overflow-hidden transition-all duration-300 border-b border-outline/10 bg-layer-base/50 backdrop-blur-md relative z-20",
+                effectivelyExpanded ? "px-6 justify-between" : "px-0 justify-center"
             )}>
-                <Image
-                    src="/zap-logo.png"
-                    alt="ZAP Logo"
-                    width={effectivelyExpanded ? 32 : 40}
-                    height={effectivelyExpanded ? 32 : 40}
-                    className="cursor-pointer hover:scale-110 transition-transform shrink-0"
-                    priority
-                />
-                <AnimatePresence>
-                    {effectivelyExpanded && (
+                <div className="flex items-center gap-3">
+                    <Image
+                        src={zapLogo}
+                        alt="ZAP Logo"
+                        width={effectivelyExpanded ? 32 : 40}
+                        height={effectivelyExpanded ? 32 : 40}
+                        className="cursor-pointer hover:scale-110 transition-transform shrink-0 object-contain"
+                        priority
+                    />
+                    <AnimatePresence>
+                        {effectivelyExpanded && (
+                            <motion.div
+                                initial={{ opacity: 0, width: 0 }}
+                                animate={{ opacity: 1, width: "auto" }}
+                                exit={{ opacity: 0, width: 0 }}
+                                className="overflow-hidden pointer-events-auto"
+                            >
+                                <QuickNavigate className="bg-transparent border-none shadow-none text-on-surface hover:bg-on-surface/5" />
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                </div>
+
+                {effectivelyExpanded && (
+                    <button
+                        onClick={toggleSidebar}
+                        title={isExpanded ? "Collapse Sidebar" : "Expand Sidebar"}
+                        className="px-1 py-0.5 text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/50 border border-outline rounded-[4px] flex items-center justify-center hover:scale-110 active:scale-95 transition-all duration-200 outline-none"
+                    >
                         <motion.div
-                            initial={{ opacity: 0, width: 0 }}
-                            animate={{ opacity: 1, width: "auto" }}
-                            exit={{ opacity: 0, width: 0 }}
-                            className="flex-1 overflow-hidden pointer-events-auto"
+                            animate={{ rotate: isExpanded ? 0 : 180 }}
+                            transition={{ duration: 0.3, ease: "easeInOut" }}
+                            className="flex items-center justify-center"
                         >
-                            <QuickNavigate className="w-full bg-transparent border-none shadow-none text-on-surface hover:bg-on-surface/5" />
+                            <Icon name="chevron_left" size={12} weight={700} />
                         </motion.div>
-                    )}
-                </AnimatePresence>
+                    </button>
+                )}
             </div>
 
             {/* Navigation List */}
-            <div className="flex-1 overflow-y-auto scrollbar-hide py-4 px-3 space-y-1">
+            <div className="flex-1 overflow-y-auto scrollbar-hide py-4 px-6 space-y-1">
+                {(mounted && activeWorkspaceId === 'zap-swarm' && pathname && pathname.startsWith('/chats')) ? (
+                    <SwarmChatNavBody currentPath={pathname} />
+                ) : (
                 <Accordion
                     type="multiple"
                     value={Object.keys(openCategories).filter(k => openCategories[k] && effectivelyExpanded)}
@@ -707,7 +787,21 @@ export const SideNav: React.FC<SideNavProps> = ({ showDevWrapper = false }) => {
                     {mounted && EFFECTIVE_NAV.map((category) => {
                         const hasItems = category.items.length > 0;
                         const IconComp = category.icon;
-                        const isActive = isActiveLevel(category.id);
+                        
+                        let isActive = false;
+                        if (mounted && activeHref) {
+                            for (const item of category.items) {
+                                if (typeof item === 'string') {
+                                    const href = getHref(item, theme, activeWorkspaceId, currentPort);
+                                    if (href && href === activeHref) isActive = true;
+                                } else {
+                                    for (const subItem of item.items) {
+                                        const href = getHref(subItem, theme, activeWorkspaceId, currentPort);
+                                        if (href && href === activeHref) isActive = true;
+                                    }
+                                }
+                            }
+                        }
 
                         return (
                             <AccordionItem key={category.id} value={category.id} className="border-none w-full">
@@ -718,10 +812,16 @@ export const SideNav: React.FC<SideNavProps> = ({ showDevWrapper = false }) => {
                                         }
                                     }}
                                     className={cn(
-                                        !effectivelyExpanded ? "justify-center py-3 px-0 h-11" : "",
-                                        isActive && effectivelyExpanded ? "bg-primary/10 text-on-surface ring-1 ring-primary/20" : "",
-                                        isActive && !effectivelyExpanded ? "bg-primary/10 text-primary ring-1 ring-primary/20" : ""
+                                        !effectivelyExpanded ? "justify-center py-3 px-0 h-11" : "px-2 py-2 gap-3 transition-all duration-300",
+                                        isActive && effectivelyExpanded ? "bg-primary/10 text-on-surface" : "hover:bg-on-surface/5 text-on-surface-variant",
+                                        isActive && !effectivelyExpanded ? "bg-primary/10 text-primary" : ""
                                     )}
+                                    style={{
+                                        borderRadius: 'var(--navlink-border-radius, 8px)',
+                                        borderWidth: 'var(--navlink-border-width, 0px)',
+                                        borderStyle: 'solid',
+                                        borderColor: isActive ? 'var(--color-primary-container)' : 'transparent',
+                                    }}
                                 >
                                     <div className="flex items-center gap-3 overflow-hidden text-left flex-1 min-w-0">
                                         <IconComp
@@ -754,24 +854,14 @@ export const SideNav: React.FC<SideNavProps> = ({ showDevWrapper = false }) => {
                                                     const isItemActive = mounted && href !== '' && href === activeHref;
 
                                                     return (
-                                                        <Link
+                                                        <NavLink
                                                             key={`str-${item}`}
                                                             href={href || '#'}
-                                                            data-sidebar-active={isItemActive}
-                                                            className={cn(
-                                                                "relative block py-[5px] px-3 rounded-md text-bodyMedium transition-all duration-300 outline-none font-body text-transform-secondary tracking-tight",
-                                                                isItemActive
-                                                                    ? "bg-primary-container text-on-primary-container font-bold shadow-[var(--md-sys-elevation-level1)]"
-                                                                    : "text-on-surface-variant opacity-70 hover:text-on-surface hover:bg-on-surface/5 group-hover/navlist:opacity-40 hover:!opacity-100"
-                                                            )}
+                                                            isActive={isItemActive}
+                                                            variant="default"
                                                         >
-                                                            {isItemActive && (
-                                                                <div
-                                                                    className="absolute left-[-16px] top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-primary shadow-[0_0_8px_rgba(var(--sys-color-primary-rgb),0.6)]"
-                                                                />
-                                                            )}
                                                             {item}
-                                                        </Link>
+                                                        </NavLink>
                                                     );
                                                 } else {
                                                     return (
@@ -811,46 +901,37 @@ export const SideNav: React.FC<SideNavProps> = ({ showDevWrapper = false }) => {
                                                                             const href = getHref(subItem, theme, activeWorkspaceId, currentPort, pathname);
                                                                             const isItemActive = mounted && href !== '' && href === activeHref;
                                                                             return (
-                                                                                <Link
+                                                                                <NavLink
                                                                                     href={href || '#'}
                                                                                     key={subItem}
-                                                                                    data-sidebar-active={isItemActive}
-                                                                                    className={cn(
-                                                                                        "relative block py-1.5 px-3 -ml-3 rounded-md text-[12px] transition-all duration-300 outline-none font-body text-transform-secondary",
-                                                                                        isItemActive
-                                                                                            ? "bg-primary-container text-on-primary-container font-bold border border-primary-container shadow-[var(--md-sys-elevation-level1)]"
-                                                                                            : "text-on-surface-variant opacity-60 hover:text-on-surface hover:bg-on-surface/5 group-hover/navlist:opacity-40 hover:!opacity-100"
-                                                                                    )}
+                                                                                    isActive={isItemActive}
+                                                                                    variant="default"
                                                                                 >
-                                                                                    {isItemActive && (
-                                                                                        <motion.div
-                                                                                            layoutId="sidebar-active-indicator"
-                                                                                            className="absolute left-[-17px] top-1/2 -translate-y-1/2 w-1 h-1 rounded-full bg-primary shadow-[0_0_6px_rgba(var(--sys-color-primary-rgb),0.5)]"
-                                                                                        />
-                                                                                    )}
                                                                                     {subItem}
-                                                                                </Link>
+                                                                                </NavLink>
                                                                             );
                                                                         })}
                                                                     </motion.div>
                                                                 )}
                                                             </AnimatePresence>
                                                         </div>
-                                                    );
-                                                }
-                                            })}
-                                        </div>
-                                    </AccordionContent>
-                                )}
-                            </AccordionItem>
-                        );
-                    })}
-                </Accordion>
+
+                                                        );
+                                                    }
+                                                })}
+                                            </div>
+                                        </AccordionContent>
+                                    )}
+                                </AccordionItem>
+                            );
+                        })}
+                    </Accordion>
+                )}
             </div>
 
-            {/* Footer Area */}
+            {/* Bottom Footer Area */}
             {effectivelyExpanded && (
-                <div className="mt-auto px-6 pb-3 pt-3 flex flex-col gap-3 bg-transparent border-t border-black">
+                <div className="mt-auto px-6 pb-3 pt-3 flex flex-col gap-3 bg-transparent border-t border-outline/5">
                     {/* Theme Switcher */}
                     <div className="flex w-full bg-layer-dialog border border-outline-variant/50 rounded-[var(--button-border-radius,9999px)] p-1 shadow-inner gap-0.5">
                         <Button
@@ -942,9 +1023,8 @@ export const SideNav: React.FC<SideNavProps> = ({ showDevWrapper = false }) => {
     return content;
 };
 
-
-
-function isActiveLevel(id: string) {
-    return ['SYS', 'LAB', 'L1', 'L2'].includes(id);
-}
-
+export const SideNav: React.FC<SideNavProps> = (props) => (
+    <Suspense fallback={<div className="w-[72px] h-full bg-layer-panel border-r border-black shrink-0" />}>
+        <SideNavContent {...props} />
+    </Suspense>
+);

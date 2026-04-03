@@ -8,3 +8,26 @@
   background-position: right 1rem top 50%;
   background-size: 0.65rem auto;
 }
+
+/* Markdown body — code block background adapts to Metro theme layers */
+.markdown-body pre,
+.markdown-body .react-syntax-highlighter-line-number {
+  background: var(--layer-cover, #1e1e2e) !important;
+}
+
+/* Markdown body — inline code contrast */
+.markdown-body :not(pre) > code {
+  background: var(--layer-cover, #1e1e2e);
+  color: var(--on-surface, #e0e0e0);
+}
+
+/* Markdown body — table row striping */
+.markdown-body tbody tr:nth-child(even) {
+  background: var(--layer-cover, #1e1e2e);
+}
+
+/* Markdown body — scrollbar inside code blocks */
+.markdown-body pre div {
+  scrollbar-width: thin;
+  scrollbar-color: var(--outline, #444) transparent;
+}

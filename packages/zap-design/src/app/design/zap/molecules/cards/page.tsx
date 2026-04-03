@@ -3,6 +3,8 @@
 import React from 'react';
 import { ComponentSandboxTemplate } from '../../../../../zap/layout/ComponentSandboxTemplate';
 import { CardsSection } from '../../../../../zap/sections/molecules/containment/CardsSection';
+import { CanvasBody } from '../../../../../zap/layout/CanvasBody';
+import { SectionHeader } from '../../../../../zap/sections/SectionHeader';
 
 export default function CardsPage() {
     return (
@@ -33,9 +35,16 @@ export default function CardsPage() {
                 'Never use bg-surface-container directly — use bg-layer-panel for elevation control.',
             ]}
         >
-            <div className="w-full flex flex-col gap-8 py-8">
+            
+            <CanvasBody flush={false}>
+                <CanvasBody.Section>
+                    <SectionHeader number="1" id="cards" title="Cards Sandbox" description="Interactive components for Cards" icon="widgets" />
+                    <CanvasBody.Demo className="w-full flex flex-col gap-8 py-8">
                 <CardsSection />
-            </div>
+                </CanvasBody.Demo>
+                </CanvasBody.Section>
+            </CanvasBody>
+        
         </ComponentSandboxTemplate>
     );
 }

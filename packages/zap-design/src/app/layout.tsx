@@ -76,7 +76,7 @@ const spaceMono = Space_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ZAP Design Engine",
+  title: "ZAP Design",
   description: "The 7-Level Atomic React Factory for ZAP OS",
 };
 

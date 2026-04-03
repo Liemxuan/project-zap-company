@@ -1,129 +1,133 @@
 'use client';
-import { parseCssToNumber } from '../../../../../lib/utils';
 
 import React, { useState } from 'react';
 import { ComponentSandboxTemplate } from '../../../../../zap/layout/ComponentSandboxTemplate';
-import { Slider } from '../../../../../genesis/atoms/interactive/slider';
 import { Separator } from '../../../../../genesis/atoms/interactive/separator';
-import { Wrapper } from '../../../../../components/dev/Wrapper';
+import { Icon } from '../../../../../genesis/atoms/icons/Icon';
+import { cn } from '../../../../../lib/utils';
+import { CanvasBody } from '../../../../../zap/layout/CanvasBody';
+import { SectionHeader } from '../../../../../zap/sections/SectionHeader';
 
-export default function SeparatorSandbox() {
-    // Dynamic Properties State
-    const [thickness, setThickness] = useState([1]);
-    const [width, setWidth] = useState([100]);
-            const handleLoadedVariables = (variables: Record<string, string>) => {
-                if (variables['--separator-thickness']) setThickness([parseCssToNumber(variables['--separator-thickness'])]);
-                            if (variables['--separator-width']) setWidth([parseCssToNumber(variables['--separator-width'])]);
-            };
-        
+export default function SeparatorSandboxPage() {
+    const [thickness, setThickness] = useState('1px');
+    const [width, setWidth] = useState('100%');
+
     const inspectorControls = (
-        <Wrapper identity={{ displayName: "Inspector Controls Container", type: "Container", filePath: "zap/atoms/separator/page.tsx" }}>
-            <div className="space-y-4">
-                <Wrapper identity={{ displayName: "Separator Structural Settings", type: "Docs Link", filePath: "zap/atoms/separator/page.tsx" }}>
-                    <div className="space-y-6">
-                        <h4 className="text-label-small text-transform-primary font-display font-bold text-muted-foreground tracking-wider uppercase">Sandbox Variables</h4>
-
-                        <div className="space-y-4">
-                            <div className="space-y-2">
-                                <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-muted-foreground uppercase">
-                                    <span>--separator-thickness</span>
-                                    <span className="font-bold">{thickness[0]}px</span>
-                                </div>
-                                <Slider value={thickness} onValueChange={setThickness} min={1} max={10} step={1} className="w-full" />
-                            </div>
-
-                            <div className="space-y-2">
-                                <div className="flex justify-between items-center text-label-small font-dev text-transform-tertiary text-muted-foreground uppercase">
-                                    <span>--separator-width</span>
-                                    <span className="font-bold">{width[0]}%</span>
-                                </div>
-                                <Slider value={width} onValueChange={setWidth} min={10} max={100} step={5} className="w-full" />
-                            </div>
-                        </div>
+        <div className="space-y-6">
+            <div className="space-y-4 pb-4 border-b border-border/50">
+                <h4 className="text-label-small text-transform-primary font-display font-bold text-muted-foreground tracking-wider uppercase">Foundation Tokens</h4>
+                
+                <div className="space-y-4">
+                    <div className="space-y-1.5">
+                        <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Stroke Thickness</label>
+                        <select 
+                            className="w-full bg-layer-panel border border-border/50 rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-primary"
+                            value={thickness}
+                            onChange={(e) => setThickness(e.target.value)}
+                        >
+                            {['1px', '2px', '4px', '6px', '8px'].map(s => (
+                                <option key={s} value={s}>{s}</option>
+                            ))}
+                        </select>
                     </div>
-                </Wrapper>
+                    <div className="space-y-1.5">
+                        <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Spanning Width</label>
+                        <select 
+                            className="w-full bg-layer-panel border border-border/50 rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-primary"
+                            value={width}
+                            onChange={(e) => setWidth(e.target.value)}
+                        >
+                            {['25%', '50%', '75%', '100%'].map(s => (
+                                <option key={s} value={s}>{s}</option>
+                            ))}
+                        </select>
+                    </div>
+                </div>
             </div>
-        </Wrapper>
+        </div>
     );
+
+    const handleLoadedVariables = (variables: Record<string, string>) => {
+        if (variables['--separator-thickness']) setThickness(variables['--separator-thickness']);
+        if (variables['--separator-width']) setWidth(variables['--separator-width']);
+    };
+
     return (
         <ComponentSandboxTemplate
             componentName="Separator"
             tier="L3 ATOM"
-            status="Beta"
-            importPath="@/components/ui/separator"
-            filePath="src/components/ui/separator.tsx"
+            status="Verified"
+            filePath="src/genesis/atoms/interactive/separator.tsx"
+            importPath="@/genesis/atoms/interactive/separator"
             inspectorControls={inspectorControls}
             foundationInheritance={{
-                colorTokens: ['--md-sys-color-primary'],
+                colorTokens: ['--md-sys-color-outline-variant', '--md-sys-color-surface-container'],
                 typographyScales: ['--font-body']
             }}
             platformConstraints={{
-                web: "N/A",
-                mobile: "N/A"
+                web: "Accessible divider role with orientation support.",
+                mobile: "Ensure visual weight is sufficient for low-light mobile viewing."
             }}
             foundationRules={[
-                "Arbitrary Token Syntax Only."
-            ]} publishPayload={{ '--separator-thickness': thickness[0] + 'px',
-                        '--separator-width': width[0] + '%' }} onLoadedVariables={handleLoadedVariables}
+                "Separators should use --color-outline-variant by default.",
+                "Vertical separators must have an explicit height or fill container."
+            ]}
+            onLoadedVariables={handleLoadedVariables}
         >
-            <style dangerouslySetInnerHTML={{ __html: `
-                .separator-preview-sandbox {
-                    --separator-thickness: ${thickness[0]}px;
-                    --separator-width: ${width[0]}%;
-                }
-            ` }} />
-            <div
-                className="w-full space-y-12 animate-in fade-in duration-500 pb-16 separator-preview-sandbox"
-            >
-                <div className="w-full flex flex-col items-center justify-center p-12 bg-layer-panel shadow-sm border border-outline-variant rounded-[length:var(--card-border-radius,12px)] min-h-[400px]">
-                    <div className="w-full max-w-md bg-layer-dialog border border-outline-variant rounded-[length:var(--card-border-radius,12px)] shadow-xl overflow-hidden flex flex-col">
-                        
-                        <div className="p-6">
-                            <h2 className="text-title-small font-semibold text-transform-primary mb-1">ZAP Separator Atom</h2>
-                            <p className="text-body-small text-muted-foreground font-body leading-relaxed">
-                                Separators dynamically split UI content blocks. The sliders in the Inspector control the thickness and width of the dividing line below.
-                            </p>
+            <CanvasBody flush={false}>
+                <CanvasBody.Section>
+                    <SectionHeader id="interactive-preview" 
+                        number="01"
+                        title="Interactive Preview"
+                        icon="horizontal_rule"
+                        description="Live-configured divider testing orientation and L2 layer restoration."
+                    />
+                    <CanvasBody.Demo centered>
+                        <div className="w-full max-w-sm p-12 bg-layer-panel border border-border/40 shadow-xl rounded-2xl flex flex-col items-center justify-center gap-10" style={{ borderRadius: '24px' }}>
+                           <div className="w-full space-y-6 text-center">
+                               <div className="space-y-1">
+                                   <h3 className="text-titleSmall font-display font-bold text-primary">Content Block A</h3>
+                                   <p className="text-bodySmall font-body text-muted-foreground">Standardized structural divider positioning.</p>
+                               </div>
+                               <div className="flex justify-center w-full">
+                                   <Separator 
+                                       orientation="horizontal" 
+                                       style={{ 
+                                           height: thickness,
+                                           width: width,
+                                           backgroundColor: 'var(--md-sys-color-outline-variant)'
+                                       } as any}
+                                   />
+                               </div>
+                               <div className="space-y-1">
+                                   <h3 className="text-titleSmall font-display font-bold text-primary">Content Block B</h3>
+                                   <p className="text-bodySmall font-body text-muted-foreground">Visual containment strategy enabled.</p>
+                               </div>
+                           </div>
                         </div>
+                    </CanvasBody.Demo>
+                </CanvasBody.Section>
 
-                        {/* Horizontal Sandbox Separator */}
-                        <Separator 
-                            orientation="horizontal"
-                            style={Object.assign({}, {
-                                height: 'var(--separator-thickness)',
-                                width: 'var(--separator-width)',
-                                margin: '0 auto'
-                            })}
-                        />
-
-                        <div className="p-6 flex items-center justify-center gap-6 h-20 text-body-small font-medium text-on-surface-variant font-display bg-layer-surface/50">
-                            <span className="hover:text-primary cursor-pointer transition-colors">Tokens</span>
-
-                            {/* Vertical Sandbox Separator */}
-                            <Separator 
-                                orientation="vertical"
-                                className="h-full"
-                                style={Object.assign({}, {
-                                    width: 'var(--separator-thickness)'
-                                })}
-                            />
-
-                            <span className="hover:text-primary cursor-pointer transition-colors">Layouts</span>
-
-                            {/* Vertical Sandbox Separator */}
-                            <Separator 
-                                orientation="vertical"
-                                className="h-full"
-                                style={Object.assign({}, {
-                                    width: 'var(--separator-thickness)'
-                                })}
-                            />
-
-                            <span className="hover:text-primary cursor-pointer transition-colors">Components</span>
+                <CanvasBody.Section className="pb-16">
+                    <SectionHeader id="directional-matrix" 
+                        number="02"
+                        title="Directional Matrix"
+                        icon="splitscreen"
+                        description="Comparative orientation testing including vertical spanning."
+                    />
+                    <CanvasBody.Demo>
+                        <div className="w-full max-w-2xl bg-layer-panel border border-border/40 rounded-xl p-8 flex flex-col gap-8 shadow-md">
+                            <div className="flex items-center justify-center gap-8 h-12 bg-layer-surface/50 rounded-lg border border-border/10">
+                                <span className="text-labelSmall font-body text-primary uppercase tracking-widest">Metadata</span>
+                                <Separator orientation="vertical" className="h-6" style={{ width: thickness, backgroundColor: 'var(--md-sys-color-outline-variant)' } as any} />
+                                <span className="text-labelSmall font-body text-primary uppercase tracking-widest">Analytics</span>
+                                <Separator orientation="vertical" className="h-6" style={{ width: thickness, backgroundColor: 'var(--md-sys-color-outline-variant)' } as any} />
+                                <span className="text-labelSmall font-body text-primary uppercase tracking-widest">Settings</span>
+                            </div>
                         </div>
-
-                    </div>
-                </div>
-            </div>
+                    </CanvasBody.Demo>
+                </CanvasBody.Section>
+            </CanvasBody>
         </ComponentSandboxTemplate>
     );
 }

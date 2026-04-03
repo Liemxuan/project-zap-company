@@ -177,7 +177,7 @@ export default function ExecutionTrackerDashboard() {
                         <div className="bg-muted/30 border rounded-xl p-4 flex gap-4 items-center justify-between">
                             <div>
                                 <div className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground mb-1">Queue Depth</div>
-                                <div className="text-2xl font-black font-dev text-transform-primary tracking-tighter">
+                                <div className="text-2xl font-black font-dev text-transform-tertiary text-transform-primary tracking-tighter">
                                     {jobs.filter(j => j.status === 'PENDING_MCP_DISPATCH').length} <span className="text-xs text-muted-foreground">/ {jobs.length}</span>
                                 </div>
                             </div>
@@ -262,7 +262,7 @@ export default function ExecutionTrackerDashboard() {
                                     <div className="space-y-6">
                                         <div className="space-y-1">
                                             <div className="text-[9px] font-bold uppercase text-muted-foreground tracking-widest">Target Agent Node</div>
-                                            <div className="text-xl font-black font-dev tracking-tight text-foreground">{selectedJob.assignedAgentId}</div>
+                                            <div className="text-xl font-black font-dev text-transform-tertiary tracking-tight text-foreground">{selectedJob.assignedAgentId}</div>
                                             <div className="flex gap-2 mt-2">
                                                 <Badge variant="secondary" className="text-[8px] uppercase tracking-tighter border-none bg-muted/50">{selectedJob.tenantId}</Badge>
                                                 <Badge variant="outline" className={`text-[8px] uppercase tracking-tighter border-none ${getStatusColor(selectedJob.status)}`}>{selectedJob.status}</Badge>
@@ -274,7 +274,7 @@ export default function ExecutionTrackerDashboard() {
                                                 MCP Dispatch Payload
                                             </div>
                                             <div className="bg-[#050505] rounded-xl p-3 border border-border/10 shadow-inner overflow-x-auto relative group">
-                                                <pre className="text-[10px] font-dev text-[#14FF00] leading-relaxed tracking-wide opacity-90">
+                                                <pre className="text-[10px] font-dev text-transform-tertiary text-[#14FF00] leading-relaxed tracking-wide opacity-90">
                                                     {JSON.stringify(selectedJob.payload, null, 2)}
                                                 </pre>
                                             </div>
@@ -304,7 +304,7 @@ export default function ExecutionTrackerDashboard() {
                         background: var(--border);
                         border-radius: 10px;
                     }
-               `}</style>
+              `}</style>
             </div>
         </AppShell>
     );

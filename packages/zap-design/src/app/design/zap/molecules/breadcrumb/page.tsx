@@ -2,10 +2,11 @@
 
 import React, { useState } from 'react';
 import { ComponentSandboxTemplate } from '../../../../../zap/layout/ComponentSandboxTemplate';
-import { Wrapper } from '../../../../../components/dev/Wrapper';
 
 import { Breadcrumbs } from '../../../../../genesis/molecules/navigation/Breadcrumbs';
 import { Slider } from '../../../../../genesis/atoms/interactive/slider';
+import { CanvasBody } from '../../../../../zap/layout/CanvasBody';
+import { SectionHeader } from '../../../../../zap/sections/SectionHeader';
 
 export default function BreadcrumbsSandboxPage() {    const [gap, setGap] = useState([6]);
     const [iconSize, setIconSize] = useState([12]);
@@ -13,9 +14,9 @@ export default function BreadcrumbsSandboxPage() {    const [gap, setGap] = useS
 
     // Fetch initial settings
     const inspectorControls = (
-        <Wrapper identity={{ displayName: "Inspector Controls Container", type: "Container", filePath: "zap/molecules/breadcrumb" }}>
+        
             <div className="space-y-4">
-                <Wrapper identity={{ displayName: "Breadcrumbs Structural Settings", type: "Docs Link", filePath: "zap/molecules/breadcrumb/page.tsx" }}>
+                
                     <div className="space-y-6">
                         <h4 className="text-label-small text-transform-primary font-display font-bold text-on-surface-variant text-transform-secondary tracking-wider">Sandbox Variables</h4>
 
@@ -45,9 +46,9 @@ export default function BreadcrumbsSandboxPage() {    const [gap, setGap] = useS
                             </div>
                         </div>
                     </div>
-                </Wrapper>
+                
             </div>
-        </Wrapper>
+        
     );
     return (
         <ComponentSandboxTemplate
@@ -64,14 +65,11 @@ export default function BreadcrumbsSandboxPage() {    const [gap, setGap] = useS
             platformConstraints={{ web: "N/A", mobile: "N/A" }}
             foundationRules={[]}
         >
-            <div 
-                className="w-full p-12 bg-layer-panel shadow-sm border border-outline-variant rounded-xl flex items-center justify-center min-h-[200px] animate-in fade-in duration-500 pb-16"
-                style={Object.assign({}, {
-                    '--breadcrumb-gap': `${gap[0]}px`,
-                    '--breadcrumb-icon-size': `${iconSize[0]}px`,
-                    '--breadcrumb-padding': `${padding[0]}px`
-                } as React.CSSProperties)}
-            >
+            
+            <CanvasBody flush={false}>
+                <CanvasBody.Section>
+                    <SectionHeader number="1" id="breadcrumb" title="Breadcrumbs Sandbox" description="Interactive components for Breadcrumbs" icon="widgets" />
+                    <CanvasBody.Demo className="w-full p-12 bg-layer-panel shadow-sm border border-outline-variant rounded-xl flex items-center justify-center min-h-[200px] animate-in fade-in duration-500 pb-16">
                 <Breadcrumbs 
                     items={[
                         { label: 'Home' },
@@ -80,7 +78,10 @@ export default function BreadcrumbsSandboxPage() {    const [gap, setGap] = useS
                         { label: 'Breadcrumbs', active: true }
                     ]} 
                 />
-            </div>
+                </CanvasBody.Demo>
+                </CanvasBody.Section>
+            </CanvasBody>
+        
         </ComponentSandboxTemplate>
     );
 }

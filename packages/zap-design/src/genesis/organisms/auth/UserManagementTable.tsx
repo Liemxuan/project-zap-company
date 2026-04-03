@@ -154,7 +154,7 @@ export function UserManagementTable() {
       <main className="w-full flex items-center justify-center min-h-[length:var(--table-min-height,25rem)] bg-layer-canvas border-outline-variant rounded-[length:var(--radius-card,8px)] border">
         <div className="flex flex-col items-center space-y-4">
           <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full" />
-          <Text size="dev-wrapper" className="bg-transparent text-muted-foreground uppercase text-transform-tertiary">Fetching Vault Identities...</Text>
+ <Text size="dev-wrapper" className="bg-transparent text-muted-foreground text-transform-tertiary">Fetching Vault Identities...</Text>
         </div>
       </main>
     );
@@ -206,7 +206,7 @@ export function UserManagementTable() {
               <Filter className="h-4 w-4 mr-2" />
               <span className="font-display font-medium text-xs text-transform-primary">Filter</span>
               {activeFilters > 0 && (
-                <Badge className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center p-0 text-xs bg-destructive text-destructive-foreground z-20">
+                <Badge className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center p-0 text-xs rounded-full bg-error text-on-error border-none z-20">
                   {activeFilters}
                 </Badge>
               )}
@@ -389,7 +389,7 @@ export function UserManagementTable() {
             <div className="flex items-center gap-2">
               <span className="text-transform-secondary">Show</span>
               <Select defaultValue="10">
-                <SelectTrigger size="sm" className="w-20 font-medium font-body bg-layer-panel text-on-surface hover:bg-layer-dialog">
+                <SelectTrigger size="sm" className="w-20 font-medium font-body text-transform-secondary bg-layer-panel text-on-surface hover:bg-layer-dialog">
                   <SelectValue placeholder="10" />
                 </SelectTrigger>
                 <SelectContent>

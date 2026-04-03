@@ -72,3 +72,4 @@ links.csv
 # Gemini brain (agent artifacts)
 .gemini/
 .turbo/
+.gstack/

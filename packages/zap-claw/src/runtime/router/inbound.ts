@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { getOrCreateSession, appendMessage } from "./session.js";
 import { omniQueue, triageJob, QueuePriority } from "../engine/omni_queue.js";
 import { OmniPayload, LLMConfig } from "../engine/omni_router.js";
+import { passesMentionGate, resolveAgentBinding, logDLQ } from "./dispatch.js";
 
 export async function handleTelegramWebhook(req: Request, res: Response) {
     try {
@@ -22,29 +23,57 @@ export async function handleTelegramWebhook(req: Request, res: Response) {
                 : undefined;
 
             if (text) {
-                // 1. Acquire Session (creating if necessary, strictly bound to tenant, chat, and thread)
+                // Determine group context & gate
+                const chatType = payload.message.chat.type;
+                const botUsername = process.env.TELEGRAM_BOT_USERNAME || "ZAP_Bot";
+                const mongoUri = process.env.MONGODB_URI || "mongodb://localhost:27017";
+                
+                // 1. Resolve Matrix Binding First (to check for allowAutoListen)
+                const binding = await resolveAgentBinding(mongoUri, tenantId, "telegram", chatId, threadId);
+
+                if (!binding) {
+                    console.log(`[Router] 🛑 Filtered: No agent bound to ${chatId}`);
+                    // Fail-closed DLQ behavior
+                    await logDLQ(mongoUri, payload, "NO_AGENT_BINDING");
+                    return res.status(200).json({ ok: true, dropped: "no_agent_binding" });
+                }
+
+                // 2. Mention Gate (Noise Filter)
+                if (!passesMentionGate(chatType, text, botUsername, threadId, binding.allowAutoListen)) {
+                    console.log(`[Router] 🛑 Filtered: Non-mention in group ${chatId}`);
+                    // Optionally log to DLQ if we want to trace noise, though usually we don't save noise
+                    return res.status(200).json({ ok: true, dropped: "mention_gated" });
+                }
+
+                // 1. Acquire Session
                 const session = await getOrCreateSession(tenantId, "telegram", chatId, threadId);
 
-                // 2. Append User Message to History (triggers Rule of 500 compaction if needed)
+                // 2. Append User Message
                 await appendMessage(session.sessionId, tenantId, "user", text);
 
-                // 3. Construct OmniPayload (Strictly Typed)
+                // 3. Construct Payload with Paranoia Constraints
+                let systemPrompt = binding.systemPrompt || "You are an integrated agent of the ZAP Swarm.";
+                
+                // Inject Environmental Context dynamically per PRD-005 Section 5
+                const senderName = payload.message.from.first_name || payload.message.from.username || "User";
+                systemPrompt += `\n[ENVIRONMENT CONTEXT: You are running in a ${chatType} chat. The user speaking right now is ${senderName}. Do not misidentify the speaker.]`;
+
                 const omniPayload: OmniPayload = {
-                    systemPrompt: "You are Hermes, the Communications Gateway for the ZAP Swarm. Your primary function is to converse natively with the user on Telegram and orchestrate swarm resources if complex tasks arise. Answer queries accurately or dispatch to Spike/Jerry if code/backend systems need mutating.",
+                    systemPrompt: systemPrompt,
                     messages: [
                         ...session.messages.map(m => ({ role: m.role as "user" | "assistant" | "system", content: m.content })),
-                        { role: "user", content: text } // Ensure the latest message is included
+                        { role: "user", content: text }
                     ],
-                    theme: "A_ECONOMIC", // Default to economic theme
-                    intent: threadId ? "ACP_SUBAGENT_SPAWN" : "FAST_CHAT" // Native Thread Inference
+                    theme: "A_ECONOMIC",
+                    intent: threadId ? "ACP_SUBAGENT_SPAWN" : "FAST_CHAT"
                 };
 
                 // 4. Triage & Enqueue
                 const queueName = triageJob(omniPayload);
-                const priority: QueuePriority = 1; // Default priority for chat
+                const priority = (binding.priority ?? 1) as unknown as QueuePriority;
 
                 const llmConfig: LLMConfig = {
-                    apiKey: process.env.GOOGLE_API_KEY || "", // Router will resolve/override this
+                    apiKey: process.env.GOOGLE_API_KEY || "", 
                     defaultModel: "google/gemini-2.0-flash-001",
                     accountLevel: "STANDARD"
                 };
@@ -56,14 +85,14 @@ export async function handleTelegramWebhook(req: Request, res: Response) {
                     omniPayload,
                     llmConfig,
                     "TELEGRAM",
-                    chatId, // Sender Identifier (Chat ID)
-                    parseInt(chatId), // Numeric Chat ID for callbacks
+                    chatId,
+                    parseInt(chatId),
                     {
                         tenantId,
                         senderIdentifier: chatId,
                         sessionId: session.sessionId,
-                        assignedAgentId: "hermes",
-                        threadId // Pass deep binding string to OmniQueue
+                        assignedAgentId: binding.agentId,
+                        threadId
                     }
                 );
 

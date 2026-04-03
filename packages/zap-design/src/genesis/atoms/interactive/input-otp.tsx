@@ -55,7 +55,7 @@ function InputOTPSlot({
       data-slot="input-otp-slot"
       data-active={isActive}
       className={cn(
-        "relative flex w-[var(--input-height,36px)] h-[var(--input-height,36px)] items-center justify-center border-y-[length:var(--input-border-width,1px)] border-r-[length:var(--input-border-width,1px)] border-[color:var(--input-border-filled,var(--color-outline-variant))] bg-[color:var(--input-bg-filled,transparent)] text-on-surface transition-[color,box-shadow] outline-none font-body text-sm font-normal text-transform-primary",
+        "relative flex w-[var(--input-height,36px)] h-[var(--input-height,36px)] items-center justify-center border-y-[length:var(--input-border-width,1px)] border-r-[length:var(--input-border-width,1px)] border-[color:var(--input-border-filled,var(--color-outline-variant))] bg-[color:var(--input-bg-filled,transparent)] text-on-surface transition-[color,box-shadow] outline-none font-body text-transform-secondary text-sm font-normal text-transform-primary",
         "first:rounded-l-[var(--input-border-radius,8px)] first:border-l-[length:var(--input-border-width,1px)] last:rounded-r-[var(--input-border-radius,8px)]",
         "aria-invalid:border-[color:var(--input-error-border,var(--color-error))] aria-invalid:bg-error/5 aria-invalid:text-error dark:aria-invalid:border-error",
         "data-[active=true]:z-10 data-[active=true]:border-[color:var(--input-focus-border,var(--m3-sys-light-primary))] data-[active=true]:ring-[length:var(--input-focus-width,2px)] data-[active=true]:ring-[color:var(--input-focus-ring,var(--color-primary-fixed-dim))] data-[active=true]:bg-[color:var(--input-bg-filled-focus,transparent)]",

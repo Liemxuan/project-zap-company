@@ -20,30 +20,28 @@ webhookRouter.post('/webhook/payment', async (req, res) => {
         let event;
 
         // SOP-033: Enforce Stripe Signature Hardening
-        if (endpointSecret && sig) {
-            try {
-                // req.body is a raw Buffer because of bodyParser.raw() mapped in server.ts
-                event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
-            } catch (err: any) {
-                console.error(`[Webhook] Signature verification failed:`, err.message);
-                res.status(400).send(`Webhook Error: ${err.message}`);
-                return;
-            }
-        } else {
-            // Fallback for local testing / bypass if env vars are not set
-            // Since req.body is raw buffer, we must parse it back to JSON manually
-            try {
-                const bodyString = Buffer.isBuffer(req.body) ? req.body.toString('utf8') : req.body;
-                event = typeof bodyString === 'string' ? JSON.parse(bodyString) : bodyString;
-            } catch (err) {
-                console.error(`[Webhook] Failed to parse raw body payload fallback`);
-                res.status(400).send('Bad Request: Invalid JSON body');
-                return;
-            }
+        if (!endpointSecret || !sig) {
+            console.error(`[Webhook SECURITY] Missing Stripe Signature or Webhook Secret. Payload rejected.`);
+            res.status(401).send('Unauthorized: Verification missing.');
+            return;
+        }
+
+        try {
+            // req.body is a raw Buffer because of bodyParser.raw() mapped in server.ts
+            // Use rigorous strict typing for the cryptographic construct.
+            event = stripe.webhooks.constructEvent(
+                Buffer.isBuffer(req.body) ? req.body : Buffer.from(req.body || ''), 
+                sig, 
+                endpointSecret
+            );
+        } catch (err: any) {
+            console.error(`[Webhook SECURITY] Signature verification failed:`, err.message);
+            res.status(401).send(`Unauthorized: Signature validation failed.`);
+            return;
         }
 
         // We simulate extracting metadata representing a fulfilled order cart.
-        const payload = event;
+        const payload: any = event;
         
         console.log(`[Webhook] Incoming Payment / Order Fulfillment Proxy`);
 

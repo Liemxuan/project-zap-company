@@ -20,7 +20,7 @@ const JWT_SECRET = new TextEncoder().encode(
 // ── Rate Limiter (in-memory sliding window) ──────────────
 // Production: swap for Redis INCR + EXPIRE
 const RATE_LIMIT_WINDOW_MS = 60_000; // 1 minute
-const RATE_LIMIT_MAX_REQUESTS = 120; // per IP per window
+const RATE_LIMIT_MAX_REQUESTS = 2400; // per IP per window
 const rateLimitStore = new Map<string, { count: number; resetAt: number }>();
 
 function checkRateLimit(ip: string): { allowed: boolean; remaining: number; resetAt: number } {
@@ -56,7 +56,7 @@ const ALLOWED_ORIGINS = new Set([
     'http://localhost:3000',  // zap-design
     'http://localhost:3500',  // zap-swarm (self)
     'http://localhost:3900',  // zap-claw
-    'http://localhost:4700',  // zap-auth
+    'http://localhost:4200',  // zap-ops (internal auth)
 ]);
 
 // ── Known Bypass Session IDs (dev/test only) ─────────────
@@ -189,7 +189,7 @@ export async function middleware(request: NextRequest) {
 
     if (!session?.value) {
         // No session → redirect to Auth portal
-        const loginUrl = new URL('http://localhost:4700');
+        const loginUrl = new URL('http://localhost:4200');
         loginUrl.searchParams.set('callbackUrl', request.url);
         return NextResponse.redirect(loginUrl);
     }
@@ -197,7 +197,7 @@ export async function middleware(request: NextRequest) {
     // Validate session value isn't empty/malformed
     if (session.value.length < 4) {
         // Suspicious short session — clear and redirect
-        const redirectResponse = NextResponse.redirect(new URL('http://localhost:4700'));
+        const redirectResponse = NextResponse.redirect(new URL('http://localhost:4200'));
         redirectResponse.cookies.delete('zap_session');
         return redirectResponse;
     }

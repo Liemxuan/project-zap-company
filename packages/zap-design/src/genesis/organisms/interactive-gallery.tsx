@@ -27,7 +27,7 @@ export function InteractiveGallery() {
                     <Info className="h-4 w-4" />
                   </Button>
                 </TooltipTrigger>
-                <TooltipContent className="bg-on-surface text-surface font-body text-bodyMedium border-none">
+                <TooltipContent className="bg-on-surface text-surface font-body text-transform-secondary text-bodyMedium border-none">
                   Switch component mapping to M3 variables.
                 </TooltipContent>
               </Tooltip>
@@ -92,10 +92,10 @@ export function InteractiveGallery() {
         <CardContent className="space-y-8">
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <label className="font-body text-bodySmall font-medium text-on-surface-variant text-transform-tertiary uppercase tracking-wider">
+ <label className="font-body text-transform-secondary text-bodySmall font-medium text-on-surface-variant text-transform-tertiary tracking-wider">
                 Volume
               </label>
-              <span className="font-body text-bodySmall font-medium text-on-surface text-transform-tertiary">
+              <span className="font-body text-transform-secondary text-bodySmall font-medium text-on-surface text-transform-tertiary">
                 {sliderValue[0]}%
               </span>
             </div>
@@ -111,10 +111,10 @@ export function InteractiveGallery() {
 
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <label className="font-body text-bodySmall font-medium text-on-surface-variant text-transform-tertiary uppercase tracking-wider">
+ <label className="font-body text-transform-secondary text-bodySmall font-medium text-on-surface-variant text-transform-tertiary tracking-wider">
                 System Load
               </label>
-              <span className="font-body text-bodySmall font-medium text-on-surface text-transform-tertiary">
+              <span className="font-body text-transform-secondary text-bodySmall font-medium text-on-surface text-transform-tertiary">
                 {progress}%
               </span>
             </div>

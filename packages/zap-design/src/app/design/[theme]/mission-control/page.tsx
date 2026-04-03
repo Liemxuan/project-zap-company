@@ -509,7 +509,7 @@ export default function MissionControlPage() {
                                     <div className="flex justify-between items-center p-5 rounded-xl bg-primary/5 shadow-sm ring-1 ring-primary/20 text-sm">
                                         <span className="text-primary tracking-widest uppercase text-[11px] font-bold">Network State</span>
                                         <div className="flex items-center gap-3 bg-layer-modal px-3.5 py-1.5 rounded-full border border-primary/10">
-                                            <span className="capitalize font-mono text-xs font-bold text-primary">{inspector.statusData.status}</span>
+ <span className=" font-mono text-transform-tertiary text-xs font-bold text-primary">{inspector.statusData.status}</span>
                                             <div className={`h-2.5 w-2.5 rounded-full ${statusDot(inspector.statusData.status)}`} />
                                         </div>
                                     </div>
@@ -519,13 +519,13 @@ export default function MissionControlPage() {
                                                 <table className="w-full text-left text-sm text-on-surface-variant">
                                                     <thead className="sticky top-0 bg-outline/5est z-10 text-[11px] uppercase font-black tracking-widest text-on-surface border-b border-outline/10">
                                                         <tr>
-                                                            <th className="p-4 bg-outline/5 font-body">API Key</th>
-                                                            <th className="p-4 bg-outline/5 font-body">Project Bind</th>
-                                                            <th className="p-4 bg-outline/5 font-body">Status</th>
-                                                            { (!inspector.view || inspector.view === 'all') && <th className="p-4 bg-outline/5 font-body">Tier</th> }
+                                                            <th className="p-4 bg-outline/5 font-body text-transform-secondary">API Key</th>
+                                                            <th className="p-4 bg-outline/5 font-body text-transform-secondary">Project Bind</th>
+                                                            <th className="p-4 bg-outline/5 font-body text-transform-secondary">Status</th>
+                                                            { (!inspector.view || inspector.view === 'all') && <th className="p-4 bg-outline/5 font-body text-transform-secondary">Tier</th> }
                                                         </tr>
                                                     </thead>
-                                                    <tbody className="divide-y divide-outline/5 font-mono text-xs">
+                                                    <tbody className="divide-y divide-outline/5 font-mono text-transform-tertiary text-xs">
                                                         {(!inspector.view || inspector.view === 'all' || inspector.view === 'ultra') && inspector.statusData.ultraKeysList?.map((k, i) => (
                                                             <tr key={`u-${i}`} className="hover:bg-outline/5 transition-colors">
                                                                 <td className="p-4 text-secondary">{k.key}</td>
@@ -573,7 +573,7 @@ export default function MissionControlPage() {
                                     {(!inspector.view || inspector.view === 'all' || inspector.view === 'blocks') && (
                                     <div className="p-5 bg-error/5 shadow-sm ring-1 ring-error/20 rounded-xl mt-6">
                                         <div className="text-[11px] uppercase font-black text-error tracking-widest mb-3">429 Active Blocks</div>
-                                        <div className="text-sm font-mono font-bold text-error leading-relaxed">
+                                        <div className="text-sm font-mono text-transform-tertiary font-bold text-error leading-relaxed">
                                             {inspector.statusData.blockedProjects.length === 0 ? 'Clear (No Captchas)' : inspector.statusData.blockedProjects.join(', ')}
                                         </div>
                                     </div>
@@ -581,7 +581,7 @@ export default function MissionControlPage() {
                                     {(!inspector.view || inspector.view === 'all' || inspector.view === 'dead') && (
                                     <div className="p-5 bg-warning/5 shadow-sm ring-1 ring-warning/20 rounded-xl mt-4">
                                         <div className="text-[11px] uppercase font-black text-warning tracking-widest mb-3">Dead Keys (403)</div>
-                                        <div className="text-sm font-mono font-bold text-warning leading-relaxed">
+                                        <div className="text-sm font-mono text-transform-tertiary font-bold text-warning leading-relaxed">
                                             {inspector.statusData.deadKeysCount === 0 ? 'Clear (No 403s)' : inspector.statusData.deadKeys?.join(', ')}
                                         </div>
                                     </div>
@@ -614,7 +614,7 @@ export default function MissionControlPage() {
                                     
                                     <div className="p-5 bg-layer-modal shadow-sm ring-1 ring-outline/10 rounded-xl">
                                         <Text size="label-small" className="text-on-surface-variant mb-3 block">Connection Bind</Text>
-                                        <Text size="body-large" weight="medium" className="text-on-surface bg-outline/5 border border-outline/5 px-4 py-2 rounded-lg w-max font-mono block">
+                                        <Text size="body-large" weight="medium" className="text-on-surface bg-outline/5 border border-outline/5 px-4 py-2 rounded-lg w-max font-mono text-transform-tertiary block">
                                             {inspector.type === 'infra' && inspector.info.parsedHost && inspector.info.parsedHost !== 'localhost' ? inspector.info.parsedHost : `:${inspector.node.port}`}
                                         </Text>
                                     </div>

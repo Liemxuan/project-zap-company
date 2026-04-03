@@ -1,10 +1,10 @@
-
 'use client';
 
 import React from 'react';
 import { ComponentSandboxTemplate } from '../../../../../zap/layout/ComponentSandboxTemplate';
-import { Wrapper } from '../../../../../components/dev/Wrapper';
 import { LiveBlinker } from '../../../../../genesis/atoms/indicators/LiveBlinker';
+import { CanvasBody } from '../../../../../zap/layout/CanvasBody';
+import { SectionHeader } from '../../../../../zap/sections/atoms/foundations/components';
 
 export default function LiveBlinkerSandboxPage() {
     return (
@@ -26,56 +26,45 @@ export default function LiveBlinkerSandboxPage() {
                 "Dot is bordered with foreground color.",
             ]}
         >
-            <div className="w-full space-y-10 animate-in fade-in duration-500 pb-8">
-
-                {/* Default */}
-                <div className="space-y-2">
-                    <span className="text-label-small font-semibold text-muted-foreground uppercase tracking-widest">Default Live Blinker</span>
-                    <span className="text-label-small font-dev text-muted-foreground block">
-                        Animated red dot with &quot;LIVE&quot; label
-                    </span>
-                    <Wrapper identity={{ displayName: "LiveBlinker", type: "Atom", filePath: "genesis/atoms/indicators/LiveBlinker.tsx" }}>
-                        <div className="bg-layer-panel border border-card-border rounded-lg p-6 flex items-center gap-6">
-                            <LiveBlinker />
-                        </div>
-                    </Wrapper>
-                </div>
-
-                {/* In Context */}
-                <div className="space-y-2">
-                    <span className="text-label-small font-semibold text-muted-foreground uppercase tracking-widest">In Header Context</span>
-                    <span className="text-label-small font-dev text-muted-foreground block">
-                        LiveBlinker alongside a title, mimicking a streaming header
-                    </span>
-                    <Wrapper identity={{ displayName: "LiveBlinker (Header)", type: "Atom", filePath: "genesis/atoms/indicators/LiveBlinker.tsx" }}>
-                        <div className="bg-layer-panel border border-card-border rounded-lg p-6 flex items-center justify-between w-full">
-                            <h3 className="text-body-small font-display font-bold text-foreground tracking-wide uppercase">Real-time Dashboard</h3>
-                            <LiveBlinker />
-                        </div>
-                    </Wrapper>
-                </div>
-
-                {/* Icon Only */}
-                <div className="space-y-2">
-                    <span className="text-label-small font-semibold text-muted-foreground uppercase tracking-widest">Icon Only</span>
-                    <span className="text-label-small font-dev text-muted-foreground block">
-                        Color variations for the Live Blinker without text
-                    </span>
-                    <Wrapper identity={{ displayName: "LiveBlinker (Icon Only)", type: "Atom", filePath: "genesis/atoms/indicators/LiveBlinker.tsx" }}>
-                        <div className="bg-layer-panel border border-card-border rounded-lg p-6 flex items-center gap-6">
-                            <div className="flex flex-col items-center gap-2">
-                                <LiveBlinker iconOnly color="red" />
-                                <span className="text-label-small font-dev text-muted-foreground">Red</span>
+            <CanvasBody flush={false} coverTitle="Live Blinker Atoms" coverBadge="L2 // ATOMS">
+                <CanvasBody.Section flush={false} className="w-full animate-in fade-in duration-500">
+                    <SectionHeader
+                        number="01"
+                        title="Primary Indicator"
+                        icon="sensors"
+                        description="Animated pulse indicator used to signify active real-time data streams or status."
+                        id="primary-indicator"
+                    />
+                    <CanvasBody.Demo minHeight="min-h-[160px]" centered={true}>
+                        <div className="flex items-center gap-10 p-8 bg-layer-panel border border-outline-variant/20 rounded-xl">
+                            <div className="flex flex-col items-center gap-4">
+                                <LiveBlinker />
+                                <span className="text-[10px] font-dev text-transform-tertiary text-muted-foreground">Default state</span>
                             </div>
-                            <div className="flex flex-col items-center gap-2">
+                            <div className="flex flex-col items-center gap-4">
                                 <LiveBlinker iconOnly color="green" />
-                                <span className="text-label-small font-dev text-muted-foreground">Green</span>
+                                <span className="text-[10px] font-dev text-transform-tertiary text-muted-foreground">Icon only (green)</span>
                             </div>
                         </div>
-                    </Wrapper>
-                </div>
+                    </CanvasBody.Demo>
+                </CanvasBody.Section>
 
-            </div>
+                <CanvasBody.Section flush={false} className="w-full mt-10">
+                    <SectionHeader
+                        number="02"
+                        title="Contextual Integration"
+                        icon="view_compact"
+                        description="LiveBlinker embedded within a structural organism (e.g., Dashboard Header)."
+                        id="contextual"
+                    />
+                    <CanvasBody.Demo minHeight="min-h-[160px]" centered={true}>
+                        <div className="w-full max-w-md bg-layer-panel border border-outline-variant/20 rounded-xl p-6 flex items-center justify-between">
+                            <h3 className="text-body-small font-display text-transform-primary font-bold text-foreground tracking-wide">Real-time dashboard</h3>
+                            <LiveBlinker />
+                        </div>
+                    </CanvasBody.Demo>
+                </CanvasBody.Section>
+            </CanvasBody>
         </ComponentSandboxTemplate>
     );
 }

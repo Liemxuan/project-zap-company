@@ -2,8 +2,9 @@
 
 import React from 'react';
 import { ComponentSandboxTemplate } from '../../../../../zap/layout/ComponentSandboxTemplate';
-import { Wrapper } from '../../../../../components/dev/Wrapper';
 import { InspectorAccordion } from '../../../../../zap/organisms/laboratory/InspectorAccordion';
+import { CanvasBody } from '../../../../../zap/layout/CanvasBody';
+import { SectionHeader } from '../../../../../zap/sections/SectionHeader';
 
 export default function InspectorAccordionPage() {
     return (
@@ -29,10 +30,14 @@ export default function InspectorAccordionPage() {
                 'Title always uses font-display + text-titleSmall + text-transform-primary — never override font family inline.',
             ]}
         >
-            <div className="w-full flex flex-col gap-10 py-8">
+            
+            <CanvasBody flush={false}>
+                <CanvasBody.Section>
+                    <SectionHeader number="1" id="inspector-accordion" title="InspectorAccordion Sandbox" description="Interactive components for InspectorAccordion" icon="widgets" />
+                    <CanvasBody.Demo className="w-full flex flex-col gap-10 py-8">
 
                 {/* ── VARIANT 1: Default Open — with Google Icon */}
-                <Wrapper identity={{ displayName: 'Default Open Variant', type: 'Demo', filePath: 'zap/molecules/inspector-accordion/page.tsx' }}>
+                
                     <div className="flex flex-col gap-2">
                         <span className="text-label-small font-bold tracking-widest text-on-surface-variant text-transform-secondary font-dev text-transform-tertiary px-1">
                             VARIANT — DEFAULT OPEN (icon + content)
@@ -58,10 +63,10 @@ export default function InspectorAccordionPage() {
                             </InspectorAccordion>
                         </div>
                     </div>
-                </Wrapper>
+                
 
                 {/* ── VARIANT 2: Default Closed */}
-                <Wrapper identity={{ displayName: 'Default Closed Variant', type: 'Demo', filePath: 'zap/molecules/inspector-accordion/page.tsx' }}>
+                
                     <div className="flex flex-col gap-2">
                         <span className="text-label-small font-bold tracking-widest text-on-surface-variant text-transform-secondary font-dev text-transform-tertiary px-1">
                             VARIANT — DEFAULT CLOSED
@@ -75,10 +80,10 @@ export default function InspectorAccordionPage() {
                             </InspectorAccordion>
                         </div>
                     </div>
-                </Wrapper>
+                
 
                 {/* ── VARIANT 3: Stacked (realistic inspector panel) */}
-                <Wrapper identity={{ displayName: 'Stacked Inspector Panel', type: 'Demo', filePath: 'zap/molecules/inspector-accordion/page.tsx' }}>
+                
                     <div className="flex flex-col gap-2">
                         <span className="text-label-small font-bold tracking-widest text-on-surface-variant text-transform-secondary font-dev text-transform-tertiary px-1">
                             VARIANT — STACKED (realistic inspector panel)
@@ -107,7 +112,7 @@ export default function InspectorAccordionPage() {
                                 <InspectorAccordion title="Inheritance Map" icon="account_tree" defaultOpen={false}>
                                     <div className="flex flex-wrap gap-1 pt-1">
                                         <span className="px-1.5 py-0.5 bg-primary-container text-on-primary-container rounded text-label-small font-dev text-transform-tertiary">bg-primary/10</span>
-                                        <span className="px-1.5 py-0.5 bg-secondary-container text-on-secondary-container rounded text-label-small font-dev text-transform-tertiary">font-display</span>
+                                        <span className="px-1.5 py-0.5 bg-secondary-container text-on-secondary-container rounded text-label-small font-dev text-transform-tertiary">font-display text-transform-primary</span>
                                     </div>
                                 </InspectorAccordion>
                                 <InspectorAccordion title="Platform Context" icon="devices" defaultOpen={false}>
@@ -116,10 +121,10 @@ export default function InspectorAccordionPage() {
                             </div>
                         </div>
                     </div>
-                </Wrapper>
+                
 
                 {/* ── PROP MAP */}
-                <Wrapper identity={{ displayName: 'Prop Reference', type: 'Docs', filePath: 'zap/molecules/inspector-accordion/page.tsx' }}>
+                
                     <div className="flex flex-col gap-2">
                         <span className="text-label-small font-bold tracking-widest text-on-surface-variant text-transform-secondary font-dev text-transform-tertiary px-1">
                             PROP REFERENCE
@@ -160,9 +165,12 @@ export default function InspectorAccordionPage() {
                             </div>
                         </div>
                     </div>
-                </Wrapper>
+                
 
-            </div>
+                </CanvasBody.Demo>
+                </CanvasBody.Section>
+            </CanvasBody>
+        
         </ComponentSandboxTemplate>
     );
 }

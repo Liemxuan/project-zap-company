@@ -6,6 +6,7 @@ import { useTheme } from '../../../../components/ThemeContext';
 import { Wrapper } from '../../../../components/dev/Wrapper';
 import { Toggle } from '../../../../genesis/atoms/interactive/custom-toggle';
 import { Canvas } from '../../../../genesis/atoms/surfaces/canvas';
+import { CanvasBody } from '../../../../zap/layout/CanvasBody';
 
 export const InteractiveElementsBody = () => {
     const { } = useTheme();
@@ -41,7 +42,7 @@ export const InteractiveElementsBody = () => {
 
                     {/* 01. BUTTON.TSX */}
                     <Wrapper identity={{ displayName: "Button Variant Spec", filePath: "zap/sections/interactive/body.tsx", type: "Atom/View", architecture: "SYSTEMS // CORE" }}>
-                        <section className="bg-layer-cover border-[length:var(--card-border-width,0px)] border-card-border p-6 shadow-card rounded-card">
+                        <CanvasBody.Section flush={true} className="border-[length:var(--card-border-width,0px)] border-card-border p-6 shadow-card rounded-card">
                             <div className="flex items-center justify-between mb-2 pb-4">
                                 <Wrapper className="w-fit" identity={{ displayName: "Section Header: BUTTON.TSX", type: "Wrapped Snippet", filePath: "zap/sections/interactive/body.tsx" }}>
                                     <h2 className="text-xl font-black uppercase tracking-tight text-brand-midnight">BUTTON.TSX</h2>
@@ -100,14 +101,14 @@ export const InteractiveElementsBody = () => {
                                     </div>
                                 </Wrapper>
                             </div>
-                        </section>
+                        </CanvasBody.Section>
                     </Wrapper>
 
 
 
                     {/* 02. Toggle.tsx */}
                     <Wrapper identity={{ displayName: "Toggle Variant Spec", filePath: "zap/sections/interactive/body.tsx", type: "Atom/View", architecture: "SYSTEMS // CORE" }}>
-                        <section className="bg-layer-cover border-[length:var(--card-border-width,0px)] border-card-border p-6 shadow-card rounded-card pb-24">
+                        <CanvasBody.Section flush={true} className="border-[length:var(--card-border-width,0px)] border-card-border p-6 shadow-card rounded-card pb-24">
                             <div className="flex items-center justify-between mb-2 pb-4">
                                 <Wrapper className="w-fit" identity={{ displayName: "Section Header: Toggle.tsx", type: "Wrapped Snippet", filePath: "zap/sections/interactive/body.tsx" }}>
                                     <h2 className="text-xl font-black uppercase tracking-tight text-brand-midnight">Toggle.tsx</h2>
@@ -143,7 +144,7 @@ export const InteractiveElementsBody = () => {
                                     </div>
                                 </Wrapper>
                             </div>
-                        </section>
+                        </CanvasBody.Section>
                     </Wrapper>
                 </div>
             </Canvas>

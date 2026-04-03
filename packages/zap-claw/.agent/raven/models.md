@@ -1,19 +1,31 @@
-# ⚡ MODELS: LLM Connection & Routing
+# ⚡ SYSTEM ROUTING MATRIX (RAVEN)
 
+<!-- ⚠️ DYNAMICALLY COMPILED VIA SYNC_AGENT_PROFESSION.TS ⚠️ -->
 **Target System:** OLYMPUS
+**Strict Profession Lock:** `SYSTEM_ARCHITECT`
 
-## 1. Connection Strategy (3-Tier Fallback)
+## 1. Provider Tier Mapping
 
-1. **Primary Provider:** `Google Ultra` (`PROV-ULTRA-01` | kayvietnam@gmail.com)
-2. **Secondary Fallback:** `Google Pro` (`PROV-PRO-01` | tom@zap.vn)
-3. **Tertiary Fallback:** `OpenRouter` (`PROV-OPENR-01` | tom@two.vn)
+| Priority | Provider Tier | Assigned To | Engine Strategy |
+| :--- | :--- | :--- | :--- |
+| **Primary** | `ULTRA` | `kayvietnam@gmail.com` | Zero-latency, unthrottled high-priority lanes. |
+| **Secondary** | `PRO` | `tom@zap.vn` | High-limit, stable backup pool. |
+| **Tertiary** | `OPENROUTER` | `tom@two.vn` | Hard fallback. Last resort rate-limit bridging. |
 
-## 2. Active Network Config (Precision Tier)
+## 2. Intelligence Assignments (Locked)
 
-- **Connection Model:** `Omni-Router (Internal Default)`
-- **Primary Tier Model:** `gemini-3.1-pro` (Deep cross-dataset analysis & pattern recognition)
-- **Fast Brain Model:** `gemini-3-flash` (Quick SQL generation, metric lookups)
+Based on the [SYSTEM_ARCHITECT] profession bounds, this agent is restricted to the following runtime limits:
 
-## 3. Override Warning
+| Objective | Bound Engine | Registry Identifier | Trigger Tags |
+| :--- | :--- | :--- | :--- |
+| **Deep Thinking / Complex Matrix** | Execution Core | `gemini-3.1-pro-preview` | `coding, core-reasoning, long-context, backend-schema, pipeline-design` |
+| **High-Velocity Tasking** | Specialized Secondary | `gemini-2.5-pro` | `core-reasoning` |
+| **Swarm Heartbeat Tracker** | Gemini 4M Context | `gemini-2.5-pro` | `4m-context, log-ingestion` |
+| **Data Visualization** | Nano Banana 2 | `gemini-3.1-flash-image-preview` | `image-generation, ui-mockups` |
+| **Memory Sync Cortex** | Embeddings 2 | `gemini-embedding-2-preview` | `rag, semantic-search` |
 
-- **Platform Integrity (Olympus Only):** Olympus agents MUST NEVER use BYOK fallback. Strictly bound to internal Omni-Router.
+## 3. Omni-Router Enforcements
+- **Integrity Bounds:** Operating strictly within `Backend architecture, database modeling, schema design.` bounds.
+- **BYOK Lockout:** This agent is barred from independent OPENAI_API_KEY overwrites to preserve swarm telemetry.
+
+*Compiled dynamically on 2026-03-31T08:00:12.257Z*

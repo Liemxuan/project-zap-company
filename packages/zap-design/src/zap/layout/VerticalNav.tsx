@@ -110,7 +110,7 @@ export const VerticalNav = ({ width = 260, isCollapsed = false }: VerticalNavPro
                                                 ? 'bg-brand-midnight text-brand-primary border-brand-primary'
                                                 : 'bg-white text-brand-midnight border-brand-midnight/10 hover:border-brand-midnight'
                                             }
-                                       `}
+                                      `}
                                     >
                                         <Icon name={level.icon} size={20} />
                                     </button>
@@ -132,7 +132,7 @@ export const VerticalNav = ({ width = 260, isCollapsed = false }: VerticalNavPro
                                                 ? 'bg-brand-midnight text-white border-brand-primary'
                                                 : 'bg-brand-midnight/5 text-brand-midnight border-brand-midnight'
                                             }
-                                       `}
+                                      `}
                                     >
                                         <div className="flex items-center gap-3">
                                             <Icon name={level.icon} size={16} className={isOpen ? 'text-brand-primary' : ''} />
@@ -160,7 +160,7 @@ export const VerticalNav = ({ width = 260, isCollapsed = false }: VerticalNavPro
                                                                 ? 'bg-brand-primary text-brand-midnight shadow-[4px_4px_0px_0px_#000]'
                                                                 : 'bg-white text-brand-midnight hover:bg-layer-panel shadow-none'
                                                             }
-                                                       `}
+                                                      `}
                                                     >
                                                         <Text size="iso-100" weight="black" className="font-display text-transform-primary tracking-[0.05em] whitespace-nowrap overflow-hidden text-ellipsis">
                                                             {item.replace(/ & /g, " ").replace(/,/g, "").split(" ")[0]}
@@ -192,7 +192,7 @@ export const VerticalNav = ({ width = 260, isCollapsed = false }: VerticalNavPro
                                                 ? 'bg-layer-panel border-[length:var(--card-border-width,0px)] border-card-border shadow-card text-brand-midnight'
                                                 : 'text-iso-gray-400 hover:text-brand-midnight hover:bg-layer-panel/50 border-[length:var(--card-border-width,0px)] border-transparent'
                                             }
-                                       `}
+                                      `}
                                     >
                                         {t}
                                     </button>

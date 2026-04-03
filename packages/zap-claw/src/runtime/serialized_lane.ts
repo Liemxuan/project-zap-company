@@ -3,6 +3,7 @@ import { Redis } from "ioredis";
 import { resolveAgentLLMConfig, generateOmniContent, OmniPayload, OmniResponse } from "./engine/omni_router.js";
 import { SYSTEM_PROMPT } from "../system_prompt.js";
 import "dotenv/config";
+import { getGlobalMongoClient } from "../db/mongo_client.js";
 
 const MONGO_URI = process.env.MONGODB_URI || "";
 const REDIS_URL = process.env.REDIS_URL || "redis://localhost:6379";
@@ -40,9 +41,8 @@ export async function executeSerializedLane(
 ): Promise<OmniResponse | string> {
     console.log(`\n[Serialized Lane] 🚀 Booting execution sequence for Agent: ${userProfile.assignedAgentId}`);
 
-    const client = new MongoClient(MONGO_URI, { serverSelectionTimeoutMS: 5000 });
+    const client = await getGlobalMongoClient(MONGO_URI);
     try {
-        await client.connect();
         const db = client.db(DB_NAME);
         const memoryCollectionName = `${tenantId}_SYS_CLAW_memory`;
         const memoryCol = db.collection(memoryCollectionName);
@@ -268,6 +268,7 @@ Please read the following conversation history and execute the next response bas
             redis.rpush(sessionKey, JSON.stringify(userInteraction), JSON.stringify(agentInteraction)).then(() => redis.expire(sessionKey, 86400)),
             memoryCol.insertMany([userInteraction, agentInteraction]),
             metricsCol.insertOne({
+                sessionId: sessionId || null,
                 timestamp: new Date(),
                 tenantId,
                 agentId: userProfile.assignedAgentId,
@@ -287,6 +288,5 @@ Please read the following conversation history and execute the next response bas
         console.error(`[Serialized Lane ERROR]`, error.message || error);
         return "❌ Internal Lane Error.";
     } finally {
-        await client.close();
     }
 }

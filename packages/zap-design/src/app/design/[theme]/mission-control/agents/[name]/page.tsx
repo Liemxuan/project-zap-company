@@ -40,7 +40,7 @@ export default function AgentForensicsPage() {
                                 <Monitor className="h-6 w-6 text-primary" />
                                 {agentName} Agent
                             </h1>
-                            <p className="text-xs font-mono text-primary/80 mt-1 uppercase tracking-wider">Deep Forensics Level 2</p>
+ <p className="text-xs font-mono text-transform-tertiary text-primary/80 mt-1 tracking-wider">Deep Forensics Level 2</p>
                         </div>
                     </div>
                 </div>
@@ -52,7 +52,7 @@ export default function AgentForensicsPage() {
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                     <div className="p-6 bg-surface-variant/30 border border-outline/10 rounded-xl relative overflow-hidden group">
                         <h3 className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mb-2">Process State</h3>
-                        <div className="text-xl font-mono text-green-400 flex items-center gap-2">
+                        <div className="text-xl font-mono text-transform-tertiary text-green-400 flex items-center gap-2">
                             <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
                             RUNNING
                         </div>
@@ -60,17 +60,17 @@ export default function AgentForensicsPage() {
                     
                     <div className="p-6 bg-surface-variant/30 border border-outline/10 rounded-xl relative overflow-hidden group">
                         <h3 className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mb-2">Memory Utilization</h3>
-                        <div className="text-xl font-mono text-on-surface">124 MB</div>
+                        <div className="text-xl font-mono text-transform-tertiary text-on-surface">124 MB</div>
                     </div>
 
                     <div className="p-6 bg-surface-variant/30 border border-outline/10 rounded-xl relative overflow-hidden group">
                         <h3 className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mb-2">Active Connects</h3>
-                        <div className="text-xl font-mono text-on-surface">3</div>
+                        <div className="text-xl font-mono text-transform-tertiary text-on-surface">3</div>
                     </div>
                     
                     <div className="p-6 bg-surface-variant/30 border border-outline/10 rounded-xl relative overflow-hidden group">
                         <h3 className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mb-2">Task Volume</h3>
-                        <div className="text-xl font-mono text-on-surface">1,024 OK</div>
+                        <div className="text-xl font-mono text-transform-tertiary text-on-surface">1,024 OK</div>
                     </div>
                 </div>
 
@@ -81,7 +81,7 @@ export default function AgentForensicsPage() {
                         Live STDOUT Stream
                     </h2>
                     
-                    <div className="p-6 border border-white/5 bg-black/50 rounded-xl text-left h-96 overflow-y-auto font-mono text-xs text-green-400 space-y-2 relative">
+                    <div className="p-6 border border-white/5 bg-black/50 rounded-xl text-left h-96 overflow-y-auto font-mono text-transform-tertiary text-xs text-green-400 space-y-2 relative">
                         {/* Fake scanline effect */}
                         <div className="absolute inset-0 bg-[linear-gradient(transparent_50%,rgba(0,0,0,0.25)_50%)] bg-[length:100%_4px] pointer-events-none opacity-20" />
                         

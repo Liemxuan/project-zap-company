@@ -35,7 +35,7 @@ export function CleanShellInspector({
          <div className="h-14 px-4 flex items-center justify-between shrink-0 border-b border-border/50 bg-layer-panel">
              <div className="flex items-center gap-2">
                  <Icon name="palette" size={18} className="text-on-surface" />
-                 <h2 className="font-black text-on-surface text-[11px] tracking-widest font-display text-transform-primary uppercase">
+ <h2 className="font-black text-on-surface text-[11px] tracking-widest font-display text-transform-primary ">
                      {title}
                  </h2>
              </div>

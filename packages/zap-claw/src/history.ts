@@ -29,33 +29,65 @@ export async function getHistory(userId: string | number, accountType: string = 
     console.warn(`[ThreadDataMiddleware] Redis failure on get:`, e);
   }
 
-  // Fallback to Long-Term DB
-  const rows = await prisma.interaction.findMany({
-    where: {
-      sessionId: userId.toString(),
-      accountType: { startsWith: accountType }
-    },
-    orderBy: { createdAt: 'desc' },
-    take: limit
-  });
+  // Fallback to Long-Term DB (Prisma)
+  try {
+    const rows = await prisma.interaction.findMany({
+      where: {
+        sessionId: userId.toString(),
+        accountType: { startsWith: accountType }
+      },
+      orderBy: { createdAt: 'desc' },
+      take: limit
+    });
 
-  // Hotload the cache to catch incoming bursts
-  if (rows.length > 0) {
-    try {
-      const pipeline = ThreadDataMiddleware.pipeline();
-      pipeline.del(cacheKey);
-      for (const row of rows) {
-        pipeline.rpush(cacheKey, JSON.stringify(row));
+    // Hotload the cache to catch incoming bursts
+    if (rows.length > 0) {
+      try {
+        const pipeline = ThreadDataMiddleware.pipeline();
+        pipeline.del(cacheKey);
+        for (const row of rows) {
+          pipeline.rpush(cacheKey, JSON.stringify(row));
+        }
+        pipeline.expire(cacheKey, THREAD_DATA_TTL);
+        await pipeline.exec();
+      } catch (e) {
+        console.warn(`[ThreadDataMiddleware] Failed to hotload cache:`, e);
       }
-      pipeline.expire(cacheKey, THREAD_DATA_TTL);
-      await pipeline.exec();
-    } catch (e) {
-      console.warn(`[ThreadDataMiddleware] Failed to hotload cache:`, e);
+    }
+
+    // Reverse so chronologically ordered messages go into LLM
+    return rows.reverse().map(parserMessageFormatter);
+  } catch (prismaErr: any) {
+    console.error(`[history] Prisma failure, falling back to MongoDB:`, prismaErr.message);
+    
+    // Fallback to MongoDB (SYS_OS_conversation_history)
+    try {
+      const { MongoClient } = await import('mongodb');
+      const MONGO_URI = process.env.MONGODB_URI || "mongodb://localhost:27017";
+      const client = new MongoClient(MONGO_URI);
+      await client.connect();
+      const db = client.db('olympus');
+      const col = db.collection('SYS_OS_conversation_history');
+      
+      const docs = await col.find({ sessionId: userId.toString() })
+        .sort({ timestamp: -1 })
+        .limit(limit)
+        .toArray();
+      
+      await client.close();
+      
+      return docs.reverse().map(doc => ({
+        id: doc._id.toString(),
+        user_id: doc.sessionId,
+        role: (doc.role as any).toLowerCase(),
+        content: doc.content || "",
+        created_at: doc.timestamp
+      }));
+    } catch (mongoErr: any) {
+      console.error(`[history] MongoDB fallback also failed:`, mongoErr.message);
+      return [];
     }
   }
-
-  // Reverse so chronologically ordered messages go into LLM
-  return rows.reverse().map(parserMessageFormatter);
 }
 
 function parserMessageFormatter(r: any): Message {
@@ -221,12 +253,12 @@ export async function appendMessage(
 }
 
 
-export async function pruneHistory(userId: string | number, keepLast = 200): Promise<void> {
-  const toKeep = await prisma.interaction.findMany({
+export async function pruneHistory(userId: string | number, keepLast = 200, insertSummaryString?: string, accountType: string = "PERSONAL"): Promise<void> {
+  let toKeep = await prisma.interaction.findMany({
     where: { sessionId: userId.toString() },
     orderBy: { createdAt: 'desc' },
     take: keepLast,
-    select: { id: true, role: true, content: true }
+    select: { id: true, role: true, content: true, createdAt: true }
   });
 
   const keepIds = toKeep.map((row: any) => row.id);
@@ -248,6 +280,25 @@ export async function pruneHistory(userId: string | number, keepLast = 200): Pro
       id: { notIn: keepIds }
     }
   });
+
+  if (insertSummaryString && toKeep.length > 0) {
+      const oldestKept = toKeep[toKeep.length - 1];
+      if (oldestKept && oldestKept.createdAt) {
+          const summaryTime = new Date(oldestKept.createdAt.getTime() - 1000); // 1 second before the oldest kept message
+          
+          const { randomUUID } = await import("crypto");
+          await prisma.interaction.create({
+              data: {
+                  id: randomUUID(),
+                  sessionId: userId.toString(),
+                  role: 'SYSTEM',
+                  content: insertSummaryString,
+                  accountType: accountType,
+                  createdAt: summaryTime
+              }
+          });
+      }
+  }
 
   // Also truncate the burst cache explicitly when pruned
   try {

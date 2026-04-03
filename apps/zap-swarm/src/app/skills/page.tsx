@@ -1,14 +1,18 @@
 "use client";
 
+export const dynamic = 'force-dynamic';
+
 import { Heading } from "zap-design/src/genesis/atoms/typography/headings";
 import { Text } from "zap-design/src/genesis/atoms/typography/text";
 import { AppShell } from "zap-design/src/zap/layout/AppShell";
 import { ThemeHeader } from "zap-design/src/genesis/molecules/layout/ThemeHeader";
 import { Puzzle, RefreshCw, Activity, CheckCircle, XCircle, Clock, Search, X, Bot, Shield, Wrench, Cpu } from "lucide-react";
 import { Button } from "zap-design/src/genesis/atoms/interactive/button";
-import { useState, useMemo } from "react";
+import { useState, useMemo, Suspense } from "react";
 
 import { useQuery } from "@tanstack/react-query";
+
+import { useSearchParams } from "next/navigation";
 
 // ── Types ──────────────────────────────────────────────
 
@@ -20,6 +24,7 @@ interface SkillData {
   tags: string[];
   desc: string;
   path: string;
+  content?: string;
 }
 
 interface ExecutionStats {
@@ -41,12 +46,12 @@ interface ExecutionRecord {
 // ── Agent Colors & Icons ───────────────────────────────
 
 const AGENT_CONFIG: Record<string, { color: string; bg: string; icon: React.ReactNode; label: string }> = {
-  spike:    { color: "text-blue-400", bg: "bg-blue-400/10", icon: <Wrench className="size-3" />, label: "Spike" },
-  jerry:    { color: "text-amber-400", bg: "bg-amber-400/10", icon: <Shield className="size-3" />, label: "Jerry" },
-  ralph:    { color: "text-purple-400", bg: "bg-purple-400/10", icon: <Bot className="size-3" />, label: "Ralph" },
-  cso:      { color: "text-red-400", bg: "bg-red-400/10", icon: <Shield className="size-3" />, label: "CSO" },
+  spike: { color: "text-blue-400", bg: "bg-blue-400/10", icon: <Wrench className="size-3" />, label: "Spike" },
+  jerry: { color: "text-amber-400", bg: "bg-amber-400/10", icon: <Shield className="size-3" />, label: "Jerry" },
+  ralph: { color: "text-purple-400", bg: "bg-purple-400/10", icon: <Bot className="size-3" />, label: "Ralph" },
+  cso: { color: "text-red-400", bg: "bg-red-400/10", icon: <Shield className="size-3" />, label: "CSO" },
   operator: { color: "text-emerald-400", bg: "bg-emerald-400/10", icon: <Cpu className="size-3" />, label: "Operator" },
-  any:      { color: "text-on-surface-variant", bg: "bg-outline/10", icon: <Bot className="size-3" />, label: "Any" },
+  any: { color: "text-on-surface-variant", bg: "bg-outline/10", icon: <Bot className="size-3" />, label: "Any" },
 };
 
 const GROUP_COLORS: Record<string, string> = {
@@ -64,10 +69,13 @@ const GROUP_COLORS: Record<string, string> = {
 
 // ── Main Page ──────────────────────────────────────────
 
-export default function SkillsDashboard() {
-  const [searchQuery, setSearchQuery] = useState("");
+function SkillsDashboardContent() {
+  const searchParams = useSearchParams();
+  const [searchQuery, setSearchQuery] = useState(searchParams?.get("q") || searchParams?.get("search") || "");
   const [activeGroup, setActiveGroup] = useState<string | null>(null);
-  const [activeAgent, setActiveAgent] = useState<string | null>(null);
+  const [activeAgent, setActiveAgent] = useState<string | null>(searchParams?.get("agent") || null);
+  const [sortBy, setSortBy] = useState<string>("newest");
+  const [selectedSkill, setSelectedSkill] = useState<SkillData | null>(null);
 
   const { data, isLoading, error, refetch, isFetching } = useQuery<{ success: boolean; skills: SkillData[] }>({
     queryKey: ['swarm-skills'],
@@ -81,7 +89,7 @@ export default function SkillsDashboard() {
   const { data: execData } = useQuery<{ success: boolean; executions: ExecutionRecord[]; stats: ExecutionStats }>({
     queryKey: ['swarm-skill-executions'],
     queryFn: async () => {
-      const res = await fetch('/api/swarm/skills/executions?limit=10');
+      const res = await fetch('/api/swarm/skills/executions?limit=50');
       if (!res.ok) throw new Error('Network response was not ok');
       return res.json();
     },
@@ -110,13 +118,15 @@ export default function SkillsDashboard() {
   }, [skills]);
 
   const filteredSkills = useMemo(() => {
-    let result = skills;
-    
+    let result = [...skills];
+
     if (activeGroup) {
       result = result.filter(s => (s.group || 'Uncategorized') === activeGroup);
     }
-    if (activeAgent) {
-      result = result.filter(s => (s.agent || 'any') === activeAgent);
+    if (activeAgent && activeAgent !== 'any') {
+      result = result.filter(s => (s.agent || 'any') === activeAgent || (s.agent || 'any') === 'any');
+    } else if (activeAgent === 'any') {
+      result = result.filter(s => (s.agent || 'any') === 'any');
     }
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
@@ -130,22 +140,45 @@ export default function SkillsDashboard() {
       );
     }
 
+    // Apply Sorting
+    if (sortBy === 'a-z') {
+      result.sort((a, b) => a.name.localeCompare(b.name));
+    } else if (sortBy === 'z-a') {
+      result.sort((a, b) => b.name.localeCompare(a.name));
+    } else if (sortBy === 'newest') {
+      result.reverse();
+    } else if (sortBy === 'most-popular') {
+      const freq = new Map();
+      recentExecs.forEach(e => freq.set(e.skillName, (freq.get(e.skillName) || 0) + 1));
+      result.sort((a, b) => {
+        const diff = (freq.get(b.name) || 0) - (freq.get(a.name) || 0);
+        return diff !== 0 ? diff : a.name.localeCompare(b.name);
+      });
+    } else if (sortBy === 'least-popular') {
+      const rfreq = new Map();
+      recentExecs.forEach(e => rfreq.set(e.skillName, (rfreq.get(e.skillName) || 0) + 1));
+      result.sort((a, b) => {
+        const diff = (rfreq.get(a.name) || 0) - (rfreq.get(b.name) || 0);
+        return diff !== 0 ? diff : a.name.localeCompare(b.name);
+      });
+    }
+
     return result;
-  }, [skills, activeGroup, activeAgent, searchQuery]);
+  }, [skills, activeGroup, activeAgent, searchQuery, sortBy, recentExecs]);
 
   const hasActiveFilters = activeGroup || activeAgent || searchQuery.trim();
 
   return (
     <AppShell>
       <div className="flex flex-col h-full bg-layer-base text-on-surface w-full overflow-hidden">
-        <ThemeHeader 
+        <ThemeHeader
           breadcrumb="Zap Swarm / Registry"
           title="Skills Library"
           badge={`${skills.length} Loaded`}
           liveIndicator={false}
         />
-        
-        <main className="flex-1 overflow-y-auto p-8">
+
+        <main className="flex-1 overflow-y-auto px-5 md:px-12 py-8">
           {/* ── Search & Controls Bar ────────────────── */}
           <div className="flex gap-4 items-stretch mb-6">
             {/* Search Box */}
@@ -168,7 +201,23 @@ export default function SkillsDashboard() {
                 </button>
               )}
             </div>
-            
+
+            <div className="flex shrink-0 items-center justify-center bg-layer-cover border border-outline/10 rounded-[var(--card-radius,12px)] px-4">
+              <span className="text-on-surface-variant mr-2 text-sm">Sort by:</span>
+              <select
+                title="Sort skills by"
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                className="bg-transparent text-on-surface text-sm border-none focus:ring-0 cursor-pointer outline-none font-medium appearance-none min-w-[120px]"
+              >
+                <option className="bg-layer-cover" value="newest">Newest</option>
+                <option className="bg-layer-cover" value="a-z">Name (A-Z)</option>
+                <option className="bg-layer-cover" value="z-a">Name (Z-A)</option>
+                <option className="bg-layer-cover" value="most-popular">Most Popular</option>
+                <option className="bg-layer-cover" value="least-popular">Least Popular</option>
+              </select>
+            </div>
+
             <Button
               variant="primary"
               onClick={() => refetch()}
@@ -208,11 +257,10 @@ export default function SkillsDashboard() {
                 <button
                   key={a.name}
                   onClick={() => setActiveAgent(activeAgent === a.name ? null : a.name)}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border transition-all ${
-                    activeAgent === a.name
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border transition-all ${activeAgent === a.name
                       ? `${cfg.bg} ${cfg.color} border-current ring-1 ring-current/20`
                       : 'border-outline/10 text-on-surface-variant/60 hover:border-outline/20 hover:text-on-surface-variant'
-                  }`}
+                    }`}
                 >
                   {cfg.icon}
                   {cfg.label}
@@ -295,7 +343,7 @@ export default function SkillsDashboard() {
                 const agentCfg = AGENT_CONFIG[s.agent] || AGENT_CONFIG.any;
                 const groupColor = GROUP_COLORS[s.group] || "bg-outline/10 text-on-surface-variant";
                 return (
-                  <div key={s.name} className="bg-layer-cover shadow-[var(--shadow-elevation-1,0_1px_3px_rgba(0,0,0,0.1))] p-5 rounded-[var(--card-radius,12px)] border border-[var(--color-outline-variant,rgba(0,0,0,0.05))] hover:-translate-y-1 hover:shadow-[var(--shadow-elevation-2,0_4px_6px_rgba(0,0,0,0.1))] transition-all cursor-pointer group flex flex-col h-full">
+                  <div key={s.name} onClick={() => setSelectedSkill(s)} className="bg-layer-cover shadow-[var(--shadow-elevation-1,0_1px_3px_rgba(0,0,0,0.1))] p-5 rounded-[var(--card-radius,12px)] border border-[var(--color-outline-variant,rgba(0,0,0,0.05))] hover:-translate-y-1 hover:shadow-[var(--shadow-elevation-2,0_4px_6px_rgba(0,0,0,0.1))] transition-all cursor-pointer group flex flex-col h-full">
                     {/* Top row: icon + badges */}
                     <div className="flex justify-between items-start mb-3">
                       <div className="size-9 bg-primary/10 rounded-[var(--button-border-radius,8px)] flex justify-center items-center group-hover:bg-primary/20 transition-colors">
@@ -313,9 +361,9 @@ export default function SkillsDashboard() {
                     </div>
 
                     {/* Skill name */}
-                    <Heading level={4} className="text-on-surface mb-1.5 tracking-tight break-all text-sm">{s.name}</Heading>
-                    <Text size="body-small" className="text-on-surface-variant line-clamp-2 mb-3 text-xs leading-relaxed">{s.desc}</Text>
-                    
+                    <Heading level={6} className="text-on-surface mb-1.5 tracking-tight truncate">{s.name}</Heading>
+                    <Text size="body-small" className="text-on-surface-variant line-clamp-5 mb-3 text-xs leading-relaxed">{s.desc}</Text>
+
                     {/* Tags */}
                     <div className="flex flex-wrap gap-1 mb-3">
                       {(s.tags || []).slice(0, 5).map(tag => (
@@ -347,6 +395,13 @@ export default function SkillsDashboard() {
           )}
         </main>
       </div>
+
+      {selectedSkill && (
+        <SkillDetailModal
+          skill={selectedSkill}
+          onClose={() => setSelectedSkill(null)}
+        />
+      )}
     </AppShell>
   );
 }
@@ -359,14 +414,71 @@ function FilterChip({ label, count, active, onClick, colorClass }: {
   return (
     <button
       onClick={onClick}
-      className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-all ${
-        active
+      className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-all ${active
           ? `${colorClass || 'bg-primary/10 text-primary'} border-current/20 ring-1 ring-current/10`
           : 'border-outline/10 text-on-surface-variant/50 hover:border-outline/20 hover:text-on-surface-variant'
-      }`}
+        }`}
     >
       {label} <span className="opacity-50">{count}</span>
     </button>
+  );
+}
+
+function SkillDetailModal({ skill, onClose }: { skill: SkillData; onClose: () => void }) {
+  const agentCfg = AGENT_CONFIG[skill.agent] || AGENT_CONFIG.any;
+  const groupColor = GROUP_COLORS[skill.group] || "bg-outline/10 text-on-surface-variant";
+
+  return (
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+      <div className="bg-layer-base rounded-[var(--card-radius,16px)] shadow-[var(--shadow-elevation-3,0_8px_16px_rgba(0,0,0,0.2))] w-full max-w-4xl h-[85vh] flex flex-col overflow-hidden border border-[var(--color-outline-variant,rgba(0,0,0,0.1))]">
+        <div className="px-6 py-5 border-b border-[var(--color-outline-variant,rgba(0,0,0,0.1))] flex justify-between items-start bg-layer-cover">
+          <div className="flex flex-col gap-2">
+            <div className="flex items-center gap-2">
+              <span className={`px-2 py-0.5 rounded text-[10px] font-bold tracking-wide ${groupColor}`}>
+                {skill.group}
+              </span>
+              <span className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-semibold ${agentCfg.bg} ${agentCfg.color}`}>
+                {agentCfg.icon}
+                {agentCfg.label}
+              </span>
+            </div>
+            <Heading level={3} className="text-on-surface mb-0">{skill.name}</Heading>
+            <Text size="body-small" className="text-on-surface-variant leading-relaxed">
+              {skill.desc}
+            </Text>
+          </div>
+          <button title="Close" aria-label="Close Modal" onClick={onClose} className="text-on-surface-variant hover:text-on-surface p-1.5 rounded hover:bg-outline/5 transition-colors mt-[-4px] mr-[-4px]">
+            <X className="size-5" />
+          </button>
+        </div>
+
+        <div className="p-0 flex-1 min-h-0 bg-layer-base flex flex-col">
+          <div className="px-6 py-3 border-b border-[var(--color-outline-variant,rgba(0,0,0,0.05))] bg-surface-container-highest flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Text size="label-small" className="text-on-surface-variant/70 font-mono tracking-wider uppercase">Path</Text>
+              <Text size="body-small" className="font-mono text-on-surface-variant bg-layer-base px-2 py-0.5 rounded border border-outline/5">
+                {skill.path}/SKILL.md
+              </Text>
+            </div>
+            <div className="flex gap-1">
+              {(skill.tags || []).map(tag => (
+                <span key={tag} className="px-2 py-0.5 rounded bg-outline/5 text-on-surface-variant/60 text-[10px] font-mono">
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex-1 overflow-y-auto p-6 custom-scrollbar bg-[var(--color-layer-cover,#F8F9FA)]">
+            <div className="prose prose-sm dark:prose-invert max-w-none">
+              <pre className="text-[13px] font-mono bg-transparent p-0 m-0 whitespace-pre-wrap text-on-surface-variant/90 leading-relaxed border-none">
+                {skill.content || "No detailed instructions exist for this skill natively. Review the file path above."}
+              </pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -410,4 +522,12 @@ function formatRelativeTime(timestamp: string): string {
   if (diffMs < 3_600_000) return `${Math.floor(diffMs / 60_000)}m ago`;
   if (diffMs < 86_400_000) return `${Math.floor(diffMs / 3_600_000)}h ago`;
   return `${Math.floor(diffMs / 86_400_000)}d ago`;
+}
+
+export default function SkillsDashboard() {
+  return (
+    <Suspense fallback={<div className="p-8 text-on-surface flex w-full h-full justify-center items-center">Loading Skills Registry...</div>}>
+      <SkillsDashboardContent />
+    </Suspense>
+  );
 }

@@ -26,7 +26,7 @@ export default function DynamicFoundationPage() {
                     <Icon name="error_outline" size={48} className="text-destructive mx-auto" />
                     <h2 className="text-xl font-bold text-foreground">Theme Not Found</h2>
                     <p className="text-sm text-muted-foreground">
-                        Theme <code className="font-dev text-primary">{themeId}</code> is not registered.
+                        Theme <code className="font-dev text-transform-tertiary text-primary">{themeId}</code> is not registered.
                     </p>
                     <Link
                         href="/design"
@@ -47,7 +47,7 @@ export default function DynamicFoundationPage() {
                 <Icon name="search_off" size={64} className="text-muted-foreground/30" />
                 <div className="text-center space-y-2">
                     <h2 className="text-xl font-bold text-foreground">
-                        <code className="font-dev text-primary">{foundationId}</code> not found
+                        <code className="font-dev text-transform-tertiary text-primary">{foundationId}</code> not found
                     </h2>
                     <p className="text-sm text-muted-foreground max-w-md">
                         This foundation doesn&apos;t exist in the registry.
@@ -87,9 +87,9 @@ export default function DynamicFoundationPage() {
                         Not Enabled for {themeConfig.name}
                     </h2>
                     <p className="text-sm text-muted-foreground max-w-md">
-                        <code className="font-dev text-primary">{foundationEntry.label}</code> exists in the registry
+                        <code className="font-dev text-transform-tertiary text-primary">{foundationEntry.label}</code> exists in the registry
                         but isn&apos;t enabled for <strong>{themeConfig.name}</strong>.
-                        Add <code className="font-dev">&quot;{foundationId}&quot;</code> to <code className="font-dev">hasFoundations</code> in the registry.
+                        Add <code className="font-dev text-transform-tertiary">&quot;{foundationId}&quot;</code> to <code className="font-dev text-transform-tertiary">hasFoundations</code> in the registry.
                     </p>
                 </div>
             </div>

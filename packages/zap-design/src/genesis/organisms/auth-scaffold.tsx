@@ -85,7 +85,7 @@ export function AuthScaffold() {
                     type="email" 
                     placeholder="zeus@zap.dev" 
                     required 
-                    className="font-body text-bodyLarge text-on-surface h-12 border-outline-variant focus-visible:ring-primary/20"
+                    className="font-body text-transform-secondary text-bodyLarge text-on-surface h-12 border-outline-variant focus-visible:ring-primary/20"
                   />
                 </div>
                 
@@ -94,7 +94,7 @@ export function AuthScaffold() {
                     <Label htmlFor="password" className="font-display text-bodyMedium font-medium text-transform-primary text-on-surface">
                       Password
                     </Label>
-                    <a href="#" className="font-body text-bodySmall font-medium text-primary hover:text-primary/80 transition-colors">
+                    <a href="#" className="font-body text-transform-secondary text-bodySmall font-medium text-primary hover:text-primary/80 transition-colors">
                       Forgot password?
                     </a>
                   </div>
@@ -103,7 +103,7 @@ export function AuthScaffold() {
                     type="password" 
                     placeholder="••••••••" 
                     required 
-                    className="font-body text-bodyLarge h-12 border-outline-variant focus-visible:ring-primary/20 tracking-widest"
+                    className="font-body text-transform-secondary text-bodyLarge h-12 border-outline-variant focus-visible:ring-primary/20 tracking-widest"
                   />
                 </div>
               </div>
@@ -137,11 +137,11 @@ export function AuthScaffold() {
               </div>
 
               <div className="mt-6 grid grid-cols-2 gap-4">
-                <Button variant="outline" className="h-11 font-body text-bodyMedium text-on-surface border-outline-variant hover:bg-surface-variant">
+                <Button variant="outline" className="h-11 font-body text-transform-secondary text-bodyMedium text-on-surface border-outline-variant hover:bg-surface-variant">
                   <Github className="mr-2 h-4 w-4" />
                   GitHub
                 </Button>
-                <Button variant="outline" className="h-11 font-body text-bodyMedium text-on-surface border-outline-variant hover:bg-surface-variant">
+                <Button variant="outline" className="h-11 font-body text-transform-secondary text-bodyMedium text-on-surface border-outline-variant hover:bg-surface-variant">
                   <Mail className="mr-2 h-4 w-4" />
                   SSO
                 </Button>
@@ -150,8 +150,8 @@ export function AuthScaffold() {
 
             <div className="mt-8 text-center">
               <p className="font-body text-bodyMedium text-on-surface-variant text-transform-secondary">
-                Don&apos;t have an access token?{' '}
-                <a href="#" className="font-display font-medium text-primary hover:text-primary/80 transition-colors">
+                Don&apos;t have an access token?{''}
+                <a href="#" className="font-display text-transform-primary font-medium text-primary hover:text-primary/80 transition-colors">
                   Request authorization
                 </a>
               </p>

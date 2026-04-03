@@ -1,6 +1,6 @@
 # ZAP Surface Elevation Protocol (CORE)
 > This document is auto-generated upon Theme Publishing. It represents the single source of truth for ZAP-OS L0-L5 surface semantics for this theme.
-> Last Sync: 2026-04-02T04:51:17.677Z
+> Last Sync: 2026-04-01T09:21:41.889Z
 
 ## 1. The Default M3 Surface Map
 By default, the `bg-layer-*` utility classes map directly to the underlying Material 3 surface tint hierarchy:

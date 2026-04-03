@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react';
 import { ComponentSandboxTemplate } from '../../../../../zap/layout/ComponentSandboxTemplate';
-import { Wrapper } from '../../../../../components/dev/Wrapper';
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -20,6 +19,8 @@ import {
 import { Input } from '../../../../../genesis/atoms/interactive/inputs'
 import { Button } from '../../../../../genesis/atoms/interactive/button'
 import { Slider } from '../../../../../genesis/atoms/interactive/slider';
+import { CanvasBody } from '../../../../../zap/layout/CanvasBody';
+import { SectionHeader } from '../../../../../zap/sections/SectionHeader';
 const formSchema = z.object({
   username: z.string().min(2, {
     message: "Username must be at least 2 characters.",
@@ -41,9 +42,9 @@ export default function FormSandboxPage() {    const [gap, setGap] = useState([8
 
     // Fetch initial settings
     const inspectorControls = (
-        <Wrapper identity={{ displayName: "Inspector Controls Container", type: "Container", filePath: "zap/molecules/form" }}>
+        
             <div className="space-y-4">
-                <Wrapper identity={{ displayName: "Form Structural Settings", type: "Docs Link", filePath: "zap/molecules/form/page.tsx" }}>
+                
                     <div className="space-y-6">
                         <h4 className="text-label-small text-transform-primary font-display font-bold text-on-surface-variant text-transform-secondary tracking-wider">Sandbox Variables</h4>
 
@@ -57,9 +58,9 @@ export default function FormSandboxPage() {    const [gap, setGap] = useState([8
                             </div>
                         </div>
                     </div>
-                </Wrapper>
+                
             </div>
-        </Wrapper>
+        
     );
     return (
         <ComponentSandboxTemplate
@@ -76,12 +77,11 @@ export default function FormSandboxPage() {    const [gap, setGap] = useState([8
             platformConstraints={{ web: "N/A", mobile: "N/A" }}
             foundationRules={[]}
         >
-            <div 
-                className="w-full flex items-center justify-center min-h-[400px] p-12 bg-layer-panel shadow-sm border border-outline-variant rounded-xl"
-                style={Object.assign({}, {
-                     '--form-item-gap': `${gap[0]}px`,
-                } as React.CSSProperties)}
-            >
+            
+            <CanvasBody flush={false}>
+                <CanvasBody.Section>
+                    <SectionHeader number="1" id="form" title="Form Sandbox" description="Interactive components for Form" icon="widgets" />
+                    <CanvasBody.Demo className="w-full flex items-center justify-center min-h-[400px] p-12 bg-layer-panel shadow-sm border border-outline-variant rounded-xl">
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full max-w-sm">
                         <FormField
@@ -91,7 +91,7 @@ export default function FormSandboxPage() {    const [gap, setGap] = useState([8
                                 <FormItem>
                                     <FormLabel>Username</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="shadcn" {...field} />
+                                        <Input aria-label="Input component" placeholder="shadcn" {...field} />
                                     </FormControl>
                                     <FormDescription>
                                         This is your public display name.
@@ -103,7 +103,10 @@ export default function FormSandboxPage() {    const [gap, setGap] = useState([8
                         <Button type="submit">Submit</Button>
                     </form>
                 </Form>
-            </div>
+                </CanvasBody.Demo>
+                </CanvasBody.Section>
+            </CanvasBody>
+        
         </ComponentSandboxTemplate>
     );
 }

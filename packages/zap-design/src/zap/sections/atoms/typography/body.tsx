@@ -10,6 +10,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { TypographyThemeSchema } from './schema';
 import { CORE_FONTS } from './inspector';
 import { SectionHeader, TokenTable } from '../../../../zap/sections/atoms/foundations/components';
+import { CanvasBody } from '../../../../zap/layout/CanvasBody';
 import {
     M3_ROLE_ORDER,
     M3_ROLE_META,
@@ -178,7 +179,7 @@ const FontPickerPopup = ({
                                         ? 'bg-primary text-on-primary shadow-sm'
                                         : 'bg-on-surface/5 text-foreground hover:bg-on-surface/10'
                                     }
-                               `}
+                              `}
                             >
                                 {label}
                             </button>
@@ -202,7 +203,7 @@ const FontPickerPopup = ({
                                     ? 'bg-primary/10 border-l-4 border-primary'
                                     : 'hover:bg-on-surface/5 border-l-4 border-transparent'
                                 }
-                           `}
+                          `}
                         >
                             <span
                                 className="text-2xl font-bold text-foreground w-16 shrink-0"
@@ -293,7 +294,7 @@ const FontFamilyCard = ({
                             {TRANSFORM_TO_INDICATOR[transform || 'none']}
                         </span>
                         {transform && transform !== 'none' && (
-                            <span className="text-[9px] font-dev font-black tracking-widest px-2 py-[3px] rounded bg-primary/10 text-primary mt-2" style={Object.assign({}, { textTransform: 'none' })}>
+                            <span className="text-[9px] font-dev text-transform-tertiary font-black tracking-widest px-2 py-[3px] rounded bg-primary/10 text-primary mt-2" style={Object.assign({}, { textTransform: 'none' })}>
                                 {transform}
                             </span>
                         )}
@@ -400,7 +401,7 @@ const RoleSection = ({
     const sampleText = FAMILY_PANGRAMS[familyRole];
 
     return (
-        <section className="rounded-xl border border-outline-variant/40 overflow-hidden bg-layer-panel">
+        <CanvasBody.Section flush={true} className="rounded-xl border border-outline-variant/40 overflow-hidden">
             <SectionHeader
                 number={ROLE_NUMBERS[role]}
                 icon={ROLE_ICONS[role]}
@@ -417,7 +418,7 @@ const RoleSection = ({
                     ))}
                 </div>
 
-                <div className="font-body" style={Object.assign({}, { textTransform: 'none' })}>
+                <div className="font-body text-transform-secondary" style={Object.assign({}, { textTransform: 'none' })}>
                     <TokenTable
                         headers={['Token', 'Alias', 'Size (px)', 'Weight', 'Line Height', 'Letter Spacing', 'Component']}
                         rows={tokens.map(t => [
@@ -441,7 +442,7 @@ const RoleSection = ({
                     </div>
                 )}
             </div>
-        </section>
+        </CanvasBody.Section>
     );
 };
 
@@ -466,7 +467,7 @@ export const TypographyBody = ({ themeData, onFontChange, onTransformChange, tra
             <div className="max-w-5xl mx-auto space-y-8 pb-24 font-secondary">
 
                 {/* ── 01. FONT FAMILY SHOWCASE ────────────────────────── */}
-                <section className="rounded-xl border border-outline-variant/40 overflow-hidden bg-layer-panel">
+                <CanvasBody.Section flush={true} className="rounded-xl border border-outline-variant/40 overflow-hidden">
                     <SectionHeader
                         number="01"
                         title="Font Families"
@@ -489,7 +490,7 @@ export const TypographyBody = ({ themeData, onFontChange, onTransformChange, tra
                             <FontFamilyCard role="tertiary" fontValue={themeData.global.tertiaryFont} transform={transforms?.tertiary} onFontChange={onFontChange} onTransformChange={onTransformChange} />
                         </div>
                     </div>
-                </section>
+                </CanvasBody.Section>
 
                 {/* ── 02–06. M3 TYPE SCALE (5 roles) ────────────────────── */}
                 {M3_ROLE_ORDER.map(role => (
@@ -511,7 +512,7 @@ export const TypographyBody = ({ themeData, onFontChange, onTransformChange, tra
                 />
 
                 {/* ── 08. L2 COMPONENT MAPPING ───────────────────────── */}
-                <section className="rounded-xl border border-outline-variant/40 overflow-hidden bg-layer-panel">
+                <CanvasBody.Section flush={true} className="rounded-xl border border-outline-variant/40 overflow-hidden">
                     <SectionHeader
                         number="08"
                         title="Component → Token Mapping"
@@ -546,7 +547,7 @@ export const TypographyBody = ({ themeData, onFontChange, onTransformChange, tra
                             />
                         </div>
                     </div>
-                </section>
+                </CanvasBody.Section>
 
             </div>
         </Wrapper>

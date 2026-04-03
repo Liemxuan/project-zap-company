@@ -1,0 +1,29 @@
+{
+  "name": "Core Utils",
+  "version": "1.0.0",
+  "description": "Essential system tools for time, research, and filesystem access.",
+  "tools": [
+    {
+      "name": "get_current_time",
+      "description": "Returns the current system time. Use this when the user asks for the current time or date.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {}
+      }
+    },
+    {
+      "name": "brave_search",
+      "description": "Performs a web search using the Brave Search API. Use this for real-time information research.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "The search query"
+          }
+        },
+        "required": ["query"]
+      }
+    }
+  ]
+}

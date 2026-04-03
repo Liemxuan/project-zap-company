@@ -25,7 +25,7 @@
       }
     },
     "typography": {
-      "primaryFont": "var(--font-jetbrains), monospace",
+      "primaryFont": "var(--font-inter), sans-serif",
       "primaryTransform": "lowercase",
       "secondaryFont": "var(--font-inter), sans-serif",
       "secondaryTransform": "lowercase",
@@ -34,9 +34,9 @@
     }
   },
   "metrics": {
-    "checkboxSize": "16px !important",
-    "checkboxBorderWidth": "1px !important",
-    "checkboxBorderRadius": "4px !important",
+    "checkboxSize": "20px !important",
+    "checkboxBorderWidth": "2px !important",
+    "checkboxBorderRadius": "0.5rem (8px) !important",
     "buttonHeight": "34px !important",
     "buttonBorderWidth": "0px !important",
     "buttonBorderRadius": "0px !important",
@@ -61,7 +61,7 @@
     "indicatorHeight": "16px !important",
     "indicatorBorderWidth": "0px !important",
     "indicatorBorderRadius": "8px !important",
-    "inputHeight": "44px !important",
+    "inputHeight": "42px !important",
     "inputBorderWidth": "1px !important",
     "inputBorderRadius": "12px !important",
     "textareaMinHeight": "130px !important",
@@ -110,7 +110,7 @@
     "radioSize": "18px !important",
     "radioBorderWidth": "2px !important",
     "formItemGap": "12px !important",
-    "fontDisplay": "var(--font-jetbrains), monospace !important",
+    "fontDisplay": "var(--font-inter), sans-serif !important",
     "headingTransform": "lowercase !important",
     "fontBody": "var(--font-inter), sans-serif !important",
     "bodyTransform": "lowercase !important",
@@ -210,12 +210,11 @@
     "navBorderRadius": "0px !important",
     "navShowContent": "false !important",
     "navDropdownSide": "top !important",
-    "inputFocusBorder": "var(--color-primary) !important",
-    "inputFocusRing": "color-mix(in srgb, var(--color-primary) 80%, transparent) !important",
-    "inputErrorBorder": "var(--color-error) !important",
-    "inputErrorText": "var(--color-error) !important",
-    "inputErrorRing": "color-mix(in srgb, var(--color-error) 80%, transparent) !important"
+    "navlinkBorderWidth": "1px !important",
+    "navlinkBorderRadius": "0px !important",
+    "productImageBorderRadius": "9999px !important",
+    "productImageBorderWidth": "2px !important"
   },
   "name": "METRO",
-  "updatedAt": "2026-04-02T04:33:21.310Z"
+  "updatedAt": "2026-04-02T09:00:31.437Z"
 }

@@ -48,7 +48,7 @@ export default function StitchPlayfulTestPage() {
                         50% { transform: translateY(-20px); }
                         100% { transform: translateY(0px); }
                     }
-               `}} />
+              `}} />
 
                 <ContainerDevWrapper showClassNames={devMode} identity={{ displayName: "Playful About Me", filePath: "stitch-playful-test/page.tsx", type: "Page", architecture: "ZAP LAYOUT ENGINE" }}>
 

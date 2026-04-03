@@ -58,7 +58,7 @@ export const ElevationInspector = ({
     hasOverrides,
 }: ElevationInspectorProps) => {
     return (
-        <div className="font-body select-none pb-4 flex flex-col gap-1">
+        <div className="font-body text-transform-secondary select-none pb-4 flex flex-col gap-1">
 
             {/* ── Data Terminal (CST parity) ── */}
             <InspectorAccordion title="Data Terminal" icon="database" defaultOpen={false}>
@@ -88,7 +88,7 @@ export const ElevationInspector = ({
             <InspectorAccordion title="Layer Settings" icon="stack" defaultOpen={true}>
                 <div className="space-y-1 pt-1">
                     <p className="text-[9px] text-muted-foreground mb-3 leading-relaxed">
-                        Configure surface token, opacity, and tint for each elevation layer. Modified layers are indicated by a{' '}
+                        Configure surface token, opacity, and tint for each elevation layer. Modified layers are indicated by a{''}
                         <span className="inline-block w-1.5 h-1.5 rounded-full bg-tertiary align-middle mx-0.5" /> dot.
                     </p>
                     {[0, 1, 2, 3, 4, 5].map(id => (
@@ -128,7 +128,7 @@ export const ElevationInspector = ({
                             </div>
                             <div className="flex-1 min-w-0">
                                 <span className="text-[10px] font-bold text-foreground block">{LAYER_NAMES[level.level]?.name || `Level ${level.level}`}</span>
-                                <span className="text-[9px] text-muted-foreground truncate block font-dev">{level.dp}dp · {level.tintOpacity}%</span>
+                                <span className="text-[9px] text-muted-foreground truncate block font-dev text-transform-tertiary">{level.dp}dp · {level.tintOpacity}%</span>
                             </div>
                         </div>
                     ))}

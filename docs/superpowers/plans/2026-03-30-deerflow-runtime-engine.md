@@ -1,6 +1,6 @@
 # DeerFlow 2.0 Runtime Engine — Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [x]`) syntax for tracking.
 
 **Goal:** Build the missing DeerFlow 2.0 runtime engine — middleware pipeline, DAG executor, skill runner, and missing agent identities — to turn ZAP OS from a routing layer into a full orchestration harness.
 
@@ -65,14 +65,14 @@
 - Create: `packages/zap-claw/.agent/cleo/identity.md` (+ 11 more per agent)
 - Reference: `packages/zap-claw/.agent/jerry/` (template)
 
-- [ ] **Step 1: Read the Jerry agent template to understand the 12-file structure**
+- [x] **Step 1: Read the Jerry agent template to understand the 12-file structure**
 
 ```bash
 ls packages/zap-claw/.agent/jerry/
 cat packages/zap-claw/.agent/jerry/identity.md
 ```
 
-- [ ] **Step 2: Create Cleo agent (DeerFlow Lead Agent equivalent)**
+- [x] **Step 2: Create Cleo agent (DeerFlow Lead Agent equivalent)**
 
 Create `packages/zap-claw/.agent/cleo/` with all 12 files. Cleo is the orchestrator — task decomposition, DAG spawning, TodoMode enforcement.
 
@@ -108,7 +108,7 @@ Always produce a structured plan before executing. Use the `write_todos` tool fi
 
 Create minimal versions of: `soul.md`, `tools.md`, `memory.md`, `skill.md`, `heartbeat.md`, `shield.md`, `agents.md`, `learn.md`, `user.md`, `self-healing-brain.md` — following Jerry's structure.
 
-- [ ] **Step 3: Create Coder agent**
+- [x] **Step 3: Create Coder agent**
 
 `packages/zap-claw/.agent/coder/identity.md`:
 ```markdown
@@ -128,7 +128,7 @@ You are Coder. You write TypeScript code following BLAST protocol and strict TDD
 - Run tests and verify green before returning
 ```
 
-- [ ] **Step 4: Create Architect agent**
+- [x] **Step 4: Create Architect agent**
 
 `packages/zap-claw/.agent/architect/identity.md`:
 ```markdown
@@ -142,7 +142,7 @@ You are Coder. You write TypeScript code following BLAST protocol and strict TDD
 You are Architect. You design system architecture, write PRDs, create DAG designs, and author SOPs. You think in systems and produce implementation plans.
 ```
 
-- [ ] **Step 5: Create Daemon agent**
+- [x] **Step 5: Create Daemon agent**
 
 `packages/zap-claw/.agent/daemon/identity.md`:
 ```markdown
@@ -156,7 +156,7 @@ You are Architect. You design system architecture, write PRDs, create DAG design
 You are Daemon. You run background maintenance: memory compaction (24h cycle), health checks, Docker sandbox provisioning, and scheduled tasks. You never interact with users directly.
 ```
 
-- [ ] **Step 6: Create Gateway agent**
+- [x] **Step 6: Create Gateway agent**
 
 `packages/zap-claw/.agent/gateway/identity.md`:
 ```markdown
@@ -170,7 +170,7 @@ You are Daemon. You run background maintenance: memory compaction (24h cycle), h
 You are Gateway. You classify inbound requests, rate-limit by tenant, and route to the correct agent via OmniRouter. You are the API gateway entry point for all external traffic.
 ```
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add packages/zap-claw/.agent/cleo/ packages/zap-claw/.agent/coder/ packages/zap-claw/.agent/architect/ packages/zap-claw/.agent/daemon/ packages/zap-claw/.agent/gateway/
@@ -187,7 +187,7 @@ git commit -m "feat: add 5 missing agent identity files (Cleo, Coder, Architect,
 - Modify: `packages/zap-claw/src/middlewares/index.ts`
 - Reference: `packages/zap-claw/src/middlewares/todolist.ts` (pattern), `packages/zap-claw/src/memory/ralph.ts` (memory API)
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 ```typescript
 // packages/zap-claw/src/__tests__/middlewares/memory_inject.test.ts
@@ -230,14 +230,14 @@ describe('MemoryInjectMiddleware', () => {
 });
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 ```bash
 cd packages/zap-claw && npx jest src/__tests__/middlewares/memory_inject.test.ts --no-coverage
 ```
 Expected: FAIL — `Cannot find module '../../middlewares/memory_inject.js'`
 
-- [ ] **Step 3: Write minimal implementation**
+- [x] **Step 3: Write minimal implementation**
 
 ```typescript
 // packages/zap-claw/src/middlewares/memory_inject.ts
@@ -293,21 +293,21 @@ export const MemoryInjectMiddleware: ToolMiddleware = async (ctx, next) => {
 };
 ```
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
 ```bash
 cd packages/zap-claw && npx jest src/__tests__/middlewares/memory_inject.test.ts --no-coverage
 ```
 Expected: PASS
 
-- [ ] **Step 5: Export from index**
+- [x] **Step 5: Export from index**
 
 Add to `packages/zap-claw/src/middlewares/index.ts`:
 ```typescript
 export { MemoryInjectMiddleware } from './memory_inject.js';
 ```
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add packages/zap-claw/src/middlewares/memory_inject.ts packages/zap-claw/src/__tests__/middlewares/memory_inject.test.ts packages/zap-claw/src/middlewares/index.ts
@@ -322,7 +322,7 @@ git commit -m "feat: add memory inject middleware for DeerFlow pipeline"
 - Create: `packages/zap-claw/src/middlewares/loop_detection.ts`
 - Test: `packages/zap-claw/src/__tests__/middlewares/loop_detection.test.ts`
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 ```typescript
 // packages/zap-claw/src/__tests__/middlewares/loop_detection.test.ts
@@ -378,13 +378,13 @@ describe('LoopDetectionMiddleware', () => {
 });
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 ```bash
 cd packages/zap-claw && npx jest src/__tests__/middlewares/loop_detection.test.ts --no-coverage
 ```
 
-- [ ] **Step 3: Write minimal implementation**
+- [x] **Step 3: Write minimal implementation**
 
 ```typescript
 // packages/zap-claw/src/middlewares/loop_detection.ts
@@ -419,13 +419,13 @@ export const LoopDetectionMiddleware: ToolMiddleware = async (ctx, next) => {
 };
 ```
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
 ```bash
 cd packages/zap-claw && npx jest src/__tests__/middlewares/loop_detection.test.ts --no-coverage
 ```
 
-- [ ] **Step 5: Export and commit**
+- [x] **Step 5: Export and commit**
 
 ```bash
 # Add to middlewares/index.ts
@@ -441,7 +441,7 @@ git commit -m "feat: add loop detection middleware for DeerFlow pipeline"
 - Create: `packages/zap-claw/src/middlewares/context_summarize.ts`
 - Test: `packages/zap-claw/src/__tests__/middlewares/context_summarize.test.ts`
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 ```typescript
 // packages/zap-claw/src/__tests__/middlewares/context_summarize.test.ts
@@ -483,9 +483,9 @@ describe('ContextSummarizeMiddleware', () => {
 });
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
-- [ ] **Step 3: Write minimal implementation**
+- [x] **Step 3: Write minimal implementation**
 
 ```typescript
 // packages/zap-claw/src/middlewares/context_summarize.ts
@@ -510,9 +510,9 @@ export const ContextSummarizeMiddleware: ToolMiddleware = async (ctx, next) => {
 };
 ```
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
-- [ ] **Step 5: Export and commit**
+- [x] **Step 5: Export and commit**
 
 ```bash
 git add packages/zap-claw/src/middlewares/context_summarize.ts packages/zap-claw/src/__tests__/middlewares/context_summarize.test.ts packages/zap-claw/src/middlewares/index.ts
@@ -527,7 +527,7 @@ git commit -m "feat: add context summarization middleware for DeerFlow pipeline"
 - Create: `packages/zap-claw/src/middlewares/subagent_limit.ts`
 - Test: `packages/zap-claw/src/__tests__/middlewares/subagent_limit.test.ts`
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 ```typescript
 // packages/zap-claw/src/__tests__/middlewares/subagent_limit.test.ts
@@ -594,9 +594,9 @@ describe('SubagentLimitMiddleware', () => {
 });
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
-- [ ] **Step 3: Write minimal implementation**
+- [x] **Step 3: Write minimal implementation**
 
 ```typescript
 // packages/zap-claw/src/middlewares/subagent_limit.ts
@@ -633,9 +633,9 @@ export const SubagentLimitMiddleware: ToolMiddleware = async (ctx, next) => {
 };
 ```
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
-- [ ] **Step 5: Export and commit**
+- [x] **Step 5: Export and commit**
 
 ```bash
 git add packages/zap-claw/src/middlewares/subagent_limit.ts packages/zap-claw/src/__tests__/middlewares/subagent_limit.test.ts packages/zap-claw/src/middlewares/index.ts
@@ -652,7 +652,7 @@ git commit -m "feat: add subagent limit middleware for DeerFlow pipeline"
 - Test: `packages/zap-claw/src/__tests__/middlewares/title_autogen.test.ts`
 - Test: `packages/zap-claw/src/__tests__/middlewares/followup_suggest.test.ts`
 
-- [ ] **Step 1: Write tests for both middlewares**
+- [x] **Step 1: Write tests for both middlewares**
 
 ```typescript
 // packages/zap-claw/src/__tests__/middlewares/title_autogen.test.ts
@@ -713,9 +713,9 @@ describe('FollowupSuggestMiddleware', () => {
 });
 ```
 
-- [ ] **Step 2: Run tests to verify they fail**
+- [x] **Step 2: Run tests to verify they fail**
 
-- [ ] **Step 3: Write implementations**
+- [x] **Step 3: Write implementations**
 
 ```typescript
 // packages/zap-claw/src/middlewares/title_autogen.ts
@@ -741,9 +741,9 @@ export const FollowupSuggestMiddleware: ToolMiddleware = async (ctx, next) => {
 };
 ```
 
-- [ ] **Step 4: Run tests to verify they pass**
+- [x] **Step 4: Run tests to verify they pass**
 
-- [ ] **Step 5: Export and commit**
+- [x] **Step 5: Export and commit**
 
 ```bash
 git add packages/zap-claw/src/middlewares/title_autogen.ts packages/zap-claw/src/middlewares/followup_suggest.ts packages/zap-claw/src/__tests__/middlewares/ packages/zap-claw/src/middlewares/index.ts
@@ -762,7 +762,7 @@ git commit -m "feat: add title auto-gen and follow-up suggestion middlewares"
 - Test: `packages/zap-claw/src/__tests__/tools/spawn.test.ts`
 - Reference: `packages/zap-claw/src/tools/task.ts` (existing pattern)
 
-- [ ] **Step 1: Write the failing test for spawn tool**
+- [x] **Step 1: Write the failing test for spawn tool**
 
 ```typescript
 // packages/zap-claw/src/__tests__/tools/spawn.test.ts
@@ -794,9 +794,9 @@ describe('spawn tool', () => {
 });
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
-- [ ] **Step 3: Write spawn tool**
+- [x] **Step 3: Write spawn tool**
 
 ```typescript
 // packages/zap-claw/src/tools/spawn.ts
@@ -916,9 +916,9 @@ export async function handler(
 }
 ```
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
-- [ ] **Step 5: Create the API route**
+- [x] **Step 5: Create the API route**
 
 ```typescript
 // apps/zap-swarm/src/app/api/swarm/spawn/route.ts
@@ -979,11 +979,11 @@ export async function POST(req: NextRequest) {
 }
 ```
 
-- [ ] **Step 6: Register spawn tool in tools/index.ts**
+- [x] **Step 6: Register spawn tool in tools/index.ts**
 
 Add the spawn tool import and registration alongside existing tools.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add packages/zap-claw/src/tools/spawn.ts packages/zap-claw/src/__tests__/tools/spawn.test.ts packages/zap-claw/src/tools/index.ts apps/zap-swarm/src/app/api/swarm/spawn/route.ts
@@ -999,7 +999,7 @@ git commit -m "feat: add spawn tool and API route for DAG child job creation"
 - Test: `packages/zap-claw/src/__tests__/runtime/dag_executor.test.ts`
 - Reference: `packages/zap-claw/src/runtime/engine/omni_queue.ts:332-343` (existing DAG unblocking)
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 ```typescript
 // packages/zap-claw/src/__tests__/runtime/dag_executor.test.ts
@@ -1035,9 +1035,9 @@ describe('DAG Executor', () => {
 });
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
-- [ ] **Step 3: Write implementation**
+- [x] **Step 3: Write implementation**
 
 ```typescript
 // packages/zap-claw/src/runtime/engine/dag_executor.ts
@@ -1138,9 +1138,9 @@ export async function startDAGExecutor(tenantId: string = 'ZVN', pollIntervalMs:
 }
 ```
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add packages/zap-claw/src/runtime/engine/dag_executor.ts packages/zap-claw/src/__tests__/runtime/dag_executor.test.ts
@@ -1158,7 +1158,7 @@ git commit -m "feat: add DAG executor daemon for DeerFlow job orchestration"
 - Modify: `apps/zap-swarm/src/app/api/swarm/skills/route.ts` (POST handler)
 - Reference: `apps/zap-swarm/src/app/api/swarm/skills/route.ts` (existing classification logic)
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 ```typescript
 // packages/zap-claw/src/__tests__/skills/skill_runner.test.ts
@@ -1186,9 +1186,9 @@ describe('Skill Runner', () => {
 });
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
-- [ ] **Step 3: Write implementation**
+- [x] **Step 3: Write implementation**
 
 ```typescript
 // packages/zap-claw/src/skills/skill_runner.ts
@@ -1310,9 +1310,9 @@ export function discoverSkills(skillsBasePath: string): SkillEntry[] {
 }
 ```
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 mkdir -p packages/zap-claw/src/skills
@@ -1331,7 +1331,7 @@ git commit -m "feat: add skill runner and registry for DeerFlow skill execution"
 
 This task wires all middlewares into the canonical execution order.
 
-- [ ] **Step 1: Write the integration test**
+- [x] **Step 1: Write the integration test**
 
 ```typescript
 // packages/zap-claw/src/__tests__/middlewares/pipeline_integration.test.ts
@@ -1410,9 +1410,9 @@ describe('Full DeerFlow Middleware Pipeline', () => {
 });
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
-- [ ] **Step 3: Update middlewares/index.ts with canonical pipeline**
+- [x] **Step 3: Update middlewares/index.ts with canonical pipeline**
 
 ```typescript
 // packages/zap-claw/src/middlewares/index.ts
@@ -1476,13 +1476,13 @@ export const DEERFLOW_PIPELINE: ToolMiddleware[] = [
 ];
 ```
 
-- [ ] **Step 4: Run tests to verify they pass**
+- [x] **Step 4: Run tests to verify they pass**
 
 ```bash
 cd packages/zap-claw && npx jest src/__tests__/middlewares/ --no-coverage
 ```
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add packages/zap-claw/src/middlewares/
@@ -1496,13 +1496,13 @@ git commit -m "feat: wire canonical DeerFlow middleware pipeline with execution 
 **Files:**
 - Modify: `apps/zap-swarm/src/app/api/swarm/skills/route.ts` (POST section)
 
-- [ ] **Step 1: Read current POST handler**
+- [x] **Step 1: Read current POST handler**
 
 ```bash
 cat apps/zap-swarm/src/app/api/swarm/skills/route.ts
 ```
 
-- [ ] **Step 2: Update POST handler to use skill_runner**
+- [x] **Step 2: Update POST handler to use skill_runner**
 
 The current POST handler already reads SKILL.md and dispatches to chat. Verify it works end-to-end by:
 1. Confirming the SKILL.md resolution path is correct
@@ -1511,7 +1511,7 @@ The current POST handler already reads SKILL.md and dispatches to chat. Verify i
 
 No structural change needed if the existing POST handler already does this correctly (it does based on the audit). Verify and move on.
 
-- [ ] **Step 3: Commit (if changes made)**
+- [x] **Step 3: Commit (if changes made)**
 
 ```bash
 git add apps/zap-swarm/src/app/api/swarm/skills/route.ts
@@ -1522,17 +1522,17 @@ git commit -m "fix: verify skill execution POST handler wiring"
 
 ## Task 12: Integration Smoke Test
 
-- [ ] **Step 1: Start zap-claw dev server**
+- [x] **Step 1: Start zap-claw dev server**
 
 ```bash
 cd packages/zap-claw && npm run dev
 ```
 
-- [ ] **Step 2: Verify middleware pipeline loads**
+- [x] **Step 2: Verify middleware pipeline loads**
 
 Check console output for middleware registration messages.
 
-- [ ] **Step 3: Test spawn API endpoint**
+- [x] **Step 3: Test spawn API endpoint**
 
 ```bash
 curl -X POST http://localhost:3500/api/swarm/spawn \
@@ -1542,7 +1542,7 @@ curl -X POST http://localhost:3500/api/swarm/spawn \
 
 Expected: `{ "success": true, "jobId": "...", "status": "PENDING" }`
 
-- [ ] **Step 4: Test skill execution**
+- [x] **Step 4: Test skill execution**
 
 ```bash
 curl -X POST http://localhost:3500/api/swarm/skills \
@@ -1552,7 +1552,7 @@ curl -X POST http://localhost:3500/api/swarm/skills \
 
 Expected: `{ "success": true, "jobId": "...", "skill": "df-deep-research" }`
 
-- [ ] **Step 5: Verify DAG unblocking**
+- [x] **Step 5: Verify DAG unblocking**
 
 Create two jobs where job B depends on job A. Complete job A manually in MongoDB. Verify job B status changes from BLOCKED to PENDING.
 
@@ -1565,7 +1565,7 @@ curl -X POST http://localhost:3500/api/swarm/spawn \
   -d '{"agentSlug":"coder","task":"implement X","dependsOn":["<PARENT_JOB_ID>"],"tenantId":"ZVN"}'
 ```
 
-- [ ] **Step 6: Final commit**
+- [x] **Step 6: Final commit**
 
 ```bash
 git commit --allow-empty -m "chore: DeerFlow runtime engine integration verified"

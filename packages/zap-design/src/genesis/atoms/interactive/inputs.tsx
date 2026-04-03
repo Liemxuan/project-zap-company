@@ -23,7 +23,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         const isError = propIsError || !!fieldError;
         const errorMessage = propErrorMessage || (fieldError?.message as string);
 
-        const baseClasses = "w-full transition-all duration-200 focus:outline-none focus:ring-2 text-on-surface font-body border-solid";
+        const baseClasses = "w-full transition-all duration-200 focus:outline-none focus:ring-2 text-on-surface font-body text-transform-secondary border-solid";
         
         const variantClasses = {
             outlined: "bg-[color:var(--local-bg-outlined)] border-[color:var(--local-border-outlined)] focus:border-[color:var(--local-focus-border)] focus:ring-[color:var(--local-focus-ring)]",

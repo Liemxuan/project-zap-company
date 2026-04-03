@@ -23,7 +23,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata = {
-  title: "ZAP Swarm Command",
+  title: "ZAP AI",
   description: "Standalone Swarm Command Center",
 };
 

@@ -47,7 +47,12 @@ export const MetroHeader = ({
                 setPlatform={setPlatform}
                 showBackground={showBackground}
                 rightSlot={
-                    rightSlot || (liveIndicator ? <LiveBlinker /> : undefined)
+                    (rightSlot || liveIndicator) ? (
+                        <div className="flex items-center gap-4">
+                            {rightSlot}
+                            {liveIndicator && <LiveBlinker />}
+                        </div>
+                    ) : undefined
                 }
             />
         </Wrapper>

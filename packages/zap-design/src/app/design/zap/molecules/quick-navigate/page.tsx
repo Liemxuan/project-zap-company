@@ -1,9 +1,10 @@
 'use client';
 import { parseCssToNumber } from '../../../../../lib/utils';
+import { CanvasBody } from '../../../../../zap/layout/CanvasBody';
+import { SectionHeader } from '../../../../../zap/sections/SectionHeader';
 import React, { useState, useEffect } from 'react';
 import { ComponentSandboxTemplate } from '../../../../../zap/layout/ComponentSandboxTemplate';
 import { Icon } from '../../../../../genesis/atoms/icons/Icon';
-import { Wrapper } from '../../../../../components/dev/Wrapper';
 import { Slider } from '../../../../../genesis/atoms/interactive/slider';
 import { Label } from '../../../../../genesis/atoms/interactive/label';
 import { Heading } from '../../../../../genesis/atoms/typography/headings';
@@ -66,7 +67,7 @@ export default function QuickNavigateSandboxPage() {
 
     const renderRadiusSelect = (value: string, onChange: (val: string) => void) => (
         <select 
-            className={`w-full bg-layer-base border ${value !== '' ? 'border-primary/50 text-on-surface' : 'border-outline-variant/30 text-on-surface/50'} rounded px-2 py-1 text-label-small font-dev outline-none`}
+            className={`w-full bg-layer-base border ${value !== '' ? 'border-primary/50 text-on-surface' : 'border-outline-variant/30 text-on-surface/50'} rounded px-2 py-1 text-label-small font-dev text-transform-tertiary outline-none`}
             style={{ backgroundColor: 'var(--color-surface-container-highest)' }}
             value={value}
             onChange={(e) => onChange(e.target.value)}
@@ -80,7 +81,7 @@ export default function QuickNavigateSandboxPage() {
 
     const renderWidthSelect = (value: string, onChange: (val: string) => void) => (
         <select 
-            className={`w-full bg-layer-base border ${value !== '' ? 'border-primary/50 text-on-surface' : 'border-outline-variant/30 text-on-surface/50'} rounded px-2 py-1 text-label-small font-dev outline-none`}
+            className={`w-full bg-layer-base border ${value !== '' ? 'border-primary/50 text-on-surface' : 'border-outline-variant/30 text-on-surface/50'} rounded px-2 py-1 text-label-small font-dev text-transform-tertiary outline-none`}
             style={{ backgroundColor: 'var(--color-surface-container-highest)' }}
             value={value}
             onChange={(e) => onChange(e.target.value)}
@@ -93,15 +94,15 @@ export default function QuickNavigateSandboxPage() {
     );
 
     const inspectorControls = (
-        <Wrapper identity={{ displayName: "Inspector Controls Container", type: "Container", filePath: "zap/molecules/quick-navigate/page.tsx" }}>
+        
             <div className="space-y-4">
-                <Wrapper identity={{ displayName: "Combobox Structural Settings", type: "Docs Link", filePath: "zap/molecules/quick-navigate/page.tsx" }}>
+                
                     <div className="space-y-6">
-                        <Text size="label-small" className="text-transform-primary font-display font-bold text-on-surface-variant text-transform-secondary tracking-wider uppercase block">Quick Navigate Variables</Text>
+ <Text size="label-small" className="text-transform-primary font-display font-bold text-on-surface-variant text-transform-secondary tracking-wider block">Quick Navigate Variables</Text>
 
                         <div className="space-y-4">
                             <div className="space-y-2">
-                                <div className="flex justify-between items-center font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary uppercase">
+ <div className="flex justify-between items-center font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary ">
                                     <Text size="label-small">--select-height</Text>
                                     <Text size="label-small" className="font-bold">{height[0]}px</Text>
                                 </div>
@@ -109,7 +110,7 @@ export default function QuickNavigateSandboxPage() {
                             </div>
 
                             <div className="space-y-2">
-                                <div className="flex justify-between items-center font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary uppercase pb-1">
+ <div className="flex justify-between items-center font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary pb-1">
                                     <Text size="label-small">Border Radius</Text>
                                     <Text size="label-small" className="font-bold opacity-50">{effectiveProps.radius}</Text>
                                 </div>
@@ -117,7 +118,7 @@ export default function QuickNavigateSandboxPage() {
                             </div>
 
                             <div className="space-y-2">
-                                <div className="flex justify-between items-center font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary uppercase pb-1">
+ <div className="flex justify-between items-center font-dev text-transform-tertiary text-on-surface-variant text-transform-secondary pb-1">
                                     <Text size="label-small">Border Width</Text>
                                     <Text size="label-small" className="font-bold opacity-50">{effectiveProps.width}</Text>
                                 </div>
@@ -125,9 +126,9 @@ export default function QuickNavigateSandboxPage() {
                             </div>
                         </div>
                     </div>
-                </Wrapper>
+                
             </div>
-        </Wrapper>
+        
     );
 
     const handleLoadedVariables = (variables: Record<string, string>) => {
@@ -164,6 +165,10 @@ export default function QuickNavigateSandboxPage() {
                 />
             }
         >
+            <CanvasBody flush={false}>
+                <CanvasBody.Section>
+                    <SectionHeader number="1" id="quick-navigate" title="Quick Navigate Sandbox" description="Interactive components for Quick Navigate" icon="widgets" />
+                    <CanvasBody.Demo className="w-full">
             <div
                 className="w-full space-y-12 animate-in fade-in duration-500 pb-16"
                 style={{
@@ -172,26 +177,29 @@ export default function QuickNavigateSandboxPage() {
                     '--select-border-width': previewWidth
                 } as React.CSSProperties}
             >
-                <section className="space-y-6">
-                    <Wrapper identity={{ displayName: "Section Header", type: "Header", filePath: "zap/molecules/quick-navigate/page.tsx" }} className="w-fit inline-block">
+                <div className="space-y-6">
+                    
                         <div className="flex items-center justify-start gap-2 text-on-surface-variant text-transform-secondary pb-2 px-2">
                             <Icon name="search" size={14} className="opacity-60" />
                             <Heading level={3} className="tracking-tight text-transform-primary uppercase">Quick Navigate Search</Heading>
                         </div>
-                    </Wrapper>
+                    
 
                     <div className="bg-layer-panel rounded-[24px] border border-outline-variant/50 p-8 md:p-12 relative overflow-visible h-[400px]">
-                        <Wrapper identity={{ displayName: "States Grid Container", type: "Container", filePath: "zap/molecules/quick-navigate/page.tsx" }}>
+                        
                             <div className="max-w-xs space-y-4">
                                 <div className="space-y-2">
                                     <Label className="text-on-surface-variant text-transform-secondary font-bold tracking-widest uppercase mb-2 block"><Text size="label-medium" className="inline">Quick Navigate</Text></Label>
                                     <QuickNavigate className="w-full" />
                                 </div>
                             </div>
-                        </Wrapper>
+                        
                     </div>
-                </section>
+                </div>
             </div>
+                    </CanvasBody.Demo>
+                </CanvasBody.Section>
+            </CanvasBody>
         </ComponentSandboxTemplate>
     );
 }

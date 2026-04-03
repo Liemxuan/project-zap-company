@@ -4,6 +4,8 @@ import React, { useState } from 'react';
 import { ComponentSandboxTemplate } from '../../../../../zap/layout/ComponentSandboxTemplate';
 import { InspectorAccordion } from '../../../../../zap/organisms/laboratory/InspectorAccordion';
 import { ProfileSwitcher, Profile } from '../../../../../genesis/molecules/profile-switcher';
+import { CanvasBody } from '../../../../../zap/layout/CanvasBody';
+import { SectionHeader } from '../../../../../zap/sections/SectionHeader';
 
 const MOCK_PROFILES: Profile[] = [
     {
@@ -44,12 +46,18 @@ export default function ProfileSwitcherSandbox() {
             importPath="@/components/ui/profile-switcher"
             inspectorControls={
                 <InspectorAccordion title="Switcher Data">
-                    <div className="flex flex-col gap-4">
+            <CanvasBody flush={false}>
+                <CanvasBody.Section>
+                    <SectionHeader number="1" id="profile-switcher" title="Profile Switcher Sandbox" description="Interactive components for Profile Switcher" icon="widgets" />
+                    <CanvasBody.Demo className="flex flex-col gap-4">
                         <div className="flex flex-col gap-2">
                             <span className="text-body-small font-semibold text-on-surface text-transform-primary">Current Active ID</span>
-                            <span className="text-label-small font-mono text-on-surface-variant text-transform-secondary bg-surface-variant p-2 rounded">{activeId}</span>
+                            <span className="text-label-small font-mono text-transform-tertiary text-on-surface-variant text-transform-secondary bg-surface-variant p-2 rounded">{activeId}</span>
                         </div>
-                    </div>
+                        </CanvasBody.Demo>
+                </CanvasBody.Section>
+            </CanvasBody>
+        
                 </InspectorAccordion>
             }
         >

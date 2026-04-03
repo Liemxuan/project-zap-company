@@ -1,8 +1,9 @@
 'use client';
 
+import { CanvasBody } from '../../../../../zap/layout/CanvasBody';
+import { SectionHeader } from '../../../../../zap/sections/SectionHeader';
 import React, { useState, useEffect } from 'react';
 import { ComponentSandboxTemplate } from '../../../../../zap/layout/ComponentSandboxTemplate';
-import { Wrapper } from '../../../../../components/dev/Wrapper';
 import { useTheme } from '../../../../../components/ThemeContext';
 import { ThemePublisher } from '../../../../../components/dev/ThemePublisher';
 import { useBorderProperties } from '../../../../../zap/sections/atoms/border_radius/use-border-properties';
@@ -124,9 +125,9 @@ export default function DialogSandboxPage() {
     };
 
     const inspectorControls = (
-        <Wrapper identity={{ displayName: "Inspector Controls Container", type: "Container", filePath: "zap/molecules/dialog" }}>
+        <>
             <div className="space-y-4">
-                <Wrapper identity={{ displayName: "Dialog Structural Settings", type: "Docs Link", filePath: "zap/molecules/dialog/page.tsx" }}>
+                
                     <div className="space-y-6">
                         <h4 className="text-label-small text-transform-primary font-display font-bold text-on-surface-variant text-transform-secondary tracking-wider">Sandbox Variables</h4>
 
@@ -190,9 +191,9 @@ export default function DialogSandboxPage() {
                             </div>
                         </div>
                     </div>
-                </Wrapper>
+                
             </div>
-        </Wrapper>
+        </>
     );
 
     const handlePublish = async () => {
@@ -250,7 +251,6 @@ export default function DialogSandboxPage() {
                 typographyScales: ["font-display", "font-body", "text-transform-primary", "text-transform-secondary"]
             }}
             platformConstraints={{ web: "N/A", mobile: "N/A" }}
-            foundationRules={[]}
         >
             <style dangerouslySetInnerHTML={{ __html: `
                 .dialog-preview-sandbox {
@@ -261,9 +261,10 @@ export default function DialogSandboxPage() {
                     ${previewBgCssVar ? `--dialog-bg: ${previewBgCssVar};` : ''}
                 }
             ` }} />
-            <div 
-                className="w-full flex items-center justify-center min-h-[400px] p-12 bg-layer-panel shadow-sm border border-outline-variant rounded-xl dialog-preview-sandbox"
-            >
+            <CanvasBody flush={false}>
+                <CanvasBody.Section>
+                    <SectionHeader number="1" id="dialog" title="Dialog Sandbox" description="Interactive components for Dialog" icon="widgets" />
+                    <CanvasBody.Demo className="w-full flex items-center justify-center min-h-[400px] p-12 bg-layer-panel shadow-sm border border-outline-variant rounded-xl dialog-preview-sandbox">
                 <Dialog modal={false}>
                     <DialogTrigger asChild>
                         <Button variant="flat">Open Dialog</Button>
@@ -283,19 +284,19 @@ export default function DialogSandboxPage() {
                                 <Label htmlFor="name">
                                     Name
                                 </Label>
-                                <Input id="name" defaultValue="Pedro Duarte" type="text" />
+                                <Input aria-label="Input component" id="name" defaultValue="Pedro Duarte" type="text" />
                             </div>
                             <div className="flex flex-col gap-2">
                                 <Label htmlFor="username">
                                     Username
                                 </Label>
-                                <Input id="username" defaultValue="@peduarte" type="text" />
+                                <Input aria-label="Input component" id="username" defaultValue="@peduarte" type="text" />
                             </div>
                             <div className="flex flex-col gap-2">
                                 <Label htmlFor="email">
                                     Email
                                 </Label>
-                                <Input id="email" defaultValue="pedro@zeus.com" type="email" />
+                                <Input aria-label="Input component" id="email" defaultValue="pedro@zeus.com" type="email" />
                             </div>
                         </div>
                         <DialogFooter>
@@ -303,7 +304,9 @@ export default function DialogSandboxPage() {
                         </DialogFooter>
                     </DialogContent>
                 </Dialog>
-            </div>
+                    </CanvasBody.Demo>
+                </CanvasBody.Section>
+            </CanvasBody>
         </ComponentSandboxTemplate>
     );
 }

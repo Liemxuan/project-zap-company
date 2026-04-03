@@ -109,7 +109,7 @@ const PhoneFrame = ({
             <div className="absolute top-0 left-0 right-0 z-50">
                 {isIOS ? <IOSStatusBar /> : <AndroidStatusBar />}
             </div>
-
+            
             {/* Main Viewport Container */}
             <div className={cn("flex-1 overflow-y-auto no-scrollbar flex flex-col relative", isIOS ? "pt-[54px]" : "pt-[28px]")}>
                 {children}
@@ -212,7 +212,7 @@ export const CanvasDesktop = ({
     title = "ZAP Desktop Engine", 
     fullScreenHref, 
     defaultWindowClass = 'expanded', 
-    defaultPlatform = 'ios'
+    defaultPlatform = 'ios' 
 }: CanvasDesktopProps) => {
     const [windowClass, setWindowClass] = useState<WindowClass>(defaultWindowClass);
     const [platform, setPlatform] = useState<DevicePlatform>(defaultPlatform);
@@ -255,9 +255,9 @@ export const CanvasDesktop = ({
     const getBoundingBox = () => {
         if (windowClass === 'compact') {
             if (isBoth) {
-                return {
-                    width: DEVICE_SPECS.android.width + DEVICE_SPECS.ios.width + 48,
-                    height: Math.max(DEVICE_SPECS.android.height, DEVICE_SPECS.ios.height) + 40
+                return { 
+                    width: DEVICE_SPECS.android.width + DEVICE_SPECS.ios.width + 48, 
+                    height: Math.max(DEVICE_SPECS.android.height, DEVICE_SPECS.ios.height) + 40 
                 };
             }
             const spec = DEVICE_SPECS[platform as keyof typeof DEVICE_SPECS];
@@ -281,95 +281,95 @@ export const CanvasDesktop = ({
             />
 
             {/* ── Preview Frame (Scaled Space) ──────────────── */}
-            <div
+            <div 
                 className="relative transition-all duration-300 flex justify-center origin-top mt-4"
                 style={{ width: bbox.width * scale, height: bbox.height * scale }}
             >
-                <div
+                <div 
                     className="absolute top-0 origin-top flex justify-center"
                     style={{ transform: `scale(${scale})`, width: bbox.width }}
                 >
                     <motion.div
-                        key={`${windowClass}-${platform}`}
-                        initial={{ opacity: 0, y: 12, scale: 0.97 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-                        className="flex items-start justify-center gap-12"
-                    >
-                        {windowClass === 'compact' ? (
-                            /* ── Compact: Phone Frames ─────────────── */
-                            isBoth ? (
-                                <>
-                                    <div className="flex flex-col items-center gap-4">
-                                        <PhoneFrame deviceKey="android">{children}</PhoneFrame>
-                                        <p className="text-[10px] font-dev text-transform-tertiary opacity-50 tracking-widest text-on-surface">
-                                            {DEVICE_SPECS.android.name} · {DEVICE_SPECS.android.spec}
-                                        </p>
-                                    </div>
-                                    <div className="flex flex-col items-center gap-4">
-                                        <PhoneFrame deviceKey="ios">{children}</PhoneFrame>
-                                        <p className="text-[10px] font-dev text-transform-tertiary opacity-50 tracking-widest text-on-surface">
-                                            {DEVICE_SPECS.ios.name} · {DEVICE_SPECS.ios.spec}
-                                        </p>
-                                    </div>
-                                </>
-                            ) : (
-                                <PhoneFrame deviceKey={platform as keyof typeof DEVICE_SPECS}>{children}</PhoneFrame>
-                            )
-                        ) : windowClass === 'medium' ? (
-                            /* ── Medium: Tablet frame ──────────────── */
-                            <div
-                                className="relative flex flex-col overflow-hidden shadow-[0_32px_64px_-16px_rgba(0,0,0,0.3)] bg-layer-base border-outline-variant"
-                                style={{
-                                    width: 1024,
-                                    height: 768,
-                                    borderRadius: 16,
-                                    borderWidth: 8,
-                                    borderStyle: 'solid',
-                                }}
-                            >
-                                <div className="absolute top-0 left-0 right-0 h-7 flex items-center justify-between px-5 shrink-0 z-50 pointer-events-none text-foreground">
-                                    <span className="tabular-nums text-[10px] font-medium mt-1">22:50</span>
-                                    <div className="flex gap-1.5 items-center opacity-80 mt-1">
-                                        <Icon name="signal_cellular_4_bar" size={12} />
-                                        <Icon name="wifi" size={12} />
-                                        <Icon name="battery_full" size={12} />
-                                    </div>
+                    key={`${windowClass}-${platform}`}
+                    initial={{ opacity: 0, y: 12, scale: 0.97 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                    className="flex items-start justify-center gap-12"
+                >
+                    {windowClass === 'compact' ? (
+                        /* ── Compact: Phone Frames ─────────────── */
+                        isBoth ? (
+                            <>
+                                <div className="flex flex-col items-center gap-4">
+                                    <PhoneFrame deviceKey="android">{children}</PhoneFrame>
+                                    <p className="text-[10px] font-dev text-transform-tertiary opacity-50 tracking-widest text-on-surface">
+                                        {DEVICE_SPECS.android.name} · {DEVICE_SPECS.android.spec}
+                                    </p>
                                 </div>
-                                <div className="flex-1 overflow-y-auto no-scrollbar pt-7">
-                                    {children}
+                                <div className="flex flex-col items-center gap-4">
+                                    <PhoneFrame deviceKey="ios">{children}</PhoneFrame>
+                                    <p className="text-[10px] font-dev text-transform-tertiary opacity-50 tracking-widest text-on-surface">
+                                        {DEVICE_SPECS.ios.name} · {DEVICE_SPECS.ios.spec}
+                                    </p>
                                 </div>
-                            </div>
+                            </>
                         ) : (
-                            /* ── Expanded: Desktop frame ───────────── */
-                            <div
-                                className="relative flex flex-col overflow-hidden shadow-[0_32px_64px_-16px_rgba(0,0,0,0.3)] bg-layer-base border-outline-variant"
-                                style={{
-                                    width: 1440,
-                                    height: 900,
-                                    borderRadius: 12,
-                                    borderWidth: 1,
-                                    borderStyle: 'solid',
-                                }}
-                            >
-                                {/* Desktop title bar */}
-                                <div className="h-[38px] w-full flex items-center px-4 gap-2 shrink-0 border-b border-border bg-layer-panel z-50">
-                                    <div className="flex gap-2 w-[60px]">
-                                        <div className="w-3 h-3 rounded-full bg-[#EC6A5E] border border-black/10 shadow-sm" />
-                                        <div className="w-3 h-3 rounded-full bg-[#F4BF4F] border border-black/10 shadow-sm" />
-                                        <div className="w-3 h-3 rounded-full bg-[#61C554] border border-black/10 shadow-sm" />
-                                    </div>
-                                    <span className="text-[10px] font-bold font-display tracking-[0.25em] uppercase opacity-60 ml-2 flex-1 text-center text-on-surface-variant">
-                                        {title}
-                                    </span>
-                                    <div className="w-[60px]" /> {/* Spacer for symmetry */}
-                                </div>
-                                <div className="flex-1 overflow-y-auto no-scrollbar">
-                                    {children}
+                            <PhoneFrame deviceKey={platform as keyof typeof DEVICE_SPECS}>{children}</PhoneFrame>
+                        )
+                    ) : windowClass === 'medium' ? (
+                        /* ── Medium: Tablet frame ──────────────── */
+                        <div
+                            className="relative flex flex-col overflow-hidden shadow-[0_32px_64px_-16px_rgba(0,0,0,0.3)] bg-layer-base border-outline-variant"
+                            style={{
+                                width: 1024,
+                                height: 768,
+                                borderRadius: 16,
+                                borderWidth: 8,
+                                borderStyle: 'solid',
+                            }}
+                        >
+                            <div className="absolute top-0 left-0 right-0 h-7 flex items-center justify-between px-5 shrink-0 z-50 pointer-events-none text-foreground">
+                                <span className="tabular-nums text-[10px] font-medium mt-1">22:50</span>
+                                <div className="flex gap-1.5 items-center opacity-80 mt-1">
+                                    <Icon name="signal_cellular_4_bar" size={12} />
+                                    <Icon name="wifi" size={12} />
+                                    <Icon name="battery_full" size={12} />
                                 </div>
                             </div>
-                        )}
-                    </motion.div>
+                            <div className="flex-1 overflow-y-auto no-scrollbar pt-7">
+                                {children}
+                            </div>
+                        </div>
+                    ) : (
+                        /* ── Expanded: Desktop frame ───────────── */
+                        <div
+                            className="relative flex flex-col overflow-hidden shadow-[0_32px_64px_-16px_rgba(0,0,0,0.3)] bg-layer-base border-outline-variant"
+                            style={{
+                                width: 1440,
+                                height: 900,
+                                borderRadius: 12,
+                                borderWidth: 1,
+                                borderStyle: 'solid',
+                            }}
+                        >
+                            {/* Desktop title bar */}
+                            <div className="h-[38px] w-full flex items-center px-4 gap-2 shrink-0 border-b border-border bg-layer-panel z-50">
+                                <div className="flex gap-2 w-[60px]">
+                                    <div className="w-3 h-3 rounded-full bg-[#EC6A5E] border border-black/10 shadow-sm" />
+                                    <div className="w-3 h-3 rounded-full bg-[#F4BF4F] border border-black/10 shadow-sm" />
+                                    <div className="w-3 h-3 rounded-full bg-[#61C554] border border-black/10 shadow-sm" />
+                                </div>
+ <span className="text-[10px] font-bold font-display text-transform-primary tracking-[0.25em] opacity-60 ml-2 flex-1 text-center text-on-surface-variant">
+                                    {title}
+                                </span>
+                                <div className="w-[60px]" /> {/* Spacer for symmetry */}
+                            </div>
+                            <div className="flex-1 overflow-y-auto no-scrollbar">
+                                {children}
+                            </div>
+                        </div>
+                    )}
+                </motion.div>
                 </div>
 
                 {/* Map-gauge vertical zoom controls — Floating dependably inside the right canvas boundary to avoid viewport clipping when expanded */}
@@ -377,8 +377,8 @@ export const CanvasDesktop = ({
                     <div className="sticky top-1/2 -translate-y-1/2 flex flex-col items-center bg-surface-container-high rounded-full border border-outline-variant shadow-2xl p-1 pointer-events-auto transition-colors hover:bg-surface-container-highest z-[9999]">
                         {scale < maxScale && (
                             <>
-                                <button
-                                    onClick={handleZoomIn}
+                                <button 
+                                    onClick={handleZoomIn} 
                                     className="p-2 rounded-full hover:bg-surface-variant hover:text-primary transition-colors text-on-surface flex items-center justify-center cursor-pointer"
                                     title="Zoom In"
                                 >
@@ -387,8 +387,8 @@ export const CanvasDesktop = ({
                                 <div className="my-1 border-t border-outline-variant w-6 mx-auto" />
                             </>
                         )}
-                        <button
-                            onClick={handleZoomReset}
+                        <button 
+                            onClick={handleZoomReset} 
                             className={cn("p-2 rounded-full transition-colors", scale === maxScale ? "text-primary" : "text-on-surface hover:bg-surface-variant hover:text-primary")}
                             title="Reset Zoom (100%)"
                         >
@@ -397,21 +397,21 @@ export const CanvasDesktop = ({
                             </span>
                         </button>
                         <div className="my-1 border-t border-outline-variant w-5 mx-auto" />
-                        <button
-                            onClick={handleZoomOut}
+                        <button 
+                            onClick={handleZoomOut} 
                             className="p-2 rounded-full hover:bg-surface-variant hover:text-primary transition-colors text-on-surface flex items-center justify-center cursor-pointer"
                             title="Zoom Out"
                         >
                             <Icon name="remove" size={18} />
                         </button>
-
+                        
                         {fullScreenHref && (
                             <>
                                 <div className="my-1 border-t border-outline-variant w-5 mx-auto" />
-                                <Link
-                                    href={fullScreenHref}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
+                                <Link 
+                                    href={fullScreenHref} 
+                                    target="_blank" 
+                                    rel="noopener noreferrer" 
                                     className="p-2 rounded-full hover:bg-surface-variant focus:bg-primary focus:text-on-primary hover:text-primary transition-colors text-on-surface-variant flex items-center justify-center cursor-pointer"
                                     title="Open True Size (Full Screen)"
                                 >

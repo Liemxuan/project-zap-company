@@ -1,6 +1,7 @@
 import { MongoClient, ObjectId } from "mongodb";
 import { GoogleGenAI } from "@google/genai";
 import "dotenv/config";
+import { getGlobalMongoClient } from "../db/mongo_client.js";
 
 const MONGO_URI = process.env.MONGODB_URI || "";
 const DB_NAME = "olympus";
@@ -22,9 +23,8 @@ export async function executeAutonomousLane(
     console.log(`\n[Autonomous Lane] 🚀 Booting autonomous execution sequence for Agent: ${agentProfile.assignedAgentId}`);
     console.log(`[Autonomous Lane] 📋 Processing Task ID: ${task._id} | Title: ${task.title}`);
 
-    const client = new MongoClient(MONGO_URI, { serverSelectionTimeoutMS: 5000 });
+    const client = await getGlobalMongoClient(MONGO_URI);
     try {
-        await client.connect();
         const db = client.db(DB_NAME);
 
         // Find the linked supervisor to get their identifier
@@ -97,6 +97,5 @@ Perform the task requested, and write a status report that will be inserted dire
         console.error(`[Autonomous Lane ERROR]`, error);
         return "❌ Internal Autonomous Error.";
     } finally {
-        await client.close();
     }
 }

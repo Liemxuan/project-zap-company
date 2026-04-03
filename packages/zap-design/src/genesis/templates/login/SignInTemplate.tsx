@@ -10,7 +10,7 @@ import { Fingerprint, Sun } from 'lucide-react';
 export function SignInTemplate() {
     return (
         <AppShell>
-            <div className="grid min-h-screen md:grid-cols-2 bg-layer-0 font-body text-on-surface">
+            <div className="grid min-h-screen md:grid-cols-2 bg-layer-0 font-body text-transform-secondary text-on-surface">
                 {/* Left Column - Branding / Imagery */}
                 <div className="relative hidden flex-col justify-center p-12 md:flex bg-gradient-to-br from-[#d9dcd6] to-[#e4e6db] overflow-hidden">
                     {/* Simulated Moon/Planet graphic */}

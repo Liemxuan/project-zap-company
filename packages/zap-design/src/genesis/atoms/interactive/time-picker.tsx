@@ -61,7 +61,7 @@ export function TimePicker({
           role="combobox"
           aria-expanded={open}
           className={cn(
-            "w-full justify-between h-[var(--input-height,36px)] rounded-[var(--input-border-radius,8px)] border-[length:var(--input-border-width,1px)] border-[color:var(--input-border-filled,transparent)] bg-[color:var(--input-bg-filled,var(--color-surface-container-high))] transition-colors font-body text-sm font-normal text-transform-primary",
+            "w-full justify-between h-[var(--input-height,36px)] rounded-[var(--input-border-radius,8px)] border-[length:var(--input-border-width,1px)] border-[color:var(--input-border-filled,transparent)] bg-[color:var(--input-bg-filled,var(--color-surface-container-high))] transition-colors font-body text-transform-secondary text-sm font-normal text-transform-primary",
             "data-[state=open]:border-[color:var(--input-focus-border,var(--m3-sys-light-primary))] data-[state=open]:text-primary data-[state=open]:outline-none data-[state=open]:ring-[length:var(--input-focus-width,2px)] data-[state=open]:ring-[color:var(--input-focus-ring,var(--color-primary-fixed-dim))]",
             !open && "hover:bg-[color:var(--input-bg-filled-focus,var(--color-surface-container-highest))]",
             !selectedTime && "text-transform-primary",

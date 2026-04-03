@@ -1,0 +1,32 @@
+[package]
+name = "kairos"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+tokio = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+sqlx = { workspace = true }
+fred = { workspace = true }
+anyhow = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+async-trait = { workspace = true }
+tokio-stream = { workspace = true }
+async-stream = { workspace = true }
+futures = { workspace = true }
+walkdir = { workspace = true }
+uuid = { workspace = true }
+chrono = { workspace = true }
+clap = { workspace = true }
+# Local crate dependencies
+runtime = { path = "../runtime" }
+vector = { path = "../vector" }
+
+[lib]
+path = "src/lib.rs"
+
+[[bin]]
+name = "kairosd"
+path = "src/main.rs"

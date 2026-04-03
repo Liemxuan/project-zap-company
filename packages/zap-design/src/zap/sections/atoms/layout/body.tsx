@@ -3,6 +3,7 @@
 import { Icon } from '../../../../genesis/atoms/icons/Icon';
 import { Wrapper } from '../../../../components/dev/Wrapper';
 import { Canvas } from '../../../../genesis/atoms/surfaces/canvas';
+import { CanvasBody } from '../../../../zap/layout/CanvasBody';
 
 const SPACING_SCALE = [
     { token: 'XS', px: '4px', rem: '0.25rem', twClass: 'w-1' },
@@ -48,7 +49,7 @@ export const LayoutPrimitivesBody = () => {
 
                     {/* 01. The 8pt Grid System */}
                     <Wrapper identity={{ displayName: "8pt Grid System Block", filePath: "zap/sections/atoms/layout/body.tsx", type: "Atom/View", architecture: "SYSTEMS // CORE" }}>
-                        <section className="bg-layer-cover border-[length:var(--card-border-width,0px)] border-card-border p-6 shadow-card rounded-card">
+                        <CanvasBody.Section flush={true} className="border-[length:var(--card-border-width,0px)] border-card-border p-6 shadow-card rounded-card">
                             <Wrapper identity={{ displayName: "Section Header: The 8pt Grid System", filePath: "zap/sections/atoms/layout/body.tsx", type: "Wrapped Snippet" }}>
                                 <div className="flex items-center justify-between mb-6 pb-4">
                                     <h2 className="text-xl font-black uppercase">The 8pt Grid System</h2>
@@ -102,12 +103,12 @@ export const LayoutPrimitivesBody = () => {
                                     </div>
                                 </Wrapper>
                             </div>
-                        </section>
+                        </CanvasBody.Section>
                     </Wrapper>
 
                     {/* 02. Layout Grids */}
                     <Wrapper identity={{ displayName: "Layout Grids Block", filePath: "zap/sections/atoms/layout/body.tsx", type: "Atom/View", architecture: "SYSTEMS // CORE" }}>
-                        <section className="bg-layer-cover border-[length:var(--card-border-width,0px)] border-card-border p-6 shadow-card rounded-card">
+                        <CanvasBody.Section flush={true} className="border-[length:var(--card-border-width,0px)] border-card-border p-6 shadow-card rounded-card">
                             <Wrapper identity={{ displayName: "Section Header: Layout Grids", filePath: "zap/sections/atoms/layout/body.tsx", type: "Wrapped Snippet" }}>
                                 <div className="flex items-center justify-between mb-6 pb-4">
                                     <h2 className="text-xl font-black uppercase">Layout Grids</h2>
@@ -147,12 +148,12 @@ export const LayoutPrimitivesBody = () => {
                                     ))}
                                 </div>
                             </div>
-                        </section>
+                        </CanvasBody.Section>
                     </Wrapper>
 
                     {/* 03. Spacing Scale */}
                     <Wrapper identity={{ displayName: "Spacing Scale Block", filePath: "zap/sections/atoms/layout/body.tsx", type: "Atom/View", architecture: "SYSTEMS // CORE" }}>
-                        <section className="bg-layer-cover border-[length:var(--card-border-width,0px)] border-card-border p-6 shadow-card rounded-card pb-24">
+                        <CanvasBody.Section flush={true} className="border-[length:var(--card-border-width,0px)] border-card-border p-6 shadow-card rounded-card pb-24">
                             <Wrapper identity={{ displayName: "Section Header: Spacing Scale", filePath: "zap/sections/atoms/layout/body.tsx", type: "Wrapped Snippet" }}>
                                 <div className="flex items-center justify-between mb-6 pb-4">
                                     <h2 className="text-xl font-black uppercase">Spacing Scale</h2>
@@ -186,7 +187,7 @@ export const LayoutPrimitivesBody = () => {
                                     </table>
                                 </div>
                             </Wrapper>
-                        </section>
+                        </CanvasBody.Section>
                     </Wrapper>
                 </div>
             </Canvas>
