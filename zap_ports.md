@@ -12,7 +12,9 @@ This document serves as the absolute single source of truth for the Olympus Mono
 | Port | Ownership | Service Name | Path in Monorepo | Detailed Business Purpose |
 | :--- | :--- | :--- | :--- | :--- |
 | **`3000`** | **`[ZAP]`** | **Design Engine** | `packages/zap-design` | **The UI Foundry.** Used by the Vietnam team to build, inspect, and test L1-L7 components, atoms, and M3 design tokens before they are shipped to products. |
+| **`3002`** | **`[ZAP]`** | **Memory v2 API** | `packages/zap-memory` | **Swarm Local Persistence.** Retains sync experiences and world facts (SOP-035) to local DB. |
 | **`3500`** | **`[ZAP]`** | **Swarm Monitor** | `apps/zap-swarm` | **Agent Telemetry.** Our internal Swarm Command Center. Used by our engineers to track agent memory, ticket queues, and AI fleet health globally. |
+| **`3900`** | **`[ZAP]`** | **Claw Gateway**  | `packages/zap-claw` | **Agent API.** Internal API routing for Swarm capabilities and tooling execution. |
 
 ---
 

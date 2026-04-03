@@ -70,6 +70,18 @@ export const WORKSPACE_REGISTRY: WorkspaceEntry[] = [
     icon: 'palette',
     tags: ['design', 'components', 'atoms', 'theme', 'zap-internal'],
   },
+  {
+    id: 'memory-api',
+    name: '[VAULT] Memory v2 API',
+    domain: 'VAULT',
+    sub: 'MEMORY',
+    port: 3002,
+    folder: 'packages/zap-memory',
+    healthEndpoint: '/',
+    description: 'Local persistence engine for AI experiences and world facts (SOP-035)',
+    icon: 'memory',
+    tags: ['memory', 'vault', 'zap-internal', 'persistence'],
+  },
 
   // ══════════════════════════════════════════════════════════
   // MERCHANT: REVENUE SUITE
@@ -149,6 +161,18 @@ export const WORKSPACE_REGISTRY: WorkspaceEntry[] = [
     description: 'Internal dashboard to monitor agent fleets globally',
     icon: 'psychology',
     tags: ['swarm', 'command', 'agent', 'deerflow', 'zap-internal'],
+  },
+  {
+    id: 'zap-claw',
+    name: '[ZAP] Claw Gateway',
+    domain: 'AGENT',
+    sub: 'API',
+    port: 3900,
+    folder: 'packages/zap-claw',
+    healthEndpoint: '/',
+    description: 'Internal Gateway/Backend for AI Subagents',
+    icon: 'api',
+    tags: ['swarm', 'gateway', 'agent', 'api', 'zap-internal'],
   },
   {
     id: 'kairos-daemon',
