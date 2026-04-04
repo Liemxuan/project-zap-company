@@ -16,48 +16,51 @@ import { SideNav } from '../../molecules/navigation/SideNav';
 import { ThemeHeader } from '../../molecules/layout/ThemeHeader';
 import { Inspector } from '../../../zap/layout/Inspector';
 
-export interface Category {
+export interface Employee {
     id: string;
-    media_url: string;
     name: string;
-    slug: string;
-    parent: string;
-    item_count: number;
+    job_title: string;
+    department: string;
+    role: string;
     status: string;
+    avatar_url?: string;
 }
 
-const SAMPLE_CATEGORIES: Category[] = [
-    { id: "CAT-001", name: "Iphone 16 Series", slug: "/iphone-16", parent: "Electronics", item_count: 54, media_url: "https://images.unsplash.com/photo-1616348436168-de43ad0db179?q=80&w=256&h=256&auto=format&fit=crop", status: "Active" },
-    { id: "CAT-002", name: "Samsung S24 Series", slug: "/samsung-s24", parent: "Electronics", item_count: 32, media_url: "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?q=80&w=256&h=256&auto=format&fit=crop", status: "Active" },
-    { id: "CAT-003", name: "Office Furniture", slug: "/office-furniture", parent: "Furniture", item_count: 12, media_url: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?q=80&w=256&h=256&auto=format&fit=crop", status: "Hidden" },
-    { id: "CAT-004", name: "Cloud Services", slug: "/cloud-services", parent: "Software", item_count: 7, media_url: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=256&h=256&auto=format&fit=crop", status: "Active" },
-    { id: "CAT-005", name: "Home Audio", slug: "/home-audio", parent: "Electronics", item_count: 24, media_url: "https://images.unsplash.com/photo-1546435770-a3e426bf472b?q=80&w=256&h=256&auto=format&fit=crop", status: "Active" },
+const SAMPLE_EMPLOYEES: Employee[] = [
+    { id: "EMP-001", name: "Alice Johnson", job_title: "Store Manager", department: "Retail", role: "Manager", status: "Active" },
+    { id: "EMP-002", name: "Bob Smith", job_title: "Cashier", department: "Retail", role: "Staff", status: "Active" },
+    { id: "EMP-003", name: "Charlie Davis", job_title: "Inventory Specialist", department: "Warehouse", role: "Staff", status: "Active" },
+    { id: "EMP-004", name: "Diana Evans", job_title: "Regional Director", department: "Management", role: "Admin", status: "Active" },
+    { id: "EMP-005", name: "Evan Wright", job_title: "Sales Associate", department: "Retail", role: "Staff", status: "On Leave" },
+    { id: "EMP-006", name: "Fiona Clark", job_title: "Customer Support", department: "Support", role: "Staff", status: "Active" },
+    { id: "EMP-007", name: "George Miller", job_title: "Warehouse Manager", department: "Warehouse", role: "Manager", status: "Active" },
+    { id: "EMP-008", name: "Hannah Lewis", job_title: "HR Coordinator", department: "Human Resources", role: "Admin", status: "Active" },
 ];
 
 /**
- * Category Template
- * Route: /design/[theme]/organisms/categories
+ * Employee Template
+ * Route: /design/[theme]/organisms/employees
  */
-export default function CategoryTemplate() {
+export default function EmployeeTemplate() {
     const { theme: appTheme, inspectorState, setInspectorState } = useTheme();
     const activeTheme = appTheme === 'core' ? 'core' : 'metro';
     const searchParams = useSearchParams();
     const isFullscreen = searchParams.get('fullscreen') === 'true';
 
-    // Map Categories to generic ListItem
-    const MAPPED_DATA: ListItem[] = SAMPLE_CATEGORIES.map(cat => ({
-        id: cat.id,
-        media_url: cat.media_url,
-        variant_name: cat.name,
-        sku_code: cat.slug,
-        barcode: cat.parent,
-        category_id: cat.parent,
-        product_type: cat.status,
+    // Map Employees to generic ListItem
+    const MAPPED_DATA: ListItem[] = SAMPLE_EMPLOYEES.map(emp => ({
+        id: emp.id,
+        media_url: emp.avatar_url || '',
+        variant_name: emp.name,
+        sku_code: emp.job_title,
+        barcode: emp.role,
+        category_id: emp.department,
+        product_type: emp.role,
         sale_price: 0,
-        qty_on_hand: cat.item_count,
-        uom_id: "Items",
-        warehouse_id: "Root Catalog",
-        status_id: cat.status
+        qty_on_hand: 0,
+        uom_id: emp.department,
+        warehouse_id: '',
+        status_id: emp.status,
     }));
 
     const [filters, setFilters] = useState<Filters>({
@@ -90,13 +93,21 @@ export default function CategoryTemplate() {
                     className="w-80 text-left font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    Category Name
+                    Employee Name
                 </div>
             ),
             cell: ({ row }) => (
                 <div className="w-80 py-2.5 text-left">
                     <div className="flex items-center gap-4">
-                        <img src={row.original.media_url} alt={row.original.variant_name} className="w-10 h-10 object-cover rounded-full border-[1.5px] border-border shrink-0" />
+                        <div className="w-10 h-10 rounded-full bg-layer-base border border-border flex items-center justify-center shrink-0 overflow-hidden">
+                            {row.original.media_url ? (
+                                <img src={row.original.media_url} alt={row.original.variant_name} className="w-full h-full object-cover" />
+                            ) : (
+                                <span className="text-[10px] font-bold">
+                                    {row.original.variant_name.split(' ').map(n => n[0]).join('')}
+                                </span>
+                            )}
+                        </div>
                         <div className="flex flex-col min-w-0">
                             <span className="font-semibold text-foreground text-sm truncate">{row.original.variant_name}</span>
                             <span className="font-dev font-normal text-xs text-muted-foreground uppercase tracking-wide truncate mt-0.5">{row.original.sku_code}</span>
@@ -112,7 +123,7 @@ export default function CategoryTemplate() {
                     className="w-32 text-left font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    Parent
+                    Department
                 </div>
             ),
             cell: ({ row }) => (
@@ -122,18 +133,13 @@ export default function CategoryTemplate() {
             ),
         },
         {
-            accessorKey: "qty_on_hand",
-            header: ({ column }) => (
-                <div
-                    className="w-32 text-right pr-4 font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                    Items
-                </div>
-            ),
+            accessorKey: "product_type",
+            header: () => <div className="w-28 text-left font-mono text-[10px] tracking-widest text-muted-foreground uppercase">Role</div>,
             cell: ({ row }) => (
-                <div className="w-32 text-right py-2.5 pr-4">
-                    <span className="font-bold text-foreground">{row.original.qty_on_hand}</span>
+                <div className="w-28 py-2.5">
+                    <Pill variant="neutral" className="w-fit px-1.5 py-0.5">
+                        {row.original.product_type}
+                    </Pill>
                 </div>
             ),
         },
@@ -175,48 +181,48 @@ export default function CategoryTemplate() {
     ], []);
 
     const labels = {
-        addItem: "Add Category",
-        itemName: "Category Name",
-        itemCode: "Slug",
-        category: "Parent",
-        type: "Status",
-        inventory: "Items",
-        price: "Internal ID"
+        addItem: "Add Employee",
+        itemName: "Employee Name",
+        itemCode: "Job Title",
+        category: "Department",
+        type: "Role",
+        inventory: "Performance",
+        price: "Internal ID",
     };
 
     const baseGroups: FilterGroup[] = [
         {
             id: 'category',
-            title: 'Parent Category',
-            options: Array.from(new Set(MAPPED_DATA.map(p => p.category_id))).map(parent => ({
-                id: parent,
-                label: parent,
-            }))
+            title: 'Department',
+            options: Array.from(new Set(MAPPED_DATA.map(e => e.category_id))).map(dept => ({
+                id: dept,
+                label: dept,
+            })),
         },
         {
             id: 'productType',
-            title: 'Status',
-            options: Array.from(new Set(MAPPED_DATA.map(p => p.product_type))).map(status => ({
-                id: status,
-                label: status,
-            }))
+            title: 'Role',
+            options: Array.from(new Set(MAPPED_DATA.map(e => e.product_type))).map(role => ({
+                id: role,
+                label: role,
+            })),
         },
         {
             id: 'status',
-            title: 'Visibility',
-            options: Array.from(new Set(MAPPED_DATA.map(p => p.status_id))).map(status => ({
+            title: 'Status',
+            options: Array.from(new Set(MAPPED_DATA.map(e => e.status_id))).map(status => ({
                 id: status,
                 label: status,
-            }))
-        }
+            })),
+        },
     ];
 
     const filterGroups = baseGroups.map(group => ({
         ...group,
         options: group.options.map(opt => ({
             ...opt,
-            selected: filters[group.id as keyof Filters]?.includes(opt.id)
-        }))
+            selected: filters[group.id as keyof Filters]?.includes(opt.id),
+        })),
     }));
 
     const handleFilterToggle = (groupId: string, optionId: string) => {
@@ -225,10 +231,7 @@ export default function CategoryTemplate() {
             const updatedList = currentList.includes(optionId)
                 ? currentList.filter(id => id !== optionId)
                 : [...currentList, optionId];
-            return {
-                ...current,
-                [groupId as keyof Filters]: updatedList
-            };
+            return { ...current, [groupId as keyof Filters]: updatedList };
         });
     };
 
@@ -239,14 +242,14 @@ export default function CategoryTemplate() {
             onFilterChange={setFilters}
             onToggleFilters={() => setInspectorState(inspectorState === 'expanded' ? 'collapsed' : 'expanded')}
             isFilterActive={inspectorState === 'expanded'}
-            //labels={labels}
-            columns={columns}
+            labels={labels}
+            columns={columns} // Use custom columns
         />
     );
 
     const rightDrawerContent = inspectorState === 'expanded' && (
         <div className="h-full border-l border-border bg-layer-panel hidden md:flex flex-col shrink-0 z-20 relative">
-            <Inspector title="CATEGORY LAB" width={320}>
+            <Inspector title="EMPLOYEE LAB" width={320}>
                 <div className="flex flex-col gap-0 w-full px-4 pt-4">
                     <Accordion
                         type="single"
@@ -292,13 +295,13 @@ export default function CategoryTemplate() {
                         <Icon name="dashboard" size={18} />
                         <span>Overview</span>
                     </div>
-                    <div className="px-3 py-2.5 rounded-md bg-primary/10 text-primary flex items-center gap-3 border border-primary/20 cursor-pointer">
-                        <Icon name="category" size={18} />
-                        <span>Categories</span>
+                    <div className="px-3 py-2.5 rounded-md bg-primary/10 text-primary flex items-center gap-3 border border-primary/20 cursor-pointer opacity-100">
+                        <Icon name="groups" size={18} />
+                        <span>Employees</span>
                     </div>
                     <div className="px-3 py-2.5 rounded-md hover:bg-surface-variant/40 flex items-center gap-3 transition-colors cursor-pointer">
-                        <Icon name="inventory" size={18} />
-                        <span>Products</span>
+                        <Icon name="settings" size={18} />
+                        <span>Settings</span>
                     </div>
                 </div>
             </div>
@@ -307,9 +310,9 @@ export default function CategoryTemplate() {
             <div className="flex-1 flex flex-col min-w-0 bg-layer-base/50 relative">
                 <div className="h-14 border-b border-border bg-layer-base flex items-center px-6 justify-between shrink-0 shadow-sm z-10 relative">
                     <div className="flex items-center text-xs gap-1 font-dev text-transform-tertiary">
-                        <span className="opacity-50 uppercase tracking-widest">Catalog</span>
+                        <span className="opacity-50 uppercase tracking-widest">Organization</span>
                         <Icon name="chevron_right" size={14} className="opacity-30" />
-                        <span className="font-bold text-on-surface uppercase tracking-widest">Categories</span>
+                        <span className="font-bold text-on-surface uppercase tracking-widest">Employees</span>
                     </div>
                 </div>
 
@@ -328,7 +331,7 @@ export default function CategoryTemplate() {
             <div className="flex h-screen w-full bg-layer-canvas overflow-hidden font-sans">
                 <SideNav />
                 <div className="flex-1 flex flex-col min-w-0 bg-transparent relative">
-                    <ThemeHeader title="CATEGORY ASSEMBLY" badge="data grid" />
+                    <ThemeHeader title="EMPLOYEE ASSEMBLY" badge="data grid" />
                     <div className="flex-1 overflow-auto pt-8 px-12 pb-16 flex flex-col relative z-0 bg-layer-base min-w-0">
                         {tableComponent}
                     </div>
@@ -340,11 +343,11 @@ export default function CategoryTemplate() {
 
     return (
         <ComponentSandboxTemplate
-            componentName="categories"
+            componentName="employees"
             tier="L6 LAYOUT"
             status="Verified"
-            filePath="src/genesis/templates/tables/CategoryTemplate.tsx"
-            importPath="@/genesis/templates/tables/CategoryTemplate"
+            filePath="src/genesis/templates/tables/EmployeeTemplate.tsx"
+            importPath="@/genesis/templates/tables/EmployeeTemplate"
             hideDataTerminal={true}
             fullWidth={true}
             inspectorControls={
@@ -378,8 +381,8 @@ export default function CategoryTemplate() {
         >
             <div className="w-full flex-1 flex items-center justify-center pt-8">
                 <CanvasDesktop
-                    title="Categories // Collection"
-                    fullScreenHref={`/design/${activeTheme}/organisms/categories?fullscreen=true`}
+                    title="Employees // Organization"
+                    fullScreenHref={`/design/${activeTheme}/organisms/employees?fullscreen=true`}
                 >
                     {layoutContent}
                 </CanvasDesktop>

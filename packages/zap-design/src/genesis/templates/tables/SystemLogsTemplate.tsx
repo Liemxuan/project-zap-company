@@ -3,7 +3,12 @@ import { useSearchParams } from 'next/navigation';
 import { useTheme } from '../../../components/ThemeContext';
 import { ComponentSandboxTemplate } from '../../../zap/layout/ComponentSandboxTemplate';
 import { CanvasDesktop } from '../../../components/dev/CanvasDesktop';
-import { SystemLogsTable, SAMPLE_LOGS, Filters } from '../../../zap/organisms/system-logs-table';
+import { ListTable, ListItem, Filters } from '../../../zap/organisms/list-table';
+import { SAMPLE_LOGS } from '../../../zap/organisms/system-logs-table';
+import { ColumnDef } from '@tanstack/react-table';
+import { Pill } from '../../atoms/status/pills';
+import { ChevronDown } from "lucide-react";
+import { motion } from "framer-motion";
 import { DataFilter, FilterGroup } from '../../molecules/data-filter';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../../molecules/accordion';
 import { Icon } from '../../atoms/icons/Icon';
@@ -23,15 +28,144 @@ export default function SystemLogsTemplate() {
     const isFullscreen = searchParams.get('fullscreen') === 'true';
 
     const [filters, setFilters] = useState<Filters>({
-        level: [],
-        service: [],
-        status: [],
+        category: [], // Map level to category
+        productType: [], // Map service to productType
+        status: [], // Map status to status
     });
+
+    // Map System Logs to generic ListItem
+    interface LogListItem extends ListItem {
+        timestamp?: string;
+    }
+
+    const MAPPED_DATA: LogListItem[] = SAMPLE_LOGS.map(log => ({
+        id: log.id,
+        media_url: '',
+        variant_name: log.message,
+        sku_code: log.service,
+        barcode: log.duration,
+        category_id: log.level,
+        product_type: log.service,
+        sale_price: 0,
+        qty_on_hand: 0,
+        uom_id: log.status,
+        warehouse_id: log.service,
+        status_id: log.status,
+        timestamp: log.timestamp, 
+    }));
+
+    const columns = React.useMemo<ColumnDef<LogListItem>[]>(() => [
+        {
+            id: "expander",
+            header: () => <div className="w-12 px-7" />,
+            cell: ({ row }) => (
+                <div className="px-7 w-12 py-3">
+                    <motion.div
+                        animate={{ rotate: row.getIsExpanded() ? 180 : 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="flex-shrink-0 w-4 cursor-pointer"
+                        onClick={() => row.toggleExpanded()}
+                    >
+                        <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                    </motion.div>
+                </div>
+            ),
+        },
+        {
+            accessorKey: "category_id",
+            header: ({ column }) => (
+                <div
+                    className="w-28 text-left font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    Level
+                </div>
+            ),
+            cell: ({ row }) => (
+                <div className="w-28 py-3">
+                    <Pill
+                        variant={row.original.category_id === 'info' ? 'info' : row.original.category_id === 'warning' ? 'warning' : 'error'}
+                        className="min-w-16 block text-center"
+                    >
+                        {row.original.category_id}
+                    </Pill>
+                </div>
+            ),
+        },
+        {
+            accessorKey: "timestamp",
+            header: () => <div className="w-28 text-left font-mono text-[10px] tracking-widest text-muted-foreground uppercase">Time</div>,
+            cell: ({ row }) => (
+                <div className="w-28 font-dev text-transform-tertiary text-muted-foreground text-left py-3">
+                    {new Date(row.original.timestamp as string).toLocaleTimeString("en-US", {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        second: "2-digit",
+                    })}
+                </div>
+            ),
+        },
+        {
+            accessorKey: "product_type",
+            header: ({ column }) => (
+                <div
+                    className="w-48 text-left font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    Service
+                </div>
+            ),
+            cell: ({ row }) => (
+                <div className="w-48 truncate font-medium text-foreground text-left py-3">
+                    {row.original.product_type}
+                </div>
+            ),
+        },
+        {
+            accessorKey: "variant_name",
+            header: () => <div className="text-left font-mono text-[10px] tracking-widest text-muted-foreground uppercase">Message</div>,
+            cell: ({ row }) => (
+                <div className="truncate max-w-[400px] text-muted-foreground text-left py-3 pr-4">
+                    {row.original.variant_name}
+                </div>
+            ),
+        },
+        {
+            accessorKey: "status_id",
+            header: ({ column }) => (
+                <div
+                    className="w-24 text-right font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    Status
+                </div>
+            ),
+            cell: ({ row }) => {
+                const status = row.original.status_id;
+                const statusColor = status === '200' || status === '201' ? 'text-success' : 
+                                   status === 'warning' || status === '429' ? 'text-warning' : 'text-destructive';
+                return (
+                    <div className={`w-24 text-right font-dev text-transform-tertiary font-semibold py-3 ${statusColor}`}>
+                        {status}
+                    </div>
+                );
+            },
+        },
+        {
+            accessorKey: "barcode",
+            header: () => <div className="w-24 pr-7 text-right font-mono text-[10px] tracking-widest text-muted-foreground uppercase">Duration</div>,
+            cell: ({ row }) => (
+                <div className="w-24 pr-7 text-right font-dev text-transform-tertiary text-muted-foreground py-3">
+                    {row.original.barcode}
+                </div>
+            ),
+        },
+    ], []);
 
     // Derive filter groups from the SAMPLE_LOGS
     const baseGroups: FilterGroup[] = [
         {
-            id: 'level',
+            id: 'category',
             title: 'Level',
             options: Array.from(new Set(SAMPLE_LOGS.map(l => l.level))).map(level => ({
                 id: level,
@@ -39,7 +173,7 @@ export default function SystemLogsTemplate() {
             }))
         },
         {
-            id: 'service',
+            id: 'productType',
             title: 'Service',
             options: Array.from(new Set(SAMPLE_LOGS.map(l => l.service))).map(service => ({
                 id: service,
@@ -178,11 +312,13 @@ export default function SystemLogsTemplate() {
 
                 {/* Table Content */}
                 <div className="flex-1 overflow-auto pt-8 px-4 lg:pt-11 lg:px-12 pb-16 flex flex-col relative z-0">
-                    <SystemLogsTable
+                    <ListTable
+                        initialItems={MAPPED_DATA}
                         filters={filters}
                         onFilterChange={setFilters}
                         onToggleFilters={() => setInspectorState(inspectorState === 'expanded' ? 'collapsed' : 'expanded')}
                         isFilterActive={inspectorState === 'expanded'}
+                        columns={columns}
                     />
                 </div>
             </div>
@@ -230,11 +366,13 @@ export default function SystemLogsTemplate() {
                     />
 
                     <div className="flex-1 overflow-auto pt-8 px-4 lg:pt-11 lg:px-12 pb-16 flex flex-col relative z-0 bg-layer-base">
-                        <SystemLogsTable
+                        <ListTable
+                            initialItems={MAPPED_DATA}
                             filters={filters}
                             onFilterChange={setFilters}
                             onToggleFilters={() => setInspectorState(inspectorState === 'expanded' ? 'collapsed' : 'expanded')}
                             isFilterActive={inspectorState === 'expanded'}
+                            columns={columns}
                         />
                     </div>
                 </div>

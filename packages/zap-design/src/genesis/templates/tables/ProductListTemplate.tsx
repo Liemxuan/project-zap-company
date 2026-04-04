@@ -4,12 +4,18 @@ import { useTheme } from '../../../components/ThemeContext';
 import { ComponentSandboxTemplate } from '../../../zap/layout/ComponentSandboxTemplate';
 import { CanvasDesktop } from '../../../components/dev/CanvasDesktop';
 import { ListTable, SAMPLE_DATA, ListItem, Filters } from '../../../zap/organisms/list-table';
+import { ColumnDef } from '@tanstack/react-table';
+import { Pill } from '../../atoms/status/pills';
+import { Button } from '../../atoms/interactive/button';
+import { ChevronDown, MoreHorizontal } from "lucide-react";
+import { motion } from "framer-motion";
 import { DataFilter, FilterGroup } from '../../molecules/data-filter';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../../molecules/accordion';
 import { Icon } from '../../atoms/icons/Icon';
 import { SideNav } from '../../molecules/navigation/SideNav';
 import { ThemeHeader } from '../../molecules/layout/ThemeHeader';
 import { Inspector } from '../../../zap/layout/Inspector';
+import { ProductImage } from '@/genesis/atoms/data-display/ProductImage';
 
 /**
  * Product List (Layout) Showcase
@@ -27,6 +33,125 @@ export default function ProductListTemplate() {
         productType: [],
         status: [],
     });
+
+    const columns = React.useMemo<ColumnDef<ListItem>[]>(() => [
+        {
+            id: "expander",
+            header: () => <div className="w-12 px-7" />,
+            cell: ({ row }) => (
+                <div className="px-7 w-12 py-2.5">
+                    <motion.div
+                        animate={{ rotate: row.getIsExpanded() ? 180 : 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="flex-shrink-0 w-4 cursor-pointer"
+                        onClick={() => row.toggleExpanded()}
+                    >
+                        <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                    </motion.div>
+                </div>
+            ),
+        },
+        {
+            accessorKey: "variant_name",
+            header: ({ column }) => (
+                <div
+                    className="w-80 text-left font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    Product Name
+                </div>
+            ),
+            cell: ({ row }) => (
+                <div className="w-80 py-2.5 text-left">
+                    <div className="flex items-center gap-4">
+                        <ProductImage src={row.original.media_url} alt={row.original.variant_name} className="w-10 h-10 object-cover rounded-md border-[1.5px] border-border shrink-0 bg-surface-variant" />
+                        <div className="flex flex-col min-w-0">
+                            <span className="font-semibold text-foreground text-sm truncate uppercase tracking-tight">{row.original.variant_name}</span>
+                            <span className="font-dev font-normal text-xs text-muted-foreground uppercase tracking-wide truncate mt-0.5 opacity-70">SKU: {row.original.sku_code}</span>
+                        </div>
+                    </div>
+                </div>
+            ),
+        },
+        {
+            accessorKey: "category_id",
+            header: ({ column }) => (
+                <div
+                    className="w-32 text-left font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    Category
+                </div>
+            ),
+            cell: ({ row }) => (
+                <div className="w-32 truncate text-muted-foreground text-left py-2.5">
+                    {row.original.category_id}
+                </div>
+            ),
+        },
+        {
+            accessorKey: "product_type",
+            header: () => <div className="w-28 text-left font-mono text-[10px] tracking-widest text-muted-foreground uppercase">Type</div>,
+            cell: ({ row }) => (
+                <div className="w-28 py-2.5">
+                    <Pill variant="neutral" className="w-fit px-1.5 py-0.5 text-[10px]">
+                        {row.original.product_type}
+                    </Pill>
+                </div>
+            ),
+        },
+        {
+            accessorKey: "sale_price",
+            header: ({ column }) => (
+                <div
+                    className="w-32 text-right pr-4 font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    Price
+                </div>
+            ),
+            cell: ({ row }) => (
+                <div className="w-32 text-right py-2.5 pr-4">
+                    <span className="font-bold text-foreground font-mono text-sm">${row.original.sale_price.toFixed(2)}</span>
+                </div>
+            ),
+        },
+        {
+            accessorKey: "status_id",
+            header: ({ column }) => (
+                <div
+                    className="w-32 text-right font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    Status
+                </div>
+            ),
+            cell: ({ row }) => (
+                <div className="w-32 text-right py-2.5">
+                    <Pill
+                        variant={row.original.status_id === 'Active' ? 'success' : 'warning'}
+                        className="whitespace-nowrap w-fit ml-auto"
+                    >
+                        <div className="w-1.5 h-1.5 rounded-full bg-current mr-1.5 opacity-80 shrink-0" />
+                        {row.original.status_id}
+                    </Pill>
+                </div>
+            ),
+        },
+        {
+            id: "actions",
+            header: () => <div className="w-24 pr-7" />,
+            cell: () => (
+                <div className="w-24 pr-7 py-2.5 text-right">
+                    <div className="flex items-center justify-end text-muted-foreground">
+                        <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                            <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                    </div>
+                </div>
+            ),
+        },
+    ], []);
 
     // Derive filter groups from the SAMPLE_DATA
     const baseGroups: FilterGroup[] = [
@@ -178,10 +303,12 @@ export default function ProductListTemplate() {
                 {/* Table Content */}
                 <div className="flex-1 overflow-auto pt-8 px-4 lg:pt-11 lg:px-12 pb-16 flex flex-col relative z-0 min-w-0">
                     <ListTable
+                        initialItems={SAMPLE_DATA}
                         filters={filters}
                         onFilterChange={setFilters}
                         onToggleFilters={() => setInspectorState(inspectorState === 'expanded' ? 'collapsed' : 'expanded')}
                         isFilterActive={inspectorState === 'expanded'}
+                        columns={columns}
                     />
                 </div>
             </div>
@@ -230,10 +357,12 @@ export default function ProductListTemplate() {
 
                     <div className="flex-1 overflow-auto pt-8 px-4 lg:pt-11 lg:px-12 pb-16 flex flex-col relative z-0 bg-layer-base min-w-0">
                         <ListTable
+                            initialItems={SAMPLE_DATA}
                             filters={filters}
                             onFilterChange={setFilters}
                             onToggleFilters={() => setInspectorState(inspectorState === 'expanded' ? 'collapsed' : 'expanded')}
                             isFilterActive={inspectorState === 'expanded'}
+                            columns={columns}
                         />
                     </div>
                 </div>

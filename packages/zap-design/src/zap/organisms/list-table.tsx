@@ -42,6 +42,8 @@ import {
   PaginationPrevious,
 } from '../../genesis/molecules/pagination';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../genesis/atoms/interactive/select';
+import { ProductImage } from '../../genesis/atoms/data-display/ProductImage';
+//import { Avatar, AvatarFallback, AvatarImage } from '../../genesis/atoms/data-display/avatar';
 
 export interface ListItem {
   id: string; // ID
@@ -295,6 +297,7 @@ export interface ListTableProps {
     inventory?: string;
     price?: string;
   };
+  columns?: ColumnDef<ListItem>[];
 }
 
 export function ListTable({
@@ -303,7 +306,8 @@ export function ListTable({
   onFilterChange,
   onToggleFilters,
   isFilterActive,
-  labels = {}
+  labels = {},
+  columns: externalColumns
 }: ListTableProps) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -350,174 +354,178 @@ export function ListTable({
     }
   };
 
-  const columns = useMemo<ColumnDef<ListItem>[]>(() => [
-    {
-      id: "expander",
-      header: () => <div className="w-12 px-7" />,
-      cell: ({ row }) => (
-        <div className="px-7 w-12 py-2.5">
-          <motion.div
-            animate={{ rotate: row.getIsExpanded() ? 180 : 0 }}
-            transition={{ duration: 0.2 }}
-            className="flex-shrink-0 w-4 cursor-pointer"
-            onClick={() => row.toggleExpanded()}
+  const columns = useMemo<ColumnDef<ListItem>[]>(() => {
+    if (externalColumns) return externalColumns;
+
+    return [
+      {
+        id: "expander",
+        header: () => <div className="w-12 px-7" />,
+        cell: ({ row }) => (
+          <div className="px-7 w-12 py-2.5">
+            <motion.div
+              animate={{ rotate: row.getIsExpanded() ? 180 : 0 }}
+              transition={{ duration: 0.2 }}
+              className="flex-shrink-0 w-4 cursor-pointer"
+              onClick={() => row.toggleExpanded()}
+            >
+              <ChevronDown className="h-4 w-4 text-muted-foreground" />
+            </motion.div>
+          </div>
+        ),
+      },
+      {
+        accessorKey: "id",
+        header: ({ column }) => (
+          <div
+            className="w-16 text-left font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            <ChevronDown className="h-4 w-4 text-muted-foreground" />
-          </motion.div>
-        </div>
-      ),
-    },
-    {
-      accessorKey: "id",
-      header: ({ column }) => (
-        <div
-          className="w-16 hidden lg:table-cell text-left font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          ID
-        </div>
-      ),
-      cell: ({ row }) => (
-        <div className="w-16 hidden lg:table-cell font-dev text-transform-tertiary text-muted-foreground text-left py-2.5 truncate">
-          {row.original.id.split('-')[1] || row.original.id}
-        </div>
-      ),
-    },
-    {
-      accessorKey: "variant_name",
-      header: ({ column }) => (
-        <div
-          className="w-80 text-left font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          {L.itemName}
-        </div>
-      ),
-      cell: ({ row }) => (
-        <div className="w-80 py-2.5 text-left">
-          <div className="flex items-center gap-4">
-            <img src={row.original.media_url} alt={row.original.variant_name} className="w-10 h-10 object-cover rounded-md border-[1.5px] border-border shrink-0" />
-            <div className="flex flex-col min-w-0">
-              <span className="font-semibold text-foreground text-sm truncate">{row.original.variant_name}</span>
-              <span className="font-dev font-normal text-xs text-muted-foreground uppercase tracking-wide truncate mt-0.5">{row.original.sku_code}</span>
+            ID
+          </div>
+        ),
+        cell: ({ row }) => (
+          <div className="w-16 font-dev text-transform-tertiary text-muted-foreground text-left py-2.5 truncate">
+            {row.original.id.split('-')[1] || row.original.id}
+          </div>
+        ),
+      },
+      {
+        accessorKey: "variant_name",
+        header: ({ column }) => (
+          <div
+            className="w-80 text-left font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            {L.itemName}
+          </div>
+        ),
+        cell: ({ row }) => (
+          <div className="w-80 py-2.5 text-left">
+            <div className="flex items-center gap-4">
+              <ProductImage src={row.original.media_url} alt={row.original.variant_name} className="w-10 h-10 object-cover rounded-md border-[1.5px] border-border shrink-0 bg-surface-variant" />
+              <div className="flex flex-col min-w-0">
+                <span className="font-semibold text-foreground text-sm truncate uppercase tracking-tight">{row.original.variant_name}</span>
+                <span className="font-dev font-normal text-xs text-muted-foreground uppercase tracking-wide truncate mt-0.5 opacity-70">SKU: {row.original.sku_code}</span>
+              </div>
             </div>
           </div>
-        </div>
-      ),
-    },
-    {
-      accessorKey: "barcode",
-      header: () => <div className="w-32 text-left font-mono text-[10px] tracking-widest text-muted-foreground uppercase">{L.itemCode}</div>,
-      cell: ({ row }) => (
-        <div className="w-32 py-2.5 text-left font-dev text-transform-tertiary text-muted-foreground truncate">
-          {row.original.barcode}
-        </div>
-      ),
-    },
-    {
-      accessorKey: "category_id",
-      header: ({ column }) => (
-        <div
-          className="w-32 text-left font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          {L.category}
-        </div>
-      ),
-      cell: ({ row }) => (
-        <div className="w-32 truncate text-muted-foreground text-left py-2.5">
-          {row.original.category_id}
-        </div>
-      ),
-    },
-    {
-      accessorKey: "product_type",
-      header: () => <div className="w-28 text-left font-mono text-[10px] tracking-widest text-muted-foreground uppercase">{L.type}</div>,
-      cell: ({ row }) => (
-        <div className="w-28 py-2.5">
-          <Pill
-            variant={row.original.product_type === 'PHYSICAL' ? 'info' : row.original.product_type === 'DIGITAL' ? 'warning' : 'neutral'}
-            className="w-fit px-1.5 py-0.5"
+        ),
+      },
+      {
+        accessorKey: "barcode",
+        header: () => <div className="w-32 text-left font-mono text-[10px] tracking-widest text-muted-foreground uppercase">{L.itemCode}</div>,
+        cell: ({ row }) => (
+          <div className="w-32 py-2.5 text-left font-dev text-transform-tertiary text-muted-foreground truncate">
+            {row.original.barcode}
+          </div>
+        ),
+      },
+      {
+        accessorKey: "category_id",
+        header: ({ column }) => (
+          <div
+            className="w-32 text-left font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            {row.original.product_type}
-          </Pill>
-        </div>
-      ),
-    },
-    {
-      accessorKey: "qty_on_hand",
-      header: ({ column }) => (
-        <div
-          className="w-32 text-right pr-4 font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          {L.inventory}
-        </div>
-      ),
-      cell: ({ row }) => (
-        <div className="w-32 text-right py-2.5 pr-4">
-          <div className="flex flex-col items-end">
-            <div className="flex items-baseline gap-1">
-              <span className={`font-bold ${row.original.qty_on_hand === 0 ? 'text-destructive' : 'text-foreground'}`}>{row.original.qty_on_hand}</span>
-              <span className="text-xs text-muted-foreground">{row.original.uom_id}</span>
+            {L.category}
+          </div>
+        ),
+        cell: ({ row }) => (
+          <div className="w-32 truncate text-muted-foreground text-left py-2.5">
+            {row.original.category_id}
+          </div>
+        ),
+      },
+      {
+        accessorKey: "product_type",
+        header: () => <div className="w-28 text-left font-mono text-[10px] tracking-widest text-muted-foreground uppercase">{L.type}</div>,
+        cell: ({ row }) => (
+          <div className="w-28 py-2.5">
+            <Pill
+              variant={row.original.product_type === 'PHYSICAL' ? 'info' : row.original.product_type === 'DIGITAL' ? 'warning' : 'neutral'}
+              className="w-fit px-1.5 py-0.5"
+            >
+              {row.original.product_type}
+            </Pill>
+          </div>
+        ),
+      },
+      {
+        accessorKey: "qty_on_hand",
+        header: ({ column }) => (
+          <div
+            className="w-32 text-right pr-4 font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            {L.inventory}
+          </div>
+        ),
+        cell: ({ row }) => (
+          <div className="w-32 text-right py-2.5 pr-4">
+            <div className="flex flex-col items-end">
+              <div className="flex items-baseline gap-1">
+                <span className={`font-bold ${row.original.qty_on_hand === 0 ? 'text-destructive' : 'text-foreground'}`}>{row.original.qty_on_hand}</span>
+                <span className="text-xs text-muted-foreground">{row.original.uom_id}</span>
+              </div>
+              <span className="text-[10px] text-muted-foreground truncate max-w-full">{row.original.warehouse_id}</span>
             </div>
-            <span className="text-[10px] text-muted-foreground truncate max-w-full">{row.original.warehouse_id}</span>
           </div>
-        </div>
-      ),
-    },
-    {
-      accessorKey: "sale_price",
-      header: ({ column }) => (
-        <div
-          className="w-24 text-right font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          {L.price}
-        </div>
-      ),
-      cell: ({ row }) => (
-        <div className="w-24 text-right font-bold text-foreground py-2.5">
-          ${row.original.sale_price.toFixed(2)}
-        </div>
-      ),
-    },
-    {
-      accessorKey: "status_id",
-      header: ({ column }) => (
-        <div
-          className="w-32 text-right font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Status
-        </div>
-      ),
-      cell: ({ row }) => (
-        <div className="w-32 text-right py-2.5">
-          <Pill
-            variant={row.original.status_id === 'Active' ? 'success' : row.original.status_id === 'Hidden' ? 'warning' : 'error'}
-            className="whitespace-nowrap w-fit ml-auto"
+        ),
+      },
+      {
+        accessorKey: "sale_price",
+        header: ({ column }) => (
+          <div
+            className="w-24 text-right font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            <div className="w-1.5 h-1.5 rounded-full bg-current mr-1.5 opacity-80 shrink-0" />
-            {row.original.status_id}
-          </Pill>
-        </div>
-      ),
-    },
-    {
-      id: "actions",
-      header: () => <div className="w-24 pr-7" />,
-      cell: () => (
-        <div className="w-24 pr-7 py-2.5 text-right">
-          <div className="flex items-center justify-end text-muted-foreground">
-            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
+            {L.price}
           </div>
-        </div>
-      ),
-    },
-  ], [L]);
+        ),
+        cell: ({ row }) => (
+          <div className="w-24 text-right font-bold text-foreground py-2.5">
+            ${row.original.sale_price.toFixed(2)}
+          </div>
+        ),
+      },
+      {
+        accessorKey: "status_id",
+        header: ({ column }) => (
+          <div
+            className="w-32 text-right font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Status
+          </div>
+        ),
+        cell: ({ row }) => (
+          <div className="w-32 text-right py-2.5">
+            <Pill
+              variant={row.original.status_id === 'Active' ? 'success' : row.original.status_id === 'Hidden' ? 'warning' : 'error'}
+              className="whitespace-nowrap w-fit ml-auto"
+            >
+              <div className="w-1.5 h-1.5 rounded-full bg-current mr-1.5 opacity-80 shrink-0" />
+              {row.original.status_id}
+            </Pill>
+          </div>
+        ),
+      },
+      {
+        id: "actions",
+        header: () => <div className="w-24 pr-7" />,
+        cell: () => (
+          <div className="w-24 pr-7 py-2.5 text-right">
+            <div className="flex items-center justify-end text-muted-foreground">
+              <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                < MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+        ),
+      },
+    ];
+  }, [L, externalColumns]);
 
   const filteredData = useMemo(() => {
     return items.filter((p) => {
@@ -620,9 +628,9 @@ export function ListTable({
         </AnimatePresence>
 
         {/* DATA GRID */}
-        <div className="flex-1 flex flex-col bg-layer-cover overflow-auto min-w-0">
-          <div className="flex-1 rounded-none border-0 block min-w-max">
-            <Table className="w-full relative bg-transparent border-collapse min-w-max">
+        <div className="flex-1 flex flex-col bg-layer-cover overflow-hidden min-w-0 relative">
+          <div className="absolute inset-0 [&_[data-slot=table-wrapper]]:h-full [&_[data-slot=table-wrapper]]:overflow-auto [&_[data-slot=table-wrapper]]:scrollbar-thin [&_[data-slot=table-wrapper]]:scrollbar-thumb-outline-variant/30 [&_[data-slot=table-wrapper]]:scrollbar-track-transparent">
+            <Table className="relative bg-transparent border-collapse w-full min-w-max">
               <TableHeader className="bg-layer-panel top-0 z-10 sticky border-b border-border shadow-sm h-12">
                 {table.getHeaderGroups().map((headerGroup) => (
                   <TableRow key={headerGroup.id} className="border-b-0 hover:bg-transparent">
@@ -631,7 +639,7 @@ export function ListTable({
                         {header.isPlaceholder
                           ? null
                           : flexRender(header.column.columnDef.header, header.getContext())}
-                        
+
                         {/* Column Picker in the last header */}
                         {header.column.id === 'actions' && (
                           <div className="absolute right-7 top-1/2 -translate-y-1/2">
@@ -650,10 +658,10 @@ export function ListTable({
                                     .filter(col => col.getCanHide())
                                     .map(col => (
                                       <div key={col.id} className="flex items-center space-x-2">
-                                        <Checkbox 
-                                          id={`col-${col.id}`} 
-                                          checked={col.getIsVisible()} 
-                                          onCheckedChange={(val) => col.toggleVisibility(!!val)} 
+                                        <Checkbox
+                                          id={`col-${col.id}`}
+                                          checked={col.getIsVisible()}
+                                          onCheckedChange={(val) => col.toggleVisibility(!!val)}
                                         />
                                         <label htmlFor={`col-${col.id}`} className="text-sm font-medium leading-none cursor-pointer uppercase font-mono text-[11px]">
                                           {col.id}
@@ -682,7 +690,7 @@ export function ListTable({
                           </TableCell>
                         ))}
                       </TableRow>
-                      
+
                       {/* Expanded Content */}
                       <AnimatePresence>
                         {row.getIsExpanded() && (
@@ -734,14 +742,13 @@ export function ListTable({
           </div>
         </div>
       </div>
-
       {/* PAGINATION */}
       <div className="border-t border-border bg-layer-panel px-7 py-4">
         <div className="flex items-center justify-between text-sm text-muted-foreground font-body text-transform-secondary">
           <div className="flex items-center gap-2">
             <span className="text-transform-secondary">Show</span>
-            <Select 
-              value={table.getState().pagination.pageSize.toString()} 
+            <Select
+              value={table.getState().pagination.pageSize.toString()}
               onValueChange={(val) => table.setPageSize(Number(val))}
             >
               <SelectTrigger size="sm" className="w-20 font-medium font-body text-transform-secondary bg-layer-panel text-on-surface hover:bg-layer-dialog">
@@ -763,15 +770,15 @@ export function ListTable({
             <Pagination className="mx-0 w-auto m-0">
               <PaginationContent>
                 <PaginationItem>
-                  <PaginationPrevious 
-                    href="#" 
+                  <PaginationPrevious
+                    href="#"
                     className="font-mono text-[10px] tracking-widest uppercase cursor-pointer"
                     onClick={(e) => { e.preventDefault(); table.previousPage(); }}
                   />
                 </PaginationItem>
                 <PaginationItem>
-                  <PaginationNext 
-                    href="#" 
+                  <PaginationNext
+                    href="#"
                     className="font-mono text-[10px] tracking-widest uppercase cursor-pointer"
                     onClick={(e) => { e.preventDefault(); table.nextPage(); }}
                   />

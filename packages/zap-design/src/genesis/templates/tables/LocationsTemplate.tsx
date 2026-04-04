@@ -4,6 +4,11 @@ import { useTheme } from '../../../components/ThemeContext';
 import { ComponentSandboxTemplate } from '../../../zap/layout/ComponentSandboxTemplate';
 import { CanvasDesktop } from '../../../components/dev/CanvasDesktop';
 import { ListTable, ListItem, Filters } from '../../../zap/organisms/list-table';
+import { ColumnDef } from '@tanstack/react-table';
+import { Pill } from '../../atoms/status/pills';
+import { Button } from '../../atoms/interactive/button';
+import { ChevronDown, MoreHorizontal } from "lucide-react";
+import { motion } from "framer-motion";
 import { SAMPLE_LOCATIONS } from '../../../zap/organisms/locations-table';
 import { DataFilter, FilterGroup } from '../../molecules/data-filter';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../../molecules/accordion';
@@ -44,6 +49,115 @@ export default function LocationsTemplate() {
         productType: [],
         status: [],
     });
+
+    const columns = React.useMemo<ColumnDef<ListItem>[]>(() => [
+        {
+            id: "expander",
+            header: () => <div className="w-12 px-7" />,
+            cell: ({ row }) => (
+                <div className="px-7 w-12 py-2.5">
+                    <motion.div
+                        animate={{ rotate: row.getIsExpanded() ? 180 : 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="flex-shrink-0 w-4 cursor-pointer"
+                        onClick={() => row.toggleExpanded()}
+                    >
+                        <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                    </motion.div>
+                </div>
+            ),
+        },
+        {
+            accessorKey: "variant_name",
+            header: ({ column }) => (
+                <div
+                    className="w-80 text-left font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    Location Name
+                </div>
+            ),
+            cell: ({ row }) => (
+                <div className="w-80 py-2.5 text-left">
+                    <div className="flex items-center gap-4">
+                        <div className="w-10 h-10 rounded-lg bg-surface-variant border border-border flex items-center justify-center shrink-0 overflow-hidden">
+                            {row.original.media_url ? (
+                                <img src={row.original.media_url} alt={row.original.variant_name} className="w-full h-full object-cover" />
+                            ) : (
+                                <Icon name="location_on" size={18} className="text-muted-foreground opacity-50" />
+                            )}
+                        </div>
+                        <div className="flex flex-col min-w-0">
+                            <span className="font-semibold text-foreground text-sm truncate">{row.original.variant_name}</span>
+                            <span className="font-dev font-normal text-xs text-muted-foreground uppercase tracking-wide truncate mt-0.5">{row.original.sku_code}</span>
+                        </div>
+                    </div>
+                </div>
+            ),
+        },
+        {
+            accessorKey: "category_id",
+            header: ({ column }) => (
+                <div
+                    className="w-32 text-left font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    Region
+                </div>
+            ),
+            cell: ({ row }) => (
+                <div className="w-32 truncate text-muted-foreground text-left py-2.5">
+                    {row.original.category_id}
+                </div>
+            ),
+        },
+        {
+            accessorKey: "product_type",
+            header: () => <div className="w-28 text-left font-mono text-[10px] tracking-widest text-muted-foreground uppercase">Loc Type</div>,
+            cell: ({ row }) => (
+                <div className="w-28 py-2.5">
+                    <Pill variant="neutral" className="w-fit px-1.5 py-0.5">
+                        {row.original.product_type}
+                    </Pill>
+                </div>
+            ),
+        },
+        {
+            accessorKey: "status_id",
+            header: ({ column }) => (
+                <div
+                    className="w-32 text-right font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    Status
+                </div>
+            ),
+            cell: ({ row }) => (
+                <div className="w-32 text-right py-2.5">
+                    <Pill
+                        variant={row.original.status_id === 'Active' ? 'success' : 'warning'}
+                        className="whitespace-nowrap w-fit ml-auto"
+                    >
+                        <div className="w-1.5 h-1.5 rounded-full bg-current mr-1.5 opacity-80 shrink-0" />
+                        {row.original.status_id}
+                    </Pill>
+                </div>
+            ),
+        },
+        {
+            id: "actions",
+            header: () => <div className="w-24 pr-7" />,
+            cell: () => (
+                <div className="w-24 pr-7 py-2.5 text-right">
+                    <div className="flex items-center justify-end text-muted-foreground">
+                        <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                            <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                    </div>
+                </div>
+            ),
+        },
+    ], []);
 
     // Derive filter groups from the MAPPED_LOCATIONS
     const baseGroups: FilterGroup[] = [
@@ -139,6 +253,7 @@ export default function LocationsTemplate() {
             onToggleFilters={() => setInspectorState(inspectorState === 'expanded' ? 'collapsed' : 'expanded')}
             isFilterActive={inspectorState === 'expanded'}
             labels={labels}
+            columns={columns} // Use custom columns
         />
     );
 
