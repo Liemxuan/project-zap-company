@@ -16,7 +16,7 @@ import { Icon } from '../../atoms/icons/Icon';
 import { SideNav } from '../../molecules/navigation/SideNav';
 import { ThemeHeader } from '../../molecules/layout/ThemeHeader';
 import { Inspector } from '../../../zap/layout/Inspector';
-
+import { Avatar } from '@/genesis/atoms/status/avatars';
 /**
  * Locations (Layout) Showcase
  * Renders ListTable inside the L6 CanvasDesktop layout
@@ -80,12 +80,18 @@ export default function LocationsTemplate() {
             cell: ({ row }) => (
                 <div className="w-80 py-2.5 text-left">
                     <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 rounded-lg bg-surface-variant border border-border flex items-center justify-center shrink-0 overflow-hidden">
-                            {row.original.media_url ? (
+                        <div className="w-10 h-10 flex items-center justify-center shrink-0 overflow-hidden">
+                            {/* {row.original.media_url ? (
                                 <img src={row.original.media_url} alt={row.original.variant_name} className="w-full h-full object-cover" />
                             ) : (
                                 <Icon name="location_on" size={18} className="text-muted-foreground opacity-50" />
-                            )}
+                            )} */}
+                            <Avatar src={row.original.media_url}
+                                className="w-full h-full object-cover border-[1px] border-border"
+                                initials={row.original.variant_name.split(' ').map(n => n[0]).join('')}
+                                size="sm"
+                                fallback={row.original.variant_name.split(' ').map(n => n[0]).join('')}
+                            />
                         </div>
                         <div className="flex flex-col min-w-0">
                             <span className="font-semibold text-foreground text-sm truncate">{row.original.variant_name}</span>
@@ -106,7 +112,7 @@ export default function LocationsTemplate() {
                 </div>
             ),
             cell: ({ row }) => (
-                <div className="w-32 truncate text-muted-foreground text-left py-2.5">
+                <div className="w-32 truncate font-dev text-transform-tertiary text-muted-foreground text-left py-2.5">
                     {row.original.category_id}
                 </div>
             ),
