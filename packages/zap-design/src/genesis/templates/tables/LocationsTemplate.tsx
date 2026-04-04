@@ -3,7 +3,13 @@ import { useSearchParams } from 'next/navigation';
 import { useTheme } from '../../../components/ThemeContext';
 import { ComponentSandboxTemplate } from '../../../zap/layout/ComponentSandboxTemplate';
 import { CanvasDesktop } from '../../../components/dev/CanvasDesktop';
-import { LocationsTable, SAMPLE_LOCATIONS, Filters } from '../../../zap/organisms/locations-table';
+import { ListTable, ListItem, Filters } from '../../../zap/organisms/list-table';
+import { ColumnDef } from '@tanstack/react-table';
+import { Pill } from '../../atoms/status/pills';
+import { Button } from '../../atoms/interactive/button';
+import { ChevronDown, MoreHorizontal } from "lucide-react";
+import { motion } from "framer-motion";
+import { SAMPLE_LOCATIONS } from '../../../zap/organisms/locations-table';
 import { DataFilter, FilterGroup } from '../../molecules/data-filter';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../../molecules/accordion';
 import { Icon } from '../../atoms/icons/Icon';
@@ -13,7 +19,7 @@ import { Inspector } from '../../../zap/layout/Inspector';
 
 /**
  * Locations (Layout) Showcase
- * Renders LocationsTable inside the L6 CanvasDesktop layout
+ * Renders ListTable inside the L6 CanvasDesktop layout
  * Route: /design/[theme]/organisms/locations
  */
 export default function LocationsTemplate() {
@@ -22,26 +28,151 @@ export default function LocationsTemplate() {
     const searchParams = useSearchParams();
     const isFullscreen = searchParams.get('fullscreen') === 'true';
 
+    // Map Locations to generic ListItem
+    const MAPPED_LOCATIONS: ListItem[] = SAMPLE_LOCATIONS.map(loc => ({
+        id: loc.id,
+        media_url: loc.media_url,
+        variant_name: loc.location_name,
+        sku_code: loc.address,
+        barcode: loc.phone,
+        category_id: loc.region,
+        product_type: loc.location_type,
+        sale_price: 0,
+        qty_on_hand: 0,
+        uom_id: loc.manager,
+        warehouse_id: loc.operating_hours,
+        status_id: loc.status_id === 'Renovation' ? 'Hidden' : (loc.status_id === 'Closed' ? 'Out of Stock' : loc.status_id)
+    }));
+
     const [filters, setFilters] = useState<Filters>({
-        region: [],
-        locationType: [],
+        category: [],
+        productType: [],
         status: [],
     });
 
-    // Derive filter groups from the SAMPLE_LOCATIONS
+    const columns = React.useMemo<ColumnDef<ListItem>[]>(() => [
+        {
+            id: "expander",
+            header: () => <div className="w-12 px-7" />,
+            cell: ({ row }) => (
+                <div className="px-7 w-12 py-2.5">
+                    <motion.div
+                        animate={{ rotate: row.getIsExpanded() ? 180 : 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="flex-shrink-0 w-4 cursor-pointer"
+                        onClick={() => row.toggleExpanded()}
+                    >
+                        <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                    </motion.div>
+                </div>
+            ),
+        },
+        {
+            accessorKey: "variant_name",
+            header: ({ column }) => (
+                <div
+                    className="w-80 text-left font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    Location Name
+                </div>
+            ),
+            cell: ({ row }) => (
+                <div className="w-80 py-2.5 text-left">
+                    <div className="flex items-center gap-4">
+                        <div className="w-10 h-10 rounded-lg bg-surface-variant border border-border flex items-center justify-center shrink-0 overflow-hidden">
+                            {row.original.media_url ? (
+                                <img src={row.original.media_url} alt={row.original.variant_name} className="w-full h-full object-cover" />
+                            ) : (
+                                <Icon name="location_on" size={18} className="text-muted-foreground opacity-50" />
+                            )}
+                        </div>
+                        <div className="flex flex-col min-w-0">
+                            <span className="font-semibold text-foreground text-sm truncate">{row.original.variant_name}</span>
+                            <span className="font-dev font-normal text-xs text-muted-foreground uppercase tracking-wide truncate mt-0.5">{row.original.sku_code}</span>
+                        </div>
+                    </div>
+                </div>
+            ),
+        },
+        {
+            accessorKey: "category_id",
+            header: ({ column }) => (
+                <div
+                    className="w-32 text-left font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    Region
+                </div>
+            ),
+            cell: ({ row }) => (
+                <div className="w-32 truncate text-muted-foreground text-left py-2.5">
+                    {row.original.category_id}
+                </div>
+            ),
+        },
+        {
+            accessorKey: "product_type",
+            header: () => <div className="w-28 text-left font-mono text-[10px] tracking-widest text-muted-foreground uppercase">Loc Type</div>,
+            cell: ({ row }) => (
+                <div className="w-28 py-2.5">
+                    <Pill variant="neutral" className="w-fit px-1.5 py-0.5">
+                        {row.original.product_type}
+                    </Pill>
+                </div>
+            ),
+        },
+        {
+            accessorKey: "status_id",
+            header: ({ column }) => (
+                <div
+                    className="w-32 text-right font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    Status
+                </div>
+            ),
+            cell: ({ row }) => (
+                <div className="w-32 text-right py-2.5">
+                    <Pill
+                        variant={row.original.status_id === 'Active' ? 'success' : 'warning'}
+                        className="whitespace-nowrap w-fit ml-auto"
+                    >
+                        <div className="w-1.5 h-1.5 rounded-full bg-current mr-1.5 opacity-80 shrink-0" />
+                        {row.original.status_id}
+                    </Pill>
+                </div>
+            ),
+        },
+        {
+            id: "actions",
+            header: () => <div className="w-24 pr-7" />,
+            cell: () => (
+                <div className="w-24 pr-7 py-2.5 text-right">
+                    <div className="flex items-center justify-end text-muted-foreground">
+                        <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                            <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                    </div>
+                </div>
+            ),
+        },
+    ], []);
+
+    // Derive filter groups from the MAPPED_LOCATIONS
     const baseGroups: FilterGroup[] = [
         {
-            id: 'region',
+            id: 'category',
             title: 'Region',
-            options: Array.from(new Set(SAMPLE_LOCATIONS.map(p => p.region))).map(region => ({
+            options: Array.from(new Set(MAPPED_LOCATIONS.map(p => p.category_id))).map(region => ({
                 id: region,
                 label: region,
             }))
         },
         {
-            id: 'locationType',
+            id: 'productType',
             title: 'Location Type',
-            options: Array.from(new Set(SAMPLE_LOCATIONS.map(p => p.location_type))).map(type => ({
+            options: Array.from(new Set(MAPPED_LOCATIONS.map(p => p.product_type))).map(type => ({
                 id: type,
                 label: type,
             }))
@@ -49,7 +180,7 @@ export default function LocationsTemplate() {
         {
             id: 'status',
             title: 'Status',
-            options: Array.from(new Set(SAMPLE_LOCATIONS.map(p => p.status_id))).map(status => ({
+            options: Array.from(new Set(MAPPED_LOCATIONS.map(p => p.status_id))).map(status => ({
                 id: status,
                 label: status,
             }))
@@ -78,9 +209,19 @@ export default function LocationsTemplate() {
         });
     };
 
+    const labels = {
+        addItem: "Add Location",
+        itemName: "Location Name",
+        itemCode: "Address",
+        category: "Region",
+        type: "Loc Type",
+        inventory: "Manager / Hours",
+        price: "Revenue"
+    };
+
     const rightDrawerContent = inspectorState === 'expanded' && (
         <div className="h-full border-l border-border bg-layer-panel hidden md:flex flex-col shrink-0 z-20 relative">
-            <Inspector title="E-COMMERCE LAB" width={320}>
+            <Inspector title="LOCATIONS LAB" width={320}>
                 <div className="flex flex-col gap-0 w-full px-4 pt-4">
                     <Accordion type="single" collapsible variant="navigation" value={inspectorState === 'expanded' ? "item-1" : ""} onValueChange={(val: string) => { if (val !== "item-1") setInspectorState('collapsed'); }} className="bg-transparent w-full space-y-2">
                         <AccordionItem value="item-1" className="border-none m-0">
@@ -102,6 +243,18 @@ export default function LocationsTemplate() {
                 </div>
             </Inspector>
         </div>
+    );
+
+    const tableComponent = (
+        <ListTable
+            initialItems={MAPPED_LOCATIONS}
+            filters={filters}
+            onFilterChange={setFilters}
+            onToggleFilters={() => setInspectorState(inspectorState === 'expanded' ? 'collapsed' : 'expanded')}
+            isFilterActive={inspectorState === 'expanded'}
+            labels={labels}
+            columns={columns} // Use custom columns
+        />
     );
 
     const layoutContent = (
@@ -177,12 +330,7 @@ export default function LocationsTemplate() {
 
                 {/* Table Content */}
                 <div className="flex-1 overflow-auto pt-8 px-4 lg:pt-11 lg:px-12 pb-16 flex flex-col relative z-0 min-w-0">
-                    <LocationsTable
-                        filters={filters}
-                        onFilterChange={setFilters}
-                        onToggleFilters={() => setInspectorState(inspectorState === 'expanded' ? 'collapsed' : 'expanded')}
-                        isFilterActive={inspectorState === 'expanded'}
-                    />
+                    {tableComponent}
                 </div>
             </div>
 
@@ -229,12 +377,7 @@ export default function LocationsTemplate() {
                     />
 
                     <div className="flex-1 overflow-auto pt-8 px-4 lg:pt-11 lg:px-12 pb-16 flex flex-col relative z-0 bg-layer-base min-w-0">
-                        <LocationsTable
-                            filters={filters}
-                            onFilterChange={setFilters}
-                            onToggleFilters={() => setInspectorState(inspectorState === 'expanded' ? 'collapsed' : 'expanded')}
-                            isFilterActive={inspectorState === 'expanded'}
-                        />
+                        {tableComponent}
                     </div>
                 </div>
 

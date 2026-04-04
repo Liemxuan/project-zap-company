@@ -57,7 +57,7 @@ const NAV_DATA: Category[] = [
     {
         id: 'L6', title: 'L6: Layouts', icon: Columns, items: [
             { title: 'Authentication', items: ['Sign-in A', 'Sign-in B'] },
-            { title: 'Tables', items: ['system logs', 'Product List', 'Locations'] }
+            { title: 'Tables', items: ['system logs', 'Product List', 'Locations', 'Categories'] }
         ]
     },
     {
@@ -293,6 +293,7 @@ const getHref = (item: string, theme: string, activeWorkspaceId?: string | null,
             'system logs': `/design/${theme}/organisms/system-logs-layout`,
             'Product List': `/design/${theme}/organisms/product-list`,
             'Locations': prefix ? `${prefix}/locations` : `/zap/en/locations`,
+            'Categories': `/design/${theme}/organisms/categories`,
 
             // L5 Organisms — use theme path
             'Data Grid': `/design/${theme}/organisms/data-grid`,
@@ -315,7 +316,6 @@ const getHref = (item: string, theme: string, activeWorkspaceId?: string | null,
             
             'User Management': `/auth/${theme}/user-management`,
             'Product Management': `/auth/${theme}/product-management`,
-            'Categories': `/auth/${theme}/categories`,
             'Modifier Groups': prefix ? `${prefix}/modifier-groups` : `/zap/en/modifier-groups`,
             'Units': `/auth/${theme}/units`,
             'Catalog Vault': `/auth/${theme}/catalog-vault`,
@@ -414,7 +414,7 @@ const SwarmChatNavBody = ({ currentPath }: { currentPath: string }) => {
     const [sessions, setSessions] = React.useState<any[]>([]);
     const searchParams = useSearchParams();
     const agentId = searchParams?.get('agent');
-    
+
     React.useEffect(() => {
         let mounted = true;
         const fetchSessions = () => {
@@ -422,9 +422,9 @@ const SwarmChatNavBody = ({ currentPath }: { currentPath: string }) => {
             fetch(url)
                 .then(res => res.json())
                 .then(data => {
-                    if(mounted && data.success) setSessions(data.sessions || []);
+                    if (mounted && data.success) setSessions(data.sessions || []);
                 })
-                .catch(() => {});
+                .catch(() => { });
         };
         fetchSessions();
         const interval = setInterval(fetchSessions, 5000);
@@ -443,17 +443,17 @@ const SwarmChatNavBody = ({ currentPath }: { currentPath: string }) => {
         <div className="flex flex-col space-y-2 w-full">
             <Link href="/chats/new" className="w-full mb-2 block">
                 <div className="flex items-center gap-2 px-3 py-2.5 rounded-md transition-colors w-full overflow-hidden bg-primary/10 border border-primary/10 text-primary hover:bg-primary/20 group justify-center">
-                    <Plus size={14} className="group-hover:scale-110 transition-transform" /> 
+                    <Plus size={14} className="group-hover:scale-110 transition-transform" />
                     <span className="font-medium text-xs tracking-widest uppercase">NEW CHAT</span>
                 </div>
             </Link>
-            
+
             <div className="flex flex-col gap-0.5">
                 {sessions.map(s => {
                     const isActive = currentPath === `/chats/${s.id}` || currentPath.endsWith(s.id);
                     return (
-                        <Link 
-                            key={s.id} 
+                        <Link
+                            key={s.id}
                             href={`/chats/${s.id}`}
                             className={cn(
                                 "flex items-center gap-2.5 px-3 py-2 rounded-md transition-colors w-full overflow-hidden",
@@ -793,151 +793,153 @@ const SideNavContent: React.FC<SideNavProps> = ({ showDevWrapper = false }) => {
                 {(mounted && activeWorkspaceId === 'zap-swarm' && pathname && pathname.startsWith('/chats')) ? (
                     <SwarmChatNavBody currentPath={pathname} />
                 ) : (
-                <Accordion
-                    type="multiple"
-                    value={Object.keys(openCategories).filter(k => openCategories[k] && effectivelyExpanded)}
-                    onValueChange={(val) => {
-                        const newCat = { ...openCategories };
-                        EFFECTIVE_NAV.forEach(cat => {
-                            newCat[cat.id] = val.includes(cat.id);
-                        });
-                        setOpenCategories(newCat);
-                    }}
-                    className="w-full space-y-1"
-                    variant="navigation"
-                    indicator="none"
-                >
-                    {mounted && EFFECTIVE_NAV.map((category) => {
-                        const hasItems = category.items.length > 0;
-                        const IconComp = category.icon;
-                        
-                        let isActive = false;
-                        if (mounted && activeHref) {
-                            for (const item of category.items) {
-                                if (typeof item === 'string') {
-                                    const href = getHref(item, theme, activeWorkspaceId, currentPort);
-                                    if (href && href === activeHref) isActive = true;
-                                } else {
-                                    for (const subItem of item.items) {
-                                        const href = getHref(subItem, theme, activeWorkspaceId, currentPort);
+                    <Accordion
+                        type="multiple"
+                        value={Object.keys(openCategories).filter(k => openCategories[k] && effectivelyExpanded)}
+                        onValueChange={(val) => {
+                            const newCat = { ...openCategories };
+                            EFFECTIVE_NAV.forEach(cat => {
+                                newCat[cat.id] = val.includes(cat.id);
+                            });
+                            setOpenCategories(newCat);
+                        }}
+                        className="w-full space-y-1"
+                        variant="navigation"
+                        indicator="none"
+                    >
+                        {mounted && EFFECTIVE_NAV.map((category) => {
+                            const hasItems = category.items.length > 0;
+                            const IconComp = category.icon;
+
+                            let isActive = false;
+                            if (mounted && activeHref) {
+                                for (const item of category.items) {
+                                    if (typeof item === 'string') {
+                                        const href = getHref(item, theme, activeWorkspaceId, currentPort);
                                         if (href && href === activeHref) isActive = true;
+                                    } else {
+                                        for (const subItem of item.items) {
+                                            const href = getHref(subItem, theme, activeWorkspaceId, currentPort);
+                                            if (href && href === activeHref) isActive = true;
+                                        }
                                     }
                                 }
                             }
-                        }
 
-                        return (
-                            <AccordionItem key={category.id} value={category.id} className="border-none w-full">
-                                <AccordionTrigger
-                                    onClick={() => {
-                                        if (!effectivelyExpanded) {
-                                            setSidebarState('expanded');
-                                        }
-                                    }}
-                                    className={cn(
-                                        !effectivelyExpanded ? "justify-center py-3 px-0 h-11" : "px-2 py-2 gap-3 transition-all duration-300",
-                                        isActive && effectivelyExpanded ? "bg-primary/10 text-on-surface" : "hover:bg-on-surface/5 text-on-surface-variant",
-                                        isActive && !effectivelyExpanded ? "bg-primary/10 text-primary" : ""
-                                    )}
-                                    style={{
-                                        borderRadius: 'var(--navlink-border-radius, 8px)',
-                                        borderWidth: 'var(--navlink-border-width, 0px)',
-                                        borderStyle: 'solid',
-                                        borderColor: isActive ? 'var(--color-primary-container)' : 'transparent',
-                                    }}
-                                >
-                                    <div className="flex items-center gap-3 overflow-hidden text-left flex-1 min-w-0">
-                                        <IconComp
-                                            size={20}
-                                            strokeWidth={isActive ? 2.5 : 1.5}
-                                            className={cn(
-                                                "shrink-0 transition-colors",
-                                                isActive ? "text-primary" : "text-on-surface-variant opacity-70 group-data-[state=open]:text-primary"
-                                            )}
-                                        />
-                                        {effectivelyExpanded && (
-                                            <span className="font-display font-medium text-titleSmall text-transform-primary tracking-tight whitespace-nowrap overflow-hidden text-ellipsis">
-                                                {category.title}
-                                            </span>
+                            return (
+                                <AccordionItem key={category.id} value={category.id} className="border-none w-full">
+                                    <AccordionTrigger
+                                        onClick={() => {
+                                            if (!effectivelyExpanded) {
+                                                setSidebarState('expanded');
+                                            }
+                                        }}
+                                        className={cn(
+                                            !effectivelyExpanded ? "justify-center py-3 px-0 h-11" : "px-2 py-2 gap-3 transition-all duration-300",
+                                            isActive && effectivelyExpanded ? "bg-primary/10 text-on-surface" : "hover:bg-on-surface/5 text-on-surface-variant",
+                                            isActive && !effectivelyExpanded ? "bg-primary/10 text-primary" : ""
                                         )}
-                                    </div>
-                                    {/* Manual indicator for effectivelyExpanded cases */}
-                                    {effectivelyExpanded && (
-                                        <ChevronDown className="size-4 shrink-0 transition-transform duration-200 text-on-surface-variant/50 group-data-[state=open]:rotate-180" strokeWidth={2.5} />
-                                    )}
-                                </AccordionTrigger>
+                                        style={{
+                                            borderRadius: 'var(--navlink-border-radius, 8px)',
+                                            borderWidth: 'var(--navlink-border-width, 0px)',
+                                            borderStyle: 'solid',
+                                            borderColor: isActive ? 'var(--color-primary-container)' : 'transparent',
+                                        }}
+                                    >
+                                        <div className="flex items-center gap-3 overflow-hidden text-left flex-1 min-w-0">
+                                            <IconComp
+                                                size={20}
+                                                strokeWidth={isActive ? 2.5 : 1.5}
+                                                className={cn(
+                                                    "shrink-0 transition-colors",
+                                                    isActive ? "text-primary" : "text-on-surface-variant opacity-70 group-data-[state=open]:text-primary"
+                                                )}
+                                            />
+                                            {effectivelyExpanded && (
+                                                <span className="font-display font-medium text-titleSmall text-transform-primary tracking-tight whitespace-nowrap overflow-hidden text-ellipsis">
+                                                    {category.title}
+                                                </span>
+                                            )}
+                                        </div>
+                                        {/* Manual indicator for effectivelyExpanded cases */}
+                                        {effectivelyExpanded && (
+                                            <ChevronDown className="size-4 shrink-0 transition-transform duration-200 text-on-surface-variant/50 group-data-[state=open]:rotate-180" strokeWidth={2.5} />
+                                        )}
+                                    </AccordionTrigger>
 
-                                {/* Inner Items */}
-                                {hasItems && effectivelyExpanded && (
-                                    <AccordionContent>
-                                        <div className="flex flex-col m-0 pl-8 overflow-hidden group/navlist space-y-[2px]">
-                                            {category.items.map((item, itemIdx) => {
-                                                if (typeof item === 'string') {
-                                                    const href = getHref(item, theme, activeWorkspaceId, currentPort, pathname);
-                                                    const isItemActive = mounted && href !== '' && href === activeHref;
+                                    {/* Inner Items */}
+                                    {hasItems && effectivelyExpanded && (
+                                        <AccordionContent>
+                                            <div className="flex flex-col m-0 pl-8 overflow-hidden group/navlist space-y-[2px]">
+                                                {category.items.map((item, itemIdx) => {
+                                                    if (typeof item === 'string') {
+                                                        const href = getHref(item, theme, activeWorkspaceId, currentPort, pathname);
+                                                        const isItemActive = mounted && href !== '' && href === activeHref;
 
-                                                    return (
-                                                        <NavLink
-                                                            key={`str-${item}`}
-                                                            href={href || '#'}
-                                                            isActive={isItemActive}
-                                                            variant="default"
-                                                        >
-                                                            {item}
-                                                        </NavLink>
-                                                    );
-                                                } else {
-                                                    return (
-                                                        <div key={`grp-${item.title}`} className="flex flex-col mt-2 mb-1">
-                                                            <button
-                                                                onClick={(e) => {
-                                                                    e.preventDefault();
-                                                                    e.stopPropagation();
-                                                                    const key = `${category.id}-${item.title}`;
-                                                                    setOpenSubGroups(prev => {
-                                                                        if (prev[key]) return {};
-                                                                        return { [key]: true };
-                                                                    });
-                                                                }}
-                                                                className="flex items-center justify-between w-full outline-none group/subgroup cursor-pointer hover:bg-on-surface/5 rounded px-2 py-1.5 -ml-2 mb-1 transition-colors"
+
+                                                        return (
+                                                            <NavLink
+                                                                key={`str-${item}`}
+                                                                href={href || '#'}
+                                                                isActive={isItemActive}
+                                                                variant="default"
                                                             >
-                                                                <div className="text-bodyMedium font-body text-on-surface-variant opacity-80 group-hover/subgroup:opacity-100 text-transform-secondary tracking-tight transition-opacity font-medium">
-                                                                    {item.title}
-                                                                </div>
-                                                                <motion.div
-                                                                    animate={{ rotate: (openSubGroups[`${category.id}-${item.title}`]) ? 0 : -90 }}
-                                                                    className="text-on-surface-variant opacity-50 group-hover/subgroup:opacity-100 transition-opacity"
+                                                                {item}
+                                                            </NavLink>
+                                                        );
+                                                    } else {
+                                                        return (
+                                                            <div key={`grp-${item.title}`} className="flex flex-col mt-2 mb-1">
+                                                                <button
+                                                                    onClick={(e) => {
+                                                                        e.preventDefault();
+                                                                        e.stopPropagation();
+                                                                        const key = `${category.id}-${item.title}`;
+                                                                        setOpenSubGroups(prev => {
+                                                                            if (prev[key]) return {};
+                                                                            return { [key]: true };
+                                                                        });
+                                                                    }}
+                                                                    className="flex items-center justify-between w-full outline-none group/subgroup cursor-pointer hover:bg-on-surface/5 rounded px-2 py-1.5 -ml-2 mb-1 transition-colors"
                                                                 >
-                                                                    <ChevronDown size={14} strokeWidth={2.5} />
-                                                                </motion.div>
-                                                            </button>
-                                                            <AnimatePresence initial={false}>
-                                                                {(openSubGroups[`${category.id}-${item.title}`]) && (
+                                                                    <div className="text-bodyMedium font-body text-on-surface-variant opacity-80 group-hover/subgroup:opacity-100 text-transform-secondary tracking-tight transition-opacity font-medium">
+                                                                        {item.title}
+                                                                    </div>
                                                                     <motion.div
-                                                                        initial={{ height: 0, opacity: 0 }}
-                                                                        animate={{ height: "auto", opacity: 1 }}
-                                                                        exit={{ height: 0, opacity: 0 }}
-                                                                        transition={{ duration: 0.2, ease: "easeInOut" }}
-                                                                        className="flex flex-col border-l border-primary/20 ml-2 pl-3 space-y-0.5 overflow-hidden"
+                                                                        animate={{ rotate: (openSubGroups[`${category.id}-${item.title}`]) ? 0 : -90 }}
+                                                                        className="text-on-surface-variant opacity-50 group-hover/subgroup:opacity-100 transition-opacity"
                                                                     >
-                                                                        {item.items.map((subItem) => {
-                                                                            const href = getHref(subItem, theme, activeWorkspaceId, currentPort, pathname);
-                                                                            const isItemActive = mounted && href !== '' && href === activeHref;
-                                                                            return (
-                                                                                <NavLink
-                                                                                    href={href || '#'}
-                                                                                    key={subItem}
-                                                                                    isActive={isItemActive}
-                                                                                    variant="default"
-                                                                                >
-                                                                                    {subItem}
-                                                                                </NavLink>
-                                                                            );
-                                                                        })}
+                                                                        <ChevronDown size={14} strokeWidth={2.5} />
                                                                     </motion.div>
-                                                                )}
-                                                            </AnimatePresence>
-                                                        </div>
+
+                                                                </button>
+                                                                <AnimatePresence initial={false}>
+                                                                    {(openSubGroups[`${category.id}-${item.title}`]) && (
+                                                                        <motion.div
+                                                                            initial={{ height: 0, opacity: 0 }}
+                                                                            animate={{ height: "auto", opacity: 1 }}
+                                                                            exit={{ height: 0, opacity: 0 }}
+                                                                            transition={{ duration: 0.2, ease: "easeInOut" }}
+                                                                            className="flex flex-col border-l border-primary/20 ml-2 pl-3 space-y-0.5 overflow-hidden"
+                                                                        >
+                                                                            {item.items.map((subItem) => {
+                                                                                const href = getHref(subItem, theme, activeWorkspaceId, currentPort);
+                                                                                const isItemActive = mounted && href !== '' && href === activeHref;
+                                                                                return (
+                                                                                    <NavLink
+                                                                                        href={href || '#'}
+                                                                                        key={subItem}
+                                                                                        isActive={isItemActive}
+                                                                                        variant="default"
+                                                                                    >
+                                                                                        {subItem}
+                                                                                    </NavLink>
+                                                                                );
+                                                                            })}
+                                                                        </motion.div>
+                                                                    )}
+                                                                </AnimatePresence>
+                                                            </div>
 
                                                         );
                                                     }
