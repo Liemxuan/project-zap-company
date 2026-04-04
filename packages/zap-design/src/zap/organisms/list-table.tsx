@@ -287,6 +287,7 @@ export interface ListTableProps {
   filters?: Filters;
   onFilterChange?: (filters: Filters) => void;
   onToggleFilters?: () => void;
+  onAddClick?: () => void;
   isFilterActive?: boolean;
   labels?: {
     addItem?: string;
@@ -305,6 +306,7 @@ export function ListTable({
   filters: controlledFilters,
   onFilterChange,
   onToggleFilters,
+  onAddClick,
   isFilterActive,
   labels = {},
   columns: externalColumns
@@ -599,7 +601,7 @@ export function ListTable({
               </Badge>
             )}
           </Button>
-          <Button variant="primary" size="sm" className="h-[var(--input-height,var(--button-height,48px))] px-6">
+          <Button variant="primary" size="sm" onClick={onAddClick} className="h-[var(--input-height,var(--button-height,48px))] px-6">
             <Plus className="h-4 w-4 mr-2" />
             <span className="font-display font-medium text-xs font-mono">{L.addItem}</span>
           </Button>

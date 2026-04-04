@@ -15,6 +15,7 @@ import { Icon } from '../../atoms/icons/Icon';
 import { SideNav } from '../../molecules/navigation/SideNav';
 import { ThemeHeader } from '../../molecules/layout/ThemeHeader';
 import { Inspector } from '../../../zap/layout/Inspector';
+import ProductCreateTemplate from '../forms/ProductCreateTemplate';
 import { Avatar } from '@/genesis/atoms/status/avatars';
 import { Checkbox } from '../../atoms/interactive/checkbox';
 /**
@@ -27,6 +28,8 @@ export default function ProductListTemplate() {
     const activeTheme = appTheme === 'core' ? 'core' : 'metro';
     const searchParams = useSearchParams();
     const isFullscreen = searchParams.get('fullscreen') === 'true';
+
+    const [isCreating, setIsCreating] = useState(false);
 
     const [filters, setFilters] = useState<Filters>({
         category: [],
@@ -343,6 +346,7 @@ export default function ProductListTemplate() {
                         onToggleFilters={() => setInspectorState(inspectorState === 'expanded' ? 'collapsed' : 'expanded')}
                         isFilterActive={inspectorState === 'expanded'}
                         columns={columns}
+                        onAddClick={() => setIsCreating(true)}
                     />
                 </div>
             </div>
@@ -374,6 +378,10 @@ export default function ProductListTemplate() {
         </div>
     );
 
+    if (isCreating) {
+        return <ProductCreateTemplate onCancel={() => setIsCreating(false)} />;
+    }
+
     if (isFullscreen) {
         return (
             <div className="flex h-screen w-full bg-layer-canvas overflow-hidden font-sans">
@@ -397,6 +405,7 @@ export default function ProductListTemplate() {
                             onToggleFilters={() => setInspectorState(inspectorState === 'expanded' ? 'collapsed' : 'expanded')}
                             isFilterActive={inspectorState === 'expanded'}
                             columns={columns}
+                            onAddClick={() => setIsCreating(true)}
                         />
                     </div>
                 </div>

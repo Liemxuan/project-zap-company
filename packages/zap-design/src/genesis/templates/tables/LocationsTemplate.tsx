@@ -17,6 +17,8 @@ import { SideNav } from '../../molecules/navigation/SideNav';
 import { ThemeHeader } from '../../molecules/layout/ThemeHeader';
 import { Inspector } from '../../../zap/layout/Inspector';
 import { Avatar } from '@/genesis/atoms/status/avatars';
+import LocationCreateTemplate from '../forms/LocationCreateTemplate';
+
 /**
  * Locations (Layout) Showcase
  * Renders ListTable inside the L6 CanvasDesktop layout
@@ -27,6 +29,7 @@ export default function LocationsTemplate() {
     const activeTheme = appTheme === 'core' ? 'core' : 'metro';
     const searchParams = useSearchParams();
     const isFullscreen = searchParams.get('fullscreen') === 'true';
+    const [isCreating, setIsCreating] = useState(false);
 
     // Map Locations to generic ListItem
     const MAPPED_LOCATIONS: ListItem[] = SAMPLE_LOCATIONS.map(loc => ({
@@ -260,6 +263,7 @@ export default function LocationsTemplate() {
             isFilterActive={inspectorState === 'expanded'}
             labels={labels}
             columns={columns} // Use custom columns
+            onAddClick={() => setIsCreating(true)}
         />
     );
 
@@ -366,6 +370,10 @@ export default function LocationsTemplate() {
             </Accordion>
         </div>
     );
+
+    if (isCreating) {
+        return <LocationCreateTemplate onCancel={() => setIsCreating(false)} />;
+    }
 
     if (isFullscreen) {
         return (
