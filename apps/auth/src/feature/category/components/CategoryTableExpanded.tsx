@@ -10,6 +10,9 @@ import { Button } from 'zap-design/src/genesis/atoms/interactive/button';
 import { Input } from 'zap-design/src/genesis/atoms/interactive/inputs';
 import { Pill } from 'zap-design/src/genesis/atoms/status/pills';
 import { Avatar, AvatarImage, AvatarFallback } from 'zap-design/src/genesis/atoms/interactive/avatar';
+import { Checkbox } from 'zap-design/src/genesis/atoms/interactive/checkbox';
+import { Popover, PopoverContent, PopoverTrigger } from 'zap-design/src/genesis/molecules/popover';
+import { Plus } from 'lucide-react';
 import {
   Table,
   TableBody,
@@ -48,11 +51,13 @@ function CategoryRow({
   expanded,
   onToggle,
   t,
+  visibleCols,
 }: {
   category: Category;
   expanded: boolean;
   onToggle: () => void;
   t: (key: string, fallback?: string) => string;
+  visibleCols: Record<string, boolean>;
 }) {
   const pillVariant = category.is_active ? 'success' : 'error';
 
@@ -63,18 +68,18 @@ function CategoryRow({
         className="cursor-pointer group hover:bg-surface-variant/50 focus:bg-surface-variant/70 border-b border-border/50 group-last:border-0"
       >
         {/* expand icon */}
-        <TableCell className="w-10 text-center py-4">
+        <TableCell className="px-7 w-12 py-2.5">
           <motion.div
             animate={{ rotate: expanded ? 180 : 0 }}
             transition={{ duration: 0.2 }}
-            className="inline-flex"
+            className="flex-shrink-0 w-4 cursor-pointer"
           >
-            <ChevronDown className="h-3 w-3 text-muted-foreground" />
+            <ChevronDown className="h-4 w-4 text-muted-foreground" />
           </motion.div>
         </TableCell>
 
         {/* id */}
-        <TableCell className="w-20 whitespace-nowrap text-left py-4 font-dev text-muted-foreground text-[11px]">
+        <TableCell className="w-16 whitespace-nowrap text-left py-2.5 font-dev text-muted-foreground text-[10px]">
           {category.id}
         </TableCell>
 
@@ -86,36 +91,27 @@ function CategoryRow({
           </Avatar>
         </TableCell>
 
-        {/* category_name */}
-        <TableCell className="w-full min-w-[200px] whitespace-nowrap text-left py-4 font-medium text-[11px]">
-          {category.name}
+        {/* category_name (3) */}
+        <TableCell className="min-w-40 whitespace-nowrap text-left py-2.5 px-4">
+          <span className="font-display font-bold text-foreground text-sm block">{category.name}</span>
         </TableCell>
 
-        {/* item (item_count) */}
-        <TableCell className="w-20 whitespace-nowrap text-center py-4 font-dev text-muted-foreground text-[11px]">
-          {category.item_count}
-        </TableCell>
+        {/* item (4) */}
+        {visibleCols.item && (
+          <TableCell className="w-32 whitespace-nowrap text-center py-4 text-muted-foreground text-sm font-body">
+            {category.item_count}
+          </TableCell>
+        )}
 
-        {/* channel */}
-        <TableCell className="w-32 whitespace-nowrap text-left py-4 font-medium text-[11px]">
-          {category.channels && category.channels.length > 0 ? (
-            <span className="text-muted-foreground">
-              {category.channels.length} {category.channels.length === 1 ? 'channel' : 'channels'}
-            </span>
-          ) : (
-            <span className="text-muted-foreground">—</span>
-          )}
-        </TableCell>
-
-        {/* status */}
+        {/* status (5) */}
         <TableCell className="w-28 whitespace-nowrap py-4">
           <Pill variant={pillVariant} className="min-w-16 block text-center text-[10px]">
-            {category.is_active ? 'Active' : 'Inactive'}
+            {category.is_active ? t('status_active', 'Active') : t('status_inactive', 'Inactive')}
           </Pill>
         </TableCell>
 
-        {/* actions */}
-        <TableCell className="w-16 whitespace-nowrap text-right py-4 sticky right-0 bg-layer-canvas group-hover:bg-surface-variant/50 transition-colors z-10 shadow-[-4px_0_8px_-4px_rgba(0,0,0,0.1)]" onClick={(e) => e.stopPropagation()}>
+        {/* actions (6) */}
+        <TableCell className="w-16 whitespace-nowrap text-right py-4 sticky right-0 z-10 shadow-[-4px_0_8px_-4px_rgba(0,0,0,0.12)] border-l border-border bg-layer-cover group-hover:bg-surface-variant/50 transition-colors" onClick={(e) => e.stopPropagation()}>
           <QuickActionsDropdown
             actions={[
               { label: t('action_view', 'View'), icon: Eye, onClick: () => console.log('View', category.id) },
@@ -129,7 +125,7 @@ function CategoryRow({
       <AnimatePresence initial={false}>
         {expanded && (
           <TableRow className="hover:bg-transparent data-[state=selected]:bg-transparent border-0">
-            <TableCell colSpan={8} className="p-0 border-b-0 h-0 border-t-0">
+            <TableCell colSpan={5 + (visibleCols.item ? 1 : 0)} className="p-0 border-b-0 h-0 border-t-0">
               <motion.div
                 initial={{ height: 0, opacity: 0 }}
                 animate={{ height: 'auto', opacity: 1 }}
@@ -152,14 +148,14 @@ function CategoryRow({
                     {category.parent_id && (
                       <div>
                         <p className="mb-1 text-[length:var(--table-font-size,0.625rem)] font-display font-semibold text-transform-primary tracking-wide text-muted-foreground">
-                          Parent ID
+                          {t('table_parent_id', 'Parent ID')}
                         </p>
                         <p className="text-foreground text-xs font-mono">{category.parent_id}</p>
                       </div>
                     )}
                     <div>
                       <p className="mb-1 text-[length:var(--table-font-size,0.625rem)] font-display font-semibold text-transform-primary tracking-wide text-muted-foreground">
-                        Items
+                        {t('table_item', 'Items')}
                       </p>
                       <p className="text-foreground">{category.item_count}</p>
                     </div>
@@ -212,7 +208,7 @@ function FilterPanel({
         </h3>
         {hasActiveFilters && (
           <Button variant="ghost" size="sm" onClick={clearAll} className="h-6 text-xs text-primary">
-            Clear
+            {t('clear', 'Clear')}
           </Button>
         )}
       </div>
@@ -231,13 +227,12 @@ function FilterPanel({
                 whileHover={{ x: 2 }}
                 onClick={() => toggleFilter(status)}
                 aria-pressed={selected}
-                className={`flex w-full items-center justify-between gap-2 border border-[length:max(var(--button-border-width,1px),1px)] rounded-[length:var(--button-border-radius,var(--radius-btn,4px))] px-3 py-2 text-sm transition-colors font-dev text-transform-tertiary ${
-                  selected
+                className={`flex w-full items-center justify-between gap-2 border border-[length:max(var(--button-border-width,1px),1px)] rounded-[length:var(--button-border-radius,var(--radius-btn,4px))] px-3 py-2 text-sm transition-colors font-dev text-transform-tertiary ${selected
                     ? 'border-primary bg-primary/10 text-primary'
                     : 'border-border text-muted-foreground hover:border-primary/40 hover:bg-surface-variant/40'
-                }`}
+                  }`}
               >
-                <span className="capitalize">{status}</span>
+                <span className="capitalize">{t(`status_${status.toLowerCase()}`, status)}</span>
                 {selected && <Check className="h-3.5 w-3.5" />}
               </motion.button>
             );
@@ -289,6 +284,11 @@ export function CategoryTableExpanded({
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [internalFilters, setInternalFilters] = useState<CategoryFilters>({ status: [] });
   const [internalShowFilters, setInternalShowFilters] = useState(false);
+  const [visibleCols, setVisibleCols] = useState<Record<string, boolean>>({
+    item: true,
+  });
+  const [tempCols, setTempCols] = useState<Record<string, boolean>>({ ...visibleCols });
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
   const filters = filtersProp ?? internalFilters;
   const showFilters = isFilterActive ?? internalShowFilters;
@@ -317,8 +317,8 @@ export function CategoryTableExpanded({
     });
   }, [filters, searchQuery, categories]);
 
-  const totalPages = totalPagesProp ?? Math.ceil(filteredCategories.length / pageSize);
-  
+  const totalPages = Math.max(1, totalPagesProp ?? Math.ceil(filteredCategories.length / pageSize));
+
   // For client-side fallback if no totalPages is provided, we still slice
   // But if totalPages is provided, we assume the server already paginated
   const displayCategories = totalPagesProp ? categories : filteredCategories.slice((currentPage - 1) * pageSize, currentPage * pageSize);
@@ -356,7 +356,7 @@ export function CategoryTableExpanded({
         <div className="flex items-center h-8">
           {hasActiveFilter && (
             <span className="text-sm font-medium text-muted-foreground font-body text-transform-secondary">
-              {filteredCategories.length} of {categories.length} records matched criteria.
+              {filteredCategories.length} {t('of', 'of')} {totalRecords} {t('categories_matched', 'records matched criteria.')}
             </span>
           )}
         </div>
@@ -384,13 +384,19 @@ export function CategoryTableExpanded({
           >
             <Filter className="h-4 w-4 mr-2" />
             <span className="font-display font-medium text-xs text-transform-primary">
-              {t('filter', 'Filter')}
+              {t('filter', 'filter')}
             </span>
             {activeFilters > 0 && (
               <Badge className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center p-0 text-xs bg-destructive text-destructive-foreground z-20">
                 {activeFilters}
               </Badge>
             )}
+          </Button>
+
+          <Button variant="primary" size="sm" className="h-[var(--input-height,var(--button-height,48px))] px-6">
+            <span className="font-display font-medium text-xs text-transform-primary">
+              {t('btn_add', 'add category')}
+            </span>
           </Button>
         </div>
       </div>
@@ -422,14 +428,57 @@ export function CategoryTableExpanded({
             <Table className="w-full relative bg-transparent">
               <TableHeader className="bg-layer-panel top-0 z-10 sticky border-b border-border shadow-sm h-12">
                 <TableRow className="border-b-0 hover:bg-transparent">
-                  <TableHead className="w-10 text-center bg-layer-panel h-12"></TableHead>
-                  <TableHead className="w-20 text-left bg-layer-panel font-display font-semibold text-[10px] h-12" style={{ textTransform: 'lowercase' }}>id</TableHead>
-                  <TableHead className="w-20 text-center bg-layer-panel font-display font-semibold text-[10px] h-12" style={{ textTransform: 'lowercase' }}>image</TableHead>
-                  <TableHead className="text-left bg-layer-panel font-display font-semibold text-[10px] h-12" style={{ textTransform: 'lowercase' }}>category_name</TableHead>
-                  <TableHead className="w-20 text-center bg-layer-panel font-display font-semibold text-[10px] h-12" style={{ textTransform: 'lowercase' }}>item</TableHead>
-                  <TableHead className="w-32 text-left bg-layer-panel font-display font-semibold text-[10px] h-12" style={{ textTransform: 'lowercase' }}>channel</TableHead>
-                  <TableHead className="w-28 text-center bg-layer-panel font-display font-semibold text-[10px] h-12" style={{ textTransform: 'lowercase' }}>status</TableHead>
-                  <TableHead className="w-16 text-right bg-layer-panel font-display font-semibold text-[10px] h-12 sticky right-0 z-30 shadow-[-4px_0_8px_-4px_rgba(0,0,0,0.1)]" style={{ textTransform: 'lowercase' }}>actions</TableHead>
+                  <TableHead className="w-12 px-7 bg-layer-panel h-12"></TableHead>
+                  <TableHead className="w-16 text-left bg-layer-panel font-display font-black text-[10px] h-12 text-transform-primary uppercase tracking-[0.1em]">{t('table_id', 'id')}</TableHead>
+                  <TableHead className="w-16 text-center bg-layer-panel font-display font-black text-[10px] h-12 text-transform-primary uppercase tracking-[0.1em]">{t('table_image', 'image')}</TableHead>
+                  <TableHead className="min-w-40 px-4 text-left bg-layer-panel font-display font-black text-[10px] h-12 text-transform-primary uppercase tracking-[0.1em]">{t('table_name', 'category name')}</TableHead>
+
+                  {visibleCols.item && (
+                    <TableHead className="w-32 text-center bg-layer-panel font-display font-black text-[10px] h-12 text-transform-primary uppercase tracking-[0.1em]">{t('table_item', 'item')}</TableHead>
+                  )}
+
+                  <TableHead className="w-28 text-center bg-layer-panel font-display font-black text-[10px] h-12 text-transform-primary uppercase tracking-[0.1em]">{t('table_status', 'status')}</TableHead>
+                  <TableHead className="w-16 text-right bg-layer-panel font-display font-black text-[10px] h-12 sticky right-0 z-30 shadow-[-4px_0_8px_-4px_rgba(0,0,0,0.1)] border-l border-border bg-layer-panel text-transform-primary group uppercase tracking-[0.1em]">
+                    <div className="flex items-center justify-end w-full">
+                      <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="h-6 w-6 p-0 bg-surface hover:bg-surface-variant border border-border"
+                            onClick={() => setTempCols(visibleCols)}
+                          >
+                            <Plus className="h-3 w-3" />
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-56 p-0 bg-surface shadow-2xl border border-outline rounded-xl" align="end" sideOffset={8}>
+                          <div className="p-3">
+                            <p className="font-dev text-[10px] text-muted-foreground font-semibold tracking-wide uppercase">{t('select_columns', 'Select Columns')}</p>
+                          </div>
+                          <div className="px-3 pb-3 flex flex-col gap-3">
+                            <div className="flex items-center space-x-2">
+                              <Checkbox id="col-item" checked={tempCols.item} onCheckedChange={(c) => setTempCols(prev => ({ ...prev, item: !!c }))} />
+                              <label htmlFor="col-item" className="text-sm font-medium leading-none cursor-pointer">{t('table_item', 'Item Count')}</label>
+                            </div>
+                          </div>
+                          <div className="p-2 border-t border-border flex justify-end gap-3 items-center">
+                            <button
+                              onClick={() => setTempCols({ item: true })}
+                              className="text-[10px] font-dev text-muted-foreground font-semibold uppercase tracking-wide hover:text-foreground"
+                            >
+                              {t('btn_reset', 'Reset')}
+                            </button>
+                            <button
+                              onClick={() => { setVisibleCols(tempCols); setIsPopoverOpen(false); }}
+                              className="text-[10px] font-dev text-foreground font-semibold uppercase tracking-wide hover:opacity-80"
+                            >
+                              {t('btn_apply', 'Apply')}
+                            </button>
+                          </div>
+                        </PopoverContent>
+                      </Popover>
+                    </div>
+                  </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -446,11 +495,12 @@ export function CategoryTableExpanded({
                           )
                         }
                         t={t}
+                        visibleCols={visibleCols}
                       />
                     ))
                   ) : (
                     <TableRow>
-                      <TableCell colSpan={8} className="h-48 text-center p-12">
+                      <TableCell colSpan={5 + (visibleCols.item ? 1 : 0)} className="h-48 text-center p-12">
                         <motion.div key="empty-state" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
                           <p className="font-body text-transform-secondary text-muted-foreground">
                             {t('no_data', 'No categories match your filters.')}
@@ -497,7 +547,7 @@ export function CategoryTableExpanded({
                 <PaginationPrevious
                   onClick={() => onPageChange?.(Math.max(1, currentPage - 1))}
                   className={cn(
-                    'h-8 px-3 font-body text-transform-secondary lowercase',
+                    'h-8 px-3 font-body text-transform-secondary',
                     currentPage === 1 && 'pointer-events-none opacity-40'
                   )}
                 />
@@ -523,7 +573,7 @@ export function CategoryTableExpanded({
                 <PaginationNext
                   onClick={() => onPageChange?.(Math.min(totalPages, currentPage + 1))}
                   className={cn(
-                    'h-8 px-3 font-body text-transform-secondary lowercase',
+                    'h-8 px-3 font-body text-transform-secondary',
                     currentPage === totalPages && 'pointer-events-none opacity-40'
                   )}
                 />

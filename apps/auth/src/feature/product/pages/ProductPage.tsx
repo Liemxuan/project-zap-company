@@ -60,7 +60,7 @@ export function ProductPage({ merchant }: Props) {
       title: t('table_status', 'Status'),
       options: Array.from(new Set(products.map(p => p.status?.toString()))).filter(Boolean).map(status => ({
         id: status || 'unknown',
-        label: `Status ${status}`,
+        label: t(`status_${status}`, `Status ${status}`),
       }))
     }
   ];
@@ -110,7 +110,7 @@ export function ProductPage({ merchant }: Props) {
           className="bg-transparent w-full space-y-2"
         >
           <AccordionItem value="item-1" className="border-none m-0">
-            <AccordionTrigger className="px-4 py-3 flex items-center gap-2 rounded-lg bg-surface-variant hover:bg-surface-variant/80 font-mono text-[11px] uppercase tracking-widest text-on-surface font-bold transition-colors m-0 w-full min-w-0">
+            <AccordionTrigger className="px-4 py-3 flex items-center gap-2 rounded-lg bg-surface-variant hover:bg-surface-variant/80 font-mono text-[11px] tracking-widest text-on-surface font-bold transition-colors m-0 w-full min-w-0">
               <div className="flex items-center gap-2 overflow-hidden flex-1 text-left min-w-0">
                 <Icon name="filter_list" size={16} className="shrink-0 text-on-surface-variant opacity-70 group-data-[state=open]:text-primary transition-colors" />
                 <span className="truncate">{t('filter', 'Filters')}</span>
@@ -159,8 +159,8 @@ export function ProductPage({ merchant }: Props) {
         {/* Header - Matching SystemLogs style */}
         <div className="bg-layer-panel">
           <ThemeHeader
-            title={t('title', 'products assembly')}
-            breadcrumb={`zap inc. / ${merchant ? `${merchant} / ` : ''}management / assembly`}
+            title={t('title', 'Product Management')}
+            breadcrumb={`zap inc. / ${merchant ? `${merchant} / ` : ''}${t('breadcrumb', 'Inventory / products')}`}
             badge={t('badge', 'verified')}
             liveIndicator={true}
             showBackground={false}

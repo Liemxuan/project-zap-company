@@ -11,7 +11,11 @@ export function useLocations(initialPage = 1, pageSize = 10) {
   const [error, setError] = useState<string | null>(null);
   const [page, setPage] = useState(initialPage);
   const [total, setTotal] = useState(0);
-  const [filter, setFilter] = useState<LocationFilter>({});
+  const [totalPages, setTotalPages] = useState(0);
+  const [filter, setFilter] = useState<LocationFilter>({
+    search: '',
+    filters: {}
+  });
 
   // Sync internal page state with initialPage prop when it changes (URL driven)
   useEffect(() => {
@@ -38,8 +42,14 @@ export function useLocations(initialPage = 1, pageSize = 10) {
       setError(null);
       try {
         const response = await postLocationList(filter, page, pageSize);
-        setLocations(response.data);
-        setTotal(response.total);
+        if (response.success) {
+          setLocations(response.data.items);
+          setTotal(response.data.total_record);
+          setTotalPages(response.data.total_page);
+        } else {
+          setError(response.message || 'Failed to fetch locations');
+          setLocations([]);
+        }
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to fetch locations');
         setLocations([]);
@@ -51,19 +61,25 @@ export function useLocations(initialPage = 1, pageSize = 10) {
     fetchLocations();
   }, [filter, page, pageSize]);
 
-  const handleSearch = useCallback((searchQuery: string) => {
+  const handleSearch = useCallback((search: string) => {
     setPage(1);
-    setFilter((prev) => ({ ...prev, searchQuery }));
+    setFilter((prev) => ({ ...prev, search }));
   }, []);
 
-  const handleFilterByCity = useCallback((city: string | undefined) => {
+  const handleFilterByWarehouseType = useCallback((warehouse_type: string[] | undefined) => {
     setPage(1);
-    setFilter((prev) => ({ ...prev, city }));
+    setFilter((prev) => ({ 
+      ...prev, 
+      filters: { ...prev.filters, warehouse_type } 
+    }));
   }, []);
 
-  const handleFilterByStatus = useCallback((status: 'active' | 'inactive' | 'archived' | undefined) => {
+  const handleFilterByStatus = useCallback((is_active: boolean[] | undefined) => {
     setPage(1);
-    setFilter((prev) => ({ ...prev, status }));
+    setFilter((prev) => ({ 
+      ...prev, 
+      filters: { ...prev.filters, is_active } 
+    }));
   }, []);
 
   const handlePageChange = useCallback((newPage: number) => {
@@ -72,7 +88,7 @@ export function useLocations(initialPage = 1, pageSize = 10) {
 
   const handleClearFilters = useCallback(() => {
     setPage(1);
-    setFilter({});
+    setFilter({ search: '', filters: {} });
   }, []);
 
   return {
@@ -82,10 +98,12 @@ export function useLocations(initialPage = 1, pageSize = 10) {
     error,
     page,
     total,
+    totalRecords: total,
+    totalPages,
     pageSize,
     filter,
     handleSearch,
-    handleFilterByCity,
+    handleFilterByWarehouseType,
     handleFilterByStatus,
     handlePageChange,
     handleClearFilters,

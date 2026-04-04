@@ -1,127 +1,137 @@
 import { Location, LocationFilter, LocationResponse } from '../feature/location/models/location.model';
 
-// Mock location data
+// Mock location data based on warehouse list response
 export const MOCK_LOCATIONS: Location[] = [
-  {
-    id: 'loc-001',
-    name: 'Downtown Branch',
-    address: '123 Main Street',
-    city: 'New York',
-    country: 'USA',
-    postalCode: '10001',
-    phone: '+1-212-555-0100',
-    email: 'downtown@zap.com',
-    status: 'active',
-    image: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&auto=format&fit=crop&q=60',
-    openingHours: '08:00 - 22:00',
-    createdAt: new Date('2024-01-15'),
-    updatedAt: new Date('2024-03-20'),
-  },
-  {
-    id: 'loc-002',
-    name: 'Westside Location',
-    address: '456 West Ave',
-    city: 'Los Angeles',
-    country: 'USA',
-    postalCode: '90001',
-    phone: '+1-213-555-0200',
-    email: 'westside@zap.com',
-    status: 'active',
-    image: 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=800&auto=format&fit=crop&q=60',
-    openingHours: '10:00 - 23:00',
-    createdAt: new Date('2024-01-20'),
-    updatedAt: new Date('2024-03-18'),
-  },
-  {
-    id: 'loc-003',
-    name: 'Marina Branch',
-    address: '789 Waterfront Drive',
-    city: 'San Francisco',
-    country: 'USA',
-    postalCode: '94105',
-    phone: '+1-415-555-0300',
-    email: 'marina@zap.com',
-    status: 'active',
-    image: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&auto=format&fit=crop&q=60',
-    openingHours: '11:00 - 21:00',
-    createdAt: new Date('2024-02-01'),
-    updatedAt: new Date('2024-03-17'),
-  },
-  {
-    id: 'loc-004',
-    name: 'Airport Hub',
-    address: '1000 Terminal Road',
-    city: 'Chicago',
-    country: 'USA',
-    postalCode: '60666',
-    phone: '+1-773-555-0400',
-    email: 'airport@zap.com',
-    status: 'active',
-    image: 'https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=800&auto=format&fit=crop&q=60',
-    openingHours: '06:00 - 23:59',
-    createdAt: new Date('2024-02-10'),
-    updatedAt: new Date('2024-03-19'),
-  },
-  {
-    id: 'loc-005',
-    name: 'Uptown Cafe',
-    address: '321 North Street',
-    city: 'Boston',
-    country: 'USA',
-    postalCode: '02101',
-    phone: '+1-617-555-0500',
-    email: 'uptown@zap.com',
-    status: 'inactive',
-    image: 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=800&auto=format&fit=crop&q=60',
-    openingHours: '09:00 - 18:00',
-    createdAt: new Date('2024-02-15'),
-    updatedAt: new Date('2024-03-10'),
-  },
-  {
-    id: 'loc-006',
-    name: 'Harbor View',
-    address: '555 Pier Street',
-    city: 'Seattle',
-    country: 'USA',
-    postalCode: '98101',
-    phone: '+1-206-555-0600',
-    email: 'harbor@zap.com',
-    status: 'active',
-    image: 'https://images.unsplash.com/photo-1464347601390-25e2842a37f7?w=800&auto=format&fit=crop&q=60',
-    openingHours: '07:00 - 22:00',
-    createdAt: new Date('2024-02-20'),
-    updatedAt: new Date('2024-03-15'),
-  },
-  {
-    id: 'loc-007',
-    name: 'Midtown Plaza',
-    address: '888 Central Ave',
-    city: 'Miami',
-    country: 'USA',
-    postalCode: '33128',
-    phone: '+1-305-555-0700',
-    email: 'midtown@zap.com',
-    status: 'active',
-    image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&auto=format&fit=crop&q=60',
-    openingHours: '08:00 - 23:00',
-    createdAt: new Date('2024-03-01'),
-    updatedAt: new Date('2024-03-16'),
-  },
-  {
-    id: 'loc-008',
-    name: 'Tech Park',
-    address: '999 Innovation Drive',
-    city: 'Austin',
-    country: 'USA',
-    postalCode: '78701',
-    phone: '+1-512-555-0800',
-    email: 'techpark@zap.com',
-    status: 'active',
-    image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&auto=format&fit=crop&q=60',
-    openingHours: '08:00 - 20:00',
-    createdAt: new Date('2024-03-05'),
-    updatedAt: new Date('2024-03-14'),
-  },
+    {
+        "id": "f47ac10b-fa24-4372-a567-6f5400000000",
+        "tenant_id": "f47ac10b-fa24-4372-a567-6f5400000001",
+        "legacy_id": "f47ac10b-fa24-4372-a567-6f5400000002",
+        "name": "Cà Phê Sữa Đá",
+        "warehouse_type": "Ăn Kèm",
+        "is_active": true,
+        "status_id": 109,
+        "address_json": "28510 Lê Lợi, P.Bến Nghé, Quận 1",
+        "manager_id": "f47ac10b-fa24-4372-a567-6f5400000007",
+        "created_at": "2026-03-28T14:45:14.059Z",
+        "updated_at": "2026-03-28T14:45:14.059Z"
+    },
+    {
+        "id": "f47ac10b-fa24-4372-a567-6f5500000000",
+        "tenant_id": "f47ac10b-fa24-4372-a567-6f5500000001",
+        "legacy_id": "f47ac10b-fa24-4372-a567-6f5500000002",
+        "name": "Phở Bò Kobe",
+        "warehouse_type": "Combo",
+        "is_active": true,
+        "status_id": 104,
+        "address_json": "28511 Lê Lợi, P.Bến Nghé, Quận 1",
+        "manager_id": "f47ac10b-fa24-4372-a567-6f5500000007",
+        "created_at": "2026-03-28T14:45:14.059Z",
+        "updated_at": "2026-03-28T14:45:14.059Z"
+    },
+    {
+        "id": "f47ac10b-fa24-4372-a567-6f5600000000",
+        "tenant_id": "f47ac10b-fa24-4372-a567-6f5600000001",
+        "legacy_id": "f47ac10b-fa24-4372-a567-6f5600000002",
+        "name": "Pizza Hải Sản",
+        "warehouse_type": "Món Nước",
+        "is_active": true,
+        "status_id": 138,
+        "address_json": "28512 Lê Lợi, P.Bến Nghé, Quận 1",
+        "manager_id": "f47ac10b-fa24-4372-a567-6f5600000007",
+        "created_at": "2026-03-28T14:45:14.059Z",
+        "updated_at": "2026-03-28T14:45:14.059Z"
+    },
+    {
+        "id": "f47ac10b-fa24-4372-a567-6f5700000000",
+        "tenant_id": "f47ac10b-fa24-4372-a567-6f5700000001",
+        "legacy_id": "f47ac10b-fa24-4372-a567-6f5700000002",
+        "name": "Gà Rán Phần 4 Người",
+        "warehouse_type": "Món Khô",
+        "is_active": true,
+        "status_id": 125,
+        "address_json": "28513 Lê Lợi, P.Bến Nghé, Quận 1",
+        "manager_id": "f47ac10b-fa24-4372-a567-6f5700000007",
+        "created_at": "2026-03-28T14:45:14.059Z",
+        "updated_at": "2026-03-28T14:45:14.059Z"
+    },
+    {
+        "id": "f47ac10b-fa24-4372-a567-6f5800000000",
+        "tenant_id": "f47ac10b-fa24-4372-a567-6f5800000001",
+        "legacy_id": "f47ac10b-fa24-4372-a567-6f5800000002",
+        "name": "Phở Gà",
+        "warehouse_type": "Đồ Uống",
+        "is_active": true,
+        "status_id": 146,
+        "address_json": "28514 Lê Lợi, P.Bến Nghé, Quận 1",
+        "manager_id": "f47ac10b-fa24-4372-a567-6f5800000007",
+        "created_at": "2026-03-28T14:45:14.059Z",
+        "updated_at": "2026-03-28T14:45:14.059Z"
+    },
+    {
+        "id": "f47ac10b-fa24-4372-a567-6f5900000000",
+        "tenant_id": "f47ac10b-fa24-4372-a567-6f5900000001",
+        "legacy_id": "f47ac10b-fa24-4372-a567-6f5900000002",
+        "name": "Phở Nạm Tiêu Đen",
+        "warehouse_type": "Tráng Miệng",
+        "is_active": true,
+        "status_id": 100,
+        "address_json": "28515 Lê Lợi, P.Bến Nghé, Quận 1",
+        "manager_id": "f47ac10b-fa24-4372-a567-6f5900000007",
+        "created_at": "2026-03-28T14:45:14.059Z",
+        "updated_at": "2026-03-28T14:45:14.059Z"
+    },
+    {
+        "id": "f47ac10b-fa24-4372-a567-6f5a00000000",
+        "tenant_id": "f47ac10b-fa24-4372-a567-6f5a00000001",
+        "legacy_id": "f47ac10b-fa24-4372-a567-6f5a00000002",
+        "name": "Gỏi Cuốn Phở 24",
+        "warehouse_type": "Ăn Kèm",
+        "is_active": true,
+        "status_id": 143,
+        "address_json": "28516 Lê Lợi, P.Bến Nghé, Quận 1",
+        "manager_id": "f47ac10b-fa24-4372-a567-6f5a00000007",
+        "created_at": "2026-03-28T14:45:14.059Z",
+        "updated_at": "2026-03-28T14:45:14.059Z"
+    },
+    {
+        "id": "f47ac10b-fa24-4372-a567-6f5b00000000",
+        "tenant_id": "f47ac10b-fa24-4372-a567-6f5b00000001",
+        "legacy_id": "f47ac10b-fa24-4372-a567-6f5b00000002",
+        "name": "Cơm Chiên Dương Châu",
+        "warehouse_type": "Combo",
+        "is_active": true,
+        "status_id": 75,
+        "address_json": "28517 Lê Lợi, P.Bến Nghé, Quận 1",
+        "manager_id": "f47ac10b-fa24-4372-a567-6f5b00000007",
+        "created_at": "2026-03-28T14:45:14.059Z",
+        "updated_at": "2026-03-28T14:45:14.059Z"
+    },
+    {
+        "id": "f47ac10b-fa24-4372-a567-6f5c00000000",
+        "tenant_id": "f47ac10b-fa24-4372-a567-6f5c00000001",
+        "legacy_id": "f47ac10b-fa24-4372-a567-6f5c00000002",
+        "name": "Phở Trộn Xì Dầu",
+        "warehouse_type": "Món Nước",
+        "is_active": true,
+        "status_id": 131,
+        "address_json": "28518 Lê Lợi, P.Bến Nghé, Quận 1",
+        "manager_id": "f47ac10b-fa24-4372-a567-6f5c00000007",
+        "created_at": "2026-03-28T14:45:14.059Z",
+        "updated_at": "2026-03-28T14:45:14.059Z"
+    },
+    {
+        "id": "f47ac10b-fa24-4372-a567-6f5d00000000",
+        "tenant_id": "f47ac10b-fa24-4372-a567-6f5d00000001",
+        "legacy_id": "f47ac10b-fa24-4372-a567-6f5d00000002",
+        "name": "Trà Sữa Trân Châu",
+        "warehouse_type": "Món Khô",
+        "is_active": true,
+        "status_id": 64,
+        "address_json": "28519 Lê Lợi, P.Bến Nghé, Quận 1",
+        "manager_id": "f47ac10b-fa24-4372-a567-6f5d00000007",
+        "created_at": "2026-03-28T14:45:14.059Z",
+        "updated_at": "2026-03-28T14:45:14.059Z"
+    }
 ];
 
 export async function getMockLocations(filter?: LocationFilter, page = 1, pageSize = 10): Promise<LocationResponse> {
@@ -129,22 +139,19 @@ export async function getMockLocations(filter?: LocationFilter, page = 1, pageSi
   let filtered = [...MOCK_LOCATIONS];
 
   if (filter) {
-    if (filter.searchQuery) {
-      const query = filter.searchQuery.toLowerCase();
+    if (filter.search) {
+      const query = filter.search.toLowerCase();
       filtered = filtered.filter(
         (l) => l.name.toLowerCase().includes(query) ||
-               l.city.toLowerCase().includes(query) ||
-               l.address.toLowerCase().includes(query)
+               l.warehouse_type.toLowerCase().includes(query) ||
+               l.address_json.toLowerCase().includes(query)
       );
     }
-    if (filter.city) {
-      filtered = filtered.filter((l) => l.city === filter.city);
+    if (filter.filters?.is_active && filter.filters.is_active.length > 0) {
+      filtered = filtered.filter((l) => filter.filters?.is_active?.includes(l.is_active));
     }
-    if (filter.country) {
-      filtered = filtered.filter((l) => l.country === filter.country);
-    }
-    if (filter.status) {
-      filtered = filtered.filter((l) => l.status === filter.status);
+    if (filter.filters?.warehouse_type && filter.filters.warehouse_type.length > 0) {
+      filtered = filtered.filter((l) => filter.filters?.warehouse_type?.includes(l.warehouse_type));
     }
   }
 
@@ -153,7 +160,18 @@ export async function getMockLocations(filter?: LocationFilter, page = 1, pageSi
   const end = start + pageSize;
   const data = filtered.slice(start, end);
 
-  return { data, total, page, pageSize };
+  return { 
+    success: true,
+    code: 200,
+    message: "OK",
+    data: {
+        total_page: Math.ceil(total / pageSize),
+        total_record: total,
+        page_index: page,
+        page_size: pageSize,
+        items: data
+    }
+  };
 }
 
 export async function getMockLocationById(id: string): Promise<Location | null> {
@@ -163,6 +181,7 @@ export async function getMockLocationById(id: string): Promise<Location | null> 
 
 export async function getMockLocationCities(): Promise<string[]> {
   await new Promise((resolve) => setTimeout(resolve, 100));
-  const cities = new Set(MOCK_LOCATIONS.map((l) => l.city));
-  return Array.from(cities).sort();
+  const cities = new Set(MOCK_LOCATIONS.map((l) => l.address_json.split(',').pop()?.trim() || ''));
+  return Array.from(cities).filter(Boolean).sort();
 }
+

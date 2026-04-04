@@ -1,7 +1,7 @@
 'use client';
 
 import { AnimatePresence, motion } from 'framer-motion';
-import { Check, ChevronDown, Filter, Eye, Edit, Trash2 } from 'lucide-react';
+import { Check, ChevronDown, Filter, Eye, Edit, Trash2, Columns } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { cn } from 'zap-design/src/lib/utils';
 
@@ -63,67 +63,49 @@ function BrandRow({
         className="cursor-pointer group hover:bg-surface-variant/50 focus:bg-surface-variant/70 border-b border-border/50 group-last:border-0"
       >
         {/* expand icon */}
-        <TableCell className="w-10 text-center py-4">
+        <TableCell className="px-7 w-12 py-2.5">
           <motion.div
             animate={{ rotate: expanded ? 180 : 0 }}
             transition={{ duration: 0.2 }}
-            className="inline-flex"
+            className="flex-shrink-0 w-4 cursor-pointer"
           >
-            <ChevronDown className="h-3 w-3 text-muted-foreground" />
+            <ChevronDown className="h-4 w-4 text-muted-foreground" />
           </motion.div>
         </TableCell>
 
         {/* id */}
-        <TableCell className="w-20 whitespace-nowrap text-left py-4 font-dev text-muted-foreground text-[11px]">
+        <TableCell className="w-16 whitespace-nowrap text-left py-2.5 font-dev text-muted-foreground text-[10px]">
           {brand.id}
         </TableCell>
 
-        {/* logo */}
-        <TableCell className="w-20 py-4 flex justify-center">
-          <Avatar size="sm">
-            {brand.logo_url && <AvatarImage src={brand.logo_url} alt={brand.name} />}
-            <AvatarFallback>{brand.name.slice(0, 2).toUpperCase()}</AvatarFallback>
-          </Avatar>
-        </TableCell>
-
         {/* name */}
-        <TableCell className="w-full min-w-[200px] whitespace-nowrap text-left py-4 font-medium text-[11px]">
+        <TableCell className="w-full min-w-40 whitespace-nowrap text-left py-2.5 font-display font-bold text-sm">
           {brand.name}
         </TableCell>
 
-        {/* slug */}
-        <TableCell className="min-w-[150px] whitespace-nowrap text-left py-4 font-dev text-muted-foreground text-[11px]">
-          {brand.slug}
-        </TableCell>
-
-        {/* premium */}
-        <TableCell className="w-24 whitespace-nowrap text-center py-4">
-          <Pill variant={pillVariant} className="min-w-fit block text-center text-[10px]">
-            {brand.is_premium ? 'Premium' : 'Standard'}
-          </Pill>
-        </TableCell>
-
         {/* status_id */}
-        <TableCell className="w-20 whitespace-nowrap text-center py-4 font-dev text-muted-foreground text-[11px]">
+        <TableCell className="w-20 whitespace-nowrap text-center py-4 text-muted-foreground text-sm font-body">
           {brand.status_id}
         </TableCell>
 
         {/* actions */}
-        <TableCell className="w-16 whitespace-nowrap text-right py-4 sticky right-0 bg-layer-canvas group-hover:bg-surface-variant/50 transition-colors z-10 shadow-[-4px_0_8px_-4px_rgba(0,0,0,0.1)]" onClick={(e) => e.stopPropagation()}>
-          <QuickActionsDropdown
-            actions={[
-              { label: t('action_view', 'View'), icon: Eye, onClick: () => console.log('View', brand.id) },
-              { label: t('action_edit', 'Edit'), icon: Edit, onClick: () => console.log('Edit', brand.id) },
-              { label: t('action_delete', 'Delete'), icon: Trash2, variant: 'destructive', onClick: () => console.log('Delete', brand.id) },
-            ]}
-          />
+        <TableCell className="w-24 whitespace-nowrap text-right py-4 sticky right-0 bg-layer-canvas group-hover:bg-surface-variant/50 transition-colors z-10 shadow-[-4px_0_8px_-4px_rgba(0,0,0,0.1)]" onClick={(e) => e.stopPropagation()}>
+          <div className="flex justify-end px-2">
+            <QuickActionsDropdown
+              actions={[
+                { label: t('action_view', 'View'), icon: Eye, onClick: () => console.log('View', brand.id) },
+                { label: t('action_edit', 'Edit'), icon: Edit, onClick: () => console.log('Edit', brand.id) },
+                { label: t('action_delete', 'Delete'), icon: Trash2, variant: 'destructive', onClick: () => console.log('Delete', brand.id) },
+              ]}
+            />
+          </div>
         </TableCell>
       </TableRow>
 
       <AnimatePresence initial={false}>
         {expanded && (
           <TableRow className="hover:bg-transparent data-[state=selected]:bg-transparent border-0">
-            <TableCell colSpan={8} className="p-0 border-b-0 h-0 border-t-0">
+            <TableCell colSpan={5} className="p-0 border-b-0 h-0 border-t-0">
               <motion.div
                 initial={{ height: 0, opacity: 0 }}
                 animate={{ height: 'auto', opacity: 1 }}
@@ -224,8 +206,8 @@ function FilterPanel({
                 onClick={() => toggleFilter(status)}
                 aria-pressed={selected}
                 className={`flex w-full items-center justify-between gap-2 border border-[length:max(var(--button-border-width,1px),1px)] rounded-[length:var(--button-border-radius,var(--radius-btn,4px))] px-3 py-2 text-sm transition-colors font-dev text-transform-tertiary ${selected
-                    ? 'border-primary bg-primary/10 text-primary'
-                    : 'border-border text-muted-foreground hover:border-primary/40 hover:bg-surface-variant/40'
+                  ? 'border-primary bg-primary/10 text-primary'
+                  : 'border-border text-muted-foreground hover:border-primary/40 hover:bg-surface-variant/40'
                   }`}
               >
                 <span className="capitalize">{status}</span>
@@ -308,7 +290,7 @@ export function BrandTableExpanded({
     });
   }, [filters, searchQuery, brands]);
 
-  const totalPages = totalPagesProp ?? Math.ceil(filteredBrands.length / pageSize);
+  const totalPages = Math.max(1, totalPagesProp ?? Math.ceil(filteredBrands.length / pageSize));
 
   // For client-side fallback if no totalPages is provided, we still slice
   // But if totalPages is provided, we assume the server already paginated
@@ -375,13 +357,19 @@ export function BrandTableExpanded({
           >
             <Filter className="h-4 w-4 mr-2" />
             <span className="font-display font-medium text-xs text-transform-primary">
-              {t('filter', 'Filter')}
+              {t('filter', 'filter')}
             </span>
             {activeFilters > 0 && (
               <Badge className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center p-0 text-xs bg-destructive text-destructive-foreground z-20">
                 {activeFilters}
               </Badge>
             )}
+          </Button>
+
+          <Button variant="primary" size="sm" className="h-[var(--input-height,var(--button-height,48px))] px-6">
+            <span className="font-display font-medium text-xs text-transform-primary">
+              {t('btn_add', 'add brand')}
+            </span>
           </Button>
         </div>
       </div>
@@ -413,14 +401,11 @@ export function BrandTableExpanded({
             <Table className="w-full relative bg-transparent">
               <TableHeader className="bg-layer-panel top-0 z-10 sticky border-b border-border shadow-sm h-12">
                 <TableRow className="border-b-0 hover:bg-transparent">
-                  <TableHead className="w-10 text-center bg-layer-panel h-12"></TableHead>
-                  <TableHead className="w-20 text-left bg-layer-panel font-display font-semibold text-[10px] h-12" style={{ textTransform: 'lowercase' }}>id</TableHead>
-                  <TableHead className="w-20 text-center bg-layer-panel font-display font-semibold text-[10px] h-12" style={{ textTransform: 'lowercase' }}>logo</TableHead>
-                  <TableHead className="text-left bg-layer-panel font-display font-semibold text-[10px] h-12" style={{ textTransform: 'lowercase' }}>name</TableHead>
-                  <TableHead className="min-w-[150px] text-left bg-layer-panel font-display font-semibold text-[10px] h-12" style={{ textTransform: 'lowercase' }}>slug</TableHead>
-                  <TableHead className="w-24 text-center bg-layer-panel font-display font-semibold text-[10px] h-12" style={{ textTransform: 'lowercase' }}>premium</TableHead>
-                  <TableHead className="w-20 text-center bg-layer-panel font-display font-semibold text-[10px] h-12" style={{ textTransform: 'lowercase' }}>status</TableHead>
-                  <TableHead className="w-16 text-right bg-layer-panel font-display font-semibold text-[10px] h-12 sticky right-0 z-30 shadow-[-4px_0_8px_-4px_rgba(0,0,0,0.1)]" style={{ textTransform: 'lowercase' }}>actions</TableHead>
+                  <TableHead className="w-12 px-7 bg-layer-panel h-12"></TableHead>
+                  <TableHead className="w-20 text-left bg-layer-panel font-display font-black text-[10px] h-12 text-transform-primary uppercase tracking-[0.1em]">{t('table_brand_id', 'brand id')}</TableHead>
+                  <TableHead className="text-left bg-layer-panel font-display font-black text-[10px] h-12 text-transform-primary uppercase tracking-[0.1em]">{t('table_brand_name', 'brand name')}</TableHead>
+                  <TableHead className="w-20 text-center bg-layer-panel font-display font-black text-[10px] h-12 text-transform-primary uppercase tracking-[0.1em]">{t('table_status', 'status')}</TableHead>
+                  <TableHead className="w-24 text-right bg-layer-panel font-display font-black text-[10px] h-12 sticky right-0 z-30 shadow-[-4px_0_8px_-4px_rgba(0,0,0,0.1)] text-transform-primary uppercase tracking-[0.1em]">{t('table_action', 'action')}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -441,7 +426,7 @@ export function BrandTableExpanded({
                     ))
                   ) : (
                     <TableRow>
-                      <TableCell colSpan={8} className="h-48 text-center p-12">
+                      <TableCell colSpan={5} className="h-48 text-center p-12">
                         <motion.div key="empty-state" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
                           <p className="font-body text-transform-secondary text-muted-foreground">
                             {t('no_data', 'No brands match your filters.')}
@@ -488,7 +473,7 @@ export function BrandTableExpanded({
                 <PaginationPrevious
                   onClick={() => onPageChange?.(Math.max(1, currentPage - 1))}
                   className={cn(
-                    'h-8 px-3 font-body text-transform-secondary lowercase',
+                    'h-8 px-3 font-body text-transform-secondary',
                     currentPage === 1 && 'pointer-events-none opacity-40'
                   )}
                 />
@@ -514,7 +499,7 @@ export function BrandTableExpanded({
                 <PaginationNext
                   onClick={() => onPageChange?.(Math.min(totalPages, currentPage + 1))}
                   className={cn(
-                    'h-8 px-3 font-body text-transform-secondary lowercase',
+                    'h-8 px-3 font-body text-transform-secondary',
                     currentPage === totalPages && 'pointer-events-none opacity-40'
                   )}
                 />

@@ -1,0 +1,13 @@
+{
+  "status": "error",
+  "code": 404,
+  "message": "Resource Not Found",
+  "detail": "The Location ID provided does not exist in the ZAP registry.",
+  "errors": [
+    {
+      "field": "location_id",
+      "issue": "INVALID_REFERENCE"
+    }
+  ],
+  "trace_id": "zap-trace-987654321"
+}

@@ -42,7 +42,8 @@ export function ModifierGroupPage({ merchant }: Props) {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
 
-  const { modifierGroups, loading, totalRecords, totalPages } = useModifierGroups(currentPage, pageSize);
+  const { modifierGroups, loading, total: totalRecords } = useModifierGroups(currentPage, pageSize, filters);
+  const totalPages = Math.ceil(totalRecords / (pageSize || 10));
 
   if (tLoading) return null;
 
@@ -50,10 +51,10 @@ export function ModifierGroupPage({ merchant }: Props) {
   const baseGroups: DataFilterGroup[] = [
     {
       id: 'active',
-      title: 'Active Status',
+      title: t('filter_status', 'Status'),
       options: [
-        { id: 'active', label: 'Active' },
-        { id: 'inactive', label: 'Inactive' }
+        { id: 'active', label: t('status_active', 'Active') },
+        { id: 'inactive', label: t('status_inactive', 'Inactive') }
       ]
     }
   ];
@@ -81,18 +82,8 @@ export function ModifierGroupPage({ merchant }: Props) {
     });
   };
 
-  const toggleFullscreen = () => {
-    const params = new URLSearchParams(searchParams.toString());
-    if (isFullscreen) {
-      params.delete('fullscreen');
-    } else {
-      params.set('fullscreen', 'true');
-    }
-    router.push(`?${params.toString()}`);
-  };
-
   const inspectorContent = (
-    <Inspector title="MODIFIER GROUPS" width={320}>
+    <Inspector title={t('lbl_inspector_title', 'MODIFIER GROUPS')} width={320}>
       <div className="flex flex-col gap-0 w-full px-4 pt-4">
         <Accordion
           type="single"
@@ -103,10 +94,10 @@ export function ModifierGroupPage({ merchant }: Props) {
           className="bg-transparent w-full space-y-2"
         >
           <AccordionItem value="item-1" className="border-none m-0">
-            <AccordionTrigger className="px-4 py-3 flex items-center gap-2 rounded-lg bg-surface-variant hover:bg-surface-variant/80 font-mono text-[11px] uppercase tracking-widest text-on-surface font-bold transition-colors m-0 w-full min-w-0">
+            <AccordionTrigger className="px-4 py-3 flex items-center gap-2 rounded-lg bg-surface-variant hover:bg-surface-variant/80 font-mono text-[11px] tracking-widest text-on-surface font-bold transition-colors m-0 w-full min-w-0">
               <div className="flex items-center gap-2 overflow-hidden flex-1 text-left min-w-0">
                 <Icon name="filter_list" size={16} className="shrink-0 text-on-surface-variant opacity-70 group-data-[state=open]:text-primary transition-colors" />
-                <span className="truncate">FILTERS</span>
+                <span className="truncate uppercase">{t('filter', 'Filters')}</span>
               </div>
             </AccordionTrigger>
             <AccordionContent className="bg-transparent px-4 pb-4 pt-2">
@@ -149,20 +140,22 @@ export function ModifierGroupPage({ merchant }: Props) {
   return (
     <AppShell inspector={inspectorContent}>
       <div className="flex flex-col w-full h-full overflow-hidden bg-white">
+        {/* Header - Global Admin Breadcrumb */}
         <div className="bg-layer-panel">
           <ThemeHeader
-            title="modifier group assembly"
-            breadcrumb={`zap inc. / ${merchant ? `${merchant} / ` : ''}management / assembly`}
-            badge="verified"
+            title={t('title', 'Modifier Group Management')}
+            breadcrumb={`zap inc. / ${merchant ? `${merchant} / ` : ''}${t('breadcrumb', 'Inventory / modifier groups')}`}
+            badge={t('badge', 'verified')}
             liveIndicator={true}
             showBackground={false}
           />
         </div>
 
+        {/* Content - Toggle between Sandbox and Fullscreen look */}
         <div className="flex-1 overflow-auto pt-8 px-4 lg:pt-16 lg:px-24 pb-24 flex flex-col relative z-0 bg-white">
           {!isFullscreen ? (
             <CanvasDesktop
-              title="Modifier Group Datagrid // Assembly"
+              title={t('canvas_title', 'Modifier Group Datagrid // Assembly')}
               fullScreenHref="?fullscreen=true"
             >
               <div className="w-full flex-1 flex flex-col rounded-b-xl overflow-visible min-h-[600px] p-6 lg:p-12 pb-24">
@@ -171,7 +164,7 @@ export function ModifierGroupPage({ merchant }: Props) {
             </CanvasDesktop>
           ) : (
             <div className="flex-1 flex flex-col min-h-0">
-              {tableContent}
+               {tableContent}
             </div>
           )}
         </div>

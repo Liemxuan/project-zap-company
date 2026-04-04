@@ -11,11 +11,14 @@
   "previous": "Trước",
   "next": "Sau",
   "table_id": "ID",
+  "table_brand_id": "Mã thương hiệu",
   "table_logo": "Logo",
   "table_name": "Tên",
+  "table_brand_name": "Tên thương hiệu",
   "table_slug": "Slug",
   "table_premium": "Premium",
   "table_status": "Trạng thái",
+  "table_action": "Thao tác",
   "status_active": "Hoạt động",
   "status_inactive": "Ngưng hoạt động"
 }

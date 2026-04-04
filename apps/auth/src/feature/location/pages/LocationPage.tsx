@@ -26,6 +26,7 @@ type DataFilterGroup = {
 
 interface Props {
   merchant?: string;
+  lang?: string;
 }
 
 export function LocationPage({ merchant }: Props) {
@@ -36,32 +37,25 @@ export function LocationPage({ merchant }: Props) {
   const isFullscreen = searchParams.get('fullscreen') === 'true';
 
   const [filters, setFilters] = useState<LocationFilters>({
-    status: [],
+    is_active: [],
+    warehouse_type: [],
   });
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
 
-  const { locations, loading, total } = useLocations(1, 100);
+  const { locations, loading, totalRecords, totalPages } = useLocations(currentPage, pageSize);
 
   if (tLoading) return null;
 
   // Derive filter groups
   const baseGroups: DataFilterGroup[] = [
     {
-      id: 'status',
-      title: 'Status',
-      options: Array.from(new Set(locations.map(l => l.status))).map(status => ({
-        id: status,
-        label: status,
-      }))
-    },
-    {
-      id: 'city',
-      title: 'City',
-      options: Array.from(new Set(locations.map(l => l.city))).map(city => ({
-        id: city,
-        label: city,
-      }))
+      id: 'is_active',
+      title: t('lbl_active_status', 'Active Status'),
+      options: [
+        { id: 'active', label: t('status_active', 'Active') },
+        { id: 'inactive', label: t('status_inactive', 'Inactive') }
+      ]
     }
   ];
 
@@ -70,27 +64,29 @@ export function LocationPage({ merchant }: Props) {
     ...group,
     options: group.options.map(opt => ({
       ...opt,
-      selected: group.id === 'status' 
-        ? filters.status.includes(opt.id)
-        : false 
+      selected: group.id === 'is_active' 
+        ? filters.is_active?.includes(opt.id === 'active')
+        : false
     }))
   }));
 
   const handleFilterToggle = (groupId: string, optionId: string) => {
-    if (groupId === 'status') {
-      setFilters(current => {
-        const currentList = current.status;
-        const updatedList = currentList.includes(optionId)
-          ? currentList.filter(id => id !== optionId)
-          : [...currentList, optionId];
+    setFilters(current => {
+      if (groupId === 'is_active') {
+        const val = optionId === 'active';
+        const currentList = current.is_active || [];
+        const updatedList = currentList.includes(val)
+          ? currentList.filter(v => v !== val)
+          : [...currentList, val];
         setCurrentPage(1);
-        return { ...current, status: updatedList };
-      });
-    }
+        return { ...current, is_active: updatedList };
+      }
+      return current;
+    });
   };
 
   const inspectorContent = (
-    <Inspector title="LOCATIONS LAB" width={320}>
+    <Inspector title={t('lbl_inspector_title', 'LỌC ĐỊA ĐIỂM')} width={320}>
       <div className="flex flex-col gap-0 w-full px-4 pt-4">
         <Accordion
           type="single"
@@ -101,10 +97,10 @@ export function LocationPage({ merchant }: Props) {
           className="bg-transparent w-full space-y-2"
         >
           <AccordionItem value="item-1" className="border-none m-0">
-            <AccordionTrigger className="px-4 py-3 flex items-center gap-2 rounded-lg bg-surface-variant hover:bg-surface-variant/80 font-mono text-[11px] uppercase tracking-widest text-on-surface font-bold transition-colors m-0 w-full min-w-0">
+            <AccordionTrigger className="px-4 py-3 flex items-center gap-2 rounded-lg bg-surface-variant hover:bg-surface-variant/80 font-mono text-[11px] tracking-widest text-on-surface font-bold transition-colors m-0 w-full min-w-0">
               <div className="flex items-center gap-2 overflow-hidden flex-1 text-left min-w-0">
                 <Icon name="filter_list" size={16} className="shrink-0 text-on-surface-variant opacity-70 group-data-[state=open]:text-primary transition-colors" />
-                <span className="truncate">FILTERS</span>
+                <span className="truncate">{t('filter', 'FILTERS')}</span>
               </div>
             </AccordionTrigger>
             <AccordionContent className="bg-transparent px-4 pb-4 pt-2">
@@ -123,7 +119,8 @@ export function LocationPage({ merchant }: Props) {
     <LocationTableExpanded
       locations={locations}
       loading={loading}
-      totalRecords={total}
+      totalRecords={totalRecords}
+      totalPages={totalPages}
       currentPage={currentPage}
       pageSize={pageSize}
       onPageChange={setCurrentPage}
@@ -131,8 +128,14 @@ export function LocationPage({ merchant }: Props) {
         setPageSize(newSize);
         setCurrentPage(1);
       }}
+      onSearchChange={(query) => {
+        // Handle search query updates here if needed
+        console.log('Search query:', query);
+      }}
+      onToggleFilters={() => setInspectorState(inspectorState === 'expanded' ? 'collapsed' : 'expanded')}
+      isFilterActive={inspectorState === 'expanded'}
       t={t}
-      lang={lang}
+      lang={lang || 'en'}
     />
   );
 
@@ -141,9 +144,9 @@ export function LocationPage({ merchant }: Props) {
       <div className="flex flex-col w-full h-full overflow-hidden bg-white">
         <div className="bg-layer-panel">
           <ThemeHeader
-            title="locations assembly"
-            breadcrumb={`zap inc. / ${merchant ? `${merchant} / ` : ''}management / assembly`}
-            badge="verified"
+            title={t('title', 'location management')}
+            breadcrumb={`zap inc. / ${merchant ? `${merchant} / ` : ''}${t('breadcrumb', 'inventory / locations')}`}
+            badge={t('badge', 'verified')}
             liveIndicator={true}
             showBackground={false}
           />
@@ -152,10 +155,10 @@ export function LocationPage({ merchant }: Props) {
         <div className="flex-1 overflow-auto pt-8 px-4 lg:pt-16 lg:px-24 pb-24 flex flex-col relative z-0 bg-white">
           {!isFullscreen ? (
             <CanvasDesktop
-              title="Location Datagrid // Assembly"
+              title={t('canvas_title', 'Location Datagrid // Assembly')}
               fullScreenHref="?fullscreen=true"
             >
-              <div className="w-full flex-1 flex flex-col rounded-b-xl overflow-hidden min-h-[600px] p-6 lg:p-12 pb-24">
+              <div className="w-full flex-1 flex flex-col rounded-b-xl overflow-visible min-h-[600px] p-6 lg:p-12 pb-24">
                 {tableContent}
               </div>
             </CanvasDesktop>

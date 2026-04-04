@@ -12,6 +12,27 @@ import { ThemeHeader } from '../../molecules/layout/ThemeHeader';
 import { Inspector } from '../../../zap/layout/Inspector';
 
 /**
+ * Reusable Filter Panel component to reduce duplication
+ */
+function FilterPanel({ filterGroups, onToggle }: { filterGroups: FilterGroup[], onToggle: (groupId: string, optionId: string) => void }) {
+  return (
+    <Accordion type="single" collapsible variant="navigation" defaultValue="item-1" className="bg-transparent w-full space-y-2">
+      <AccordionItem value="item-1" className="border-none m-0">
+        <AccordionTrigger className="px-4 py-3 flex items-center gap-2 rounded-lg bg-surface-variant hover:bg-surface-variant/80 font-mono text-transform-tertiary text-[11px] tracking-widest text-on-surface font-bold transition-colors m-0 w-full min-w-0">
+          <div className="flex items-center gap-2 overflow-hidden flex-1 text-left min-w-0">
+            <Icon name="filter_list" size={16} className="shrink-0 text-on-surface-variant opacity-70 group-data-[state=open]:text-primary transition-colors" />
+            <span className="truncate">FILTERS</span>
+          </div>
+        </AccordionTrigger>
+        <AccordionContent className="bg-transparent px-4 pb-4 pt-2">
+          <DataFilter title="" groups={filterGroups} onToggle={onToggle} />
+        </AccordionContent>
+      </AccordionItem>
+    </Accordion>
+  );
+}
+
+/**
  * Product List (Layout) Showcase
  * Renders ProductListTable inside the L6 CanvasDesktop layout
  * Route: /design/[theme]/organisms/product-list
@@ -82,23 +103,7 @@ export default function ProductListTemplate() {
         <div className="h-full border-l border-border bg-layer-panel hidden md:flex flex-col shrink-0 z-20 relative">
             <Inspector title="E-COMMERCE LAB" width={320}>
                 <div className="flex flex-col gap-0 w-full px-4 pt-4">
-                    <Accordion type="single" collapsible variant="navigation" value={inspectorState === 'expanded' ? "item-1" : ""} onValueChange={(val: string) => { if (val !== "item-1") setInspectorState('collapsed'); }} className="bg-transparent w-full space-y-2">
-                        <AccordionItem value="item-1" className="border-none m-0">
-                            <AccordionTrigger className="px-4 py-3 flex items-center gap-2 rounded-lg bg-surface-variant hover:bg-surface-variant/80 font-mono text-transform-tertiary text-[11px] tracking-widest text-on-surface font-bold transition-colors m-0 w-full min-w-0">
-                                <div className="flex items-center gap-2 overflow-hidden flex-1 text-left min-w-0">
-                                    <Icon name="filter_list" size={16} className="shrink-0 text-on-surface-variant opacity-70 group-data-[state=open]:text-primary transition-colors" />
-                                    <span className="truncate">FILTERS</span>
-                                </div>
-                            </AccordionTrigger>
-                            <AccordionContent className="bg-transparent px-4 pb-4 pt-2">
-                                <DataFilter
-                                    title=""
-                                    groups={filterGroups}
-                                    onToggle={handleFilterToggle}
-                                />
-                            </AccordionContent>
-                        </AccordionItem>
-                    </Accordion>
+                    <FilterPanel filterGroups={filterGroups} onToggle={handleFilterToggle} />
                 </div>
             </Inspector>
         </div>
@@ -106,33 +111,35 @@ export default function ProductListTemplate() {
 
     const layoutContent = (
         <div className="flex h-full w-full bg-layer-base overflow-hidden font-sans border border-border">
-            {/* Fake Side Navigation */}
-            <div className="w-[240px] flex-shrink-0 border-r border-border bg-layer-panel hidden md:flex flex-col z-10 shadow-sm relative">
+            {/* Sidebar Navigation */}
+            <aside className="w-[240px] flex-shrink-0 border-r border-border bg-layer-panel hidden md:flex flex-col z-10 shadow-sm relative">
                 <div className="h-14 border-b border-border flex items-center px-4 shrink-0 gap-2">
                     <div className="w-6 h-6 rounded bg-primary flex items-center justify-center">
                         <Icon name="bolt" size={14} className="text-primary-foreground" />
                     </div>
                     <span className="font-bold text-sm tracking-widest font-display text-transform-primary text-on-surface">ZAP OS</span>
                 </div>
-                <div className="flex-1 py-4 px-3 space-y-1 overflow-y-auto">
-                    <div className="px-3 py-2.5 rounded-md hover:bg-surface-variant/40 flex items-center gap-3 text-sm text-on-surface cursor-pointer transition-colors">
-                        <Icon name="dashboard" size={18} className="text-on-surface-variant shrink-0" />
-                        <span className="font-medium">Overview</span>
-                    </div>
-                    <div className="px-3 py-2.5 rounded-md text-on-surface hover:bg-surface-variant/40 flex items-center gap-3 text-sm cursor-pointer transition-colors">
-                        <Icon name="list_alt" size={18} className="shrink-0 text-on-surface-variant" />
-                        <span className="font-medium">System Logs</span>
-                    </div>
-                    <div className="px-3 py-2.5 rounded-md bg-primary/10 text-primary flex items-center gap-3 text-sm cursor-pointer border border-primary/20 relative">
-                        <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-1/2 bg-primary rounded-r-md"></div>
-                        <Icon name="inventory-2" size={18} className="shrink-0" />
-                        <span className="font-medium">Product List</span>
-                    </div>
-                    <div className="px-3 py-2.5 rounded-md hover:bg-surface-variant/40 flex items-center gap-3 text-sm text-on-surface cursor-pointer transition-colors">
-                        <Icon name="settings" size={18} className="text-on-surface-variant shrink-0" />
-                        <span className="font-medium">Configuration</span>
-                    </div>
-                </div>
+                <nav className="flex-1 py-4 px-3 space-y-1 overflow-y-auto">
+                    {[
+                        { icon: 'dashboard', label: 'Overview' },
+                        { icon: 'list_alt', label: 'System Logs' },
+                        { icon: 'inventory-2', label: 'Product List', active: true },
+                        { icon: 'settings', label: 'Configuration' },
+                    ].map((item) => (
+                        <div
+                            key={item.label}
+                            className={`px-3 py-2.5 rounded-md flex items-center gap-3 text-sm cursor-pointer transition-colors relative ${
+                                item.active
+                                    ? 'bg-primary/10 text-primary border border-primary/20'
+                                    : 'text-on-surface hover:bg-surface-variant/40'
+                            }`}
+                        >
+                            {item.active && <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-1/2 bg-primary rounded-r-md"></div>}
+                            <Icon name={item.icon} size={18} className={`shrink-0 ${item.active ? '' : 'text-on-surface-variant'}`} />
+                            <span className="font-medium">{item.label}</span>
+                        </div>
+                    ))}
+                </nav>
                 <div className="p-4 border-t border-border mt-auto bg-surface-variant/30">
                     <div className="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity">
                         <div className="w-8 h-8 rounded-full bg-layer-base border border-border flex items-center justify-center shrink-0">
@@ -144,101 +151,79 @@ export default function ProductListTemplate() {
                         </div>
                     </div>
                 </div>
-            </div>
+            </aside>
 
-            {/* Main Area */}
+            {/* Main Content */}
             <div className="flex-1 flex flex-col min-w-0 bg-layer-base/50 relative">
-                {/* Fake Header */}
-                <div className="h-14 border-b border-border bg-layer-base flex items-center px-4 lg:px-6 justify-between shrink-0 shadow-sm z-10 relative">
-                    <div className="flex items-center">
-                        <button title="Menu" aria-label="Menu" className="md:hidden mr-2 -ml-2 shrink-0 p-2 hover:bg-surface-variant rounded-md transition-colors text-on-surface-variant">
+                {/* Header */}
+                <header className="h-14 border-b border-border bg-layer-base flex items-center px-4 lg:px-6 justify-between shrink-0 shadow-sm z-10 relative">
+                    <div className="flex items-center gap-2 min-w-0">
+                        <button title="Menu" aria-label="Menu" className="md:hidden shrink-0 p-2 hover:bg-surface-variant rounded-md transition-colors text-on-surface-variant">
                             <Icon name="menu" size={20} />
                         </button>
-                        <div className="flex items-center text-xs lg:text-sm">
-                            <span className="text-on-surface-variant hover:text-on-surface cursor-pointer transition-colors">Catalog</span>
-                            <Icon name="chevron_right" size={16} className="text-on-surface-variant/50 mx-1 shrink-0" />
-                            <span className="font-medium text-on-surface">Product List</span>
-                        </div>
+                        <nav className="flex items-center gap-1 text-xs lg:text-sm min-w-0">
+                            <span className="text-on-surface-variant hover:text-on-surface cursor-pointer transition-colors truncate">Catalog</span>
+                            <Icon name="chevron_right" size={16} className="text-on-surface-variant/50 shrink-0" />
+                            <span className="font-medium text-on-surface truncate">Product List</span>
+                        </nav>
                     </div>
-                    <div className="flex items-center gap-3 lg:gap-4">
+                    <div className="flex items-center gap-3 lg:gap-4 shrink-0">
                         <button title="Notifications" aria-label="Notifications" className="relative w-8 h-8 rounded-full hover:bg-surface-variant flex items-center justify-center transition-colors text-on-surface-variant">
                             <Icon name="notifications" size={18} />
                         </button>
-                        <div className="h-6 w-px bg-border my-auto hidden sm:block" />
-                        <div className="hidden sm:flex flex-col items-end">
+                        <div className="h-6 w-px bg-border hidden sm:block" />
+                        <div className="hidden sm:flex flex-col items-end gap-0.5">
                             <span className="text-xs font-bold leading-tight">us-west-1</span>
-                            <span className="text-[9px] tracking-widest text-green-500 font-dev text-transform-tertiary mt-0.5 flex items-center gap-1">
+                            <span className="text-[9px] tracking-widest text-green-500 font-dev text-transform-tertiary flex items-center gap-1">
                                 <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
                                 Healthy
                             </span>
                         </div>
                     </div>
-                </div>
+                </header>
 
                 {/* Table Content */}
-                <div className="flex-1 overflow-auto pt-8 px-4 lg:pt-11 lg:px-12 pb-16 flex flex-col relative z-0 min-w-0">
+                <main className="flex-1 overflow-auto px-4 sm:px-6 lg:px-12 py-6 lg:py-8 flex flex-col relative z-0 min-w-0">
                     <ProductListTable
                         filters={filters}
                         onFilterChange={setFilters}
                         onToggleFilters={() => setInspectorState(inspectorState === 'expanded' ? 'collapsed' : 'expanded')}
                         isFilterActive={inspectorState === 'expanded'}
                     />
-                </div>
+                </main>
             </div>
 
-            {/* Fake Inspector Drawer */}
+            {/* Inspector Drawer */}
             {rightDrawerContent}
         </div>
     );
 
     const inspectorContent = (
         <div className="flex flex-col gap-0 w-full min-w-[320px] px-4 pt-4">
-            <Accordion type="single" collapsible variant="navigation" value={inspectorState === 'expanded' ? "item-1" : ""} onValueChange={(val: string) => { if (val !== "item-1") setInspectorState('collapsed'); }} className="bg-transparent w-full space-y-2">
-                <AccordionItem value="item-1" className="border-none m-0">
-                    <AccordionTrigger className="px-4 py-3 flex items-center gap-2 rounded-lg bg-surface-variant hover:bg-surface-variant/80 font-mono text-transform-tertiary text-[11px] tracking-widest text-on-surface font-bold transition-colors m-0 w-full min-w-0">
-                        <div className="flex items-center gap-2 overflow-hidden flex-1 text-left min-w-0">
-                            <Icon name="filter_list" size={16} className="shrink-0 text-on-surface-variant opacity-70 group-data-[state=open]:text-primary transition-colors" />
-                            <span className="truncate">FILTERS</span>
-                        </div>
-                    </AccordionTrigger>
-                    <AccordionContent className="bg-transparent px-4 pb-4 pt-2">
-                        <DataFilter
-                            title=""
-                            groups={filterGroups}
-                            onToggle={handleFilterToggle}
-                        />
-                    </AccordionContent>
-                </AccordionItem>
-            </Accordion>
+            <FilterPanel filterGroups={filterGroups} onToggle={handleFilterToggle} />
         </div>
     );
 
     if (isFullscreen) {
         return (
             <div className="flex h-screen w-full bg-layer-canvas overflow-hidden font-sans">
-                {/* True Side Navigation */}
                 <SideNav />
-
                 <div className="flex-1 flex flex-col min-w-0 bg-transparent relative">
-                    {/* True Main Header */}
                     <ThemeHeader
                         title="PRODUCT LIST ASSEMBLY"
                         breadcrumb="zap design engine / metro / layout"
                         badge="component sandbox"
                         showBackground={false}
                     />
-
-                    <div className="flex-1 overflow-auto pt-8 px-4 lg:pt-11 lg:px-12 pb-16 flex flex-col relative z-0 bg-layer-base min-w-0">
+                    <main className="flex-1 overflow-auto px-4 sm:px-6 lg:px-12 py-6 lg:py-8 flex flex-col relative z-0 bg-layer-base min-w-0">
                         <ProductListTable
                             filters={filters}
                             onFilterChange={setFilters}
                             onToggleFilters={() => setInspectorState(inspectorState === 'expanded' ? 'collapsed' : 'expanded')}
                             isFilterActive={inspectorState === 'expanded'}
                         />
-                    </div>
+                    </main>
                 </div>
-
-                {/* True Inspector Drawer */}
                 {rightDrawerContent}
             </div>
         );

@@ -96,7 +96,7 @@ const PhoneFrame = ({
     const isIOS = deviceKey === 'ios';
     return (
         <div
-            className="relative flex flex-col overflow-hidden shadow-[0_32px_64px_-16px_rgba(0,0,0,0.3)] shrink-0 bg-layer-base border-outline-variant"
+            className="relative flex flex-col overflow-hidden shadow-[0_32px_64px_-16px_rgba(0,0,0,0.3)] shrink-0 bg-layer-canvas border-outline-variant"
             style={{
                 width: spec.width,
                 height: spec.height,
@@ -319,7 +319,7 @@ export const CanvasDesktop = ({
                     ) : windowClass === 'medium' ? (
                         /* ── Medium: Tablet frame ──────────────── */
                         <div
-                            className="relative flex flex-col overflow-hidden shadow-[0_32px_64px_-16px_rgba(0,0,0,0.3)] bg-layer-base border-outline-variant"
+                            className="relative flex flex-col overflow-hidden shadow-[0_32px_64px_-16px_rgba(0,0,0,0.3)] bg-layer-canvas border-outline-variant"
                             style={{
                                 width: 1024,
                                 height: 768,
@@ -343,7 +343,7 @@ export const CanvasDesktop = ({
                     ) : (
                         /* ── Expanded: Desktop frame ───────────── */
                         <div
-                            className="relative flex flex-col overflow-hidden shadow-[0_32px_64px_-16px_rgba(0,0,0,0.3)] bg-layer-base border-outline-variant"
+                            className="relative flex flex-col overflow-hidden shadow-[0_32px_64px_-16px_rgba(0,0,0,0.3)] bg-layer-canvas border-outline-variant"
                             style={{
                                 width: 1440,
                                 height: 900,

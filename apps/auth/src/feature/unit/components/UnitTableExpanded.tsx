@@ -1,15 +1,16 @@
 'use client';
 
 import { AnimatePresence, motion } from 'framer-motion';
-import { ChevronDown, Eye, Edit, Trash2, Check, Filter } from 'lucide-react';
+import { Check, ChevronDown, Filter, Eye, Edit, Trash2, Plus } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { cn } from 'zap-design/src/lib/utils';
 
-import { QuickActionsDropdown } from 'zap-design/src/genesis/molecules/quick-actions-dropdown';
 import { Badge } from 'zap-design/src/genesis/atoms/interactive/badge';
 import { Button } from 'zap-design/src/genesis/atoms/interactive/button';
 import { Input } from 'zap-design/src/genesis/atoms/interactive/inputs';
 import { Pill } from 'zap-design/src/genesis/atoms/status/pills';
+import { Checkbox } from 'zap-design/src/genesis/atoms/interactive/checkbox';
+import { Popover, PopoverContent, PopoverTrigger } from 'zap-design/src/genesis/molecules/popover';
 import {
   Table,
   TableBody,
@@ -27,10 +28,15 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from 'zap-design/src/genesis/molecules/pagination';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from 'zap-design/src/genesis/atoms/interactive/select';
-import { Heading } from 'zap-design/src/genesis/atoms/typography/headings';
-import { Text } from 'zap-design/src/genesis/atoms/typography/text';
-import { type Unit, type UnitStatus } from '../models/unit.model';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from 'zap-design/src/genesis/atoms/interactive/select';
+import { QuickActionsDropdown } from 'zap-design/src/genesis/molecules/quick-actions-dropdown';
+import type { Unit, UnitStatus } from '../models/unit.model';
 
 export type UnitFilters = {
   status: UnitStatus[];
@@ -41,86 +47,68 @@ function UnitRow({
   expanded,
   onToggle,
   t,
+  visibleCols,
   lang,
 }: {
   unit: Unit;
   expanded: boolean;
   onToggle: () => void;
   t: (key: string, fallback?: string) => string;
+  visibleCols: Record<string, boolean>;
   lang: string;
 }) {
-  const createdDate = new Date(unit.createdAt).toLocaleDateString(lang === 'vi' ? 'vi-VN' : 'en-US', {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
-  });
+  const pillVariant = unit.status === 'active' ? 'success' : 'neutral';
 
   return (
     <>
       <TableRow
-        onClick={onToggle}
-        className={cn(
-          "cursor-pointer group hover:bg-surface-variant/30 focus:bg-surface-variant/50 border-b border-border/40 transition-colors",
-          expanded && "bg-surface-variant/20 border-b-0"
-        )}
+        className="group hover:bg-surface-variant/50 focus:bg-surface-variant/70 border-b border-border/50 group-last:border-0"
       >
-        <TableCell className="px-6 w-12 py-4">
+        <TableCell className="px-7 w-12 py-2.5" onClick={onToggle}>
           <motion.div
             animate={{ rotate: expanded ? 180 : 0 }}
             transition={{ duration: 0.2 }}
-            className="flex items-center justify-center w-6 h-6 rounded-full group-hover:bg-surface-variant/50 transition-colors"
+            className="flex-shrink-0 w-4 cursor-pointer"
           >
-            <ChevronDown className="h-4 w-4 text-on-surface/40 group-hover:text-on-surface transition-colors" />
+            <ChevronDown className="h-4 w-4 text-muted-foreground" />
           </motion.div>
         </TableCell>
 
-        <TableCell className="px-4 py-4 w-24">
-          <Text size="body-tiny" className="font-dev text-on-surface/50 tabular-nums">
-            #{unit.id.slice(-4).toUpperCase()}
-          </Text>
+        {/* 1. Name (Fixed) */}
+        <TableCell className="min-w-40 py-2.5 text-left">
+          <span className="font-display font-bold text-foreground text-sm truncate block">{unit.name}</span>
         </TableCell>
 
-        <TableCell className="px-4 py-4 min-w-[200px]">
-          <div className="flex flex-col">
-            <Text size="label-large" className="font-display font-medium text-on-surface">
-              {unit.name}
-            </Text>
-          </div>
-        </TableCell>
+        {/* 2. Symbol (Default) */}
+        {visibleCols.symbol && (
+          <TableCell className="w-32 py-2.5 text-center font-body text-muted-foreground truncate text-sm">
+            {unit.abbreviation || '—'}
+          </TableCell>
+        )}
 
-        <TableCell className="px-4 py-4 w-48 text-center uppercase tracking-wider font-display font-bold text-[13px] text-on-surface">
-          {unit.abbreviation}
-        </TableCell>
+        {/* 3. Precision (Default) */}
+        {visibleCols.precision && (
+          <TableCell className="w-32 py-2.5 text-center text-muted-foreground truncate font-body text-sm">
+            0
+          </TableCell>
+        )}
 
-        <TableCell className="px-4 py-4 w-32 text-center">
-          <Pill
-            variant={unit.status === 'active' ? 'success' : 'neutral'}
-            className="min-w-[80px] justify-center inline-flex"
-          >
+        {/* 4. Status (Fixed) */}
+        <TableCell className="w-32 text-center py-2.5">
+          <Pill variant={pillVariant} className="whitespace-nowrap w-fit m-auto">
+            <div className="w-1.5 h-1.5 rounded-full bg-current mr-1.5 opacity-80 shrink-0" />
             {t(`status_${unit.status}`, unit.status)}
           </Pill>
         </TableCell>
 
-        <TableCell className="px-6 py-4 w-20 text-center sticky right-0 bg-layer-canvas z-10 shadow-[-8px_0_12px_-4px_rgba(0,0,0,0.05)] group-hover:bg-layer-canvas/95 transition-colors">
-          <div className="flex justify-center">
+        {/* 5. Actions (Fixed - Sticky) */}
+        <TableCell className="w-24 pr-7 py-2.5 text-right sticky right-0 z-10 bg-layer-base group-hover:bg-surface-variant/50 transition-colors shadow-[-4px_0_8px_-4px_rgba(0,0,0,0.12)] border-l border-border">
+          <div className="flex items-center justify-end text-muted-foreground">
             <QuickActionsDropdown
               actions={[
-                {
-                  label: t('action_view', 'View'),
-                  icon: Eye,
-                  onClick: () => console.log('View', unit.id),
-                },
-                {
-                  label: t('action_edit', 'Edit'),
-                  icon: Edit,
-                  onClick: () => console.log('Edit', unit.id),
-                },
-                {
-                  label: t('action_delete', 'Delete'),
-                  icon: Trash2,
-                  variant: 'destructive',
-                  onClick: () => console.log('Delete', unit.id),
-                },
+                { label: t('action_view', 'view'), icon: Eye, onClick: () => console.log('view', unit.id) },
+                { label: t('action_edit', 'edit'), icon: Edit, onClick: () => console.log('edit', unit.id) },
+                { label: t('action_delete', 'delete'), icon: Trash2, variant: 'destructive', onClick: () => console.log('delete', unit.id) },
               ]}
             />
           </div>
@@ -130,52 +118,55 @@ function UnitRow({
       <AnimatePresence initial={false}>
         {expanded && (
           <TableRow className="hover:bg-transparent data-[state=selected]:bg-transparent border-0 overflow-hidden">
-            <TableCell colSpan={6} className="p-0 border-0 overflow-hidden">
+            <TableCell colSpan={10} className="p-0 border-b-0 h-0 border-t-0">
               <motion.div
                 initial={{ height: 0, opacity: 0 }}
-                animate={{ height: 'auto', opacity: 1 }}
+                animate={{ height: "auto", opacity: 1 }}
                 exit={{ height: 0, opacity: 0 }}
-                transition={{ duration: 0.25, ease: [0.23, 1, 0.32, 1] }}
-                className="bg-layer-panel/60 border-b border-border/40"
+                transition={{ duration: 0.2 }}
+                className="overflow-hidden bg-layer-panel border-t border-border"
               >
-                <div className="px-24 py-8 flex flex-col gap-8 max-w-5xl">
-                  {/* Expanded Content Section */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-                    <div className="flex flex-col gap-3">
-                      <Heading level={6} className="text-[10px] font-bold uppercase tracking-[0.2em] text-on-surface/40 font-display">
-                        description // metadata
-                      </Heading>
-                      <div className="p-5 rounded-xl bg-layer-canvas border border-border/40 min-h-[80px] shadow-sm">
-                        <Text size="body-small" className="text-on-surface/80 leading-relaxed font-body italic">
-                          {unit.description || t('no_description', 'no description available for this unit...')}
-                        </Text>
-                      </div>
+                <div className="space-y-4 px-7 py-4 border-b border-border">
+                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 font-dev text-transform-tertiary">
+                    <div>
+                      <p className="mb-1 text-[length:var(--table-font-size,0.625rem)] font-display font-semibold text-transform-primary tracking-wide text-muted-foreground">
+                        {t('table_id', 'id')}
+                      </p>
+                      <p className="text-foreground">{unit.id}</p>
                     </div>
-
-                    <div className="flex flex-col gap-6">
-                      <div className="grid grid-cols-2 gap-8">
-                        <div className="flex flex-col gap-1">
-                          <Text size="label-small" className="text-[10px] font-bold uppercase tracking-widest text-on-surface/40">created at</Text>
-                          <Text size="body-small" className="font-mono text-on-surface/70">{createdDate}</Text>
-                        </div>
-                        <div className="flex flex-col gap-1">
-                          <Text size="label-small" className="text-[10px] font-bold uppercase tracking-widest text-on-surface/40">last updated</Text>
-                          <div className="flex items-center gap-2">
-                             <div className="w-1.5 h-1.5 rounded-full bg-success/60 animate-pulse" />
-                             <Text size="body-small" className="font-mono text-on-surface/70">
-                                {new Date(unit.updatedAt).toLocaleDateString(lang === 'vi' ? 'vi-VN' : 'en-US')}
-                             </Text>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="pt-4 border-t border-border/30">
-                        <Button variant="ghost" size="sm" className="text-[11px] font-bold uppercase tracking-widest text-primary gap-2 h-9 px-4 hover:bg-primary/5">
-                           audit full history <ChevronDown className="h-3 w-3 -rotate-90" />
-                        </Button>
-                      </div>
+                    <div>
+                      <p className="mb-1 text-[length:var(--table-font-size,0.625rem)] font-display font-semibold text-transform-primary tracking-wide text-muted-foreground">
+                        {t('table_symbol', 'symbol')}
+                      </p>
+                      <p className="text-foreground">{unit.abbreviation || '—'}</p>
+                    </div>
+                    <div>
+                      <p className="mb-1 text-[length:var(--table-font-size,0.625rem)] font-display font-semibold text-transform-primary tracking-wide text-muted-foreground">
+                        {t('table_description', 'description')}
+                      </p>
+                      <p className="text-foreground truncate">{unit.description || '—'}</p>
                     </div>
                   </div>
+                  {(unit.createdAt || unit.updatedAt) && (
+                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 font-dev text-transform-tertiary pt-2 border-t border-border/40">
+                      <div>
+                        <p className="mb-1 text-[length:var(--table-font-size,0.625rem)] font-display font-semibold text-transform-primary tracking-wide text-muted-foreground">
+                          {t('table_created', 'created')}
+                        </p>
+                        <p className="text-[10px] text-foreground">
+                          {unit.createdAt ? new Date(unit.createdAt).toLocaleString(lang === 'vi' ? 'vi-VN' : 'en-US') : '—'}
+                        </p>
+                      </div>
+                      <div>
+                        <p className="mb-1 text-[length:var(--table-font-size,0.625rem)] font-display font-semibold text-transform-primary tracking-wide text-muted-foreground">
+                          {t('table_updated', 'updated')}
+                        </p>
+                        <p className="text-[10px] text-foreground">
+                          {unit.updatedAt ? new Date(unit.updatedAt).toLocaleString(lang === 'vi' ? 'vi-VN' : 'en-US') : '—'}
+                        </p>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </motion.div>
             </TableCell>
@@ -186,19 +177,99 @@ function UnitRow({
   );
 }
 
+function FilterPanel({
+  filters,
+  onChange,
+  t,
+}: {
+  filters: UnitFilters;
+  onChange: (filters: UnitFilters) => void;
+  t: (key: string, fallback?: string) => string;
+}) {
+  const toggleFilter = (filterKey: keyof UnitFilters, value: string) => {
+    const current = filters[filterKey];
+    const updated = current.includes(value as any)
+      ? current.filter((entry) => entry !== value)
+      : [...current, value as any];
+
+    onChange({
+      ...filters,
+      [filterKey]: updated,
+    });
+  };
+
+  const clearAll = () => {
+    onChange({ status: [] });
+  };
+
+  const hasActiveFilters = filters.status.length > 0;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ delay: 0.05 }}
+      className="flex h-full flex-col space-y-6 overflow-y-auto bg-layer-panel p-4"
+    >
+      <div className="flex items-center justify-between">
+        <h3 className="text-sm font-display text-transform-primary font-semibold text-foreground">{t('filter', 'filters')}</h3>
+        {hasActiveFilters && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={clearAll}
+            className="h-6 text-xs text-primary"
+          >
+            {t('clear', 'clear')}
+          </Button>
+        )}
+      </div>
+
+      <div className="space-y-3">
+        <p className="text-[length:var(--table-font-size,0.625rem)] font-display font-semibold text-transform-primary tracking-wide text-muted-foreground">
+          {t('table_status', 'status')}
+        </p>
+        <div className="space-y-2">
+          {['active', 'inactive'].map((status) => {
+            const selected = filters.status.includes(status as UnitStatus);
+
+            return (
+              <motion.button
+                key={status}
+                type="button"
+                whileHover={{ x: 2 }}
+                onClick={() => toggleFilter("status", status)}
+                aria-pressed={selected}
+                className={`flex w-full items-center justify-between gap-2 border border-[length:max(var(--button-border-width,1px),1px)] rounded-[length:var(--button-border-radius,var(--radius-btn,4px))] px-3 py-2 text-sm transition-colors font-body text-transform-secondary ${selected
+                  ? "border-primary bg-primary/10 text-primary"
+                  : "border-border text-muted-foreground hover:border-primary/40 hover:bg-surface-variant/40"
+                  }`}
+              >
+                <span>{t(`status_${status}`, status)}</span>
+                {selected && <Check className="h-3.5 w-3.5" />}
+              </motion.button>
+            );
+          })}
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
 interface UnitTableExpandedProps {
   units: Unit[];
   loading: boolean;
-  filters: UnitFilters;
-  currentPage: number;
-  pageSize: number;
-  totalRecords: number;
-  totalPages: number;
-  onFilterChange: (filters: UnitFilters) => void;
-  onPageChange: (page: number) => void;
-  onPageSizeChange: (pageSize: number) => void;
-  onToggleFilters: () => void;
-  isFilterActive: boolean;
+  filters?: UnitFilters;
+  onFilterChange?: (filters: UnitFilters) => void;
+  currentPage?: number;
+  pageSize?: number;
+  totalRecords?: number;
+  totalPages?: number;
+  onPageChange?: (page: number) => void;
+  onPageSizeChange?: (pageSize: number) => void;
+  isFilterActive?: boolean;
+  onToggleFilters?: () => void;
   className?: string;
   t: (key: string, fallback?: string) => string;
   lang: string;
@@ -207,212 +278,320 @@ interface UnitTableExpandedProps {
 export function UnitTableExpanded({
   units = [],
   loading,
-  filters,
-  currentPage,
-  pageSize,
-  totalRecords,
-  totalPages,
+  filters: filtersProp,
   onFilterChange,
+  currentPage = 1,
+  pageSize = 10,
+  totalRecords = units.length,
+  totalPages: totalPagesProp,
   onPageChange,
   onPageSizeChange,
-  onToggleFilters,
   isFilterActive,
+  onToggleFilters,
   className,
   t,
   lang,
 }: UnitTableExpandedProps) {
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [internalFilters, setInternalFilters] = useState<UnitFilters>({ status: [] });
+  const [internalShowFilters, setInternalShowFilters] = useState(false);
+  const [visibleCols, setVisibleCols] = useState<Record<string, boolean>>({
+    symbol: true,
+    precision: true,
+  });
+  const [tempCols, setTempCols] = useState<Record<string, boolean>>({ ...visibleCols });
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+
+  const filters = filtersProp ?? internalFilters;
+  const showFilters = isFilterActive ?? internalShowFilters;
+
+  const handleFilterChange = (newFilters: UnitFilters) => {
+    if (onFilterChange) onFilterChange(newFilters);
+    setInternalFilters(newFilters);
+  };
+
+  const handleToggleFilters = () => {
+    if (onToggleFilters) {
+      onToggleFilters();
+    } else {
+      setInternalShowFilters(current => !current);
+    }
+  };
 
   const filteredUnits = useMemo(() => {
-    return units.filter((unit) => {
+    if (totalRecords > units.length) {
+      return units;
+    }
+
+    return units.filter((u) => {
       const lowerQuery = searchQuery.toLowerCase();
+
       const matchSearch =
-        unit.name.toLowerCase().includes(lowerQuery) ||
-        unit.abbreviation.toLowerCase().includes(lowerQuery) ||
-        (unit.description || '').toLowerCase().includes(lowerQuery) ||
-        unit.id.toLowerCase().includes(lowerQuery);
+        u.name.toLowerCase().includes(lowerQuery) ||
+        u.abbreviation.toLowerCase().includes(lowerQuery) ||
+        u.id.toLowerCase().includes(lowerQuery);
 
       const matchStatus =
-        filters.status.length === 0 || filters.status.includes(unit.status);
+        filters.status.length === 0 || filters.status.includes(u.status);
 
       return matchSearch && matchStatus;
     });
-  }, [units, searchQuery, filters.status]);
+  }, [units, searchQuery, filters.status, totalRecords]);
 
-  const activeFilterCount = filters.status.length;
-  const hasActiveFilter = activeFilterCount > 0 || searchQuery.trim() !== '';
+  const totalPages = Math.max(1, totalPagesProp ?? Math.ceil(totalRecords / pageSize));
+
+  const paginatedUnits = useMemo(() => {
+    if (totalRecords > units.length) {
+      return units;
+    }
+    const start = (currentPage - 1) * pageSize;
+    return filteredUnits.slice(start, start + pageSize);
+  }, [filteredUnits, currentPage, pageSize, totalRecords, units]);
+
+  const activeFilters = filters.status.length;
+  const hasActiveFilter = activeFilters > 0 || searchQuery.trim() !== "";
+
+  const pageNumbers: (number | string)[] = [];
+  if (totalPages <= 5) {
+    for (let i = 1; i <= totalPages; i++) pageNumbers.push(i);
+  } else {
+    pageNumbers.push(1);
+    if (currentPage > 3) pageNumbers.push('...');
+    const start = Math.max(2, currentPage - 1);
+    const end = Math.min(totalPages - 1, currentPage + 1);
+    for (let i = start; i <= end; i++) pageNumbers.push(i);
+    if (currentPage < totalPages - 2) pageNumbers.push('...');
+    pageNumbers.push(totalPages);
+  }
+
+  if (loading) {
+    return (
+      <main className={cn('w-full bg-layer-canvas border-outline-variant overflow-hidden border-[length:max(var(--table-border-width,var(--card-border-width,1px)),1px)] rounded-[length:max(var(--table-border-radius,var(--radius-card,8px)),8px)] flex flex-col min-h-[500px] items-center justify-center', className)}>
+        <p className="font-body text-transform-secondary text-muted-foreground">{t('loading', 'loading units...')}</p>
+      </main>
+    );
+  }
 
   return (
-    <div className={cn("w-full flex-1 flex flex-col bg-layer-canvas rounded-xl border border-border/40 shadow-xl overflow-hidden", className)}>
-      {/* ─── Header Toolbar ────────────────────────────────────────────────── */}
-      <div className="flex flex-col lg:flex-row justify-between items-center w-full py-4 px-6 gap-6 border-b border-border/40 bg-layer-panel/60 backdrop-blur-md sticky top-0 z-30">
-        <div className="flex items-center h-10">
-          <AnimatePresence mode="wait">
-            {hasActiveFilter ? (
-              <motion.div
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -10 }}
-                className="flex items-center gap-3 px-4 py-2 rounded-full bg-primary/5 border border-primary/10"
-              >
-                <div className="flex items-center gap-1.5 h-2 w-2 rounded-full bg-primary animate-pulse" />
-                <Text size="label-small" className="font-display font-medium text-primary text-[12px]">
-                  {filteredUnits.length} {t('of')} {totalRecords} {t('units_matched', 'units matched')}
-                </Text>
-              </motion.div>
-            ) : (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="flex items-center gap-2"
-              >
-                <Text size="label-small" className="font-display font-bold uppercase tracking-[0.2em] text-on-surface/30">
-                   active index // {totalRecords} units
-                </Text>
-              </motion.div>
-            )}
-          </AnimatePresence>
+    <main className={cn("w-full bg-layer-canvas border-outline-variant overflow-hidden border-[length:max(var(--table-border-width,var(--card-border-width,1px)),1px)] rounded-[length:max(var(--table-border-radius,var(--radius-card,8px)),8px)] flex flex-col min-h-[500px]", className)}>
+      <div className="flex flex-col md:flex-row justify-between items-end md:items-center w-full py-4 px-5 gap-4 border-b border-border bg-layer-panel min-h-[length:max(var(--table-toolbar-height,4.5rem),4.5rem)] flex-shrink-0">
+        <div className="flex items-center h-8">
+          {hasActiveFilter && (
+            <span className="text-sm font-medium text-muted-foreground font-body text-transform-secondary">
+              {filteredUnits.length} {t('of', 'of')} {totalRecords} {t('units_matched', 'records matched criteria.')}
+            </span>
+          )}
         </div>
 
-        <div className="flex items-center gap-4 w-full lg:w-auto">
-          <div className="relative flex-1 lg:w-[380px] group">
+        <div className="flex items-center gap-3 w-full md:w-auto">
+          <div className="relative flex-1 md:w-80">
             <Input
               variant="filled"
               leadingIcon="search"
               placeholder={t('search_placeholder', 'search units...')}
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="h-11 bg-layer-cover/60 border-transparent hover:border-border/40 focus:bg-layer-cover transition-all rounded-xl pl-11"
+              onChange={(event) => {
+                setSearchQuery(event.target.value);
+                onPageChange?.(1);
+              }}
+              className="font-body text-transform-secondary text-sm"
             />
           </div>
           <Button
-            variant={isFilterActive ? 'primary' : 'outline'}
+            variant={showFilters ? "primary" : "outline"}
             size="sm"
-            onClick={onToggleFilters}
-            className={cn(
-              "relative h-11 px-5 rounded-xl border-border/40 transition-all font-display uppercase tracking-widest text-[11px] font-bold gap-3 shadow-sm",
-              isFilterActive ? "bg-primary text-on-primary ring-4 ring-primary/10 shadow-lg" : "bg-layer-panel hover:bg-layer-cover"
-            )}
+            onClick={handleToggleFilters}
+            className="relative h-[var(--input-height,var(--button-height,48px))] px-6"
           >
-            <Filter size={16} className={cn(isFilterActive ? "text-on-primary" : "text-primary")} />
-            <span>{t('filter', 'filter')}</span>
-            {activeFilterCount > 0 && (
-              <Badge className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center p-0 text-[10px] bg-primary text-on-primary ring-2 ring-layer-canvas">
-                {activeFilterCount}
+            <Filter className="h-4 w-4 mr-2" />
+            <span className="font-display font-medium text-xs text-transform-primary">{t('filter', 'filters')}</span>
+            {activeFilters > 0 && (
+              <Badge className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center p-0 text-xs rounded-full bg-error text-on-error border-none z-20">
+                {activeFilters}
               </Badge>
             )}
+          </Button>
+          <Button variant="primary" size="sm" className="h-[var(--input-height,var(--button-height,48px))] px-6">
+            <span className="font-display font-medium text-xs text-transform-primary">{t('btn_add', 'add unit')}</span>
           </Button>
         </div>
       </div>
 
-      {/* ─── Table Content ────────────────────────────────────────────────── */}
-      <div className="relative flex-1 overflow-visible">
-        <div className="min-w-full inline-block align-middle">
-          <Table className="w-full relative border-separate border-spacing-0 bg-transparent">
-            <TableHeader className="bg-layer-panel/80 backdrop-blur-md sticky top-0 z-20 border-b border-border/40">
-              <TableRow className="hover:bg-transparent border-0 h-14">
-                <TableHead className="w-12 px-6"></TableHead>
-                <TableHead className="w-24 px-4 font-display font-bold uppercase tracking-[0.15em] text-[10px] text-on-surface/40">{t('table_id', 'id')}</TableHead>
-                <TableHead className="px-4 font-display font-bold uppercase tracking-[0.15em] text-[10px] text-on-surface/40 text-left">{t('table_name', 'unit_name')}</TableHead>
-                <TableHead className="w-48 px-4 font-display font-bold uppercase tracking-[0.15em] text-[10px] text-on-surface/40 text-center">{t('table_abbreviation', 'abbreviation')}</TableHead>
-                <TableHead className="w-32 px-4 font-display font-bold uppercase tracking-[0.15em] text-[10px] text-on-surface/40 text-center">{t('table_status', 'status')}</TableHead>
-                <TableHead className="w-20 px-6 font-display font-bold uppercase tracking-[0.15em] text-[10px] text-on-surface/40 text-center sticky right-0 bg-layer-panel/95 z-25 backdrop-blur-md">{t('table_actions', 'actions')}</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {loading ? (
-                <TableRow>
-                  <TableCell colSpan={6} className="h-64 text-center">
-                    <div className="flex flex-col items-center justify-center gap-4 text-on-surface/30">
-                       <div className="w-10 h-10 rounded-full border-2 border-t-primary border-transparent animate-spin" />
-                       <Text size="label-large" className="font-display uppercase tracking-widest text-[13px]">loading unit index...</Text>
+      <div className="flex flex-1 overflow-hidden">
+        <AnimatePresence initial={false}>
+          {showFilters && !isFilterActive && (
+            <motion.div
+              key="filters"
+              initial={{ width: 0, opacity: 0 }}
+              animate={{ width: 288, opacity: 1 }}
+              exit={{ width: 0, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="overflow-hidden border-r border-border bg-layer-panel w-72 flex-shrink-0 flex"
+            >
+              <FilterPanel
+                filters={filters}
+                onChange={handleFilterChange}
+                t={t}
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <div className="flex-1 flex flex-col bg-layer-cover overflow-auto min-w-0">
+          <div className="flex-1 rounded-none border-0 block min-w-max">
+            <Table className="w-full relative bg-transparent border-collapse min-w-max">
+              <TableHeader className="bg-layer-panel top-0 z-10 sticky border-b border-border shadow-sm h-12">
+                <TableRow className="border-b-0 hover:bg-transparent">
+                  <TableHead className="w-12 px-7 bg-layer-panel"></TableHead>
+
+                   {/* 1. Name (Fixed) */}
+                  <TableHead className="min-w-40 text-left bg-layer-panel font-display font-black text-[10px] text-transform-primary uppercase tracking-[0.1em]">{t('table_name', 'name')}</TableHead>
+
+                  {/* 2. Symbol (Default) */}
+                  {visibleCols.symbol && <TableHead className="w-32 text-center bg-layer-panel font-display font-black text-[10px] text-transform-primary uppercase tracking-[0.1em]">{t('table_symbol', 'symbol')}</TableHead>}
+
+                  {/* 3. Precision (Default) */}
+                  {visibleCols.precision && <TableHead className="w-32 text-center bg-layer-panel font-display font-black text-[10px] text-transform-primary uppercase tracking-[0.1em]">{t('table_precision', 'precision')}</TableHead>}
+
+                  {/* 4. Status (Fixed) */}
+                  <TableHead className="w-32 text-center bg-layer-panel font-display font-black text-[10px] text-transform-primary uppercase tracking-[0.1em]">{t('table_status', 'status')}</TableHead>
+
+                  {/* 5. Actions (Fixed) */}
+                  <TableHead className="w-24 pr-7 text-right sticky right-0 z-20 shadow-[-4px_0_8px_-4px_rgba(0,0,0,0.1)] border-l border-border bg-layer-panel font-display font-black text-[10px] text-transform-primary uppercase tracking-[0.1em]">
+                    <div className="flex items-center justify-end gap-2">
+                      <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
+                        <PopoverTrigger asChild>
+                          <Button onClick={() => setTempCols(visibleCols)} variant="ghost" size="sm" className="h-6 w-6 p-0 bg-surface hover:bg-surface-variant border border-border">
+                            <Plus className="h-3 w-3" />
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-56 p-0 bg-surface shadow-2xl border border-outline rounded-xl" align="end" sideOffset={8}>
+                          <div className="p-3 border-b border-border">
+                            <p className="font-dev text-[10px] text-muted-foreground font-semibold tracking-wide">{t('select_columns', 'select columns')}</p>
+                          </div>
+                          <div className="px-3 py-3 flex flex-col gap-3">
+                            <div className="flex items-center space-x-2">
+                              <Checkbox id="col-symbol" checked={tempCols.symbol} onCheckedChange={(c) => setTempCols(prev => ({ ...prev, symbol: !!c }))} />
+                              <label htmlFor="col-symbol" className="text-sm font-medium leading-none cursor-pointer text-transform-secondary font-body">{t('table_symbol', 'symbol')}</label>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                              <Checkbox id="col-precision" checked={tempCols.precision} onCheckedChange={(c) => setTempCols(prev => ({ ...prev, precision: !!c }))} />
+                              <label htmlFor="col-precision" className="text-sm font-medium leading-none cursor-pointer text-transform-secondary font-body">{t('table_precision', 'precision')}</label>
+                            </div>
+                          </div>
+                          <div className="p-2 border-t border-border flex justify-end gap-3 items-center">
+                            <button onClick={() => setTempCols({ symbol: true, precision: true })} className="text-[10px] font-dev text-muted-foreground font-semibold tracking-wide hover:text-foreground">{t('btn_reset', 'reset')}</button>
+                            <button onClick={() => { setVisibleCols(tempCols); setIsPopoverOpen(false); }} className="text-[10px] font-dev text-foreground font-semibold tracking-wide hover:opacity-80">{t('btn_apply', 'apply')}</button>
+                          </div>
+                        </PopoverContent>
+                      </Popover>
                     </div>
-                  </TableCell>
+                  </TableHead>
                 </TableRow>
-              ) : filteredUnits.length > 0 ? (
-                filteredUnits.map((unit) => (
-                  <UnitRow
-                    key={unit.id}
-                    unit={unit}
-                    expanded={expandedId === unit.id}
-                    onToggle={() => setExpandedId(expandedId === unit.id ? null : unit.id)}
-                    t={t}
-                    lang={lang}
-                  />
-                ))
-              ) : (
-                <TableRow className="hover:bg-transparent border-0">
-                  <TableCell colSpan={6} className="h-96 text-center">
-                    <div className="max-w-md mx-auto flex flex-col items-center gap-4 py-20 px-8">
-                       <div className="p-6 rounded-full bg-surface-variant/20 mb-2">
-                          <Filter className="w-12 h-12 text-on-surface/10 stroke-[1.5]" />
-                       </div>
-                       <Heading level={4} className="font-display uppercase tracking-widest text-on-surface/50">{t('no_data', 'zero results matched')}</Heading>
-                       <Text size="body-medium" className="text-on-surface/30 text-center leading-relaxed">Adjust your filters or search query to locate specific unit records within the assembly database.</Text>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                <AnimatePresence mode="popLayout">
+                  {paginatedUnits.length > 0 ? (
+                    paginatedUnits.map((u) => (
+                      <UnitRow
+                        key={u.id}
+                        unit={u}
+                        expanded={expandedId === u.id}
+                        onToggle={() =>
+                          setExpandedId((current) =>
+                            current === u.id ? null : u.id
+                          )
+                        }
+                        visibleCols={visibleCols}
+                        t={t}
+                        lang={lang}
+                      />
+                    ))
+                  ) : (
+                    <TableRow className="hover:bg-transparent border-0">
+                      <TableCell colSpan={10} className="h-96 text-center p-12">
+                        <motion.div
+                          key="empty-state"
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                        >
+                          <p className="font-body text-transform-secondary text-muted-foreground">
+                            {t('no_data', 'zero units match your filters.')}
+                          </p>
+                        </motion.div>
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </AnimatePresence>
+              </TableBody>
+            </Table>
+          </div>
         </div>
       </div>
 
-      {/* ─── Pagination Footer ────────────────────────────────────────────── */}
-      <div className="w-full h-[72px] bg-layer-panel border-t border-border/40 px-8 flex items-center justify-between sticky bottom-0 z-30">
-        <div className="flex items-center gap-3">
-          <Text size="label-small" className="font-display font-bold text-on-surface/30 uppercase tracking-[0.1em] text-[10px]">
-            {t('show', 'show')}
-          </Text>
-          <Select 
-            value={pageSize.toString()} 
-            onValueChange={(val) => onPageSizeChange(parseInt(val, 10))}
-          >
-            <SelectTrigger className="h-9 w-20 bg-surface-variant/20 border-transparent hover:bg-surface-variant/40 transition-colors px-3 rounded-lg font-mono text-[12px] font-bold text-on-surface">
-              <SelectValue placeholder={pageSize.toString()} />
-            </SelectTrigger>
-            <SelectContent className="bg-layer-panel border-border/40">
-              {[10, 20, 50, 100].map((size) => (
-                <SelectItem key={size} value={size.toString()} className="font-mono text-[12px] uppercase tracking-wider">{size}</SelectItem>
+      <div className="border-t border-border bg-layer-panel px-7 py-4">
+        <div className="flex items-center justify-between text-sm text-muted-foreground font-body text-transform-secondary">
+          <div className="flex items-center gap-2">
+            <span className="text-transform-secondary">{t('show', 'show')}</span>
+            <Select
+              value={pageSize.toString()}
+              onValueChange={(val) => onPageSizeChange?.(parseInt(val, 10))}
+            >
+              <SelectTrigger size="sm" className="w-20 font-medium font-body text-transform-secondary bg-layer-panel text-on-surface hover:bg-layer-dialog">
+                <SelectValue placeholder={pageSize >= 9999 ? t('all', 'all') : pageSize.toString()} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="10">10</SelectItem>
+                <SelectItem value="20">20</SelectItem>
+                <SelectItem value="50">50</SelectItem>
+                <SelectItem value="100">100</SelectItem>
+                <SelectItem value="9999">{t('all', 'all')}</SelectItem>
+              </SelectContent>
+            </Select>
+            <span className="text-transform-secondary">{t('records_per_table', 'units per page')}</span>
+          </div>
+          <Pagination className="mx-0 w-auto m-0">
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious
+                  onClick={() => onPageChange?.(Math.max(1, currentPage - 1))}
+                  className={cn(
+                    'h-8 px-3 font-body text-transform-secondary',
+                    currentPage === 1 && 'pointer-events-none opacity-40'
+                  )}
+                />
+              </PaginationItem>
+
+              {pageNumbers.map((page, idx) => (
+                <PaginationItem key={idx}>
+                  {page === '...' ? (
+                    <PaginationEllipsis />
+                  ) : (
+                    <PaginationLink
+                      isActive={currentPage === page}
+                      onClick={() => onPageChange?.(page as number)}
+                      className="h-8 w-8 font-body cursor-pointer"
+                    >
+                      {page}
+                    </PaginationLink>
+                  )}
+                </PaginationItem>
               ))}
-            </SelectContent>
-          </Select>
-          <Text size="label-small" className="font-display font-bold text-on-surface/30 uppercase tracking-[0.1em] text-[10px]">
-            {t('records_per_table', 'entries per view')}
-          </Text>
+
+              <PaginationItem>
+                <PaginationNext
+                  onClick={() => onPageChange?.(Math.min(totalPages, currentPage + 1))}
+                  className={cn(
+                    'h-8 px-3 font-body text-transform-secondary',
+                    currentPage === totalPages && 'pointer-events-none opacity-40'
+                  )}
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
         </div>
-
-        <Pagination className="mx-0 w-auto m-0 flex-1 justify-end">
-          <PaginationContent className="bg-surface-variant/20 border border-border/20 rounded-xl px-1.5 h-11 gap-1.5 shadow-inner">
-            <PaginationItem>
-              <PaginationPrevious 
-                onClick={() => onPageChange(Math.max(1, currentPage - 1))}
-                className={cn(
-                  "h-8 px-4 rounded-lg bg-transparent border-0 hover:bg-layer-canvas/60 text-[11px] font-bold uppercase tracking-widest font-display transition-all",
-                  currentPage === 1 && "pointer-events-none opacity-20 filter grayscale"
-                )}
-              />
-            </PaginationItem>
-            
-            <div className="flex items-center gap-1.5 px-3">
-              <Text size="label-small" className="font-mono text-primary font-bold text-[13px]">{currentPage}</Text>
-              <Text size="label-small" className="font-mono text-on-surface/30 font-bold text-[13px]">/</Text>
-              <Text size="label-small" className="font-mono text-on-surface/50 font-bold text-[13px]">{totalPages}</Text>
-            </div>
-
-            <PaginationItem>
-              <PaginationNext 
-                onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}
-                className={cn(
-                  "h-8 px-4 rounded-lg bg-transparent border-0 hover:bg-layer-canvas/60 text-[11px] font-bold uppercase tracking-widest font-display transition-all",
-                  currentPage === totalPages && "pointer-events-none opacity-20 filter grayscale"
-                )}
-              />
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
       </div>
-    </div>
+    </main>
   );
 }

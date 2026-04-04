@@ -11,11 +11,14 @@
   "previous": "Previous",
   "next": "Next",
   "table_id": "ID",
+  "table_brand_id": "brand id",
   "table_logo": "Logo",
   "table_name": "Name",
+  "table_brand_name": "brand name",
   "table_slug": "Slug",
   "table_premium": "Premium",
-  "table_status": "Status",
+  "table_status": "status",
+  "table_action": "action",
   "status_active": "Active",
   "status_inactive": "Inactive"
 }

@@ -1,0 +1,56 @@
+{
+  "success": true,
+  "code": 200,
+  "message": "OK",
+  "data": {
+    "id": "loc_12345",
+    "basic_info": {
+      "nickname": "ZAP Warehouse A",
+      "description": "Trung tâm lưu trữ và phân phối hàng điện tử khu vực miền Nam. Thiết kế theo tiêu chuẩn ZAP M3 (Digital Curator).",
+      "status": "ACTIVE"
+    },
+    "business_address": {
+      "street": "123 Đường Nam Kỳ Khởi Nghĩa",
+      "ward": "Bến Nghé",
+      "district": "Quận 1",
+      "city": "TP. Hồ Chí Minh",
+      "zip_code": "70000",
+      "coordinates": {
+        "lat": 10.7769,
+        "lng": 106.7009
+      }
+    },
+    "contact": {
+      "phone": "+84 901 234 567",
+      "email": "warehouse.a@zap.com",
+      "social": {
+        "facebook": "https://facebook.com/zap.warehouse",
+        "instagram": "@zap_warehouse"
+      }
+    },
+    "branding": {
+      "logo_url": "https://cdn.zap.com/assets/loc_12345_logo.png",
+      "primary_color": "#570013",
+      "secondary_color": "#F7FBEF",
+      "is_custom_brand": true
+    },
+    "operations": {
+      "business_hours": [
+        { "day": "MONDAY", "open": "08:00", "close": "18:00", "is_closed": false },
+        { "day": "TUESDAY", "open": "08:00", "close": "18:00", "is_closed": false },
+        { "day": "WEDNESDAY", "open": "08:00", "close": "18:00", "is_closed": false },
+        { "day": "THURSDAY", "open": "08:00", "close": "18:00", "is_closed": false },
+        { "day": "FRIDAY", "open": "08:00", "close": "19:00", "is_closed": false },
+        { "day": "SATURDAY", "open": "09:00", "close": "17:00", "is_closed": false },
+        { "day": "SUNDAY", "open": "00:00", "close": "00:00", "is_closed": true }
+      ],
+      "preferred_language": "vi-VN",
+      "timezone": "Asia/Ho_Chi_Minh"
+    },
+    "settings": {
+      "match_library_from": "loc_root_inventory",
+      "enable_online_ordering": true,
+      "inventory_sync": true
+    }
+  }
+}

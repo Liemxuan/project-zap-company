@@ -1,94 +1,74 @@
 /**
  * Location Service
- * Handles location data fetching and manipulation
+ * Handles location data fetching and manipulation with real API (100% no mock)
  */
 
 import { Location, LocationFilter, LocationResponse } from '../models/location.model';
-import { httpService } from '@/core/api/http.service';
-import { API_ENDPOINTS } from '@/const';
-import * as locationMock from '@/mocks/location.mock';
+import { 
+  getLocationsServer, 
+  getLocationByIdServer, 
+  createLocationServer, 
+  updateLocationServer, 
+  deleteLocationServer 
+} from './location.server';
 
 /**
- * Fetch all locations with optional filtering
+ * Fetch all locations with optional filtering (via Server Action)
  */
 export async function getLocations(filter?: LocationFilter, page = 1, pageSize = 10): Promise<LocationResponse> {
-  return locationMock.getMockLocations(filter, page, pageSize);
+  return getLocationsServer(filter, page, pageSize);
 }
 
 /**
- * Fetch single location by ID
+ * Fetch single location by ID (via Server Action)
  */
 export async function getLocationById(id: string): Promise<Location | null> {
-  return locationMock.getMockLocationById(id);
+  return getLocationByIdServer(id);
 }
 
 /**
- * Get unique cities
+ * Get unique cities derived from the current location list
  */
 export async function getLocationCities(): Promise<string[]> {
-  return locationMock.getMockLocationCities();
+  try {
+    const response = await getLocationsServer({}, 1, 100);
+    if (response.success && response.data.items) {
+      const cities = new Set(
+        response.data.items.map((l) => l.address_json?.split(',').pop()?.trim() || '')
+      );
+      return Array.from(cities).filter(Boolean).sort();
+    }
+    return [];
+  } catch (error) {
+    console.error('[Location Service] Failed to extract cities from API:', error);
+    return [];
+  }
 }
 
 /**
- * Create new location (mock)
+ * Create new location (via Server Action)
  */
-export async function createLocation(location: Omit<Location, 'id' | 'createdAt' | 'updatedAt'>): Promise<Location> {
-  await new Promise((resolve) => setTimeout(resolve, 200));
-
-  const newLocation: Location = {
-    ...location,
-    id: `loc-${Date.now()}`,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  };
-
-  locationMock.MOCK_LOCATIONS.push(newLocation);
-  return newLocation;
+export async function createLocation(location: Omit<Location, 'id' | 'created_at' | 'updated_at'>): Promise<Location> {
+  return createLocationServer(location);
 }
 
 /**
- * Update location (mock)
+ * Update location (via Server Action)
  */
 export async function updateLocation(id: string, updates: Partial<Location>): Promise<Location | null> {
-  await new Promise((resolve) => setTimeout(resolve, 200));
-
-  const index = locationMock.MOCK_LOCATIONS.findIndex((l) => l.id === id);
-  if (index === -1) return null;
-
-  const updated = {
-    ...locationMock.MOCK_LOCATIONS[index],
-    ...updates,
-    updatedAt: new Date(),
-  };
-
-  locationMock.MOCK_LOCATIONS[index] = updated;
-  return updated;
+  return updateLocationServer(id, updates);
 }
 
 /**
- * Delete location (mock)
+ * Delete location (via Server Action)
  */
 export async function deleteLocation(id: string): Promise<boolean> {
-  await new Promise((resolve) => setTimeout(resolve, 200));
-
-  const index = locationMock.MOCK_LOCATIONS.findIndex((l) => l.id === id);
-  if (index === -1) return false;
-
-  locationMock.MOCK_LOCATIONS.splice(index, 1);
-  return true;
+  return deleteLocationServer(id);
 }
 
 /**
- * Fetch location list using POST
+ * Fetch location list using POST (alias for getLocations)
  */
 export async function postLocationList(filter?: LocationFilter, page = 1, pageSize = 10): Promise<LocationResponse> {
-  const mockResult = await getLocations(filter, page, pageSize);
-  
-  const response = await httpService.post<LocationResponse>(
-    API_ENDPOINTS.LOCATION_LIST, 
-    { filter, page, pageSize },
-    { success: true, message: 'Success', code: 200, data: mockResult }
-  );
-  
-  return response.data;
+  return getLocationsServer(filter, page, pageSize);
 }

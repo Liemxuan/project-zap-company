@@ -249,13 +249,13 @@ const getHref = (item: string, theme: string, activeWorkspaceId?: string | null,
 
     // If we're in zap-auth workspace, try to detect merchant/lang prefix from current pathname
     let prefix = '';
-    if (activeWorkspaceId === 'zap-auth' && pathname) {
+    if ((activeWorkspaceId === 'merchant-admin' || activeWorkspaceId === 'zap-auth') && pathname) {
         const segments = pathname.split('/').filter(Boolean);
         // Pattern: /[merchant]/[lang]/...
         // Lang is usually 2 chars or matches en/vi/fr/ja
-        if (segments.length >= 1 && segments[0] !== 'auth' && segments[0] !== 'design') {
+        if (segments.length >= 2 && segments[0] !== 'auth' && segments[0] !== 'design') {
             // If second segment looks like a language code
-            if (segments.length >= 2 && ['en', 'vi', 'fr', 'ja', 'es'].includes(segments[1].toLowerCase())) {
+            if (['en', 'vi', 'fr', 'ja', 'es'].includes(segments[1].toLowerCase())) {
                 prefix = `/${segments[0]}/${segments[1]}`;
             }
         }
@@ -292,7 +292,7 @@ const getHref = (item: string, theme: string, activeWorkspaceId?: string | null,
             'Sign-in B': `/design/${theme}/organisms/signin-b`,
             'system logs': `/design/${theme}/organisms/system-logs-layout`,
             'Product List': `/design/${theme}/organisms/product-list`,
-            'Locations': `/design/${theme}/organisms/locations`,
+            'Locations': prefix ? `${prefix}/locations` : `/zap/en/locations`,
 
             // L5 Organisms — use theme path
             'Data Grid': `/design/${theme}/organisms/data-grid`,
@@ -308,15 +308,16 @@ const getHref = (item: string, theme: string, activeWorkspaceId?: string | null,
             'Signin': `/auth/${theme}/signin`,
             'Infrastructure': '/admin/infrastructure',
             'System Logs': `/design/${theme}/organisms/system-logs`,
+            'Product': prefix ? `${prefix}/products` : `/zap/en/products`,
+            'Category': prefix ? `${prefix}/categories` : `/zap/en/categories`,
+            'Unit': prefix ? `${prefix}/units` : `/zap/en/units`,
+            'Brand': prefix ? `${prefix}/brands` : `/zap/en/brands`,
+            
             'User Management': `/auth/${theme}/user-management`,
-            /* 
-            'Products List': prefix ? `${prefix}/products` : `/auth/${theme}/products`,
-            'Categories List': prefix ? `${prefix}/categories` : `/auth/${theme}/categories`,
-            'Brands List': prefix ? `${prefix}/brands` : `/auth/${theme}/brands`,
-            'Locations List': prefix ? `${prefix}/locations` : `/auth/${theme}/locations`,
-            'Dining Option': prefix ? `${prefix}/dining-options` : `/auth/${theme}/dining-options`,
-            */
             'Product Management': `/auth/${theme}/product-management`,
+            'Categories': `/auth/${theme}/categories`,
+            'Modifier Groups': prefix ? `${prefix}/modifier-groups` : `/zap/en/modifier-groups`,
+            'Units': `/auth/${theme}/units`,
             'Catalog Vault': `/auth/${theme}/catalog-vault`,
             'Brand Vault': `/auth/${theme}/brand-vault`,
 
@@ -543,15 +544,37 @@ const SideNavContent: React.FC<SideNavProps> = ({ showDevWrapper = false }) => {
                     { id: 'swarm', title: 'Swarm Metrics', icon: Box, items: ['Jobs', 'Agents', 'Registry'] }
                 ];
             }
-            if (activeWorkspaceId === 'zap-auth') {
+            if (activeWorkspaceId === 'merchant-admin' || activeWorkspaceId === 'zap-auth') {
                 return [
-                    /* 
-                    { id: 'auth-main', title: 'ZAP-AUTH MAIN', icon: Layout, items: ['Dashboard', 'Overview', 'Reports'] },
-                    { id: 'auth-products', title: 'PRODUCTS', icon: Box, items: ['Products List', 'Categories List', 'Brands List'] },
-                    { id: 'auth-location', title: 'LOCATION', icon: Database, items: ['Locations List', 'Dining Option'] },
-                    */
-                    { id: 'auth-main', title: 'ZAP-AUTH MAIN', icon: Layout, items: ['Dashboard', 'Overview', 'Reports', 'Product Management', 'Catalog Vault', 'Brand Vault'] },
-                    { id: 'auth-prefs', title: 'SYSTEM PREFERENCES', icon: Columns, items: ['User Management', 'Settings', 'Access Control'] }
+                    { 
+                        id: 'auth-main', 
+                        title: 'ZAP-AUTH MAIN', 
+                        icon: Layout, 
+                        items: [
+                            'Dashboard', 
+                            'Overview', 
+                            'Reports'
+                        ] 
+                    },
+                    {
+                        id: 'auth-inventory',
+                        title: 'CATALOG & INVENTORY',
+                        icon: Box,
+                        items: [
+                            'Product',
+                            'Category',
+                            'Unit',
+                            'Brand',
+                            'Locations',
+                            'Modifier Groups'
+                        ]
+                    },
+                    { 
+                        id: 'auth-prefs', 
+                        title: 'SYSTEM PREFERENCES', 
+                        icon: Columns, 
+                        items: ['User Management', 'Settings', 'Access Control'] 
+                    }
                 ];
             }
             if (activeWorkspaceId === 'zap-swarm') {

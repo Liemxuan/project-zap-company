@@ -152,8 +152,8 @@ export function getMockModifierGroups(
   }
 
   // Apply status filter
-  if (filter?.status) {
-    filtered = filtered.filter((group) => group.status === filter.status);
+  if (filter?.status && filter.status.length > 0) {
+    filtered = filtered.filter((group) => filter.status!.includes(group.status));
   }
 
   // Paginate

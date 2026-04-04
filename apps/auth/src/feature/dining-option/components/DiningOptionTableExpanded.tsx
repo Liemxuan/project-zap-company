@@ -53,18 +53,18 @@ function DiningOptionRow({
     <>
       <TableRow onClick={onToggle} className="cursor-pointer">
         {/* expand icon */}
-        <TableCell className="w-10 text-center py-4">
+        <TableCell className="px-7 w-12 py-2.5">
           <motion.div
             animate={{ rotate: expanded ? 180 : 0 }}
             transition={{ duration: 0.2 }}
-            className="inline-flex"
+            className="flex-shrink-0 w-4 cursor-pointer"
           >
-            <ChevronDown className="h-3 w-3 text-muted-foreground" />
+            <ChevronDown className="h-4 w-4 text-muted-foreground" />
           </motion.div>
         </TableCell>
 
         {/* id */}
-        <TableCell className="w-20 whitespace-nowrap text-left py-4 font-dev text-muted-foreground text-[11px]">
+        <TableCell className="w-16 whitespace-nowrap text-left py-2.5 font-dev text-muted-foreground text-[10px]">
           {diningOption.id}
         </TableCell>
 
@@ -77,17 +77,17 @@ function DiningOptionRow({
         </TableCell>
 
         {/* name */}
-        <TableCell className="min-w-[200px] whitespace-nowrap text-left py-4 font-medium text-[11px]">
+        <TableCell className="min-w-40 whitespace-nowrap text-left py-2.5 px-4 font-display font-bold text-sm">
           {diningOption.name}
         </TableCell>
 
         {/* type */}
-        <TableCell className="w-28 whitespace-nowrap text-left py-4 font-dev text-muted-foreground text-[11px]">
+        <TableCell className="w-28 whitespace-nowrap text-left py-4 text-muted-foreground text-sm font-body">
           {diningOption.type}
         </TableCell>
 
         {/* hours */}
-        <TableCell className="w-32 whitespace-nowrap text-left py-4 font-dev text-muted-foreground text-[11px]">
+        <TableCell className="w-32 whitespace-nowrap text-left py-4 text-muted-foreground text-sm font-body">
           {diningOption.availableHours}
         </TableCell>
 
@@ -299,7 +299,7 @@ export function DiningOptionTableExpanded({
   const activeFilters = filters.status.length;
   const hasActiveFilter = activeFilters > 0 || searchQuery.trim() !== '';
 
-  const totalPages = Math.ceil(totalRecords / pageSize);
+  const totalPages = Math.max(1, Math.ceil(totalRecords / pageSize));
 
   const paginationItems = useMemo(() => {
     const items = [];
@@ -374,14 +374,14 @@ export function DiningOptionTableExpanded({
         <Table>
               <TableHeader className="bg-layer-panel top-0 z-10 sticky border-b border-border shadow-sm h-12">
                 <TableRow className="border-b-0 hover:bg-transparent">
-                  <TableHead className="w-10 text-center bg-layer-panel h-12"></TableHead>
-                  <TableHead className="w-20 text-left bg-layer-panel font-display font-semibold text-[10px] h-12" style={{ textTransform: 'lowercase' }}>id</TableHead>
-                  <TableHead className="w-20 text-center bg-layer-panel font-display font-semibold text-[10px] h-12" style={{ textTransform: 'lowercase' }}>image</TableHead>
-                  <TableHead className="text-left bg-layer-panel font-display font-semibold text-[10px] h-12" style={{ textTransform: 'lowercase' }}>name</TableHead>
-                  <TableHead className="w-28 text-left bg-layer-panel font-display font-semibold text-[10px] h-12" style={{ textTransform: 'lowercase' }}>type</TableHead>
-                  <TableHead className="w-32 text-left bg-layer-panel font-display font-semibold text-[10px] h-12" style={{ textTransform: 'lowercase' }}>hours</TableHead>
-                  <TableHead className="w-28 text-center bg-layer-panel font-display font-semibold text-[10px] h-12" style={{ textTransform: 'lowercase' }}>status</TableHead>
-                  <TableHead className="w-16 text-right bg-layer-panel font-display font-semibold text-[10px] h-12" style={{ textTransform: 'lowercase' }}>actions</TableHead>
+                  <TableHead className="w-12 px-7 bg-layer-panel h-12"></TableHead>
+                  <TableHead className="w-20 text-left bg-layer-panel font-display font-black text-[10px] h-12 text-transform-primary uppercase tracking-[0.1em]">{t('table_id', 'id')}</TableHead>
+                  <TableHead className="w-20 text-center bg-layer-panel font-display font-black text-[10px] h-12 text-transform-primary uppercase tracking-[0.1em]">{t('table_image', 'image')}</TableHead>
+                  <TableHead className="text-left bg-layer-panel font-display font-black text-[10px] h-12 text-transform-primary uppercase tracking-[0.1em] px-4">{t('table_name', 'name')}</TableHead>
+                  <TableHead className="w-28 text-left bg-layer-panel font-display font-black text-[10px] h-12 text-transform-primary uppercase tracking-[0.1em]">{t('table_type', 'type')}</TableHead>
+                  <TableHead className="w-32 text-left bg-layer-panel font-display font-black text-[10px] h-12 text-transform-primary uppercase tracking-[0.1em]">{t('table_hours', 'hours')}</TableHead>
+                  <TableHead className="w-28 text-center bg-layer-panel font-display font-black text-[10px] h-12 text-transform-primary uppercase tracking-[0.1em]">{t('table_status', 'status')}</TableHead>
+                  <TableHead className="w-16 text-right bg-layer-panel font-display font-black text-[10px] h-12 text-transform-primary uppercase tracking-[0.1em]">{t('table_actions', 'actions')}</TableHead>
                 </TableRow>
               </TableHeader>
           <TableBody>
@@ -470,7 +470,7 @@ export function DiningOptionTableExpanded({
                     <PaginationPrevious
                       onClick={() => onPageChange(Math.max(1, currentPage - 1))}
                       className={cn(
-                        'h-8 px-3 rounded-full hover:bg-layer-canvas text-on-surface/80 hover:text-on-surface lowercase font-body transition-colors',
+                        'h-8 px-3 rounded-full hover:bg-layer-canvas text-on-surface/80 hover:text-on-surface font-body transition-colors',
                         currentPage === 1 && 'pointer-events-none opacity-40'
                       )}
                     >
@@ -505,7 +505,7 @@ export function DiningOptionTableExpanded({
                     <PaginationNext
                       onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}
                       className={cn(
-                        'h-8 px-3 rounded-full hover:bg-layer-canvas text-on-surface/80 hover:text-on-surface lowercase font-body transition-colors',
+                        'h-8 px-3 rounded-full hover:bg-layer-canvas text-on-surface/80 hover:text-on-surface font-body transition-colors',
                         currentPage === totalPages && 'pointer-events-none opacity-40'
                       )}
                     >
