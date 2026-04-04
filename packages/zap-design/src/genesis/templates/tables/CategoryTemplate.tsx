@@ -15,6 +15,8 @@ import { Icon } from '../../atoms/icons/Icon';
 import { SideNav } from '../../molecules/navigation/SideNav';
 import { ThemeHeader } from '../../molecules/layout/ThemeHeader';
 import { Inspector } from '../../../zap/layout/Inspector';
+import { Avatar } from '@/genesis/atoms/status/avatars';
+import { Checkbox } from '@/genesis/atoms/interactive/checkbox';
 
 export interface Category {
     id: string;
@@ -68,6 +70,32 @@ export default function CategoryTemplate() {
 
     const columns = React.useMemo<ColumnDef<ListItem>[]>(() => [
         {
+            id: "select",
+            header: ({ table }) => (
+                <div className="w-12 px-7">
+                    <Checkbox
+                        checked={
+                            table.getIsAllPageRowsSelected() ||
+                            (table.getIsSomePageRowsSelected() && "indeterminate")
+                        }
+                        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+                        aria-label="Select all"
+                        className="translate-y-0.5"
+                    /></div>
+            ),
+            cell: ({ row }) => (
+                <div className="w-12 px-7">
+                    <Checkbox
+                        checked={row.getIsSelected()}
+                        onCheckedChange={(value) => row.toggleSelected(!!value)}
+                        aria-label="Select row"
+                        className="translate-y-0.5"
+                    /></div>
+            ),
+            enableSorting: false,
+            enableHiding: false,
+        },
+        {
             id: "expander",
             header: () => <div className="w-12 px-7" />,
             cell: ({ row }) => (
@@ -96,7 +124,14 @@ export default function CategoryTemplate() {
             cell: ({ row }) => (
                 <div className="w-80 py-2.5 text-left">
                     <div className="flex items-center gap-4">
-                        <img src={row.original.media_url} alt={row.original.variant_name} className="w-10 h-10 object-cover rounded-full border-[1.5px] border-border shrink-0" />
+                        {/* <img src={row.original.media_url} alt={row.original.variant_name} className="w-10 h-10 object-cover rounded-full border-[1.5px] border-border shrink-0" /> */}
+                        <div className="w-10 h-10 flex items-center justify-center shrink-0 overflow-hidden">
+                            <Avatar src={row.original.media_url}
+                                className="w-full h-full object-cover border-[1px] border-border"
+                                initials={row.original.variant_name.split(' ').map(n => n[0]).join('')}
+                                size="sm"
+                            />
+                        </div>
                         <div className="flex flex-col min-w-0">
                             <span className="font-semibold text-foreground text-sm truncate">{row.original.variant_name}</span>
                             <span className="font-dev font-normal text-xs text-muted-foreground uppercase tracking-wide truncate mt-0.5">{row.original.sku_code}</span>
@@ -116,7 +151,7 @@ export default function CategoryTemplate() {
                 </div>
             ),
             cell: ({ row }) => (
-                <div className="w-32 truncate text-muted-foreground text-left py-2.5">
+                <div className="w-32 truncate font-dev text-transform-tertiary text-muted-foreground text-left py-2.5">
                     {row.original.category_id}
                 </div>
             ),
