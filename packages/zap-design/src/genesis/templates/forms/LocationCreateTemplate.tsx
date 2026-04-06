@@ -1,185 +1,309 @@
-import { useTheme } from '../../../components/ThemeContext';
-import { ComponentSandboxTemplate } from '../../../zap/layout/ComponentSandboxTemplate';
-import { CanvasDesktop } from '../../../components/dev/CanvasDesktop';
-import { ThemeHeader } from '../../molecules/layout/ThemeHeader';
-import { SideNav } from '../../molecules/navigation/SideNav';
-import { Save, X } from "lucide-react";
-import { useSearchParams } from 'next/navigation';
+'use client';
+
+import React, { useState } from 'react';
+import { X, ExternalLink, Pencil } from 'lucide-react';
 import { Button } from '../../atoms/interactive/button';
-import { Input } from '../../atoms/interactive/input';
+import { Input } from '../../atoms/interactive/inputs';
 import { Textarea } from '../../atoms/interactive/textarea';
 import { Label } from '../../atoms/interactive/label';
+import { Checkbox } from '../../atoms/interactive/checkbox';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '../../atoms/interactive/select';
+import { Heading } from '../../atoms/typography/headings';
+/* ────────────────────────────────────────────────────────
+ * LocationCreateTemplate
+ * Matches the "Location details" reference — single-column
+ * form, no sidebar, top bar with X + Save.
+ * L1→L6 tokens throughout, zero hardcoded hex.
+ * ──────────────────────────────────────────────────────── */
 
-/**
- * Location Create Template
- * References the "Remix of Location Admin" aesthetic (Tonal Layering, No-Line rule, Inter/Manrope).
- */
+/* ── Section heading ── */
+function SectionHeading({ title, description }: { title: string; description?: string }) {
+    return (
+        <div className="space-y-1">
+            <h2 className="font-display text-transform-primary text-base font-semibold text-foreground">{title}</h2>
+            {description && (
+                <p className="font-body text-transform-secondary text-xs text-muted-foreground leading-relaxed">{description}</p>
+            )}
+        </div>
+    );
+}
+
+/* ── Field label ── */
+function FieldLabel({ children, trailing }: { children: React.ReactNode; trailing?: React.ReactNode }) {
+    return (
+        <div className="flex items-center justify-between mb-1.5">
+            <Label className="block font-body text-sm font-medium tracking-wide text-transform-secondary text-muted-foreground">
+                {children}
+            </Label>
+            {trailing}
+        </div>
+    );
+}
+
+/* ── Business-hours row ── */
+function HoursRow({ day, defaultEnabled = false, open, close }: { day: string; defaultEnabled?: boolean; open?: string; close?: string }) {
+    const [enabled, setEnabled] = useState(defaultEnabled);
+    return (
+        <div className="flex items-center gap-3 py-2">
+            <Checkbox checked={enabled} onCheckedChange={(v) => setEnabled(!!v)} className="shrink-0" />
+            <span className="font-body text-transform-secondary text-sm text-foreground w-24">{day}</span>
+            <div className="flex items-center gap-2 flex-1">
+                <Input
+                    type="time"
+                    variant='outlined'
+                    defaultValue={enabled ? (open ?? '09:00 AM') : undefined}
+                    placeholder="Closed"
+                    disabled={!enabled}
+                    className="w-32 text-center text-xs bg-white"
+                />
+                <Input
+                    type="time"
+                    variant='outlined'
+                    defaultValue={enabled ? (close ?? '08:00 PM') : undefined}
+                    placeholder="Closed"
+                    disabled={!enabled}
+                    className="w-32 text-center text-xs bg-white"
+                />
+            </div>
+        </div>
+    );
+}
+
 export default function LocationCreateTemplate({ onCancel }: { onCancel?: () => void }) {
-    const { theme: appTheme } = useTheme();
-    const activeTheme = appTheme === 'core' ? 'core' : 'metro';
-    const searchParams = useSearchParams();
-    const isFullscreen = searchParams.get('fullscreen') === 'true';
+    return (
+        <div className="flex-1 flex flex-col min-w-0 bg-layer-cover relative">
+            {/* ── Top Bar ── */}
+            <div className="flex items-center justify-between px-5 py-3 border-b border-outline-variant/40 bg-gray-50 shrink-0">
+                <button onClick={onCancel} className="h-8 w-8 flex items-center justify-center rounded-full hover:bg-surface-variant/60 transition-colors text-foreground">
+                    <X size={18} />
+                </button>
+                <Heading level={4}>Location details</Heading>
+                <Button variant="primary" size="sm" className="font-display text-transform-primary text-xs h-8 px-5 rounded-lg shadow-sm">
+                    Save
+                </Button>
+            </div>
 
-    const formContent = (
-        <div className="flex-1 flex flex-col min-w-0 bg-layer-base/50 relative">
-            <ThemeHeader
-                breadcrumb="facilities / locations"
-                title="LOCATION DETAILS"
-                badge="Add a new location to your organization"
-                showBackground={false}
-                rightSlot={
-                    <div className="flex items-center gap-3">
-                        <Button variant="ghost" size="sm" onClick={onCancel} className="font-dev text-transform-tertiary text-muted-foreground uppercase tracking-widest text-[10px]">
-                            <X size={14} className="mr-1.5" /> Cancel
-                        </Button>
-                        <Button size="sm" className="bg-primary hover:bg-primary/90 text-white font-dev uppercase tracking-widest text-[10px] h-8 px-4 border-none shadow-md rounded-[8px]">
-                            <Save size={14} className="mr-1.5" /> Save Location
-                        </Button>
-                    </div>
-                }
-            />
+            {/* ── Scrollable Form ── */}
+            <div className="flex-1 overflow-auto px-6 md:px-10 py-8 bg-layer-cover bg-white">
+                <div className="w-full max-w-lg mx-auto space-y-10 pb-20">
 
-            {/* Form Content - Tonal Layering & No-line aesthetic */}
-            <div className="flex-1 overflow-auto p-12 flex justify-center bg-[#F7FBEF]">
-                <div className="w-full max-w-4xl space-y-8 pb-20">
-                    <div className="mb-10">
-                        <h1 className="font-display text-4xl font-bold text-[#570013] tracking-tight">Create Location</h1>
-                        <p className="font-sans text-sm text-[#4F6354] mt-2">Add a new facility to operations.</p>
-                    </div>
-
-                    {/* General Information Section */}
-                    <div className="bg-[#EBEFE3] p-8 rounded-[12px] space-y-6">
-                        <h2 className="font-display text-xl font-semibold text-[#181D16]">General Information</h2>
-
-                        <div className="bg-[#FFFFFF] p-6 rounded-[8px] space-y-5 shadow-[0px_12px_32px_rgba(24,29,22,0.04)]">
+                    {/* ━━ 1. Basic Information ━━ */}
+                    <section className="space-y-4">
+                        <SectionHeading
+                            title="Basic Information"
+                            description="Help customers recognize your transactions with your store's location, nickname and a brief description of your products or services."
+                        />
+                        <div className="space-y-4">
                             <div>
-                                <Label className="block font-sans text-[11px] font-semibold tracking-wide uppercase text-[#4F6354] mb-2">Location Name</Label>
-                                <Input type="text" placeholder="E.g., Downtown Distribution Center" />
+                                <FieldLabel trailing={<span className="text-primary text-[10px] font-medium cursor-pointer hover:underline">What is this?</span>}>
+                                    Location business name
+                                </FieldLabel>
+                                <Input variant='outlined' type="text" placeholder="Modistry" />
                             </div>
-
-                            <div className="grid grid-cols-2 gap-5">
-                                <div>
-                                    <Label className="block font-sans text-[11px] font-semibold tracking-wide uppercase text-[#4F6354] mb-2">Location Code</Label>
-                                    <Input placeholder="LOC-0000" />
+                            <div>
+                                <FieldLabel>Location nickname</FieldLabel>
+                                <Input variant='outlined' type="text" placeholder="" trailingIcon="error" />
+                            </div>
+                            <p className="text-[10px] font-body text-transform-secondary text-muted-foreground leading-relaxed">
+                                Your Location Business Name can be changed for free every 90 months. Changing your location business name does not give you access to a Google Plus identity. If you want to make a change out of the timeline, please{' '}
+                                <span className="text-primary font-medium underline cursor-pointer">contact Support</span>.
+                            </p>
+                            <div>
+                                <FieldLabel>Business description</FieldLabel>
+                                <Textarea rows={4} placeholder="" className='bg-white' />
+                                <div className="flex justify-end mt-1">
+                                    <span className="text-[10px] text-muted-foreground font-body">0/400</span>
                                 </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* ━━ 2. Business Address ━━ */}
+                    <section className="space-y-4">
+                        <SectionHeading title="Business address" />
+                        <div className="space-y-4">
+                            <div>
+                                <FieldLabel>Location type</FieldLabel>
+                                <Select>
+                                    <SelectTrigger className="w-full bg-white">
+                                        <SelectValue placeholder="Physical location" />
+                                    </SelectTrigger>
+                                    <SelectContent className='bg-white'>
+                                        <SelectItem value="physical">Physical location</SelectItem>
+                                        <SelectItem value="virtual">Virtual / Online</SelectItem>
+                                        <SelectItem value="popup">Pop-up</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                            <div>
+                                <FieldLabel>Address line 1</FieldLabel>
+                                <Input variant='outlined' type="text" placeholder="" />
+                            </div>
+                            <div>
+                                <FieldLabel>Address line 2</FieldLabel>
+                                <Input variant='outlined' type="text" placeholder="" />
+                            </div>
+                            <div>
+                                <FieldLabel>City</FieldLabel>
+                                <Input variant='outlined' type="text" placeholder="" />
+                            </div>
+                            <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <Label className="block font-sans text-[11px] font-semibold tracking-wide uppercase text-[#4F6354] mb-2">Status</Label>
+                                    <FieldLabel>Province</FieldLabel>
                                     <Select>
-                                        <SelectTrigger className="w-full h-[length:var(--input-height,36px)]">
-                                            <SelectValue placeholder="Select Status..." />
+                                        <SelectTrigger className="w-full bg-white">
+                                            <SelectValue placeholder="" />
                                         </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="active">Active</SelectItem>
-                                            <SelectItem value="renovation">Renovation</SelectItem>
+                                        <SelectContent className='bg-white'>
+                                            <SelectItem value="hcm">Ho Chi Minh</SelectItem>
+                                            <SelectItem value="hn">Hanoi</SelectItem>
                                         </SelectContent>
                                     </Select>
                                 </div>
-                            </div>
-
-                            <div>
-                                <Label className="block font-sans text-[11px] font-semibold tracking-wide uppercase text-[#4F6354] mb-2">Description</Label>
-                                <Textarea rows={4} placeholder="Detailed description of the product..." />
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Address Details Section */}
-                    <div className="bg-[#EBEFE3] p-8 rounded-[12px] space-y-6">
-                        <h2 className="font-display text-xl font-semibold text-[#181D16]">Address Details</h2>
-
-                        <div className="bg-[#FFFFFF] p-6 rounded-[8px] space-y-5 shadow-[0px_12px_32px_rgba(24,29,22,0.04)]">
-                            <div>
-                                <Label className="block font-sans text-[11px] font-semibold tracking-wide uppercase text-[#4F6354] mb-2">Street Address</Label>
-                                <Input type="text" placeholder="123 Storage Way" />
-                            </div>
-
-                            <div className="grid grid-cols-2 gap-5">
                                 <div>
-                                    <Label className="block font-sans text-[11px] font-semibold tracking-wide uppercase text-[#4F6354] mb-2">City</Label>
-                                    <Input type="text" placeholder="San Francisco" />
-                                </div>
-                                <div>
-                                    <Label className="block font-sans text-[11px] font-semibold tracking-wide uppercase text-[#4F6354] mb-2">Postal Code</Label>
-                                    <Input type="text" placeholder="94103" />
+                                    <FieldLabel>Postal code</FieldLabel>
+                                    <Input variant='outlined' type="text" placeholder="" />
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </section>
 
-                    {/* Contact Information Section */}
-                    <div className="bg-[#EBEFE3] p-8 rounded-[12px] space-y-6">
-                        <h2 className="font-display text-xl font-semibold text-[#181D16]">Contact Information</h2>
-
-                        <div className="bg-[#FFFFFF] p-6 rounded-[8px] shadow-[0px_12px_32px_rgba(24,29,22,0.04)] grid grid-cols-2 gap-x-5 gap-y-5 items-start">
-                            <div className="col-span-1">
-                                <Label className="block font-sans text-[11px] font-semibold tracking-wide uppercase text-[#4F6354] mb-2">Primary Phone</Label>
-                                <Input type="tel" placeholder="(555) 123-4567" />
+                    {/* ━━ 3. Contact Information ━━ */}
+                    <section className="space-y-4">
+                        <SectionHeading title="Contact Information" />
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <FieldLabel>Email</FieldLabel>
+                                <Input variant='outlined' type="email" placeholder="Email" />
                             </div>
-
-                            <div className="col-span-1">
-                                <Label className="block font-sans text-[11px] font-semibold tracking-wide uppercase text-[#4F6354] mb-2">Facility Manager</Label>
-                                <Input type="text" placeholder="Jane Doe" />
+                            <div>
+                                <FieldLabel>Phone</FieldLabel>
+                                <Input variant='outlined' type="tel" placeholder="Phone" />
                             </div>
                         </div>
-                    </div>
+                    </section>
+
+                    {/* ━━ 4. Social Contact ━━ */}
+                    <section className="space-y-4">
+                        <SectionHeading title="Social contact" />
+                        <div className="space-y-4">
+                            <div>
+                                <FieldLabel>Website</FieldLabel>
+                                <Input variant='outlined' type="url" placeholder="Website" />
+                            </div>
+                            <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <FieldLabel>X</FieldLabel>
+                                    <Input variant='outlined' type="text" placeholder="X" />
+                                </div>
+                                <div>
+                                    <FieldLabel>Instagram</FieldLabel>
+                                    <Input variant='outlined' type="text" placeholder="Instagram" />
+                                </div>
+                            </div>
+                            <div>
+                                <FieldLabel>Facebook</FieldLabel>
+                                <Input variant='outlined' type="text" placeholder="Facebook" />
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* ━━ 5. Branding ━━ */}
+                    <section className="space-y-4">
+                        <SectionHeading
+                            title="Branding"
+                            description="Customize your customer facing touchpoints like receipts, invoices, appointment booking flow, and checkout screens with your brand's color and logo."
+                        />
+                        <div className="flex items-center gap-4 p-4 bg-white rounded-[length:var(--radius-card,12px)] border border-outline-variant/30">
+                            <div className="h-10 w-10 rounded-lg bg-foreground flex items-center justify-center shrink-0">
+                                <span className="text-background text-lg">🏪</span>
+                            </div>
+                            <p className="font-display text-transform-primary text-sm font-semibold text-foreground flex-1">My Business</p>
+                            <button className="h-8 w-8 flex items-center justify-center rounded-full  hover:bg-surface-variant/60 transition-colors text-muted-foreground">
+                                <Pencil size={14} />
+                            </button>
+                        </div>
+                    </section>
+
+                    {/* ━━ 6. Business Hours ━━ */}
+                    <section className="space-y-4">
+                        <SectionHeading title="Business hours" />
+                        <div className="space-y-4">
+                            <div>
+                                <FieldLabel>Time Zone</FieldLabel>
+                                <Select>
+                                    <SelectTrigger className="w-full bg-white">
+                                        <SelectValue placeholder="Asia/Muscat (UTC+07:00)" />
+                                    </SelectTrigger>
+                                    <SelectContent className='bg-white'>
+                                        <SelectItem value="utc7">Asia/Ho_Chi_Minh (UTC+07:00)</SelectItem>
+                                        <SelectItem value="est">(GMT-05:00) Eastern Time</SelectItem>
+                                        <SelectItem value="pst">(GMT-08:00) Pacific Time</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                            <div>
+                                <SectionHeading
+                                    title="Regular hours"
+                                    description="Let your clients know when you're open."
+                                />
+                            </div>
+                            <div>
+                                <HoursRow day="Monday" />
+                                <HoursRow day="Tuesday" />
+                                <HoursRow day="Wednesday" />
+                                <HoursRow day="Thursday" />
+                                <HoursRow day="Friday" />
+                                <HoursRow day="Saturday" />
+                                <HoursRow day="Sunday" />
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* ━━ 7. Preferred Language ━━ */}
+                    <section className="space-y-4">
+                        <SectionHeading
+                            title="Preferred language"
+                            description="Set the language for Square emails and customer receipts."
+                        />
+                        <div>
+                            <FieldLabel>Select language</FieldLabel>
+                            <Select>
+                                <SelectTrigger className="w-full bg-white">
+                                    <SelectValue placeholder="English" />
+                                </SelectTrigger>
+                                <SelectContent className='bg-white'>
+                                    <SelectItem value="en">English</SelectItem>
+                                    <SelectItem value="vi">Vietnamese</SelectItem>
+                                    <SelectItem value="ja">Japanese</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
+                    </section>
+
+                    {/* ━━ 8. Match Items Library ━━ */}
+                    <section className="space-y-4">
+                        <SectionHeading
+                            title="Match items library from another location"
+                            description={`Matching another location's item library will configure all items, modifiers, taxes and everything found under your Item settings.`}
+                        />
+                        <div>
+                            <FieldLabel>Location</FieldLabel>
+                            <Select>
+                                <SelectTrigger className="w-full bg-white">
+                                    <SelectValue placeholder="" />
+                                </SelectTrigger>
+                                <SelectContent className='bg-white'>
+                                    <SelectItem value="loc1">Flagship LA</SelectItem>
+                                    <SelectItem value="loc2">NYC Hub</SelectItem>
+                                    <SelectItem value="loc3">Texas Fulfillment</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
+                    </section>
 
                 </div>
             </div>
         </div>
-    );
-
-    if (isFullscreen) {
-        return (
-            <div className="flex h-screen w-full bg-layer-canvas overflow-hidden font-sans">
-                {/* True Side Navigation */}
-                <SideNav />
-                {formContent}
-            </div>
-        );
-    }
-
-    return (
-        <ComponentSandboxTemplate
-            componentName="location-create"
-            tier="L6 LAYOUT"
-            status="In Progress"
-            filePath="src/genesis/templates/forms/LocationCreateTemplate.tsx"
-            importPath="@/genesis/templates/forms/LocationCreateTemplate"
-            hideDataTerminal={true}
-            fullWidth={true}
-        >
-            <div className="w-full flex-1 flex items-center justify-center pt-8">
-                <CanvasDesktop
-                    title="Locations // Create"
-                    fullScreenHref={`/design/${activeTheme}/organisms/location-create?fullscreen=true`}
-                >
-                    <div className="flex h-full w-full bg-layer-base overflow-hidden font-sans border border-border">
-                        {/* Mock Nav */}
-                        <div className="w-[240px] flex-shrink-0 border-r border-border bg-layer-panel hidden md:flex flex-col z-10 shadow-sm relative">
-                            <div className="h-14 border-b border-border flex items-center px-4 shrink-0 gap-2">
-                                <div className="w-6 h-6 rounded bg-primary flex items-center justify-center text-primary-foreground">
-                                    <span className="font-bold text-[10px]">ZP</span>
-                                </div>
-                                <span className="font-bold text-sm tracking-widest font-display text-on-surface uppercase">ZAP OS</span>
-                            </div>
-                            <div className="flex-1 py-4 px-3 space-y-1 uppercase font-mono text-[11px] tracking-widest text-on-surface opacity-70">
-                                <div className="px-3 py-2.5 rounded-md hover:bg-surface-variant/40 flex items-center gap-3 transition-colors cursor-pointer">
-                                    Overview
-                                </div>
-                                <div className="px-3 py-2.5 rounded-md hover:bg-surface-variant/40 flex items-center gap-3 transition-colors cursor-pointer">
-                                    Categories
-                                </div>
-                                <div className="px-3 py-2.5 rounded-md bg-primary/10 text-primary flex items-center gap-3 border border-primary/20 cursor-pointer">
-                                    Products
-                                </div>
-                            </div>
-                        </div>
-
-                        {formContent}
-                    </div>
-                </CanvasDesktop>
-            </div>
-        </ComponentSandboxTemplate>
     );
 }

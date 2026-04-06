@@ -45,7 +45,6 @@ const SystemLogsTable = dynamic(() => import('../zap/organisms/system-logs-table
 const SystemLogsTemplate = dynamic(() => import('../genesis/templates/tables/SystemLogsTemplate'), { ssr: false });
 const ListTable = dynamic(() => import('../zap/organisms/list-table').then(m => ({ default: m.ListTable })), { ssr: false });
 const ProductListTemplate = dynamic(() => import('../genesis/templates/tables/ProductListTemplate'), { ssr: false });
-const LocationsTable = dynamic(() => import('../zap/organisms/locations-table').then(m => ({ default: m.LocationsTable })), { ssr: false });
 const LocationsTemplate = dynamic(() => import('../genesis/templates/tables/LocationsTemplate'), { ssr: false });
 const UserManagementTable = dynamic(() => import('@/genesis/organisms/auth/UserManagementTable').then(m => ({ default: m.UserManagementTable })), { ssr: false });
 const Body = dynamic(() => import('../genesis/templates/body/BodyOrganism').then(m => ({ default: m.BodyOrganism })), { ssr: false });

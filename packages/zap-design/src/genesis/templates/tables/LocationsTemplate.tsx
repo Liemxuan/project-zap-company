@@ -9,7 +9,6 @@ import { Pill } from '../../atoms/status/pills';
 import { Button } from '../../atoms/interactive/button';
 import { ChevronDown, MoreHorizontal } from "lucide-react";
 import { motion } from "framer-motion";
-import { SAMPLE_LOCATIONS } from '../../../zap/organisms/locations-table';
 import { DataFilter, FilterGroup } from '../../molecules/data-filter';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../../molecules/accordion';
 import { Icon } from '../../atoms/icons/Icon';
@@ -18,12 +17,29 @@ import { ThemeHeader } from '../../molecules/layout/ThemeHeader';
 import { Inspector } from '../../../zap/layout/Inspector';
 import { Avatar } from '@/genesis/atoms/status/avatars';
 import LocationCreateTemplate from '../forms/LocationCreateTemplate';
+import { Checkbox } from '../../atoms/interactive/checkbox';
 
+import { ListEmpty } from '../../../zap/organisms/list-empty';
+import { Map, Plus } from 'lucide-react';
 /**
  * Locations (Layout) Showcase
  * Renders ListTable inside the L6 CanvasDesktop layout
  * Route: /design/[theme]/organisms/locations
  */
+
+export interface Location {
+    id: string; // ID
+    media_url: string; // Image
+    location_name: string; // Item Name
+    address: string; // Address
+    phone: string; // Phone
+    region: string; // Region
+    location_type: string; // Retail vs Warehouse
+    operating_hours: string; // Info
+    manager: string; // Info
+    status_id: string; // Status
+}
+
 export default function LocationsTemplate() {
     const { theme: appTheme, inspectorState, setInspectorState } = useTheme();
     const activeTheme = appTheme === 'core' ? 'core' : 'metro';
@@ -31,6 +47,68 @@ export default function LocationsTemplate() {
     const isFullscreen = searchParams.get('fullscreen') === 'true';
     const [isCreating, setIsCreating] = useState(false);
 
+    const SAMPLE_LOCATIONS: Location[] = [
+        {
+            id: "loc-1",
+            media_url: "https://images.unsplash.com/photo-1542038784456-1ea8e935640e?w=200&h=200&fit=crop",
+            location_name: "Flagship LA",
+            address: "123 Rodeo Drive, Beverly Hills, CA",
+            phone: "+1 (310) 555-0199",
+            region: "West Coast",
+            location_type: "Retail",
+            operating_hours: "10am - 8pm",
+            manager: "Sarah Jenkins",
+            status_id: "Active"
+        },
+        {
+            id: "loc-2",
+            media_url: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=200&h=200&fit=crop",
+            location_name: "NYC Hub",
+            address: "450 5th Ave, New York, NY",
+            phone: "+1 (212) 555-8842",
+            region: "East Coast",
+            location_type: "HQ",
+            operating_hours: "9am - 6pm",
+            manager: "Michael Chang",
+            status_id: "Active"
+        },
+        {
+            id: "loc-3",
+            media_url: "https://images.unsplash.com/photo-1586528116311-ad8ed7fc5117?w=200&h=200&fit=crop",
+            location_name: "Texas Fulfillment",
+            address: "9900 Logistics Way, Austin, TX",
+            phone: "+1 (512) 555-1122",
+            region: "South",
+            location_type: "Warehouse",
+            operating_hours: "24/7",
+            manager: "David Ross",
+            status_id: "Active"
+        },
+        {
+            id: "loc-4",
+            media_url: "https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=200&h=200&fit=crop",
+            location_name: "Seattle Downtown",
+            address: "400 Pine St, Seattle, WA",
+            phone: "+1 (206) 555-3344",
+            region: "West Coast",
+            location_type: "Retail",
+            operating_hours: "11am - 7pm",
+            manager: "Emma Watson",
+            status_id: "Renovation"
+        },
+        {
+            id: "loc-5",
+            media_url: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=200&h=200&fit=crop",
+            location_name: "Miami Popup",
+            address: "800 Ocean Dr, Miami Beach, FL",
+            phone: "+1 (305) 555-9090",
+            region: "South",
+            location_type: "Popup",
+            operating_hours: "12pm - 10pm",
+            manager: "Carlos Ruiz",
+            status_id: "Closed"
+        }
+    ];
     // Map Locations to generic ListItem
     const MAPPED_LOCATIONS: ListItem[] = SAMPLE_LOCATIONS.map(loc => ({
         id: loc.id,
@@ -47,6 +125,8 @@ export default function LocationsTemplate() {
         status_id: loc.status_id === 'Renovation' ? 'Hidden' : (loc.status_id === 'Closed' ? 'Out of Stock' : loc.status_id)
     }));
 
+
+
     const [filters, setFilters] = useState<Filters>({
         category: [],
         productType: [],
@@ -54,6 +134,32 @@ export default function LocationsTemplate() {
     });
 
     const columns = React.useMemo<ColumnDef<ListItem>[]>(() => [
+        {
+            id: "select",
+            header: ({ table }) => (
+                <div className="w-12 px-7">
+                    <Checkbox
+                        checked={
+                            table.getIsAllPageRowsSelected() ||
+                            (table.getIsSomePageRowsSelected() && "indeterminate")
+                        }
+                        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+                        aria-label="Select all"
+                        className="translate-y-0.5"
+                    /></div>
+            ),
+            cell: ({ row }) => (
+                <div className="w-12 px-7">
+                    <Checkbox
+                        checked={row.getIsSelected()}
+                        onCheckedChange={(value) => row.toggleSelected(!!value)}
+                        aria-label="Select row"
+                        className="translate-y-0.5"
+                    /></div>
+            ),
+            enableSorting: false,
+            enableHiding: false,
+        },
         {
             id: "expander",
             header: () => <div className="w-12 px-7" />,
@@ -391,6 +497,24 @@ export default function LocationsTemplate() {
                     />
 
                     <div className="flex-1 overflow-auto pt-8 px-4 lg:pt-11 lg:px-12 pb-16 flex flex-col relative z-0 bg-layer-base min-w-0">
+                        <ListEmpty
+                            icon={Map}
+                            title="No locations found"
+                            description="Get started by creating your first location."
+                            actions={[
+                                {
+                                    label: 'Add Location',
+                                    onClick: () => setIsCreating(true),
+                                    variant: 'outline',
+                                },
+                                {
+                                    label: 'Add Location',
+                                    onClick: () => setIsCreating(true),
+                                    icon: Plus,
+                                    variant: 'primary',
+                                },
+                            ]}
+                        />
                         {tableComponent}
                     </div>
                 </div>
