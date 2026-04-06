@@ -287,6 +287,7 @@ export interface ListTableProps {
   filters?: Filters;
   onFilterChange?: (filters: Filters) => void;
   onToggleFilters?: () => void;
+  onAddClick?: () => void;
   isFilterActive?: boolean;
   labels?: {
     addItem?: string;
@@ -305,6 +306,7 @@ export function ListTable({
   filters: controlledFilters,
   onFilterChange,
   onToggleFilters,
+  onAddClick,
   isFilterActive,
   labels = {},
   columns: externalColumns
@@ -599,9 +601,12 @@ export function ListTable({
               </Badge>
             )}
           </Button>
-          <Button variant="primary" size="sm" className="h-[var(--input-height,var(--button-height,48px))] px-6">
+          <Button variant="primary"
+            size="sm"
+            onClick={onAddClick}
+            className="h-[var(--input-height,var(--button-height,48px))] px-6">
             <Plus className="h-4 w-4 mr-2" />
-            <span className="font-display font-medium text-xs font-mono">{L.addItem}</span>
+            <span className="font-display font-medium text-xs text-transform-primary">{L.addItem}</span>
           </Button>
         </div>
       </div>
@@ -642,10 +647,10 @@ export function ListTable({
 
                         {/* Column Picker in the last header */}
                         {header.column.id === 'actions' && (
-                          <div className="absolute right-7 top-1/2 -translate-y-1/2">
+                          <div className="absolute right-0 top-1/2 -translate-y-1/2">
                             <Popover>
                               <PopoverTrigger asChild>
-                                <Button variant="ghost" size="sm" className="h-6 w-6 p-0 bg-surface hover:bg-surface-variant border border-border">
+                                <Button variant="ghost" size="sm" className="h-6 w-6 p-0 bg-surface hover:bg-surface-variant border border-border rounded-full">
                                   <Plus className="h-3 w-3" />
                                 </Button>
                               </PopoverTrigger>

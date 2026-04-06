@@ -775,7 +775,7 @@ const SideNavContent: React.FC<SideNavProps> = ({ showDevWrapper = false }) => {
                     <button
                         onClick={toggleSidebar}
                         title={isExpanded ? "Collapse Sidebar" : "Expand Sidebar"}
-                        className="px-1 py-0.5 text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/50 border border-outline rounded-[4px] flex items-center justify-center hover:scale-110 active:scale-95 transition-all duration-200 outline-none"
+                        className="px-1 py-0.5 text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/50 border border-outline rounded-[4px] flex items-center justify-center hover:scale-110 active:scale-95 transition-all duration-200 outline-none z-10"
                     >
                         <motion.div
                             animate={{ rotate: isExpanded ? 0 : 180 }}
