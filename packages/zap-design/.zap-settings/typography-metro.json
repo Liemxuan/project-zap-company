@@ -1,11 +1,11 @@
 {
   "theme": "metro",
-  "primaryFont": "var(--font-inter), sans-serif",
+  "primaryFont": "var(--font-roboto), sans-serif",
   "primaryTransform": "lowercase",
   "secondaryFont": "var(--font-inter), sans-serif",
   "secondaryTransform": "lowercase",
   "tertiaryFont": "var(--font-jetbrains), monospace",
   "tertiaryTransform": "lowercase",
   "components": {},
-  "updatedAt": "2026-04-02T08:56:36.366Z"
+  "updatedAt": "2026-04-06T08:10:50.225Z"
 }

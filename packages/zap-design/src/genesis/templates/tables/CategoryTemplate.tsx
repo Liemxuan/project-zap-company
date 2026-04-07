@@ -6,9 +6,9 @@ import { CanvasDesktop } from '../../../components/dev/CanvasDesktop';
 import { ListTable, ListItem, Filters } from '../../../zap/organisms/list-table';
 import { ColumnDef } from '@tanstack/react-table';
 import { Pill } from '../../atoms/status/pills';
-import { Button } from '../../atoms/interactive/button';
-import { ChevronDown, MoreHorizontal } from "lucide-react";
+import { ChevronDown, Pencil, Copy, Archive, Trash2 } from "lucide-react";
 import { motion } from "framer-motion";
+import { QuickActionsDropdown } from '../../molecules/quick-actions-dropdown';
 import { DataFilter, FilterGroup } from '../../molecules/data-filter';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../../molecules/accordion';
 import { Icon } from '../../atoms/icons/Icon';
@@ -17,6 +17,7 @@ import { ThemeHeader } from '../../molecules/layout/ThemeHeader';
 import { Inspector } from '../../../zap/layout/Inspector';
 import { Avatar } from '@/genesis/atoms/status/avatars';
 import { Checkbox } from '@/genesis/atoms/interactive/checkbox';
+
 
 export interface Category {
     id: string;
@@ -45,7 +46,6 @@ export default function CategoryTemplate() {
     const activeTheme = appTheme === 'core' ? 'core' : 'metro';
     const searchParams = useSearchParams();
     const isFullscreen = searchParams.get('fullscreen') === 'true';
-
     // Map Categories to generic ListItem
     const MAPPED_DATA: ListItem[] = SAMPLE_CATEGORIES.map(cat => ({
         id: cat.id,
@@ -197,12 +197,18 @@ export default function CategoryTemplate() {
         {
             id: "actions",
             header: () => <div className="w-24 pr-7" />,
-            cell: () => (
-                <div className="w-24 pr-7 py-2.5 text-right">
-                    <div className="flex items-center justify-end text-muted-foreground">
-                        <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                            <MoreHorizontal className="h-4 w-4" />
-                        </Button>
+            cell: ({ row }) => (
+                <div className="w-24 pr-7 py-2.5 text-right" onClick={e => e.stopPropagation()}>
+                    <div className="flex items-center justify-end">
+                        <QuickActionsDropdown
+                            label={row.original.variant_name}
+                            actions={[
+                                { label: 'Edit', icon: Pencil, onClick: () => {} },
+                                { label: 'Duplicate', icon: Copy, onClick: () => {} },
+                                { label: 'Archive', icon: Archive, onClick: () => {} },
+                                { label: 'Delete', icon: Trash2, onClick: () => {}, variant: 'destructive' },
+                            ]}
+                        />
                     </div>
                 </div>
             ),
@@ -274,7 +280,6 @@ export default function CategoryTemplate() {
             onFilterChange={setFilters}
             onToggleFilters={() => setInspectorState(inspectorState === 'expanded' ? 'collapsed' : 'expanded')}
             isFilterActive={inspectorState === 'expanded'}
-            //labels={labels}
             columns={columns}
         />
     );
@@ -313,7 +318,7 @@ export default function CategoryTemplate() {
     );
 
     const layoutContent = (
-        <div className="flex h-full w-full bg-layer-base overflow-hidden font-sans border border-border">
+        <div className="flex h-full w-full bg-layer-base overflow-hidden font-sans border border-border relative">
             {/* Nav */}
             <div className="w-[240px] flex-shrink-0 border-r border-border bg-layer-panel hidden md:flex flex-col z-10 shadow-sm relative">
                 <div className="h-14 border-b border-border flex items-center px-4 shrink-0 gap-2">

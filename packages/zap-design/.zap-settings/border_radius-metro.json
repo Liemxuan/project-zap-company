@@ -2,7 +2,7 @@
   "theme": "metro",
   "state": {
     "universal": {
-      "radius": "rounded-none",
+      "radius": "rounded-sm",
       "width": "border-0",
       "style": "border-none",
       "opacity": "100%"
@@ -55,5 +55,5 @@
       }
     }
   },
-  "updatedAt": "2026-03-29T09:55:23.818Z"
+  "updatedAt": "2026-04-06T03:18:26.993Z"
 }

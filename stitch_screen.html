@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Location Details | The Digital Curator</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-surface-variant": "#584141",
+                        "on-tertiary-fixed-variant": "#114d5b",
+                        "on-error": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "secondary-fixed": "#d2e8d5",
+                        "tertiary": "#002c36",
+                        "outline-variant": "#e0bfbf",
+                        "surface-tint": "#af2b3e",
+                        "secondary": "#4f6354",
+                        "surface-container-highest": "#e0e4d8",
+                        "surface-dim": "#d7dcd0",
+                        "on-secondary-container": "#536758",
+                        "inverse-primary": "#ffb3b5",
+                        "surface-container-low": "#f1f5e9",
+                        "inverse-surface": "#2d322a",
+                        "tertiary-fixed-dim": "#9acfde",
+                        "primary-container": "#800020",
+                        "on-secondary-fixed": "#0d1f14",
+                        "tertiary-fixed": "#b6ebfb",
+                        "secondary-container": "#cfe5d2",
+                        "surface-container-high": "#e6eade",
+                        "surface-bright": "#f7fbef",
+                        "on-secondary-fixed-variant": "#384b3d",
+                        "on-primary-fixed-variant": "#8e0f28",
+                        "on-tertiary-container": "#7cb0c0",
+                        "outline": "#8c7071",
+                        "surface-variant": "#e0e4d8",
+                        "on-primary-fixed": "#40000b",
+                        "on-tertiary-fixed": "#001f26",
+                        "surface-container-lowest": "#ffffff",
+                        "on-background": "#181d16",
+                        "error": "#ba1a1a",
+                        "surface-container": "#ebefe3",
+                        "on-tertiary": "#ffffff",
+                        "primary": "#570013",
+                        "on-primary": "#ffffff",
+                        "secondary-fixed-dim": "#b6ccba",
+                        "surface": "#f7fbef",
+                        "on-surface": "#181d16",
+                        "on-secondary": "#ffffff",
+                        "primary-fixed-dim": "#ffb3b5",
+                        "on-primary-container": "#ff828a",
+                        "tertiary-container": "#004451",
+                        "background": "#f7fbef",
+                        "primary-fixed": "#ffdada",
+                        "on-error-container": "#93000a",
+                        "inverse-on-surface": "#eef2e6"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #F7FBEF; color: #181D16; }
+        h1, h2, h3, .font-headline { font-family: 'Manrope', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        input:focus, textarea:focus, select:focus { outline: none; border-bottom: 2px solid #570013 !important; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #e0e4d8; border-radius: 10px; }
+    </style>
+</head>
+<body class="flex min-h-screen">
+<!-- SideNavBar -->
+<aside class="h-screen w-64 fixed left-0 top-0 flex flex-col bg-[#F1F5E9] dark:bg-stone-900 z-50 tonal-transition">
+<div class="px-6 py-8 flex flex-col gap-1">
+<div class="flex items-center gap-3 mb-8 px-3">
+<div class="w-10 h-10 rounded-lg bg-primary flex items-center justify-center text-white font-bold text-xl">P</div>
+<div>
+<div class="text-sm font-headline font-bold text-on-background">Inventory Pro</div>
+<div class="text-[11px] font-medium text-secondary">Global Admin</div>
+</div>
+</div>
+<nav class="flex flex-col gap-1">
+<a class="text-[#4F6354] dark:text-stone-400 mx-3 px-4 py-3 hover:bg-[#EBEFE3] dark:hover:bg-stone-800/50 rounded-lg transition-all flex items-center gap-3 font-inter text-[13px] font-medium" href="#">
+<span class="material-symbols-outlined">dashboard</span> Dashboard
+                </a>
+<a class="text-[#570013] dark:text-[#ffb3b6] font-semibold bg-[#FFFFFF] dark:bg-stone-800 rounded-lg shadow-sm mx-3 px-4 py-3 flex items-center gap-3 font-inter text-[13px] font-medium" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">location_on</span> Locations
+                </a>
+<a class="text-[#4F6354] dark:text-stone-400 mx-3 px-4 py-3 hover:bg-[#EBEFE3] dark:hover:bg-stone-800/50 rounded-lg transition-all flex items-center gap-3 font-inter text-[13px] font-medium" href="#">
+<span class="material-symbols-outlined">inventory_2</span> Inventory
+                </a>
+<a class="text-[#4F6354] dark:text-stone-400 mx-3 px-4 py-3 hover:bg-[#EBEFE3] dark:hover:bg-stone-800/50 rounded-lg transition-all flex items-center gap-3 font-inter text-[13px] font-medium" href="#">
+<span class="material-symbols-outlined">analytics</span> Reports
+                </a>
+<a class="text-[#4F6354] dark:text-stone-400 mx-3 px-4 py-3 hover:bg-[#EBEFE3] dark:hover:bg-stone-800/50 rounded-lg transition-all flex items-center gap-3 font-inter text-[13px] font-medium" href="#">
+<span class="material-symbols-outlined">group</span> Staff
+                </a>
+</nav>
+</div>
+<div class="mt-auto border-t border-secondary/10 px-6 py-6 flex flex-col gap-1">
+<a class="text-[#4F6354] dark:text-stone-400 mx-3 px-4 py-2 hover:bg-[#EBEFE3] dark:hover:bg-stone-800/50 rounded-lg transition-all flex items-center gap-3 font-inter text-[13px] font-medium" href="#">
+<span class="material-symbols-outlined">help</span> Support
+            </a>
+<a class="text-[#4F6354] dark:text-stone-400 mx-3 px-4 py-2 hover:bg-[#EBEFE3] dark:hover:bg-stone-800/50 rounded-lg transition-all flex items-center gap-3 font-inter text-[13px] font-medium" href="#">
+<span class="material-symbols-outlined">logout</span> Sign Out
+            </a>
+</div>
+</aside>
+<!-- Main Canvas -->
+<main class="flex-1 ml-64 bg-surface min-h-screen flex flex-col">
+<!-- TopNavBar -->
+<header class="bg-[#F7FBEF] dark:bg-stone-950 sticky top-0 z-40 border-b border-[#570013]/10 dark:border-white/5 flex justify-between items-center w-full px-8 py-3">
+<div class="flex items-center gap-6">
+<h1 class="text-xl font-bold text-[#570013] dark:text-[#ffb3b6] tracking-tighter font-headline">The Digital Curator</h1>
+<div class="h-6 w-[1px] bg-secondary/20"></div>
+<h2 class="font-headline text-lg font-semibold tracking-tight text-primary">Location details</h2>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex gap-2">
+<button class="p-2 rounded-full hover:bg-[#F1F5E9] transition-colors text-secondary">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 rounded-full hover:bg-[#F1F5E9] transition-colors text-secondary">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</div>
+<button class="px-6 py-2 bg-primary text-white font-semibold rounded-lg shadow-sm hover:opacity-90 transition-opacity">
+                    Save
+                </button>
+</div>
+</header>
+<!-- Content Area -->
+<div class="flex-1 p-8 max-w-4xl mx-auto w-full">
+<div class="space-y-12">
+<!-- Section 1: Basic Information -->
+<section class="space-y-6">
+<div>
+<h3 class="text-xl font-bold font-headline text-on-background">Basic Information</h3>
+<p class="text-sm text-on-secondary-container mt-1">Help customers recognize your transactions with your store's location, nickname and a brief description of your products or services.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="space-y-1">
+<label class="block text-xs font-semibold text-secondary uppercase tracking-wider">Location business name</label>
+<div class="relative">
+<input class="w-full bg-surface-container-low border-b-2 border-transparent p-3 rounded-t-lg transition-all font-body text-sm" placeholder="e.g., Curated Goods North" type="text"/>
+<a class="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-bold text-primary hover:underline" href="#">What is this?</a>
+</div>
+</div>
+<div class="space-y-1">
+<label class="block text-xs font-semibold text-secondary uppercase tracking-wider">Location nickname</label>
+<div class="relative">
+<input class="w-full bg-surface-container-low border-b-2 border-transparent p-3 rounded-t-lg transition-all font-body text-sm" placeholder="e.g., Downtown Loft" type="text"/>
+<span class="absolute right-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-sm text-secondary/60">info</span>
+</div>
+</div>
+<div class="md:col-span-2 space-y-1">
+<label class="block text-xs font-semibold text-secondary uppercase tracking-wider">Business description</label>
+<div class="relative">
+<textarea class="w-full bg-surface-container-low border-b-2 border-transparent p-3 rounded-t-lg transition-all font-body text-sm resize-none" placeholder="Describe the offerings of this specific location..." rows="4"></textarea>
+<div class="absolute bottom-2 right-3 text-[10px] font-mono text-secondary">0/1024</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 2: Business Address -->
+<section class="space-y-6">
+<h3 class="text-xl font-bold font-headline text-on-background">Business address</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="md:col-span-2 space-y-1">
+<label class="block text-xs font-semibold text-secondary uppercase tracking-wider">Location type</label>
+<select class="w-full bg-surface-container-low border-b-2 border-transparent p-3 rounded-t-lg transition-all font-body text-sm appearance-none">
+<option>Physical location</option>
+<option>Warehouse / Storage</option>
+<option>Pop-up / Event</option>
+</select>
+</div>
+<div class="md:col-span-2 space-y-1">
+<label class="block text-xs font-semibold text-secondary uppercase tracking-wider">Address line 1</label>
+<input class="w-full bg-surface-container-low border-b-2 border-transparent p-3 rounded-t-lg transition-all font-body text-sm" type="text"/>
+</div>
+<div class="md:col-span-2 space-y-1">
+<label class="block text-xs font-semibold text-secondary uppercase tracking-wider">Address line 2 (Optional)</label>
+<input class="w-full bg-surface-container-low border-b-2 border-transparent p-3 rounded-t-lg transition-all font-body text-sm" type="text"/>
+</div>
+<div class="space-y-1">
+<label class="block text-xs font-semibold text-secondary uppercase tracking-wider">City</label>
+<input class="w-full bg-surface-container-low border-b-2 border-transparent p-3 rounded-t-lg transition-all font-body text-sm" type="text"/>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="space-y-1">
+<label class="block text-xs font-semibold text-secondary uppercase tracking-wider">Province</label>
+<select class="w-full bg-surface-container-low border-b-2 border-transparent p-3 rounded-t-lg transition-all font-body text-sm">
+<option>Ontario</option>
+<option>Quebec</option>
+<option>British Columbia</option>
+</select>
+</div>
+<div class="space-y-1">
+<label class="block text-xs font-semibold text-secondary uppercase tracking-wider">Postal code</label>
+<input class="w-full bg-surface-container-low border-b-2 border-transparent p-3 rounded-t-lg transition-all font-body text-sm" type="text"/>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 3: Contact Information -->
+<section class="space-y-6">
+<h3 class="text-xl font-bold font-headline text-on-background">Contact Information</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="space-y-1">
+<label class="block text-xs font-semibold text-secondary uppercase tracking-wider">Email</label>
+<input class="w-full bg-surface-container-low border-b-2 border-transparent p-3 rounded-t-lg transition-all font-body text-sm" placeholder="contact@business.com" type="email"/>
+</div>
+<div class="space-y-1">
+<label class="block text-xs font-semibold text-secondary uppercase tracking-wider">Phone</label>
+<input class="w-full bg-surface-container-low border-b-2 border-transparent p-3 rounded-t-lg transition-all font-body text-sm" placeholder="+1 (000) 000-0000" type="tel"/>
+</div>
+</div>
+</section>
+<!-- Section 4: Social Contact -->
+<section class="space-y-6">
+<h3 class="text-xl font-bold font-headline text-on-background">Social contact</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="space-y-1">
+<label class="block text-xs font-semibold text-secondary uppercase tracking-wider">Website</label>
+<input class="w-full bg-surface-container-low border-b-2 border-transparent p-3 rounded-t-lg transition-all font-body text-sm" placeholder="https://" type="url"/>
+</div>
+<div class="space-y-1">
+<label class="block text-xs font-semibold text-secondary uppercase tracking-wider">X (formerly Twitter)</label>
+<input class="w-full bg-surface-container-low border-b-2 border-transparent p-3 rounded-t-lg transition-all font-body text-sm" placeholder="@handle" type="text"/>
+</div>
+<div class="space-y-1">
+<label class="block text-xs font-semibold text-secondary uppercase tracking-wider">Instagram</label>
+<input class="w-full bg-surface-container-low border-b-2 border-transparent p-3 rounded-t-lg transition-all font-body text-sm" placeholder="@handle" type="text"/>
+</div>
+<div class="space-y-1">
+<label class="block text-xs font-semibold text-secondary uppercase tracking-wider">Facebook</label>
+<input class="w-full bg-surface-container-low border-b-2 border-transparent p-3 rounded-t-lg transition-all font-body text-sm" placeholder="facebook.com/yourpage" type="text"/>
+</div>
+</div>
+</section>
+<!-- Section 5: Branding -->
+<section class="space-y-6">
+<div>
+<h3 class="text-xl font-bold font-headline text-on-background">Branding</h3>
+<p class="text-sm text-on-secondary-container mt-1">Customize your customer facing touchpoints like receipts, invoices, appointment booking flow, and checkout screens with your brand's color and logo.</p>
+</div>
+<div class="p-6 bg-surface-container-lowest rounded-xl flex items-center gap-6 border border-primary/5">
+<div class="w-24 h-24 bg-surface-container-low rounded-lg flex items-center justify-center relative group overflow-hidden">
+<img class="w-16 h-16 object-contain opacity-40" data-alt="minimalist modern business logo design with geometric shapes and soft muted colors on a clean background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCFOG-IQqPuko65LIcfkfpRJ6Tv8m9I7a9Art07U8iD9SPU5B6e4mdLjV92Xu8eLzi2vj860pExwh0ccGZOYjkLASE54anDBRmQLu5Ex-lFTEAj3T70zxqSRGQLGfm-nA-knWHxTdVMCJWsEUyr7wmTY4ObezcvS-ImEl1cV7EEwFcxEV-iUgyK_MHTqm6LtEaxnYoF1ZOTaCnOZZL8OpAdgknoxMKRepwnz2IB1ZqTg43imSx9YSeMI6aYGm9ZcpB_b0RHS4cqL09I"/>
+<button class="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+<span class="material-symbols-outlined text-white">edit</span>
+</button>
+</div>
+<div>
+<div class="text-lg font-bold font-headline text-primary">My Business</div>
+<div class="text-sm text-secondary">Preview of customer touchpoints</div>
+<button class="mt-3 text-sm font-semibold text-primary flex items-center gap-1 hover:underline">
+                                Edit brand assets <span class="material-symbols-outlined text-sm">open_in_new</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Section 6: Business Hours -->
+<section class="space-y-6">
+<h3 class="text-xl font-bold font-headline text-on-background">Business hours</h3>
+<div class="space-y-4">
+<div class="space-y-1">
+<label class="block text-xs font-semibold text-secondary uppercase tracking-wider">Time Zone</label>
+<select class="w-full md:w-1/2 bg-surface-container-low border-b-2 border-transparent p-3 rounded-t-lg transition-all font-body text-sm">
+<option>(GMT-05:00) Eastern Time (US &amp; Canada)</option>
+<option>(GMT-08:00) Pacific Time (US &amp; Canada)</option>
+</select>
+</div>
+<div class="bg-surface-container-low rounded-xl p-6 space-y-4">
+<!-- Monday -->
+<div class="flex items-center justify-between py-2">
+<div class="flex items-center gap-4 w-32">
+<input checked="" class="w-5 h-5 rounded border-secondary text-primary focus:ring-primary/20" type="checkbox"/>
+<span class="font-medium text-sm">Monday</span>
+</div>
+<div class="flex items-center gap-4">
+<input class="bg-surface-container-lowest border-none p-2 rounded text-sm focus:ring-1 focus:ring-primary" type="time" value="09:00"/>
+<span class="text-secondary">—</span>
+<input class="bg-surface-container-lowest border-none p-2 rounded text-sm focus:ring-1 focus:ring-primary" type="time" value="18:00"/>
+</div>
+</div>
+<!-- Friday (abbreviated for code brevity, repeating pattern) -->
+<div class="flex items-center justify-between py-2 border-t border-secondary/5">
+<div class="flex items-center gap-4 w-32">
+<input checked="" class="w-5 h-5 rounded border-secondary text-primary focus:ring-primary/20" type="checkbox"/>
+<span class="font-medium text-sm">Friday</span>
+</div>
+<div class="flex items-center gap-4">
+<input class="bg-surface-container-lowest border-none p-2 rounded text-sm focus:ring-1 focus:ring-primary" type="time" value="09:00"/>
+<span class="text-secondary">—</span>
+<input class="bg-surface-container-lowest border-none p-2 rounded text-sm focus:ring-1 focus:ring-primary" type="time" value="18:00"/>
+</div>
+</div>
+<!-- Saturday -->
+<div class="flex items-center justify-between py-2 border-t border-secondary/5 opacity-50">
+<div class="flex items-center gap-4 w-32">
+<input class="w-5 h-5 rounded border-secondary text-primary focus:ring-primary/20" type="checkbox"/>
+<span class="font-medium text-sm">Saturday</span>
+</div>
+<div class="flex items-center gap-4">
+<span class="text-sm font-medium italic text-secondary px-12">Closed</span>
+</div>
+</div>
+<!-- Sunday -->
+<div class="flex items-center justify-between py-2 border-t border-secondary/5 opacity-50">
+<div class="flex items-center gap-4 w-32">
+<input class="w-5 h-5 rounded border-secondary text-primary focus:ring-primary/20" type="checkbox"/>
+<span class="font-medium text-sm">Sunday</span>
+</div>
+<div class="flex items-center gap-4">
+<span class="text-sm font-medium italic text-secondary px-12">Closed</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 7: Preferred language -->
+<section class="space-y-6">
+<h3 class="text-xl font-bold font-headline text-on-background">Preferred language</h3>
+<div class="space-y-1">
+<label class="block text-xs font-semibold text-secondary uppercase tracking-wider">Select language</label>
+<select class="w-full md:w-1/2 bg-surface-container-low border-b-2 border-transparent p-3 rounded-t-lg transition-all font-body text-sm">
+<option>English</option>
+<option>French</option>
+<option>Spanish</option>
+</select>
+</div>
+</section>
+<!-- Section 8: Match item library -->
+<section class="space-y-6">
+<div>
+<h3 class="text-xl font-bold font-headline text-on-background">Match item library from another location</h3>
+<p class="text-sm text-on-secondary-container mt-1">Matching another location's item library will configure all items, modifiers, taxes and everything found under your Item settings.</p>
+</div>
+<div class="space-y-1">
+<label class="block text-xs font-semibold text-secondary uppercase tracking-wider">Location</label>
+<select class="w-full md:w-1/2 bg-surface-container-low border-b-2 border-transparent p-3 rounded-t-lg transition-all font-body text-sm">
+<option>Select a location to sync...</option>
+<option>North Flagship Store</option>
+<option>East Distribution Hub</option>
+</select>
+</div>
+</section>
+<!-- Footer Actions -->
+<div class="pt-12 pb-24 flex justify-end gap-4 border-t border-secondary/10">
+<button class="px-8 py-3 text-secondary font-bold hover:bg-secondary/5 transition-colors rounded-lg">Cancel</button>
+<button class="px-10 py-3 bg-primary text-white font-bold rounded-lg shadow-lg hover:shadow-xl hover:opacity-90 transition-all">Save Location</button>
+</div>
+</div>
+</div>
+</main>
+</body></html>

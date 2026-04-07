@@ -47,7 +47,7 @@
     "buttonPaddingY": "12px !important",
     "buttonIconGap": "8px !important",
     "buttonBorderWidth": "1px !important",
-    "buttonBorderRadius": "0px !important",
+    "buttonBorderRadius": "9999px !important",
     "buttonVariantStyle": "flat !important",
     "buttonVisualStyle": "outline !important",
     "avatarSizeSm": "30px !important",
@@ -197,5 +197,5 @@
     },
     "physics": {}
   },
-  "updatedAt": "2026-04-01T09:21:41.888Z"
+  "updatedAt": "2026-04-06T03:23:53.761Z"
 }

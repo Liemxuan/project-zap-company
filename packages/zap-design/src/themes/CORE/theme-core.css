@@ -10,7 +10,7 @@
     --button-padding-y: 12px;
     --button-icon-gap: 8px;
     --button-border-width: 1px;
-    --button-border-radius: 0px;
+    --button-border-radius: 9999px;
     --button-variant-style: flat;
     --button-visual-style: outline;
     --button-color: primary;
