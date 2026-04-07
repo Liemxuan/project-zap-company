@@ -299,6 +299,7 @@ export interface ListTableProps {
     price?: string;
   };
   columns?: ColumnDef<ListItem>[];
+  onRowClick?: (item: ListItem) => void;
 }
 
 export function ListTable({
@@ -309,7 +310,8 @@ export function ListTable({
   onAddClick,
   isFilterActive,
   labels = {},
-  columns: externalColumns
+  columns: externalColumns,
+  onRowClick,
 }: ListTableProps) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -688,7 +690,10 @@ export function ListTable({
                 {table.getRowModel().rows.length > 0 ? (
                   table.getRowModel().rows.map((row) => (
                     <React.Fragment key={row.id}>
-                      <TableRow className="group hover:bg-surface-variant/50 focus:bg-surface-variant/70 border-b border-border/50 transition-colors">
+                      <TableRow
+                        className="group hover:bg-surface-variant/50 focus:bg-surface-variant/70 border-b border-border/50 transition-colors cursor-pointer"
+                        onClick={() => onRowClick?.(row.original)}
+                      >
                         {row.getVisibleCells().map((cell) => (
                           <TableCell key={cell.id} className="p-0">
                             {flexRender(cell.column.columnDef.cell, cell.getContext())}

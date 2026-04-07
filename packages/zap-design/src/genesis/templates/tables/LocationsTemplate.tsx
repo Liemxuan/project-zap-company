@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useTheme } from '../../../components/ThemeContext';
 import { ComponentSandboxTemplate } from '../../../zap/layout/ComponentSandboxTemplate';
@@ -7,8 +7,8 @@ import { ListTable, ListItem, Filters } from '../../../zap/organisms/list-table'
 import { ColumnDef } from '@tanstack/react-table';
 import { Pill } from '../../atoms/status/pills';
 import { Button } from '../../atoms/interactive/button';
-import { ChevronDown, MoreHorizontal } from "lucide-react";
-import { motion } from "framer-motion";
+import { ChevronDown, X } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import { DataFilter, FilterGroup } from '../../molecules/data-filter';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../../molecules/accordion';
 import { Icon } from '../../atoms/icons/Icon';
@@ -26,6 +26,26 @@ import { Map, Plus } from 'lucide-react';
  * Renders ListTable inside the L6 CanvasDesktop layout
  * Route: /design/[theme]/organisms/locations
  */
+
+/* ── Detail panel key-value row ── */
+function DetailRow({ label, value }: { label: string; value: string }) {
+    return (
+        <div className="flex items-center justify-between py-2.5 border-b border-outline-variant/30 last:border-b-0">
+            <span className="font-display text-transform-primary text-sm font-medium text-foreground">{label}</span>
+            <span className="font-body text-transform-secondary text-sm text-muted-foreground text-right">{value || '\u2014'}</span>
+        </div>
+    );
+}
+
+/* ── Business hours detail row ── */
+function HoursDetailRow({ day, value }: { day: string; value: string }) {
+    return (
+        <div className="flex items-center justify-between py-2.5 border-b border-outline-variant/30 last:border-b-0">
+            <span className="font-display text-transform-primary text-sm font-semibold text-foreground">{day}</span>
+            <span className={`font-body text-transform-secondary text-sm ${value === 'Closed' ? 'text-muted-foreground' : 'text-foreground'}`}>{value}</span>
+        </div>
+    );
+}
 
 export interface Location {
     id: string; // ID
@@ -46,6 +66,7 @@ export default function LocationsTemplate() {
     const searchParams = useSearchParams();
     const isFullscreen = searchParams.get('fullscreen') === 'true';
     const [isCreating, setIsCreating] = useState(false);
+    const [selectedLocation, setSelectedLocation] = useState<Location | null>(null);
 
     const SAMPLE_LOCATIONS: Location[] = [
         {
@@ -259,19 +280,6 @@ export default function LocationsTemplate() {
                 </div>
             ),
         },
-        {
-            id: "actions",
-            header: () => <div className="w-24 pr-7" />,
-            cell: () => (
-                <div className="w-24 pr-7 py-2.5 text-right">
-                    <div className="flex items-center justify-end text-muted-foreground">
-                        <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                            <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                    </div>
-                </div>
-            ),
-        },
     ], []);
 
     // Derive filter groups from the MAPPED_LOCATIONS
@@ -360,6 +368,11 @@ export default function LocationsTemplate() {
         </div>
     );
 
+    const handleRowClick = useCallback((row: ListItem) => {
+        const loc = SAMPLE_LOCATIONS.find(l => l.id === row.id) ?? null;
+        setSelectedLocation(loc);
+    }, []);
+
     const tableComponent = (
         <ListTable
             initialItems={MAPPED_LOCATIONS}
@@ -368,13 +381,89 @@ export default function LocationsTemplate() {
             onToggleFilters={() => setInspectorState(inspectorState === 'expanded' ? 'collapsed' : 'expanded')}
             isFilterActive={inspectorState === 'expanded'}
             labels={labels}
-            columns={columns} // Use custom columns
+            columns={columns}
             onAddClick={() => setIsCreating(true)}
+            onRowClick={handleRowClick}
         />
     );
 
+    /* ── Detail Panel (right side) ── */
+    const detailPanel = (
+        <AnimatePresence>
+            {selectedLocation && (
+                <>
+                    <motion.div
+                        key="detail-backdrop"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="absolute inset-0 bg-black/30 z-10 hidden md:block"
+                        onClick={() => setSelectedLocation(null)}
+                    />
+                <motion.div
+                    key="detail-panel"
+                    initial={{ width: 0, opacity: 0 }}
+                    animate={{ width: 380, opacity: 1 }}
+                    exit={{ width: 0, opacity: 0 }}
+                    transition={{ duration: 0.25, ease: 'easeInOut' }}
+                    className="h-full border-l border-border bg-layer-panel hidden md:flex flex-col shrink-0 z-20 relative overflow-hidden"
+                >
+                    <div className="flex flex-col h-full w-[380px] overflow-y-auto">
+                        {/* Header */}
+                        <div className="flex items-center justify-between px-5 py-4 shrink-0">
+                            <button
+                                onClick={() => setSelectedLocation(null)}
+                                className="h-8 w-8 flex items-center justify-center rounded-full hover:bg-surface-variant/60 transition-colors text-foreground"
+                            >
+                                <X size={16} />
+                            </button>
+                            <Button variant="primary" size="sm" className="font-display text-transform-primary text-xs h-8 px-5 rounded-lg shadow-sm">
+                                Edit location
+                            </Button>
+                        </div>
+
+                        {/* Location Name */}
+                        <div className="px-6 pt-2 pb-4">
+                            <h2 className="font-display text-transform-primary text-lg font-semibold text-foreground">{selectedLocation.location_name}</h2>
+                            <p className="font-body text-transform-secondary text-sm text-muted-foreground mt-0.5">{selectedLocation.location_name}</p>
+                        </div>
+
+                        {/* Location Details */}
+                        <div className="px-6 pb-6 space-y-1">
+                            <h3 className="font-display text-transform-primary text-sm font-semibold text-foreground mb-3">Location details</h3>
+                            <DetailRow label="Nickname" value={selectedLocation.location_name} />
+                            <DetailRow label="Location type" value={selectedLocation.location_type} />
+                            <DetailRow label="Address" value={selectedLocation.address} />
+                            <DetailRow label="Location" value={selectedLocation.region} />
+                            <DetailRow label="Phone" value={selectedLocation.phone} />
+                            <DetailRow label="Email" value="" />
+                            <DetailRow label="Preferred language" value="English" />
+                        </div>
+
+                        {/* Separator */}
+                        <div className="border-t border-outline-variant/40 mx-6" />
+
+                        {/* Business Hours */}
+                        <div className="px-6 py-6 space-y-1">
+                            <h3 className="font-display text-transform-primary text-sm font-semibold text-foreground mb-3">Business hours</h3>
+                            <HoursDetailRow day="Monday" value={selectedLocation.operating_hours} />
+                            <HoursDetailRow day="Tuesday" value="Closed" />
+                            <HoursDetailRow day="Wednesday" value="Closed" />
+                            <HoursDetailRow day="Thursday" value="Closed" />
+                            <HoursDetailRow day="Friday" value="Closed" />
+                            <HoursDetailRow day="Saturday" value="Closed" />
+                            <HoursDetailRow day="Sunday" value="Closed" />
+                        </div>
+                    </div>
+                </motion.div>
+                </>
+            )}
+        </AnimatePresence>
+    );
+
     const layoutContent = (
-        <div className="flex h-full w-full bg-layer-base overflow-hidden font-sans border border-border">
+        <div className="flex h-full w-full bg-layer-base overflow-hidden font-sans border border-border relative">
             {/* Fake Side Navigation */}
             <div className="w-[240px] flex-shrink-0 border-r border-border bg-layer-panel hidden md:flex flex-col z-10 shadow-sm relative">
                 <div className="h-14 border-b border-border flex items-center px-4 shrink-0 gap-2">
@@ -452,6 +541,9 @@ export default function LocationsTemplate() {
 
             {/* Fake Inspector Drawer */}
             {rightDrawerContent}
+
+            {/* Row Detail Panel */}
+            {detailPanel}
         </div>
     );
 
@@ -521,6 +613,7 @@ export default function LocationsTemplate() {
 
                 {/* True Inspector Drawer */}
                 {rightDrawerContent}
+                {detailPanel}
             </div>
         );
     }

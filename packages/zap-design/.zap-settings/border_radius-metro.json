@@ -2,7 +2,7 @@
   "theme": "metro",
   "state": {
     "universal": {
-      "radius": "rounded-none",
+      "radius": "rounded-sm",
       "width": "border-0",
       "style": "border-none",
       "opacity": "100%"
@@ -35,9 +35,7 @@
         "width": "border"
       },
       "Input": {
-        "width": "border",
-        "radius": "rounded",
-        "bg": "bg-layer-base"
+        "width": "border"
       },
       "Textarea": {
         "width": "border-0",
@@ -57,5 +55,5 @@
       }
     }
   },
-  "updatedAt": "2026-04-02T04:33:21.369Z"
+  "updatedAt": "2026-04-06T03:18:26.993Z"
 }

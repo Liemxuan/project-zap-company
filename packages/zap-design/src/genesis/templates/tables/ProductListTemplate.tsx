@@ -6,9 +6,10 @@ import { CanvasDesktop } from '../../../components/dev/CanvasDesktop';
 import { ListTable, SAMPLE_DATA, ListItem, Filters } from '../../../zap/organisms/list-table';
 import { ColumnDef } from '@tanstack/react-table';
 import { Pill } from '../../atoms/status/pills';
-import { Button } from '../../atoms/interactive/button';
-import { ChevronDown, MoreHorizontal } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { motion } from "framer-motion";
+import { QuickActionsDropdown } from '../../molecules/quick-actions-dropdown';
+import { Pencil, Copy, Archive, Trash2 } from 'lucide-react';
 import { DataFilter, FilterGroup } from '../../molecules/data-filter';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../../molecules/accordion';
 import { Icon } from '../../atoms/icons/Icon';
@@ -199,12 +200,18 @@ export default function ProductListTemplate() {
         {
             id: "actions",
             header: () => <div className="w-24 pr-7" />,
-            cell: () => (
-                <div className="w-24 pr-7 py-2.5 text-right">
-                    <div className="flex items-center justify-end text-muted-foreground">
-                        <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                            <MoreHorizontal className="h-4 w-4" />
-                        </Button>
+            cell: ({ row }) => (
+                <div className="w-24 pr-7 py-2.5 text-right" onClick={e => e.stopPropagation()}>
+                    <div className="flex items-center justify-end">
+                        <QuickActionsDropdown
+                            label={row.original.variant_name}
+                            actions={[
+                                { label: 'Edit', icon: Pencil, onClick: () => {} },
+                                { label: 'Duplicate', icon: Copy, onClick: () => {} },
+                                { label: 'Archive', icon: Archive, onClick: () => {} },
+                                { label: 'Delete', icon: Trash2, onClick: () => {}, variant: 'destructive' },
+                            ]}
+                        />
                     </div>
                 </div>
             ),
