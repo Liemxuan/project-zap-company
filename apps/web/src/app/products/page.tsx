@@ -1,3 +1,5 @@
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 import { fetchProducts, type ProductListResponse, type Product } from '@/lib/products';
 import ProductsClient from './products-client';
 

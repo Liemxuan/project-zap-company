@@ -50,5 +50,6 @@
   "select_columns": "Select Columns",
   "of": "of",
   "records_matched": "records matched criteria.",
-  "add_location": "add location"
+  "add_location": "add location",
+  "lbl_inspector_title": "LOCATIONS FILTER"
 }

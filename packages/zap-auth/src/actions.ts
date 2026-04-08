@@ -28,8 +28,61 @@ const MOCK_USERS: Record<string, { password: string; id: string; tenantId: strin
 const MOCK_LOCKED = new Set(['locked@zap']);
 
 export async function loginAction(email: string, pass: string) {
+    const IS_MOCK = process.env.NEXT_PUBLIC_IS_MOCK === 'true';
     const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://crm-gateway-v1-c7wqwyi1.uc.gateway.dev/api';
-    console.log('🔍 loginAction: account =', email, '| API_URL =', API_URL);
+    console.log('🔍 loginAction: account =', email, '| IS_MOCK =', IS_MOCK, '| API_URL =', API_URL);
+
+    // ─── Handle Mock Login ───────────────────────────────────────────
+    if (IS_MOCK) {
+        const user = MOCK_USERS[email];
+        if (!user || user.password !== pass) {
+            console.log('❌ Mock login failed for:', email);
+            return { error: 'invalid_credentials' };
+        }
+
+        console.log('✅ Mock login success for:', email);
+        const token = 'mock-jwt-token-zss-' + Math.random().toString(36).substring(2);
+        
+        const cookieStore = await cookies();
+        cookieStore.set('zap_session', token, {
+            secure: false,
+            httpOnly: true,
+            path: '/',
+            maxAge: 60 * 60 * 24 * 7,
+            sameSite: 'lax',
+        });
+
+        cookieStore.set('access_token', token, {
+            secure: false,
+            httpOnly: false,
+            path: '/',
+            maxAge: 60 * 60 * 24 * 7,
+            sameSite: 'lax',
+        });
+
+        const userData = {
+            merchant_id: user.tenantId,
+            email: email,
+            name: email.split('@')[0],
+            logo_url: '/zap-logo.png',
+        };
+
+        cookieStore.set('zap_user', JSON.stringify(userData), {
+            secure: false,
+            httpOnly: false,
+            path: '/',
+            maxAge: 60 * 60 * 24 * 7,
+            sameSite: 'lax',
+        });
+
+        return {
+            success: true,
+            data: {
+                token,
+                ...userData,
+            },
+        };
+    }
 
     try {
         // Call real API for authentication

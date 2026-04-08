@@ -22,5 +22,7 @@
   "mock_hint_success": "Success: admin@zap / 1234",
   "mock_hint_wrong_pw": "Wrong password: admin@zap / wrong",
   "mock_hint_locked": "Locked account: locked@zap / any",
-  "mock_hint_merchant": "Bad merchant: type \"locked\" as merchant"
+  "mock_hint_merchant": "Bad merchant: type \"locked\" as merchant",
+  "no_account_text": "Don't have a ZAP account?",
+  "register_link_text": "Create your free account"
 }

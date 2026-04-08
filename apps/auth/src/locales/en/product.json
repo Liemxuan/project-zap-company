@@ -45,5 +45,11 @@
   "btn_apply": "Apply",
   "active_status": "Active Status",
   "clear": "Clear",
-  "btn_add": "add product"
+  "btn_add": "add product",
+  "datagrid_title": "product inventory core",
+  "filter_category": "categories",
+  "filter_status": "system status",
+  "no_records": "no matches detected",
+  "try_adjusting": "adjust system parameters to broaden scope",
+  "records_suffix": "entries"
 }

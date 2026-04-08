@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useTheme } from 'zap-design/src/components/ThemeContext';
 import { AppShell } from 'zap-design/src/zap/layout/AppShell';
@@ -39,10 +39,13 @@ export function ModifierGroupPage({ merchant }: Props) {
   const [filters, setFilters] = useState<ModifierGroupFilters>({
     status: [],
   });
+  
+  const memoizedFilter = useMemo(() => filters, [filters]);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
 
-  const { modifierGroups, loading, total: totalRecords } = useModifierGroups(currentPage, pageSize, filters);
+  const { modifierGroups, loading, total: totalRecords } = useModifierGroups(currentPage, pageSize, memoizedFilter);
+
   const totalPages = Math.ceil(totalRecords / (pageSize || 10));
 
   if (tLoading) return null;

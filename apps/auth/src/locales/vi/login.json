@@ -22,5 +22,7 @@
   "mock_hint_success": "Thành công: admin@zap / 1234",
   "mock_hint_wrong_pw": "Sai mật khẩu: admin@zap / wrong",
   "mock_hint_locked": "Tài khoản khóa: locked@zap / bất kỳ",
-  "mock_hint_merchant": "Merchant lỗi: nhập \"locked\" vào tên cửa hàng"
+  "mock_hint_merchant": "Merchant lỗi: nhập \"locked\" vào tên cửa hàng",
+  "no_account_text": "Bạn chưa có tài khoản ZAP?",
+  "register_link_text": "Tạo tài khoản miễn phí ngay"
 }

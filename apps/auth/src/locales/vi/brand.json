@@ -18,7 +18,7 @@
   "table_slug": "Slug",
   "table_premium": "Premium",
   "table_status": "Trạng thái",
-  "table_action": "Thao tác",
+  "table_action": "",
   "status_active": "Hoạt động",
   "status_inactive": "Ngưng hoạt động"
 }

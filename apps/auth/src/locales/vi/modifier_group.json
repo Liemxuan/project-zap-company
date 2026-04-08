@@ -27,5 +27,10 @@
   "btn_add": "thêm nhóm tùy chọn",
   "select_columns": "CHỌN CỘT",
   "btn_reset": "Đặt lại",
-  "btn_apply": "Áp dụng"
+  "btn_apply": "Áp dụng",
+  "page": "Trang",
+  "of": "trên",
+  "previous": "Trước",
+  "next": "Sau"
 }
+

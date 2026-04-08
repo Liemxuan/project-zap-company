@@ -1,6 +1,7 @@
 {
   "of": "Trên",
-  "categories_matched": "Danh mục khớp với tiêu chí.",
+  "page": "Trang",
+  "records_matched": "Danh mục khớp với tiêu chí.",
   "title": "Quản lý danh mục",
   "breadcrumb": "kho hàng / danh mục",
   "badge": "môi trường giả lập",
@@ -22,7 +23,7 @@
   "table_slug": "Slug",
   "table_item": "Số lượng sản phẩm",
   "table_status": "Trạng thái hiển thị",
-  "status_active": "Hoạt động",
+  "status_active": "",
   "status_inactive": "Ngưng hoạt động",
   "status_1": "Hoạt động",
   "status_129": "Ngưng hoạt động",

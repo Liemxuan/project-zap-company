@@ -1,53 +1,41 @@
-/**
- * Modifier Group Service
- * Handles modifier group data fetching via real API
- */
-
 import {
   ModifierGroupFilter,
   ModifierGroupResponse,
-  ModifierGroupApiResponse,
-  mapApiItemToModifierGroup,
 } from '../models/modifier-group.model';
+import { getMockModifierGroups } from '../../../mocks/modifier-group.mock';
 import { httpService } from '@/core/api/http.service';
 import { API_ENDPOINTS } from '@/const';
 
 /**
- * Fetch modifier group list using POST
- * Sends snake_case request body matching API contract
- * 
- * API Response flow:
- * 1. Axios interceptor strips outer axios wrapper → returns { success, data: { items, total, ... } }
- * 2. httpService.post returns this as ApiResponse<T> 
- * 3. So response = { success: true, data: { items, total, total_page, ... } }
- * 4. response.data = { items: [...], total: 50, total_page: 5, ... }
+ * Fetch modifier group list
  */
 export async function postModifierGroupList(
   filter?: ModifierGroupFilter,
   page = 1,
   pageSize = 10
 ): Promise<ModifierGroupResponse> {
-  // Build request body matching API contract
-  const requestBody = {
-    page_index: page,
-    page_size: pageSize,
-    search: filter?.searchQuery || '',
-    filters: {},
-  };
+  const mockResult = await getMockModifierGroups(filter, page, pageSize);
 
-  const response = await httpService.post<ModifierGroupApiResponse>(
+  const response = await httpService.post<ModifierGroupResponse>(
     API_ENDPOINTS.MODIFIER_GROUP_LIST,
-    requestBody
+    { filter, page, pageSize },
+    { success: true, message: 'Success', code: 200, data: mockResult }
   );
 
-  // response.data = { items: [...], total, total_page, total_record, page_index, page_size }
-  const apiData = response.data;
+  return response.data;
+}
 
-  return {
-    data: (apiData.items || []).map(mapApiItemToModifierGroup),
-    total: apiData.total_record || apiData.total || 0,
-    totalPages: apiData.total_page || 1,
-    page: apiData.page_index || page,
-    pageSize: apiData.page_size || pageSize,
-  };
+/**
+ * Fetch single modifier group by ID
+ */
+export async function getModifierGroupById(id: string) {
+  const mockData = null; // Modifier groups usually don't have a direct get-by-id in this schema
+  const url = API_ENDPOINTS.MODIFIER_GROUP_LIST.replace('list', id);
+  
+  const response = await httpService.get<any>(
+    url,
+    undefined,
+    { success: true, code: 200, message: 'OK', data: mockData }
+  );
+  return response.data;
 }

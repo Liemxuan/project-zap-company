@@ -143,6 +143,19 @@ export function LoginForm({ values, loading, dict, onChange, onSubmit, merchant,
           </span>
         </div>
       </Button>
+      <div className="text-center mt-6 pt-6 border-t border-outline/10">
+        <Text size="label-small" className="text-on-surface-variant/60 font-medium">
+          {dict.no_account_text ?? "Don't have a ZAP account?"}
+        </Text>
+        <div className="mt-2">
+          <a
+            href={`/${merchant}/en/register`}
+            className="text-xs font-bold text-primary hover:text-primary/80 underline decoration-2 underline-offset-4 transition-all"
+          >
+            {dict.register_link_text ?? "Create your free account"}
+          </a>
+        </div>
+      </div>
     </form>
   );
 }

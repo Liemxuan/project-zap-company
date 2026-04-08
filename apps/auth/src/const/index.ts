@@ -48,7 +48,7 @@ export const API_ENDPOINTS = {
   MODIFIER_GROUP_LIST: '/modifiergroups/list',
 
   // Locations
-  LOCATION_LIST: '/warehouses/list',
+  LOCATION_LIST: '/locations/list',
 
   // Dining Options
   DINING_OPTION_LIST: '/dining-option-list',

@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Locations Management - 4700+ Items</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-primary: #007AFF;
+            --color-primary-foreground: #FFFFFF;
+            --color-foreground: #000000;
+            --color-muted-foreground: #666666;
+            --color-border: #E5E5E5;
+            --color-border-variant: #F0F0F0;
+            --color-surface: #F9F9F9;
+            --color-surface-variant: #F0F0F0;
+            --color-layer-base: #FFFFFF;
+            --color-layer-panel: #F5F5F5;
+            --color-layer-cover: #FFFFFF;
+            --color-success: #34C759;
+            --color-error: #FF3B30;
+            --color-warning: #FF9500;
+            --color-on-surface: #000000;
+            --color-on-surface-variant: #666666;
+        }
+
+        html {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            color: var(--color-foreground);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 240px;
+            background-color: var(--color-layer-panel);
+            border-right: 1px solid var(--color-border);
+            display: flex;
+            flex-direction: column;
+            padding: 0;
+        }
+
+        .sidebar-header {
+            height: 56px;
+            border-bottom: 1px solid var(--color-border);
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            gap: 8px;
+            font-weight: 600;
+        }
+
+        .sidebar-logo {
+            width: 24px;
+            height: 24px;
+            background-color: var(--color-primary);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-primary-foreground);
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .sidebar-menu {
+            flex: 1;
+            padding: 12px;
+            overflow-y: auto;
+        }
+
+        .sidebar-menu-item {
+            padding: 10px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 4px;
+            transition: background-color 0.2s;
+        }
+
+        .sidebar-menu-item:hover {
+            background-color: rgba(0, 122, 255, 0.1);
+        }
+
+        .sidebar-menu-item.active {
+            background-color: rgba(0, 122, 255, 0.15);
+            color: var(--color-primary);
+            font-weight: 500;
+        }
+
+        /* Main Layout */
+        .main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .header {
+            height: 56px;
+            background-color: var(--color-layer-base);
+            border-bottom: 1px solid var(--color-border);
+            display: flex;
+            align-items: center;
+            padding: 0 24px;
+            justify-content: space-between;
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: var(--color-muted-foreground);
+        }
+
+        .breadcrumb-separator {
+            color: var(--color-border-variant);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: var(--color-success);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--color-success);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Content Area */
+        .content {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+
+        .table-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--color-layer-base);
+            border-radius: 8px;
+            margin: 16px;
+            border: 1px solid var(--color-border);
+            overflow: hidden;
+        }
+
+        /* Table Toolbar */
+        .table-toolbar {
+            padding: 16px 20px;
+            background-color: var(--color-layer-panel);
+            border-bottom: 1px solid var(--color-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .search-container {
+            position: relative;
+            flex: 1;
+            min-width: 200px;
+            max-width: 400px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 8px 12px 8px 32px;
+            border: 1px solid var(--color-border);
+            border-radius: 6px;
+            font-size: 13px;
+            background-color: var(--color-layer-base);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--color-muted-foreground);
+            font-size: 16px;
+        }
+
+        .toolbar-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: 1px solid var(--color-border);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background-color: var(--color-layer-base);
+            color: var(--color-foreground);
+            transition: all 0.2s;
+        }
+
+        .btn:hover {
+            background-color: var(--color-surface-variant);
+        }
+
+        .btn-primary {
+            background-color: var(--color-primary);
+            color: var(--color-primary-foreground);
+            border-color: var(--color-primary);
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+        }
+
+        /* Table */
+        .table-container {
+            flex: 1;
+            overflow: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: var(--color-layer-base);
+        }
+
+        thead {
+            position: sticky;
+            top: 0;
+            background-color: var(--color-layer-panel);
+            border-bottom: 1px solid var(--color-border);
+            z-index: 10;
+        }
+
+        th {
+            padding: 12px 16px;
+            text-align: left;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--color-muted-foreground);
+            border-bottom: 1px solid var(--color-border);
+            cursor: pointer;
+            user-select: none;
+        }
+
+        th:hover {
+            background-color: var(--color-surface);
+        }
+
+        td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--color-border-variant);
+            font-size: 13px;
+            color: var(--color-foreground);
+        }
+
+        tbody tr {
+            transition: background-color 0.15s;
+        }
+
+        tbody tr:hover {
+            background-color: var(--color-surface);
+        }
+
+        /* Status Badge */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .badge-success {
+            background-color: rgba(52, 199, 89, 0.15);
+            color: var(--color-success);
+        }
+
+        .badge-error {
+            background-color: rgba(255, 59, 48, 0.15);
+            color: var(--color-error);
+        }
+
+        .badge-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: currentColor;
+            opacity: 0.8;
+        }
+
+        /* Action Menu */
+        .menu-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-muted-foreground);
+            transition: color 0.2s;
+        }
+
+        .menu-button:hover {
+            color: var(--color-foreground);
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            background-color: var(--color-layer-panel);
+            border: 1px solid var(--color-border);
+            border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            min-width: 160px;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+
+        .dropdown-item {
+            padding: 10px 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: var(--color-foreground);
+            transition: background-color 0.15s;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+        }
+
+        .dropdown-item:hover {
+            background-color: var(--color-surface-variant);
+        }
+
+        .dropdown-item.delete:hover {
+            background-color: rgba(255, 59, 48, 0.1);
+            color: var(--color-error);
+        }
+
+        /* Footer */
+        .table-footer {
+            padding: 12px 20px;
+            background-color: var(--color-layer-panel);
+            border-top: 1px solid var(--color-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            color: var(--color-muted-foreground);
+        }
+
+        .pagination {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .pagination-btn {
+            padding: 4px 8px;
+            border: 1px solid var(--color-border);
+            border-radius: 4px;
+            cursor: pointer;
+            background-color: var(--color-layer-base);
+            font-size: 11px;
+            transition: all 0.2s;
+        }
+
+        .pagination-btn:hover:not(:disabled) {
+            background-color: var(--color-surface-variant);
+        }
+
+        .pagination-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        /* Right Panel */
+        .right-panel {
+            width: 450px;
+            background-color: var(--color-layer-panel);
+            border-left: 1px solid var(--color-border);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            animation: slideIn 0.25s ease-in-out;
+        }
+
+        .right-panel.show {
+            display: flex;
+        }
+
+        @keyframes slideIn {
+            from {
+                width: 0;
+                opacity: 0;
+            }
+            to {
+                width: 450px;
+                opacity: 1;
+            }
+        }
+
+        .panel-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--color-border-variant);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .panel-close {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-foreground);
+            font-size: 18px;
+        }
+
+        .panel-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0;
+        }
+
+        .panel-section {
+            padding: 24px;
+            border-bottom: 1px solid var(--color-border-variant);
+        }
+
+        .panel-section:last-child {
+            border-bottom: none;
+        }
+
+        .panel-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--color-foreground);
+        }
+
+        .panel-subtitle {
+            font-size: 13px;
+            color: var(--color-muted-foreground);
+            margin-top: 4px;
+        }
+
+        .detail-group {
+            margin-bottom: 20px;
+        }
+
+        .detail-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .detail-label {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--color-muted-foreground);
+            margin-bottom: 12px;
+            opacity: 0.7;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--color-border-variant);
+            font-size: 13px;
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-row-label {
+            color: var(--color-foreground);
+            font-weight: 500;
+        }
+
+        .detail-row-value {
+            color: var(--color-muted-foreground);
+            text-align: right;
+        }
+
+        /* Scrollbar */
+        .table-container::-webkit-scrollbar,
+        .panel-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .table-container::-webkit-scrollbar-track,
+        .panel-content::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .table-container::-webkit-scrollbar-thumb,
+        .panel-content::-webkit-scrollbar-thumb {
+            background: var(--color-border);
+            border-radius: 4px;
+        }
+
+        .table-container::-webkit-scrollbar-thumb:hover,
+        .panel-content::-webkit-scrollbar-thumb:hover {
+            background: var(--color-surface-variant);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">⚡</div>
+                <span style="font-size: 14px;">ZAP OS</span>
+            </div>
+            <div class="sidebar-menu">
+                <div class="sidebar-menu-item">📊 Overview</div>
+                <div class="sidebar-menu-item">📋 System Logs</div>
+                <div class="sidebar-menu-item active">📦 Locations</div>
+                <div class="sidebar-menu-item">⚙️ Configuration</div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main">
+            <!-- Header -->
+            <div class="header">
+                <div class="breadcrumb">
+                    <span>Catalog</span>
+                    <span class="breadcrumb-separator">›</span>
+                    <span style="font-weight: 600; color: var(--color-foreground);">Locations</span>
+                </div>
+                <div class="header-actions">
+                    <button style="background: none; border: none; cursor: pointer; font-size: 18px;">🔔</button>
+                    <div style="width: 1px; height: 20px; background-color: var(--color-border);"></div>
+                    <div style="font-size: 12px;">
+                        <div style="font-weight: 600;">us-west-1</div>
+                        <div class="status-indicator">
+                            <span class="status-dot"></span>
+                            <span>Healthy</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content -->
+            <div class="content">
+                <!-- Table -->
+                <div class="table-wrapper">
+                    <!-- Toolbar -->
+                    <div class="table-toolbar">
+                        <div class="search-container">
+                            <span class="search-icon">🔍</span>
+                            <input
+                                type="text"
+                                class="search-input"
+                                id="searchInput"
+                                placeholder="Search locations..."
+                            >
+                        </div>
+                        <div class="toolbar-buttons">
+                            <button class="btn">🔽 Filter</button>
+                            <button class="btn btn-primary">➕ Add Location</button>
+                        </div>
+                    </div>
+
+                    <!-- Table -->
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="width: 50px;">ID</th>
+                                    <th style="width: 200px;">NAME</th>
+                                    <th>ADDRESS</th>
+                                    <th style="width: 100px;">TYPE</th>
+                                    <th style="width: 120px;">PHONE</th>
+                                    <th style="width: 80px;">STATUS</th>
+                                    <th style="width: 60px; text-align: center;">ACTIONS</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableBody">
+                                <!-- Generated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="table-footer">
+                        <div>
+                            Show
+                            <select id="pageSize" style="margin: 0 4px; padding: 2px 4px; border: 1px solid var(--color-border); border-radius: 4px;">
+                                <option value="10">10</option>
+                                <option value="20">20</option>
+                                <option value="50" selected>50</option>
+                                <option value="100">100</option>
+                            </select>
+                            items per page
+                        </div>
+                        <div class="pagination">
+                            <span id="pageInfo">Page 1 of 94</span>
+                            <button class="pagination-btn" id="prevBtn" onclick="previousPage()">← Previous</button>
+                            <button class="pagination-btn" id="nextBtn" onclick="nextPage()">Next →</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Panel -->
+                <div class="right-panel" id="rightPanel">
+                    <div class="panel-header">
+                        <button class="panel-close" onclick="closePanel()">✕</button>
+                        <button class="btn btn-primary" style="height: 32px; padding: 6px 16px; font-size: 12px;">Edit location</button>
+                    </div>
+                    <div class="panel-content">
+                        <div class="panel-section">
+                            <h2 class="panel-title" id="panelLocationName">Location Name</h2>
+                            <p class="panel-subtitle" id="panelLocationType">Retail Store</p>
+                        </div>
+
+                        <div class="panel-section">
+                            <div class="detail-label">Location Details</div>
+                            <div class="detail-row">
+                                <span class="detail-row-label">Name</span>
+                                <span class="detail-row-value" id="detailName">—</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-row-label">Type</span>
+                                <span class="detail-row-value" id="detailType">—</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-row-label">Address</span>
+                                <span class="detail-row-value" id="detailAddress">—</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-row-label">State</span>
+                                <span class="detail-row-value" id="detailState">—</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-row-label">Phone</span>
+                                <span class="detail-row-value" id="detailPhone">—</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-row-label">Email</span>
+                                <span class="detail-row-value" id="detailEmail">—</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-row-label">Language</span>
+                                <span class="detail-row-value" id="detailLanguage">English</span>
+                            </div>
+                        </div>
+
+                        <div class="panel-section">
+                            <div class="detail-label">Business Hours</div>
+                            <div class="detail-row">
+                                <span class="detail-row-label">Mon</span>
+                                <span class="detail-row-value">09:00 - 18:00</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-row-label">Tue</span>
+                                <span class="detail-row-value">09:00 - 18:00</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-row-label">Wed</span>
+                                <span class="detail-row-value">09:00 - 18:00</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-row-label">Thu</span>
+                                <span class="detail-row-value">09:00 - 18:00</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-row-label">Fri</span>
+                                <span class="detail-row-value">09:00 - 18:00</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-row-label">Sat</span>
+                                <span class="detail-row-value">10:00 - 16:00</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-row-label">Sun</span>
+                                <span class="detail-row-value">Closed</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Generate 4700 mock locations
+        function generateLocations(count = 4700) {
+            const cities = ['Ho Chi Minh', 'Ha Noi', 'Da Nang', 'Can Tho', 'Hai Phong'];
+            const districts = ['Quận 1', 'Quận 2', 'Quận 3', 'Quận 4', 'Quận 5', 'Quận 7', 'Quận 9', 'Tân Bình', 'Tân Phú', 'Bình Thạnh'];
+            const types = ['Store', 'Kitchen', 'Warehouse', 'Hub'];
+            const foodNames = ['Phở', 'Cà Phê', 'Cơm', 'Bánh Mì', 'Pizza', 'Burger', 'Gà Rán', 'Mì Ý', 'Sushi', 'Bánh Trung Thu'];
+
+            const locations = [];
+            for (let i = 0; i < count; i++) {
+                const foodName = foodNames[i % foodNames.length];
+                const district = districts[i % districts.length];
+                const city = cities[Math.floor(i / 1000) % cities.length];
+                const type = types[Math.floor(i / 1175) % types.length];
+                const isActive = i % 15 !== 0;
+
+                locations.push({
+                    id: `LOC-${String(i + 1000).padStart(4, '0')}`,
+                    name: `${foodName} ${district} #${(i % 50) + 1}`,
+                    address: `${(i % 500) + 1}/${(i % 100) + 1} ${district}, ${city}`,
+                    type: type,
+                    phone: `028 ${Math.floor(Math.random() * 9000) + 1000} ${String(i % 9999).padStart(4, '0')}`,
+                    email: `location${i + 1000}@zap.com`,
+                    status: isActive ? 'active' : 'inactive',
+                    state: city
+                });
+            }
+            return locations;
+        }
+
+        const allLocations = generateLocations();
+        let currentPage = 1;
+        let pageSize = 50;
+        let filteredLocations = [...allLocations];
+
+        // Render table
+        function renderTable() {
+            const start = (currentPage - 1) * pageSize;
+            const end = start + pageSize;
+            const pageLocations = filteredLocations.slice(start, end);
+
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = pageLocations.map((loc, idx) => `
+                <tr>
+                    <td style="font-family: monospace; opacity: 0.7;">${loc.id.substring(0, 8)}</td>
+                    <td style="font-weight: 500;">${loc.name}</td>
+                    <td style="max-width: 300px; overflow: hidden; text-overflow: ellipsis;">${loc.address}</td>
+                    <td>${loc.type}</td>
+                    <td>${loc.phone}</td>
+                    <td>
+                        <span class="badge ${loc.status === 'active' ? 'badge-success' : 'badge-error'}">
+                            <span class="badge-dot"></span>
+                            ${loc.status === 'active' ? 'Active' : 'Inactive'}
+                        </span>
+                    </td>
+                    <td style="text-align: center;">
+                        <button class="menu-button" onclick="toggleMenu(event, ${idx})">⋯</button>
+                        <div class="dropdown-menu" id="menu-${idx}">
+                            <button class="dropdown-item" onclick="viewDetail(${idx})">👁️ View</button>
+                            <button class="dropdown-item" onclick="editLocation(${idx})">✏️ Edit</button>
+                            <button class="dropdown-item delete" onclick="deleteLocation(${idx})">🗑️ Delete</button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+
+            // Update pagination
+            const totalPages = Math.ceil(filteredLocations.length / pageSize);
+            document.getElementById('pageInfo').textContent = `Page ${currentPage} of ${totalPages}`;
+            document.getElementById('prevBtn').disabled = currentPage === 1;
+            document.getElementById('nextBtn').disabled = currentPage === totalPages;
+        }
+
+        function toggleMenu(event, idx) {
+            event.stopPropagation();
+            const menu = document.getElementById(`menu-${idx}`);
+
+            // Close all other menus
+            document.querySelectorAll('.dropdown-menu.show').forEach(m => {
+                if (m !== menu) m.classList.remove('show');
+            });
+
+            menu.classList.toggle('show');
+        }
+
+        function viewDetail(idx) {
+            const start = (currentPage - 1) * pageSize;
+            const loc = filteredLocations[start + idx];
+
+            document.getElementById('panelLocationName').textContent = loc.name;
+            document.getElementById('panelLocationType').textContent = loc.type;
+            document.getElementById('detailName').textContent = loc.name;
+            document.getElementById('detailType').textContent = loc.type;
+            document.getElementById('detailAddress').textContent = loc.address;
+            document.getElementById('detailState').textContent = loc.state;
+            document.getElementById('detailPhone').textContent = loc.phone;
+            document.getElementById('detailEmail').textContent = loc.email;
+
+            document.getElementById('rightPanel').classList.add('show');
+        }
+
+        function editLocation(idx) {
+            alert('Edit location: ' + filteredLocations[idx].name);
+        }
+
+        function deleteLocation(idx) {
+            if (confirm('Are you sure you want to delete this location?')) {
+                alert('Delete location: ' + filteredLocations[idx].name);
+            }
+        }
+
+        function closePanel() {
+            document.getElementById('rightPanel').classList.remove('show');
+        }
+
+        function nextPage() {
+            const totalPages = Math.ceil(filteredLocations.length / pageSize);
+            if (currentPage < totalPages) {
+                currentPage++;
+                renderTable();
+                document.querySelector('.table-container').scrollTop = 0;
+            }
+        }
+
+        function previousPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                renderTable();
+                document.querySelector('.table-container').scrollTop = 0;
+            }
+        }
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            filteredLocations = allLocations.filter(loc =>
+                loc.name.toLowerCase().includes(query) ||
+                loc.address.toLowerCase().includes(query) ||
+                loc.phone.includes(query) ||
+                loc.id.includes(query)
+            );
+            currentPage = 1;
+            renderTable();
+        });
+
+        // Page size change
+        document.getElementById('pageSize').addEventListener('change', (e) => {
+            pageSize = parseInt(e.target.value);
+            currentPage = 1;
+            renderTable();
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', () => {
+            document.querySelectorAll('.dropdown-menu.show').forEach(m => m.classList.remove('show'));
+        });
+
+        // Initial render
+        renderTable();
+    </script>
+</body>
+</html>

@@ -1,3 +1,8 @@
 {
-  "/_not-found/page": "app/_not-found/page.js"
+  "/_not-found/page": "app/_not-found/page.js",
+  "/api/colors/publish/route": "app/api/colors/publish/route.js",
+  "/api/typography/publish/route": "app/api/typography/publish/route.js",
+  "/page": "app/page.js",
+  "/products/page": "app/products/page.js",
+  "/storefront/page": "app/storefront/page.js"
 }

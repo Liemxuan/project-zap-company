@@ -1,5 +1,132 @@
 {
-  "node": {},
+  "node": {
+    "60169dfcbd7f6c7db9da8175a7afdfc0b87f24147d": {
+      "workers": {
+        "app/page": {
+          "moduleId": "[project]/apps/web/.next-internal/server/app/page/actions.js { ACTIONS_MODULE0 => \"[project]/packages/zap-auth/src/actions.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false,
+          "exportedName": "loginAction",
+          "filename": "packages/zap-auth/src/actions.ts"
+        },
+        "app/products/page": {
+          "moduleId": "[project]/apps/web/.next-internal/server/app/products/page/actions.js { ACTIONS_MODULE0 => \"[project]/apps/web/src/lib/products.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/packages/zap-auth/src/actions.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false,
+          "exportedName": "loginAction",
+          "filename": "packages/zap-auth/src/actions.ts"
+        }
+      },
+      "filename": "packages/zap-auth/src/actions.ts",
+      "exportedName": "loginAction"
+    },
+    "4053436b40b86450a5b7ec2028d68db5d310616c27": {
+      "workers": {
+        "app/products/page": {
+          "moduleId": "[project]/apps/web/.next-internal/server/app/products/page/actions.js { ACTIONS_MODULE0 => \"[project]/apps/web/src/lib/products.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/packages/zap-auth/src/actions.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false,
+          "exportedName": "fetchProducts",
+          "filename": "apps/web/src/lib/products.ts"
+        }
+      },
+      "filename": "apps/web/src/lib/products.ts",
+      "exportedName": "fetchProducts"
+    },
+    "000353c8baa99c085d682bb116b686b5ff3d7258d2": {
+      "workers": {
+        "app/products/page": {
+          "moduleId": "[project]/apps/web/.next-internal/server/app/products/page/actions.js { ACTIONS_MODULE0 => \"[project]/apps/web/src/lib/products.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/packages/zap-auth/src/actions.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false,
+          "exportedName": "getProductsAction",
+          "filename": "packages/zap-auth/src/actions.ts"
+        }
+      },
+      "filename": "packages/zap-auth/src/actions.ts",
+      "exportedName": "getProductsAction"
+    },
+    "003dbfd99ffc089ef21c383cc4b46d5433d76fadea": {
+      "workers": {
+        "app/products/page": {
+          "moduleId": "[project]/apps/web/.next-internal/server/app/products/page/actions.js { ACTIONS_MODULE0 => \"[project]/apps/web/src/lib/products.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/packages/zap-auth/src/actions.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false,
+          "exportedName": "getAuthToken",
+          "filename": "packages/zap-auth/src/actions.ts"
+        }
+      },
+      "filename": "packages/zap-auth/src/actions.ts",
+      "exportedName": "getAuthToken"
+    },
+    "0040408527341e042f46683839ef498edf2961d089": {
+      "workers": {
+        "app/products/page": {
+          "moduleId": "[project]/apps/web/.next-internal/server/app/products/page/actions.js { ACTIONS_MODULE0 => \"[project]/apps/web/src/lib/products.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/packages/zap-auth/src/actions.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false,
+          "exportedName": "getSystemLogsAction",
+          "filename": "packages/zap-auth/src/actions.ts"
+        }
+      },
+      "filename": "packages/zap-auth/src/actions.ts",
+      "exportedName": "getSystemLogsAction"
+    },
+    "007f1a09ea6afda5d369d34516dd4a95e1a4b3423f": {
+      "workers": {
+        "app/products/page": {
+          "moduleId": "[project]/apps/web/.next-internal/server/app/products/page/actions.js { ACTIONS_MODULE0 => \"[project]/apps/web/src/lib/products.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/packages/zap-auth/src/actions.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false,
+          "exportedName": "logoutAction",
+          "filename": "packages/zap-auth/src/actions.ts"
+        }
+      },
+      "filename": "packages/zap-auth/src/actions.ts",
+      "exportedName": "logoutAction"
+    },
+    "009d4db42c315f181f0e074fdf2e71a137a044150d": {
+      "workers": {
+        "app/products/page": {
+          "moduleId": "[project]/apps/web/.next-internal/server/app/products/page/actions.js { ACTIONS_MODULE0 => \"[project]/apps/web/src/lib/products.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/packages/zap-auth/src/actions.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false,
+          "exportedName": "getSession",
+          "filename": "packages/zap-auth/src/actions.ts"
+        }
+      },
+      "filename": "packages/zap-auth/src/actions.ts",
+      "exportedName": "getSession"
+    },
+    "00dfe71c4cdb1d6518bab1c33867a88196db000740": {
+      "workers": {
+        "app/products/page": {
+          "moduleId": "[project]/apps/web/.next-internal/server/app/products/page/actions.js { ACTIONS_MODULE0 => \"[project]/apps/web/src/lib/products.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/packages/zap-auth/src/actions.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false,
+          "exportedName": "getUsersAction",
+          "filename": "packages/zap-auth/src/actions.ts"
+        }
+      },
+      "filename": "packages/zap-auth/src/actions.ts",
+      "exportedName": "getUsersAction"
+    },
+    "00e8682ce0a9f2d9ab52913a04f1dfede1a66ff175": {
+      "workers": {
+        "app/products/page": {
+          "moduleId": "[project]/apps/web/.next-internal/server/app/products/page/actions.js { ACTIONS_MODULE0 => \"[project]/apps/web/src/lib/products.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/packages/zap-auth/src/actions.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false,
+          "exportedName": "getPortalMetricsAction",
+          "filename": "packages/zap-auth/src/actions.ts"
+        }
+      },
+      "filename": "packages/zap-auth/src/actions.ts",
+      "exportedName": "getPortalMetricsAction"
+    },
+    "6008ef7de9ebb3a88a69fef00e8049137e0b09049c": {
+      "workers": {
+        "app/products/page": {
+          "moduleId": "[project]/apps/web/.next-internal/server/app/products/page/actions.js { ACTIONS_MODULE0 => \"[project]/apps/web/src/lib/products.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/packages/zap-auth/src/actions.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false,
+          "exportedName": "apiCallWithAuth",
+          "filename": "packages/zap-auth/src/actions.ts"
+        }
+      },
+      "filename": "packages/zap-auth/src/actions.ts",
+      "exportedName": "apiCallWithAuth"
+    }
+  },
   "edge": {},
   "encryptionKey": "/C9MmBitWzT6cy6pmT3ce1wbD8ypAdecikGLszok95w="
 }

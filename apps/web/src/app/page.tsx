@@ -1,29 +1,22 @@
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
-import { FoundationLogin } from 'zap-design/src/components/ui/FoundationLogin';
-import { loginAction } from '@olympus/zap-auth/src/actions';
+import { BrandHeader } from "../components/brand-header";
+import { AuthForm } from "../components/auth-form";
+import { AuthHeroPanel } from "../components/auth-hero-panel";
 
-export default async function HomePage() {
-  const cookieStore = await cookies();
-  const session = cookieStore.get('zap_session');
-
-  // If logged in, redirect to products
-  if (session) {
-    redirect('/products');
-  }
-
-  // Show login page if not logged in
+export default function HomePage() {
   return (
-    <FoundationLogin
-      appName="Consumer Web Storefront"
-      description="The public-facing e-commerce application. Browse our products catalog and make purchases."
-      duties={[
-          "Browse and search product catalog",
-          "View product details and prices",
-          "Manage your shopping cart",
-          "Secure checkout and payment"
-      ]}
-      onLogin={loginAction}
-    />
+    <div className="min-h-screen grid lg:grid-cols-2 bg-surface">
+        {/* Visual Identity Section — parallax hero */}
+        <AuthHeroPanel />
+        
+        {/* Auth Section */}
+        <div className="flex flex-col items-center justify-center p-8 sm:p-12 lg:p-24 w-full">
+            <div className="w-full max-w-sm space-y-8 animate-in fade-in slide-in-from-bottom-8 duration-700 ease-out fill-mode-both">
+                <BrandHeader />
+                <AuthForm />
+            </div>
+        </div>
+    </div>
   );
 }

@@ -1,16 +1,29 @@
 'use client';
 
-import { AnimatePresence, motion } from 'framer-motion';
-import { Check, ChevronDown, Filter, Eye, Edit, Trash2, Plus, MoreHorizontal } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { AnimatePresence, motion } from "framer-motion";
+import { Check, ChevronDown, Filter, MoreHorizontal, Plus } from "lucide-react";
+import React, { useMemo, useState } from "react";
+import {
+  ColumnDef,
+  flexRender,
+  getCoreRowModel,
+  getExpandedRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
+  ColumnFiltersState,
+  SortingState,
+  VisibilityState,
+  ExpandedState,
+} from "@tanstack/react-table";
 import { cn } from 'zap-design/src/lib/utils';
 
 import { Badge } from 'zap-design/src/genesis/atoms/interactive/badge';
 import { Button } from 'zap-design/src/genesis/atoms/interactive/button';
 import { Input } from 'zap-design/src/genesis/atoms/interactive/inputs';
-import { Pill } from 'zap-design/src/genesis/atoms/status/pills';
-import { Avatar, AvatarImage, AvatarFallback } from 'zap-design/src/genesis/atoms/interactive/avatar';
 import { Checkbox } from 'zap-design/src/genesis/atoms/interactive/checkbox';
+import { Pill } from 'zap-design/src/genesis/atoms/status/pills';
 import { Popover, PopoverContent, PopoverTrigger } from 'zap-design/src/genesis/molecules/popover';
 import {
   Table,
@@ -23,251 +36,37 @@ import {
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
-  PaginationLink,
   PaginationNext,
   PaginationPrevious,
 } from 'zap-design/src/genesis/molecules/pagination';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from 'zap-design/src/genesis/atoms/interactive/select';
-import { QuickActionsDropdown } from 'zap-design/src/genesis/molecules/quick-actions-dropdown';
-import type { Product } from '../models/product.model';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from 'zap-design/src/genesis/atoms/interactive/select';
+import { Avatar, AvatarImage, AvatarFallback } from 'zap-design/src/genesis/atoms/interactive/avatar';
+import { Product } from '../models/product.model';
 
-export type ProductFilters = {
+export interface ProductFilters {
   category: string[];
+  productType?: string[];
   status: string[];
-};
-
-function ProductRow({
-  product,
-  expanded,
-  onToggle,
-  t,
-  visibleCols,
-  lang,
-}: {
-  product: Product;
-  expanded: boolean;
-  onToggle: () => void;
-  t: (key: string, fallback?: string) => string;
-  visibleCols: Record<string, boolean>;
-  lang: string;
-}) {
-  const stockColor =
-    (product.stock ?? 0) > 20
-      ? 'text-success'
-      : (product.stock ?? 0) > 0
-        ? 'text-warning'
-        : 'text-destructive';
-
-  const pillVariant =
-    (product.status >= 50 && product.status < 100)
-      ? 'success'
-      : (product.status >= 100 && product.status < 150)
-        ? 'warning'
-        : 'error';
-
-  return (
-    <>
-      <TableRow
-        className="group hover:bg-surface-variant/50 focus:bg-surface-variant/70 border-b border-border/50 group-last:border-0"
-      >
-        <TableCell className="px-7 w-12 py-2.5" onClick={onToggle}>
-          <motion.div
-            animate={{ rotate: expanded ? 180 : 0 }}
-            transition={{ duration: 0.2 }}
-            className="flex-shrink-0 w-4 cursor-pointer"
-          >
-            <ChevronDown className="h-4 w-4 text-muted-foreground" />
-          </motion.div>
-        </TableCell>
-
-        {/* 1. ID (Fixed) */}
-        <TableCell className="w-16 font-dev text-transform-tertiary text-muted-foreground text-left py-2.5 truncate text-[10px]">
-          {product.id}
-        </TableCell>
-
-        {/* 2. Image (Fixed) */}
-        <TableCell className="w-16 py-2.5">
-          <Avatar size="sm" className="rounded-md border-[1.5px] border-border shrink-0">
-            {product.image && <AvatarImage src={product.image} alt={product.name} />}
-            <AvatarFallback>{product.name.slice(0, 2).toUpperCase()}</AvatarFallback>
-          </Avatar>
-        </TableCell>
-
-        {/* 3. Item Name (Fixed) */}
-        <TableCell className="min-w-40 py-2.5 text-left">
-          <span className="font-display font-bold text-foreground text-sm truncate block">{product.name}</span>
-        </TableCell>
-
-        {/* 4. SKU (Default) */}
-        {visibleCols.sku && (
-          <TableCell className="w-32 py-2.5 text-left font-dev text-transform-tertiary text-muted-foreground truncate">
-            {product.sku || '—'}
-          </TableCell>
-        )}
-
-        {/* 5. Category (Default) */}
-        {visibleCols.category && (
-          <TableCell className="w-32 truncate text-muted-foreground text-left py-2.5">
-            {product.cate_name || '—'}
-          </TableCell>
-        )}
-
-        {/* 6. Price (Default) */}
-        {visibleCols.price && (
-          <TableCell className="w-24 text-right font-bold text-foreground py-2.5">
-            ${product.price.toFixed(2)}
-          </TableCell>
-        )}
-
-        {/* 7. Location (Default) */}
-        {visibleCols.location && (
-          <TableCell className="w-32 py-2.5 text-left text-muted-foreground truncate">
-            {product.location || '—'}
-          </TableCell>
-        )}
-
-        {/* 8. Stock (Optional) */}
-        {visibleCols.stock && (
-          <TableCell className="w-24 text-right py-2.5 font-bold">
-            <span className={stockColor}>{product.stock ?? 0}</span>
-          </TableCell>
-        )}
-
-        {/* 9. Unit (Optional) */}
-        {visibleCols.unit && (
-          <TableCell className="w-24 py-2.5 text-left text-muted-foreground">
-            {product.unit || '—'}
-          </TableCell>
-        )}
-
-        {/* 10. Barcode (Optional) */}
-        {visibleCols.barcode && (
-          <TableCell className="w-32 py-2.5 text-left font-dev text-transform-tertiary text-muted-foreground truncate">
-            {product.barcode || '—'}
-          </TableCell>
-        )}
-
-        {/* 11. Product Type (Optional) */}
-        {visibleCols.type && (
-          <TableCell className="w-28 py-2.5">
-            <Pill variant="neutral" className="w-fit px-1.5 py-0.5">{product.productType || '—'}</Pill>
-          </TableCell>
-        )}
-
-        {/* 12. Status (Fixed) */}
-        <TableCell className="w-32 text-right py-2.5 pr-4">
-          <Pill variant={pillVariant} className="whitespace-nowrap w-fit ml-auto">
-            <div className="w-1.5 h-1.5 rounded-full bg-current mr-1.5 opacity-80 shrink-0" />
-            {t(`status_${product.status}`, product.status.toString())}
-          </Pill>
-        </TableCell>
-
-        {/* 13. Actions (Fixed - Sticky) */}
-        <TableCell className="w-24 pr-7 py-2.5 text-right sticky right-0 z-10 bg-layer-base group-hover:bg-surface-variant/50 transition-colors shadow-[-4px_0_8px_-4px_rgba(0,0,0,0.12)] border-l border-border">
-          <div className="flex items-center justify-end text-muted-foreground">
-            <QuickActionsDropdown
-              actions={[
-                { label: t('action_view', 'View'), icon: Eye, onClick: () => console.log('View', product.id) },
-                { label: t('action_edit', 'Edit'), icon: Edit, onClick: () => console.log('Edit', product.id) },
-                { label: t('action_delete', 'Delete'), icon: Trash2, variant: 'destructive', onClick: () => console.log('Delete', product.id) },
-              ]}
-            />
-          </div>
-        </TableCell>
-      </TableRow>
-
-      <AnimatePresence initial={false}>
-        {expanded && (
-          <TableRow className="hover:bg-transparent data-[state=selected]:bg-transparent border-0">
-            <TableCell colSpan={10} className="p-0 border-b-0 h-0 border-t-0">
-              <motion.div
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: "auto", opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }}
-                transition={{ duration: 0.2 }}
-                className="overflow-hidden bg-layer-panel border-t border-border"
-              >
-                <div className="space-y-4 px-7 py-4 border-b border-border">
-                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 font-dev text-transform-tertiary">
-                    <div>
-                      <p className="mb-1 text-[length:var(--table-font-size,0.625rem)] font-display font-semibold text-transform-primary tracking-wide text-muted-foreground">
-                        {t('table_id', 'ID')}
-                      </p>
-                      <p className="text-foreground">{product.id}</p>
-                    </div>
-                    <div>
-                      <p className="mb-1 text-[length:var(--table-font-size,0.625rem)] font-display font-semibold text-transform-primary tracking-wide text-muted-foreground">
-                        {t('table_barcode', 'Barcode')}
-                      </p>
-                      <p className="text-foreground">{product.barcode || '—'}</p>
-                    </div>
-                    <div>
-                      <p className="mb-1 text-[length:var(--table-font-size,0.625rem)] font-display font-semibold text-transform-primary tracking-wide text-muted-foreground">
-                        {t('table_sku', 'SKU')}
-                      </p>
-                      <p className="text-foreground">{product.sku}</p>
-                    </div>
-                    <div>
-                      <p className="mb-1 text-[length:var(--table-font-size,0.625rem)] font-display font-semibold text-transform-primary tracking-wide text-muted-foreground">
-                        {t('table_description', 'Description')}
-                      </p>
-                      <p className="text-foreground truncate">{product.description || '—'}</p>
-                    </div>
-                  </div>
-                  {(product.createdAt || product.updatedAt) && (
-                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 font-dev text-transform-tertiary pt-2 border-t border-border/40">
-                      <div>
-                        <p className="mb-1 text-[length:var(--table-font-size,0.625rem)] font-display font-semibold text-transform-primary tracking-wide text-muted-foreground">
-                          {t('table_created', 'Created')}
-                        </p>
-                        <p className="text-[10px] text-foreground">
-                          {product.createdAt ? new Date(product.createdAt).toLocaleString(lang === 'vi' ? 'vi-VN' : 'en-US') : '—'}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="mb-1 text-[length:var(--table-font-size,0.625rem)] font-display font-semibold text-transform-primary tracking-wide text-muted-foreground">
-                          {t('table_updated', 'Updated')}
-                        </p>
-                        <p className="text-[10px] text-foreground">
-                          {product.updatedAt ? new Date(product.updatedAt).toLocaleString(lang === 'vi' ? 'vi-VN' : 'en-US') : '—'}
-                        </p>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </motion.div>
-            </TableCell>
-          </TableRow>
-        )}
-      </AnimatePresence>
-    </>
-  );
 }
 
 function FilterPanel({
   filters,
   onChange,
-  products,
-  t,
+  data,
+  t
 }: {
   filters: ProductFilters;
   onChange: (filters: ProductFilters) => void;
-  products: Product[];
+  data: Product[];
   t: (key: string, fallback?: string) => string;
 }) {
-  const categories = Array.from(new Set(products.map((p) => p.cate_name).filter(Boolean))).sort();
-  const statuses = Array.from(new Set(products.map((p) => p.status))).sort();
+  const categories = Array.from(new Set(data.map((p) => p.cate_name).filter(Boolean)));
+  const productTypes = Array.from(new Set(data.map((p) => p.productType).filter(Boolean)));
+  const statuses = Array.from(new Set(data.map((p) => p.status.toString())));
 
   const toggleFilter = (filterKey: keyof ProductFilters, value: string) => {
-    const current = filters[filterKey];
+    const current = filters[filterKey] || [];
     const updated = current.includes(value)
       ? current.filter((entry) => entry !== value)
       : [...current, value];
@@ -279,10 +78,16 @@ function FilterPanel({
   };
 
   const clearAll = () => {
-    onChange({ category: [], status: [] });
+    onChange({
+      category: [],
+      productType: [],
+      status: [],
+    });
   };
 
-  const hasActiveFilters = Object.values(filters).some((group) => group.length > 0);
+  const hasActiveFilters = Object.values(filters).some(
+    (group) => group && group.length > 0
+  );
 
   return (
     <motion.div
@@ -293,7 +98,7 @@ function FilterPanel({
       className="flex h-full flex-col space-y-6 overflow-y-auto bg-layer-panel p-4"
     >
       <div className="flex items-center justify-between">
-        <h3 className="text-sm font-display text-transform-primary font-semibold text-foreground">{t('filter', 'Filters')}</h3>
+        <h3 className="text-sm font-display text-transform-primary font-semibold text-foreground">Filters</h3>
         {hasActiveFilters && (
           <Button
             variant="ghost"
@@ -301,19 +106,18 @@ function FilterPanel({
             onClick={clearAll}
             className="h-6 text-xs text-primary"
           >
-            {t('clear', 'Clear')}
+            Clear
           </Button>
         )}
       </div>
 
       <div className="space-y-3">
-        <p className="text-[length:var(--table-font-size,0.625rem)] font-display font-semibold text-transform-primary tracking-wide text-muted-foreground uppercase tracking-widest">
-          {t('table_category', 'Category')}
+        <p className="text-[length:var(--table-font-size,0.625rem)] font-display font-semibold text-transform-primary tracking-wide text-muted-foreground">
+          {t('filter_category', 'Category')}
         </p>
         <div className="space-y-2">
           {categories.map((category) => {
-            const selected = filters.category.includes(category);
-
+            const selected = filters.category?.includes(category);
             return (
               <motion.button
                 key={category}
@@ -334,28 +138,56 @@ function FilterPanel({
         </div>
       </div>
 
+      {productTypes.length > 0 && (
+        <div className="space-y-3">
+          <p className="text-[length:var(--table-font-size,0.625rem)] font-display font-semibold text-transform-primary tracking-wide text-muted-foreground">
+            Product Type
+          </p>
+          <div className="space-y-2">
+            {productTypes.map((type) => {
+              if (!type) return null;
+              const selected = filters.productType?.includes(type);
+              return (
+                <motion.button
+                  key={type}
+                  type="button"
+                  whileHover={{ x: 2 }}
+                  onClick={() => toggleFilter("productType", type)}
+                  aria-pressed={selected}
+                  className={`flex w-full items-center justify-between gap-2 border border-[length:max(var(--button-border-width,1px),1px)] rounded-[length:var(--button-border-radius,var(--radius-btn,4px))] px-3 py-2 text-sm transition-colors font-body text-transform-secondary ${selected
+                    ? "border-primary bg-primary/10 text-primary"
+                    : "border-border text-muted-foreground hover:border-primary/40 hover:bg-surface-variant/40"
+                    }`}
+                >
+                  <span>{type}</span>
+                  {selected && <Check className="h-3.5 w-3.5" />}
+                </motion.button>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
       <div className="space-y-3">
-        <p className="text-[length:var(--table-font-size,0.625rem)] font-display font-semibold text-transform-primary tracking-wide text-muted-foreground uppercase tracking-widest">
-          {t('table_status', 'Status')}
+        <p className="text-[length:var(--table-font-size,0.625rem)] font-display font-semibold text-transform-primary tracking-wide text-muted-foreground">
+          {t('filter_status', 'Status')}
         </p>
         <div className="space-y-2">
           {statuses.map((status) => {
-            const statusKey = status.toString();
-            const selected = filters.status.includes(statusKey);
-
+            const selected = filters.status?.includes(status);
             return (
               <motion.button
-                key={statusKey}
+                key={status}
                 type="button"
                 whileHover={{ x: 2 }}
-                onClick={() => toggleFilter("status", statusKey)}
+                onClick={() => toggleFilter("status", status)}
                 aria-pressed={selected}
                 className={`flex w-full items-center justify-between gap-2 border border-[length:max(var(--button-border-width,1px),1px)] rounded-[length:var(--button-border-radius,var(--radius-btn,4px))] px-3 py-2 text-sm transition-colors font-dev text-transform-tertiary ${selected
                   ? "border-primary bg-primary/10 text-primary"
                   : "border-border text-muted-foreground hover:border-primary/40 hover:bg-surface-variant/40"
                   }`}
               >
-                <span>{t(`status_${status}`, status.toString())}</span>
+                <span>{t(`status_${status}`, status)}</span>
                 {selected && <Check className="h-3.5 w-3.5" />}
               </motion.button>
             );
@@ -366,9 +198,9 @@ function FilterPanel({
   );
 }
 
-interface ProductTableExpandedProps {
+export interface ProductTableExpandedProps {
   products: Product[];
-  loading: boolean;
+  loading?: boolean;
   filters?: ProductFilters;
   onFilterChange?: (filters: ProductFilters) => void;
   currentPage?: number;
@@ -386,39 +218,68 @@ interface ProductTableExpandedProps {
 
 export function ProductTableExpanded({
   products,
-  loading,
-  filters: filtersProp,
+  filters: controlledFilters,
   onFilterChange,
   currentPage = 1,
   pageSize = 10,
-  totalRecords = products.length,
-  totalPages: totalPagesProp,
+  totalRecords,
+  totalPages,
   onPageChange,
   onPageSizeChange,
   isFilterActive,
   onToggleFilters,
   className,
   t,
-  lang,
 }: ProductTableExpandedProps) {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [expandedId, setExpandedId] = useState<string | null>(null);
-  const [internalFilters, setInternalFilters] = useState<ProductFilters>({ category: [], status: [] });
-  const [internalShowFilters, setInternalShowFilters] = useState(false);
-  const [visibleCols, setVisibleCols] = useState<Record<string, boolean>>({
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({
     sku: true,
-    category: true,
+    cate_name: true,
     price: true,
     location: true,
     stock: false,
     unit: false,
     barcode: false,
-    type: false
+    productType: false
   });
-  const [tempCols, setTempCols] = useState<Record<string, boolean>>({ ...visibleCols });
-  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+  const [expanded, setExpanded] = useState<ExpandedState>({});
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const filters = filtersProp ?? internalFilters;
+  const L = useMemo(() => ({
+    addItem: t('btn_add', "Add Item"),
+    itemName: t('table_name', "Item Name"),
+    itemCode: t('table_barcode', "Code"),
+    sku: t('table_sku', "SKU"),
+    category: t('table_category', "Category"),
+    type: t('table_type', "Type"),
+    inventory: t('table_stock', "Inventory"),
+    price: t('table_price', "Price"),
+    location: t('table_location', 'Location'),
+    unit: t('table_unit', 'Unit'),
+    status: t('table_status', 'Status'),
+    searchPlaceholder: t('search_placeholder', 'Search...'),
+    filter: t('filter', 'Filter'),
+    show: t('show', 'Show'),
+    itemsPerPage: t('records_per_table', 'items per page'),
+    noItems: t('no_data', 'No items match your filters.'),
+    page: t('page', 'Page'),
+    of: t('of', 'of'),
+    previous: t('previous', 'Previous'),
+    next: t('next', 'Next'),
+    columns: t('select_columns', 'Columns'),
+  }), [t]);
+
+
+  // Keep internal state for fallback
+  const [internalFilters, setInternalFilters] = useState<ProductFilters>({
+    category: [],
+    productType: [],
+    status: [],
+  });
+  const [internalShowFilters, setInternalShowFilters] = useState(false);
+
+  const activeFilters = controlledFilters ?? internalFilters;
   const showFilters = isFilterActive ?? internalShowFilters;
 
   const handleFilterChange = (newFilters: ProductFilters) => {
@@ -434,68 +295,297 @@ export function ProductTableExpanded({
     }
   };
 
-  const filteredProducts = useMemo(() => {
-    if (totalRecords > products.length) {
-      return products;
-    }
+  const columns = useMemo<ColumnDef<Product>[]>(() => {
+    return [
+      {
+        id: "select",
+        header: ({ table }) => (
+          <div className="w-12 px-7">
+            <Checkbox
+              checked={
+                table.getIsAllPageRowsSelected() ||
+                (table.getIsSomePageRowsSelected() && "indeterminate")
+              }
+              onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+              aria-label="Select all"
+              className="translate-y-0.5"
+            />
+          </div>
+        ),
+        cell: ({ row }) => (
+          <div className="w-12 px-7 py-2.5">
+            <Checkbox
+              checked={row.getIsSelected()}
+              onCheckedChange={(value) => row.toggleSelected(!!value)}
+              aria-label="Select row"
+              className="translate-y-0.5"
+            />
+          </div>
+        ),
+        enableSorting: false,
+        enableHiding: false,
+      },
+      {
+        id: "expander",
+        header: () => <div className="w-12 px-7" />,
+        cell: ({ row }) => (
+          <div className="px-7 w-12 py-2.5">
+            <motion.div
+              animate={{ rotate: row.getIsExpanded() ? 180 : 0 }}
+              transition={{ duration: 0.2 }}
+              className="flex-shrink-0 w-4 cursor-pointer"
+              onClick={() => row.toggleExpanded()}
+            >
+              <ChevronDown className="h-4 w-4 text-muted-foreground" />
+            </motion.div>
+          </div>
+        ),
+        enableHiding: false,
+      },
+      {
+        accessorKey: "id",
+        header: ({ column }) => (
+          <div
+            className="w-16 text-left font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            {t('table_id', 'ID')}
 
+          </div>
+        ),
+        cell: ({ row }) => (
+          <div className="w-16 font-dev text-transform-tertiary text-muted-foreground text-left py-2.5 truncate">
+            {row.original.id.toString().substring(0,6)}
+          </div>
+        ),
+        enableHiding: false,
+      },
+      {
+        accessorKey: "name",
+        header: ({ column }) => (
+          <div
+            className="w-80 text-left font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            {L.itemName}
+          </div>
+        ),
+        cell: ({ row }) => (
+          <div className="w-80 py-2.5 text-left">
+            <div className="flex items-center gap-4">
+              <div className="w-10 h-10 flex items-center justify-center shrink-0 overflow-hidden">
+                <Avatar 
+                  size="sm"
+                  className="w-full h-full object-cover border-[1.5px] border-border bg-surface-variant"
+                >
+                  <AvatarImage src={row.original.image} alt={row.original.name} />
+                  <AvatarFallback>{row.original.name?.slice(0, 2).toUpperCase() || 'P'}</AvatarFallback>
+                </Avatar>
+              </div>
+              <div className="flex flex-col min-w-0">
+                <span className="font-bold text-foreground text-sm truncate uppercase tracking-tight">{row.original.name}</span>
+                <span className="font-dev font-normal text-xs text-muted-foreground uppercase tracking-wide truncate mt-0.5 opacity-70">SKU: {row.original.sku}</span>
+              </div>
+            </div>
+          </div>
+        ),
+        enableHiding: false,
+      },
+      {
+        accessorKey: "barcode",
+        header: () => <div className="w-32 text-left font-mono text-[10px] tracking-widest text-muted-foreground uppercase">{L.itemCode}</div>,
+        cell: ({ row }) => (
+          <div className="w-32 py-2.5 text-left font-dev text-transform-tertiary text-muted-foreground truncate">
+            {row.original.barcode || '—'}
+          </div>
+        ),
+      },
+      {
+        accessorKey: "sku",
+        header: () => <div className="w-32 text-left font-mono text-[10px] tracking-widest text-muted-foreground uppercase">{L.sku}</div>,
+        cell: ({ row }) => (
+          <div className="w-32 py-2.5 text-left font-dev text-transform-tertiary text-muted-foreground truncate">
+            {row.original.sku}
+          </div>
+        ),
+      },
+      {
+        accessorKey: "cate_name",
+        header: ({ column }) => (
+          <div
+            className="w-32 text-left font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            {L.category}
+          </div>
+        ),
+        cell: ({ row }) => (
+          <div className="w-32 truncate text-muted-foreground text-left py-2.5">
+            {row.original.cate_name || '—'}
+          </div>
+        ),
+      },
+      {
+        accessorKey: "productType",
+        header: () => <div className="w-28 text-left font-mono text-[10px] tracking-widest text-muted-foreground uppercase">{L.type}</div>,
+        cell: ({ row }) => (
+          <div className="w-28 py-2.5">
+            <Pill
+              variant={row.original.productType === 'PHYSICAL' ? 'info' : row.original.productType === 'DIGITAL' ? 'warning' : 'neutral'}
+              className="w-fit px-1.5 py-0.5"
+            >
+              {row.original.productType || '—'}
+            </Pill>
+          </div>
+        ),
+      },
+      {
+        accessorKey: "stock",
+        header: ({ column }) => (
+          <div
+            className="w-32 text-right pr-4 font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            {L.inventory}
+          </div>
+        ),
+        cell: ({ row }) => (
+          <div className="w-32 text-right py-2.5 pr-4">
+            <div className="flex flex-col items-end">
+              <div className="flex items-baseline gap-1">
+                <span className={`font-bold ${row.original.stock === 0 ? 'text-destructive' : 'text-foreground'}`}>{row.original.stock || 0}</span>
+                <span className="text-xs text-muted-foreground">{row.original.unit || ''}</span>
+              </div>
+              <span className="text-[10px] text-muted-foreground truncate max-w-full">{row.original.location || '—'}</span>
+            </div>
+          </div>
+        ),
+      },
+      {
+        accessorKey: "location",
+        header: () => <div className="w-32 text-left font-mono text-[10px] tracking-widest text-muted-foreground uppercase">{L.location}</div>,
+        cell: ({ row }) => (
+          <div className="w-32 py-2.5 text-left font-dev text-transform-tertiary text-muted-foreground truncate">
+            {row.original.location || '—'}
+          </div>
+        ),
+      },
+      {
+        accessorKey: "unit",
+        header: () => <div className="w-24 text-left font-mono text-[10px] tracking-widest text-muted-foreground uppercase">{L.unit}</div>,
+        cell: ({ row }) => (
+          <div className="w-24 py-2.5 text-left font-dev text-transform-tertiary text-muted-foreground truncate">
+            {row.original.unit || '—'}
+          </div>
+        ),
+      },
+      {
+        accessorKey: "price",
+        header: ({ column }) => (
+          <div
+            className="w-24 text-right font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            {L.price}
+          </div>
+        ),
+        cell: ({ row }) => (
+          <div className="w-24 text-right font-bold text-foreground py-2.5">
+            ${(row.original.price || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+          </div>
+        ),
+      },
+      {
+        accessorKey: "status",
+        header: ({ column }) => (
+          <div
+            className="w-32 text-right font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            {L.status}
+
+          </div>
+        ),
+        cell: ({ row }) => (
+          <div className="w-32 text-right py-2.5">
+            <Pill
+              variant={row.original.status >= 100 ? 'error' : row.original.status >= 50 ? 'success' : 'warning'}
+              className="whitespace-nowrap w-fit ml-auto px-2 py-0.5 font-mono text-[9px] uppercase font-bold tracking-tight shadow-none"
+            >
+              <div className={cn("w-1.5 h-1.5 rounded-full bg-current mr-1.5 opacity-80 shrink-0", row.original.status >= 100 ? "bg-error" : row.original.status >= 50 ? "bg-success" : "bg-warning")} />
+              {t(`status_${row.original.status}`, row.original.status.toString())}
+            </Pill>
+          </div>
+        ),
+        enableHiding: false,
+      },
+      {
+        id: "actions",
+        header: () => (
+          <div className="w-20 text-center py-4 relative">
+          </div>
+        ),
+        cell: () => (
+          <div className="w-20 py-2.5 text-center flex justify-center">
+            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+              <MoreHorizontal className="h-4 w-4" />
+            </Button>
+          </div>
+        ),
+        enableHiding: false,
+      },
+    ];
+  }, [L, t]);
+
+  const filteredData = useMemo(() => {
     return products.filter((p) => {
-      const lowerQuery = searchQuery.toLowerCase();
-
-      const matchSearch =
-        p.name.toLowerCase().includes(lowerQuery) ||
-        p.sku.toLowerCase().includes(lowerQuery);
-
-      const matchCategory =
-        filters.category.length === 0 || filters.category.includes(p.cate_name);
-      const matchStatus =
-        filters.status.length === 0 || filters.status.includes(p.status.toString());
-
-      return matchSearch && matchCategory && matchStatus;
+      const matchCategory = !activeFilters.category || activeFilters.category.length === 0 || activeFilters.category.includes(p.cate_name);
+      const matchType = !activeFilters.productType || activeFilters.productType.length === 0 || activeFilters.productType.includes(p.productType || '');
+      const matchStatus = !activeFilters.status || activeFilters.status.length === 0 || activeFilters.status.includes(p.status.toString());
+      return matchCategory && matchType && matchStatus;
     });
-  }, [filters, searchQuery, products, totalRecords]);
+  }, [products, activeFilters]);
 
-  const totalPages = Math.max(1, totalPagesProp ?? Math.ceil(totalRecords / pageSize));
+  // Adjust pagination remotely vs locally
+  const isRemote = (totalRecords ?? 0) > products.length;
+  
+  const table = useReactTable({
+    data: filteredData,
+    columns,
+    state: {
+      sorting,
+      columnFilters,
+      columnVisibility,
+      expanded,
+      globalFilter: searchQuery,
+      ...(isRemote ? { pagination: { pageIndex: Math.max(0, currentPage - 1), pageSize } } : {})
+    },
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
+    onColumnVisibilityChange: setColumnVisibility,
+    onExpandedChange: setExpanded,
+    onGlobalFilterChange: setSearchQuery,
+    getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getExpandedRowModel: getExpandedRowModel(),
+    getRowCanExpand: () => true,
+    ...(isRemote 
+      ? { manualPagination: true, pageCount: totalPages } 
+      : { getPaginationRowModel: getPaginationRowModel() })
+  });
 
-  const paginatedProducts = useMemo(() => {
-    if (totalRecords > products.length) {
-      return products;
-    }
-    const start = (currentPage - 1) * pageSize;
-    return filteredProducts.slice(start, start + pageSize);
-  }, [filteredProducts, currentPage, pageSize, totalRecords, products]);
-
-  const activeFilters = filters.category.length + filters.status.length;
-  const hasActiveFilter = activeFilters > 0 || searchQuery.trim() !== "";
-
-  const pageNumbers: (number | string)[] = [];
-  if (totalPages <= 5) {
-    for (let i = 1; i <= totalPages; i++) pageNumbers.push(i);
-  } else {
-    pageNumbers.push(1);
-    if (currentPage > 3) pageNumbers.push('...');
-    const start = Math.max(2, currentPage - 1);
-    const end = Math.min(totalPages - 1, currentPage + 1);
-    for (let i = start; i <= end; i++) pageNumbers.push(i);
-    if (currentPage < totalPages - 2) pageNumbers.push('...');
-    pageNumbers.push(totalPages);
-  }
-
-  if (loading) {
-    return (
-      <main className={cn('w-full bg-layer-canvas border-outline-variant overflow-hidden border-[length:var(--table-border-width,var(--card-border-width,1px))] rounded-[length:var(--table-border-radius,var(--radius-card,8px))] flex flex-col min-h-[400px] items-center justify-center', className)}>
-        <p className="font-body text-transform-secondary text-muted-foreground">{t('loading', 'Loading items...')}</p>
-      </main>
-    );
-  }
+  const totalFilteredCount = isRemote ? totalRecords : table.getFilteredRowModel().rows.length;
+  const isSearchActive = searchQuery.trim() !== "" || Object.values(activeFilters).some(g => g && g.length > 0);
 
   return (
-    <main className={cn("w-full bg-layer-canvas border-outline-variant overflow-hidden border-[length:var(--table-border-width,var(--card-border-width,1px))] rounded-[length:var(--table-border-radius,var(--radius-card,8px))] flex flex-col min-h-[500px]", className)}>
+    <main className={cn("w-full bg-layer-canvas border-outline-variant overflow-hidden border-[length:var(--table-border-width,var(--card-border-width,1px))] rounded-[length:var(--table-border-radius,var(--radius-card,8px))] flex flex-col flex-1", className)}>
+      {/* TOOLBAR */}
       <div className="flex flex-col md:flex-row justify-between items-end md:items-center w-full py-4 px-5 gap-4 border-b border-border bg-layer-panel min-h-[length:var(--table-toolbar-height,4.5rem)] flex-shrink-0">
         <div className="flex items-center h-8">
-          {hasActiveFilter && (
+          {isSearchActive && (
             <span className="text-sm font-medium text-muted-foreground font-body text-transform-secondary">
-              {filteredProducts.length} {t('of', 'of')} {totalRecords} {t('products_matched', 'records matched criteria.')}
+              {totalFilteredCount} of {isRemote ? totalRecords : products.length} items matched criteria.
             </span>
           )}
         </div>
@@ -505,13 +595,11 @@ export function ProductTableExpanded({
             <Input
               variant="filled"
               leadingIcon="search"
-              placeholder={t('search_placeholder', 'Search products...')}
+              placeholder={L.searchPlaceholder}
+
               value={searchQuery}
-              onChange={(event) => {
-                setSearchQuery(event.target.value);
-                onPageChange?.(1);
-              }}
-              className="font-body text-transform-secondary text-sm"
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="font-body text-transform-secondary text-sm h-[var(--input-height,var(--button-height,48px))]"
             />
           </div>
           <Button
@@ -521,20 +609,23 @@ export function ProductTableExpanded({
             className="relative h-[var(--input-height,var(--button-height,48px))] px-6"
           >
             <Filter className="h-4 w-4 mr-2" />
-            <span className="font-display font-medium text-xs text-transform-primary">{t('filter', 'filters')}</span>
-            {activeFilters > 0 && (
+            <span className="font-display font-medium text-xs text-transform-primary">{L.filter}</span>
+
+            {(activeFilters.category?.length + (activeFilters.productType?.length || 0) + activeFilters.status?.length) > 0 && (
               <Badge className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center p-0 text-xs rounded-full bg-error text-on-error border-none z-20">
-                {activeFilters}
+                {activeFilters.category?.length + (activeFilters.productType?.length || 0) + activeFilters.status?.length}
               </Badge>
             )}
           </Button>
           <Button variant="primary" size="sm" className="h-[var(--input-height,var(--button-height,48px))] px-6">
-            <span className="font-display font-medium text-xs text-transform-primary">{t('btn_add', 'add product')}</span>
+            <Plus className="h-4 w-4 mr-2" />
+            <span className="font-display font-medium text-xs font-mono">{L.addItem}</span>
           </Button>
         </div>
       </div>
 
       <div className="flex flex-1 overflow-hidden">
+        {/* SIDE FILTERS */}
         <AnimatePresence initial={false}>
           {showFilters && !isFilterActive && (
             <motion.div
@@ -546,218 +637,219 @@ export function ProductTableExpanded({
               className="overflow-hidden border-r border-border bg-layer-panel w-72 flex-shrink-0 flex"
             >
               <FilterPanel
-                filters={filters}
+                filters={activeFilters}
                 onChange={handleFilterChange}
-                products={products}
+                data={products}
                 t={t}
               />
             </motion.div>
           )}
         </AnimatePresence>
 
-        <div className="flex-1 flex flex-col bg-layer-cover overflow-auto min-w-0">
-          <div className="flex-1 rounded-none border-0 block min-w-max">
-            <Table className="w-full relative bg-transparent border-collapse min-w-max">
+        {/* DATA GRID */}
+        <div className="flex-1 flex flex-col bg-layer-cover overflow-hidden min-w-0 relative">
+          <div className="absolute inset-0 [&_[data-slot=table-wrapper]]:h-full [&_[data-slot=table-wrapper]]:overflow-auto [&_[data-slot=table-wrapper]]:scrollbar-thin [&_[data-slot=table-wrapper]]:scrollbar-thumb-outline-variant/30 [&_[data-slot=table-wrapper]]:scrollbar-track-transparent">
+            <Table className="relative bg-transparent border-collapse w-full min-w-max">
               <TableHeader className="bg-layer-panel top-0 z-10 sticky border-b border-border shadow-sm h-12">
-                <TableRow className="border-b-0 hover:bg-transparent">
-                  <TableHead className="w-12 px-7 bg-layer-panel"></TableHead>
-
-                  {/* 1. ID (Fixed) */}
-                  <TableHead className="w-16 text-left bg-layer-panel font-display font-black text-[10px] text-transform-primary uppercase tracking-[0.1em]">{t('table_id', 'ID')}</TableHead>
-
-                  {/* 2. Image (Fixed) */}
-                  <TableHead className="w-16 text-left bg-layer-panel font-display font-black text-[10px] text-transform-primary uppercase tracking-[0.1em]">{t('table_image', 'Image')}</TableHead>
-
-                  {/* 3. Item name (Fixed) */}
-                  <TableHead className="min-w-40 text-left bg-layer-panel font-display font-black text-[10px] text-transform-primary uppercase tracking-[0.1em]">{t('table_name', 'Item name')}</TableHead>
-
-                  {/* 4. SKU (Default) */}
-                  {visibleCols.sku && <TableHead className="w-32 text-left bg-layer-panel font-display font-black text-[10px] text-transform-primary uppercase tracking-[0.1em]">{t('table_sku', 'SKU')}</TableHead>}
-
-                  {/* 5. Category (Default) */}
-                  {visibleCols.category && <TableHead className="w-32 text-left bg-layer-panel font-display font-black text-[10px] text-transform-primary uppercase tracking-[0.1em]">{t('table_category', 'Category')}</TableHead>}
-
-                  {/* 6. Price (Default) */}
-                  {visibleCols.price && <TableHead className="w-24 text-right bg-layer-panel font-display font-black text-[10px] text-transform-primary uppercase tracking-[0.1em]">{t('table_price', 'Price')}</TableHead>}
-
-                  {/* 7. Location (Default) */}
-                  {visibleCols.location && <TableHead className="w-32 text-left bg-layer-panel font-display font-black text-[10px] text-transform-primary uppercase tracking-[0.1em]">{t('table_location', 'Location')}</TableHead>}
-
-                  {/* 8. Stock (Optional) */}
-                  {visibleCols.stock && <TableHead className="w-24 text-right bg-layer-panel font-display font-black text-[10px] text-transform-primary uppercase tracking-[0.1em]">{t('table_stock', 'Stock')}</TableHead>}
-
-                  {/* 9. Unit (Optional) */}
-                  {visibleCols.unit && <TableHead className="w-24 text-left bg-layer-panel font-display font-black text-[10px] text-transform-primary uppercase tracking-[0.1em]">{t('table_unit', 'Unit')}</TableHead>}
-
-                  {/* 10. Barcode (Optional) */}
-                  {visibleCols.barcode && <TableHead className="w-32 text-left bg-layer-panel font-display font-black text-[10px] text-transform-primary uppercase tracking-[0.1em]">{t('table_barcode', 'Barcode')}</TableHead>}
-
-                  {/* 11. Product Type (Optional) */}
-                  {visibleCols.type && <TableHead className="w-28 text-left bg-layer-panel font-display font-black text-[10px] text-transform-primary uppercase tracking-[0.1em]">{t('table_type', 'Product Type')}</TableHead>}
-
-                  {/* 12. Status (Fixed) */}
-                  <TableHead className="w-32 text-right bg-layer-panel pr-4 font-display font-black text-[10px] text-transform-primary uppercase tracking-[0.1em]">{t('table_status', 'Status')}</TableHead>
-
-                  {/* 13. Actions (Fixed) */}
-                  <TableHead className="w-24 pr-7 text-right bg-layer-panel sticky right-0 z-20 shadow-[-4px_0_8px_-4px_rgba(0,0,0,0.1)] border-l border-border bg-layer-panel font-display font-black text-[10px] text-transform-primary uppercase tracking-[0.1em]">
-                    <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
-                      <PopoverTrigger asChild>
-                        <Button onClick={() => setTempCols(visibleCols)} variant="ghost" size="sm" className="h-6 w-6 p-0 ml-auto bg-surface hover:bg-surface-variant border border-border">
-                          <Plus className="h-3 w-3" />
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-56 p-0 bg-surface shadow-2xl border border-outline rounded-xl" align="end" sideOffset={8}>
-                        <div className="p-3">
-                          <p className="font-dev text-[10px] text-muted-foreground font-semibold tracking-wide uppercase">{t('select_columns', 'Select Columns')}</p>
-                        </div>
-                        <div className="px-3 pb-3 flex flex-col gap-3">
-                          {/* Default Group */}
-                          <div className="flex items-center space-x-2">
-                            <Checkbox id="col-sku" checked={tempCols.sku} onCheckedChange={(c) => setTempCols(prev => ({ ...prev, sku: !!c }))} />
-                            <label htmlFor="col-sku" className="text-sm font-medium leading-none cursor-pointer">{t('table_sku', 'SKU')}</label>
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <TableRow key={headerGroup.id} className="border-b-0 hover:bg-transparent">
+                    {headerGroup.headers.map((header) => (
+                      <TableHead key={header.id} className="p-0 bg-layer-panel relative">
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(header.column.columnDef.header, header.getContext())}
+                        
+                        {/* Column Picker in the last header */}
+                        {header.column.id === 'actions' && (
+                          <div className="absolute inset-0 flex items-center justify-center">
+                            <Popover>
+                              <PopoverTrigger asChild>
+                                <Button variant="ghost" size="sm" className="h-6 w-6 p-0 bg-surface hover:bg-surface-variant border border-border rounded-md shadow-sm active:scale-95 transition-all">
+                                  <Plus className="h-3 w-3" />
+                                </Button>
+                              </PopoverTrigger>
+                              <PopoverContent className="w-56 p-0 bg-surface shadow-2xl border border-outline rounded-xl" align="end" sideOffset={8}>
+                                <div className="p-3 border-b border-border bg-surface-variant/20">
+                                  <p className="font-dev text-[10px] text-muted-foreground font-semibold tracking-wide uppercase">{t('select_columns', 'Columns')}</p>
+                                </div>
+                                <div className="px-3 pb-3 flex flex-col gap-3">
+                                  {table.getAllColumns()
+                                    .filter(col => col.getCanHide())
+                                    .map(col => {
+                                      const columnLabels: Record<string, string> = {
+                                        sku: t('table_sku', 'Mã SKU'),
+                                        cate_name: t('table_category', 'Danh mục'),
+                                        price: t('table_price', 'Giá bán'),
+                                        location: t('table_location', 'Vị trí'),
+                                        stock: t('table_stock', 'Tồn Kho'),
+                                        unit: t('table_unit', 'Đơn vị tính'),
+                                        barcode: t('table_barcode', 'Mã vạch'),
+                                        productType: t('table_type', 'Loại sản phẩm'),
+                                      };
+                                      
+                                      return (
+                                        <div key={col.id} className="flex items-center gap-3 p-1">
+                                          <Checkbox
+                                            id={`col-${col.id}`}
+                                            checked={col.getIsVisible()}
+                                            onCheckedChange={(value) => col.toggleVisibility(!!value)}
+                                            className="h-4 w-4 border-[1.5px] border-outline data-[state=checked]:bg-primary data-[state=checked]:border-primary transition-all duration-200"
+                                          />
+                                          <label
+                                            htmlFor={`col-${col.id}`}
+                                            className="text-xs font-dev font-medium text-on-surface-variant/80 cursor-pointer select-none tracking-tight"
+                                          >
+                                            {columnLabels[col.id] || col.id}
+                                          </label>
+                                        </div>
+                                      );
+                                    })}
+                                </div>
+                              </PopoverContent>
+                            </Popover>
                           </div>
-                          <div className="flex items-center space-x-2">
-                            <Checkbox id="col-category" checked={tempCols.category} onCheckedChange={(c) => setTempCols(prev => ({ ...prev, category: !!c }))} />
-                            <label htmlFor="col-category" className="text-sm font-medium leading-none cursor-pointer">{t('table_category', 'Category')}</label>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <Checkbox id="col-price" checked={tempCols.price} onCheckedChange={(c) => setTempCols(prev => ({ ...prev, price: !!c }))} />
-                            <label htmlFor="col-price" className="text-sm font-medium leading-none cursor-pointer">{t('table_price', 'Price')}</label>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <Checkbox id="col-location" checked={tempCols.location} onCheckedChange={(c) => setTempCols(prev => ({ ...prev, location: !!c }))} />
-                            <label htmlFor="col-location" className="text-sm font-medium leading-none cursor-pointer">{t('table_location', 'Location')}</label>
-                          </div>
-
-                          <div className="h-px bg-border my-1" />
-
-                          {/* Optional Group */}
-                          <div className="flex items-center space-x-2">
-                            <Checkbox id="col-stock" checked={tempCols.stock} onCheckedChange={(c) => setTempCols(prev => ({ ...prev, stock: !!c }))} />
-                            <label htmlFor="col-stock" className="text-sm font-medium leading-none cursor-pointer">{t('table_stock', 'Stock')}</label>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <Checkbox id="col-unit" checked={tempCols.unit} onCheckedChange={(c) => setTempCols(prev => ({ ...prev, unit: !!c }))} />
-                            <label htmlFor="col-unit" className="text-sm font-medium leading-none cursor-pointer">{t('table_unit', 'Unit')}</label>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <Checkbox id="col-barcode" checked={tempCols.barcode} onCheckedChange={(c) => setTempCols(prev => ({ ...prev, barcode: !!c }))} />
-                            <label htmlFor="col-barcode" className="text-sm font-medium leading-none cursor-pointer">{t('table_barcode', 'Barcode')}</label>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <Checkbox id="col-type" checked={tempCols.type} onCheckedChange={(c) => setTempCols(prev => ({ ...prev, type: !!c }))} />
-                            <label htmlFor="col-type" className="text-sm font-medium leading-none cursor-pointer">{t('table_type', 'Product Type')}</label>
-                          </div>
-                        </div>
-                        <div className="p-2 border-t border-border flex justify-end gap-3 items-center">
-                          <button onClick={() => setTempCols({ sku: true, category: true, price: true, location: true, stock: false, unit: false, barcode: false, type: false })} className="text-[10px] font-dev text-muted-foreground font-semibold uppercase tracking-wide hover:text-foreground">{t('btn_reset', 'Reset')}</button>
-                          <button onClick={() => { setVisibleCols(tempCols); setIsPopoverOpen(false); }} className="text-[10px] font-dev text-foreground font-semibold uppercase tracking-wide hover:opacity-80">{t('btn_apply', 'Apply')}</button>
-                        </div>
-                      </PopoverContent>
-                    </Popover>
-                  </TableHead>
-                </TableRow>
+                        )}
+                      </TableHead>
+                    ))}
+                  </TableRow>
+                ))}
               </TableHeader>
+
               <TableBody>
-                <AnimatePresence mode="popLayout">
-                  {paginatedProducts.length > 0 ? (
-                    paginatedProducts.map((p) => (
-                      <ProductRow
-                        key={p.id}
-                        product={p}
-                        expanded={expandedId === p.id}
-                        onToggle={() =>
-                          setExpandedId((current) =>
-                            current === p.id ? null : p.id
-                          )
-                        }
-                        visibleCols={visibleCols}
-                        t={t}
-                        lang={lang}
-                      />
-                    ))
-                  ) : (
-                    <TableRow>
-                      <TableCell colSpan={10} className="h-48 text-center p-12">
-                        <motion.div
-                          key="empty-state"
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                        >
-                          <p className="font-body text-transform-secondary text-muted-foreground">
-                            {t('no_data', 'No products match your filters.')}
-                          </p>
-                        </motion.div>
-                      </TableCell>
-                    </TableRow>
-                  )}
-                </AnimatePresence>
+                {table.getRowModel().rows.length > 0 ? (
+                  table.getRowModel().rows.map((row) => (
+                    <React.Fragment key={row.id}>
+                      <TableRow className="group hover:bg-surface-variant/50 focus:bg-surface-variant/70 border-b border-border/50 transition-colors">
+                        {row.getVisibleCells().map((cell) => (
+                          <TableCell key={cell.id} className="p-0">
+                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                          </TableCell>
+                        ))}
+                      </TableRow>
+
+                      {/* Expanded Content */}
+                      <AnimatePresence>
+                        {row.getIsExpanded() && (
+                          <TableRow className="hover:bg-transparent data-[state=selected]:bg-transparent border-0">
+                            <TableCell colSpan={row.getVisibleCells().length} className="p-0 border-b-0 h-0 border-t-0">
+                              <motion.div
+                                initial={{ height: 0, opacity: 0 }}
+                                animate={{ height: "auto", opacity: 1 }}
+                                exit={{ height: 0, opacity: 0 }}
+                                transition={{ duration: 0.2 }}
+                                className="overflow-hidden bg-layer-panel border-t border-border"
+                              >
+                                <div className="space-y-4 px-10 py-5 border-b border-border shadow-inner">
+                                  <div className="grid grid-cols-2 md:grid-cols-4 gap-6 font-dev text-transform-tertiary">
+                                    <div>
+                                      <p className="mb-1 text-[length:var(--table-font-size,0.625rem)] font-display font-semibold text-transform-primary tracking-widest text-muted-foreground uppercase">ID</p>
+                                      <p className="text-foreground font-mono text-xs">{row.original.id}</p>
+                                    </div>
+                                    <div>
+                                      <p className="mb-1 text-[length:var(--table-font-size,0.625rem)] font-display font-semibold text-transform-primary tracking-widest text-muted-foreground uppercase">Barcode</p>
+                                      <p className="text-foreground font-mono text-xs">{row.original.barcode || '—'}</p>
+                                    </div>
+                                    <div>
+                                      <p className="mb-1 text-[length:var(--table-font-size,0.625rem)] font-display font-semibold text-transform-primary tracking-widest text-muted-foreground uppercase">Unit</p>
+                                      <p className="text-foreground font-mono text-xs">{row.original.unit || '—'}</p>
+                                    </div>
+                                    <div>
+                                      <p className="mb-1 text-[length:var(--table-font-size,0.625rem)] font-display font-semibold text-transform-primary tracking-widest text-muted-foreground uppercase">Location</p>
+                                      <p className="text-foreground font-mono text-xs">{row.original.location || '—'}</p>
+                                    </div>
+                                  </div>
+                                </div>
+                              </motion.div>
+                            </TableCell>
+                          </TableRow>
+                        )}
+                      </AnimatePresence>
+                    </React.Fragment>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={columns.length} className="h-48 text-center p-12">
+                      <p className="font-body text-transform-secondary text-muted-foreground">{L.noItems}</p>
+
+                    </TableCell>
+                  </TableRow>
+                )}
               </TableBody>
             </Table>
           </div>
         </div>
       </div>
-
+      
+      {/* PAGINATION */}
       <div className="border-t border-border bg-layer-panel px-7 py-4">
         <div className="flex items-center justify-between text-sm text-muted-foreground font-body text-transform-secondary">
           <div className="flex items-center gap-2">
-            <span className="text-transform-secondary">{t('show', 'Show')}</span>
+            <span className="text-transform-secondary">{L.show}</span>
+
             <Select
-              value={pageSize.toString()}
-              onValueChange={(val) => onPageSizeChange?.(parseInt(val, 10))}
+              value={(isRemote ? pageSize : table.getState().pagination.pageSize).toString()}
+              onValueChange={(val) => {
+                if (isRemote) {
+                  onPageSizeChange?.(Number(val));
+                } else {
+                  table.setPageSize(Number(val));
+                }
+              }}
             >
               <SelectTrigger size="sm" className="w-20 font-medium font-body text-transform-secondary bg-layer-panel text-on-surface hover:bg-layer-dialog">
-                <SelectValue placeholder={pageSize >= 9999 ? t('all', 'All') : pageSize.toString()} />
+                <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="10">10</SelectItem>
-                <SelectItem value="20">20</SelectItem>
-                <SelectItem value="50">50</SelectItem>
-                <SelectItem value="100">100</SelectItem>
-                <SelectItem value="9999">{t('all', 'All')}</SelectItem>
+                {[10, 20, 50, 100].map(size => (
+                  <SelectItem key={size} value={size.toString()}>{size}</SelectItem>
+                ))}
               </SelectContent>
             </Select>
-            <span className="text-transform-secondary">{t('records_per_table', 'products per page')}</span>
+            <span className="text-transform-secondary">{L.itemsPerPage}</span>
+
           </div>
-          <Pagination className="mx-0 w-auto m-0">
-            <PaginationContent>
-              <PaginationItem>
-                <PaginationPrevious
-                  onClick={() => onPageChange?.(Math.max(1, currentPage - 1))}
-                  className={cn(
-                    'h-8 px-3 font-body text-transform-secondary',
-                    currentPage === 1 && 'pointer-events-none opacity-40'
-                  )}
-                />
-              </PaginationItem>
 
-              {pageNumbers.map((page, idx) => (
-                <PaginationItem key={idx}>
-                  {page === '...' ? (
-                    <PaginationEllipsis />
-                  ) : (
-                    <PaginationLink
-                      isActive={currentPage === page}
-                      onClick={() => onPageChange?.(page as number)}
-                      className="h-8 w-8 font-body cursor-pointer"
-                    >
-                      {page}
-                    </PaginationLink>
-                  )}
+          <div className="flex items-center gap-6">
+            <span className="text-xs font-mono tracking-widest uppercase opacity-60">
+              {t('page', 'Page')} {isRemote ? currentPage : table.getState().pagination.pageIndex + 1} {t('of', 'of')} {isRemote ? totalPages : table.getPageCount()}
+            </span>
+            <Pagination className="mx-0 w-auto m-0">
+              <PaginationContent>
+                <PaginationItem>
+                  <PaginationPrevious
+                    href="#"
+                    className="font-mono text-[10px] tracking-widest uppercase cursor-pointer"
+                    onClick={(e) => { 
+                      e.preventDefault(); 
+                      if (isRemote) {
+                        onPageChange?.(Math.max(1, currentPage - 1));
+                      } else {
+                        table.previousPage(); 
+                      }
+                    }}
+                  >
+                    {t('previous', 'Previous')}
+                  </PaginationPrevious>
                 </PaginationItem>
-              ))}
-
-              <PaginationItem>
-                <PaginationNext
-                  onClick={() => onPageChange?.(Math.min(totalPages, currentPage + 1))}
-                  className={cn(
-                    'h-8 px-3 font-body text-transform-secondary',
-                    currentPage === totalPages && 'pointer-events-none opacity-40'
-                  )}
-                />
-              </PaginationItem>
-            </PaginationContent>
-          </Pagination>
+                <PaginationItem>
+                  <PaginationNext
+                    href="#"
+                    className="font-mono text-[10px] tracking-widest uppercase cursor-pointer"
+                    onClick={(e) => { 
+                      e.preventDefault(); 
+                      if (isRemote) {
+                        onPageChange?.(Math.min(totalPages || 1, currentPage + 1));
+                      } else {
+                        table.nextPage(); 
+                      }
+                    }}
+                  >
+                    {t('next', 'Next')}
+                  </PaginationNext>
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
+          </div>
         </div>
       </div>
     </main>

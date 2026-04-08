@@ -18,7 +18,7 @@
   "table_slug": "Slug",
   "table_premium": "Premium",
   "table_status": "status",
-  "table_action": "action",
+  "table_action": "",
   "status_active": "Active",
   "status_inactive": "Inactive"
 }

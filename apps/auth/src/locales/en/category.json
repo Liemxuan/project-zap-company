@@ -1,6 +1,8 @@
 {
   "of": "Of",
-  "categories_matched": "Categories matched criteria.",
+  "page": "Page",
+  "records_matched": "records matched.",
+  "btn_add": "Add Category",
   "title": "Category management",
   "breadcrumb": "inventory / categories",
   "badge": "verified",
@@ -22,7 +24,7 @@
   "table_slug": "Slug",
   "table_item": "Item",
   "table_status": "Status",
-  "table_actions": "Actions",
+  "table_actions": "",
   "status_active": "Active",
   "status_inactive": "Inactive",
   "status_1": "Active",

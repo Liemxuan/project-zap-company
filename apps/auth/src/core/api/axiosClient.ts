@@ -16,6 +16,7 @@ const axiosClient = axios.create({
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
+    'Accept-Language': 'en',
   },
 });
 
@@ -44,12 +45,12 @@ axiosClient.interceptors.response.use(
   (error: any) => {
     if (error.response) {
       const { status } = error.response;
-      
+
       // Auto logout on 401 Unauthorized
       if (status === 401) {
         if (typeof window !== 'undefined') {
           localStorage.removeItem('token');
-          window.location.href = '/login';
+          window.location.href = '/';
         }
       }
     }

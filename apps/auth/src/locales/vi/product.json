@@ -1,5 +1,6 @@
 {
-  "of": "Trên",
+  "page": "Trang",
+  "of": "trên",
   "products_matched": "Sản phẩm khớp với tiêu chí.",
   "title": "Quản lý sản phẩm",
   "breadcrumb": "kho hàng / sản phẩm",
@@ -44,5 +45,12 @@
   "btn_reset": "Đặt lại",
   "btn_apply": "Áp dụng",
   "active_status": "Trạng thái hoạt động",
-  "clear": "Xóa tất cả"
+  "clear": "Xóa tất cả",
+  "btn_add": "thêm sản phẩm",
+  "datagrid_title": "kho hàng trung tâm",
+  "filter_category": "danh mục",
+  "filter_status": "trạng thái hệ thống",
+  "no_records": "không tìm thấy kết quả",
+  "try_adjusting": "điều chỉnh tham số hệ thống để mở rộng phạm vi",
+  "records_suffix": "bản ghi"
 }

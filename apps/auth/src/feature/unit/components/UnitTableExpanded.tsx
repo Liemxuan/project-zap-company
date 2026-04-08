@@ -102,8 +102,8 @@ function UnitRow({
         </TableCell>
 
         {/* 5. Actions (Fixed - Sticky) */}
-        <TableCell className="w-24 pr-7 py-2.5 text-right sticky right-0 z-10 bg-layer-base group-hover:bg-surface-variant/50 transition-colors shadow-[-4px_0_8px_-4px_rgba(0,0,0,0.12)] border-l border-border">
-          <div className="flex items-center justify-end text-muted-foreground">
+        <TableCell className="w-24 py-2.5 text-center sticky right-0 z-10 bg-layer-cover group-hover:bg-surface-variant/50 transition-colors shadow-[-4px_0_8px_-4px_rgba(0,0,0,0.1)] border-l border-border">
+          <div className="flex items-center justify-center text-muted-foreground">
             <QuickActionsDropdown
               actions={[
                 { label: t('action_view', 'view'), icon: Eye, onClick: () => console.log('view', unit.id) },
@@ -458,31 +458,31 @@ export function UnitTableExpanded({
                   <TableHead className="w-32 text-center bg-layer-panel font-display font-black text-[10px] text-transform-primary uppercase tracking-[0.1em]">{t('table_status', 'status')}</TableHead>
 
                   {/* 5. Actions (Fixed) */}
-                  <TableHead className="w-24 pr-7 text-right sticky right-0 z-20 shadow-[-4px_0_8px_-4px_rgba(0,0,0,0.1)] border-l border-border bg-layer-panel font-display font-black text-[10px] text-transform-primary uppercase tracking-[0.1em]">
-                    <div className="flex items-center justify-end gap-2">
+                  <TableHead className="w-24 text-center sticky right-0 z-20 shadow-[-4px_0_8px_-4px_rgba(0,0,0,0.1)] border-l border-border bg-layer-panel font-display font-black text-[10px] text-transform-primary uppercase tracking-[0.1em]">
+                    <div className="flex items-center justify-center">
                       <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
                         <PopoverTrigger asChild>
-                          <Button onClick={() => setTempCols(visibleCols)} variant="ghost" size="sm" className="h-6 w-6 p-0 bg-surface hover:bg-surface-variant border border-border">
+                          <Button onClick={() => setTempCols(visibleCols)} variant="ghost" size="sm" className="h-6 w-6 p-0 bg-surface hover:bg-surface-variant border border-border rounded-md shadow-sm active:scale-95 transition-all">
                             <Plus className="h-3 w-3" />
                           </Button>
                         </PopoverTrigger>
                         <PopoverContent className="w-56 p-0 bg-surface shadow-2xl border border-outline rounded-xl" align="end" sideOffset={8}>
-                          <div className="p-3 border-b border-border">
-                            <p className="font-dev text-[10px] text-muted-foreground font-semibold tracking-wide">{t('select_columns', 'select columns')}</p>
+                          <div className="p-3 border-b border-border bg-surface-variant/20">
+                            <p className="font-dev text-[10px] text-muted-foreground font-semibold tracking-wide uppercase">{t('select_columns', 'Columns')}</p>
                           </div>
-                          <div className="px-3 py-3 flex flex-col gap-3">
-                            <div className="flex items-center space-x-2">
-                              <Checkbox id="col-symbol" checked={tempCols.symbol} onCheckedChange={(c) => setTempCols(prev => ({ ...prev, symbol: !!c }))} />
-                              <label htmlFor="col-symbol" className="text-sm font-medium leading-none cursor-pointer text-transform-secondary font-body">{t('table_symbol', 'symbol')}</label>
+                          <div className="px-3 pb-3 flex flex-col gap-3">
+                            <div className="flex items-center gap-3 p-1">
+                              <Checkbox id="col-symbol" checked={tempCols.symbol} onCheckedChange={(c) => setTempCols(prev => ({ ...prev, symbol: !!c }))} className="h-4 w-4 border-[1.5px] border-outline data-[state=checked]:bg-primary data-[state=checked]:border-primary transition-all duration-200" />
+                              <label htmlFor="col-symbol" className="text-xs font-dev font-medium text-on-surface-variant/80 cursor-pointer select-none tracking-tight">{t('table_symbol', 'symbol')}</label>
                             </div>
-                            <div className="flex items-center space-x-2">
-                              <Checkbox id="col-precision" checked={tempCols.precision} onCheckedChange={(c) => setTempCols(prev => ({ ...prev, precision: !!c }))} />
-                              <label htmlFor="col-precision" className="text-sm font-medium leading-none cursor-pointer text-transform-secondary font-body">{t('table_precision', 'precision')}</label>
+                            <div className="flex items-center gap-3 p-1">
+                              <Checkbox id="col-precision" checked={tempCols.precision} onCheckedChange={(c) => setTempCols(prev => ({ ...prev, precision: !!c }))} className="h-4 w-4 border-[1.5px] border-outline data-[state=checked]:bg-primary data-[state=checked]:border-primary transition-all duration-200" />
+                              <label htmlFor="col-precision" className="text-xs font-dev font-medium text-on-surface-variant/80 cursor-pointer select-none tracking-tight">{t('table_precision', 'precision')}</label>
                             </div>
                           </div>
-                          <div className="p-2 border-t border-border flex justify-end gap-3 items-center">
-                            <button onClick={() => setTempCols({ symbol: true, precision: true })} className="text-[10px] font-dev text-muted-foreground font-semibold tracking-wide hover:text-foreground">{t('btn_reset', 'reset')}</button>
-                            <button onClick={() => { setVisibleCols(tempCols); setIsPopoverOpen(false); }} className="text-[10px] font-dev text-foreground font-semibold tracking-wide hover:opacity-80">{t('btn_apply', 'apply')}</button>
+                          <div className="p-2 border-t border-border flex justify-end gap-3 items-center bg-surface-variant/10">
+                            <button onClick={() => setTempCols({ symbol: true, precision: true })} className="text-[10px] font-dev text-muted-foreground font-semibold tracking-wide hover:text-foreground uppercase">{t('btn_reset', 'reset')}</button>
+                            <button onClick={() => { setVisibleCols(tempCols); setIsPopoverOpen(false); }} className="text-[10px] font-dev text-primary font-bold tracking-wide hover:opacity-80 uppercase">{t('btn_apply', 'apply')}</button>
                           </div>
                         </PopoverContent>
                       </Popover>
@@ -560,8 +560,11 @@ export function UnitTableExpanded({
                     'h-8 px-3 font-body text-transform-secondary',
                     currentPage === 1 && 'pointer-events-none opacity-40'
                   )}
-                />
+                >
+                  {t('previous', 'Previous')}
+                </PaginationPrevious>
               </PaginationItem>
+
 
               {pageNumbers.map((page, idx) => (
                 <PaginationItem key={idx}>
@@ -586,8 +589,11 @@ export function UnitTableExpanded({
                     'h-8 px-3 font-body text-transform-secondary',
                     currentPage === totalPages && 'pointer-events-none opacity-40'
                   )}
-                />
+                >
+                  {t('next', 'Next')}
+                </PaginationNext>
               </PaginationItem>
+
             </PaginationContent>
           </Pagination>
         </div>

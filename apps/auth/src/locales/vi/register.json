@@ -1,0 +1,13 @@
+{
+  "title": "Bắt đầu tạo tài khoản của bạn",
+  "subtitle": "Đăng ký ZAP nhanh chóng và miễn phí—không ràng buộc hay hợp đồng dài hạn.",
+  "email_label": "Email",
+  "password_label": "Mật khẩu",
+  "locale_label": "Vùng miền",
+  "agreement_text": "Tôi đồng ý với các Điều khoản, Chính sách Bảo mật và Chấp thuận Ký tên Điện tử của ZAP.",
+  "submit_button": "Tạo tài khoản",
+  "footer_signin_text": "Đã có tài khoản ZAP?",
+  "footer_signin_link": "Đăng nhập.",
+  "marketing_headline": "Gia nhập hơn 4 triệu doanh nghiệp đang vận hành cùng ZAP.",
+  "recaptcha_notice": "Trang web này được bảo vệ bởi reCAPTCHA Enterprise và Chính sách Bảo mật cũng như Điều khoản Dịch vụ của Google được áp dụng."
+}

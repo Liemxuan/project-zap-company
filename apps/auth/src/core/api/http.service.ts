@@ -5,8 +5,7 @@
 
 import axiosClient from './axiosClient';
 import { ApiResponse } from './api.types';
-
-const IS_MOCK = process.env.NEXT_PUBLIC_IS_MOCK === 'true';
+import { IS_MOCK } from '@/const';
 
 export const httpService = {
   /**
@@ -22,7 +21,15 @@ export const httpService = {
     }
 
     console.log(`%c [REAL API] GET %c ${url}`, 'color: #10b981; font-weight: bold;', 'color: inherit;');
-    return axiosClient.get(url, { params });
+    try {
+      return await axiosClient.get(url, { params });
+    } catch (error) {
+      if (mockData) {
+        console.warn(`%c [API FALLBACK] GET %c ${url} failed, using mock data`, 'color: #f59e0b; font-weight: bold;', 'color: inherit;', error);
+        return mockData;
+      }
+      throw error;
+    }
   },
 
   /**
@@ -38,7 +45,15 @@ export const httpService = {
     }
 
     console.log(`%c [REAL API] POST %c ${url}`, 'color: #10b981; font-weight: bold;', 'color: inherit;');
-    return axiosClient.post(url, data);
+    try {
+      return await axiosClient.post(url, data);
+    } catch (error) {
+      if (mockData) {
+        console.warn(`%c [API FALLBACK] POST %c ${url} failed, using mock data`, 'color: #f59e0b; font-weight: bold;', 'color: inherit;', error);
+        return mockData;
+      }
+      throw error;
+    }
   },
 
   /**
@@ -54,7 +69,15 @@ export const httpService = {
     }
 
     console.log(`%c [REAL API] PUT %c ${url}`, 'color: #10b981; font-weight: bold;', 'color: inherit;');
-    return axiosClient.put(url, data);
+    try {
+      return await axiosClient.put(url, data);
+    } catch (error) {
+      if (mockData) {
+        console.warn(`%c [API FALLBACK] PUT %c ${url} failed, using mock data`, 'color: #f59e0b; font-weight: bold;', 'color: inherit;', error);
+        return mockData;
+      }
+      throw error;
+    }
   },
 
   /**
@@ -70,6 +93,14 @@ export const httpService = {
     }
 
     console.log(`%c [REAL API] DELETE %c ${url}`, 'color: #10b981; font-weight: bold;', 'color: inherit;');
-    return axiosClient.delete(url, { params });
+    try {
+      return await axiosClient.delete(url, { params });
+    } catch (error) {
+      if (mockData) {
+        console.warn(`%c [API FALLBACK] DELETE %c ${url} failed, using mock data`, 'color: #f59e0b; font-weight: bold;', 'color: inherit;', error);
+        return mockData;
+      }
+      throw error;
+    }
   },
 };

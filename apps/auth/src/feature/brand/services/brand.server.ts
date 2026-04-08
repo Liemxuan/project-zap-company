@@ -2,6 +2,9 @@
 
 import type { BrandFilter, BrandResponse } from '../models/brand.model';
 import { API_BASE_URL, API_ENDPOINTS } from '@/const';
+import { getMockBrands } from '@/mocks/brand.mock';
+
+const IS_MOCK = process.env.NEXT_PUBLIC_IS_MOCK === 'true';
 
 /**
  * Server action: Fetch all brands with optional filtering and pagination
@@ -11,6 +14,11 @@ export async function getBrandsServer(
   page = 1,
   pageSize = 10
 ): Promise<BrandResponse> {
+  if (IS_MOCK) {
+    console.log('[Brand Server Action] Using Mock Data');
+    return getMockBrands(filter, page, pageSize);
+  }
+
   const requestPayload = {
     page_index: page,
     page_size: pageSize,

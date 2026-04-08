@@ -122,38 +122,54 @@ function AuthFormInner() {
   };
 
   const handleSignUp = () => {
-    router.push('/signup');
+    router.push('/zap/en/register');
   };
 
   return (
-    <LoginForm
-      onSubmit={handleSignIn}
-      merchantName={merchantName}
-      onMerchantNameChange={(value) => {
-        setMerchantName(value);
-        setError('');
-      }}
-      email={email}
-      onEmailChange={(value) => {
-        setEmail(value);
-        setError('');
-      }}
-      password={password}
-      onPasswordChange={(value) => {
-        setPassword(value);
-        setError('');
-      }}
-      rememberMe={rememberMe}
-      onRememberMeChange={setRememberMe}
-      isProcessing={loading}
-      error={error}
-      activeLang={activeLang}
-      onCycleLang={cycleLanguage}
-      isDarkMode={isDarkMode}
-      onToggleTheme={toggleTheme}
-      onSignUp={handleSignUp}
-      showSocialLogin={false}
-    />
+    <>
+      <LoginForm
+        onSubmit={handleSignIn}
+        merchantName={merchantName}
+        onMerchantNameChange={(value) => {
+          setMerchantName(value);
+          setError('');
+        }}
+        email={email}
+        onEmailChange={(value) => {
+          setEmail(value);
+          setError('');
+        }}
+        password={password}
+        onPasswordChange={(value) => {
+          setPassword(value);
+          setError('');
+        }}
+        rememberMe={rememberMe}
+        onRememberMeChange={setRememberMe}
+        isProcessing={loading}
+        error={error}
+        activeLang={activeLang}
+        onCycleLang={cycleLanguage}
+        isDarkMode={isDarkMode}
+        onToggleTheme={toggleTheme}
+        showSignUp={false}
+        showSocialLogin={false}
+      />
+      
+      <div className="text-center mt-8 pt-6 border-t border-outline/10 w-full">
+        <p className="text-sm text-on-surface-variant/60 font-medium">
+          Don't have a ZAP account?
+        </p>
+        <div className="mt-2">
+          <button
+            onClick={handleSignUp}
+            className="text-xs font-bold text-primary hover:text-primary/80 underline decoration-2 underline-offset-4 transition-all uppercase tracking-widest"
+          >
+            Create your free account
+          </button>
+        </div>
+      </div>
+    </>
   );
 }
 

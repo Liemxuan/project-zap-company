@@ -1,23 +1,33 @@
-/**
- * Brand Service
- * Handles brand data fetching and manipulation with real API (100% no mock)
- */
-
 import { Brand, BrandFilter, BrandResponse } from '../models/brand.model';
-import { getBrandsServer } from './brand.server';
+import { getMockBrands } from '@/mocks/brand.mock';
+import { httpService } from '@/core/api/http.service';
+import { API_ENDPOINTS } from '@/const';
 
 /**
- * Fetch all brands with optional filtering (calls server action)
+ * Fetch all brands with optional filtering
  */
 export async function getBrands(filter?: BrandFilter, page = 1, pageSize = 10): Promise<BrandResponse> {
-  return getBrandsServer(filter, page, pageSize);
+  const mockResult = await getMockBrands(filter, page, pageSize);
+  
+  const response = await httpService.post<BrandResponse>(
+    API_ENDPOINTS.BRAND_LIST,
+    { filter, page, pageSize },
+    { success: true, message: 'Success', code: 200, data: mockResult }
+  );
+  
+  return response.data;
 }
 
 /**
  * Fetch single brand by ID
  */
 export async function getBrandById(id: string): Promise<Brand | null> {
-  // TODO: Implement if API provides this endpoint
-  console.warn(`[Brand API] getBrandById not yet implemented for ${id}`);
-  return null;
+  const url = API_ENDPOINTS.BRAND_LIST.replace('list', id);
+  
+  const response = await httpService.get<Brand>(
+    url,
+    undefined,
+    { success: true, code: 200, message: 'OK', data: null as any }
+  );
+  return response.data;
 }

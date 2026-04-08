@@ -1,0 +1,13 @@
+{
+  "title": "Let's create your account",
+  "subtitle": "Signing up for ZAP is fast and free—no commitments or long-term contracts.",
+  "email_label": "Email",
+  "password_label": "Password",
+  "locale_label": "Locale",
+  "agreement_text": "I agree to ZAP's Terms, Privacy Policy, and E-Sign Consent.",
+  "submit_button": "Create account",
+  "footer_signin_text": "Already have a ZAP account?",
+  "footer_signin_link": "Sign in.",
+  "marketing_headline": "Join the 4 million+ businesses running with ZAP.",
+  "recaptcha_notice": "This site is protected by reCAPTCHA Enterprise and the Google Privacy Policy and Terms of Service apply."
+}

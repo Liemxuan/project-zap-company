@@ -1,43 +1,30 @@
-// Signup Form Types
-export interface SignupFormValues {
-  merchant_name: string;
-  merchant_url: string;
-  first_name: string;
-  last_name: string;
+export interface RegisterInput {
   email: string;
   password: string;
-  dialing_code: string;
-  phone: string;
-}
-
-export interface SignupResponse {
-  success: boolean;
-  error?: string;
-  message?: string;
-}
-
-// Check Account
-export interface RegisterCheckAccountRequest {
-  email?: string;
+  locale: string;
+  country?: string;
+  agree: boolean;
+  merchant_name?: string;
+  merchant_url?: string;
+  first_name?: string;
+  last_name?: string;
+  dialing_code?: string;
   phone?: string;
 }
 
-export interface RegisterCheckAccountResponse {
-  available: boolean;
-}
+/** Legacy alias for Signup components */
+export type SignupFormValues = RegisterInput;
 
-// Check Email
-export interface CheckEmailRequest {
+export interface RegisterResponse {
+  token: string;
+  user_id: string;
   email: string;
+  name: string;
+  merchant_id: string;
 }
 
 export interface CheckEmailResponse {
   available: boolean;
-}
-
-// Check Phone
-export interface CheckPhoneRequest {
-  phone: string;
 }
 
 export interface CheckPhoneResponse {
@@ -45,18 +32,8 @@ export interface CheckPhoneResponse {
   available: boolean;
 }
 
-// Check Merchant URL
-export interface CheckMerchantUrlRequest {
-  merchant_url: string;
-}
-
 export interface CheckMerchantUrlResponse {
   available: boolean;
-}
-
-// Send OTP (Register)
-export interface RegisterSendOtpRequest {
-  identifier: string;
 }
 
 export interface RegisterSendOtpResponse {
@@ -64,13 +41,50 @@ export interface RegisterSendOtpResponse {
   expires_in: number;
 }
 
-// Check OTP (Register)
-export interface RegisterCheckOtpRequest {
-  identifier: string;
-  otp: string;
-}
-
 export interface RegisterCheckOtpResponse {
   verified: boolean;
   token: string;
+}
+
+export interface BusinessInfoInput {
+  business_name: string;
+  business_address: string;
+  has_physical_address: boolean;
+}
+
+export interface BusinessInfoResponse {
+  success: boolean;
+  message: string;
+}
+
+export interface BusinessCategory {
+  id: string;
+  label: string;
+  category: string;
+}
+
+export interface BusinessMccInput {
+  category_id: string;
+  business_name: string;
+  phone_number: string;
+}
+
+export interface RegisterCheckAccountResponse {
+  available: boolean;
+}
+
+export interface LocaleOption {
+  value: string;
+  label: string;
+  icon?: string;
+}
+
+export interface AnnualRevenueOption {
+  id: string;
+  label: string;
+  subtext?: string;
+}
+
+export interface AnnualRevenueInput {
+  revenue_id: string;
 }

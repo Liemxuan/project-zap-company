@@ -5,7 +5,7 @@ type AppRoutes = "/" | "/products" | "/storefront"
 type AppRouteHandlerRoutes = "/api/colors/publish" | "/api/orders" | "/api/typography/publish"
 type PageRoutes = never
 type LayoutRoutes = "/"
-type RedirectRoutes = never
+type RedirectRoutes = "/design/[[...path]]"
 type RewriteRoutes = never
 type Routes = AppRoutes | PageRoutes | LayoutRoutes | RedirectRoutes | RewriteRoutes | AppRouteHandlerRoutes
 
@@ -15,6 +15,7 @@ interface ParamMap {
   "/api/colors/publish": {}
   "/api/orders": {}
   "/api/typography/publish": {}
+  "/design/[[...path]]": { "path"?: string[]; }
   "/products": {}
   "/storefront": {}
 }
