@@ -1,31 +1,31 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
+import { locationService } from '@/services/location/location.service';
 import { useSearchParams } from 'next/navigation';
-import { useTheme } from '../../../components/ThemeContext';
-import { ComponentSandboxTemplate } from '../../../zap/layout/ComponentSandboxTemplate';
-import { CanvasDesktop } from '../../../components/dev/CanvasDesktop';
-import { ListTable, ListItem, Filters } from '../../../zap/organisms/list-table';
+import { useTheme } from '@/components/ThemeContext';
+import { ComponentSandboxTemplate } from '@/zap/layout/ComponentSandboxTemplate';
+import { CanvasDesktop } from '@/components/dev/CanvasDesktop';
+import { ListTable, ListItem, Filters } from '@/zap/organisms/list-table';
 import { ColumnDef } from '@tanstack/react-table';
-import { Pill } from '../../atoms/status/pills';
-import { Button } from '../../atoms/interactive/button';
-import { ChevronDown, X } from "lucide-react";
+import { Pill } from '@/genesis/atoms/status/pills';
+import { Button } from '@/genesis/atoms/interactive/button';
+import { ChevronDown, X, Map, Plus } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { DataFilter, FilterGroup } from '../../molecules/data-filter';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../../molecules/accordion';
-import { Icon } from '../../atoms/icons/Icon';
-import { SideNav } from '../../molecules/navigation/SideNav';
-import { ThemeHeader } from '../../molecules/layout/ThemeHeader';
-import { Inspector } from '../../../zap/layout/Inspector';
-import { Avatar, AvatarFallback, AvatarImage } from '../../atoms/interactive/avatar';
+import { DataFilter, FilterGroup } from '@/genesis/molecules/data-filter';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/genesis/molecules/accordion';
+import { Icon } from '@/genesis/atoms/icons/Icon';
+import { SideNav } from '@/genesis/molecules/navigation/SideNav';
+import { ThemeHeader } from '@/genesis/molecules/layout/ThemeHeader';
+import { Inspector } from '@/zap/layout/Inspector';
+import { Avatar, AvatarFallback, AvatarImage } from '@/genesis/atoms/interactive/avatar';
 
-import LocationCreateTemplate from '../forms/LocationCreateTemplate';
-import { Checkbox } from '../../atoms/interactive/checkbox';
-import { Dialog, DialogBody, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '../../molecules/dialog';
-import { Heading } from '../../atoms/typography/headings';
+import { Checkbox } from '@/genesis/atoms/interactive/checkbox';
+import { Dialog, DialogBody, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/genesis/molecules/dialog';
+import { Heading } from '@/genesis/atoms/typography/headings';
 
-import { ListEmpty } from '../../../zap/organisms/list-empty';
-import { Map, Plus } from 'lucide-react';
-import { Text } from '../../atoms/typography/text';
-import { tr } from 'date-fns/locale';
+import { Text } from '@/genesis/atoms/typography/text';
+import { Location, OperatingHours } from '@/services/location/location.model';
+import LocationDetail from './Component/LocationDetail';
+import { useLocations, useLocationDetail } from '@/hooks/location/use-locations';
 
 /** 
  * Locations (Layout) Showcase
@@ -53,126 +53,62 @@ function HoursDetailRow({ day, value }: { day: string; value: string }) {
     );
 }
 
-export interface Location {
-    id: string; // ID
-    media_url: string; // Image
-    location_name: string; // Item Name
-    address: string; // Address
-    phone: string; // Phone
-    email: string; // Email
-    region: string; // Region
-    location_type: string; // Retail vs Warehouse
-    operating_hours: string; // Info
-    manager: string; // Info
-    status_id: string; // Status
+
+/* ── Helper to format operating hours ── */
+function formatHours(dayHours?: any) {
+    if (!dayHours || dayHours.is_closed) return 'Closed';
+    const open = dayHours.open?.substring(0, 5) || '00:00';
+    const close = dayHours.close?.substring(0, 5) || '00:00';
+    return `${open} - ${close}`;
 }
 
-export default function LocationsTemplate() {
+
+export default function PageLocationsTemplate() {
     const { theme: appTheme, inspectorState, setInspectorState } = useTheme();
     const activeTheme = appTheme === 'core' ? 'core' : 'metro';
     const searchParams = useSearchParams();
     const isFullscreen = searchParams.get('fullscreen') === 'true';
-    const [isCreating, setIsCreating] = useState(false);
-    const [selectedLocation, setSelectedLocation] = useState<Location | null>(null);
+    const {
+        locations,
+        isLoading,
+        pagination,
+        handlePageChange,
+        handlePageSizeChange,
+        handleSearch,
+        handleFilterChange,
+        filters: apiFilters,
+        search: apiSearch
+    } = useLocations();
 
-    const SAMPLE_LOCATIONS: Location[] = [
-        {
-            id: "loc-1",
-            media_url: "https://images.unsplash.com/photo-1542038784456-1ea8e935640e?w=200&h=200&fit=crop",
-            location_name: "Flagship LA",
-            address: "123 Rodeo Drive, Beverly Hills, CA",
-            phone: "+1 (310) 555-0199",
-            email: "abc@gmail.com",
-            region: "West Coast",
-            location_type: "Retail",
-            operating_hours: "10am - 8pm",
-            manager: "Sarah Jenkins",
-            status_id: "Active"
-        },
-        {
-            id: "loc-2",
-            media_url: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=200&h=200&fit=crop",
-            location_name: "NYC Hub",
-            address: "450 5th Ave, New York, NY",
-            phone: "+1 (212) 555-8842",
-            email: "abc@gmail.com",
-            region: "East Coast",
-            location_type: "HQ",
-            operating_hours: "9am - 6pm",
-            manager: "Michael Chang",
-            status_id: "Active"
-        },
-        {
-            id: "loc-3",
-            media_url: "https://images.unsplash.com/photo-1586528116311-ad8ed7fc5117?w=200&h=200&fit=crop",
-            location_name: "Texas Fulfillment",
-            address: "9900 Logistics Way, Austin, TX",
-            phone: "+1 (512) 555-1122",
-            email: "abc@gmail.com",
-            region: "South",
-            location_type: "Warehouse",
-            operating_hours: "24/7",
-            manager: "David Ross",
-            status_id: "Active"
-        },
-        {
-            id: "loc-4",
-            media_url: "https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=200&h=200&fit=crop",
-            location_name: "Seattle Downtown",
-            address: "400 Pine St, Seattle, WA",
-            phone: "+1 (206) 555-3344",
-            email: "abc@gmail.com",
-            region: "West Coast",
-            location_type: "Retail",
-            operating_hours: "11am - 7pm",
-            manager: "Emma Watson",
-            status_id: "Renovation"
-        },
-        {
-            id: "loc-5",
-            media_url: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=200&h=200&fit=crop",
-            location_name: "Miami Popup",
-            address: "800 Ocean Dr, Miami Beach, FL",
-            phone: "+1 (305) 555-9090",
-            email: "abc@gmail.com",
-            region: "South",
-            location_type: "Popup",
-            operating_hours: "12pm - 10pm",
-            manager: "Carlos Ruiz",
-            status_id: "Closed"
-        }
-    ];
+    const [selectedLocationId, setSelectedLocationId] = useState<string | null>(null);
+    const { location: selectedLocation, isLoading: isDetailLoading } = useLocationDetail(selectedLocationId);
+
+    const [isCreating, setIsCreating] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
+
     // Map Locations to generic ListItem
-    const MAPPED_LOCATIONS: ListItem[] = SAMPLE_LOCATIONS.map(loc => ({
-        id: loc.id,
-        media_url: loc.media_url,
-        variant_name: loc.location_name,
-        phone: loc.phone,
-        email: loc.email,
-        sku_code: loc.address,
-        barcode: loc.phone,
-        category_id: loc.region,
-        product_type: loc.location_type,
+    const MAPPED_LOCATIONS: ListItem[] = locations.map((loc: Location) => ({
+        id: loc.serial_id?.toString() || loc.id || '',
+        media_url: loc.logo_url || '',
+        variant_name: loc.name || '',
+        phone: loc.phone_number || '',
+        email: loc.email || '',
+        sku_code: loc.address_line_1 || '',
+        barcode: loc.phone_number || '',
+        category_id: loc.province_name || '',
+        product_type: loc.location_type_text || '',
         sale_price: 0,
         qty_on_hand: 0,
-        uom_id: loc.manager,
-        warehouse_id: loc.operating_hours,
-        status_id: loc.status_id === 'Renovation' ? 'Hidden' : (loc.status_id === 'Closed' ? 'Out of Stock' : loc.status_id)
+        uom_id: loc.transfer_account || '', // Using as manager
+        warehouse_id: typeof loc.operating_hours === 'string' ? loc.operating_hours : 'Schedule',
+        status_id: loc.status_id === 2 ? 'Hidden' : (loc.status_id === 0 ? 'Deactive' : 'Active')
     }));
-
-
-
-    const [filters, setFilters] = useState<Filters>({
-        category: [],
-        productType: [],
-        status: [],
-    });
 
     const columns = React.useMemo<ColumnDef<ListItem>[]>(() => [
         {
             id: "select",
             name: "Select",
-            disabled: "true",
+            disabled: true,
             header: ({ table }) => (
                 <div className="w-12 px-7">
                     <Checkbox
@@ -219,28 +155,30 @@ export default function LocationsTemplate() {
 
         {
             accessorKey: "variant_name",
-            name: "Location Name",
-            disabled: "true",
+            name: "Name",
+            disabled: true,
             header: ({ column }) => (
                 <div
                     className="w-80 text-left cursor-pointer hover:text-foreground transition-colors"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    <Text size='label-medium' className='font-semibold '>Location Name</Text>
+                    <Text size='label-medium' className='font-semibold '>Name</Text>
                 </div>
             ),
             cell: ({ row }) => (
                 <div className="w-80 py-2.5 text-left">
                     <div className="flex items-center gap-4">
-                        {/* <div className="flex items-center justify-center shrink-0 overflow-hidden">
+                        <div className="flex items-center justify-center shrink-0 overflow-hidden">
                             <Avatar className="rounded-full overflow-hidden" size='default'>
                                 <AvatarImage src={row.original.media_url} alt={row.original.variant_name} />
-                                <AvatarFallback className="font-display text-headlineLarge text-transform-primary bg-primary/20 text-primary">{row.original.variant_name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                                <AvatarFallback className="font-display text-headlineLarge text-transform-primary bg-primary/20 text-primary">
+                                    {(row.original.variant_name || '??').split(/\s+/).filter(Boolean).map(n => n[0]).join('').substring(0, 2).toUpperCase()}
+                                </AvatarFallback>
                             </Avatar>
-                        </div> */}
+                        </div>
                         <div className="flex flex-col min-w-0">
                             <Text size='label-small' className="font-semibold text-foreground text-sm truncate">{row.original.variant_name}</Text>
-                            <Text size='label-small' className="font-dev font-normal text-xs text-muted-foreground uppercase tracking-wide truncate mt-0.5">{row.original.sku_code}</Text>
+                            <Text size='label-small' className="font-dev font-normal text-xs text-muted-foreground text-transform-primary tracking-wide truncate mt-0.5">{row.original.sku_code}</Text>
                         </div>
                     </div>
                 </div>
@@ -249,12 +187,11 @@ export default function LocationsTemplate() {
             enableHiding: false,
         },
         {
-            accessorKey: "product_type",
+            id: "product_type",
             name: "Type",
-            disabled: "false",
-            header: () => <Text size='label-small' className="w-28 text-left font-semibold tracking-widest text-muted-foreground">Type</Text>,
+            header: () => <Text size='label-small' className="w-30 text-left font-semibold tracking-widest text-muted-foreground">Type</Text>,
             cell: ({ row }) => (
-                <div className="w-28 py-2.5">
+                <div className="w-30 py-2.5">
                     <Pill variant="neutral" className="w-fit px-1.5 py-0.5">
                         {row.original.product_type}
                     </Pill>
@@ -266,18 +203,18 @@ export default function LocationsTemplate() {
         {
             id: "phone",
             name: "Phone",
-            disabled: "false",
+            disabled: false,
             header: ({ column }) => (
                 <div
-                    className="w-32 text-left tracking-widest cursor-pointer hover:text-foreground transition-colors"
+                    className="w-40 text-left tracking-widest cursor-pointer hover:text-foreground transition-colors"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
                     <Text size='label-small' className="font-semibold text-foreground truncate">Phone</Text>
                 </div>
             ),
             cell: ({ row }) => (
-                <Text size='body-small' className="w-32 truncate text-left py-2.5">
-                    {row.original.barcode}
+                <Text size='body-small' className="w-40 text-left py-2.5">
+                    {row.original.phone}
                 </Text>
             ),
             enableSorting: true,
@@ -286,17 +223,17 @@ export default function LocationsTemplate() {
         {
             id: "email",
             name: "Email",
-            disabled: "false",
+            disabled: false,
             header: ({ column }) => (
                 <div
-                    className="w-32 text-left tracking-widest cursor-pointer hover:text-foreground transition-colors"
+                    className="w-40 text-left tracking-widest cursor-pointer hover:text-foreground transition-colors"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
                     <Text size='label-small' className="font-semibold text-foreground truncate">Email</Text>
                 </div>
             ),
             cell: ({ row }) => (
-                <Text size='body-small' className="w-32 truncate text-left py-2.5">
+                <Text size='body-small' className="w-40 truncate text-left py-2.5">
                     {row.original.email}
                 </Text>
             ),
@@ -307,7 +244,7 @@ export default function LocationsTemplate() {
         {
             accessorKey: "status_id",
             name: "Status",
-            disabled: "true",
+            disabled: true,
             header: ({ column }) => (
                 <div
                     className="w-24 tracking-widest cursor-pointer hover:text-foreground transition-colors"
@@ -328,24 +265,16 @@ export default function LocationsTemplate() {
                 </div>
             ),
             enableSorting: true,
-            enableHiding: true,
+            enableHiding: false,
         },
     ], []);
 
     // Derive filter groups from the MAPPED_LOCATIONS
     const baseGroups: FilterGroup[] = [
         {
-            id: 'category',
-            title: 'Region',
-            options: Array.from(new Set(MAPPED_LOCATIONS.map(p => p.category_id))).map(region => ({
-                id: region,
-                label: region,
-            }))
-        },
-        {
             id: 'productType',
             title: 'Location Type',
-            options: Array.from(new Set(MAPPED_LOCATIONS.map(p => p.product_type))).map(type => ({
+            options: Array.from(new Set(MAPPED_LOCATIONS.map(p => p.product_type).filter(Boolean) as string[])).map(type => ({
                 id: type,
                 label: type,
             }))
@@ -353,7 +282,7 @@ export default function LocationsTemplate() {
         {
             id: 'status',
             title: 'Status',
-            options: Array.from(new Set(MAPPED_LOCATIONS.map(p => p.status_id))).map(status => ({
+            options: Array.from(new Set(MAPPED_LOCATIONS.map(p => p.status_id).filter(Boolean) as string[])).map(status => ({
                 id: status,
                 label: status,
             }))
@@ -361,25 +290,43 @@ export default function LocationsTemplate() {
     ];
 
     // Map current dynamic state onto filter groups
-    const filterGroups = baseGroups.map(group => ({
-        ...group,
-        options: group.options.map(opt => ({
-            ...opt,
-            selected: filters[group.id as keyof Filters].includes(opt.id)
-        }))
-    }));
+    const filterGroups = baseGroups.map(group => {
+        const fieldMap: Record<string, string> = {
+            'productType': 'location_type_id',
+            'status': 'status_id',
+            'category': 'province_id'
+        };
+        const field = fieldMap[group.id];
+        const selectedValues = (apiFilters as any)[field] || [];
+
+        return {
+            ...group,
+            options: group.options.map(opt => ({
+                ...opt,
+                selected: Array.isArray(selectedValues)
+                    ? selectedValues.includes(opt.id)
+                    : selectedValues === opt.id
+            }))
+        };
+    });
 
     const handleFilterToggle = (groupId: string, optionId: string) => {
-        setFilters(current => {
-            const currentList = current[groupId as keyof Filters];
-            const updatedList = currentList.includes(optionId)
-                ? currentList.filter(id => id !== optionId)
-                : [...currentList, optionId];
-            return {
-                ...current,
-                [groupId as keyof Filters]: updatedList
-            };
-        });
+        const fieldMap: Record<string, string> = {
+            'productType': 'location_type_id',
+            'status': 'status_id',
+            'category': 'province_id'
+        };
+        const field = fieldMap[groupId];
+        if (!field) return;
+
+        const currentValues = (apiFilters as any)[field] || [];
+        const updatedValues = Array.isArray(currentValues)
+            ? (currentValues.includes(optionId)
+                ? currentValues.filter(v => v !== optionId)
+                : [...currentValues, optionId])
+            : [optionId];
+
+        handleFilterChange({ [field]: updatedValues });
     };
 
     const labels = {
@@ -398,7 +345,7 @@ export default function LocationsTemplate() {
                 <div className="flex flex-col gap-0 w-full px-4 pt-4">
                     <Accordion type="single" collapsible variant="navigation" value={inspectorState === 'expanded' ? "item-1" : ""} onValueChange={(val: string) => { if (val !== "item-1") setInspectorState('collapsed'); }} className="bg-transparent w-full space-y-2">
                         <AccordionItem value="item-1" className="border-none m-0">
-                            <AccordionTrigger className="px-4 py-3 flex items-center gap-2 rounded-lg bg-surface-variant hover:bg-surface-variant/80 font-mono text-transform-tertiary text-[11px] tracking-widest text-on-surface font-bold transition-colors m-0 w-full min-w-0">
+                            <AccordionTrigger className="px-4 py-3 flex items-center gap-2 rounded-lg bg-surface-variant hover:bg-surface-variant/80 font-mono text-transform-primary text-[11px] tracking-widest text-on-surface font-bold transition-colors m-0 w-full min-w-0">
                                 <div className="flex items-center gap-2 overflow-hidden flex-1 text-left min-w-0">
                                     <Icon name="filter_list" size={16} className="shrink-0 text-on-surface-variant opacity-70 group-data-[state=open]:text-primary transition-colors" />
                                     <span className="truncate">FILTERS</span>
@@ -419,21 +366,30 @@ export default function LocationsTemplate() {
     );
 
     const handleRowClick = useCallback((row: ListItem) => {
-        const loc = SAMPLE_LOCATIONS.find(l => l.id === row.id) ?? null;
-        setSelectedLocation(loc);
-    }, []);
+        const loc = locations.find(l => l.location_code === row.id || l.id === row.id);
+        if (loc) {
+            setSelectedLocationId(loc.id);
+        }
+    }, [locations]);
 
     const tableComponent = (
         <ListTable
             initialItems={MAPPED_LOCATIONS}
-            filters={filters}
-            onFilterChange={setFilters}
+            filters={apiFilters as any}
+            onFilterChange={handleFilterChange as any}
             onToggleFilters={() => setInspectorState(inspectorState === 'expanded' ? 'collapsed' : 'expanded')}
             isFilterActive={inspectorState === 'expanded'}
             labels={labels}
             columns={columns}
             onAddClick={() => setIsCreating(true)}
             onRowClick={handleRowClick}
+            pageIndex={pagination.page_index - 1}
+            pageSize={pagination.page_size}
+            pageCount={pagination.total_page}
+            onPageChange={(idx) => handlePageChange(idx + 1)}
+            onPageSizeChange={handlePageSizeChange}
+            isLoading={isLoading}
+            onSearch={handleSearch}
         />
     );
 
@@ -449,7 +405,7 @@ export default function LocationsTemplate() {
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.2 }}
                         className="absolute inset-0 bg-black/30 z-10 hidden md:block"
-                        onClick={() => setSelectedLocation(null)}
+                        onClick={() => setSelectedLocationId(null)}
                     />
                     <motion.div
                         key="detail-panel"
@@ -463,32 +419,40 @@ export default function LocationsTemplate() {
                             {/* Header */}
                             <div className="flex items-center justify-between px-5 py-4 shrink-0">
                                 <button
-                                    onClick={() => setSelectedLocation(null)}
+                                    onClick={() => setSelectedLocationId(null)}
                                     className="h-8 w-8 flex items-center justify-center rounded-full hover:bg-surface-variant/60 transition-colors text-foreground"
                                 >
                                     <X size={16} />
                                 </button>
-                                <Button variant="primary" size="sm" className="font-display text-transform-primary text-xs h-8 px-5 rounded-lg shadow-sm">
-                                    Edit location
-                                </Button>
+                                <div className="flex items-center gap-2">
+                                    {isDetailLoading && (
+                                        <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin mr-2" />
+                                    )}
+                                    <Button
+                                        variant="primary"
+                                        size="sm"
+                                        className="font-display text-transform-primary text-xs h-8 px-5 rounded-lg shadow-sm"
+                                        onClick={() => setIsEditing(true)}
+                                    >
+                                        Edit location
+                                    </Button>
+                                </div>
                             </div>
 
-                            {/* Location Name */}
                             <div className="px-6 pt-2 pb-4">
-                                <h2 className="font-display text-transform-primary text-lg font-semibold text-foreground">{selectedLocation.location_name}</h2>
-                                <p className="font-body text-transform-secondary text-sm text-muted-foreground mt-0.5">{selectedLocation.location_name}</p>
+                                <h2 className="font-display text-transform-primary text-lg font-semibold text-foreground tracking-tight">{selectedLocation.name}</h2>
+                                <p className="font-dev text-transform-primary text-[10px] tracking-widest text-muted-foreground opacity-70 mt-0.5">{selectedLocation.location_code || 'NO-CODE'}</p>
                             </div>
 
-                            {/* Location Details */}
                             <div className="px-6 pb-6 space-y-1">
-                                <h3 className="font-display text-transform-primary text-sm font-semibold text-foreground mb-3">Location details</h3>
-                                <DetailRow label="Nickname" value={selectedLocation.location_name} />
-                                <DetailRow label="Location type" value={selectedLocation.location_type} />
-                                <DetailRow label="Address" value={selectedLocation.address} />
-                                <DetailRow label="Location" value={selectedLocation.region} />
-                                <DetailRow label="Phone" value={selectedLocation.phone} />
-                                <DetailRow label="Email" value="" />
-                                <DetailRow label="Preferred language" value="English" />
+                                <h3 className="font-display text-transform-primary text-xs font-bold text-muted-foreground tracking-widest mb-3 mt-2">Location details</h3>
+                                <DetailRow label="Name" value={selectedLocation.name || ''} />
+                                <DetailRow label="Location type" value={selectedLocation.location_type_text || 'Standard'} />
+                                <DetailRow label="Address" value={selectedLocation.address_line_1 || ''} />
+                                <DetailRow label="Location" value={`${selectedLocation.ward_name ? selectedLocation.ward_name + ', ' : ''}${selectedLocation.district_name ? selectedLocation.district_name + ', ' : ''}${selectedLocation.province_name || ''}`} />
+                                <DetailRow label="Phone" value={selectedLocation.phone_number || ''} />
+                                <DetailRow label="Email" value={selectedLocation.email || ''} />
+                                {/* <DetailRow label="Manager" value={selectedLocation.transfer_account || 'N/A'} /> */}
                             </div>
 
                             {/* Separator */}
@@ -496,14 +460,14 @@ export default function LocationsTemplate() {
 
                             {/* Business Hours */}
                             <div className="px-6 py-6 space-y-1">
-                                <h3 className="font-display text-transform-primary text-sm font-semibold text-foreground mb-3">Business hours</h3>
-                                <HoursDetailRow day="Monday" value={selectedLocation.operating_hours} />
-                                <HoursDetailRow day="Tuesday" value="Closed" />
-                                <HoursDetailRow day="Wednesday" value="Closed" />
-                                <HoursDetailRow day="Thursday" value="Closed" />
-                                <HoursDetailRow day="Friday" value="Closed" />
-                                <HoursDetailRow day="Saturday" value="Closed" />
-                                <HoursDetailRow day="Sunday" value="Closed" />
+                                <h3 className="font-display text-transform-primary text-xs font-bold text-muted-foreground tracking-widest mb-3 mt-2">Business hours</h3>
+                                <HoursDetailRow day="Monday" value={formatHours(selectedLocation.operating_hours?.mon)} />
+                                <HoursDetailRow day="Tuesday" value={formatHours(selectedLocation.operating_hours?.tue)} />
+                                <HoursDetailRow day="Wednesday" value={formatHours(selectedLocation.operating_hours?.wed)} />
+                                <HoursDetailRow day="Thursday" value={formatHours(selectedLocation.operating_hours?.thu)} />
+                                <HoursDetailRow day="Friday" value={formatHours(selectedLocation.operating_hours?.fri)} />
+                                <HoursDetailRow day="Saturday" value={formatHours(selectedLocation.operating_hours?.sat)} />
+                                <HoursDetailRow day="Sunday" value={formatHours(selectedLocation.operating_hours?.sun)} />
                             </div>
                         </div>
                     </motion.div>
@@ -533,7 +497,7 @@ export default function LocationsTemplate() {
                     </div>
                     <div className="px-3 py-2.5 rounded-md bg-primary/10 text-primary flex items-center gap-3 text-sm cursor-pointer border border-primary/20 relative">
                         <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-1/2 bg-primary rounded-r-md"></div>
-                        <Icon name="inventory-2" size={18} className="shrink-0" />
+                        <Icon name="inventory_2" size={18} className="shrink-0" />
                         <span className="font-medium">Locations</span>
                     </div>
                     <div className="px-3 py-2.5 rounded-md hover:bg-surface-variant/40 flex items-center gap-3 text-sm text-on-surface cursor-pointer transition-colors">
@@ -601,7 +565,7 @@ export default function LocationsTemplate() {
         <div className="flex flex-col gap-0 w-full min-w-[320px] px-4 pt-4">
             <Accordion type="single" collapsible variant="navigation" value={inspectorState === 'expanded' ? "item-1" : ""} onValueChange={(val: string) => { if (val !== "item-1") setInspectorState('collapsed'); }} className="bg-transparent w-full space-y-2">
                 <AccordionItem value="item-1" className="border-none m-0">
-                    <AccordionTrigger className="px-4 py-3 flex items-center gap-2 rounded-lg bg-surface-variant hover:bg-surface-variant/80 font-mono text-transform-tertiary text-[11px] tracking-widest text-on-surface font-bold transition-colors m-0 w-full min-w-0">
+                    <AccordionTrigger className="px-4 py-3 flex items-center gap-2 rounded-lg bg-surface-variant hover:bg-surface-variant/80 font-mono text-transform-primary text-[11px] tracking-widest text-on-surface font-bold transition-colors m-0 w-full min-w-0">
                         <div className="flex items-center gap-2 overflow-hidden flex-1 text-left min-w-0">
                             <Icon name="filter_list" size={16} className="shrink-0 text-on-surface-variant opacity-70 group-data-[state=open]:text-primary transition-colors" />
                             <span className="truncate">FILTERS</span>
@@ -629,16 +593,47 @@ export default function LocationsTemplate() {
             >
                 <DialogHeader className='relative' closeButtonPosition="header-left">
                     <div className='max-w-lg mx-auto text-center'>
-                        <Heading level={2} className='text-transform-primary text-on-surface py-4'>Create Location</Heading>
+                        <Heading level={2} className='text-transform-primary text-on-surface py-4'>Location Detail</Heading>
                     </div>
                     <div className='absolute right-4 top-2'>
                         <Button variant="primary" size="lg" className="text-transform-primary text-xs px-5 rounded-lg shadow-sm">
-                            Create
+                            Save
                         </Button>
                     </div>
                 </DialogHeader>
                 <DialogBody className="flex-1 flex flex-col">
-                    <LocationCreateTemplate onCancel={() => setIsCreating(false)} />
+                    <LocationDetail onCancel={() => setIsCreating(false)} />
+                </DialogBody>
+            </DialogContent>
+        </Dialog>
+    );
+
+
+
+    const editDialog = (
+        <Dialog open={isEditing} onOpenChange={setIsEditing}>
+            <DialogContent
+                className="max-w-none w-screen h-screen p-0 border-none rounded-none bg-white"
+                showClose={true}
+                closeButtonPosition="header-left"
+                closeButtonShape='circle'
+            >
+                <DialogHeader className='relative' closeButtonPosition="header-left">
+                    <div className='max-w-lg mx-auto text-center'>
+                        <Heading level={2} className='text-transform-primary text-on-surface py-4'>Location Detail</Heading>
+                    </div>
+                    <div className='absolute right-4 top-2'>
+                        <Button variant="destructive" size="md" className="text-transform-primary px-5 rounded-lg shadow-sm border border-border">
+                            Deactive
+                        </Button>
+                        &nbsp;
+                        <Button variant="primary" size="lg" className="text-transform-primary text-xs px-5 rounded-lg shadow-sm">
+                            Save
+                        </Button>
+                    </div>
+                </DialogHeader>
+                <DialogBody className="flex-1 flex flex-col">
+                    <LocationDetail location={selectedLocation as Location} onCancel={() => setIsEditing(false)} />
                 </DialogBody>
             </DialogContent>
         </Dialog>
@@ -653,9 +648,8 @@ export default function LocationsTemplate() {
                 <div className="flex-1 flex flex-col min-w-0 bg-transparent relative">
                     {/* True Main Header */}
                     <ThemeHeader
-                        title="LOCATIONS ASSEMBLY"
-                        breadcrumb="zap design engine / metro / layout"
-                        badge="component sandbox"
+                        title="Locations"
+                        badge={null}
                         showBackground={false}
                     />
 
@@ -686,17 +680,18 @@ export default function LocationsTemplate() {
                 {rightDrawerContent}
                 {detailPanel}
                 {createDialog}
+                {editDialog}
             </div>
         );
     }
 
     return (
         <ComponentSandboxTemplate
-            componentName="locations"
+            componentName="Locations"
             tier="L6 LAYOUT"
             status="Verified"
-            filePath="src/genesis/templates/tables/LocationsTemplate.tsx"
-            importPath="@/genesis/templates/tables/LocationsTemplate"
+            filePath="src/genesis/templates/tables/location/PageLocation.tsx"
+            importPath="@/genesis/templates/tables/location/PageLocation"
             inspectorControls={inspectorContent}
             hideDataTerminal={true}
             fullWidth={true}
@@ -710,6 +705,7 @@ export default function LocationsTemplate() {
                 </CanvasDesktop>
             </div>
             {createDialog}
+            {editDialog}
         </ComponentSandboxTemplate>
     );
 }

@@ -1,32 +1,38 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { useTheme } from '../../../components/ThemeContext';
-import { ComponentSandboxTemplate } from '../../../zap/layout/ComponentSandboxTemplate';
-import { CanvasDesktop } from '../../../components/dev/CanvasDesktop';
-import { ListTable, SAMPLE_DATA, ListItem, Filters } from '../../../zap/organisms/list-table';
+import { useTheme } from '@/components/ThemeContext';
+import { ComponentSandboxTemplate } from '@/zap/layout/ComponentSandboxTemplate';
+import { CanvasDesktop } from '@/components/dev/CanvasDesktop';
+import { ListTable, ListItem } from '@/zap/organisms/list-table';
 import { ColumnDef } from '@tanstack/react-table';
-import { Pill } from '../../atoms/status/pills';
-import { ChevronDown, ChevronRight, Plus, Map } from "lucide-react";
+import { Pill } from '@/genesis/atoms/status/pills';
+import { ChevronRight, Pencil, Copy, Archive, Trash2, Plus } from "lucide-react";
 import { motion } from "framer-motion";
-import { QuickActionsDropdown } from '../../molecules/quick-actions-dropdown';
-import { Pencil, Copy, Archive, Trash2 } from 'lucide-react';
-import { DataFilter, FilterGroup } from '../../molecules/data-filter';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../../molecules/accordion';
-import { Icon } from '../../atoms/icons/Icon';
-import { SideNav } from '../../molecules/navigation/SideNav';
-import { ThemeHeader } from '../../molecules/layout/ThemeHeader';
-import { Inspector } from '../../../zap/layout/Inspector';
-import ProductCreateTemplate from '../forms/ProductCreateTemplate';
+import { QuickActionsDropdown } from '@/genesis/molecules/quick-actions-dropdown';
+import { FilterGroup, DataFilter } from '@/genesis/molecules/data-filter';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/genesis/molecules/accordion';
+import { Icon } from '@/genesis/atoms/icons/Icon';
+import { SideNav } from '@/genesis/molecules/navigation/SideNav';
+import { ThemeHeader } from '@/genesis/molecules/layout/ThemeHeader';
+import { Inspector } from '@/zap/layout/Inspector';
+import ProductCreateTemplate from '../../forms/ProductCreateTemplate';
 import { Avatar } from '@/genesis/atoms/status/avatars';
-import { Checkbox } from '../../atoms/interactive/checkbox';
-import { Text } from '../../atoms/typography/text';
-import { ListEmpty } from '@/zap/organisms/list-empty';
+import { Checkbox } from '@/genesis/atoms/interactive/checkbox';
+import { Text } from '@/genesis/atoms/typography/text';
+import { useProducts } from '@/hooks/product/use-products';
+import { Product } from '@/services/product/product.model';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/genesis/molecules/dropdown-menu';
+import { Download, Upload } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
+import { Button } from '@/genesis/atoms/interactive/buttons';
+
+
 /**
  * Product List (Layout) Showcase
  * Renders ListTable inside the L6 CanvasDesktop layout
  * Route: /design/[theme]/organisms/product-list
  */
-export default function ProductListTemplate() {
+export default function PageProductListTemplate() {
     const { theme: appTheme, inspectorState, setInspectorState } = useTheme();
     const activeTheme = appTheme === 'core' ? 'core' : 'metro';
     const searchParams = useSearchParams();
@@ -34,11 +40,37 @@ export default function ProductListTemplate() {
 
     const [isCreating, setIsCreating] = useState(false);
 
-    const [filters, setFilters] = useState<Filters>({
-        category: [],
-        productType: [],
-        status: [],
+    // --- Data Fetching ---
+    const {
+        products,
+        isLoading,
+        pagination,
+        handlePageChange,
+        handleSearch,
+        handleFilterChange,
+        filters: apiFilters
+    } = useProducts({
+        pageSize: 10
     });
+
+    // --- Data Mapping ---
+    const mapProductToListItem = (p: Product): ListItem => ({
+        id: p.id,
+        variant_name: p.name || 'Unnamed Product',
+        media_url: p.image,
+        sku_code: p.sku,
+        barcode: p.barcode,
+        category_id: p.cate_name,
+        product_type: p.productType || 'PHYSICAL',
+        sale_price: p.price || 0,
+        qty_on_hand: p.stock || 0,
+        uom_id: p.unit,
+        warehouse_id: p.location,
+        status_id: p.status === 1 || p.status === 'Active' ? 'Active' : 'Inactive',
+        subRows: p.subRows ? p.subRows.map(mapProductToListItem) : undefined,
+    });
+
+    const MAPPED_PRODUCTS = useMemo(() => products.map(mapProductToListItem), [products]);
 
     const columns = React.useMemo<ColumnDef<ListItem>[]>(() => [
         {
@@ -98,36 +130,33 @@ export default function ProductListTemplate() {
             enableHiding: false,
         },
         {
-            accessorKey: "id",
-            name: "ID",
+            id: "id",
             header: ({ column }) => (
                 <div
-                    className="w-20 text-left tracking-widest cursor-pointer transition-colors"
+                    className="w-20 text-left tracking-widest cursor-pointer hover:text-foreground transition-colors"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    <Text size='label-small' className='font-semibold  text-center'>ID</Text>
+                    <Text size='label-small' className="font-semibold text-foreground truncate uppercase">ID</Text>
                 </div>
             ),
             cell: ({ row }) => (
-                <div className="w-20 py-2.5 text-center truncate">
-                    {row.depth === 0 && (
-                        row.original.id.split('-')[1] || row.original.id
-                    )}
+                <div className="w-20 truncate text-left py-2.5 font-dev text-transform-tertiary text-muted-foreground">
+                    {row.original.id}
                 </div>
             ),
-            enableSorting: true,
-            enableHiding: true,
+            enableSorting: false,
+            enableHiding: false,
         },
         {
             accessorKey: "variant_name",
-            name: "Product Name",
+            name: "Name",
             header: ({ column }) => (
                 <div
                     className="w-72 text-left tracking-widest cursor-pointer transition-colors"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
                     <Text size='label-small' className='font-semibold'>
-                        Product Name
+                        Name
                     </Text>
                 </div>
             ),
@@ -137,36 +166,20 @@ export default function ProductListTemplate() {
                         <div className="w-10 h-10 flex items-center justify-center shrink-0 overflow-hidden">
                             <Avatar src={row.original.media_url}
                                 className="w-full h-full object-cover border-[1px] border-border"
-                                initials={row.original.variant_name?.split(' ').map(n => n[0]).join('')}
+                                initials={(row.original.variant_name || 'P').split(' ').map(n => n[0]).join('')}
                                 size="sm"
-                                fallback={row.original.variant_name?.split(' ').map(n => n[0]).join('')}
+                                fallback={(row.original.variant_name || 'P').split(' ').map(n => n[0]).join('')}
                             />
                         </div>
-                        <div className="flex flex-col min-w-0 flex flex-col gap-2">
+                        <div className="flex flex-col min-w-0 gap-2">
                             <Text size='label-small' className='font-semibold truncate'>{row.original.variant_name}</Text>
-                            {/* <Text size='label-small' className='truncate'>SKU: {row.original.sku_code}</Text> */}
+                            <Text size='label-small' className='truncate'>{row.original.sku_code}</Text>
                         </div>
                     </div>
                 </div>
             ),
-            enableSorting: true,
+            enableSorting: false,
             enableHiding: false,
-        },
-        {
-            accessorKey: "sku_code",
-            name: "SKU",
-            header: () => (
-                <div className="w-32 text-left tracking-widest">
-                    <Text size='label-small' className='font-semibold'>SKU</Text>
-                </div>
-            ),
-            cell: ({ row }) => (
-                <Text size='label-small' className="w-32 font-mono text-muted-foreground truncate py-2.5">
-                    {row.original.sku_code}
-                </Text>
-            ),
-            enableSorting: true,
-            enableHiding: true,
         },
         {
             accessorKey: "category_id",
@@ -182,11 +195,11 @@ export default function ProductListTemplate() {
                 </div>
             ),
             cell: ({ row }) => (
-                <Text size='label-small' className="w-32 truncate text-left py-2.5">
-                    {row.original.category_id}
-                </Text>
+                <div className="w-32 truncate text-left py-2.5">
+                    <Text size='label-small'>{row.original.category_id}</Text>
+                </div>
             ),
-            enableSorting: true,
+            enableSorting: false,
             enableHiding: true,
         },
         {
@@ -204,7 +217,7 @@ export default function ProductListTemplate() {
             ),
             cell: ({ row }) => (
                 <div className="w-28 text-right py-2.5 pr-4">
-                    <Text size='label-small'>${row.original.sale_price.toFixed(2)}</Text>
+                    <Text size='label-small'>${(row.original.sale_price || 0).toFixed(2)}</Text>
                 </div>
             ),
             enableSorting: true,
@@ -212,19 +225,19 @@ export default function ProductListTemplate() {
         },
         {
             accessorKey: "warehouse_id",
-            name: "Locations",
+            name: "Location",
             header: ({ column }) => (
                 <div
                     className="w-28 text-left tracking-widest cursor-pointer transition-colors"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    <Text size='label-small' className='font-semibold'>Locations</Text>
+                    <Text size='label-small' className='font-semibold'>Location</Text>
                 </div>
             ),
             cell: ({ row }) => (
-                <Text size='label-small' className="w-28 truncate text-left py-2.5 text-muted-foreground">
-                    {row.original.warehouse_id}
-                </Text>
+                <div className="w-28 truncate text-left py-2.5 text-muted-foreground">
+                    <Text size='label-small'>{row.original.warehouse_id}</Text>
+                </div>
             ),
             enableSorting: true,
             enableHiding: true,
@@ -259,15 +272,15 @@ export default function ProductListTemplate() {
                 </div>
             ),
             cell: ({ row }) => (
-                <Text size='label-small' className="w-20 truncate text-left py-2.5 text-muted-foreground">
-                    {row.original.uom_id}
-                </Text>
+                <div className="w-20 truncate text-left py-2.5 text-muted-foreground">
+                    <Text size='label-small'>{row.original.uom_id}</Text>
+                </div>
             ),
             enableSorting: false,
             enableHiding: true,
         },
         {
-            accessorKey: "barcode",
+            id: "barcode",
             name: "Barcode",
             header: () => (
                 <div className="w-32 text-left tracking-widest">
@@ -275,19 +288,19 @@ export default function ProductListTemplate() {
                 </div>
             ),
             cell: ({ row }) => (
-                <Text size='label-small' className="w-32 font-mono text-muted-foreground truncate py-2.5">
-                    {row.original.barcode}
-                </Text>
+                <div className="w-32 font-mono text-muted-foreground truncate py-2.5">
+                    <Text size='label-small'>{row.original.barcode}</Text>
+                </div>
             ),
             enableSorting: false,
             enableHiding: true,
         },
         {
             accessorKey: "product_type",
-            name: "Type",
+            name: "Product type",
             header: () => <div className="w-28 text-left tracking-widest"><Text size='label-small' className='font-semibold'>Type</Text></div>,
             cell: ({ row }) => (
-                <div className="w-28 py-2.5">
+                <div className="w-28 py-2.5 text-left">
                     <Pill variant="neutral" className="w-fit px-1.5 py-0.5 text-[10px]">
                         {row.original.product_type}
                     </Pill>
@@ -301,7 +314,7 @@ export default function ProductListTemplate() {
             name: "Status",
             header: ({ column }) => (
                 <div
-                    className="w-32 text-right tracking-widest cursor-pointer transition-colors"
+                    className="w-20 text-left tracking-widest cursor-pointer transition-colors"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
                     <Text size='label-small' className='font-semibold'>
@@ -310,18 +323,18 @@ export default function ProductListTemplate() {
                 </div>
             ),
             cell: ({ row }) => (
-                <div className="w-32 text-right py-2.5">
+                <div className="w-20 text-left py-2.5">
                     <Pill
                         variant={row.original.status_id === 'Active' ? 'success' : 'warning'}
-                        className="whitespace-nowrap w-fit ml-auto"
+                        className="whitespace-nowrap w-fit mr-auto"
                     >
                         <div className="w-1.5 h-1.5 rounded-full bg-current mr-1.5 opacity-80 shrink-0" />
                         {row.original.status_id}
                     </Pill>
                 </div>
             ),
-            enableSorting: true,
-            enableHiding: true,
+            enableSorting: false,
+            enableHiding: false,
         },
         {
             id: "actions",
@@ -347,55 +360,68 @@ export default function ProductListTemplate() {
         },
     ], []);
 
-    // Derive filter groups from the SAMPLE_DATA
-    const baseGroups: FilterGroup[] = [
-        {
-            id: 'category',
-            title: 'Category',
-            options: Array.from(new Set(SAMPLE_DATA.map(p => p.category_id))).map(cat => ({
-                id: cat,
-                label: cat,
-            }))
-        },
-        {
-            id: 'productType',
-            title: 'Product Type',
-            options: Array.from(new Set(SAMPLE_DATA.map(p => p.product_type))).map(type => ({
-                id: type,
-                label: type,
-            }))
-        },
+    const labels = {
+        addItem: "Add Product",
+        itemName: "Product Name",
+        type: "Status"
+    };
+
+    const filterGroups: FilterGroup[] = [
         {
             id: 'status',
             title: 'Status',
-            options: Array.from(new Set(SAMPLE_DATA.map(p => p.status_id))).map(status => ({
-                id: status,
-                label: status,
-            }))
+            options: [
+                { id: '1', label: 'Active', selected: String(apiFilters.status) === '1' || apiFilters.status === 'Active' },
+                { id: '0', label: 'Inactive', selected: String(apiFilters.status) === '0' || apiFilters.status === 'Inactive' },
+            ]
         }
     ];
 
-    // Map current dynamic state onto filter groups
-    const filterGroups = baseGroups.map(group => ({
-        ...group,
-        options: group.options.map(opt => ({
-            ...opt,
-            selected: filters[group.id as keyof Filters].includes(opt.id)
-        }))
-    }));
-
     const handleFilterToggle = (groupId: string, optionId: string) => {
-        setFilters(current => {
-            const currentList = current[groupId as keyof Filters];
-            const updatedList = currentList.includes(optionId)
-                ? currentList.filter(id => id !== optionId)
-                : [...currentList, optionId];
-            return {
-                ...current,
-                [groupId as keyof Filters]: updatedList
-            };
-        });
+        if (groupId === 'status') {
+            const currentStatus = String(apiFilters.status);
+            const nextStatus = currentStatus === optionId ? null : (isNaN(Number(optionId)) ? optionId : Number(optionId));
+            handleFilterChange({ status: nextStatus as any });
+        }
     };
+    const actionDropdown = (
+        <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+                <Button variant="primary" className="h-[var(--input-height,var(--button-height,48px))] px-6">
+                    <span className="font-display font-medium text-xs text-transform-primary">Actions</span>
+                    <ChevronDown className="h-4 w-4 ml-2" />
+                </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-40">
+                <DropdownMenuItem className="gap-2 cursor-pointer">
+                    <Upload className="h-4 w-4" />
+                    <span className="font-display text-xs text-transform-primary">Import</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem className="gap-2 cursor-pointer">
+                    <Download className="h-4 w-4" />
+                    <span className="font-display text-xs text-transform-primary">Export</span>
+                </DropdownMenuItem>
+            </DropdownMenuContent>
+        </DropdownMenu>
+    );
+    const tableComponent = (
+        <ListTable
+            initialItems={MAPPED_PRODUCTS}
+            isLoading={isLoading}
+            onSearch={handleSearch}
+            pageIndex={pagination.page_index - 1}
+            pageSize={pagination.page_size}
+            pageCount={pagination.total_page}
+            onPageChange={(p) => handlePageChange(p + 1)}
+            onToggleFilters={() => setInspectorState(inspectorState === 'expanded' ? 'collapsed' : 'expanded')}
+            isFilterActive={inspectorState === 'expanded'}
+            columns={columns}
+            onAddClick={() => setIsCreating(true)}
+            labels={labels}
+            defaultColumnVisibility={{ stock: false, uom_id: false, barcode: false, product_type: false }} //mặc định ẩn hiện cột
+            extraActions={actionDropdown}// nut action
+        />
+    );
 
     const rightDrawerContent = inspectorState === 'expanded' && (
         <div className="h-full border-l border-border bg-layer-panel hidden md:flex flex-col shrink-0 z-20 relative">
@@ -406,7 +432,7 @@ export default function ProductListTemplate() {
                             <AccordionTrigger className="px-4 py-3 flex items-center gap-2 rounded-lg bg-surface-variant hover:bg-surface-variant/80 font-mono text-transform-tertiary text-[11px] tracking-widest text-on-surface font-bold transition-colors m-0 w-full min-w-0">
                                 <div className="flex items-center gap-2 overflow-hidden flex-1 text-left min-w-0">
                                     <Icon name="filter_list" size={16} className="shrink-0 text-on-surface-variant opacity-70 group-data-[state=open]:text-primary transition-colors" />
-                                    <span className="truncate">FILTERS</span>
+                                    <span className="truncate uppercase">FILTERS</span>
                                 </div>
                             </AccordionTrigger>
                             <AccordionContent className="bg-transparent px-4 pb-4 pt-2">
@@ -425,114 +451,38 @@ export default function ProductListTemplate() {
 
     const layoutContent = (
         <div className="flex h-full w-full bg-layer-base overflow-hidden font-sans border border-border">
-            {/* Fake Side Navigation */}
             <div className="w-[240px] flex-shrink-0 border-r border-border bg-layer-panel hidden md:flex flex-col z-10 shadow-sm relative">
                 <div className="h-14 border-b border-border flex items-center px-4 shrink-0 gap-2">
                     <div className="w-6 h-6 rounded bg-primary flex items-center justify-center">
                         <Icon name="bolt" size={14} className="text-primary-foreground" />
                     </div>
-                    <span className="font-bold text-sm tracking-widest font-display text-transform-primary text-on-surface">ZAP OS</span>
+                    <span className="font-bold text-sm tracking-widest font-display text-transform-primary text-on-surface uppercase">ZAP OS</span>
                 </div>
-                <div className="flex-1 py-4 px-3 space-y-1 overflow-y-auto">
-                    <div className="px-3 py-2.5 rounded-md hover:bg-surface-variant/40 flex items-center gap-3 text-sm text-on-surface cursor-pointer transition-colors">
-                        <Icon name="dashboard" size={18} className="text-on-surface-variant shrink-0" />
-                        <span className="font-medium">Overview</span>
+                <div className="flex-1 py-4 px-3 space-y-1 overflow-y-auto uppercase font-mono text-[11px] tracking-widest text-on-surface opacity-70">
+                    <div className="px-3 py-2.5 rounded-md hover:bg-surface-variant/40 flex items-center gap-3 transition-colors cursor-pointer">
+                        <Icon name="dashboard" size={18} />
+                        <span>Overview</span>
                     </div>
-                    <div className="px-3 py-2.5 rounded-md text-on-surface hover:bg-surface-variant/40 flex items-center gap-3 text-sm cursor-pointer transition-colors">
-                        <Icon name="list_alt" size={18} className="shrink-0 text-on-surface-variant" />
-                        <span className="font-medium">System Logs</span>
-                    </div>
-                    <div className="px-3 py-2.5 rounded-md bg-primary/10 text-primary flex items-center gap-3 text-sm cursor-pointer border border-primary/20 relative">
-                        <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-1/2 bg-primary rounded-r-md"></div>
-                        <Icon name="inventory-2" size={18} className="shrink-0" />
-                        <span className="font-medium">Product List</span>
-                    </div>
-                    <div className="px-3 py-2.5 rounded-md hover:bg-surface-variant/40 flex items-center gap-3 text-sm text-on-surface cursor-pointer transition-colors">
-                        <Icon name="settings" size={18} className="text-on-surface-variant shrink-0" />
-                        <span className="font-medium">Configuration</span>
-                    </div>
-                </div>
-                <div className="p-4 border-t border-border mt-auto bg-surface-variant/30">
-                    <div className="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity">
-                        <div className="w-8 h-8 rounded-full bg-layer-base border border-border flex items-center justify-center shrink-0">
-                            <span className="text-[10px] font-bold">ZT</span>
-                        </div>
-                        <div className="flex flex-col min-w-0">
-                            <span className="text-xs font-bold truncate text-on-surface">Zeus Tom</span>
-                            <span className="text-[10px] text-on-surface-variant truncate tracking-wide">CSO</span>
-                        </div>
+                    <div className="px-3 py-2.5 rounded-md bg-primary/10 text-primary flex items-center gap-3 border border-primary/20 cursor-pointer">
+                        <Icon name="inventory-2" size={18} />
+                        <span>Product List</span>
                     </div>
                 </div>
             </div>
 
-            {/* Main Area */}
             <div className="flex-1 flex flex-col min-w-0 bg-layer-base/50 relative">
-                {/* Fake Header */}
-                <div className="h-14 border-b border-border bg-layer-base flex items-center px-4 lg:px-6 justify-between shrink-0 shadow-sm z-10 relative">
-                    <div className="flex items-center">
-                        <button title="Menu" aria-label="Menu" className="md:hidden mr-2 -ml-2 shrink-0 p-2 hover:bg-surface-variant rounded-md transition-colors text-on-surface-variant">
-                            <Icon name="menu" size={20} />
-                        </button>
-                        <div className="flex items-center text-xs lg:text-sm">
-                            <span className="text-on-surface-variant hover:text-on-surface cursor-pointer transition-colors">Catalog</span>
-                            <Icon name="chevron_right" size={16} className="text-on-surface-variant/50 mx-1 shrink-0" />
-                            <span className="font-medium text-on-surface">Product List</span>
-                        </div>
-                    </div>
-                    <div className="flex items-center gap-3 lg:gap-4">
-                        <button title="Notifications" aria-label="Notifications" className="relative w-8 h-8 rounded-full hover:bg-surface-variant flex items-center justify-center transition-colors text-on-surface-variant">
-                            <Icon name="notifications" size={18} />
-                        </button>
-                        <div className="h-6 w-px bg-border my-auto hidden sm:block" />
-                        <div className="hidden sm:flex flex-col items-end">
-                            <span className="text-xs font-bold leading-tight">us-west-1</span>
-                            <span className="text-[9px] tracking-widest text-green-500 font-dev text-transform-tertiary mt-0.5 flex items-center gap-1">
-                                <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
-                                Healthy
-                            </span>
-                        </div>
+                <div className="h-14 border-b border-border bg-layer-base flex items-center px-6 justify-between shrink-0 shadow-sm z-10 relative">
+                    <div className="flex items-center text-xs gap-1 font-dev text-transform-tertiary">
+                        <span className="opacity-50 uppercase tracking-widest">Catalog</span>
+                        <Icon name="chevron_right" size={14} className="opacity-30" />
+                        <span className="font-bold text-on-surface uppercase tracking-widest">Product List</span>
                     </div>
                 </div>
 
-                {/* Table Content */}
-                <div className="flex-1 overflow-auto pt-8 px-4 lg:pt-11 lg:px-12 pb-16 flex flex-col relative z-0 min-w-0">
-                    <ListTable
-                        initialItems={SAMPLE_DATA}
-                        filters={filters}
-                        onFilterChange={setFilters}
-                        onToggleFilters={() => setInspectorState(inspectorState === 'expanded' ? 'collapsed' : 'expanded')}
-                        isFilterActive={inspectorState === 'expanded'}
-                        columns={columns}
-                        onAddClick={() => setIsCreating(true)}
-                        defaultColumnVisibility={{ id: false, sku_code: false, uom_id: false, barcode: false, category_id: false }}
-                    />
+                <div className="flex-1 overflow-auto pt-11 px-12 pb-16 flex flex-col relative z-0 min-w-0">
+                    {tableComponent}
                 </div>
             </div>
-
-            {/* Fake Inspector Drawer */}
-            {rightDrawerContent}
-        </div>
-    );
-
-    const inspectorContent = (
-        <div className="flex flex-col gap-0 w-full min-w-[320px] px-4 pt-4">
-            <Accordion type="single" collapsible variant="navigation" value={inspectorState === 'expanded' ? "item-1" : ""} onValueChange={(val: string) => { if (val !== "item-1") setInspectorState('collapsed'); }} className="bg-transparent w-full space-y-2">
-                <AccordionItem value="item-1" className="border-none m-0">
-                    <AccordionTrigger className="px-4 py-3 flex items-center gap-2 rounded-lg bg-surface-variant hover:bg-surface-variant/80 font-mono text-transform-tertiary text-[11px] tracking-widest text-on-surface font-bold transition-colors m-0 w-full min-w-0">
-                        <div className="flex items-center gap-2 overflow-hidden flex-1 text-left min-w-0">
-                            <Icon name="filter_list" size={16} className="shrink-0 text-on-surface-variant opacity-70 group-data-[state=open]:text-primary transition-colors" />
-                            <span className="truncate">FILTERS</span>
-                        </div>
-                    </AccordionTrigger>
-                    <AccordionContent className="bg-transparent px-4 pb-4 pt-2">
-                        <DataFilter
-                            title=""
-                            groups={filterGroups}
-                            onToggle={handleFilterToggle}
-                        />
-                    </AccordionContent>
-                </AccordionItem>
-            </Accordion>
         </div>
     );
 
@@ -543,33 +493,13 @@ export default function ProductListTemplate() {
     if (isFullscreen) {
         return (
             <div className="flex h-screen w-full bg-layer-canvas overflow-hidden font-sans">
-                {/* True Side Navigation */}
                 <SideNav />
-
                 <div className="flex-1 flex flex-col min-w-0 bg-transparent relative">
-                    {/* True Main Header */}
-                    <ThemeHeader
-                        title="products"
-                        breadcrumb="zap design engine / metro / layout"
-                        //badge="component sandbox"
-                        showBackground={false}
-                    />
-
-                    <div className="flex-1 overflow-auto pt-8 px-4 lg:pt-11 lg:px-12 pb-16 flex flex-col relative z-0 bg-layer-base min-w-0">
-                        <ListTable
-                            initialItems={SAMPLE_DATA}
-                            filters={filters}
-                            onFilterChange={setFilters}
-                            onToggleFilters={() => setInspectorState(inspectorState === 'expanded' ? 'collapsed' : 'expanded')}
-                            isFilterActive={inspectorState === 'expanded'}
-                            columns={columns}
-                            onAddClick={() => setIsCreating(true)}
-                            defaultColumnVisibility={{ id: false, sku_code: false, uom_id: false, barcode: false, category_id: false }}
-                        />
+                    <ThemeHeader title="Products" badge={null} />
+                    <div className="flex-1 overflow-auto pt-8 px-12 pb-16 flex flex-col relative z-0 bg-layer-base min-w-0">
+                        {tableComponent}
                     </div>
                 </div>
-
-                {/* True Inspector Drawer */}
                 {rightDrawerContent}
             </div>
         );
@@ -577,12 +507,32 @@ export default function ProductListTemplate() {
 
     return (
         <ComponentSandboxTemplate
-            componentName="product list"
+            componentName="Product list"
             tier="L6 LAYOUT"
             status="Verified"
-            filePath="src/genesis/templates/tables/ProductListTemplate.tsx"
-            importPath="@/genesis/templates/tables/ProductListTemplate"
-            inspectorControls={inspectorContent}
+            filePath="src/genesis/templates/tables/product/PageProduct.tsx"
+            importPath="@/genesis/templates/tables/product/PageProduct"
+            inspectorControls={
+                <div className="flex flex-col gap-0 w-full min-w-[320px] px-4 pt-4">
+                    <Accordion type="single" collapsible variant="navigation" value={inspectorState === 'expanded' ? "item-1" : ""} onValueChange={(val: string) => { if (val !== "item-1") setInspectorState('collapsed'); }} className="bg-transparent w-full space-y-2">
+                        <AccordionItem value="item-1" className="border-none m-0">
+                            <AccordionTrigger className="px-4 py-3 flex items-center gap-2 rounded-lg bg-surface-variant hover:bg-surface-variant/80 font-mono text-transform-tertiary text-[11px] tracking-widest text-on-surface font-bold transition-colors m-0 w-full min-w-0">
+                                <div className="flex items-center gap-2 overflow-hidden flex-1 text-left min-w-0">
+                                    <Icon name="filter_list" size={16} className="shrink-0 text-on-surface-variant opacity-70 group-data-[state=open]:text-primary transition-colors" />
+                                    <span className="truncate uppercase">FILTERS</span>
+                                </div>
+                            </AccordionTrigger>
+                            <AccordionContent className="bg-transparent px-4 pb-4 pt-2">
+                                <DataFilter
+                                    title=""
+                                    groups={filterGroups}
+                                    onToggle={handleFilterToggle}
+                                />
+                            </AccordionContent>
+                        </AccordionItem>
+                    </Accordion>
+                </div>
+            }
             hideDataTerminal={true}
             fullWidth={true}
         >
