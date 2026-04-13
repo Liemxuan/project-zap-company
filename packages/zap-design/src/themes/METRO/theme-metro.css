@@ -4,7 +4,7 @@
     --button-padding-y: 12px;
     --button-icon-gap: 8px;
     --button-border-width: 0px;
-    --button-border-radius: 9999px;
+    --button-border-radius: 0.75rem;
     --button-variant-style: glow;
     --button-visual-style: outline;
     --button-color: primary;

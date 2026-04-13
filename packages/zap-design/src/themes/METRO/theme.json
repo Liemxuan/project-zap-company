@@ -25,12 +25,12 @@
       }
     },
     "typography": {
-      "primaryFont": "var(--font-roboto), sans-serif",
-      "primaryTransform": "lowercase",
-      "secondaryFont": "var(--font-inter), sans-serif",
-      "secondaryTransform": "lowercase",
-      "tertiaryFont": "var(--font-jetbrains), monospace",
-      "tertiaryTransform": "lowercase"
+      "primaryFont": "var(--font-space-grotesk), sans-serif",
+      "primaryTransform": "capitalize",
+      "secondaryFont": "var(--font-space-grotesk), sans-serif",
+      "secondaryTransform": "capitalize",
+      "tertiaryFont": "var(--font-space-grotesk), sans-serif",
+      "tertiaryTransform": "capitalize"
     }
   },
   "metrics": {
@@ -110,12 +110,12 @@
     "radioSize": "18px !important",
     "radioBorderWidth": "2px !important",
     "formItemGap": "12px !important",
-    "fontDisplay": "var(--font-roboto), sans-serif !important",
-    "headingTransform": "lowercase !important",
-    "fontBody": "var(--font-inter), sans-serif !important",
-    "bodyTransform": "lowercase !important",
-    "fontDev": "var(--font-jetbrains), monospace !important",
-    "devTransform": "lowercase !important",
+    "fontDisplay": "var(--font-space-grotesk), sans-serif !important",
+    "headingTransform": "capitalize !important",
+    "fontBody": "var(--font-space-grotesk), sans-serif !important",
+    "bodyTransform": "capitalize !important",
+    "fontDev": "var(--font-space-grotesk), sans-serif !important",
+    "devTransform": "capitalize !important",
     "buttonColor": "primary !important",
     "buttonSize": "default !important",
     "buttonIconPosition": "left !important",
@@ -216,5 +216,5 @@
     "productImageBorderWidth": "2px !important"
   },
   "name": "METRO",
-  "updatedAt": "2026-04-06T08:10:50.210Z"
+  "updatedAt": "2026-04-10T03:06:52.623Z"
 }

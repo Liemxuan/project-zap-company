@@ -13,6 +13,7 @@ export interface Collection {
   parent_id?: string | null;
   item_count?: number;
   status?: string;
+  locations?: string[];
 }
 
 export interface CollectionFilters {

@@ -721,11 +721,11 @@ export const MOCK_GROUP_PRODUCTS: GroupProduct[] = [
 ];
 
 export const MOCK_COLLECTIONS: Collection[] = [
-    { id: "1", name: "Spring Essentials", slug: "spring-essentials", item_count: 24, media_url: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=256&h=256&auto=format&fit=crop", is_active: true },
-    { id: "2", name: "Winter Collection 2024", slug: "winter-2024", item_count: 56, media_url: "https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=256&h=256&auto=format&fit=crop", is_active: true },
-    { id: "3", name: "Summer Hits", slug: "summer-hits", item_count: 12, media_url: "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?q=80&w=256&h=256&auto=format&fit=crop", is_active: true },
-    { id: "4", name: "Autumn Vibes", slug: "autumn-vibes", item_count: 31, media_url: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?q=80&w=256&h=256&auto=format&fit=crop", is_active: false },
-    { id: "5", name: "Holiday Special", slug: "holiday-special", item_count: 18, media_url: "https://images.unsplash.com/photo-1512909006721-3d6018887383?q=80&w=256&h=256&auto=format&fit=crop", is_active: true },
+    { id: "1", name: "Spring Essentials", slug: "spring-essentials", item_count: 24, media_url: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=256&h=256&auto=format&fit=crop", is_active: true, locations: ['All branches'] },
+    { id: "2", name: "Winter Collection 2024", slug: "winter-2024", item_count: 56, media_url: "https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=256&h=256&auto=format&fit=crop", is_active: true, locations: ['HQ-01', 'WH-EAST'] },
+    { id: "3", name: "Summer Hits", slug: "summer-hits", item_count: 12, media_url: "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?q=80&w=256&h=256&auto=format&fit=crop", is_active: true, locations: ['HQ-01'] },
+    { id: "4", name: "Autumn Vibes", slug: "autumn-vibes", item_count: 31, media_url: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?q=80&w=256&h=256&auto=format&fit=crop", is_active: false, locations: ['WH-EAST'] },
+    { id: "5", name: "Holiday Special", slug: "holiday-special", item_count: 18, media_url: "https://images.unsplash.com/photo-1512909006721-3d6018887383?q=80&w=256&h=256&auto=format&fit=crop", is_active: true, locations: ['All branches'] },
 ];
 
 export const MOCK_MENUS: Menu[] = [

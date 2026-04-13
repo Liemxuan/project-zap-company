@@ -52,8 +52,11 @@
         "bgGroup": "bg-layer-panel",
         "itemRadius": "rounded-md",
         "itemWidth": "border-8"
+      },
+      "Button": {
+        "radius": "rounded-xl"
       }
     }
   },
-  "updatedAt": "2026-04-06T03:18:26.993Z"
+  "updatedAt": "2026-04-10T02:38:53.854Z"
 }

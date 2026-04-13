@@ -47,7 +47,7 @@ export const getColumns = (handlers: {
                     className="w-64 text-left font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    Promotion name
+                    Name
                 </div>
             ),
             cell: ({ row }) => (
@@ -58,34 +58,34 @@ export const getColumns = (handlers: {
             enableSorting: false,
             enableHiding: false,
         },
-        {
-            id: "DiscountValue",
-            accessorKey: "discount_value",
-            header: ({ column }) => (
-                <div
-                    className="w-32 text-right pr-4 font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                    Discount value
-                </div>
-            ),
-            cell: ({ row }) => {
-                const isPercentage = row.original.discount_type === 'Percentage';
-                const formatted = isPercentage 
-                    ? `${row.original.discount_value}%`
-                    : new Intl.NumberFormat('vi-VN').format(row.original.discount_value || 0);
-                
-                return (
-                    <div className="w-32 text-right py-2.5 pr-4">
-                        <span className="font-bold text-foreground">
-                            {formatted} {!isPercentage && '₫'}
-                        </span>
-                    </div>
-                );
-            },
-            enableSorting: false,
-            enableHiding: true,
-        },
+        // {
+        //     id: "DiscountValue",
+        //     accessorKey: "discount_value",
+        //     header: ({ column }) => (
+        //         <div
+        //             className="w-32 text-right pr-4 font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
+        //             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        //         >
+        //             Discount value
+        //         </div>
+        //     ),
+        //     cell: ({ row }) => {
+        //         const isPercentage = row.original.discount_type === 'Percentage';
+        //         const formatted = isPercentage
+        //             ? `${row.original.discount_value}%`
+        //             : new Intl.NumberFormat('vi-VN').format(row.original.discount_value || 0);
+
+        //         return (
+        //             <div className="w-32 text-right py-2.5 pr-4">
+        //                 <span className="font-bold text-foreground">
+        //                     {formatted} {!isPercentage && '₫'}
+        //                 </span>
+        //             </div>
+        //         );
+        //     },
+        //     enableSorting: false,
+        //     enableHiding: true,
+        // },
         {
             id: "DiscountType",
             accessorKey: "discount_type",
@@ -94,7 +94,7 @@ export const getColumns = (handlers: {
                     className="w-32 text-left font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    Discount type
+                    Type
                 </div>
             ),
             cell: ({ row }) => (
@@ -125,25 +125,6 @@ export const getColumns = (handlers: {
             enableHiding: true,
         },
         {
-            id: "Schedule",
-            accessorKey: "schedule",
-            header: ({ column }) => (
-                <div
-                    className="w-48 text-left font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                    Schedule
-                </div>
-            ),
-            cell: ({ row }) => (
-                <div className="w-48 py-2.5 text-left">
-                    <span className="text-on-surface-variant text-sm truncate">{row.original.schedule || 'No schedule'}</span>
-                </div>
-            ),
-            enableSorting: false,
-            enableHiding: true,
-        },
-        {
             id: "Location",
             accessorKey: "locations",
             header: ({ column }) => (
@@ -163,6 +144,25 @@ export const getColumns = (handlers: {
                             </span>
                         ))}
                     </div>
+                </div>
+            ),
+            enableSorting: false,
+            enableHiding: true,
+        },
+        {
+            id: "Schedule",
+            accessorKey: "schedule",
+            header: ({ column }) => (
+                <div
+                    className="w-48 text-left font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    Schedule
+                </div>
+            ),
+            cell: ({ row }) => (
+                <div className="w-48 py-2.5 text-left">
+                    <span className="text-on-surface-variant text-sm truncate">{row.original.schedule || 'No schedule'}</span>
                 </div>
             ),
             enableSorting: false,

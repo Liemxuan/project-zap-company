@@ -11,3 +11,4 @@ export * from './menu/use-menus';
 export * from './modifier-item/use-modifier-items';
 export * from './customer/use-customers';
 export * from './membership/use-memberships';
+export * from './promotion/use-promotions';

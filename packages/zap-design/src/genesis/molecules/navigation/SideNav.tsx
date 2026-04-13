@@ -57,7 +57,7 @@ const NAV_DATA: Category[] = [
     {
         id: 'L6', title: 'L6: Layouts', icon: Columns, items: [
             { title: 'Authentication', items: ['Sign-in A', 'Sign-in B'] },
-            { title: 'Tables', items: ['system logs', 'Product List', 'Locations', 'Categories'] }
+            { title: 'Tables', items: ['system logs', 'Product List', 'Locations', 'Categories', 'Group Products', 'Modifier Items', 'Collections', 'Menus', 'Customers', 'Memberships', 'Promotions'] }
         ]
     },
     {
@@ -292,8 +292,15 @@ const getHref = (item: string, theme: string, activeWorkspaceId?: string | null,
             'Sign-in B': `/design/${theme}/organisms/signin-b`,
             'system logs': `/design/${theme}/organisms/system-logs-layout`,
             'Product List': `/design/${theme}/organisms/product-list`,
-            'Locations': prefix ? `${prefix}/locations` : `/zap/en/locations`,
+            'Locations': `/design/${theme}/organisms/locations`,
             'Categories': `/design/${theme}/organisms/categories`,
+            'Group Products': `/design/${theme}/organisms/group-products`,
+            'Modifier Items': `/design/${theme}/organisms/modifier-items`,
+            'Collections': `/design/${theme}/organisms/collections`,
+            'Menus': `/design/${theme}/organisms/menus`,
+            'Customers': `/design/${theme}/organisms/customers`,
+            'Memberships': `/design/${theme}/organisms/memberships`,
+            'Promotions': `/design/${theme}/organisms/promotions`,
 
             // L5 Organisms — use theme path
             'Data Grid': `/design/${theme}/organisms/data-grid`,
@@ -313,7 +320,7 @@ const getHref = (item: string, theme: string, activeWorkspaceId?: string | null,
             'Category': prefix ? `${prefix}/categories` : `/zap/en/categories`,
             'Unit': prefix ? `${prefix}/units` : `/zap/en/units`,
             'Brand': prefix ? `${prefix}/brands` : `/zap/en/brands`,
-            
+
             'User Management': `/auth/${theme}/user-management`,
             'Product Management': `/auth/${theme}/product-management`,
             'Modifier Groups': prefix ? `${prefix}/modifier-groups` : `/zap/en/modifier-groups`,
@@ -326,7 +333,7 @@ const getHref = (item: string, theme: string, activeWorkspaceId?: string | null,
             'Orders': '/kiosk/orders',
             'Overview': '/storefront',
             'Products': '/storefront/products',
-            'Customers': '/storefront/customers',
+            'Storefront Customers': '/storefront/customers',
 
             // Ops
             'Master Data': '/inventory/master',
@@ -523,7 +530,7 @@ const SideNavContent: React.FC<SideNavProps> = ({ showDevWrapper = false }) => {
                 return [{ id: 'kiosk', title: 'Kiosk System', icon: Layout, items: ['Terminal', 'Orders'] }];
             }
             if (ws?.id === 'pos-web') {
-                return [{ id: 'web', title: 'Storefront', icon: Layout, items: ['Overview', 'Products', 'Customers'] }];
+                return [{ id: 'web', title: 'Storefront', icon: Layout, items: ['Overview', 'Products', 'Storefront Customers'] }];
             }
             if (activeWorkspaceId === 'ops-main') {
                 return [
@@ -546,15 +553,15 @@ const SideNavContent: React.FC<SideNavProps> = ({ showDevWrapper = false }) => {
             }
             if (activeWorkspaceId === 'merchant-admin' || activeWorkspaceId === 'zap-auth') {
                 return [
-                    { 
-                        id: 'auth-main', 
-                        title: 'ZAP-AUTH MAIN', 
-                        icon: Layout, 
+                    {
+                        id: 'auth-main',
+                        title: 'ZAP-AUTH MAIN',
+                        icon: Layout,
                         items: [
-                            'Dashboard', 
-                            'Overview', 
+                            'Dashboard',
+                            'Overview',
                             'Reports'
-                        ] 
+                        ]
                     },
                     {
                         id: 'auth-inventory',
@@ -569,11 +576,11 @@ const SideNavContent: React.FC<SideNavProps> = ({ showDevWrapper = false }) => {
                             'Modifier Groups'
                         ]
                     },
-                    { 
-                        id: 'auth-prefs', 
-                        title: 'SYSTEM PREFERENCES', 
-                        icon: Columns, 
-                        items: ['User Management', 'Settings', 'Access Control'] 
+                    {
+                        id: 'auth-prefs',
+                        title: 'SYSTEM PREFERENCES',
+                        icon: Columns,
+                        items: ['User Management', 'Settings', 'Access Control']
                     }
                 ];
             }

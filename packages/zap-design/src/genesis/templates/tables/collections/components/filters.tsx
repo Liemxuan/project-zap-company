@@ -10,7 +10,8 @@ export const COLLECTION_LABELS = {
     category: "Category",
     type: "Status",
     inventory: "Product Count",
-    price: "Internal ID"
+    price: "Internal ID",
+    location: "Location"
 };
 
 /**

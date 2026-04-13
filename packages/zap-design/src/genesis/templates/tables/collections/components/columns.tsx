@@ -97,7 +97,7 @@ export const getColumns = (handlers: {
                     className="w-32 text-right pr-4 font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    Product Count
+                    Items
                 </div>
             ),
             cell: ({ row }) => (
@@ -105,6 +105,31 @@ export const getColumns = (handlers: {
                     <span className="font-bold text-foreground">{row.original.item_count}</span>
                 </div>
             ),
+            enableSorting: false,
+            enableHiding: true,
+        },
+        {
+            id: "Location",
+            accessorKey: "locations",
+            header: ({ column }) => (
+                <div
+                    className="w-48 text-left font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    Location
+                </div>
+            ),
+            cell: ({ row }) => {
+                const locations = row.original.locations;
+                const displayText = Array.isArray(locations) 
+                    ? locations.join(', ') 
+                    : (locations || 'Global');
+                return (
+                    <div className="w-48 py-2.5 text-left">
+                        <span className="text-on-surface-variant text-sm truncate block">{displayText}</span>
+                    </div>
+                );
+            },
             enableSorting: false,
             enableHiding: true,
         },
