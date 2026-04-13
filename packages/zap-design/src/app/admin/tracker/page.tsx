@@ -64,7 +64,7 @@ export default async function AdminTrackerPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {personas.map((p) => (
+                {personas.map((p: any) => (
                   <TableRow key={p.id}>
                     <TableCell className="font-mono text-transform-tertiary">{p.name}</TableCell>
                     <TableCell>{p.sector || 'UNIVERSAL'}</TableCell>
@@ -102,7 +102,7 @@ export default async function AdminTrackerPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {tenants.map((t) => (
+                {tenants.map((t: any) => (
                   <TableRow key={t.id}>
                     <TableCell className="font-medium">{t.slug}</TableCell>
                     <TableCell>{t.sector || 'N/A'}</TableCell>
@@ -136,7 +136,7 @@ export default async function AdminTrackerPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {subscriptions.map((s) => (
+                {subscriptions.map((s: any) => (
                   <TableRow key={s.id}>
                     <TableCell>{s.tenants.slug}</TableCell>
                     <TableCell className="font-mono text-transform-tertiary">{s.ai_personas.name}</TableCell>
@@ -170,7 +170,7 @@ export default async function AdminTrackerPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {workspaces.map((w) => (
+                {workspaces.map((w: any) => (
                   <TableRow key={w.id}>
                     <TableCell className="font-medium">{w.id.substring(0,8)}</TableCell>
                     <TableCell>{w.tenants.slug}</TableCell>
@@ -204,7 +204,7 @@ export default async function AdminTrackerPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {interactions.map((i) => (
+                {interactions.map((i: any) => (
                   <TableRow key={i.id}>
                     <TableCell>User {i.users?.id.substring(0,8)}</TableCell>
                     <TableCell className="font-mono text-transform-tertiary">{i.ai_personas.name}</TableCell>

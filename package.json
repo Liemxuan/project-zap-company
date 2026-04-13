@@ -20,8 +20,11 @@
         "turbo": "^2.9.3"
     },
     "dependencies": {
+        "@date-fns/tz": "^1.2.0",
+        "@dnd-kit/utilities": "^3.2.2",
         "@hookform/resolvers": "^5.2.2",
         "@prisma/client": "^6.19.2",
+        "axios": "^1.14.0",
         "mongodb": "^7.1.1",
         "react-hook-form": "^7.72.0",
         "zod": "^3.25.76",

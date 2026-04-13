@@ -149,11 +149,20 @@ export const LoginForm: React.FC<LoginFormProps> = ({
                 {showPassword && (
                     <motion.div variants={itemShow} className="space-y-2">
                         <Label className="text-on-surface">Password</Label>
-                        <PasswordInput
+                        {/* <PasswordInput
                             placeholder="••••••••"
                             value={password}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => onPasswordChange(e.target.value)}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => onPasswordChange(e.target.value)}                            
                             required
+                        /> */}
+                        <Input
+                            style={{ textTransform: 'none' }}
+                            autoCapitalize="none"
+                            autoCorrect="off"
+                            spellCheck="false"
+                            type="password"
+                            placeholder='••••••••'
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => onPasswordChange(e.target.value)}
                         />
                     </motion.div>
                 )}

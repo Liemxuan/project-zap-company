@@ -32,6 +32,10 @@ const nextConfig: NextConfig = {
       {
         source: '/webhook/:path*',
         destination: 'http://localhost:3300/webhook/:path*',
+      },
+      {
+        source: '/api/proxy/crm-gateway/:path*',
+        destination: 'https://crm-gateway-v1-c7wqwyi1.uc.gateway.dev/api/:path*',
       }
     ];
   },

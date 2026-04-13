@@ -204,7 +204,7 @@ export default function ProductListTemplate() {
             ),
             cell: ({ row }) => (
                 <div className="w-28 text-right py-2.5 pr-4">
-                    <Text size='label-small'>${row.original.sale_price.toFixed(2)}</Text>
+                    <Text size='label-small'>${row.original.sale_price?.toFixed(2)}</Text>
                 </div>
             ),
             enableSorting: true,
