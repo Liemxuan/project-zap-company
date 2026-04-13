@@ -729,11 +729,11 @@ export const MOCK_COLLECTIONS: Collection[] = [
 ];
 
 export const MOCK_MENUS: Menu[] = [
-    { id: "1", name: "Thực đơn Sáng", is_active: true, locations: ["HQ-01", "WH-EAST"], channels: ["DINE_IN", "TAKE_AWAY"], total_items: 24, status: "Active" },
-    { id: "2", name: "Thực đơn Trưa", is_active: true, locations: ["HQ-01"], channels: ["DINE_IN"], total_items: 45, status: "Active" },
-    { id: "3", name: "Thực đơn Tối", is_active: true, locations: ["HQ-01", "WH-EAST"], channels: ["DINE_IN", "DELIVERY"], total_items: 38, status: "Active" },
-    { id: "4", name: "Thực đơn Cuối Tuần", is_active: false, locations: ["WH-EAST"], channels: ["TAKE_AWAY", "DELIVERY"], total_items: 12, status: "Inactive" },
-    { id: "5", name: "Thực đơn Khuyến Mãi", is_active: true, locations: ["HQ-01"], channels: ["DELIVERY"], total_items: 15, status: "Active" },
+    { id: "1", name: "Thực đơn Sáng", is_active: true, locations: ["HQ-01", "WH-EAST"], channels: ["POS"], total_items: 24, status: "Active" },
+    { id: "2", name: "Thực đơn Trưa", is_active: true, locations: ["HQ-01"], channels: ["POS", "KIOSK", "APP"], total_items: 45, status: "Active" },
+    { id: "3", name: "Thực đơn Tối", is_active: true, locations: ["HQ-01", "WH-EAST"], channels: ["APP", "KIOSK"], total_items: 38, status: "Active" },
+    { id: "4", name: "Thực đơn Cuối Tuần", is_active: false, locations: ["WH-EAST"], channels: ["KIOSK", "WEB"], total_items: 12, status: "Inactive" },
+    { id: "5", name: "Thực đơn Khuyến Mãi", is_active: true, locations: ["HQ-01"], channels: ["KIOSK", "WEB"], total_items: 15, status: "Active" },
 ];
 
 export const MOCK_MODIFIER_ITEMS: ModifierItem[] = [
@@ -802,4 +802,3 @@ export const MOCK_PROMOTIONS: Promotion[] = [
     { id: 'PROM-004', name: 'Weekend Brunch', discount_value: 10, discount_type: 'Percentage', apply_to: 'Food', schedule: 'Sat, Sun 10:00 - 14:00', locations: ['HQ-01', 'WH-EAST'], is_active: false },
     { id: 'PROM-005', name: 'Member Anniversary', discount_value: 20, discount_type: 'Percentage', apply_to: 'All products', schedule: 'Member Join Date', locations: ['All branches'], is_active: true },
 ];
-

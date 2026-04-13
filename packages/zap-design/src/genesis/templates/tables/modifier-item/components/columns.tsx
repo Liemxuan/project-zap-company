@@ -150,7 +150,7 @@ export const getColumns = (handlers: {
                     className="w-20 text-left font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    Trạng thái
+                    Status
                 </div>
             ),
             cell: ({ row }) => (

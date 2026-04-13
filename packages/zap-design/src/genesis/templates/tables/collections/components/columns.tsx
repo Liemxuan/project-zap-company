@@ -4,7 +4,7 @@ import { Pill } from '@/genesis/atoms/status/pills';
 import { Avatar } from '@/genesis/atoms/status/avatars';
 import { Checkbox } from '@/genesis/atoms/interactive/checkbox';
 import { QuickActionsDropdown } from '@/genesis/molecules/quick-actions-dropdown';
-import { Pencil, Copy, Trash2 } from "lucide-react";
+import { Pencil, Copy, Trash2, GripVertical, LayoutGrid } from "lucide-react";
 
 /**
  * Get columns definition for Collections table
@@ -121,8 +121,8 @@ export const getColumns = (handlers: {
             ),
             cell: ({ row }) => {
                 const locations = row.original.locations;
-                const displayText = Array.isArray(locations) 
-                    ? locations.join(', ') 
+                const displayText = Array.isArray(locations)
+                    ? locations.join(', ')
                     : (locations || 'Global');
                 return (
                     <div className="w-48 py-2.5 text-left">
@@ -167,6 +167,8 @@ export const getColumns = (handlers: {
                         <QuickActionsDropdown
                             actions={[
                                 { label: 'Edit', icon: Pencil, onClick: () => handlers.onAction('edit', row.original) },
+                                { label: 'Assign items', icon: LayoutGrid, onClick: () => handlers.onAction('assign', row.original) },
+                                { label: 'Sort items', icon: GripVertical, onClick: () => handlers.onAction('sort', row.original) },
                                 { label: 'Duplicate', icon: Copy, onClick: () => handlers.onAction('duplicate', row.original) },
                                 { label: 'Delete', icon: Trash2, onClick: () => handlers.onAction('delete', row.original), variant: 'destructive' },
                             ]}
