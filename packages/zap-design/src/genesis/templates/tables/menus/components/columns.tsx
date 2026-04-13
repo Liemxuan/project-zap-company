@@ -1,13 +1,12 @@
 import React from 'react';
 import { ColumnDef } from '@tanstack/react-table';
 import { Pill } from '@/genesis/atoms/status/pills';
-import { Avatar } from '@/genesis/atoms/status/avatars';
 import { Checkbox } from '@/genesis/atoms/interactive/checkbox';
 import { QuickActionsDropdown } from '@/genesis/molecules/quick-actions-dropdown';
 import { Pencil, Copy, Trash2 } from "lucide-react";
 
 /**
- * Get columns definition for Group Product table
+ * Get columns definition for Menus table
  */
 export const getColumns = (handlers: {
     onAction: (type: string, item: any) => void;
@@ -41,86 +40,88 @@ export const getColumns = (handlers: {
             enableHiding: false,
         },
         {
-            id: "id",
-            header: ({ column }) => (
-                <div
-                    className="w-14 text-left font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                    Id
-                </div>
-            ),
-            cell: ({ row }) => (
-                <div className="w-14 truncate font-dev text-transform-tertiary text-muted-foreground text-left py-2.5">
-                    {row.original.id}
-                </div>
-            ),
-            enableSorting: false,
-            enableHiding: false,
-        },
-        {
             id: "Name",
             accessorKey: "name",
             header: ({ column }) => (
                 <div
-                    className="w-80 text-left font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
+                    className="w-64 text-left font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    Name
+                    Menu
                 </div>
             ),
             cell: ({ row }) => (
-                <div className="w-80 py-2.5 text-left">
-                    <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 flex items-center justify-center shrink-0 overflow-hidden">
-                            <Avatar
-                                src={row.original.media_url}
-                                className="w-full h-full object-cover border-[1px] border-border"
-                                initials={row.original.name?.split(' ').map((n: string) => n[0]).join('') || 'G'}
-                                size="sm"
-                            />
-                        </div>
-                        <div className="flex flex-col min-w-0">
-                            <span className="font-semibold text-foreground text-sm truncate">{row.original.name}</span>
-                        </div>
-                    </div>
+                <div className="w-64 py-2.5 text-left">
+                    <span className="font-semibold text-foreground text-sm truncate">{row.original.name}</span>
                 </div>
             ),
             enableSorting: false,
             enableHiding: false,
         },
         {
-            id: "Items",
-            accessorKey: "item_count",
+            id: "Location",
+            accessorKey: "locations",
             header: ({ column }) => (
                 <div
-                    className="w-32 text-right pr-4 font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
+                    className="w-48 text-left font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    Items
+                    Location
                 </div>
             ),
             cell: ({ row }) => (
-                <div className="w-32 text-right py-2.5 pr-4">
-                    <span className="font-bold text-foreground">{row.original.item_count}</span>
+                <div className="w-48 py-2.5 text-left overflow-hidden">
+                    <div className="flex flex-wrap gap-1">
+                        {(row.original.locations || []).map((loc: string) => (
+                            <span key={loc} className="text-[10px] bg-surface-variant px-1.5 py-0.5 rounded text-on-surface-variant font-medium">
+                                {loc}
+                            </span>
+                        ))}
+                    </div>
                 </div>
             ),
             enableSorting: false,
             enableHiding: true,
         },
         {
-            id: "Location",
+            id: "Channel",
+            accessorKey: "channels",
+            header: ({ column }) => (
+                <div
+                    className="w-48 text-left font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    Channel
+                </div>
+            ),
+            cell: ({ row }) => (
+                <div className="w-48 py-2.5 text-left overflow-hidden">
+                    <div className="flex flex-wrap gap-1">
+                        {(row.original.channels || []).map((ch: string) => (
+                            <span key={ch} className="text-[10px] bg-primary/10 text-primary px-1.5 py-0.5 rounded font-medium border border-primary/20">
+                                {ch.replace('_', ' ')}
+                            </span>
+                        ))}
+                    </div>
+                </div>
+            ),
+            enableSorting: false,
+            enableHiding: true,
+        },
+        {
+            id: "TotalItem",
+            accessorKey: "total_items",
             header: ({ column }) => (
                 <div
                     className="w-32 text-right pr-4 font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    Location
+                    Total item
                 </div>
             ),
-            cell: () => (
+            cell: ({ row }) => (
                 <div className="w-32 text-right py-2.5 pr-4">
-                    <span className="font-bold text-foreground">-</span>
+                    <span className="font-bold text-foreground">{row.original.total_items}</span>
                 </div>
             ),
             enableSorting: false,

@@ -217,7 +217,10 @@ export default function PageProductListTemplate() {
             ),
             cell: ({ row }) => (
                 <div className="w-28 text-right py-2.5 pr-4">
-                    <Text size='label-small'>${(row.original.sale_price || 0).toFixed(2)}</Text>
+                    <Text size='label-small'>
+                        {new Intl.NumberFormat('vi-VN').format(row.original.sale_price || 0)}
+
+                    </Text>
                 </div>
             ),
             enableSorting: true,
@@ -344,7 +347,6 @@ export default function PageProductListTemplate() {
                 <div className="w-24 pr-7 py-2.5 text-right" onClick={e => e.stopPropagation()}>
                     <div className="flex items-center justify-end">
                         <QuickActionsDropdown
-                            label={row.original.variant_name}
                             actions={[
                                 { label: 'Edit', icon: Pencil, onClick: () => { } },
                                 { label: 'Duplicate', icon: Copy, onClick: () => { } },

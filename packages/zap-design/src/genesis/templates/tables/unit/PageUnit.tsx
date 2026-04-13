@@ -146,7 +146,6 @@ export default function PageUnitTemplate() {
                 <div className="w-24 pr-7 py-2.5 text-right" onClick={e => e.stopPropagation()}>
                     <div className="flex items-center justify-end">
                         <QuickActionsDropdown
-                            label={row.original.name}
                             actions={[
                                 { label: 'Edit', icon: Pencil, onClick: () => { } },
                                 { label: 'Duplicate', icon: Copy, onClick: () => { } },

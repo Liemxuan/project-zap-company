@@ -6,6 +6,11 @@ import { Product } from '../services/product/product.model';
 import { GroupProduct } from '../services/group-product/group-product.model';
 import { Unit } from '../services/unit/unit.model';
 import { Location } from '../services/location/location.model';
+import { Collection } from '../services/collection/collection.model';
+import { Menu } from '../services/menu/menu.model';
+import { ModifierItem } from '../services/modifier-item/modifier-item.model';
+import { Customer } from '../services/customer/customer.model';
+import { Membership } from '../services/membership/membership.model';
 
 export const MOCK_CATEGORIES: Category[] = [
     { id: "1", name: "Iphone 16 Series", slug: "/iphone-16", parent: "Electronics", item_count: 54, media_url: "https://images.unsplash.com/photo-1616348436168-de43ad0db179?q=80&w=256&h=256&auto=format&fit=crop", is_active: true },
@@ -25,6 +30,7 @@ export const MOCK_DINING_OPTIONS: DiningOption[] = [
     { id: "1", name: "Dine In", status: "Active", type: "DINE_IN" },
     { id: "2", name: "Takeaway", status: "Active", type: "TAKE_AWAY" },
     { id: "3", name: "Delivery", status: "Active", type: "DELIVERY" },
+    { id: "4", name: "Pick-up", status: "Active", type: "PICK UP" },
 ];
 
 export const MOCK_MODIFIER_GROUPS: ModifierGroup[] = [
@@ -711,4 +717,79 @@ export const MOCK_GROUP_PRODUCTS: GroupProduct[] = [
     { id: "3", name: "Modern Office", slug: "modern-office", parent: "Furniture", item_count: 12, media_url: "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=256&h=256&auto=format&fit=crop", is_active: true },
     { id: "4", name: "Smart Home", slug: "smart-home", parent: "Electronics", item_count: 22, media_url: "https://images.unsplash.com/photo-1558002038-103792e07a70?q=80&w=256&h=256&auto=format&fit=crop", is_active: false },
     { id: "5", name: "Designer Collection", slug: "designer-collection", parent: "Fashion", item_count: 45, media_url: "https://images.unsplash.com/photo-1445205170230-053b83016050?q=80&w=256&h=256&auto=format&fit=crop", is_active: true },
+];
+
+export const MOCK_COLLECTIONS: Collection[] = [
+    { id: "1", name: "Spring Essentials", slug: "spring-essentials", item_count: 24, media_url: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=256&h=256&auto=format&fit=crop", is_active: true },
+    { id: "2", name: "Winter Collection 2024", slug: "winter-2024", item_count: 56, media_url: "https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=256&h=256&auto=format&fit=crop", is_active: true },
+    { id: "3", name: "Summer Hits", slug: "summer-hits", item_count: 12, media_url: "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?q=80&w=256&h=256&auto=format&fit=crop", is_active: true },
+    { id: "4", name: "Autumn Vibes", slug: "autumn-vibes", item_count: 31, media_url: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?q=80&w=256&h=256&auto=format&fit=crop", is_active: false },
+    { id: "5", name: "Holiday Special", slug: "holiday-special", item_count: 18, media_url: "https://images.unsplash.com/photo-1512909006721-3d6018887383?q=80&w=256&h=256&auto=format&fit=crop", is_active: true },
+];
+
+export const MOCK_MENUS: Menu[] = [
+    { id: "1", name: "Thực đơn Sáng", is_active: true, locations: ["HQ-01", "WH-EAST"], channels: ["DINE_IN", "TAKE_AWAY"], total_items: 24, status: "Active" },
+    { id: "2", name: "Thực đơn Trưa", is_active: true, locations: ["HQ-01"], channels: ["DINE_IN"], total_items: 45, status: "Active" },
+    { id: "3", name: "Thực đơn Tối", is_active: true, locations: ["HQ-01", "WH-EAST"], channels: ["DINE_IN", "DELIVERY"], total_items: 38, status: "Active" },
+    { id: "4", name: "Thực đơn Cuối Tuần", is_active: false, locations: ["WH-EAST"], channels: ["TAKE_AWAY", "DELIVERY"], total_items: 12, status: "Inactive" },
+    { id: "5", name: "Thực đơn Khuyến Mãi", is_active: true, locations: ["HQ-01"], channels: ["DELIVERY"], total_items: 15, status: "Active" },
+];
+
+export const MOCK_MODIFIER_ITEMS: ModifierItem[] = [
+    { id: "M01", name: "Thêm Trân Châu Trắng", display_type: "Checkbox", locations: ["HQ-01", "WH-EAST"], price: 10000, is_active: true, status: "Active" },
+    { id: "M02", name: "Thêm Trân Châu Đen", display_type: "Checkbox", locations: ["HQ-01"], price: 8000, is_active: true, status: "Active" },
+    { id: "M03", name: "Ít Đường", display_type: "Radio", locations: ["HQ-01", "WH-EAST"], price: 0, is_active: true, status: "Active" },
+    { id: "M04", name: "Không Đá", display_type: "Radio", locations: ["WH-EAST"], price: 0, is_active: false, status: "Inactive" },
+    { id: "M05", name: "Thêm Kem Cheese", display_type: "Checkbox", locations: ["HQ-01"], price: 15000, is_active: true, status: "Active" },
+];
+
+export const MOCK_CUSTOMERS: Customer[] = [
+    { id: 'CUST-001', name: 'Nguyễn Văn A', phone: '0901234567', money: 500000, point: 1250, membership: 'Gold', total_spend: 15000000, is_active: true },
+    { id: 'CUST-002', name: 'Trần Thị B', phone: '0912345678', money: 25000, point: 450, membership: 'Silver', total_spend: 4200000, is_active: true },
+    { id: 'CUST-003', name: 'Lê Văn C', phone: '0987654321', money: 0, point: 100, membership: 'Bronze', total_spend: 1200000, is_active: false },
+    { id: 'CUST-004', name: 'Phạm Thị D', phone: '0933445566', money: 1200000, point: 3200, membership: 'Diamond', total_spend: 45000000, is_active: true },
+    { id: 'CUST-005', name: 'Hoàng Văn E', phone: '0944556677', money: 150000, point: 800, membership: 'Gold', total_spend: 8500000, is_active: true },
+];
+
+export const MOCK_MEMBERSHIPS: Membership[] = [
+    {
+        id: 'MEM-001',
+        tier: 'Bronze',
+        tier_price: 0,
+        billing_cycle: 'Monthly',
+        benefit: '5% Point Cashback',
+        is_active: true
+    },
+    {
+        id: 'MEM-002',
+        tier: 'Silver',
+        tier_price: 500000,
+        billing_cycle: 'Monthly',
+        benefit: '5% Discount, 7% Point Cashback',
+        is_active: true
+    },
+    {
+        id: 'MEM-003',
+        tier: 'Gold',
+        tier_price: 1200000,
+        billing_cycle: 'Monthly',
+        benefit: '10% Discount, 10% Point Cashback, Free Shipping',
+        is_active: true
+    },
+    {
+        id: 'MEM-004',
+        tier: 'Diamond',
+        tier_price: 5000000,
+        billing_cycle: 'Yearly',
+        benefit: '15% Discount, 15% Point Cashback, VIP Lounge, Personal Assistant',
+        is_active: true
+    },
+    {
+        id: 'MEM-005',
+        tier: 'Enterprise',
+        tier_price: 15000000,
+        billing_cycle: 'Yearly',
+        benefit: 'Custom benefits, Unlimited users, Dedicated support',
+        is_active: false
+    }
 ];

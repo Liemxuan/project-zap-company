@@ -179,7 +179,6 @@ export default function PageBrandTemplate() {
             cell: ({ row }) => (
                 <div className="w-24 pr-4 py-2.5 text-right" onClick={e => e.stopPropagation()}>
                     <QuickActionsDropdown
-                        label={row.original.name}
                         actions={[
                             { label: 'Edit', icon: Pencil, onClick: () => { } },
                             { label: 'Duplicate', icon: Copy, onClick: () => { } },

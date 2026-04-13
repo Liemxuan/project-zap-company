@@ -7,7 +7,7 @@ import { QuickActionsDropdown } from '@/genesis/molecules/quick-actions-dropdown
 import { Pencil, Copy, Trash2 } from "lucide-react";
 
 /**
- * Get columns definition for Group Product table
+ * Get columns definition for Collections table
  */
 export const getColumns = (handlers: {
     onAction: (type: string, item: any) => void;
@@ -76,7 +76,7 @@ export const getColumns = (handlers: {
                             <Avatar
                                 src={row.original.media_url}
                                 className="w-full h-full object-cover border-[1px] border-border"
-                                initials={row.original.name?.split(' ').map((n: string) => n[0]).join('') || 'G'}
+                                initials={row.original.name?.split(' ').map((n: string) => n[0]).join('') || 'C'}
                                 size="sm"
                             />
                         </div>
@@ -97,30 +97,12 @@ export const getColumns = (handlers: {
                     className="w-32 text-right pr-4 font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    Items
+                    Product Count
                 </div>
             ),
             cell: ({ row }) => (
                 <div className="w-32 text-right py-2.5 pr-4">
                     <span className="font-bold text-foreground">{row.original.item_count}</span>
-                </div>
-            ),
-            enableSorting: false,
-            enableHiding: true,
-        },
-        {
-            id: "Location",
-            header: ({ column }) => (
-                <div
-                    className="w-32 text-right pr-4 font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                    Location
-                </div>
-            ),
-            cell: () => (
-                <div className="w-32 text-right py-2.5 pr-4">
-                    <span className="font-bold text-foreground">-</span>
                 </div>
             ),
             enableSorting: false,

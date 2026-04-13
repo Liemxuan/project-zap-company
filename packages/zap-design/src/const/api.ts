@@ -43,6 +43,27 @@ export const API_ENDPOINTS = {
   GROUP_PRODUCT: {
     LIST: '/api/proxy/crm-gateway/group-products/list',
     DETAIL: '/api/proxy/crm-gateway/group-products',
+  },
+
+  COLLECTION: {
+    LIST: '/api/proxy/crm-gateway/collections/list',
+    DETAIL: '/api/proxy/crm-gateway/collections',
+  },
+  MENU: {
+    LIST: '/api/proxy/crm-gateway/menus/list',
+    DETAIL: '/api/proxy/crm-gateway/menus',
+  },
+  MODIFIER_ITEM: {
+    LIST: '/api/proxy/crm-gateway/modifier-items/list',
+    DETAIL: '/api/proxy/crm-gateway/modifier-items',
+  },
+  CUSTOMER: {
+    LIST: '/api/proxy/crm-gateway/customers/list',
+    DETAIL: '/api/proxy/crm-gateway/customers',
+  },
+  MEMBERSHIP: {
+    LIST: '/api/proxy/crm-gateway/memberships/list',
+    DETAIL: '/api/proxy/crm-gateway/memberships',
   }
 } as const;
 
