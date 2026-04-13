@@ -18,6 +18,11 @@ import {
 } from '../../../../../genesis/molecules/dropdown-menu'
 import { Pill, PillVariant } from '../../../../../genesis/atoms/status/pills'
 import { Slider } from '../../../../../genesis/atoms/interactive/slider';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../../../../genesis/molecules/tabs';
+
+// Promotion Data Integration
+import { getColumns as getPromotionColumns } from '../../../../../genesis/templates/tables/promotions/components/columns';
+import { MOCK_PROMOTIONS } from '../../../../../hooks/mock-data';
 
 import { Wrapper } from '../../../../../components/dev/Wrapper';
 type Payment = {
@@ -185,14 +190,43 @@ export default function DataGridSandbox() {  const [borderRadius, setBorderRadiu
           "Respect text casing rules."
       ]}
     >
-      <div 
-        className="w-full p-12 bg-layer-panel shadow-sm border border-outline-variant rounded-xl overflow-hidden"
-        style={{
-          '--data-grid-radius': `${borderRadius[0]}px`,
-          '--data-grid-border-width': `${borderWidth[0]}px`,
-        } as React.CSSProperties}
-      >
-        <DataGrid columns={columns} data={data} searchKey="email" />
+      <div className="w-full p-6 bg-layer-panel shadow-sm border border-outline-variant rounded-xl flex flex-col gap-6 overflow-hidden">
+        <Tabs defaultValue="payments" className="w-full">
+          <div className="flex items-center justify-between mb-2">
+            <TabsList className="bg-surface-variant/20 p-1">
+              <TabsTrigger value="payments" className="px-6 py-2 uppercase tracking-widest text-[10px] font-bold">Payments (Standard)</TabsTrigger>
+              <TabsTrigger value="promotions" className="px-6 py-2 uppercase tracking-widest text-[10px] font-bold text-primary">Promotions (Custom)</TabsTrigger>
+            </TabsList>
+          </div>
+
+          <TabsContent value="payments" className="mt-0 pt-4 border-t border-border/50">
+            <div
+              className="w-full overflow-hidden"
+              style={{
+                '--data-grid-radius': `${borderRadius[0]}px`,
+                '--data-grid-border-width': `${borderWidth[0]}px`,
+              } as React.CSSProperties}
+            >
+              <DataGrid columns={columns} data={data} searchKey="email" />
+            </div>
+          </TabsContent>
+
+          <TabsContent value="promotions" className="mt-0 pt-4 border-t border-border/50">
+            <div
+              className="w-full overflow-hidden"
+              style={{
+                '--data-grid-radius': `${borderRadius[0]}px`,
+                '--data-grid-border-width': `${borderWidth[0]}px`,
+              } as React.CSSProperties}
+            >
+              <DataGrid
+                columns={getPromotionColumns({ onAction: (t, i) => console.log(t, i) })}
+                data={MOCK_PROMOTIONS}
+                searchKey="name"
+              />
+            </div>
+          </TabsContent>
+        </Tabs>
       </div>
     </ComponentSandboxTemplate>
   )

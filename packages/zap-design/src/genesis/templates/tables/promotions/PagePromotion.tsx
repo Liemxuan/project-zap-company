@@ -84,7 +84,7 @@ export default function PagePromotionsTemplate() {
             }}
             columns={columns as any}
             labels={PROMOTION_LABELS}
-            defaultColumnVisibility={{ ApplyTo: false }} //mặc định ẩn hiện cột
+            defaultColumnVisibility={{ apply_to: false }} //mặc định ẩn hiện cột
         />
     );
 

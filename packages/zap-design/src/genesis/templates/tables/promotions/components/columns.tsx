@@ -40,7 +40,7 @@ export const getColumns = (handlers: {
             enableHiding: false,
         },
         {
-            id: "PromotionName",
+            id: "name",
             accessorKey: "name",
             header: ({ column }) => (
                 <div
@@ -87,7 +87,7 @@ export const getColumns = (handlers: {
         //     enableHiding: true,
         // },
         {
-            id: "DiscountType",
+            id: "type",
             accessorKey: "discount_type",
             header: ({ column }) => (
                 <div
@@ -106,7 +106,7 @@ export const getColumns = (handlers: {
             enableHiding: true,
         },
         {
-            id: "ApplyTo",
+            id: "apply_to",
             accessorKey: "apply_to",
             header: ({ column }) => (
                 <div
