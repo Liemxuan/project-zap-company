@@ -45,13 +45,24 @@ const SystemLogsTable = dynamic(() => import('../zap/organisms/system-logs-table
 const SystemLogsTemplate = dynamic(() => import('../genesis/templates/tables/SystemLogsTemplate'), { ssr: false });
 const ListTable = dynamic(() => import('../zap/organisms/list-table').then(m => ({ default: m.ListTable })), { ssr: false });
 const ProductListTemplate = dynamic(() => import('../genesis/templates/tables/ProductListTemplate'), { ssr: false });
-const LocationsTemplate = dynamic(() => import('../genesis/templates/tables/LocationsTemplate'), { ssr: false });
+const PageLocationsTemplate = dynamic(() => import('../genesis/templates/tables/location/PageLocation'), { ssr: false });
+const PageCategoryTemplate = dynamic(() => import('../genesis/templates/tables/categories/PageCategories'), { ssr: false });
+const PageBrandTemplate = dynamic(() => import('../genesis/templates/tables/brand/PageBrand'), { ssr: false });
+const PageDiningOptionTemplate = dynamic(() => import('../genesis/templates/tables/dining-option/PageDiningOption'), { ssr: false });
+const PageModifierGroupTemplate = dynamic(() => import('../genesis/templates/tables/modifier-group/PageModifierGroup'), { ssr: false });
+const PageProductTemplate = dynamic(() => import('../genesis/templates/tables/product/PageProduct'), { ssr: false });
+const PageUnitTemplate = dynamic(() => import('../genesis/templates/tables/unit/PageUnit'), { ssr: false });
+const PageGroupProductTemplate = dynamic(() => import('../genesis/templates/tables/group-product/PageGroupProduct'), { ssr: false });
+const PageCollectionTemplate = dynamic(() => import('../genesis/templates/tables/collections/PageCollection'), { ssr: false });
+const PageMenusTemplate = dynamic(() => import('../genesis/templates/tables/menus/PageMenus'), { ssr: false });
+const PageModifierItemTemplate = dynamic(() => import('../genesis/templates/tables/modifier-item/PageModifierItem'), { ssr: false });
+const PageCustomerTemplate = dynamic(() => import('../genesis/templates/tables/customers/PageCustomer'), { ssr: false });
+const PageMembershipTemplate = dynamic(() => import('../genesis/templates/tables/memberships/PageMembership'), { ssr: false });
+const PagePromotionsTemplate = dynamic(() => import('../genesis/templates/tables/promotions/PagePromotion'), { ssr: false });
+const EmployeeTemplate = dynamic(() => import('../genesis/templates/tables/EmployeeTemplate'), { ssr: false });
 const UserManagementTable = dynamic(() => import('@/genesis/organisms/auth/UserManagementTable').then(m => ({ default: m.UserManagementTable })), { ssr: false });
 const Body = dynamic(() => import('../genesis/templates/body/BodyOrganism').then(m => ({ default: m.BodyOrganism })), { ssr: false });
 const CanvasGuide = dynamic(() => import('../genesis/templates/canvas-guide/CanvasGuideOrganism').then(m => ({ default: m.CanvasGuideOrganism })), { ssr: false });
-const CategoryTemplate = dynamic(() => import('../genesis/templates/tables/CategoryTemplate'), { ssr: false });
-const UnitTemplate = dynamic(() => import('../genesis/templates/tables/UnitTemplate'), { ssr: false });
-const EmployeeTemplate = dynamic(() => import('../genesis/templates/tables/EmployeeTemplate'), { ssr: false });
 
 
 // ─── REGISTRY ───────────────────────────────────────────────────────────────────
@@ -70,10 +81,21 @@ export const ORGANISM_REGISTRY: Record<string, OrganismEntry> = {
     'system-logs-layout': { id: 'system-logs-layout', label: 'system logs', tier: 'L6 LAYOUT', status: 'Verified', type: 'page', component: SystemLogsTemplate, icon: 'list_alt', category: 'Tables' },
     'system-logs': { id: 'system-logs', label: 'System Logs', tier: 'L7 PAGE', status: 'Verified', type: 'showcase', component: SystemLogsTable, icon: 'list_alt', category: 'Tables' },
     'list-table': { id: 'list-table', label: 'List Table', tier: 'L7 PAGE', status: 'Verified', type: 'showcase', component: ListTable, icon: 'list', category: 'Tables' },
-    'product-list': { id: 'product-list', label: 'Product List', tier: 'L6 LAYOUT', status: 'Verified', type: 'page', component: ProductListTemplate, icon: 'inventory', category: 'Tables' },
-    'locations': { id: 'locations', label: 'Locations', tier: 'L6 LAYOUT', status: 'Verified', type: 'page', component: LocationsTemplate, icon: 'storefront', category: 'Tables' },
-    'categories': { id: 'categories', label: 'Categories', tier: 'L6 LAYOUT', status: 'Verified', type: 'page', component: CategoryTemplate, icon: 'category', category: 'Tables' },
-    'units': { id: 'units', label: 'Units', tier: 'L6 LAYOUT', status: 'Verified', type: 'page', component: UnitTemplate, icon: 'straighten', category: 'Tables' },
+    'product-list': { id: 'product-list', label: 'Product List', tier: 'L6 LAYOUT', status: 'Verified', type: 'page', component: PageProductTemplate, icon: 'inventory', category: 'Tables' },
+    'locations': { id: 'locations', label: 'Locations', tier: 'L6 LAYOUT', status: 'Verified', type: 'page', component: PageLocationsTemplate, icon: 'storefront', category: 'Tables' },
+    'categories': { id: 'categories', label: 'Categories', tier: 'L6 LAYOUT', status: 'Verified', type: 'page', component: PageCategoryTemplate, icon: 'category', category: 'Tables' },
+    'brands': { id: 'brands', label: 'Brands', tier: 'L6 LAYOUT', status: 'Verified', type: 'page', component: PageBrandTemplate, icon: 'verified_user', category: 'Tables' },
+    'dining-options': { id: 'dining-options', label: 'Dining Options', tier: 'L6 LAYOUT', status: 'Verified', type: 'page', component: PageDiningOptionTemplate, icon: 'restaurant', category: 'Tables' },
+    'modifier-groups': { id: 'modifier-groups', label: 'Modifier Groups', tier: 'L6 LAYOUT', status: 'Verified', type: 'page', component: PageModifierGroupTemplate, icon: 'settings_input_component', category: 'Tables' },
+    'products': { id: 'products', label: 'Products', tier: 'L6 LAYOUT', status: 'Verified', type: 'page', component: PageProductTemplate, icon: 'inventory_2', category: 'Tables' },
+    'units': { id: 'units', label: 'Units', tier: 'L6 LAYOUT', status: 'Verified', type: 'page', component: PageUnitTemplate, icon: 'straighten', category: 'Tables' },
+    'group-products': { id: 'group-products', label: 'Group Products', tier: 'L6 LAYOUT', status: 'Verified', type: 'page', component: PageGroupProductTemplate, icon: 'inventory_2', category: 'Tables' },
+    'collections': { id: 'collections', label: 'Collections', tier: 'L6 LAYOUT', status: 'Verified', type: 'page', component: PageCollectionTemplate, icon: 'collections', category: 'Tables' },
+    'menus': { id: 'menus', label: 'Menus', tier: 'L6 LAYOUT', status: 'Verified', type: 'page', component: PageMenusTemplate, icon: 'restaurant_menu', category: 'Tables' },
+    'modifier-items': { id: 'modifier-items', label: 'Modifier Items', tier: 'L6 LAYOUT', status: 'Verified', type: 'page', component: PageModifierItemTemplate, icon: 'settings_input_component', category: 'Tables' },
+    'customers': { id: 'customers', label: 'Customers', tier: 'L6 LAYOUT', status: 'Verified', type: 'page', component: PageCustomerTemplate, icon: 'groups', category: 'Tables' },
+    'memberships': { id: 'memberships', label: 'Memberships', tier: 'L6 LAYOUT', status: 'Verified', type: 'page', component: PageMembershipTemplate, icon: 'card_membership', category: 'Tables' },
+    'promotions': { id: 'promotions', label: 'Promotions', tier: 'L6 LAYOUT', status: 'Verified', type: 'page', component: PagePromotionsTemplate, icon: 'campaign', category: 'Tables' },
     'employees': { id: 'employees', label: 'Employees', tier: 'L6 LAYOUT', status: 'Verified', type: 'page', component: EmployeeTemplate, icon: 'groups', category: 'Tables' },
     'user-management': { id: 'user-management', label: 'User Management', tier: 'L5 ORGANISM', status: 'Verified', type: 'showcase', component: UserManagementTable, icon: 'manage_accounts', category: 'Tables' },
     'body': { id: 'body', label: 'Body', tier: 'L4 ORGANISM', status: 'Verified', type: 'showcase', component: Body, icon: 'grid_view', category: 'Layouts' },
