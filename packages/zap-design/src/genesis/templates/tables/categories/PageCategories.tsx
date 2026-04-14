@@ -113,7 +113,7 @@ export default function PageCategoryTemplate() {
                 <div className="w-80 py-2.5 text-left">
                     <div className="flex items-center gap-4">
                         <div className="w-10 h-10 flex items-center justify-center shrink-0 overflow-hidden">
-                            <Avatar 
+                            <Avatar
                                 src={row.original.media_url}
                                 initials={row.original.acronymn}
                                 size="sm"
@@ -124,9 +124,6 @@ export default function PageCategoryTemplate() {
                         <div className="flex flex-col min-w-0">
                             <Text size='label-small' className='font-semibold text-foreground truncate'>
                                 {row.original.name}
-                            </Text>
-                            <Text size='label-small' className='text-muted-foreground truncate'>
-                                {row.original.acronymn}
                             </Text>
                         </div>
                     </div>

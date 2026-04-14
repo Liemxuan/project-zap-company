@@ -54,6 +54,8 @@ export const getColumns = ({
                     {row.original.id}
                 </div>
             ),
+            enableSorting: false,
+            enableHiding: false,
         },
         {
             id: "Name",
@@ -85,6 +87,8 @@ export const getColumns = ({
                     </div>
                 </div>
             ),
+            enableSorting: false,
+            enableHiding: false,
         },
         {
             accessorKey: "phone",
@@ -227,6 +231,8 @@ export const getColumns = ({
                     </div>
                 );
             },
+            enableSorting: false,
+            enableHiding: false,
         },
         {
             id: "actions",
@@ -246,5 +252,7 @@ export const getColumns = ({
                     />
                 </div>
             ),
+            enableSorting: false,
+            enableHiding: false,
         },
     ];

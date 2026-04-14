@@ -64,6 +64,8 @@ export const getPolicyColumns = (
                     {row.original.id}
                 </div>
             ),
+            enableSorting: false,
+            enableHiding: false,
         },
         {
             id: "Name",
@@ -96,6 +98,8 @@ export const getPolicyColumns = (
                     </div>
                 </div>
             ),
+            enableSorting: false,
+            enableHiding: false,
         },
         {
             id: "Type",
@@ -115,7 +119,7 @@ export const getPolicyColumns = (
             ),
         },
         {
-            id: "AppliedTo",
+            id: "Applied To",
             accessorKey: "applied_to",
             header: ({ column }) => (
                 <div
@@ -132,7 +136,7 @@ export const getPolicyColumns = (
             ),
         },
         {
-            id: "UpdatedAt",
+            id: "Last Updated",
             accessorKey: "updated_at",
             header: ({ column }) => (
                 <div
@@ -170,6 +174,8 @@ export const getPolicyColumns = (
                     </Pill>
                 </div>
             ),
+            enableSorting: false,
+            enableHiding: false,
         },
         {
             id: "actions",

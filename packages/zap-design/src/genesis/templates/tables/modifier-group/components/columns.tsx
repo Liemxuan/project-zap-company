@@ -81,19 +81,16 @@ export const getModifierGroupColumns = (
             cell: ({ row }) => (
                 <div className="w-64 py-2.5 flex items-center gap-3">
                     <div className="w-10 h-10 flex items-center justify-center shrink-0 overflow-hidden">
-                        <Avatar 
-                            src={""} 
-                            initials={row.original.acronymn} 
+                        <Avatar
+                            src={""}
+                            initials={row.original.acronymn}
                             size="sm"
-                            className="w-full h-full object-cover border-[1px] border-border" 
+                            className="w-full h-full object-cover border-[1px] border-border"
                         />
                     </div>
                     <div className="flex flex-col min-w-0">
                         <Text size='label-small' className='font-semibold text-foreground truncate'>
                             {row.original.name}
-                        </Text>
-                        <Text size='label-small' className='text-muted-foreground truncate'>
-                            {row.original.acronymn}
                         </Text>
                     </div>
                 </div>
@@ -147,14 +144,14 @@ export const getModifierGroupColumns = (
             accessorKey: "total_item",
             header: ({ column }) => (
                 <div
-                    className="w-24 text-right pr-4 tracking-widest cursor-pointer hover:text-foreground transition-colors"
+                    className="w-30 text-right pr-4 tracking-widest cursor-pointer hover:text-foreground transition-colors"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
                     <Text size='label-small' className='font-semibold'>Total Items</Text>
                 </div>
             ),
             cell: ({ row }) => (
-                <div className="w-24 text-right py-2.5 pr-4">
+                <div className="w-30 text-right py-2.5 pr-4">
                     <span className="font-bold text-foreground">
                         {row.original.total_item ?? 0}
                     </span>
