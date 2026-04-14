@@ -81,10 +81,10 @@ export default function PageBrandTemplate() {
             accessorKey: "id",
             header: ({ column }) => (
                 <div
-                    className="w-24 text-left font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
+                    className="w-24 text-left tracking-widest cursor-pointer hover:text-foreground transition-colors"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    ID
+                    <Text size='label-small' className="font-semibold text-foreground truncate uppercase">ID</Text>
                 </div>
             ),
             cell: ({ row }) => (
@@ -96,30 +96,35 @@ export default function PageBrandTemplate() {
             enableHiding: false,
         },
         {
-            id: "BrandName",
+            id: "Name",
             accessorKey: "name",
             header: ({ column }) => (
                 <div
-                    className="w-80 text-left cursor-pointer hover:text-foreground transition-colors"
+                    className="w-80 text-left tracking-widest cursor-pointer hover:text-foreground transition-colors"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    <Text size='label-medium' className='font-semibold'>Name</Text>
+                    <Text size='label-small' className='font-semibold'>Name</Text>
                 </div>
             ),
             cell: ({ row }) => (
-                <div className="w-72 py-2.5 text-left" style={{ paddingLeft: row.depth > 0 ? `${row.depth * 1}rem` : undefined }}>
+                <div className="w-80 py-2.5 text-left" style={{ paddingLeft: row.depth > 0 ? `${row.depth * 1}rem` : undefined }}>
                     <div className="flex items-center gap-4">
                         <div className="w-10 h-10 flex items-center justify-center shrink-0 overflow-hidden">
-                            <Avatar src={row.original.media_url}
-                                className="w-full h-full object-cover border-[1px] border-border"
-                                initials={(row.original.name || 'B').split(' ').map((n: string) => n[0]).join('')}
+                            <Avatar 
+                                src={row.original.media_url}
+                                initials={row.original.acronymn}
                                 size="sm"
-                                fallback={(row.original.name || 'B').split(' ').map((n: string) => n[0]).join('')}
+                                fallback={row.original.acronymn}
+                                className="w-full h-full object-cover border-[1px] border-border"
                             />
                         </div>
-                        <div className="flex flex-col min-w-0 gap-2">
-                            <Text size='label-small' className='font-semibold truncate'>{row.original.name}</Text>
-                            <Text size='label-small' className='truncate'>{row.original.reference_id}</Text>
+                        <div className="flex flex-col min-w-0">
+                            <Text size='label-small' className='font-semibold text-foreground truncate'>
+                                {row.original.name}
+                            </Text>
+                            <Text size='label-small' className='text-muted-foreground truncate'>
+                                {row.original.acronymn}
+                            </Text>
                         </div>
                     </div>
                 </div>
@@ -132,10 +137,10 @@ export default function PageBrandTemplate() {
             accessorKey: "apply_item_count",
             header: ({ column }) => (
                 <div
-                    className="w-32 text-right font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
+                    className="w-32 text-right tracking-widest cursor-pointer hover:text-foreground transition-colors"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    Apply Item
+                    <Text size='label-small' className='font-semibold'>Apply Item</Text>
                 </div>
             ),
             cell: ({ row }) => (
@@ -153,10 +158,10 @@ export default function PageBrandTemplate() {
             accessorKey: "status_id",
             header: ({ column }) => (
                 <div
-                    className="w-32 text-left font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
+                    className="w-32 text-left tracking-widest cursor-pointer hover:text-foreground transition-colors"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    Status
+                    <Text size='label-small' className='font-semibold'>Status</Text>
                 </div>
             ),
             cell: ({ row }) => (
@@ -175,7 +180,7 @@ export default function PageBrandTemplate() {
         },
         {
             id: "Action",
-            header: () => <div className="w-24 pr-4 font-mono text-[10px] tracking-widest text-muted-foreground uppercase text-right"></div>,
+            header: () => <div className="w-24 pr-4 tracking-widest text-right transition-colors"><Text size='label-small' className='font-semibold'>Action</Text></div>,
             cell: ({ row }) => (
                 <div className="w-24 pr-4 py-2.5 text-right" onClick={e => e.stopPropagation()}>
                     <QuickActionsDropdown

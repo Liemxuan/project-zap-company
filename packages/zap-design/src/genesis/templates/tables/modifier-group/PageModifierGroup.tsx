@@ -3,29 +3,28 @@ import { useSearchParams } from 'next/navigation';
 import { useTheme } from '@/components/ThemeContext';
 import { ComponentSandboxTemplate } from '@/zap/layout/ComponentSandboxTemplate';
 import { CanvasDesktop } from '@/components/dev/CanvasDesktop';
-import { ListTable, Filters } from '@/zap/organisms/list-table';
-import { ColumnDef } from '@tanstack/react-table';
-import { Pill } from '@/genesis/atoms/status/pills';
-import { Pencil, Copy, Trash2 } from "lucide-react";
-import { QuickActionsDropdown } from '@/genesis/molecules/quick-actions-dropdown';
-import { DataFilter, FilterGroup } from '@/genesis/molecules/data-filter';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/genesis/molecules/accordion';
-import { Icon } from '@/genesis/atoms/icons/Icon';
+import { ListTable } from '@/zap/organisms/list-table';
 import { SideNav } from '@/genesis/molecules/navigation/SideNav';
 import { ThemeHeader } from '@/genesis/molecules/layout/ThemeHeader';
-import { Inspector } from '@/zap/layout/Inspector';
-import { Avatar } from '@/genesis/atoms/status/avatars';
-import { Checkbox } from '@/genesis/atoms/interactive/checkbox';
+import { Icon } from '@/genesis/atoms/icons/Icon';
 import { useModifierGroups } from '@/hooks/modifier-group/use-modifier-groups';
+import { ModifierGroup } from '@/services/modifier-group/modifier-group.model';
+import { getModifierGroupColumns } from './components/columns';
+import { getModifierGroupFilterGroups } from './components/filters';
+import { ModifierGroupInspector } from './components/inspector';
 
 /**
- * Modifier Group Template
+ * PageModifierGroupTemplate
+ * Standardized Administrative Module for Modifier Groups
  */
 export default function PageModifierGroupTemplate() {
     const { theme: appTheme, inspectorState, setInspectorState } = useTheme();
     const activeTheme = appTheme === 'core' ? 'core' : 'metro';
     const searchParams = useSearchParams();
     const isFullscreen = searchParams.get('fullscreen') === 'true';
+
+    // --- State ---
+    const [selectedItem, setSelectedItem] = useState<ModifierGroup | null>(null);
 
     // --- Data Fetching ---
     const {
@@ -41,187 +40,19 @@ export default function PageModifierGroupTemplate() {
 
     const apiFilters = pagination.filters;
 
-    // --- Data Mapping ---
-    const MAPPED_MODIFIER_GROUPS = useMemo(() => modifierGroups.map(group => ({
-        ...group,
-        id: group.id,
-        name: group.name,
-        is_active: group.status === 'Active'
-    })), [modifierGroups]);
-
-    const columns = useMemo<ColumnDef<any>[]>(() => [
-        {
-            id: "select",
-            header: ({ table }) => (
-                <div className="w-12 px-7">
-                    <Checkbox
-                        checked={
-                            table.getIsAllPageRowsSelected() ||
-                            (table.getIsSomePageRowsSelected() && "indeterminate")
-                        }
-                        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-                        aria-label="Select all"
-                        className="translate-y-0.5"
-                    /></div>
-            ),
-            cell: ({ row }) => (
-                <div className="w-12 px-7">
-                    <Checkbox
-                        checked={row.getIsSelected()}
-                        onCheckedChange={(value) => row.toggleSelected(!!value)}
-                        aria-label="Select row"
-                        className="translate-y-0.5"
-                    /></div>
-            ),
-            enableSorting: false,
-            enableHiding: false,
-        }, {
-            id: "id",
-            header: ({ column }) => (
-                <div
-                    className="w-14 text-left font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                    Id
-                </div>
-            ),
-            cell: ({ row }) => (
-                <div className="w-14 truncate font-dev text-transform-tertiary text-muted-foreground text-left py-2.5">
-                    {row.original.id}
-                </div>
-            ),
-            enableSorting: false,
-            enableHiding: false,
-        },
-        {
-            id: "Name",
-            accessorKey: "name",
-            header: ({ column }) => (
-                <div
-                    className="w-80 text-left font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                    Name
-                </div>
-            ),
-            cell: ({ row }) => (
-                <div className="w-80 py-2.5 text-left">
-                    <div className="flex flex-col min-w-0">
-                        <span className="font-semibold text-foreground text-sm truncate">{row.original.name}</span>
-                    </div>
-                </div>
-            ),
-            enableSorting: false,
-            enableHiding: false,
-        },
-        {
-            id: "DisplayType",
-            accessorKey: "display_type",
-            header: ({ column }) => (
-                <div
-                    className="w-40 text-left font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                    Display Type
-                </div>
-            ),
-            cell: ({ row }) => (
-                <div className="w-40 py-2.5 text-left">
-                    <span className="font-mono text-[11px] uppercase tracking-wider text-muted-foreground">
-                        Min: {row.original.minSelect || 0} - Max: {row.original.maxSelect || 0}
-                    </span>
-                </div>
-            ),
-            enableSorting: false,
-            enableHiding: true,
-        },
-        {
-            id: "TotalItem",
-            accessorKey: "total_item",
-            header: ({ column }) => (
-                <div
-                    className="w-32 text-right pr-4 font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                    Total item
-                </div>
-            ),
-            cell: ({ row }) => (
-                <div className="w-32 text-right py-2.5 pr-4">
-                    <span className="font-bold text-foreground">
-                        {row.original.total_item ?? 0}
-                    </span>
-                </div>
-            ),
-            enableSorting: false,
-            enableHiding: true,
-        },
-        {
-            id: "Status",
-            accessorKey: "is_active",
-            header: ({ column }) => (
-                <div
-                    className="w-20 text-left font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                    Status
-                </div>
-            ),
-            cell: ({ row }) => (
-                <div className="w-20 text-left py-2.5">
-                    <Pill
-                        variant={row.original.is_active ? 'success' : 'warning'}
-                        className="whitespace-nowrap w-fit ml-auto"
-                    >
-                        <div className="w-1.5 h-1.5 rounded-full bg-current mr-1.5 opacity-80 shrink-0" />
-                        {row.original.is_active ? 'Active' : 'Inactive'}
-                    </Pill>
-                </div>
-            ),
-            enableSorting: false,
-            enableHiding: false,
-        },
-        {
-            id: "actions",
-            header: () => <div className="w-24 pr-7" />,
-            cell: ({ row }) => (
-                <div className="w-24 pr-7 py-2.5 text-right" onClick={e => e.stopPropagation()}>
-                    <div className="flex items-center justify-end">
-                        <QuickActionsDropdown
-                            actions={[
-                                { label: 'Edit', icon: Pencil, onClick: () => { } },
-                                { label: 'Duplicate', icon: Copy, onClick: () => { } },
-                                { label: 'Delete', icon: Trash2, onClick: () => { }, variant: 'destructive' },
-                            ]}
-                        />
-                    </div>
-                </div>
-            ),
-            enableSorting: false,
-            enableHiding: false,
-        },
-    ], []);
-
-    const labels = {
-        addItem: "Add Modifier Group",
-        itemName: "Modifier Group Name",
-        type: "Status"
+    // --- Handlers ---
+    const handleEdit = (item: ModifierGroup) => {
+        setSelectedItem(item);
+        setInspectorState('expanded');
     };
 
-    const filterGroups: FilterGroup[] = [
-        {
-            id: 'status',
-            title: 'Status',
-            options: [
-                { id: 'Active', label: 'Active', selected: apiFilters.status?.includes('Active') },
-                { id: 'Inactive', label: 'Inactive', selected: apiFilters.status?.includes('Inactive') },
-            ]
-        }
-    ];
+    const handleDelete = (item: ModifierGroup) => {
+        console.log('Delete item:', item);
+    };
 
     const handleFilterToggle = (groupId: string, optionId: string) => {
         if (groupId === 'status') {
-            const currentStatus = apiFilters.status || [];
+            const currentStatus = (apiFilters.status as string[]) || [];
             const newStatus = currentStatus.includes(optionId)
                 ? currentStatus.filter(s => s !== optionId)
                 : [...currentStatus, optionId];
@@ -229,9 +60,18 @@ export default function PageModifierGroupTemplate() {
         }
     };
 
+    const handleRowClick = (item: any) => {
+        setSelectedItem(item as ModifierGroup);
+        setInspectorState('expanded');
+    };
+
+    // --- Mapped Data & Columns ---
+    const columns = useMemo(() => getModifierGroupColumns(handleEdit, handleDelete), [handleEdit, handleDelete]);
+    const filterGroups = useMemo(() => getModifierGroupFilterGroups(apiFilters), [apiFilters]);
+
     const tableComponent = (
         <ListTable
-            initialItems={MAPPED_MODIFIER_GROUPS as any}
+            initialItems={modifierGroups as any}
             isLoading={isLoading}
             onSearch={handleSearch}
             pageIndex={pagination.page_index - 1}
@@ -241,45 +81,28 @@ export default function PageModifierGroupTemplate() {
             onToggleFilters={() => setInspectorState(inspectorState === 'expanded' ? 'collapsed' : 'expanded')}
             isFilterActive={inspectorState === 'expanded'}
             columns={columns as any}
-            labels={labels}
+            labels={{
+                addItem: "Add Modifier Group",
+                itemName: "Modifier Group Name",
+                type: "Status"
+            }}
+            onRowClick={handleRowClick}
         />
     );
 
     const rightDrawerContent = inspectorState === 'expanded' && (
         <div className="h-full border-l border-border bg-layer-panel hidden md:flex flex-col shrink-0 z-20 relative">
-            <Inspector title="MODIFIER LAB" width={320}>
-                <div className="flex flex-col gap-0 w-full px-4 pt-4">
-                    <Accordion
-                        type="single"
-                        collapsible
-                        variant="navigation"
-                        value={inspectorState === 'expanded' ? "item-1" : ""}
-                        onValueChange={(val: string) => { if (val !== "item-1") setInspectorState('collapsed'); }}
-                        className="bg-transparent w-full space-y-2"
-                    >
-                        <AccordionItem value="item-1" className="border-none m-0">
-                            <AccordionTrigger className="px-4 py-3 flex items-center gap-2 rounded-lg bg-surface-variant hover:bg-surface-variant/80 font-mono text-transform-tertiary text-[11px] tracking-widest text-on-surface font-bold transition-colors m-0 w-full min-w-0">
-                                <div className="flex items-center gap-2 overflow-hidden flex-1 text-left min-w-0">
-                                    <Icon name="filter_list" size={16} className="shrink-0 text-on-surface-variant opacity-70 group-data-[state=open]:text-primary transition-colors" />
-                                    <span className="truncate uppercase">FILTERS</span>
-                                </div>
-                            </AccordionTrigger>
-                            <AccordionContent className="bg-transparent px-4 pb-4 pt-2">
-                                <DataFilter
-                                    title=""
-                                    groups={filterGroups}
-                                    onToggle={handleFilterToggle}
-                                />
-                            </AccordionContent>
-                        </AccordionItem>
-                    </Accordion>
-                </div>
-            </Inspector>
+            <ModifierGroupInspector 
+                selectedItem={selectedItem}
+                filters={filterGroups}
+                onFilterToggle={handleFilterToggle}
+            />
         </div>
     );
 
     const layoutContent = (
         <div className="flex h-full w-full bg-layer-base overflow-hidden font-sans border border-border relative">
+            {/* Sidebar Mock */}
             <div className="w-[240px] flex-shrink-0 border-r border-border bg-layer-panel hidden md:flex flex-col z-10 shadow-sm relative">
                 <div className="h-14 border-b border-border flex items-center px-4 shrink-0 gap-2">
                     <div className="w-6 h-6 rounded bg-primary flex items-center justify-center text-primary-foreground">
@@ -299,6 +122,7 @@ export default function PageModifierGroupTemplate() {
                 </div>
             </div>
 
+            {/* Main Content */}
             <div className="flex-1 flex flex-col min-w-0 bg-layer-base/50 relative">
                 <div className="h-14 border-b border-border bg-layer-base flex items-center px-6 justify-between shrink-0 shadow-sm z-10 relative">
                     <div className="flex items-center text-xs gap-1 font-dev text-transform-tertiary">
@@ -312,6 +136,7 @@ export default function PageModifierGroupTemplate() {
                     {tableComponent}
                 </div>
             </div>
+            {rightDrawerContent}
         </div>
     );
 
@@ -320,7 +145,7 @@ export default function PageModifierGroupTemplate() {
             <div className="flex h-screen w-full bg-layer-canvas overflow-hidden font-sans">
                 <SideNav />
                 <div className="flex-1 flex flex-col min-w-0 bg-transparent relative">
-                    <ThemeHeader title="Modifier groups" badge={null} />
+                    <ThemeHeader title="Modifier Groups" badge={null} />
                     <div className="flex-1 overflow-auto pt-8 px-12 pb-16 flex flex-col relative z-0 bg-layer-base min-w-0">
                         {tableComponent}
                     </div>
@@ -340,37 +165,18 @@ export default function PageModifierGroupTemplate() {
             hideDataTerminal={true}
             fullWidth={true}
             inspectorControls={
-                <div className="flex flex-col gap-0 w-full min-w-[320px] px-4 pt-4">
-                    <Accordion
-                        type="single"
-                        collapsible
-                        variant="navigation"
-                        value={inspectorState === 'expanded' ? "item-1" : ""}
-                        onValueChange={(val: string) => { if (val !== "item-1") setInspectorState('collapsed'); }}
-                        className="bg-transparent w-full space-y-2"
-                    >
-                        <AccordionItem value="item-1" className="border-none m-0">
-                            <AccordionTrigger className="px-4 py-3 flex items-center gap-2 rounded-lg bg-surface-variant hover:bg-surface-variant/80 font-mono text-transform-tertiary text-[11px] tracking-widest text-on-surface font-bold transition-colors m-0 w-full min-w-0">
-                                <div className="flex items-center gap-2 overflow-hidden flex-1 text-left min-w-0">
-                                    <Icon name="filter_list" size={16} className="shrink-0 text-on-surface-variant opacity-70 group-data-[state=open]:text-primary transition-colors" />
-                                    <span className="truncate uppercase">FILTERS</span>
-                                </div>
-                            </AccordionTrigger>
-                            <AccordionContent className="bg-transparent px-4 pb-4 pt-2">
-                                <DataFilter
-                                    title=""
-                                    groups={filterGroups}
-                                    onToggle={handleFilterToggle}
-                                />
-                            </AccordionContent>
-                        </AccordionItem>
-                    </Accordion>
+                <div className="flex flex-col gap-0 w-full min-w-[320px]">
+                    <ModifierGroupInspector 
+                        selectedItem={selectedItem}
+                        filters={filterGroups}
+                        onFilterToggle={handleFilterToggle}
+                    />
                 </div>
             }
         >
-            <div className="w-full h-full flex items-center justify-center pt-8">
+            <div className="w-full flex-1 flex items-center justify-center pt-8">
                 <CanvasDesktop
-                    title="Modifier Groups // Collection"
+                    title="Modifier Groups // Catalog"
                     fullScreenHref={`/design/${activeTheme}/organisms/modifier-groups?fullscreen=true`}
                 >
                     {layoutContent}

@@ -12,6 +12,7 @@ export interface DiningOption {
   maxCapacity?: number;
   status: string;
   image?: string;
+  acronymn?: string;
 }
 
 export interface DiningOptionFilters {

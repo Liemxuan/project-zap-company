@@ -14,6 +14,7 @@ export interface Collection {
   item_count?: number;
   status?: string;
   locations?: string[];
+  acronymn?: string;
 }
 
 export interface CollectionFilters {

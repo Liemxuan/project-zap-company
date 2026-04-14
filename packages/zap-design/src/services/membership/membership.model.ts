@@ -10,6 +10,7 @@ export interface Membership {
     is_active: boolean;  // Trạng thái
     created_at?: string;
     updated_at?: string;
+  acronymn?: string;
 }
 
 export interface MembershipFilters {

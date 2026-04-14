@@ -10,6 +10,7 @@ export interface ModifierItem {
     price: number;
     is_active: boolean;
     status?: string; // Optional metadata
+  acronymn?: string;
 }
 
 export interface ModifierItemFilters {

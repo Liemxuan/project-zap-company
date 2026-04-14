@@ -11,6 +11,7 @@ export interface Menu {
   channels?: string[]; // Multiple channels
   total_items?: number;
   status?: string;
+  acronymn?: string;
 }
 
 export interface MenuFilters {

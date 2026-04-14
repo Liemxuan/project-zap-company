@@ -16,7 +16,7 @@ import { Icon } from '@/genesis/atoms/icons/Icon';
 import { SideNav } from '@/genesis/molecules/navigation/SideNav';
 import { ThemeHeader } from '@/genesis/molecules/layout/ThemeHeader';
 import { Inspector } from '@/zap/layout/Inspector';
-import { Avatar, AvatarFallback, AvatarImage } from '@/genesis/atoms/interactive/avatar';
+import { Avatar } from '@/genesis/atoms/status/avatars';
 
 import { Checkbox } from '@/genesis/atoms/interactive/checkbox';
 import { Dialog, DialogBody, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/genesis/molecules/dialog';
@@ -91,6 +91,7 @@ export default function PageLocationsTemplate() {
         id: loc.serial_id?.toString() || loc.id || '',
         media_url: loc.logo_url || '',
         variant_name: loc.name || '',
+        acronymn: loc.acronymn || '',
         phone: loc.phone_number || '',
         email: loc.email || '',
         sku_code: loc.address_line_1 || '',
@@ -141,13 +142,13 @@ export default function PageLocationsTemplate() {
                     className="text-left tracking-widest cursor-pointer hover:text-foreground transition-colors"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    <Text size='label-small' className="font-semibold text-foreground truncate">ID</Text>
+                    <Text size='label-small' className="font-semibold text-foreground truncate uppercase">ID</Text>
                 </div>
             ),
             cell: ({ row }) => (
-                <Text size='body-small' className="w-20 truncate text-left py-2.5">
+                <div className="w-24 px-4 py-2.5 text-left font-dev text-transform-tertiary text-muted-foreground">
                     {row.original.id}
-                </Text>
+                </div>
             ),
             enableSorting: true,
             enableHiding: false,
@@ -168,17 +169,22 @@ export default function PageLocationsTemplate() {
             cell: ({ row }) => (
                 <div className="w-80 py-2.5 text-left">
                     <div className="flex items-center gap-4">
-                        <div className="flex items-center justify-center shrink-0 overflow-hidden">
-                            <Avatar className="rounded-full overflow-hidden" size='default'>
-                                <AvatarImage src={row.original.media_url} alt={row.original.variant_name} />
-                                <AvatarFallback className="font-display text-headlineLarge text-transform-primary bg-primary/20 text-primary">
-                                    {(row.original.variant_name || '??').split(/\s+/).filter(Boolean).map(n => n[0]).join('').substring(0, 2).toUpperCase()}
-                                </AvatarFallback>
-                            </Avatar>
+                        <div className="w-10 h-10 flex items-center justify-center shrink-0 overflow-hidden">
+                            <Avatar
+                                src={row.original.media_url}
+                                initials={row.original.acronymn}
+                                size="sm"
+                                fallback={row.original.acronymn}
+                                className="w-full h-full object-cover border-[1px] border-border"
+                            />
                         </div>
                         <div className="flex flex-col min-w-0">
-                            <Text size='label-small' className="font-semibold text-foreground text-sm truncate">{row.original.variant_name}</Text>
-                            <Text size='label-small' className="font-dev font-normal text-xs text-muted-foreground text-transform-primary tracking-wide truncate mt-0.5">{row.original.sku_code}</Text>
+                            <Text size='label-small' className='font-semibold text-foreground truncate'>
+                                {row.original.variant_name}
+                            </Text>
+                            <Text size='label-small' className='text-muted-foreground truncate'>
+                                {row.original.address_line_1}
+                            </Text>
                         </div>
                     </div>
                 </div>

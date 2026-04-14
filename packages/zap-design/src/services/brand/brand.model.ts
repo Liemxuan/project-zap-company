@@ -17,6 +17,7 @@ export interface Brand {
   tenant_id?: string;
   reference_id?: string;
   apply_item_count?: number;
+  acronymn?: string;
 }
 
 export interface BrandFilters {

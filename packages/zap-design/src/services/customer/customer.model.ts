@@ -6,12 +6,14 @@ export interface Customer {
     id: string;
     name: string;
     phone: string;
+    email: string;
     money: number; // Balance
     point: number;
     membership: string; // E.g., Gold, Silver, Bronze
     total_spend: number;
     is_active: boolean;
     status?: string; // Optional metadata
+  acronymn?: string;
 }
 
 export interface CustomerFilters {

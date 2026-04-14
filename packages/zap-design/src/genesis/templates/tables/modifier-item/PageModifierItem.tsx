@@ -102,15 +102,15 @@ export default function PageModifierItemTemplate() {
                 <div className="flex-1 py-4 px-3 space-y-1 uppercase font-mono text-[11px] tracking-widest text-on-surface opacity-70">
                     <div className="px-3 py-2.5 rounded-md hover:bg-surface-variant/40 flex items-center gap-3 transition-colors cursor-pointer">
                         <Icon name="dashboard" size={18} />
-                        <span>Tổng quát</span>
+                        <span>Overview</span>
                     </div>
                     <div className="px-3 py-2.5 rounded-md hover:bg-surface-variant/40 flex items-center gap-3 transition-colors cursor-pointer">
                         <Icon name="category" size={18} />
-                        <span>Danh mục</span>
+                        <span>Categories</span>
                     </div>
                     <div className="px-3 py-2.5 rounded-md bg-primary/10 text-primary flex items-center gap-3 border border-primary/20 cursor-pointer">
                         <Icon name="settings_input_component" size={18} />
-                        <span>Tùy chọn</span>
+                        <span>Modifier Items</span>
                     </div>
                 </div>
             </div>
@@ -119,9 +119,9 @@ export default function PageModifierItemTemplate() {
             <div className="flex-1 flex flex-col min-w-0 bg-layer-base/50 relative">
                 <div className="h-14 border-b border-border bg-layer-base flex items-center px-6 justify-between shrink-0 shadow-sm z-10 relative">
                     <div className="flex items-center text-xs gap-1 font-dev text-transform-tertiary">
-                        <span className="opacity-50 uppercase tracking-widest">Sản phẩm</span>
+                        <span className="opacity-50 uppercase tracking-widest">Products</span>
                         <Icon name="chevron_right" size={14} className="opacity-30" />
-                        <span className="font-bold text-on-surface uppercase tracking-widest">Tùy chọn</span>
+                        <span className="font-bold text-on-surface uppercase tracking-widest">Modifier Items</span>
                     </div>
                 </div>
                 <div className="flex-1 overflow-auto pt-11 px-12 pb-16 flex flex-col relative z-0 min-w-0">

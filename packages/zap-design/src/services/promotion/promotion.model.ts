@@ -12,6 +12,7 @@ export interface Promotion {
     locations: string[]; // E.g., ["All branches"], ["HQ-01"]
     is_active: boolean;
     status?: string; // Metadata status string
+  acronymn?: string;
 }
 
 export interface PromotionFilters {

@@ -5,6 +5,7 @@ import { Avatar } from '@/genesis/atoms/status/avatars';
 import { Checkbox } from '@/genesis/atoms/interactive/checkbox';
 import { QuickActionsDropdown } from '@/genesis/molecules/quick-actions-dropdown';
 import { Pencil, Copy, Trash2 } from "lucide-react";
+import { Text } from '@/genesis/atoms/typography/text';
 
 /**
  * Get columns definition for Group Product table
@@ -44,10 +45,10 @@ export const getColumns = (handlers: {
             id: "id",
             header: ({ column }) => (
                 <div
-                    className="w-14 text-left font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
+                    className="w-14 text-left tracking-widest cursor-pointer hover:text-foreground transition-colors"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    Id
+                    <Text size='label-small' className="font-semibold text-foreground truncate uppercase">ID</Text>
                 </div>
             ),
             cell: ({ row }) => (
@@ -63,25 +64,31 @@ export const getColumns = (handlers: {
             accessorKey: "name",
             header: ({ column }) => (
                 <div
-                    className="w-80 text-left font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
+                    className="w-80 text-left tracking-widest cursor-pointer transition-colors"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    Name
+                    <Text size='label-small' className='font-semibold'>Name</Text>
                 </div>
             ),
             cell: ({ row }) => (
                 <div className="w-80 py-2.5 text-left">
                     <div className="flex items-center gap-4">
                         <div className="w-10 h-10 flex items-center justify-center shrink-0 overflow-hidden">
-                            <Avatar
+                            <Avatar 
                                 src={row.original.media_url}
-                                className="w-full h-full object-cover border-[1px] border-border"
-                                initials={row.original.name?.split(' ').map((n: string) => n[0]).join('') || 'G'}
+                                initials={row.original.acronymn}
                                 size="sm"
+                                fallback={row.original.acronymn}
+                                className="w-full h-full object-cover border-[1px] border-border"
                             />
                         </div>
                         <div className="flex flex-col min-w-0">
-                            <span className="font-semibold text-foreground text-sm truncate">{row.original.name}</span>
+                            <Text size='label-small' className='font-semibold text-foreground truncate'>
+                                {row.original.name}
+                            </Text>
+                            <Text size='label-small' className='text-muted-foreground truncate'>
+                                {row.original.acronymn}
+                            </Text>
                         </div>
                     </div>
                 </div>
@@ -94,10 +101,10 @@ export const getColumns = (handlers: {
             accessorKey: "item_count",
             header: ({ column }) => (
                 <div
-                    className="w-32 text-right pr-4 font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
+                    className="w-32 text-right pr-4 tracking-widest cursor-pointer hover:text-foreground transition-colors"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    Items
+                    <Text size='label-small' className='font-semibold'>Items</Text>
                 </div>
             ),
             cell: ({ row }) => (
@@ -112,10 +119,10 @@ export const getColumns = (handlers: {
             id: "Location",
             header: ({ column }) => (
                 <div
-                    className="w-32 text-right pr-4 font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
+                    className="w-32 text-right pr-4 tracking-widest cursor-pointer hover:text-foreground transition-colors"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    Location
+                    <Text size='label-small' className='font-semibold'>Location</Text>
                 </div>
             ),
             cell: () => (
@@ -131,10 +138,10 @@ export const getColumns = (handlers: {
             accessorKey: "is_active",
             header: ({ column }) => (
                 <div
-                    className="w-20 text-left font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
+                    className="w-20 text-left tracking-widest cursor-pointer hover:text-foreground transition-colors"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    Status
+                    <Text size='label-small' className='font-semibold'>Status</Text>
                 </div>
             ),
             cell: ({ row }) => (

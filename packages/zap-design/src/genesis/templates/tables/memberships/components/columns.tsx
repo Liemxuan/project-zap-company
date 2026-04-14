@@ -5,6 +5,7 @@ import { Checkbox } from '@/genesis/atoms/interactive/checkbox';
 import { QuickActionsDropdown } from '@/genesis/molecules/quick-actions-dropdown';
 import { Pencil, Copy, Trash2, CreditCard, Calendar, Gift } from "lucide-react";
 import { Text } from '@/genesis/atoms/typography/text';
+import { Avatar } from '@/genesis/atoms/status/avatars';
 
 /**
  * Get columns definition for Memberships table
@@ -38,36 +39,68 @@ export const getColumns = ({
             enableHiding: false,
         },
         {
-            accessorKey: "tier",
+            id: "id",
             header: ({ column }) => (
                 <div
-                    className="w-48 text-left font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
+                    className="w-24 text-left tracking-widest cursor-pointer hover:text-foreground transition-colors"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    Tier
+                    <Text size='label-small' className="font-semibold text-foreground truncate uppercase">ID</Text>
                 </div>
             ),
             cell: ({ row }) => (
-                <div className="w-48 py-2.5">
-                    <Text size='label-small' className='font-bold text-foreground'>
-                        {row.original.tier}
-                    </Text>
+                <div className="w-24 truncate font-dev text-transform-tertiary text-muted-foreground text-left py-2.5">
+                    {row.original.id}
                 </div>
             ),
+            enableSorting: false,
+            enableHiding: false,
+        },
+        {
+            id: "Name",
+            accessorKey: "tier",
+            header: ({ column }) => (
+                <div
+                    className="w-80 text-left tracking-widest cursor-pointer transition-colors"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    <Text size='label-small' className='font-semibold'>Tier</Text>
+                </div>
+            ),
+            cell: ({ row }) => (
+                <div className="w-80 py-2.5 text-left">
+                    <div className="flex items-center gap-4">
+                        <div className="w-10 h-10 flex items-center justify-center shrink-0 overflow-hidden">
+                            <Avatar
+                                initials={row.original.acronymn}
+                                size="sm"
+                                fallback={row.original.acronymn}
+                                className="w-full h-full object-cover border-[1px] border-border"
+                            />
+                        </div>
+                        <div className="flex flex-col min-w-0">
+                            <Text size='label-small' className='font-semibold text-foreground truncate'>
+                                {row.original.tier}
+                            </Text>
+                        </div>
+                    </div>
+                </div>
+            ),
+            enableSorting: false,
+            enableHiding: false,
         },
         {
             accessorKey: "tier_price",
             header: ({ column }) => (
                 <div
-                    className="w-32 text-right pr-4 font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
+                    className="w-32 text-right pr-4 tracking-widest cursor-pointer hover:text-foreground transition-colors"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    Tier price
+                    <Text size='label-small' className='font-semibold'>Tier Price</Text>
                 </div>
             ),
             cell: ({ row }) => (
                 <div className="w-32 text-right py-2.5 pr-4 flex items-center justify-end gap-1.5">
-                    <CreditCard size={14} className="text-primary/70" />
                     <Text size='label-small' className='font-mono font-medium text-foreground'>
                         {new Intl.NumberFormat('vi-VN').format(row.original.tier_price || 0)}
                     </Text>
@@ -78,10 +111,10 @@ export const getColumns = ({
             accessorKey: "billing_cycle",
             header: ({ column }) => (
                 <div
-                    className="w-32 text-left font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
+                    className="w-32 text-left tracking-widest cursor-pointer hover:text-foreground transition-colors"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    Billing cycle
+                    <Text size='label-small' className='font-semibold'>Billing Cycle</Text>
                 </div>
             ),
             cell: ({ row }) => (
@@ -97,10 +130,11 @@ export const getColumns = ({
             accessorKey: "benefit",
             header: ({ column }) => (
                 <div
-                    className="w-64 text-left font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
+                    className="w-64 text-left tracking-widest cursor-pointer hover:text-foreground transition-colors"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    Benefit                </div>
+                    <Text size='label-small' className='font-semibold'>Benefit</Text>
+                </div>
             ),
             cell: ({ row }) => (
                 <div className="w-64 py-2.5 flex items-start gap-2">
@@ -115,10 +149,10 @@ export const getColumns = ({
             accessorKey: "is_active",
             header: ({ column }) => (
                 <div
-                    className="w-32 text-left font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
+                    className="w-32 text-left tracking-widest cursor-pointer hover:text-foreground transition-colors"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    Status
+                    <Text size='label-small' className='font-semibold'>Status</Text>
                 </div>
             ),
             cell: ({ row }) => {
@@ -137,12 +171,14 @@ export const getColumns = ({
                     </div>
                 );
             },
+            enableSorting: false,
+            enableHiding: false,
         },
         {
             id: "actions",
             header: () => (
-                <div className="w-20 text-right pr-6 font-mono text-[10px] tracking-widest text-muted-foreground uppercase">
-
+                <div className="w-20 text-right pr-6 tracking-widest transition-colors">
+                    <Text size='label-small' className='font-semibold'>Action</Text>
                 </div>
             ),
             cell: ({ row }) => (
@@ -155,5 +191,7 @@ export const getColumns = ({
                     />
                 </div>
             ),
+            enableSorting: false,
+            enableHiding: false,
         },
     ];

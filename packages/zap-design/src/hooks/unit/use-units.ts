@@ -1,89 +1,75 @@
-'use client';
-
 import { useState, useEffect, useCallback } from 'react';
-import { 
-  unitService, 
-  Unit, 
-  UnitListRequest, 
-  UnitFilters,
-  RequestOptions
-} from '../../services';
-import { MOCK_UNITS } from '../mock-data';
+import { Unit, UnitFilters } from '@/services/unit/unit.model';
+import { unitService } from '@/services/unit/unit.service';
 
-export function useUnits(
-  options: RequestOptions & { initialPage?: number; pageSize?: number } = {}
-) {
-  const { token, lang = 'en', initialPage = 1, pageSize = 10 } = options;
+interface UseUnitsOptions {
+    pageSize?: number;
+    initialFilters?: UnitFilters;
+}
 
-  const [units, setUnits] = useState<Unit[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [totalRecords, setTotalRecords] = useState(0);
-  const [totalPages, setTotalPages] = useState(0);
-  
-  const [params, setParams] = useState<UnitListRequest>({
-    page_index: initialPage,
-    page_size: pageSize,
-    search: '',
-    filters: {
-      status: null
-    }
-  });
+export function useUnits({ pageSize = 10, initialFilters = {} }: UseUnitsOptions = {}) {
+    const [units, setUnits] = useState<Unit[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [search, setSearch] = useState('');
+    const [filters, setFilters] = useState<UnitFilters>(initialFilters);
+    const [pagination, setPagination] = useState({
+        page_index: 1,
+        page_size: pageSize,
+        total_record: 0,
+        total_page: 0
+    });
 
-  const isMock = process.env.NEXT_PUBLIC_IS_MOCK === 'true';
+    const fetchUnits = useCallback(async () => {
+        setIsLoading(true);
+        try {
+            const response = await unitService.getUnits({
+                page_index: pagination.page_index,
+                page_size: pagination.page_size,
+                search,
+                filters
+            });
 
-  const fetchUnits = useCallback(async (currentParams: UnitListRequest) => {
-    setIsLoading(true);
-    setError(null);
+            if (response.success) {
+                setUnits(response.data.items);
+                setPagination(prev => ({
+                    ...prev,
+                    total_record: response.data.total_record,
+                    total_page: response.data.total_page
+                }));
+            }
+        } catch (error) {
+            console.error('Failed to fetch units:', error);
+        } finally {
+            setIsLoading(false);
+        }
+    }, [pagination.page_index, pagination.page_size, search, filters]);
 
-    // Mock Logic
-    if (isMock) {
-      await new Promise(resolve => setTimeout(resolve, 500));
-      let filtered = [...MOCK_UNITS];
-      if (currentParams.search) {
-        filtered = filtered.filter(b => b.name.toLowerCase().includes(currentParams.search.toLowerCase()));
-      }
-      const totalRecord = filtered.length;
-      const totalPage = Math.ceil(totalRecord / currentParams.page_size);
-      const start = (currentParams.page_index - 1) * currentParams.page_size;
-      const items = filtered.slice(start, start + currentParams.page_size);
+    useEffect(() => {
+        fetchUnits();
+    }, [fetchUnits]);
 
-      setUnits(items as any);
-      setTotalRecords(totalRecord);
-      setTotalPages(totalPage);
-      setIsLoading(false);
-      return;
-    }
+    const handlePageChange = (index: number) => {
+        setPagination(prev => ({ ...prev, page_index: index }));
+    };
 
-    try {
-      const response = await unitService.getUnitsList(currentParams, { token, lang });
-      if (response.success) {
-        setUnits(response.data.items);
-        setTotalRecords(response.data.total_record);
-        setTotalPages(response.data.total_page);
-      } else {
-        setError(response.message || 'Failed to fetch units');
-      }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
-    } finally {
-      setIsLoading(false);
-    }
-  }, [token, lang, isMock]);
+    const handleSearch = (query: string) => {
+        setSearch(query);
+        setPagination(prev => ({ ...prev, page_index: 1 }));
+    };
 
-  useEffect(() => {
-    fetchUnits(params);
-  }, [params, fetchUnits]);
+    const handleFilterChange = (newFilters: Partial<UnitFilters>) => {
+        setFilters(prev => ({ ...prev, ...newFilters }));
+        setPagination(prev => ({ ...prev, page_index: 1 }));
+    };
 
-  return {
-    units,
-    isLoading,
-    error,
-    pagination: { ...params, total_record: totalRecords, total_page: totalPages },
-    handlePageChange: (page_index: number) => setParams(p => ({ ...p, page_index })),
-    handlePageSizeChange: (page_size: number) => setParams(p => ({ ...p, page_size, page_index: 1 })),
-    handleSearch: (search: string) => setParams(p => ({ ...p, search, page_index: 1 })),
-    handleFilterChange: (filters: Partial<UnitFilters>) => setParams(p => ({ ...p, filters: { ...p.filters, ...filters }, page_index: 1 })),
-    refresh: () => fetchUnits(params)
-  };
+    return {
+        units,
+        isLoading,
+        pagination,
+        filters,
+        handlePageChange,
+        handleSearch,
+        handleFilterChange,
+        refresh: fetchUnits
+    };
 }

@@ -51,7 +51,7 @@ const PageBrandTemplate = dynamic(() => import('../genesis/templates/tables/bran
 const PageDiningOptionTemplate = dynamic(() => import('../genesis/templates/tables/dining-option/PageDiningOption'), { ssr: false });
 const PageModifierGroupTemplate = dynamic(() => import('../genesis/templates/tables/modifier-group/PageModifierGroup'), { ssr: false });
 const PageProductTemplate = dynamic(() => import('../genesis/templates/tables/product/PageProduct'), { ssr: false });
-const PageUnitTemplate = dynamic(() => import('../genesis/templates/tables/unit/PageUnit'), { ssr: false });
+const PageUnitTemplate = dynamic(() => import('../genesis/templates/tables/units/PageUnit'), { ssr: false });
 const PageGroupProductTemplate = dynamic(() => import('../genesis/templates/tables/group-product/PageGroupProduct'), { ssr: false });
 const PageCollectionTemplate = dynamic(() => import('../genesis/templates/tables/collections/PageCollection'), { ssr: false });
 const PageMenusTemplate = dynamic(() => import('../genesis/templates/tables/menus/PageMenus'), { ssr: false });
@@ -59,6 +59,8 @@ const PageModifierItemTemplate = dynamic(() => import('../genesis/templates/tabl
 const PageCustomerTemplate = dynamic(() => import('../genesis/templates/tables/customers/PageCustomer'), { ssr: false });
 const PageMembershipTemplate = dynamic(() => import('../genesis/templates/tables/memberships/PageMembership'), { ssr: false });
 const PagePromotionsTemplate = dynamic(() => import('../genesis/templates/tables/promotions/PagePromotion'), { ssr: false });
+const PageCountryTemplate = dynamic(() => import('../genesis/templates/tables/countries/PageCountry'), { ssr: false });
+const PagePolicyTemplate = dynamic(() => import('../genesis/templates/tables/policies/PagePolicy'), { ssr: false });
 const EmployeeTemplate = dynamic(() => import('../genesis/templates/tables/EmployeeTemplate'), { ssr: false });
 const UserManagementTable = dynamic(() => import('@/genesis/organisms/auth/UserManagementTable').then(m => ({ default: m.UserManagementTable })), { ssr: false });
 const Body = dynamic(() => import('../genesis/templates/body/BodyOrganism').then(m => ({ default: m.BodyOrganism })), { ssr: false });
@@ -96,6 +98,8 @@ export const ORGANISM_REGISTRY: Record<string, OrganismEntry> = {
     'customers': { id: 'customers', label: 'Customers', tier: 'L6 LAYOUT', status: 'Verified', type: 'page', component: PageCustomerTemplate, icon: 'groups', category: 'Tables' },
     'memberships': { id: 'memberships', label: 'Memberships', tier: 'L6 LAYOUT', status: 'Verified', type: 'page', component: PageMembershipTemplate, icon: 'card_membership', category: 'Tables' },
     'promotions': { id: 'promotions', label: 'Promotions', tier: 'L6 LAYOUT', status: 'Verified', type: 'page', component: PagePromotionsTemplate, icon: 'campaign', category: 'Tables' },
+    'countries': { id: 'countries', label: 'Countries', tier: 'L6 LAYOUT', status: 'Verified', type: 'page', component: PageCountryTemplate, icon: 'public', category: 'Tables' },
+    'policies': { id: 'policies', label: 'Policies', tier: 'L6 LAYOUT', status: 'Verified', type: 'page', component: PagePolicyTemplate, icon: 'policy', category: 'Tables' },
     'employees': { id: 'employees', label: 'Employees', tier: 'L6 LAYOUT', status: 'Verified', type: 'page', component: EmployeeTemplate, icon: 'groups', category: 'Tables' },
     'user-management': { id: 'user-management', label: 'User Management', tier: 'L5 ORGANISM', status: 'Verified', type: 'showcase', component: UserManagementTable, icon: 'manage_accounts', category: 'Tables' },
     'body': { id: 'body', label: 'Body', tier: 'L4 ORGANISM', status: 'Verified', type: 'showcase', component: Body, icon: 'grid_view', category: 'Layouts' },

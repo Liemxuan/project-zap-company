@@ -4,6 +4,8 @@ import { Pill } from '@/genesis/atoms/status/pills';
 import { Checkbox } from '@/genesis/atoms/interactive/checkbox';
 import { QuickActionsDropdown } from '@/genesis/molecules/quick-actions-dropdown';
 import { Pencil, Copy, Trash2 } from "lucide-react";
+import { Text } from '@/genesis/atoms/typography/text';
+import { Avatar } from '@/genesis/atoms/status/avatars';
 
 /**
  * Get columns definition for Promotions table
@@ -40,19 +42,52 @@ export const getColumns = (handlers: {
             enableHiding: false,
         },
         {
+            id: "id",
+            header: ({ column }) => (
+                <div
+                    className="w-24 text-left tracking-widest cursor-pointer hover:text-foreground transition-colors"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    <Text size='label-small' className="font-semibold text-foreground truncate uppercase">ID</Text>
+                </div>
+            ),
+            cell: ({ row }) => (
+                <div className="w-24 truncate font-dev text-transform-tertiary text-muted-foreground text-left py-2.5">
+                    {row.original.id}
+                </div>
+            ),
+            enableSorting: false,
+            enableHiding: false,
+        },
+        {
             id: "name",
             accessorKey: "name",
             header: ({ column }) => (
                 <div
-                    className="w-64 text-left font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
+                    className="w-80 text-left tracking-widest cursor-pointer transition-colors"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    Name
+                    <Text size='label-small' className='font-semibold'>Name</Text>
                 </div>
             ),
             cell: ({ row }) => (
-                <div className="w-64 py-2.5 text-left">
-                    <span className="font-semibold text-foreground text-sm truncate">{row.original.name}</span>
+                <div className="w-80 py-2.5 text-left">
+                    <div className="flex items-center gap-4">
+                        <div className="w-10 h-10 flex items-center justify-center shrink-0 overflow-hidden">
+                            <Avatar
+                                src={row.original.media_url}
+                                initials={row.original.acronymn}
+                                size="sm"
+                                fallback={row.original.acronymn}
+                                className="w-full h-full object-cover border-[1px] border-border"
+                            />
+                        </div>
+                        <div className="flex flex-col min-w-0">
+                            <Text size='label-small' className='font-semibold text-foreground truncate'>
+                                {row.original.name}
+                            </Text>
+                        </div>
+                    </div>
                 </div>
             ),
             enableSorting: false,

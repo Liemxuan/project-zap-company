@@ -18,6 +18,8 @@ import { Avatar } from '@/genesis/atoms/status/avatars';
 import { Checkbox } from '@/genesis/atoms/interactive/checkbox';
 import { useDiningOptions } from '@/hooks/dining-option/use-dining-options';
 
+import { Text } from '@/genesis/atoms/typography/text';
+
 /**
  * Dining Option Template
  */
@@ -74,14 +76,14 @@ export default function PageDiningOptionTemplate() {
             ),
             enableSorting: false,
             enableHiding: false,
-        }, {
+        },        {
             id: "id",
             header: ({ column }) => (
                 <div
-                    className="w-14 text-left font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
+                    className="w-14 text-left tracking-widest cursor-pointer hover:text-foreground transition-colors"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    Id
+                    <Text size='label-small' className="font-semibold text-foreground truncate uppercase">ID</Text>
                 </div>
             ),
             cell: ({ row }) => (
@@ -97,16 +99,31 @@ export default function PageDiningOptionTemplate() {
             accessorKey: "name",
             header: ({ column }) => (
                 <div
-                    className="w-80 text-left font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
+                    className="w-80 text-left tracking-widest cursor-pointer transition-colors"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    Name
+                    <Text size='label-small' className='font-semibold'>Name</Text>
                 </div>
             ),
             cell: ({ row }) => (
                 <div className="w-80 py-2.5 text-left">
-                    <div className="flex flex-col min-w-0">
-                        <span className="font-semibold text-foreground text-sm truncate">{row.original.name}</span>
+                    <div className="flex items-center gap-4">
+                        <div className="w-10 h-10 flex items-center justify-center shrink-0 overflow-hidden">
+                            <Avatar 
+                                initials={row.original.acronymn}
+                                size="sm"
+                                fallback={row.original.acronymn}
+                                className="w-full h-full object-cover border-[1px] border-border"
+                            />
+                        </div>
+                        <div className="flex flex-col min-w-0">
+                            <Text size='label-small' className='font-semibold text-foreground truncate'>
+                                {row.original.name}
+                            </Text>
+                            <Text size='label-small' className='text-muted-foreground truncate'>
+                                {row.original.acronymn}
+                            </Text>
+                        </div>
                     </div>
                 </div>
             ),
@@ -118,10 +135,10 @@ export default function PageDiningOptionTemplate() {
             accessorKey: "type",
             header: ({ column }) => (
                 <div
-                    className="w-32 text-left font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
+                    className="w-32 text-left tracking-widest cursor-pointer hover:text-foreground transition-colors"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    Type
+                    <Text size='label-small' className='font-semibold'>Type</Text>
                 </div>
             ),
             cell: ({ row }) => (
@@ -135,10 +152,10 @@ export default function PageDiningOptionTemplate() {
             accessorKey: "is_active",
             header: ({ column }) => (
                 <div
-                    className="w-20 text-left font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
+                    className="w-20 text-left tracking-widest cursor-pointer hover:text-foreground transition-colors"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    Status
+                    <Text size='label-small' className='font-semibold'>Status</Text>
                 </div>
             ),
             cell: ({ row }) => (
@@ -164,7 +181,6 @@ export default function PageDiningOptionTemplate() {
                         <QuickActionsDropdown
                             actions={[
                                 { label: 'Edit', icon: Pencil, onClick: () => { } },
-                                { label: 'Duplicate', icon: Copy, onClick: () => { } },
                                 { label: 'Delete', icon: Trash2, onClick: () => { }, variant: 'destructive' },
                             ]}
                         />

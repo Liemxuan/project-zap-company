@@ -15,8 +15,10 @@ export interface Product {
   location?: string;
   barcode?: string;
   productType?: string;
+  product_type?: string;
   unit?: string;
   subRows?: Product[];
+  acronymn?: string;
 }
 
 export interface ProductFilters {

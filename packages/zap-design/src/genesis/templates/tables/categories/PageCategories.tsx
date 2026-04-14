@@ -15,6 +15,7 @@ import { SideNav } from '@/genesis/molecules/navigation/SideNav';
 import { ThemeHeader } from '@/genesis/molecules/layout/ThemeHeader';
 import { Inspector } from '@/zap/layout/Inspector';
 import { Avatar } from '@/genesis/atoms/status/avatars';
+import { Text } from '@/genesis/atoms/typography/text';
 import { Checkbox } from '@/genesis/atoms/interactive/checkbox';
 import { useCategories } from '@/hooks/category/use-categories';
 
@@ -50,6 +51,7 @@ export default function PageCategoryTemplate() {
         id: cat.id,
         name: cat.name,
         media_url: cat.media_url,
+        acronymn: cat.acronymn,
         item_count: cat.item_count ?? 0,
         is_active: cat.is_active ?? true
     })), [categories]);
@@ -84,10 +86,10 @@ export default function PageCategoryTemplate() {
             id: "id",
             header: ({ column }) => (
                 <div
-                    className="w-14 text-left font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
+                    className="w-14 text-left tracking-widest cursor-pointer hover:text-foreground transition-colors"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    Id
+                    <Text size='label-small' className="font-semibold text-foreground truncate uppercase">ID</Text>
                 </div>
             ),
             cell: ({ row }) => (
@@ -102,24 +104,30 @@ export default function PageCategoryTemplate() {
             id: "Name",
             accessorKey: "name",
             header: ({ column }) => (
-                <div className="w-80 text-left font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
+                <div className="w-80 text-left tracking-widest cursor-pointer hover:text-foreground transition-colors"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-                    Name
+                    <Text size='label-small' className='font-semibold'>Name</Text>
                 </div>
             ),
             cell: ({ row }) => (
                 <div className="w-80 py-2.5 text-left">
                     <div className="flex items-center gap-4">
                         <div className="w-10 h-10 flex items-center justify-center shrink-0 overflow-hidden">
-                            <Avatar src={row.original.media_url}
-                                className="w-full h-full object-cover border-[1px] border-border"
-                                initials={row.original.name?.split(' ').map((n: string) => n[0]).join('') || 'C'}
+                            <Avatar 
+                                src={row.original.media_url}
+                                initials={row.original.acronymn}
                                 size="sm"
+                                fallback={row.original.acronymn}
+                                className="w-full h-full object-cover border-[1px] border-border"
                             />
                         </div>
                         <div className="flex flex-col min-w-0">
-                            <span className="font-semibold text-foreground text-sm truncate">{row.original.name}</span>
-                            {/* <span className="font-dev font-normal text-xs text-muted-foreground uppercase tracking-wide truncate mt-0.5">{row.original.slug || row.original.id}</span> */}
+                            <Text size='label-small' className='font-semibold text-foreground truncate'>
+                                {row.original.name}
+                            </Text>
+                            <Text size='label-small' className='text-muted-foreground truncate'>
+                                {row.original.acronymn}
+                            </Text>
                         </div>
                     </div>
                 </div>
@@ -132,10 +140,10 @@ export default function PageCategoryTemplate() {
             accessorKey: "item_count",
             header: ({ column }) => (
                 <div
-                    className="w-32 text-right pr-4 font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
+                    className="w-32 text-right pr-4 tracking-widest cursor-pointer hover:text-foreground transition-colors"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    Items
+                    <Text size='label-small' className='font-semibold'>Items</Text>
                 </div>
             ),
             cell: ({ row }) => (
@@ -149,10 +157,10 @@ export default function PageCategoryTemplate() {
             accessorKey: "is_active",
             header: ({ column }) => (
                 <div
-                    className="w-20 text-left font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
+                    className="w-20 text-left tracking-widest cursor-pointer hover:text-foreground transition-colors"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    Status
+                    <Text size='label-small' className='font-semibold'>Status</Text>
                 </div>
             ),
             cell: ({ row }) => (

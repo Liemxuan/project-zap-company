@@ -65,6 +65,7 @@ export interface Location {
   transfer_account: string | null;
   transfer_tag: string | null;
   parent_location_id: string | null;
+  acronymn?: string;
 }
 
 export interface LocationFilters {

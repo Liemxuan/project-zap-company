@@ -13,6 +13,7 @@ export interface Category {
   parent_id?: string | null;
   item_count?: number;
   status?: string;
+  acronymn?: string;
 }
 
 export interface CategoryFilters {

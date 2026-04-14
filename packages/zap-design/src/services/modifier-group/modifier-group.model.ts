@@ -19,6 +19,8 @@ export interface ModifierGroup {
   options: ModifierOption[];
   display_type?: string;
   total_item?: number;
+  locations?: string[];
+  acronymn?: string;
 }
 
 export interface ModifierGroupFilters {

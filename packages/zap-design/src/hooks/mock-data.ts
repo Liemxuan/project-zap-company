@@ -12,38 +12,39 @@ import { ModifierItem } from '../services/modifier-item/modifier-item.model';
 import { Customer } from '../services/customer/customer.model';
 import { Membership } from '../services/membership/membership.model';
 import { Promotion } from '../services/promotion/promotion.model';
+import { Country } from '../services/country/country.model';
 
 export const MOCK_CATEGORIES: Category[] = [
-    { id: "1", name: "Iphone 16 Series", slug: "/iphone-16", parent: "Electronics", item_count: 54, media_url: "https://images.unsplash.com/photo-1616348436168-de43ad0db179?q=80&w=256&h=256&auto=format&fit=crop", is_active: true },
-    { id: "2", name: "Samsung S24 Series", slug: "/samsung-s24", parent: "Electronics", item_count: 32, media_url: "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?q=80&w=256&h=256&auto=format&fit=crop", is_active: true },
-    { id: "3", name: "Office Furniture", slug: "/office-furniture", parent: "Furniture", item_count: 12, media_url: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?q=80&w=256&h=256&auto=format&fit=crop", is_active: false },
-    { id: "4", name: "Cloud Services", slug: "/cloud-services", parent: "Software", item_count: 7, media_url: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=256&h=256&auto=format&fit=crop", is_active: true },
-    { id: "5", name: "Home Audio", slug: "/home-audio", parent: "Electronics", item_count: 24, media_url: "https://images.unsplash.com/photo-1546435770-a3e426bf472b?q=80&w=256&h=256&auto=format&fit=crop", is_active: true },
+    { id: "1", name: "Iphone 16 Series", acronymn: "I1", slug: "/iphone-16", parent: "Electronics", item_count: 54, media_url: "https://images.unsplash.com/photo-1616348436168-de43ad0db179?q=80&w=256&h=256&auto=format&fit=crop", is_active: true },
+    { id: "2", name: "Samsung S24 Series", acronymn: "SS", slug: "/samsung-s24", parent: "Electronics", item_count: 32, media_url: "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?q=80&w=256&h=256&auto=format&fit=crop", is_active: true },
+    { id: "3", name: "Office Furniture", acronymn: "OF", slug: "/office-furniture", parent: "Furniture", item_count: 12, media_url: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?q=80&w=256&h=256&auto=format&fit=crop", is_active: false },
+    { id: "4", name: "Cloud Services", acronymn: "CS", slug: "/cloud-services", parent: "Software", item_count: 7, media_url: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=256&h=256&auto=format&fit=crop", is_active: true },
+    { id: "5", name: "Home Audio", acronymn: "HA", slug: "/home-audio", parent: "Electronics", item_count: 24, media_url: "https://images.unsplash.com/photo-1546435770-a3e426bf472b?q=80&w=256&h=256&auto=format&fit=crop", is_active: true },
 ];
 
 export const MOCK_BRANDS: Brand[] = [
-    { id: "BRD001", name: "Apple", status_id: 1, slug: "apple", logo_url: "https://images.unsplash.com/photo-1621330396173-e41b1cafd17f?w=256&h=256&auto=format&fit=crop", reference_id: "REF-APL-01", apply_item_count: 154 },
-    { id: "BRD002", name: "Samsung", status_id: 1, slug: "samsung", logo_url: "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=256&h=256&auto=format&fit=crop", reference_id: "REF-SAM-02", apply_item_count: 89 },
-    { id: "BRD003", name: "Logitech", status_id: 2, slug: "logitech", logo_url: "https://images.unsplash.com/photo-1541140532154-b024d715b909?w=256&h=256&auto=format&fit=crop", reference_id: "REF-LOG-03", apply_item_count: 42 },
+    { id: "BRD001", name: "Apple", acronymn: "AP", status_id: 1, slug: "apple", logo_url: "https://images.unsplash.com/photo-1621330396173-e41b1cafd17f?w=256&h=256&auto=format&fit=crop", reference_id: "REF-APL-01", apply_item_count: 154 },
+    { id: "BRD002", name: "Samsung", acronymn: "SA", status_id: 1, slug: "samsung", logo_url: "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=256&h=256&auto=format&fit=crop", reference_id: "REF-SAM-02", apply_item_count: 89 },
+    { id: "BRD003", name: "Logitech", acronymn: "LO", status_id: 2, slug: "logitech", logo_url: "https://images.unsplash.com/photo-1541140532154-b024d715b909?w=256&h=256&auto=format&fit=crop", reference_id: "REF-LOG-03", apply_item_count: 42 },
 ];
 
 export const MOCK_DINING_OPTIONS: DiningOption[] = [
-    { id: "1", name: "Dine In", status: "Active", type: "DINE_IN" },
-    { id: "2", name: "Takeaway", status: "Active", type: "TAKE_AWAY" },
-    { id: "3", name: "Delivery", status: "Active", type: "DELIVERY" },
-    { id: "4", name: "Pick-up", status: "Active", type: "PICK UP" },
+    { id: "1", name: "Dine In", acronymn: "DI", status: "Active", type: "DINE_IN" },
+    { id: "2", name: "Takeaway", acronymn: "TA", status: "Active", type: "TAKE_AWAY" },
+    { id: "3", name: "Delivery", acronymn: "DE", status: "Active", type: "DELIVERY" },
+    { id: "4", name: "Pick-up", acronymn: "PI", status: "Active", type: "PICK UP" },
 ];
 
 export const MOCK_MODIFIER_GROUPS: ModifierGroup[] = [
-    { id: "1", name: "Size Options", status: "Active", minSelect: 1, maxSelect: 1, options: [], display_type: "Single Choice", total_item: 3 },
-    { id: "2", name: "Toppings", status: "Active", minSelect: 0, maxSelect: 5, options: [], display_type: "Multiple Choice", total_item: 12 },
+    { id: "1", name: "Size Options", acronymn: "SO", status: "Active", minSelect: 1, maxSelect: 1, options: [], display_type: "Radio", total_item: 3, locations: ["HQ-01", "WH-EAST"] },
+    { id: "2", name: "Toppings", acronymn: "TO", status: "Active", minSelect: 0, maxSelect: 5, options: [], display_type: "Checkbox", total_item: 12, locations: ["HQ-01"] },
 ];
 
 export const MOCK_PRODUCTS: Product[] = [
     {
         id: "uuid-1",
         image: "/products/iphone15.png",
-        name: "iPhone 15 - Black",
+        name: "iPhone 15 - Black", acronymn: "I1",
         sku: "APP-IP15-BLK",
         barcode: "194253456789",
         cate_name: "Electronics",
@@ -71,7 +72,7 @@ export const MOCK_PRODUCTS: Product[] = [
             {
                 id: "uuid-1-2",
                 image: "/products/iphone15.png",
-                name: "iPhone 15 - Black 256GB",
+                name: "iPhone 15 - Black 256GB", acronymn: "I1",
                 sku: "APP-IP15-BLK-256",
                 barcode: "194253456781",
                 cate_name: "Electronics",
@@ -87,7 +88,7 @@ export const MOCK_PRODUCTS: Product[] = [
     {
         id: "uuid-2",
         image: "/products/s24.png",
-        name: "Samsung Galaxy S24",
+        name: "Samsung Galaxy S24", acronymn: "SG",
         sku: "SAM-S24-WHT",
         barcode: "8806090123456",
         cate_name: "Electronics",
@@ -101,7 +102,7 @@ export const MOCK_PRODUCTS: Product[] = [
     {
         id: "uuid-3",
         image: "/products/premium_sub.png",
-        name: "Premium Subscription",
+        name: "Premium Subscription", acronymn: "PS",
         sku: "SUB-PRM-1YR",
         barcode: "N/A",
         cate_name: "Software",
@@ -115,7 +116,7 @@ export const MOCK_PRODUCTS: Product[] = [
     {
         id: "uuid-4",
         image: "/products/it_consulting.png",
-        name: "IT Consulting Hour",
+        name: "IT Consulting Hour", acronymn: "IC",
         sku: "SRV-IT-1HR",
         barcode: "N/A",
         cate_name: "Services",
@@ -129,7 +130,7 @@ export const MOCK_PRODUCTS: Product[] = [
     {
         id: "uuid-5",
         image: "https://images.unsplash.com/photo-1517336710211-4d2450ad1e7c?w=256&h=256&auto=format&fit=crop",
-        name: "MacBook Pro 16",
+        name: "MacBook Pro 16", acronymn: "MP",
         sku: "APP-MBP16-SLV",
         barcode: "194253987654",
         cate_name: "Computers",
@@ -143,7 +144,7 @@ export const MOCK_PRODUCTS: Product[] = [
     {
         id: "uuid-6",
         image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=256&h=256&auto=format&fit=crop",
-        name: "Sony WH-1000XM5",
+        name: "Sony WH-1000XM5", acronymn: "SW",
         sku: "SON-XM5-BLK",
         barcode: "4548736132504",
         cate_name: "Electronics",
@@ -157,7 +158,7 @@ export const MOCK_PRODUCTS: Product[] = [
     {
         id: "uuid-7",
         image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=256&h=256&auto=format&fit=crop",
-        name: "Classic Leather Watch",
+        name: "Classic Leather Watch", acronymn: "CL",
         sku: "WTC-LTH-BRN",
         barcode: "7508736132501",
         cate_name: "Accessories",
@@ -171,7 +172,7 @@ export const MOCK_PRODUCTS: Product[] = [
     {
         id: "uuid-8",
         image: "https://images.unsplash.com/photo-1542496658-e33a6d0d50f6?w=256&h=256&auto=format&fit=crop",
-        name: "Desk Lamp Pro",
+        name: "Desk Lamp Pro", acronymn: "DL",
         sku: "FUR-LMP-DSK",
         barcode: "8208736132502",
         cate_name: "Office Furniture",
@@ -185,7 +186,7 @@ export const MOCK_PRODUCTS: Product[] = [
     {
         id: "uuid-9",
         image: "https://images.unsplash.com/photo-1583394838336-acd977736f90?w=256&h=256&auto=format&fit=crop",
-        name: "Studio Microphone",
+        name: "Studio Microphone", acronymn: "SM",
         sku: "AUD-MIC-STD",
         barcode: "9108736132503",
         cate_name: "Electronics",
@@ -199,7 +200,7 @@ export const MOCK_PRODUCTS: Product[] = [
     {
         id: "uuid-10",
         image: "https://images.unsplash.com/photo-1611186871348-b1ec696e52c9?w=256&h=256&auto=format&fit=crop",
-        name: "Mechanical Keyboard",
+        name: "Mechanical Keyboard", acronymn: "MK",
         sku: "ACC-KBD-MCH",
         barcode: "1108736132504",
         cate_name: "Computers",
@@ -213,7 +214,7 @@ export const MOCK_PRODUCTS: Product[] = [
     {
         id: "uuid-11",
         image: "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=256&h=256&auto=format&fit=crop",
-        name: "Monitor 27 inch 4K",
+        name: "Monitor 27 inch 4K", acronymn: "M2",
         sku: "CMP-MON-27",
         barcode: "1208736132505",
         cate_name: "Computers",
@@ -227,7 +228,7 @@ export const MOCK_PRODUCTS: Product[] = [
     {
         id: "uuid-12",
         image: "https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=256&h=256&auto=format&fit=crop",
-        name: "Nike Air Max",
+        name: "Nike Air Max", acronymn: "NA",
         sku: "CLO-SH-NIKE",
         barcode: "1308736132506",
         cate_name: "Clothing",
@@ -241,7 +242,7 @@ export const MOCK_PRODUCTS: Product[] = [
     {
         id: "uuid-13",
         image: "https://images.unsplash.com/photo-1585333127302-d29217281096?w=256&h=256&auto=format&fit=crop",
-        name: "Creative Software Suite",
+        name: "Creative Software Suite", acronymn: "CS",
         sku: "SOF-CRT-ANL",
         barcode: "N/A",
         cate_name: "Software",
@@ -255,7 +256,7 @@ export const MOCK_PRODUCTS: Product[] = [
     {
         id: "uuid-14",
         image: "https://images.unsplash.com/photo-1544652478-6653e09f18a2?w=256&h=256&auto=format&fit=crop",
-        name: "Yoga Mat Pro",
+        name: "Yoga Mat Pro", acronymn: "YM",
         sku: "SPT-YOG-MAT",
         barcode: "1408736132507",
         cate_name: "Sports",
@@ -269,7 +270,7 @@ export const MOCK_PRODUCTS: Product[] = [
     {
         id: "uuid-15",
         image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=256&h=256&auto=format&fit=crop",
-        name: "Eames Office Chair",
+        name: "Eames Office Chair", acronymn: "EO",
         sku: "FUR-CHR-EAM",
         barcode: "1508736132508",
         cate_name: "Office Furniture",
@@ -283,7 +284,7 @@ export const MOCK_PRODUCTS: Product[] = [
     {
         id: "uuid-16",
         image: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=256&h=256&auto=format&fit=crop",
-        name: "Ray-Ban Aviator",
+        name: "Ray-Ban Aviator", acronymn: "RA",
         sku: "ACC-SUN-RAY",
         barcode: "1608736132509",
         cate_name: "Accessories",
@@ -297,7 +298,7 @@ export const MOCK_PRODUCTS: Product[] = [
     {
         id: "uuid-17",
         image: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=256&h=256&auto=format&fit=crop",
-        name: "Fresh Garden Salad",
+        name: "Fresh Garden Salad", acronymn: "FG",
         sku: "FOD-SAL-GRD",
         barcode: "N/A",
         cate_name: "Food",
@@ -311,7 +312,7 @@ export const MOCK_PRODUCTS: Product[] = [
     {
         id: "uuid-18",
         image: "https://images.unsplash.com/photo-1589492477829-5e65395b66cc?w=256&h=256&auto=format&fit=crop",
-        name: "Organic Honey (500g)",
+        name: "Organic Honey (500g)", acronymn: "OH",
         sku: "FOD-HNY-ORG",
         barcode: "1708736132510",
         cate_name: "Food",
@@ -325,7 +326,7 @@ export const MOCK_PRODUCTS: Product[] = [
     {
         id: "uuid-19",
         image: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=256&h=256&auto=format&fit=crop",
-        name: "Pixel 8 Pro",
+        name: "Pixel 8 Pro", acronymn: "P8",
         sku: "GGL-PXL8-PRO",
         barcode: "1808736132511",
         cate_name: "Electronics",
@@ -339,7 +340,7 @@ export const MOCK_PRODUCTS: Product[] = [
     {
         id: "uuid-20",
         image: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=256&h=256&auto=format&fit=crop",
-        name: "Business Strategy Course",
+        name: "Business Strategy Course", acronymn: "BS",
         sku: "SRV-EDU-BSN",
         barcode: "N/A",
         cate_name: "Services",
@@ -353,7 +354,7 @@ export const MOCK_PRODUCTS: Product[] = [
     {
         id: "uuid-21",
         image: "https://images.unsplash.com/photo-1491633582648-27942438b053?w=256&h=256&auto=format&fit=crop",
-        name: "Canvas Backpack",
+        name: "Canvas Backpack", acronymn: "CB",
         sku: "ACC-BAG-CAN",
         barcode: "1908736132512",
         cate_name: "Accessories",
@@ -367,7 +368,7 @@ export const MOCK_PRODUCTS: Product[] = [
     {
         id: "uuid-22",
         image: "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=256&h=256&auto=format&fit=crop",
-        name: "Instant Camera",
+        name: "Instant Camera", acronymn: "IC",
         sku: "ELE-CAM-INS",
         barcode: "2008736132513",
         cate_name: "Electronics",
@@ -381,7 +382,7 @@ export const MOCK_PRODUCTS: Product[] = [
     {
         id: "uuid-23",
         image: "https://images.unsplash.com/photo-1512499617640-c74ae3a49dd5?w=256&h=256&auto=format&fit=crop",
-        name: "Wireless Mouse Pro",
+        name: "Wireless Mouse Pro", acronymn: "WM",
         sku: "ACC-MSE-WRL",
         barcode: "2108736132514",
         cate_name: "Computers",
@@ -395,7 +396,7 @@ export const MOCK_PRODUCTS: Product[] = [
     {
         id: "uuid-24",
         image: "https://images.unsplash.com/photo-1512446816042-444d641267d4?w=256&h=256&auto=format&fit=crop",
-        name: "Essential Oil Diffuser",
+        name: "Essential Oil Diffuser", acronymn: "EO",
         sku: "HOM-DIF-ESS",
         barcode: "2208736132515",
         cate_name: "Home Audio",
@@ -409,7 +410,7 @@ export const MOCK_PRODUCTS: Product[] = [
     {
         id: "uuid-25",
         image: "https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2?w=256&h=256&auto=format&fit=crop",
-        name: "Programming E-book",
+        name: "Programming E-book", acronymn: "PE",
         sku: "DIG-EBK-PRG",
         barcode: "N/A",
         cate_name: "Software",
@@ -423,7 +424,7 @@ export const MOCK_PRODUCTS: Product[] = [
     {
         id: "uuid-26",
         image: "https://images.unsplash.com/photo-1550009158-9ebf69173e03?w=256&h=256&auto=format&fit=crop",
-        name: "Security Camera System",
+        name: "Security Camera System", acronymn: "SC",
         sku: "ELE-SEC-CAM",
         barcode: "2308736132516",
         cate_name: "Electronics",
@@ -437,7 +438,7 @@ export const MOCK_PRODUCTS: Product[] = [
     {
         id: "uuid-27",
         image: "https://images.unsplash.com/photo-1574634534894-89d7576c8259?w=256&h=256&auto=format&fit=crop",
-        name: "Adjustable Dumbbells",
+        name: "Adjustable Dumbbells", acronymn: "AD",
         sku: "SPT-DMB-ADJ",
         barcode: "2408736132517",
         cate_name: "Sports",
@@ -451,7 +452,7 @@ export const MOCK_PRODUCTS: Product[] = [
     {
         id: "uuid-28",
         image: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=256&h=256&auto=format&fit=crop",
-        name: "Designer Sunglasses",
+        name: "Designer Sunglasses", acronymn: "DS",
         sku: "ACC-SUN-DSN",
         barcode: "2508736132518",
         cate_name: "Accessories",
@@ -465,7 +466,7 @@ export const MOCK_PRODUCTS: Product[] = [
     {
         id: "uuid-29",
         image: "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=256&h=256&auto=format&fit=crop",
-        name: "Samsung Galaxy Buds",
+        name: "Samsung Galaxy Buds", acronymn: "SG",
         sku: "SAM-BDS-PRO",
         barcode: "2608736132519",
         cate_name: "Electronics",
@@ -479,7 +480,7 @@ export const MOCK_PRODUCTS: Product[] = [
     {
         id: "uuid-30",
         image: "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=256&h=256&auto=format&fit=crop",
-        name: "Minimalist T-Shirt",
+        name: "Minimalist T-Shirt", acronymn: "MT",
         sku: "CLO-TSH-MIN",
         barcode: "2708736132520",
         cate_name: "Clothing",
@@ -493,7 +494,7 @@ export const MOCK_PRODUCTS: Product[] = [
     {
         id: "uuid-31",
         image: "https://images.unsplash.com/photo-1560243563-062bff001d68?w=256&h=256&auto=format&fit=crop",
-        name: "Standing Desk",
+        name: "Standing Desk", acronymn: "SD",
         sku: "FUR-DSK-STD",
         barcode: "2808736132521",
         cate_name: "Office Furniture",
@@ -507,7 +508,7 @@ export const MOCK_PRODUCTS: Product[] = [
     {
         id: "uuid-32",
         image: "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=256&h=256&auto=format&fit=crop",
-        name: "Laptop Sleeve 14",
+        name: "Laptop Sleeve 14", acronymn: "LS",
         sku: "ACC-LAP-SLV",
         barcode: "2908736132522",
         cate_name: "Accessories",
@@ -521,7 +522,7 @@ export const MOCK_PRODUCTS: Product[] = [
     {
         id: "uuid-33",
         image: "https://images.unsplash.com/photo-1615461066821-4384aa27448d?w=256&h=256&auto=format&fit=crop",
-        name: "Gourmet Coffee Beans",
+        name: "Gourmet Coffee Beans", acronymn: "GC",
         sku: "FOD-COF-GRM",
         barcode: "3008736132523",
         cate_name: "Food",
@@ -535,7 +536,7 @@ export const MOCK_PRODUCTS: Product[] = [
     {
         id: "uuid-34",
         image: "https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=256&h=256&auto=format&fit=crop",
-        name: "Power Bank 20000mAh",
+        name: "Power Bank 20000mAh", acronymn: "PB",
         sku: "ELE-PWR-BNK",
         barcode: "3108736132524",
         cate_name: "Electronics",
@@ -549,7 +550,7 @@ export const MOCK_PRODUCTS: Product[] = [
     {
         id: "uuid-35",
         image: "https://images.unsplash.com/photo-1510127034890-ba27508e9f1c?w=256&h=256&auto=format&fit=crop",
-        name: "Professional Camera Lens",
+        name: "Professional Camera Lens", acronymn: "PC",
         sku: "ELE-CAM-LNS",
         barcode: "3208736132525",
         cate_name: "Electronics",
@@ -563,9 +564,16 @@ export const MOCK_PRODUCTS: Product[] = [
 ];
 
 export const MOCK_UNITS: Unit[] = [
-    { id: "1", name: "Kilogram", status: "Active", abbreviation: "kg", description: "Standard weight unit" },
-    { id: "2", name: "Piece", status: "Active", abbreviation: "pc", description: "Individual item" },
-    { id: "3", name: "Box", status: "Active", abbreviation: "box", description: "Packaging unit" },
+    { id: '1', serial_id: 'UOM-001', name: 'Kilogram', acronymn: "KI", short_name: 'kg', precision: 2, status: 'Active' },
+    { id: '2', serial_id: 'UOM-002', name: 'Gram', acronymn: "GR", short_name: 'g', precision: 0, status: 'Active' },
+    { id: '3', serial_id: 'UOM-003', name: 'Liter', acronymn: "LI", short_name: 'L', precision: 3, status: 'Active' },
+    { id: '4', serial_id: 'UOM-004', name: 'Meter', acronymn: "ME", short_name: 'm', precision: 2, status: 'Inactive' },
+    { id: '5', serial_id: 'UOM-005', name: 'Piece', acronymn: "PI", short_name: 'pcs', precision: 0, status: 'Active' },
+    { id: '6', serial_id: 'UOM-006', name: 'Box', acronymn: "BO", short_name: 'box', precision: 0, status: 'Active' },
+    { id: '7', serial_id: 'UOM-007', name: 'Package', acronymn: "PA", short_name: 'pkg', precision: 0, status: 'Active' },
+    { id: '8', serial_id: 'UOM-008', name: 'Milliliter', acronymn: "MI", short_name: 'ml', precision: 2, status: 'Active' },
+    { id: '9', serial_id: 'UOM-009', name: 'Centimeter', acronymn: "CE", short_name: 'cm', precision: 1, status: 'Active' },
+    { id: '10', serial_id: 'UOM-010', name: 'Dozen', acronymn: "DO", short_name: 'doz', precision: 0, status: 'Active' },
 ];
 
 export const MOCK_LOCATIONS: Location[] = [
@@ -577,7 +585,7 @@ export const MOCK_LOCATIONS: Location[] = [
         location_code: "HQ-01",
         node_id: null,
         legacy_id: "L-001",
-        name: "Main Headquarters",
+        name: "Main Headquarters", acronymn: "MH",
         status_id: 1,
         status_code: "ACTIVE",
         is_active: true,
@@ -624,7 +632,7 @@ export const MOCK_LOCATIONS: Location[] = [
         location_code: "WH-EAST",
         node_id: null,
         legacy_id: "L-002",
-        name: "East Coast Warehouse",
+        name: "East Coast Warehouse", acronymn: "EC",
         status_id: 1,
         status_code: "ACTIVE",
         is_active: true,
@@ -671,7 +679,7 @@ export const MOCK_LOCATIONS: Location[] = [
         location_code: "RETAIL-01",
         node_id: null,
         legacy_id: "L-003",
-        name: "Downtown Retail Store",
+        name: "Downtown Retail Store", acronymn: "DR",
         status_id: 0,
         status_code: "INACTIVE",
         is_active: false,
@@ -713,49 +721,49 @@ export const MOCK_LOCATIONS: Location[] = [
 ];
 
 export const MOCK_GROUP_PRODUCTS: GroupProduct[] = [
-    { id: "1", name: "Premium Electronics", slug: "premium-electronics", parent: "Electronics", item_count: 15, media_url: "https://images.unsplash.com/photo-1498049794561-7780e7231661?q=80&w=256&h=256&auto=format&fit=crop", is_active: true },
-    { id: "2", name: "Gaming Setup", slug: "gaming-setup", parent: "Electronics", item_count: 8, media_url: "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=256&h=256&auto=format&fit=crop", is_active: true },
-    { id: "3", name: "Modern Office", slug: "modern-office", parent: "Furniture", item_count: 12, media_url: "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=256&h=256&auto=format&fit=crop", is_active: true },
-    { id: "4", name: "Smart Home", slug: "smart-home", parent: "Electronics", item_count: 22, media_url: "https://images.unsplash.com/photo-1558002038-103792e07a70?q=80&w=256&h=256&auto=format&fit=crop", is_active: false },
-    { id: "5", name: "Designer Collection", slug: "designer-collection", parent: "Fashion", item_count: 45, media_url: "https://images.unsplash.com/photo-1445205170230-053b83016050?q=80&w=256&h=256&auto=format&fit=crop", is_active: true },
+    { id: "1", name: "Premium Electronics", acronymn: "PE", slug: "premium-electronics", parent: "Electronics", item_count: 15, media_url: "https://images.unsplash.com/photo-1498049794561-7780e7231661?q=80&w=256&h=256&auto=format&fit=crop", is_active: true },
+    { id: "2", name: "Gaming Setup", acronymn: "GS", slug: "gaming-setup", parent: "Electronics", item_count: 8, media_url: "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=256&h=256&auto=format&fit=crop", is_active: true },
+    { id: "3", name: "Modern Office", acronymn: "MO", slug: "modern-office", parent: "Furniture", item_count: 12, media_url: "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=256&h=256&auto=format&fit=crop", is_active: true },
+    { id: "4", name: "Smart Home", acronymn: "SH", slug: "smart-home", parent: "Electronics", item_count: 22, media_url: "https://images.unsplash.com/photo-1558002038-103792e07a70?q=80&w=256&h=256&auto=format&fit=crop", is_active: false },
+    { id: "5", name: "Designer Collection", acronymn: "DC", slug: "designer-collection", parent: "Fashion", item_count: 45, media_url: "https://images.unsplash.com/photo-1445205170230-053b83016050?q=80&w=256&h=256&auto=format&fit=crop", is_active: true },
 ];
 
 export const MOCK_COLLECTIONS: Collection[] = [
-    { id: "1", name: "Spring Essentials", slug: "spring-essentials", item_count: 24, media_url: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=256&h=256&auto=format&fit=crop", is_active: true, locations: ['All branches'] },
-    { id: "2", name: "Winter Collection 2024", slug: "winter-2024", item_count: 56, media_url: "https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=256&h=256&auto=format&fit=crop", is_active: true, locations: ['HQ-01', 'WH-EAST'] },
-    { id: "3", name: "Summer Hits", slug: "summer-hits", item_count: 12, media_url: "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?q=80&w=256&h=256&auto=format&fit=crop", is_active: true, locations: ['HQ-01'] },
-    { id: "4", name: "Autumn Vibes", slug: "autumn-vibes", item_count: 31, media_url: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?q=80&w=256&h=256&auto=format&fit=crop", is_active: false, locations: ['WH-EAST'] },
-    { id: "5", name: "Holiday Special", slug: "holiday-special", item_count: 18, media_url: "https://images.unsplash.com/photo-1512909006721-3d6018887383?q=80&w=256&h=256&auto=format&fit=crop", is_active: true, locations: ['All branches'] },
+    { id: "1", name: "Spring Essentials", acronymn: "SE", slug: "spring-essentials", item_count: 24, media_url: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=256&h=256&auto=format&fit=crop", is_active: true, locations: ['All branches'] },
+    { id: "2", name: "Winter Collection 2024", acronymn: "WC", slug: "winter-2024", item_count: 56, media_url: "https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=256&h=256&auto=format&fit=crop", is_active: true, locations: ['HQ-01', 'WH-EAST'] },
+    { id: "3", name: "Summer Hits", acronymn: "SH", slug: "summer-hits", item_count: 12, media_url: "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?q=80&w=256&h=256&auto=format&fit=crop", is_active: true, locations: ['HQ-01'] },
+    { id: "4", name: "Autumn Vibes", acronymn: "AV", slug: "autumn-vibes", item_count: 31, media_url: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?q=80&w=256&h=256&auto=format&fit=crop", is_active: false, locations: ['WH-EAST'] },
+    { id: "5", name: "Holiday Special", acronymn: "HS", slug: "holiday-special", item_count: 18, media_url: "https://images.unsplash.com/photo-1512909006721-3d6018887383?q=80&w=256&h=256&auto=format&fit=crop", is_active: true, locations: ['All branches'] },
 ];
 
 export const MOCK_MENUS: Menu[] = [
-    { id: "1", name: "Thực đơn Sáng", is_active: true, locations: ["HQ-01", "WH-EAST"], channels: ["POS"], total_items: 24, status: "Active" },
-    { id: "2", name: "Thực đơn Trưa", is_active: true, locations: ["HQ-01"], channels: ["POS", "KIOSK", "APP"], total_items: 45, status: "Active" },
-    { id: "3", name: "Thực đơn Tối", is_active: true, locations: ["HQ-01", "WH-EAST"], channels: ["APP", "KIOSK"], total_items: 38, status: "Active" },
-    { id: "4", name: "Thực đơn Cuối Tuần", is_active: false, locations: ["WH-EAST"], channels: ["KIOSK", "WEB"], total_items: 12, status: "Inactive" },
-    { id: "5", name: "Thực đơn Khuyến Mãi", is_active: true, locations: ["HQ-01"], channels: ["KIOSK", "WEB"], total_items: 15, status: "Active" },
+    { id: "1", name: "Thực đơn Sáng", acronymn: "TĐ", is_active: true, locations: ["HQ-01", "WH-EAST"], channels: ["POS"], total_items: 24, status: "Active" },
+    { id: "2", name: "Thực đơn Trưa", acronymn: "TĐ", is_active: true, locations: ["HQ-01"], channels: ["POS", "KIOSK", "APP"], total_items: 45, status: "Active" },
+    { id: "3", name: "Thực đơn Tối", acronymn: "TĐ", is_active: true, locations: ["HQ-01", "WH-EAST"], channels: ["APP", "KIOSK"], total_items: 38, status: "Active" },
+    { id: "4", name: "Thực đơn Cuối Tuần", acronymn: "TĐ", is_active: false, locations: ["WH-EAST"], channels: ["KIOSK", "WEB"], total_items: 12, status: "Inactive" },
+    { id: "5", name: "Thực đơn Khuyến Mãi", acronymn: "TĐ", is_active: true, locations: ["HQ-01"], channels: ["KIOSK", "WEB"], total_items: 15, status: "Active" },
 ];
 
 export const MOCK_MODIFIER_ITEMS: ModifierItem[] = [
-    { id: "M01", name: "Thêm Trân Châu Trắng", display_type: "Checkbox", locations: ["HQ-01", "WH-EAST"], price: 10000, is_active: true, status: "Active" },
-    { id: "M02", name: "Thêm Trân Châu Đen", display_type: "Checkbox", locations: ["HQ-01"], price: 8000, is_active: true, status: "Active" },
-    { id: "M03", name: "Ít Đường", display_type: "Radio", locations: ["HQ-01", "WH-EAST"], price: 0, is_active: true, status: "Active" },
-    { id: "M04", name: "Không Đá", display_type: "Radio", locations: ["WH-EAST"], price: 0, is_active: false, status: "Inactive" },
-    { id: "M05", name: "Thêm Kem Cheese", display_type: "Checkbox", locations: ["HQ-01"], price: 15000, is_active: true, status: "Active" },
+    { id: "M01", name: "Thêm Trân Châu Trắng", acronymn: "TT", display_type: "Checkbox", locations: ["HQ-01", "WH-EAST"], price: 10000, is_active: true, status: "Active" },
+    { id: "M02", name: "Thêm Trân Châu Đen", acronymn: "TT", display_type: "Checkbox", locations: ["HQ-01"], price: 8000, is_active: true, status: "Active" },
+    { id: "M03", name: "Ít Đường", acronymn: "ÍĐ", display_type: "Radio", locations: ["HQ-01", "WH-EAST"], price: 0, is_active: true, status: "Active" },
+    { id: "M04", name: "Không Đá", acronymn: "KĐ", display_type: "Radio", locations: ["WH-EAST"], price: 0, is_active: false, status: "Inactive" },
+    { id: "M05", name: "Thêm Kem Cheese", acronymn: "TK", display_type: "Checkbox", locations: ["HQ-01"], price: 15000, is_active: true, status: "Active" },
 ];
 
 export const MOCK_CUSTOMERS: Customer[] = [
-    { id: 'CUST-001', name: 'Nguyễn Văn A', phone: '0901234567', money: 500000, point: 1250, membership: 'Gold', total_spend: 15000000, is_active: true },
-    { id: 'CUST-002', name: 'Trần Thị B', phone: '0912345678', money: 25000, point: 450, membership: 'Silver', total_spend: 4200000, is_active: true },
-    { id: 'CUST-003', name: 'Lê Văn C', phone: '0987654321', money: 0, point: 100, membership: 'Bronze', total_spend: 1200000, is_active: false },
-    { id: 'CUST-004', name: 'Phạm Thị D', phone: '0933445566', money: 1200000, point: 3200, membership: 'Diamond', total_spend: 45000000, is_active: true },
-    { id: 'CUST-005', name: 'Hoàng Văn E', phone: '0944556677', money: 150000, point: 800, membership: 'Gold', total_spend: 8500000, is_active: true },
+    { id: 'CUST-001', name: 'Nguyễn Văn A', acronymn: "NV", phone: '0901234567', email: 'vana@gmail.com', money: 500000, point: 1250, membership: 'Gold', total_spend: 15000000, is_active: true },
+    { id: 'CUST-002', name: 'Trần Thị B', acronymn: "TT", phone: '0912345678', email: 'thib@gmail.com', money: 25000, point: 450, membership: 'Silver', total_spend: 4200000, is_active: true },
+    { id: 'CUST-003', name: 'Lê Văn C', acronymn: "LV", phone: '0987654321', email: 'vanc@gmail.com', money: 0, point: 100, membership: 'Bronze', total_spend: 1200000, is_active: false },
+    { id: 'CUST-004', name: 'Phạm Thị D', acronymn: "PT", phone: '0933445566', email: 'thid@gmail.com', money: 1200000, point: 3200, membership: 'Diamond', total_spend: 45000000, is_active: true },
+    { id: 'CUST-005', name: 'Hoàng Văn E', acronymn: "HV", phone: '0944556677', email: 'vane@gmail.com', money: 150000, point: 800, membership: 'Gold', total_spend: 8500000, is_active: true },
 ];
 
 export const MOCK_MEMBERSHIPS: Membership[] = [
     {
         id: 'MEM-001',
-        tier: 'Bronze',
+        tier: 'Bronze', acronymn: "BR",
         tier_price: 0,
         billing_cycle: 'Monthly',
         benefit: '5% Point Cashback',
@@ -763,7 +771,7 @@ export const MOCK_MEMBERSHIPS: Membership[] = [
     },
     {
         id: 'MEM-002',
-        tier: 'Silver',
+        tier: 'Silver', acronymn: "SI",
         tier_price: 500000,
         billing_cycle: 'Monthly',
         benefit: '5% Discount, 7% Point Cashback',
@@ -771,7 +779,7 @@ export const MOCK_MEMBERSHIPS: Membership[] = [
     },
     {
         id: 'MEM-003',
-        tier: 'Gold',
+        tier: 'Gold', acronymn: "GO",
         tier_price: 1200000,
         billing_cycle: 'Monthly',
         benefit: '10% Discount, 10% Point Cashback, Free Shipping',
@@ -779,7 +787,7 @@ export const MOCK_MEMBERSHIPS: Membership[] = [
     },
     {
         id: 'MEM-004',
-        tier: 'Diamond',
+        tier: 'Diamond', acronymn: "DI",
         tier_price: 5000000,
         billing_cycle: 'Yearly',
         benefit: '15% Discount, 15% Point Cashback, VIP Lounge, Personal Assistant',
@@ -787,18 +795,28 @@ export const MOCK_MEMBERSHIPS: Membership[] = [
     },
     {
         id: 'MEM-005',
-        tier: 'Enterprise',
+        tier: 'Enterprise', acronymn: "EN",
         tier_price: 15000000,
         billing_cycle: 'Yearly',
         benefit: 'Custom benefits, Unlimited users, Dedicated support',
-        is_active: false
+        is_active: true
     }
 ];
 
 export const MOCK_PROMOTIONS: Promotion[] = [
-    { id: 'PROM-001', name: 'Summer Flash Sale', discount_value: 15, discount_type: 'Percentage', apply_to: 'All products', schedule: 'Daily 14:00 - 16:00', locations: ['All branches'], is_active: true },
-    { id: 'PROM-002', name: 'Grand Opening Discount', discount_value: 50000, discount_type: 'Fixed', apply_to: 'Selected items', schedule: 'Mon, Wed, Fri', locations: ['HQ-01'], is_active: true },
-    { id: 'PROM-003', name: 'Happy Hour Special', discount_value: 20, discount_type: 'Percentage', apply_to: 'Drinks', schedule: 'Daily 17:00 - 19:00', locations: ['All branches'], is_active: true },
-    { id: 'PROM-004', name: 'Weekend Brunch', discount_value: 10, discount_type: 'Percentage', apply_to: 'Food', schedule: 'Sat, Sun 10:00 - 14:00', locations: ['HQ-01', 'WH-EAST'], is_active: false },
-    { id: 'PROM-005', name: 'Member Anniversary', discount_value: 20, discount_type: 'Percentage', apply_to: 'All products', schedule: 'Member Join Date', locations: ['All branches'], is_active: true },
+    { id: 'PROM-001', name: 'Summer Flash Sale', acronymn: "SF", discount_value: 15, discount_type: 'Percentage', apply_to: 'All products', schedule: 'Daily 14:00 - 16:00', locations: ['All branches'], is_active: true },
+    { id: 'PROM-002', name: 'Grand Opening Discount', acronymn: "GO", discount_value: 50000, discount_type: 'Fixed', apply_to: 'Selected items', schedule: 'Mon, Wed, Fri', locations: ['HQ-01'], is_active: true },
+    { id: 'PROM-003', name: 'Happy Hour Special', acronymn: "HH", discount_value: 20, discount_type: 'Percentage', apply_to: 'Drinks', schedule: 'Daily 17:00 - 19:00', locations: ['All branches'], is_active: true },
+    { id: 'PROM-004', name: 'Weekend Brunch', acronymn: "WB", discount_value: 10, discount_type: 'Percentage', apply_to: 'Food', schedule: 'Sat, Sun 10:00 - 14:00', locations: ['HQ-01', 'WH-EAST'], is_active: false },
+    { id: 'PROM-005', name: 'Member Anniversary', acronymn: "MA", discount_value: 20, discount_type: 'Percentage', apply_to: 'All products', schedule: 'Member Join Date', locations: ['All branches'], is_active: true },
+];
+
+export const MOCK_COUNTRIES: Country[] = [
+    { id: "VN", name: "Vietnam", acronymn: "VI", code: "VN", phone_code: "+84", currency: "VND", is_active: true, flag_url: "https://flagcdn.com/w320/vn.png" },
+    { id: "US", name: "United States", acronymn: "US", code: "US", phone_code: "+1", currency: "USD", is_active: true, flag_url: "https://flagcdn.com/w320/us.png" },
+    { id: "JP", name: "Japan", acronymn: "JA", code: "JP", phone_code: "+81", currency: "JPY", is_active: true, flag_url: "https://flagcdn.com/w320/jp.png" },
+    { id: "KR", name: "South Korea", acronymn: "SK", code: "KR", phone_code: "+82", currency: "KRW", is_active: true, flag_url: "https://flagcdn.com/w320/kr.png" },
+    { id: "SG", name: "Singapore", acronymn: "SI", code: "SG", phone_code: "+65", currency: "SGD", is_active: true, flag_url: "https://flagcdn.com/w320/sg.png" },
+    { id: "TH", name: "Thailand", acronymn: "TH", code: "TH", phone_code: "+66", currency: "THB", is_active: true, flag_url: "https://flagcdn.com/w320/th.png" },
+    { id: "AU", name: "Australia", acronymn: "AU", code: "AU", phone_code: "+61", currency: "AUD", is_active: false, flag_url: "https://flagcdn.com/w320/au.png" },
 ];
