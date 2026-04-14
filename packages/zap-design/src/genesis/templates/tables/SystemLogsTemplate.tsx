@@ -15,6 +15,7 @@ import { Icon } from '../../atoms/icons/Icon';
 import { SideNav } from '../../molecules/navigation/SideNav';
 import { ThemeHeader } from '../../molecules/layout/ThemeHeader';
 import { Inspector } from '../../../zap/layout/Inspector';
+import { Text } from '@/genesis/atoms/typography/text';
 
 /**
  * System Logs (Layout) Showcase
@@ -51,7 +52,7 @@ export default function SystemLogsTemplate() {
         uom_id: log.status,
         warehouse_id: log.service,
         status_id: log.status,
-        timestamp: log.timestamp, 
+        timestamp: log.timestamp,
     }));
 
     const columns = React.useMemo<ColumnDef<LogListItem>[]>(() => [
@@ -75,10 +76,10 @@ export default function SystemLogsTemplate() {
             accessorKey: "category_id",
             header: ({ column }) => (
                 <div
-                    className="w-28 text-left font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
+                    className="w-28 text-left tracking-widest cursor-pointer hover:text-foreground transition-colors"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    Level
+                    <Text size='label-small' className='font-semibold'>Level</Text>
                 </div>
             ),
             cell: ({ row }) => (
@@ -94,7 +95,7 @@ export default function SystemLogsTemplate() {
         },
         {
             accessorKey: "timestamp",
-            header: () => <div className="w-28 text-left font-mono text-[10px] tracking-widest text-muted-foreground uppercase">Time</div>,
+            header: () => <div className="w-28 text-left tracking-widest transition-colors"><Text size='label-small' className='font-semibold'>Time</Text></div>,
             cell: ({ row }) => (
                 <div className="w-28 font-dev text-transform-tertiary text-muted-foreground text-left py-3">
                     {new Date(row.original.timestamp as string).toLocaleTimeString("en-US", {
@@ -109,10 +110,10 @@ export default function SystemLogsTemplate() {
             accessorKey: "product_type",
             header: ({ column }) => (
                 <div
-                    className="w-48 text-left font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
+                    className="w-48 text-left tracking-widest cursor-pointer hover:text-foreground transition-colors"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    Service
+                    <Text size='label-small' className='font-semibold'>Service</Text>
                 </div>
             ),
             cell: ({ row }) => (
@@ -123,7 +124,7 @@ export default function SystemLogsTemplate() {
         },
         {
             accessorKey: "variant_name",
-            header: () => <div className="text-left font-mono text-[10px] tracking-widest text-muted-foreground uppercase">Message</div>,
+            header: () => <div className="text-left tracking-widest transition-colors"><Text size='label-small' className='font-semibold'>Message</Text></div>,
             cell: ({ row }) => (
                 <div className="truncate max-w-[400px] text-muted-foreground text-left py-3 pr-4">
                     {row.original.variant_name}
@@ -134,16 +135,16 @@ export default function SystemLogsTemplate() {
             accessorKey: "status_id",
             header: ({ column }) => (
                 <div
-                    className="w-24 text-right font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
+                    className="w-24 text-right tracking-widest cursor-pointer hover:text-foreground transition-colors"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    Status
+                    <Text size='label-small' className='font-semibold'>Status</Text>
                 </div>
             ),
             cell: ({ row }) => {
                 const status = row.original.status_id;
-                const statusColor = status === '200' || status === '201' ? 'text-success' : 
-                                   status === 'warning' || status === '429' ? 'text-warning' : 'text-destructive';
+                const statusColor = status === '200' || status === '201' ? 'text-success' :
+                    status === 'warning' || status === '429' ? 'text-warning' : 'text-destructive';
                 return (
                     <div className={`w-24 text-right font-dev text-transform-tertiary font-semibold py-3 ${statusColor}`}>
                         {status}
@@ -153,7 +154,7 @@ export default function SystemLogsTemplate() {
         },
         {
             accessorKey: "barcode",
-            header: () => <div className="w-24 pr-7 text-right font-mono text-[10px] tracking-widest text-muted-foreground uppercase">Duration</div>,
+            header: () => <div className="w-24 pr-7 text-right tracking-widest transition-colors"><Text size='label-small' className='font-semibold'>Duration</Text></div>,
             cell: ({ row }) => (
                 <div className="w-24 pr-7 text-right font-dev text-transform-tertiary text-muted-foreground py-3">
                     {row.original.barcode}
@@ -218,7 +219,7 @@ export default function SystemLogsTemplate() {
                 <div className="flex flex-col gap-0 w-full px-4 pt-4">
                     <Accordion type="single" collapsible variant="navigation" value={inspectorState === 'expanded' ? "item-1" : ""} onValueChange={(val: string) => { if (val !== "item-1") setInspectorState('collapsed'); }} className="bg-transparent w-full space-y-2">
                         <AccordionItem value="item-1" className="border-none m-0">
- <AccordionTrigger className="px-4 py-3 flex items-center gap-2 rounded-lg bg-surface-variant hover:bg-surface-variant/80 font-mono text-transform-tertiary text-[11px] tracking-widest text-on-surface font-bold transition-colors m-0 w-full min-w-0">
+                            <AccordionTrigger className="px-4 py-3 flex items-center gap-2 rounded-lg bg-surface-variant hover:bg-surface-variant/80 font-mono text-transform-tertiary text-[11px] tracking-widest text-on-surface font-bold transition-colors m-0 w-full min-w-0">
                                 <div className="flex items-center gap-2 overflow-hidden flex-1 text-left min-w-0">
                                     <Icon name="filter_list" size={16} className="shrink-0 text-on-surface-variant opacity-70 group-data-[state=open]:text-primary transition-colors" />
                                     <span className="truncate">FILTERS</span>
@@ -246,7 +247,7 @@ export default function SystemLogsTemplate() {
                     <div className="w-6 h-6 rounded bg-primary flex items-center justify-center">
                         <Icon name="bolt" size={14} className="text-primary-foreground" />
                     </div>
- <span className="font-bold text-sm tracking-widest font-display text-transform-primary text-on-surface">ZAP OS</span>
+                    <span className="font-bold text-sm tracking-widest font-display text-transform-primary text-on-surface">ZAP OS</span>
                 </div>
                 <div className="flex-1 py-4 px-3 space-y-1 overflow-y-auto">
                     <div className="px-3 py-2.5 rounded-md hover:bg-surface-variant/40 flex items-center gap-3 text-sm text-on-surface cursor-pointer transition-colors">
@@ -302,7 +303,7 @@ export default function SystemLogsTemplate() {
                         <div className="h-6 w-px bg-border my-auto hidden sm:block" />
                         <div className="hidden sm:flex flex-col items-end">
                             <span className="text-xs font-bold leading-tight">us-west-1</span>
- <span className="text-[9px] tracking-widest text-green-500 font-dev text-transform-tertiary mt-0.5 flex items-center gap-1">
+                            <span className="text-[9px] tracking-widest text-green-500 font-dev text-transform-tertiary mt-0.5 flex items-center gap-1">
                                 <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
                                 Healthy
                             </span>
@@ -332,7 +333,7 @@ export default function SystemLogsTemplate() {
         <div className="flex flex-col gap-0 w-full min-w-[320px] px-4 pt-4">
             <Accordion type="single" collapsible variant="navigation" value={inspectorState === 'expanded' ? "item-1" : ""} onValueChange={(val: string) => { if (val !== "item-1") setInspectorState('collapsed'); }} className="bg-transparent w-full space-y-2">
                 <AccordionItem value="item-1" className="border-none m-0">
- <AccordionTrigger className="px-4 py-3 flex items-center gap-2 rounded-lg bg-surface-variant hover:bg-surface-variant/80 font-mono text-transform-tertiary text-[11px] tracking-widest text-on-surface font-bold transition-colors m-0 w-full min-w-0">
+                    <AccordionTrigger className="px-4 py-3 flex items-center gap-2 rounded-lg bg-surface-variant hover:bg-surface-variant/80 font-mono text-transform-tertiary text-[11px] tracking-widest text-on-surface font-bold transition-colors m-0 w-full min-w-0">
                         <div className="flex items-center gap-2 overflow-hidden flex-1 text-left min-w-0">
                             <Icon name="filter_list" size={16} className="shrink-0 text-on-surface-variant opacity-70 group-data-[state=open]:text-primary transition-colors" />
                             <span className="truncate">FILTERS</span>
