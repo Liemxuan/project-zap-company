@@ -7,6 +7,9 @@ import { ListTable } from '@/zap/organisms/list-table';
 import { SideNav } from '@/genesis/molecules/navigation/SideNav';
 import { ThemeHeader } from '@/genesis/molecules/layout/ThemeHeader';
 import { Icon } from '@/genesis/atoms/icons/Icon';
+import { Dialog, DialogBody, DialogContent, DialogHeader } from '@/genesis/molecules/dialog';
+import { Heading } from '@/genesis/atoms/typography/headings';
+import UnitDetail from './detail/unitDetail';
 import { useUnits } from '@/hooks/unit/use-units';
 import { Unit } from '@/services/unit/unit.model';
 import { getUnitColumns } from './components/columns';
@@ -25,6 +28,8 @@ export default function PageUnitTemplate() {
 
     // --- State ---
     const [selectedItem, setSelectedItem] = useState<Unit | null>(null);
+    const [isCreating, setIsCreating] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
 
     // --- Data Fetching ---
     const {
@@ -42,7 +47,7 @@ export default function PageUnitTemplate() {
     // --- Handlers ---
     const handleEdit = (item: Unit) => {
         setSelectedItem(item);
-        setInspectorState('expanded');
+        setIsEditing(true);
     };
 
     const handleDelete = (item: Unit) => {
@@ -80,6 +85,7 @@ export default function PageUnitTemplate() {
                 itemName: "Unit Name",
                 type: "Status"
             }}
+            onAddClick={() => setIsCreating(true)}
             onRowClick={handleRowClick}
         />
     );
@@ -92,6 +98,46 @@ export default function PageUnitTemplate() {
                 onFilterToggle={handleFilterToggle}
             />
         </div>
+    );
+
+    const createDialog = (
+        <Dialog open={isCreating} onOpenChange={setIsCreating}>
+            <DialogContent
+                className="max-w-none w-screen h-screen p-0 border-none rounded-none bg-white"
+                showClose={true}
+                closeButtonPosition="header-left"
+                closeButtonShape='circle'
+            >
+                <DialogHeader className='relative' closeButtonPosition="header-left">
+                    <div className='max-w-lg mx-auto text-center'>
+                        <Heading level={2} className='text-transform-primary text-on-surface py-4'>Unit Detail</Heading>
+                    </div>
+                </DialogHeader>
+                <DialogBody className="flex-1 flex flex-col p-0">
+                    <UnitDetail onCancel={() => setIsCreating(false)} />
+                </DialogBody>
+            </DialogContent>
+        </Dialog>
+    );
+
+    const editDialog = (
+        <Dialog open={isEditing} onOpenChange={setIsEditing}>
+            <DialogContent
+                className="max-w-none w-screen h-screen p-0 border-none rounded-none bg-white"
+                showClose={true}
+                closeButtonPosition="header-left"
+                closeButtonShape='circle'
+            >
+                <DialogHeader className='relative' closeButtonPosition="header-left">
+                    <div className='max-w-lg mx-auto text-center'>
+                        <Heading level={2} className='text-transform-primary text-on-surface py-4'>Unit Detail</Heading>
+                    </div>
+                </DialogHeader>
+                <DialogBody className="flex-1 flex flex-col p-0">
+                    <UnitDetail onCancel={() => setIsEditing(false)} />
+                </DialogBody>
+            </DialogContent>
+        </Dialog>
     );
 
     const layoutContent = (
@@ -149,6 +195,8 @@ export default function PageUnitTemplate() {
                     </div>
                 </div>
                 {rightDrawerContent}
+                {createDialog}
+                {editDialog}
             </div>
         );
     }
@@ -180,6 +228,8 @@ export default function PageUnitTemplate() {
                     {layoutContent}
                 </CanvasDesktop>
             </div>
+            {createDialog}
+            {editDialog}
         </ComponentSandboxTemplate>
     );
 }
