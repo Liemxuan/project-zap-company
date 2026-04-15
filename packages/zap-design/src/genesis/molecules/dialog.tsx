@@ -193,7 +193,7 @@ const DialogDescription = React.forwardRef<
 DialogDescription.displayName = DialogPrimitive.Description.displayName;
 
 const DialogBody = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div className={cn("py-2 max-h-[80vh] overflow-y-auto", className)} {...props} />
+  <div className={cn("py-2  overflow-y-auto", className)} {...props} />
 );
 DialogBody.displayName = "DialogBody";
 

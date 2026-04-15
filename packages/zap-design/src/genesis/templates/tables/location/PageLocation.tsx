@@ -94,7 +94,7 @@ export default function PageLocationsTemplate() {
         acronymn: loc.acronymn || '',
         phone: loc.phone_number || '',
         email: loc.email || '',
-        sku_code: loc.address_line_1 || '',
+        address_line_1: loc.address_line_1 || '',
         barcode: loc.phone_number || '',
         category_id: loc.province_name || '',
         product_type: loc.location_type_text || '',

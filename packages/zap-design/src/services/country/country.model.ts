@@ -11,7 +11,16 @@ export interface Country {
     is_active: boolean;  // Trạng thái
     created_at?: string;
     updated_at?: string;
-  acronymn?: string;
+    acronymn?: string;
+    serial_id: number;
+    serial_number: string | null;
+    iso_alpha2: string;
+    iso_alpha3: string;
+    numeric_code: number;
+    latitude: number | null;
+    longitude: number | null;
+    geometry_data: any | null; // Có thể thay any bằng interface cụ thể nếu có cấu trúc GeoJSON
+    flag_emoji: string;
 }
 
 export interface CountryFilters {

@@ -20,7 +20,8 @@ export const UNIT_LABELS = {
 
 export const getUnitColumns = (
     onEdit: (item: Unit) => void,
-    onDelete: (item: Unit) => void
+    onDelete: (item: Unit) => void,
+    t: any
 ): ColumnDef<Unit>[] => [
         {
             id: "select",
@@ -55,7 +56,7 @@ export const getUnitColumns = (
                     className="w-24 text-left tracking-widest cursor-pointer hover:text-foreground transition-colors"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    <Text size='label-small' className="font-semibold text-foreground truncate uppercase">ID</Text>
+                    <Text size='label-small' className="font-semibold text-foreground truncate uppercase">{t.column_id}</Text>
                 </div>
             ),
             cell: ({ row }) => (
@@ -74,7 +75,7 @@ export const getUnitColumns = (
                     className="w-64 text-left tracking-widest cursor-pointer transition-colors"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    <Text size='label-small' className='font-semibold'>Name</Text>
+                    <Text size='label-small' className='font-semibold'>{t.column_name}</Text>
                 </div>
             ),
             cell: ({ row }) => (
@@ -105,7 +106,7 @@ export const getUnitColumns = (
                     className="w-32 text-left font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    {UNIT_LABELS.short_name}
+                    {t.column_shortName}
                 </div>
             ),
             cell: ({ row }) => (
@@ -122,7 +123,7 @@ export const getUnitColumns = (
                     className="w-24 text-left font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    {UNIT_LABELS.precision}
+                    {t.column_precision}
                 </div>
             ),
             cell: ({ row }) => (
@@ -139,7 +140,7 @@ export const getUnitColumns = (
                     className="w-32 text-left font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    {UNIT_LABELS.status}
+                    {t.column_status}
                 </div>
             ),
             cell: ({ row }) => (
@@ -149,7 +150,7 @@ export const getUnitColumns = (
                         className="whitespace-nowrap w-fit ml-auto"
                     >
                         <div className="w-1.5 h-1.5 rounded-full bg-current mr-1.5 opacity-80 shrink-0" />
-                        {row.original.status}
+                        {row.original.status === 'Active' ? t.status_active : t.status_inactive}
                     </Pill>
                 </div>
             ),
@@ -158,15 +159,15 @@ export const getUnitColumns = (
         },
         {
             id: "actions",
-            header: () => <div className="w-24 pr-7 text-right font-mono text-[10px] tracking-widest text-muted-foreground uppercase">{UNIT_LABELS.actions}</div>,
+            header: () => <div className="w-24 pr-7 text-right font-mono text-[10px] tracking-widest text-muted-foreground uppercase">{t.column_action}</div>,
             cell: ({ row }) => (
                 <div className="w-24 pr-7 py-2.5 text-right" onClick={e => e.stopPropagation()}>
                     <div className="flex items-center justify-end">
                         <QuickActionsDropdown
                             actions={[
-                                { label: 'Edit', icon: Pencil, onClick: () => onEdit(row.original) },
-                                { label: 'Duplicate', icon: Copy, onClick: () => { } },
-                                { label: 'Delete', icon: Trash2, onClick: () => onDelete(row.original), variant: 'destructive' },
+                                { label: t.action_edit, icon: Pencil, onClick: () => onEdit(row.original) },
+                                { label: t.action_duplicate, icon: Copy, onClick: () => { } },
+                                { label: t.action_delete, icon: Trash2, onClick: () => onDelete(row.original), variant: 'destructive' },
                             ]}
                         />
                     </div>
