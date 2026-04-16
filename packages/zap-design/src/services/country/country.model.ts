@@ -36,8 +36,12 @@ export interface CountryListRequest {
 
 export interface CountryResponse {
     success: boolean;
-    data: Country[];
     message?: string;
+    data: {
+        items: Country[];
+        total_record: number;
+        total_page: number;
+    };
 }
 
 export interface CountryDetailResponse {

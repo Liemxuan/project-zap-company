@@ -16,10 +16,13 @@ import { useCountries } from '@/hooks/country/use-countries';
 // Types
 import { Country } from '@/services/country/country.model';
 
-// Components
+// Local Components
 import { getColumns } from './components/columns';
-import { getFilterGroups, COUNTRY_LABELS } from './components/filters';
+import { COUNTRY_LABELS, getFilterGroups } from './components/filters';
 import { CountryInspector, CountryDetailInspector } from './components/inspector';
+
+// Mock Data
+import { MOCK_COUNTRIES } from '@/hooks/mock-data';
 
 /**
  * Country Template
@@ -33,7 +36,7 @@ export default function PageCountryTemplate() {
 
     // --- Data Fetching ---
     const {
-        countries,
+        countries = [],
         isLoading,
         pagination,
         handlePageChange,
@@ -43,6 +46,9 @@ export default function PageCountryTemplate() {
     } = useCountries({
         pageSize: 10
     });
+
+    // Use global mock data if hook returns empty (standard ZAP fallback pattern)
+    const displayCountries = (countries && countries.length > 0) ? countries : MOCK_COUNTRIES;
 
     // --- Handlers ---
     const handleAction = (type: string, item: any) => {
@@ -66,13 +72,12 @@ export default function PageCountryTemplate() {
     // --- Shared Components ---
     const TableTable = (
         <ListTable
-            initialItems={countries as any}
+            initialItems={displayCountries as any}
             isLoading={isLoading}
             onSearch={handleSearch}
             pageIndex={pagination.page_index - 1}
             pageSize={pagination.page_size}
             pageCount={pagination.total_page}
-            onPageChange={(p) => handlePageChange(p + 1)}
             onToggleFilters={() => setInspectorState(inspectorState === 'expanded' ? 'collapsed' : 'expanded')}
             isFilterActive={inspectorState === 'expanded'}
             onRowClick={(item) => {
@@ -134,7 +139,7 @@ export default function PageCountryTemplate() {
                     <div className="flex items-center text-xs gap-1 font-dev text-transform-tertiary">
                         <span className="opacity-50 tracking-widest text-transform-tertiary">Settings</span>
                         <Icon name="chevron_right" size={14} className="opacity-30" />
-                        <span className="font-bold text-on-surface tracking-widest text-transform-tertiary">Countries</span>
+                        <span className="font-bold text-on-surface tracking-widest text-transform-tertiary">Countries & Dialing code</span>
                     </div>
                 </div>
                 <div className="flex-1 overflow-auto pt-11 px-12 pb-16 flex flex-col relative z-0 min-w-0">
@@ -153,7 +158,7 @@ export default function PageCountryTemplate() {
             <div className="flex h-screen w-full bg-layer-canvas overflow-hidden font-sans">
                 <SideNav />
                 <div className="flex-1 flex flex-col min-w-0 bg-transparent relative">
-                    <ThemeHeader title="Countries" badge={null} />
+                    <ThemeHeader title="Countries & Dialing code" badge={null} />
                     <div className="flex-1 overflow-auto pt-8 px-12 pb-16 flex flex-col relative z-0 bg-layer-base min-w-0">
                         {TableTable}
                     </div>
@@ -165,7 +170,7 @@ export default function PageCountryTemplate() {
 
     return (
         <ComponentSandboxTemplate
-            componentName="Countries"
+            componentName="Countries & Dialing code"
             tier="L6 LAYOUT"
             status="Verified"
             filePath="src/genesis/templates/tables/countries/PageCountry.tsx"
@@ -176,7 +181,7 @@ export default function PageCountryTemplate() {
         >
             <div className="w-full flex-1 flex items-center justify-center pt-8">
                 <CanvasDesktop
-                    title="Country Management"
+                    title="Countries & Dialing code"
                     fullScreenHref={`/design/${activeTheme}/organisms/countries?fullscreen=true`}
                 >
                     {mockShellLayout}

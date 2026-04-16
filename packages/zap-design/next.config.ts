@@ -21,6 +21,10 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'ui-avatars.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'cdn.pho24.com.vn',
+      },
     ],
   },
   async rewrites() {
@@ -35,7 +39,7 @@ const nextConfig: NextConfig = {
       },
       {
         source: '/api/proxy/crm-gateway/:path*',
-        destination: 'https://crm-gateway-v1-c7wqwyi1.uc.gateway.dev/api/:path*',
+        destination: 'https://crm-gateway-v1-9t9or3wt.uc.gateway.dev/api/:path*',
       }
     ];
   },

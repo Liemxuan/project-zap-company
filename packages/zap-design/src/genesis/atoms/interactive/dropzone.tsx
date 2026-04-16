@@ -10,10 +10,12 @@ export interface DropzoneProps extends DropzoneOptions {
   className?: string
   value?: File[]
   onChange?: (files: File[]) => void
+  hideFileList?: boolean
+  children?: React.ReactNode
 }
 
 export const Dropzone = React.forwardRef<HTMLDivElement, DropzoneProps>(
-  ({ className, value, onChange, ...props }, ref) => {
+  ({ className, value, onChange, hideFileList, children, ...props }, ref) => {
     const [files, setFiles] = React.useState<File[]>(value || [])
 
     React.useEffect(() => {
@@ -57,16 +59,22 @@ export const Dropzone = React.forwardRef<HTMLDivElement, DropzoneProps>(
           )}
         >
           <input {...getInputProps()} />
-          <UploadCloud className={cn("mb-4 h-10 w-10 text-muted-foreground", isDragActive && "text-primary")} />
-          <p className="mb-2 text-sm font-medium">
-            Drag & drop files here, or click to select files
-          </p>
-          <p className="text-xs text-muted-foreground">
-            Support for images and documents.
-          </p>
+          {children ? (
+            children
+          ) : (
+            <>
+              <UploadCloud className={cn("mb-4 h-10 w-10 text-muted-foreground", isDragActive && "text-primary")} />
+              <p className="mb-2 text-sm font-medium">
+                Drag & drop files here, or click to select files
+              </p>
+              <p className="text-xs text-muted-foreground">
+                Support for images and documents.
+              </p>
+            </>
+          )}
         </div>
 
-        {files.length > 0 && (
+        {!hideFileList && files.length > 0 && (
           <div className="grid gap-2">
             {files.map((file, i) => (
               <div

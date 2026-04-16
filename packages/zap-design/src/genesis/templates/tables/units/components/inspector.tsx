@@ -74,7 +74,7 @@ export const UnitInspector = ({
                                         <label className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground ml-1">{t.field_shortName}</label>
                                         <input
                                             type="text"
-                                            value={selectedUnit.short_name}
+                                            value={selectedUnit.symbol}
                                             readOnly
                                             className="w-full bg-surface-variant/50 border border-border rounded-md px-3 py-2 text-sm text-foreground focus:outline-none focus:border-primary/50 transition-colors"
                                         />

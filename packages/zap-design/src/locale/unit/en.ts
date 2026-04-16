@@ -1,13 +1,14 @@
 export default {
     "column_id": "ID",
     "column_name": "Name",
-    "column_shortName": "Short Name",
+    "column_shortName": "Symbol",
     "column_precision": "Precision",
     "column_status": "Status",
     "column_action": "",
     "status_active": "Active",
     "status_inactive": "Inactive",
     "action_edit": "Edit",
+    "action_view": "View",
     "action_duplicate": "Duplicate",
     "action_delete": "Delete",
     "label_addUnit": "Add Unit",
@@ -27,7 +28,9 @@ export default {
     "inspector_details": "DETAILS",
     "field_serialId": "Serial ID",
     "field_name": "Name",
-    "field_shortName": "Short Name",
+    "field_shortName": "Symbol",
     "field_precision": "Precision",
-    "dialog_createUnit": "Create Unit"
+    "dialog_createUnit": "Create Unit",
+    "dialog_editUnit": "Edit Unit",
+    "dialog_viewUnit": "View Unit"
 };

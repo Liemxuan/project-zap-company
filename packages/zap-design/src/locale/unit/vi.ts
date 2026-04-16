@@ -8,6 +8,7 @@ export default {
     "status_active": "Hoạt động",
     "status_inactive": "Ngừng hoạt động",
     "action_edit": "Chỉnh sửa",
+    "action_view": "Xem",
     "action_duplicate": "Nhân bản",
     "action_delete": "Xóa",
     "label_addUnit": "Thêm Đơn vị",
@@ -29,5 +30,7 @@ export default {
     "field_name": "Tên",
     "field_shortName": "Tên viết tắt",
     "field_precision": "Độ chính xác",
-    "dialog_createUnit": "Tạo Đơn vị"
+    "dialog_createUnit": "Tạo Đơn vị",
+    "dialog_editUnit": "Chỉnh sửa Đơn vị",
+    "dialog_viewUnit": "Xem Đơn vị"
 };

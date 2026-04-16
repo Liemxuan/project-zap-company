@@ -5,15 +5,16 @@ import { unitService } from '@/services/unit/unit.service';
 interface UseUnitsOptions {
     pageSize?: number;
     initialFilters?: UnitFilters;
+    initialPage?: number;
 }
 
-export function useUnits({ pageSize = 10, initialFilters = {} }: UseUnitsOptions = {}) {
+export function useUnits({ pageSize = 10, initialFilters = {}, initialPage = 1 }: UseUnitsOptions = {}) {
     const [units, setUnits] = useState<Unit[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [search, setSearch] = useState('');
     const [filters, setFilters] = useState<UnitFilters>(initialFilters);
     const [pagination, setPagination] = useState({
-        page_index: 1,
+        page_index: initialPage,
         page_size: pageSize,
         total_record: 0,
         total_page: 0
@@ -24,9 +25,14 @@ export function useUnits({ pageSize = 10, initialFilters = {} }: UseUnitsOptions
         try {
             const response = await unitService.getUnits({
                 page_index: pagination.page_index,
+                p: pagination.page_index,
                 page_size: pagination.page_size,
                 search,
-                filters
+                filters,
+                sort: {
+                    field: 'id',
+                    descending: true
+                }
             });
 
             if (response.success) {

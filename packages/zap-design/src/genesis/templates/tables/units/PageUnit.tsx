@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { useTheme } from '@/components/ThemeContext';
 import { ComponentSandboxTemplate } from '@/zap/layout/ComponentSandboxTemplate';
 import { CanvasDesktop } from '@/components/dev/CanvasDesktop';
@@ -19,6 +19,7 @@ import { UnitInspector } from './components/inspector';
 // Locales
 import en from '@/locale/unit/en';
 import vi from '@/locale/unit/vi';
+import { unitService } from '@/services/unit/unit.service';
 
 /**
  * PageUnitTemplate
@@ -28,7 +29,12 @@ export default function PageUnitTemplate() {
     const { theme: appTheme, inspectorState, setInspectorState } = useTheme();
     const activeTheme = appTheme === 'core' ? 'core' : 'metro';
     const searchParams = useSearchParams();
+    const router = useRouter();
+    const pathname = usePathname();
     const isFullscreen = searchParams.get('fullscreen') === 'true';
+
+    const pageParam = searchParams.get('p');
+    const initialPage = pageParam ? parseInt(pageParam) : 1;
 
     const lang = searchParams.get('lang');
     const t = lang === 'vi' ? vi : en;
@@ -37,24 +43,62 @@ export default function PageUnitTemplate() {
     const [selectedItem, setSelectedItem] = useState<Unit | null>(null);
     const [isCreating, setIsCreating] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
+    const [isViewing, setIsViewing] = useState(false);
+    const [isFetchingDetail, setIsFetchingDetail] = useState(false);
 
     // --- Data Fetching ---
     const {
         units,
         isLoading,
         pagination,
-        handlePageChange,
+        handlePageChange: baseHandlePageChange,
         handleSearch,
         handleFilterChange,
-        filters: apiFilters
+        filters: apiFilters,
+        refresh
     } = useUnits({
-        pageSize: 10
+        pageSize: 10,
+        initialPage
     });
 
+    const handlePageChange = (index: number) => {
+        baseHandlePageChange(index);
+        
+        // Update URL param 'p'
+        const params = new URLSearchParams(searchParams.toString());
+        params.set('p', index.toString());
+        router.push(`${pathname}?${params.toString()}`);
+    };
+
     // --- Handlers ---
-    const handleEdit = (item: Unit) => {
-        setSelectedItem(item);
-        setIsEditing(true);
+    const handleEdit = async (item: Unit) => {
+        setIsFetchingDetail(true);
+        try {
+            const res = await unitService.getUnitDetail(item.id);
+            if (res.success) {
+                setSelectedItem(res.data);
+                setIsEditing(true);
+            }
+        } catch (error) {
+            console.error('Failed to fetch unit detail:', error);
+        } finally {
+            setIsFetchingDetail(false);
+        }
+    };
+
+    const handleView = async (item: Unit) => {
+        setIsFetchingDetail(true);
+        try {
+            const res = await unitService.getUnitDetail(item.id);
+            if (res.success) {
+                setSelectedItem(res.data);
+                setIsViewing(true);
+            }
+        } catch (error) {
+            console.error('Failed to fetch unit detail:', error);
+        } finally {
+            setIsFetchingDetail(false);
+        }
     };
 
     const handleDelete = (item: Unit) => {
@@ -66,13 +110,8 @@ export default function PageUnitTemplate() {
         handleFilterChange({ [groupId]: currentVal === optionId ? null : optionId });
     };
 
-    const handleRowClick = (item: any) => {
-        setSelectedItem(item as Unit);
-        setInspectorState('expanded');
-    };
-
     // --- Mapped Data & Columns ---
-    const columns = useMemo(() => getUnitColumns(handleEdit, handleDelete, t), [handleEdit, handleDelete, t]);
+    const columns = useMemo(() => getUnitColumns(handleEdit, handleDelete, handleView, t), [handleEdit, handleDelete, handleView, t]);
     const filterGroups = useMemo(() => getUnitFilterGroups(apiFilters, t), [apiFilters, t]);
 
     const tableComponent = (
@@ -93,7 +132,6 @@ export default function PageUnitTemplate() {
                 type: t.label_status
             }}
             onAddClick={() => setIsCreating(true)}
-            onRowClick={handleRowClick}
         />
     );
 
@@ -108,46 +146,56 @@ export default function PageUnitTemplate() {
         </div>
     );
 
+    const renderUnitDialog = (
+        mode: 'create' | 'edit' | 'view',
+        open: boolean,
+        setOpen: (open: boolean) => void
+    ) => {
+        var title = '';
+        switch (mode) {
+            case "create":
+                title = t.dialog_createUnit;
+                break;
+            case "edit":
+                title = t.dialog_editUnit;
+                break;
+            case "view":
+                title = t.dialog_viewUnit;
+                break;
+        }
+        const itemToPass = mode === 'create' ? null : selectedItem;
 
-    const createDialog = (
-        <Dialog open={isCreating} onOpenChange={setIsCreating}>
-            <DialogContent
-                className="max-w-[800px] w-full p-0 border-none rounded-2xl bg-white shadow-2xl overflow-hidden"
-                showClose={true}
-                closeButtonShape='circle'
-                closeButtonPosition='left'
-            >
-                <DialogHeader className='relative py-8 bg-surface/5'>
-                    <div className='w-full text-center'>
-                        <DialogTitle>{t.dialog_createUnit}</DialogTitle>
-                    </div>
-                </DialogHeader>
-                <DialogBody className="p-0">
-                    <UnitDetail onCancel={() => setIsCreating(false)} />
-                </DialogBody>
-            </DialogContent>
-        </Dialog>
-    );
-
-    const editDialog = (
-        <Dialog open={isEditing} onOpenChange={setIsEditing}>
-            <DialogContent
-                className="max-w-[800px] w-full p-0 border-none rounded-2xl bg-white shadow-2xl overflow-hidden"
-                showClose={true}
-                closeButtonPosition="header-left"
-                closeButtonShape='circle'
-            >
-                <DialogHeader className='relative py-8 bg-surface/5'>
-                    <div className='w-full text-center'>
-                        <DialogTitle className='text-transform-primary text-on-surface font-bold'>{t.dialog_createUnit}</DialogTitle>
-                    </div>
-                </DialogHeader>
-                <DialogBody className="p-0">
-                    <UnitDetail onCancel={() => setIsEditing(false)} />
-                </DialogBody>
-            </DialogContent>
-        </Dialog>
-    );
+        return (
+            <Dialog open={open} onOpenChange={setOpen}>
+                <DialogContent
+                    className="max-w-[800px] w-full p-0 border-none rounded-2xl bg-white shadow-2xl overflow-hidden"
+                    showClose={true}
+                    closeButtonPosition="header-left"
+                    closeButtonShape='circle'
+                >
+                    <DialogHeader className='relative py-8 bg-surface/5'>
+                        <div className='w-full text-center'>
+                            <DialogTitle className='text-transform-primary text-on-surface font-bold'>
+                                {title}
+                            </DialogTitle>
+                        </div>
+                    </DialogHeader>
+                    <DialogBody className="p-0">
+                        <UnitDetail
+                            key={mode === 'create' ? 'create' : selectedItem?.id}
+                            mode={mode}
+                            item={itemToPass}
+                            onCancel={() => setOpen(false)}
+                            onSave={() => {
+                                setOpen(false);
+                                refresh();
+                            }}
+                        />
+                    </DialogBody>
+                </DialogContent>
+            </Dialog>
+        );
+    };
 
     const layoutContent = (
         <div className="flex h-full w-full bg-layer-base overflow-hidden font-sans border border-border relative">
@@ -204,8 +252,9 @@ export default function PageUnitTemplate() {
                     </div>
                 </div>
                 {rightDrawerContent}
-                {createDialog}
-                {editDialog}
+                {renderUnitDialog('create', isCreating, setIsCreating)}
+                {renderUnitDialog('edit', isEditing, setIsEditing)}
+                {renderUnitDialog('view', isViewing, setIsViewing)}
             </div>
         );
     }
@@ -238,8 +287,9 @@ export default function PageUnitTemplate() {
                     {layoutContent}
                 </CanvasDesktop>
             </div>
-            {createDialog}
-            {editDialog}
+            {renderUnitDialog('create', isCreating, setIsCreating)}
+            {renderUnitDialog('edit', isEditing, setIsEditing)}
+            {renderUnitDialog('view', isViewing, setIsViewing)}
         </ComponentSandboxTemplate>
     );
 }

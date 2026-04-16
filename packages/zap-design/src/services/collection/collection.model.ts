@@ -5,16 +5,17 @@
 
 export interface Collection {
   id: string;
+  serial_id: number;
   name: string;
-  is_active: boolean;
-  media_url?: string;
+  image_url: string | null;
+  product_count: number;
+  status_id: number;
+  status_code: string | null;
+  status_name: string | null;
+  is_active?: boolean;
   slug?: string;
-  parent?: string;
   parent_id?: string | null;
-  item_count?: number;
-  status?: string;
   locations?: string[];
-  acronymn?: string;
 }
 
 export interface CollectionFilters {

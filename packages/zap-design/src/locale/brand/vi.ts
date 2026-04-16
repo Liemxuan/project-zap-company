@@ -1,5 +1,5 @@
 export default {
-    "column_id": "ID",
+    "column_id": "Mã",
     "column_name": "Tên",
     "column_applyItem": "Hàng hóa áp dụng",
     "column_status": "Trạng thái",

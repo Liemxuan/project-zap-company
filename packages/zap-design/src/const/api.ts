@@ -9,7 +9,7 @@ export const API_ENDPOINTS = {
     LIST: '/api/proxy/crm-gateway/locations/list',
     DETAIL: '/api/proxy/crm-gateway/locations',
   },
-  
+
   CATEGORY: {
     LIST: '/api/proxy/crm-gateway/categories/list',
     DETAIL: '/api/proxy/crm-gateway/categories',
@@ -36,8 +36,8 @@ export const API_ENDPOINTS = {
   },
 
   UNIT: {
-    LIST: '/api/proxy/crm-gateway/units/list',
-    DETAIL: '/api/proxy/crm-gateway/units',
+    LIST: '/api/proxy/crm-gateway/uom/list',
+    DETAIL: '/api/proxy/crm-gateway/uom',
   },
 
   GROUP_PRODUCT: {
@@ -64,6 +64,10 @@ export const API_ENDPOINTS = {
   MEMBERSHIP: {
     LIST: '/api/proxy/crm-gateway/memberships/list',
     DETAIL: '/api/proxy/crm-gateway/memberships',
+  },
+  COUNTRY: {
+    LIST: '/api/proxy/crm-gateway/geocountries/list',
+    DETAIL: '/api/proxy/crm-gateway/geocountries',
   }
 } as const;
 

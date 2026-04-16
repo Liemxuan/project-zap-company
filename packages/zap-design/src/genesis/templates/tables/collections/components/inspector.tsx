@@ -5,6 +5,7 @@ import { DataFilter, FilterGroup } from '@/genesis/molecules/data-filter';
 import { Icon } from '@/genesis/atoms/icons/Icon';
 
 interface CollectionInspectorProps {
+    t: any;
     inspectorState: 'expanded' | 'collapsed';
     setInspectorState: (state: 'expanded' | 'collapsed') => void;
     filterGroups: FilterGroup[];
@@ -15,6 +16,7 @@ interface CollectionInspectorProps {
  * Inspector component for Collection page
  */
 export const CollectionInspector: React.FC<CollectionInspectorProps> = ({
+    t,
     inspectorState,
     setInspectorState,
     filterGroups,
@@ -24,7 +26,7 @@ export const CollectionInspector: React.FC<CollectionInspectorProps> = ({
 
     return (
         <div className="h-full border-l border-border bg-layer-panel hidden md:flex flex-col shrink-0 z-20 relative">
-            <Inspector title="COLLECTION LAB" width={320}>
+            <Inspector title={t.nav_collections.toUpperCase() + " LAB"} width={320}>
                 <div className="flex flex-col gap-0 w-full px-4 pt-4">
                     <Accordion
                         type="single"
@@ -40,7 +42,7 @@ export const CollectionInspector: React.FC<CollectionInspectorProps> = ({
                             <AccordionTrigger className="px-4 py-3 flex items-center gap-2 rounded-lg bg-surface-variant hover:bg-surface-variant/80 font-mono text-transform-tertiary text-[11px] tracking-widest text-on-surface font-bold transition-colors m-0 w-full min-w-0">
                                 <div className="flex items-center gap-2 overflow-hidden flex-1 text-left min-w-0">
                                     <Icon name="filter_list" size={16} className="shrink-0 text-on-surface-variant opacity-70 transition-colors" />
-                                    <span className="truncate uppercase">FILTERS</span>
+                                    <span className="truncate uppercase">{t.inspector_filters}</span>
                                 </div>
                             </AccordionTrigger>
                             <AccordionContent className="bg-transparent px-4 pb-4 pt-2">

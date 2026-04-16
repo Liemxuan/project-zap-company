@@ -77,5 +77,75 @@ export const apiService = {
       console.error(`[API_SERVICE] GET ${url} failed:`, error);
       throw error;
     }
+  },
+
+  /**
+   * Generic PUT request handler
+   */
+  async put<T>(url: string, body: any, options: RequestOptions = {}): Promise<T> {
+    const { token, lang = 'en' } = options;
+
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+      'Accept-Language': lang === 'en' ? "1" : "2",
+    };
+
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    try {
+      const response = await fetch(url, {
+        method: 'PUT',
+        headers,
+        body: JSON.stringify(body),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(
+          errorData.message || `API Error: ${response.status} ${response.statusText}`
+        );
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error(`[API_SERVICE] PUT ${url} failed:`, error);
+      throw error;
+    }
+  },
+
+  /**
+   * Generic DELETE request handler
+   */
+  async delete<T>(url: string, options: RequestOptions = {}): Promise<T> {
+    const { token, lang = 'en' } = options;
+
+    const headers: Record<string, string> = {
+      'Accept-Language': lang === 'en' ? "1" : "2",
+    };
+
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    try {
+      const response = await fetch(url, {
+        method: 'DELETE',
+        headers,
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(
+          errorData.message || `API Error: ${response.status} ${response.statusText}`
+        );
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error(`[API_SERVICE] DELETE ${url} failed:`, error);
+      throw error;
+    }
   }
 };

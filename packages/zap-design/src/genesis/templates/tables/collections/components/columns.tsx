@@ -11,8 +11,13 @@ import { Text } from '@/genesis/atoms/typography/text';
  * Get columns definition for Collections table
  */
 export const getColumns = (handlers: {
+    t: any;
     onAction: (type: string, item: any) => void;
-}): ColumnDef<any>[] => [
+    onEdit: (item: any) => void;
+    onView: (item: any) => void;
+}): ColumnDef<any>[] => {
+    const { t, onEdit, onView } = handlers;
+    return [
         {
             id: "select",
             header: ({ table }) => (
@@ -45,15 +50,15 @@ export const getColumns = (handlers: {
             id: "id",
             header: ({ column }) => (
                 <div
-                    className="w-14 text-left tracking-widest cursor-pointer hover:text-foreground transition-colors"
+                    className="w-14 text-right tracking-widest cursor-pointer hover:text-foreground transition-colors"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    <Text size='label-small' className="font-semibold text-foreground truncate uppercase">ID</Text>
+                    <Text size='label-small' className="font-semibold text-foreground truncate uppercase">{t.column_id}</Text>
                 </div>
             ),
             cell: ({ row }) => (
-                <div className="w-14 truncate font-dev text-transform-tertiary text-muted-foreground text-left py-2.5">
-                    {row.original.id}
+                <div className="w-14 truncate font-dev text-transform-tertiary text-muted-foreground text-right py-2.5">
+                    {row.original.serial_id || row.original.id}
                 </div>
             ),
             enableSorting: false,
@@ -67,26 +72,21 @@ export const getColumns = (handlers: {
                     className="w-80 text-left tracking-widest cursor-pointer transition-colors"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    <Text size='label-small' className='font-semibold'>Name</Text>
+                    <Text size='label-small' className='font-semibold'>{t.column_name}</Text>
                 </div>
             ),
             cell: ({ row }) => (
-                <div className="w-80 py-2.5 text-left">
-                    <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 flex items-center justify-center shrink-0 overflow-hidden">
-                            <Avatar
-                                src={row.original.media_url}
-                                initials={row.original.acronymn}
-                                size="sm"
-                                fallback={row.original.acronymn}
-                                className="w-full h-full object-cover border-[1px] border-border"
-                            />
-                        </div>
-                        <div className="flex flex-col min-w-0">
-                            <Text size='label-small' className='font-semibold text-foreground truncate'>
-                                {row.original.name}
-                            </Text>
-                        </div>
+                <div
+                    className="flex items-center gap-3 py-2.5 cursor-pointer hover:opacity-80 transition-opacity"
+                    onClick={() => onView(row.original)}
+                >
+                    <Avatar
+                        src={row.original.image_url}
+                        fallback={row.original.name?.substring(0, 2).toUpperCase()}
+                        className="h-10 w-10 border border-outline-variant bg-surface overflow-hidden"
+                    />
+                    <div className="flex flex-col min-w-0">
+                        <Text className="font-bold text-on-surface truncate tracking-tight">{row.original.name}</Text>
                     </div>
                 </div>
             ),
@@ -95,18 +95,18 @@ export const getColumns = (handlers: {
         },
         {
             id: "Items",
-            accessorKey: "item_count",
+            accessorKey: "product_count",
             header: ({ column }) => (
                 <div
                     className="w-32 text-right pr-4 tracking-widest cursor-pointer hover:text-foreground transition-colors"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    <Text size='label-small' className='font-semibold'>Items</Text>
+                    <Text size='label-small' className='font-semibold'>{t.column_items}</Text>
                 </div>
             ),
             cell: ({ row }) => (
                 <div className="w-32 text-right py-2.5 pr-4">
-                    <span className="font-bold text-foreground">{row.original.item_count}</span>
+                    <span className="font-bold text-foreground">{row.original.product_count}</span>
                 </div>
             ),
             enableSorting: false,
@@ -120,7 +120,7 @@ export const getColumns = (handlers: {
                     className="w-48 text-left tracking-widest cursor-pointer hover:text-foreground transition-colors"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    <Text size='label-small' className='font-semibold'>Location</Text>
+                    <Text size='label-small' className='font-semibold'>{t.column_location}</Text>
                 </div>
             ),
             cell: ({ row }) => {
@@ -145,20 +145,25 @@ export const getColumns = (handlers: {
                     className="w-20 text-left tracking-widest cursor-pointer hover:text-foreground transition-colors"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    <Text size='label-small' className='font-semibold'>Status</Text>
+                    <Text size='label-small' className='font-semibold'>{t.column_status}</Text>
                 </div>
             ),
-            cell: ({ row }) => (
-                <div className="w-20 text-left py-2.5">
-                    <Pill
-                        variant={row.original.is_active ? 'success' : 'warning'}
-                        className="whitespace-nowrap w-fit ml-auto"
-                    >
-                        <div className="w-1.5 h-1.5 rounded-full bg-current mr-1.5 opacity-80 shrink-0" />
-                        {row.original.is_active ? 'Active' : 'Inactive'}
-                    </Pill>
-                </div>
-            ),
+            cell: ({ row }) => {
+                const isActive = row.original.is_active ?? row.original.status_code === 'ACTIVE';
+                const statusName = row.original.status_name || (isActive ? t.status_active : t.status_inactive);
+
+                return (
+                    <div className="w-20 text-left py-2.5">
+                        <Pill
+                            variant={isActive ? 'success' : 'warning'}
+                            className="whitespace-nowrap w-fit ml-0"
+                        >
+                            <div className="w-1.5 h-1.5 rounded-full bg-current mr-1.5 opacity-80 shrink-0" />
+                            {statusName}
+                        </Pill>
+                    </div>
+                );
+            },
             enableSorting: false,
             enableHiding: false,
         },
@@ -170,11 +175,11 @@ export const getColumns = (handlers: {
                     <div className="flex items-center justify-end">
                         <QuickActionsDropdown
                             actions={[
-                                { label: 'Edit', icon: Pencil, onClick: () => handlers.onAction('edit', row.original) },
-                                { label: 'Assign items', icon: LayoutGrid, onClick: () => handlers.onAction('assign', row.original) },
-                                { label: 'Sort items', icon: GripVertical, onClick: () => handlers.onAction('sort', row.original) },
-                                { label: 'Duplicate', icon: Copy, onClick: () => handlers.onAction('duplicate', row.original) },
-                                { label: 'Delete', icon: Trash2, onClick: () => handlers.onAction('delete', row.original), variant: 'destructive' },
+                                { label: t.action_edit, icon: Pencil, onClick: () => onEdit(row.original) },
+                                { label: t.action_assign, icon: LayoutGrid, onClick: () => handlers.onAction('assign', row.original) },
+                                { label: t.action_sort, icon: GripVertical, onClick: () => handlers.onAction('sort', row.original) },
+                                { label: t.action_duplicate, icon: Copy, onClick: () => handlers.onAction('duplicate', row.original) },
+                                { label: t.action_delete, icon: Trash2, onClick: () => handlers.onAction('delete', row.original), variant: 'destructive' },
                             ]}
                         />
                     </div>
@@ -184,3 +189,4 @@ export const getColumns = (handlers: {
             enableHiding: false,
         },
     ];
+};

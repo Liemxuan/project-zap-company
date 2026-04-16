@@ -1,13 +1,29 @@
 export interface Unit {
-    id: string;
-    serial_id: string;
+    id: string | number;
+    tenant_id: string;
+    code: string;
     name: string;
-    short_name: string;
+    symbol: string;
     precision: number;
-    status: 'Active' | 'Inactive';
+    status_id: number;
+    status_code?: string;
+    status_name?: string;
+    is_active: boolean;
     created_at?: string;
     updated_at?: string;
-  acronymn?: string;
+    acronymn?: string;
+    serial_id?: string | number;
+    translations?: any[];
+}
+
+export interface CreateUnitRequest {
+    name: string;
+    symbol: string;
+    precision: number;
+    translations: {
+        locale_id: number;
+        name: string;
+    }[];
 }
 
 export interface UnitFilters {

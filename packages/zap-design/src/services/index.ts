@@ -32,3 +32,5 @@ export * from './membership/membership.service';
 export * from './membership/membership.model';
 export * from './promotion/promotion.service';
 export * from './promotion/promotion.model';
+export * from './country/country.service';
+export * from './country/country.model';
