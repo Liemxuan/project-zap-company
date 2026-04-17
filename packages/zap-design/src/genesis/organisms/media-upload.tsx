@@ -143,8 +143,8 @@ export function SelectableCard({
 export interface MediaUploadProps {
     title?: string;
     description?: string;
-    mediaFiles: File[];
-    onMediaFilesChange: (files: File[]) => void;
+    mediaFiles: (File | string)[];
+    onMediaFilesChange: (files: (File | string)[]) => void;
     primaryMediaIndex: number | null;
     onPrimaryMediaIndexChange: (index: number | null) => void;
     uploadLabel?: string;
@@ -164,7 +164,7 @@ export function MediaUpload({
     supportText = "Support: PNG, JPG. Maximum file size: 2MB. Recommended: 1000 \u00d7 1000 or a 1:1 aspect ratio."
 }: MediaUploadProps) {
     const mediaPreviews = useMemo(() => {
-        return mediaFiles.map(file => URL.createObjectURL(file));
+        return mediaFiles.map(file => typeof file === 'string' ? file : URL.createObjectURL(file));
     }, [mediaFiles]);
 
     return (
@@ -177,7 +177,7 @@ export function MediaUpload({
 
             <div className="space-y-4">
                 <Dropzone
-                    value={mediaFiles}
+                    value={mediaFiles as any}
                     onChange={(newFiles) => {
                         onMediaFilesChange(newFiles);
                         if (primaryMediaIndex === null && newFiles.length > 0) onPrimaryMediaIndexChange(0);
@@ -204,9 +204,9 @@ export function MediaUpload({
                         <AnimatePresence mode="popLayout">
                             {mediaFiles.map((file, idx) => (
                                 <SelectableCard
-                                    key={`${file.name}-${idx}`}
+                                    key={`${typeof file === 'string' ? file : file.name}-${idx}`}
                                     image={mediaPreviews[idx]}
-                                    label={file.name}
+                                    label={typeof file === 'string' ? 'Image' : file.name}
                                     isSelected={primaryMediaIndex === idx}
                                     onSelect={() => onPrimaryMediaIndexChange(idx)}
                                     onRemove={() => {

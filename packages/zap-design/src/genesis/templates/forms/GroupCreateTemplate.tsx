@@ -16,6 +16,7 @@ import { Tabs } from '../../atoms/interactive/Tabs';
 import { MediaUpload, SelectableCard, ColorPicker } from '../../organisms/media-upload';
 import { AddItems } from '../../organisms/add-items';
 import { AddLocation } from '../../organisms/add-location';
+import { MultiSelectOption } from '../../atoms/interactive/multi-select';
 
 const LANGUAGES = [
     { id: 'en', label: 'English' },
@@ -196,8 +197,8 @@ export default function GroupCreateTemplate({ onCancel, onSave }: { onCancel?: (
                                         </Text>
                                     </div>
                                     <AddLocation
-                                        selectedLocations={selectedLocations}
-                                        onSelectionChange={setSelectedLocations}
+                                        selectedLocations={selectedLocations as any}
+                                        onSelectionChange={setSelectedLocations as any}
                                         trigger={<button className="text-primary font-bold hover:underline px-2 transition-all">Edit</button>}
                                     />
                                 </div>
@@ -233,8 +234,8 @@ export default function GroupCreateTemplate({ onCancel, onSave }: { onCancel?: (
                                     </Text>
                                 </div>
                                 <AddItems
-                                    selectedItems={selectedItems}
-                                    onSelectionChange={setSelectedItems}
+                                    selectedItems={selectedItems as any}
+                                    onSelectionChange={setSelectedItems as any}
                                     trigger={<button className="text-primary font-bold hover:underline px-2 transition-all">Edit</button>}
                                 />
                             </div>

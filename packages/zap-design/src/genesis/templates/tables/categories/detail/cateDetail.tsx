@@ -229,7 +229,7 @@ export default function CateDetail({ mode = 'create', item, onCancel, onSave, t,
                         title={t.section_media || "Media"}
                         description=""
                         mediaFiles={mediaFiles}
-                        onMediaFilesChange={(files) => !isViewing && setMediaFiles(files)}
+                        onMediaFilesChange={(files) => !isViewing && setMediaFiles(files as any)}
                         primaryMediaIndex={mediaPrimaryIndex}
                         onPrimaryMediaIndexChange={setMediaPrimaryIndex}
                     />
@@ -247,8 +247,8 @@ export default function CateDetail({ mode = 'create', item, onCancel, onSave, t,
                                 </div>
                                 {!isViewing && (
                                     <AddItems
-                                        selectedItems={selectedItems}
-                                        onSelectionChange={setSelectedItems}
+                                        selectedItems={selectedItems as any}
+                                        onSelectionChange={setSelectedItems as any}
                                         trigger={<button className="text-primary font-bold hover:underline px-2 transition-all">{t.action_edit || "Edit"}</button>}
                                     />
                                 )}

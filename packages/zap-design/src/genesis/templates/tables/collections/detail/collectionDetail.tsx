@@ -290,7 +290,7 @@ export default function CollectionDetail({ mode = 'create', item, onCancel, onSa
                     title={t.section_visual_identity || "Visual Identity"}
                     description={t.section_visual_identity_desc || "Upload images and banners representing this collection."}
                     mediaFiles={mediaFiles}
-                    onMediaFilesChange={setMediaFiles}
+                    onMediaFilesChange={(files) => setMediaFiles(files as any)}
                     primaryMediaIndex={mediaPrimaryIndex}
                     onPrimaryMediaIndexChange={setMediaPrimaryIndex}
                 />
@@ -300,7 +300,7 @@ export default function CollectionDetail({ mode = 'create', item, onCancel, onSa
                     title={t.section_banner || "Banner"}
                     description={t.section_banner_desc || "Select a banner image for collection promotion."}
                     mediaFiles={bannerFiles}
-                    onMediaFilesChange={setBannerFiles}
+                    onMediaFilesChange={(files) => setBannerFiles(files as any)}
                     primaryMediaIndex={bannerPrimaryIndex}
                     onPrimaryMediaIndexChange={setBannerPrimaryIndex}
                 />

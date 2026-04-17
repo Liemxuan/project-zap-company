@@ -139,10 +139,9 @@ export default function CategoryCreateTemplate({ onCancel, onSave }: { onCancel?
                 {/* ━━ 2. Media ━━ */}
                 <MediaUpload
                     title="Media"
-                    type="view"
-                    description=""
+                    description="Upload category images."
                     mediaFiles={mediaFiles}
-                    onMediaFilesChange={setMediaFiles}
+                    onMediaFilesChange={(files) => setMediaFiles(files as any)}
                     primaryMediaIndex={mediaPrimaryIndex}
                     onPrimaryMediaIndexChange={setMediaPrimaryIndex}
                 />

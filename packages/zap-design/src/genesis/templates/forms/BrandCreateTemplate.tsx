@@ -57,9 +57,9 @@ export default function BrandCreateTemplate({ onCancel }: { onCancel?: () => voi
     const [activeLang, setActiveLang] = useState<string>('en');
 
     const [langData, setLangData] = useState<Record<string, BrandFields>>({
-        en: { name: '', tradingName: '', description: '', website: '', email: '' },
-        vi: { name: '', tradingName: '', description: '', website: '', email: '' },
-        ja: { name: '', tradingName: '', description: '', website: '', email: '' },
+        en: { name: '', tradingName: '', description: '', website: '', email: '', address: '' },
+        vi: { name: '', tradingName: '', description: '', website: '', email: '', address: '' },
+        ja: { name: '', tradingName: '', description: '', website: '', email: '', address: '' },
     });
 
     const currentFields = langData[activeLang];
