@@ -32,5 +32,11 @@ export default {
     "field_precision": "Precision",
     "dialog_createUnit": "Create Unit",
     "dialog_editUnit": "Edit Unit",
-    "dialog_viewUnit": "View Unit"
+    "dialog_viewUnit": "View Unit",
+    "alert_create_success": "Unit created successfully",
+    "alert_update_success": "Unit updated successfully",
+    "alert_save_error": "Failed to save unit",
+    "alert_save_error_sub": "Please check your information and try again.",
+    "alert_error": "An error occurred",
+    "alert_error_sub": "Could not connect to the server."
 };

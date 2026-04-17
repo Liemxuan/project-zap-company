@@ -190,6 +190,7 @@ export default function PageUnitTemplate() {
                                 setOpen(false);
                                 refresh();
                             }}
+                            t={t}
                         />
                     </DialogBody>
                 </DialogContent>

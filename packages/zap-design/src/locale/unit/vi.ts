@@ -32,5 +32,11 @@ export default {
     "field_precision": "Độ chính xác",
     "dialog_createUnit": "Tạo Đơn vị",
     "dialog_editUnit": "Chỉnh sửa Đơn vị",
-    "dialog_viewUnit": "Xem Đơn vị"
+    "dialog_viewUnit": "Xem Đơn vị",
+    "alert_create_success": "Tạo mới thành công",
+    "alert_update_success": "Cập nhật thành công",
+    "alert_save_error": "Lưu đơn vị thất bại",
+    "alert_save_error_sub": "Vui lòng kiểm tra lại thông tin và thử lại.",
+    "alert_error": "Đã có lỗi xảy ra",
+    "alert_error_sub": "Không thể kết nối đến máy chủ."
 };

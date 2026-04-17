@@ -28,9 +28,10 @@ interface UnitDetailProps {
     item?: Unit | null;
     onCancel?: () => void;
     onSave?: () => void;
+    t: any;
 }
 
-export default function UnitDetail({ mode = 'create', item, onCancel, onSave }: UnitDetailProps) {
+export default function UnitDetail({ mode = 'create', item, onCancel, onSave, t }: UnitDetailProps) {
     const { theme } = useTheme();
     const lp = theme === 'metro' ? 'floating' : 'top';
     const [activeLang, setActiveLang] = useState<string>('en');
@@ -66,6 +67,7 @@ export default function UnitDetail({ mode = 'create', item, onCancel, onSave }: 
 
     const [isActive, setIsActive] = useState(item?.is_active ?? true);
     const [alert, setAlert] = useState<AlertState>({ type: null, message: null });
+    const [isSaving, setIsSaving] = useState(false);
 
     const updateField = (field: keyof UnitFields, value: string) => {
         if (activeLang === 'en') {
@@ -78,6 +80,10 @@ export default function UnitDetail({ mode = 'create', item, onCancel, onSave }: 
     const currentFields = activeLang === 'en' ? enFields : viFields;
 
     const handleSave = async () => {
+        if (isSaving) return;
+        setIsSaving(true);
+        setAlert({ type: null, message: null });
+
         const payload = {
             name: enFields.name,
             symbol: enFields.symbol || viFields.symbol,
@@ -105,7 +111,7 @@ export default function UnitDetail({ mode = 'create', item, onCancel, onSave }: 
             if (res?.success) {
                 setAlert({
                     type: 'success',
-                    message: mode === 'create' ? 'Unit created successfully' : 'Unit updated successfully',
+                    message: mode === 'create' ? t.alert_create_success : t.alert_update_success,
                 });
                 
                 // Auto-close after a short delay to show success
@@ -115,17 +121,19 @@ export default function UnitDetail({ mode = 'create', item, onCancel, onSave }: 
             } else {
                 setAlert({
                     type: 'destructive',
-                    message: 'Failed to save unit',
-                    subMessage: 'Please check your information and try again.'
+                    message: t.alert_save_error,
+                    subMessage: t.alert_save_error_sub
                 });
+                setIsSaving(false);
             }
         } catch (error) {
             console.error('Failed to save unit:', error);
             setAlert({
                 type: 'destructive',
-                message: 'An error occurred',
-                subMessage: 'Could not connect to the server.'
+                message: t.alert_error,
+                subMessage: t.alert_error_sub
             });
+            setIsSaving(false);
         }
     };
 
@@ -160,9 +168,9 @@ export default function UnitDetail({ mode = 'create', item, onCancel, onSave }: 
                             position={lp}
                             label="Name"
                             className="bg-white border-outline-variant h-14"
-                            value={currentFields.name}
+                             value={currentFields.name}
                             onChange={(e) => updateField('name', e.target.value)}
-                            disabled={isViewing}
+                            disabled={isViewing || isSaving}
                         />
 
                         <Input
@@ -174,7 +182,7 @@ export default function UnitDetail({ mode = 'create', item, onCancel, onSave }: 
                             className="bg-white border-outline-variant h-14"
                             value={currentFields.symbol}
                             onChange={(e) => updateField('symbol', e.target.value)}
-                            disabled={isViewing}
+                            disabled={isViewing || isSaving}
                         />
 
                         <SelectField
@@ -185,7 +193,7 @@ export default function UnitDetail({ mode = 'create', item, onCancel, onSave }: 
                             onValueChange={(val) => updateField('precision', val)}
                             bgColor="white"
                             triggerClassName="border border-outline-variant bg-white h-14"
-                            disabled={isViewing}
+                            disabled={isViewing || isSaving}
                         >
                             <SelectItem value="0">0</SelectItem>
                             <SelectItem value="1">1</SelectItem>
@@ -206,8 +214,9 @@ export default function UnitDetail({ mode = 'create', item, onCancel, onSave }: 
                         size="lg"
                         className="min-w-[120px] rounded-lg"
                         onClick={handleSave}
+                        disabled={isSaving}
                     >
-                        Save
+                        {isSaving ? 'Saving...' : 'Save'}
                     </Button>
                 </div>
             )}
