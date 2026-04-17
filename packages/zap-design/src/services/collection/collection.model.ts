@@ -16,6 +16,7 @@ export interface Collection {
   slug?: string;
   parent_id?: string | null;
   locations?: string[];
+  translations?: any[];
 }
 
 export interface CollectionFilters {

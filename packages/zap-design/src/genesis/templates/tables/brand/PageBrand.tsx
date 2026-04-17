@@ -9,6 +9,9 @@ import { ListTable } from '@/zap/organisms/list-table';
 import { Icon } from '@/genesis/atoms/icons/Icon';
 import { SideNav } from '@/genesis/molecules/navigation/SideNav';
 import { ThemeHeader } from '@/genesis/molecules/layout/ThemeHeader';
+import { Dialog, DialogBody, DialogContent, DialogHeader, DialogTitle } from '@/genesis/molecules/dialog';
+import { BrandDetail } from './detail/brandDetail';
+import { usePathname, useRouter } from 'next/navigation';
 
 // Hooks
 import { useBrands } from '@/hooks/brand/use-brands';
@@ -31,26 +34,58 @@ export default function PageBrandTemplate() {
     const activeTheme = appTheme === 'core' ? 'core' : 'metro';
     const searchParams = useSearchParams();
     const isFullscreen = searchParams.get('fullscreen') === 'true';
-    
+
+    const pathname = usePathname();
+    const router = useRouter();
+
+    const pageParam = searchParams.get('p');
+    const initialPage = pageParam ? parseInt(pageParam) : 1;
+
     const lang = searchParams.get('lang');
     const t = lang === 'vi' ? vi : en;
+
+    // --- State ---
+    const [selectedItem, setSelectedItem] = React.useState<any | null>(null);
+    const [isCreating, setIsCreating] = React.useState(false);
+    const [isEditing, setIsEditing] = React.useState(false);
+    const [isViewing, setIsViewing] = React.useState(false);
+    const [isFetchingDetail, setIsFetchingDetail] = React.useState(false);
 
     // --- Data Fetching ---
     const {
         brands,
         isLoading,
         pagination,
-        handlePageChange,
+        handlePageChange: baseHandlePageChange,
         handleSearch,
         handleFilterChange,
-        filters: apiFilters
+        filters: apiFilters,
+        refresh
     } = useBrands({
-        pageSize: 10
+        pageSize: 10,
+        initialPage
     });
 
+    const handlePageChange = (index: number) => {
+        baseHandlePageChange(index);
+
+        // Update URL param 'p'
+        const params = new URLSearchParams(searchParams.toString());
+        params.set('p', index.toString());
+        router.push(`${pathname}?${params.toString()}`);
+    };
+
     // --- Handlers ---
-    const handleAction = (type: string, item: any) => {
+    const handleAction = async (type: string, item: any) => {
         console.log(`Action: ${type} on item:`, item);
+        setSelectedItem(item);
+        if (type === 'edit') {
+            setIsEditing(true);
+        } else if (type === 'view') {
+            setIsViewing(true);
+        } else if (type === 'delete') {
+            // Add delete logic here if needed
+        }
     };
 
     const handleFilterToggle = (groupId: string, optionId: string) => {
@@ -66,6 +101,7 @@ export default function PageBrandTemplate() {
         id: brand.id,
         name: brand.name,
         media_url: brand.logo_url,
+        acronymn: brand.name.split(' ').map((n: string) => n[0]).join('').toUpperCase().slice(0, 2),
         is_active: brand.status_id === 1
     })), [brands]);
 
@@ -89,8 +125,52 @@ export default function PageBrandTemplate() {
             isFilterActive={inspectorState === 'expanded'}
             columns={columns as any}
             labels={mappedLabels}
+            onAddClick={() => setIsCreating(true)}
         />
     );
+
+    const renderBrandDialog = (
+        mode: 'create' | 'edit' | 'view',
+        open: boolean,
+        setOpen: (open: boolean) => void
+    ) => {
+        let title = '';
+        switch (mode) {
+            case "create":
+                title = t.dialog_createBrand || 'Create Brand';
+                break;
+            case "edit":
+                title = t.dialog_editBrand || 'Edit Brand';
+                break;
+            case "view":
+                title = t.dialog_viewBrand || 'View Brand';
+                break;
+        }
+        const itemToPass = mode === 'create' ? null : selectedItem;
+
+        return (
+            <Dialog open={open} onOpenChange={setOpen}>
+                <DialogContent className="max-w-none w-screen h-screen p-0 border-none rounded-none bg-white gap-0" closeButtonPosition="header-left">
+                    <DialogHeader className='relative py-4 border-b border-outline-variant' closeButtonPosition="header-left" closeButtonClassName='border-none bg-surface hover:bg-surface-variant/60'>
+                        <div className='max-w-lg mx-auto text-center'>
+                            <DialogTitle className='text-transform-primary text-on-surface py-4'>{title}</DialogTitle>
+                        </div>
+                    </DialogHeader>
+                    <DialogBody className="flex-1 flex flex-col p-0 overflow-hidden">
+                        <BrandDetail
+                            key={mode === 'create' ? 'create' : selectedItem?.id}
+                            mode={mode}
+                            item={itemToPass}
+                            onCancel={() => setOpen(false)}
+                            onSave={() => setOpen(false)}
+                            t={t}
+                            refresh={refresh}
+                        />
+                    </DialogBody>
+                </DialogContent>
+            </Dialog>
+        );
+    };
 
     const InspectorPanel = (
         <BrandInspector
@@ -157,6 +237,9 @@ export default function PageBrandTemplate() {
                     </div>
                 </div>
                 {InspectorPanel}
+                {renderBrandDialog('create', isCreating, setIsCreating)}
+                {renderBrandDialog('edit', isEditing, setIsEditing)}
+                {renderBrandDialog('view', isViewing, setIsViewing)}
             </div>
         );
     }
@@ -190,6 +273,9 @@ export default function PageBrandTemplate() {
                     {layoutContent}
                 </CanvasDesktop>
             </div>
+            {renderBrandDialog('create', isCreating, setIsCreating)}
+            {renderBrandDialog('edit', isEditing, setIsEditing)}
+            {renderBrandDialog('view', isViewing, setIsViewing)}
         </ComponentSandboxTemplate>
     );
 }

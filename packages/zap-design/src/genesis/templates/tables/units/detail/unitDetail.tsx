@@ -15,7 +15,7 @@ const LANGUAGES = [
 import { Switch } from '@/genesis/atoms/interactive/switch';
 import { Unit } from '@/services/unit/unit.model';
 import { unitService } from '@/services/unit/unit.service';
-import { ModalAlert, AlertState } from './modalAlert';
+import { ModalAlert, AlertState } from '@/genesis/templates/modal/modalAlert';
 
 interface UnitFields {
     name: string;
@@ -29,9 +29,10 @@ interface UnitDetailProps {
     onCancel?: () => void;
     onSave?: () => void;
     t: any;
+    refresh?: () => void;
 }
 
-export default function UnitDetail({ mode = 'create', item, onCancel, onSave, t }: UnitDetailProps) {
+export default function UnitDetail({ mode = 'create', item, onCancel, onSave, t, refresh }: UnitDetailProps) {
     const { theme } = useTheme();
     const lp = theme === 'metro' ? 'floating' : 'top';
     const [activeLang, setActiveLang] = useState<string>('en');
@@ -43,7 +44,7 @@ export default function UnitDetail({ mode = 'create', item, onCancel, onSave, t 
         if (item) {
             // Find Vietnamese translation (locale_id: 1)
             const trans = item.translations?.find((t: any) => t.locale_id === 1 || t.language_code === 'vi' || t.locale === 'vi');
-            
+
             fields.name = trans?.name || item.name || '';
             // Priority: item.symbol (frontend/updated API), item.abbreviation (legacy API), item.code (fallback)
             fields.symbol = item.symbol || (item as any).abbreviation || '';
@@ -57,7 +58,7 @@ export default function UnitDetail({ mode = 'create', item, onCancel, onSave, t 
         if (item) {
             // Find English translation (locale_id: 2)
             const trans = item.translations?.find((t: any) => t.locale_id === 2 || t.language_code === 'en' || t.locale === 'en');
-            
+
             fields.name = trans?.name || item.name || '';
             fields.symbol = item.symbol || (item as any).abbreviation || '';
             fields.precision = item.precision?.toString() || '0';
@@ -113,10 +114,11 @@ export default function UnitDetail({ mode = 'create', item, onCancel, onSave, t 
                     type: 'success',
                     message: mode === 'create' ? t.alert_create_success : t.alert_update_success,
                 });
-                
+
                 // Auto-close after a short delay to show success
                 setTimeout(() => {
                     if (onSave) onSave();
+                    if (refresh) refresh();
                 }, 800);
             } else {
                 setAlert({
@@ -140,9 +142,9 @@ export default function UnitDetail({ mode = 'create', item, onCancel, onSave, t 
     return (
         <div className="flex-1 flex flex-col bg-white overflow-hidden relative">
             <div className="absolute top-4 left-6 right-6 z-50">
-                <ModalAlert 
-                    alert={alert} 
-                    onClose={() => setAlert({ type: null, message: null })} 
+                <ModalAlert
+                    alert={alert}
+                    onClose={() => setAlert({ type: null, message: null })}
                 />
             </div>
             {/* Header Tabs Matching Image */}
@@ -158,17 +160,17 @@ export default function UnitDetail({ mode = 'create', item, onCancel, onSave, t 
             <div className="flex-1 overflow-auto p-10 space-y-12">
                 <section className="max-w-xl mx-auto space-y-8">
                     <div className="space-y-2">
-                        <Heading level={4} className="text-on-surface font-bold">General Information</Heading>
+                        <Heading level={4} className="text-on-surface font-bold">{t.section_general || "General Information"}</Heading>
                     </div>
                     <div className="space-y-6">
                         <Input
                             variant="outlined"
                             type="text"
-                            placeholder="Name"
+                            placeholder={t.field_name || "Name"}
                             position={lp}
-                            label="Name"
+                            label={t.field_name || "Name"}
                             className="bg-white border-outline-variant h-14"
-                             value={currentFields.name}
+                            value={currentFields.name}
                             onChange={(e) => updateField('name', e.target.value)}
                             disabled={isViewing || isSaving}
                         />
@@ -176,9 +178,9 @@ export default function UnitDetail({ mode = 'create', item, onCancel, onSave, t 
                         <Input
                             variant="outlined"
                             type="text"
-                            placeholder="Symbol"
+                            placeholder={t.field_shortName || "Symbol"}
                             position={lp}
-                            label="Symbol"
+                            label={t.field_shortName || "Symbol"}
                             className="bg-white border-outline-variant h-14"
                             value={currentFields.symbol}
                             onChange={(e) => updateField('symbol', e.target.value)}
@@ -186,9 +188,9 @@ export default function UnitDetail({ mode = 'create', item, onCancel, onSave, t 
                         />
 
                         <SelectField
-                            label="Precision"
+                            label={t.field_precision || "Precision"}
                             position={lp}
-                            placeholder="Precision"
+                            placeholder={t.field_precision || "Precision"}
                             value={currentFields.precision}
                             onValueChange={(val) => updateField('precision', val)}
                             bgColor="white"
@@ -208,7 +210,10 @@ export default function UnitDetail({ mode = 'create', item, onCancel, onSave, t 
 
             {/* Footer Actions */}
             {!isViewing && (
-                <div className="flex justify-end p-6 border-t border-outline-variant bg-white">
+                <div className="flex justify-end p-6 border-t border-outline-variant bg-white gap-3">
+                    <Button variant="ghost" onClick={onCancel} disabled={isSaving}>
+                        {t.btn_cancel || 'Cancel'}
+                    </Button>
                     <Button
                         variant="primary"
                         size="lg"
@@ -216,7 +221,7 @@ export default function UnitDetail({ mode = 'create', item, onCancel, onSave, t 
                         onClick={handleSave}
                         disabled={isSaving}
                     >
-                        {isSaving ? 'Saving...' : 'Save'}
+                        {isSaving ? (t.label_saving || 'Saving...') : (mode === 'create' ? (t.btn_create || 'Create') : (t.btn_save || 'Save'))}
                     </Button>
                 </div>
             )}

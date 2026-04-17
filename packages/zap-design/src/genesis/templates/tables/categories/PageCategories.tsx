@@ -1,23 +1,27 @@
-import React, { useMemo } from 'react';
-import { useSearchParams } from 'next/navigation';
+'use client';
+
+import React, { useMemo, useState } from 'react';
+import { useSearchParams, usePathname, useRouter } from 'next/navigation';
 import { useTheme } from '@/components/ThemeContext';
 import { ComponentSandboxTemplate } from '@/zap/layout/ComponentSandboxTemplate';
 import { CanvasDesktop } from '@/components/dev/CanvasDesktop';
-import { ListTable, Filters } from '@/zap/organisms/list-table';
-import { ColumnDef } from '@tanstack/react-table';
-import { Pill } from '@/genesis/atoms/status/pills';
-import { Pencil, Copy, Trash2 } from "lucide-react";
-import { QuickActionsDropdown } from '@/genesis/molecules/quick-actions-dropdown';
-import { DataFilter, FilterGroup } from '@/genesis/molecules/data-filter';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/genesis/molecules/accordion';
+import { ListTable } from '@/zap/organisms/list-table';
 import { Icon } from '@/genesis/atoms/icons/Icon';
 import { SideNav } from '@/genesis/molecules/navigation/SideNav';
 import { ThemeHeader } from '@/genesis/molecules/layout/ThemeHeader';
-import { Inspector } from '@/zap/layout/Inspector';
-import { Avatar } from '@/genesis/atoms/status/avatars';
-import { Text } from '@/genesis/atoms/typography/text';
-import { Checkbox } from '@/genesis/atoms/interactive/checkbox';
+import { Dialog, DialogBody, DialogContent, DialogHeader, DialogTitle } from '@/genesis/molecules/dialog';
+import CateDetail from './detail/cateDetail';
+
+// Components
+import { getColumns } from './components/columns';
+import { CategoryInspector } from './components/inspector';
+
+// Hooks
 import { useCategories } from '@/hooks/category/use-categories';
+
+// Locales
+import en from '@/locale/category/en';
+import vi from '@/locale/category/vi';
 
 /**
  * Category Template
@@ -28,201 +32,77 @@ export default function PageCategoryTemplate() {
     const activeTheme = appTheme === 'core' ? 'core' : 'metro';
     const searchParams = useSearchParams();
     const isFullscreen = searchParams.get('fullscreen') === 'true';
+    const pathname = usePathname();
+    const router = useRouter();
+
+    const lang = searchParams.get('lang');
+    const t = lang === 'vi' ? vi : en;
+
+    const pageParam = searchParams.get('p');
+    const initialPage = pageParam ? parseInt(pageParam) : 1;
+
+    // --- State ---
+    const [selectedItem, setSelectedItem] = useState<any | null>(null);
+    const [isCreating, setIsCreating] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
+    const [isViewing, setIsViewing] = useState(false);
 
     // --- Data Fetching ---
     const {
         categories,
         isLoading,
         pagination,
-        handlePageChange,
+        handlePageChange: baseHandlePageChange,
         handleSearch,
         handleFilterChange,
-        filters: apiFilters
+        filters: apiFilters,
+        refresh
     } = useCategories({
-        pageSize: 10
+        pageSize: 10,
+        initialPage
     });
 
+    const handlePageChange = (index: number) => {
+        baseHandlePageChange(index);
+        const params = new URLSearchParams(searchParams.toString());
+        params.set('p', index.toString());
+        router.push(`${pathname}?${params.toString()}`);
+    };
+
+    // --- Handlers ---
+    const handleAction = async (type: string, item: any) => {
+        setSelectedItem(item);
+        if (type === 'edit') {
+            setIsEditing(true);
+        } else if (type === 'view') {
+            setIsViewing(true);
+        } else if (type === 'delete') {
+            console.log('Delete category:', item.id);
+        }
+    };
+
     // --- Data Mapping ---
-    // Mapping API data to flexible ListItem interface
     const MAPPED_CATEGORIES = useMemo(() => categories.map(cat => ({
         ...cat,
-        // Explicitly ensuring core fields for ListTable if needed, 
-        // though ListTable now accepts generic [key: string]: any
         id: cat.id,
         name: cat.name,
         media_url: cat.media_url,
-        acronymn: cat.acronymn,
+        acronymn: cat.acronymn || (cat.name ? cat.name.split(' ').map((n: any) => n[0]).join('').toUpperCase().slice(0, 2) : 'CAT'),
         item_count: cat.item_count ?? 0,
         is_active: cat.is_active ?? true
     })), [categories]);
 
-    const columns = useMemo<ColumnDef<any>[]>(() => [
-        {
-            id: "select",
-            header: ({ table }) => (
-                <div className="w-12 px-7">
-                    <Checkbox
-                        checked={
-                            table.getIsAllPageRowsSelected() ||
-                            (table.getIsSomePageRowsSelected() && "indeterminate")
-                        }
-                        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-                        aria-label="Select all"
-                        className="translate-y-0.5"
-                    /></div>
-            ),
-            cell: ({ row }) => (
-                <div className="w-12 px-7">
-                    <Checkbox
-                        checked={row.getIsSelected()}
-                        onCheckedChange={(value) => row.toggleSelected(!!value)}
-                        aria-label="Select row"
-                        className="translate-y-0.5"
-                    /></div>
-            ),
-            enableSorting: false,
-            enableHiding: false,
-        }, {
-            id: "id",
-            header: ({ column }) => (
-                <div
-                    className="w-14 text-left tracking-widest cursor-pointer hover:text-foreground transition-colors"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                    <Text size='label-small' className="font-semibold text-foreground truncate uppercase">ID</Text>
-                </div>
-            ),
-            cell: ({ row }) => (
-                <div className="w-14 truncate font-dev text-transform-tertiary text-muted-foreground text-left py-2.5">
-                    {row.original.id}
-                </div>
-            ),
-            enableSorting: false,
-            enableHiding: false,
-        },
-        {
-            id: "Name",
-            accessorKey: "name",
-            header: ({ column }) => (
-                <div className="w-80 text-left tracking-widest cursor-pointer hover:text-foreground transition-colors"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-                    <Text size='label-small' className='font-semibold'>Name</Text>
-                </div>
-            ),
-            cell: ({ row }) => (
-                <div className="w-80 py-2.5 text-left">
-                    <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 flex items-center justify-center shrink-0 overflow-hidden">
-                            <Avatar
-                                src={row.original.media_url}
-                                initials={row.original.acronymn}
-                                size="sm"
-                                fallback={row.original.acronymn}
-                                className="w-full h-full object-cover border-[1px] border-border"
-                            />
-                        </div>
-                        <div className="flex flex-col min-w-0">
-                            <Text size='label-small' className='font-semibold text-foreground truncate'>
-                                {row.original.name}
-                            </Text>
-                        </div>
-                    </div>
-                </div>
-            ),
-            enableSorting: false,
-            enableHiding: false,
-        },
-        {
-            id: "Items",
-            accessorKey: "item_count",
-            header: ({ column }) => (
-                <div
-                    className="w-32 text-right pr-4 tracking-widest cursor-pointer hover:text-foreground transition-colors"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                    <Text size='label-small' className='font-semibold'>Items</Text>
-                </div>
-            ),
-            cell: ({ row }) => (
-                <div className="w-32 text-right py-2.5 pr-4">
-                    <span className="font-bold text-foreground">{row.original.item_count}</span>
-                </div>
-            ),
-        },
-        {
-            id: "Status",
-            accessorKey: "is_active",
-            header: ({ column }) => (
-                <div
-                    className="w-20 text-left tracking-widest cursor-pointer hover:text-foreground transition-colors"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                    <Text size='label-small' className='font-semibold'>Status</Text>
-                </div>
-            ),
-            cell: ({ row }) => (
-                <div className="w-20 text-left py-2.5">
-                    <Pill
-                        variant={row.original.is_active ? 'success' : 'warning'}
-                        className="whitespace-nowrap w-fit ml-auto"
-                    >
-                        <div className="w-1.5 h-1.5 rounded-full bg-current mr-1.5 opacity-80 shrink-0" />
-                        {row.original.is_active ? 'Active' : 'Inactive'}
-                    </Pill>
-                </div>
-            ),
-            enableSorting: false,
-            enableHiding: false,
-        },
-        {
-            id: "actions",
-            header: () => <div className="w-24 pr-7" />,
-            cell: ({ row }) => (
-                <div className="w-24 pr-7 py-2.5 text-right" onClick={e => e.stopPropagation()}>
-                    <div className="flex items-center justify-end">
-                        <QuickActionsDropdown
-                            actions={[
-                                { label: 'Edit', icon: Pencil, onClick: () => { } },
-                                { label: 'Duplicate', icon: Copy, onClick: () => { } },
-                                { label: 'Delete', icon: Trash2, onClick: () => { }, variant: 'destructive' },
-                            ]}
-                        />
-                    </div>
-                </div>
-            ),
-            enableSorting: false,
-            enableHiding: false,
-        },
-    ], []);
+    const columns = useMemo(() => getColumns({ t, handleAction }), [t]);
 
-    const labels = {
-        addItem: "Add Category",
-        itemName: "Category Name",
+    const labels = useMemo(() => ({
+        addItem: t.label_addCategory || "Add Category",
+        itemName: t.label_categoryName || "Category Name",
         itemCode: "Slug",
         category: "Parent",
-        type: "Status",
-        inventory: "Items",
+        type: t.label_status || "Status",
+        inventory: t.column_itemCount || "Items",
         price: "Internal ID"
-    };
-
-    // Filter logic needs to be adapted for API interaction
-    const filterGroups: FilterGroup[] = [
-        {
-            id: 'is_active',
-            title: 'Status',
-            options: [
-                { id: 'true', label: 'Active', selected: apiFilters.is_active === true },
-                { id: 'false', label: 'Inactive', selected: apiFilters.is_active === false },
-            ]
-        }
-    ];
-
-    const handleFilterToggle = (groupId: string, optionId: string) => {
-        if (groupId === 'is_active') {
-            const val = optionId === 'true';
-            handleFilterChange({ is_active: apiFilters.is_active === val ? null : val });
-        }
-    };
+    }), [t]);
 
     const tableComponent = (
         <ListTable
@@ -237,40 +117,64 @@ export default function PageCategoryTemplate() {
             isFilterActive={inspectorState === 'expanded'}
             columns={columns as any}
             labels={labels}
+            onAddClick={() => setIsCreating(true)}
         />
     );
 
-    const rightDrawerContent = inspectorState === 'expanded' && (
-        <div className="h-full border-l border-border bg-layer-panel hidden md:flex flex-col shrink-0 z-20 relative">
-            <Inspector title="CATEGORY LAB" width={320}>
-                <div className="flex flex-col gap-0 w-full px-4 pt-4">
-                    <Accordion
-                        type="single"
-                        collapsible
-                        variant="navigation"
-                        value={inspectorState === 'expanded' ? "item-1" : ""}
-                        onValueChange={(val: string) => { if (val !== "item-1") setInspectorState('collapsed'); }}
-                        className="bg-transparent w-full space-y-2"
-                    >
-                        <AccordionItem value="item-1" className="border-none m-0">
-                            <AccordionTrigger className="px-4 py-3 flex items-center gap-2 rounded-lg bg-surface-variant hover:bg-surface-variant/80 font-mono text-transform-tertiary text-[11px] tracking-widest text-on-surface font-bold transition-colors m-0 w-full min-w-0">
-                                <div className="flex items-center gap-2 overflow-hidden flex-1 text-left min-w-0">
-                                    <Icon name="filter_list" size={16} className="shrink-0 text-on-surface-variant opacity-70 group-data-[state=open]:text-primary transition-colors" />
-                                    <span className="truncate uppercase">FILTERS</span>
-                                </div>
-                            </AccordionTrigger>
-                            <AccordionContent className="bg-transparent px-4 pb-4 pt-2">
-                                <DataFilter
-                                    title=""
-                                    groups={filterGroups}
-                                    onToggle={handleFilterToggle}
-                                />
-                            </AccordionContent>
-                        </AccordionItem>
-                    </Accordion>
-                </div>
-            </Inspector>
-        </div>
+    const renderCategoryDialog = (
+        mode: 'create' | 'edit' | 'view',
+        open: boolean,
+        setOpen: (open: boolean) => void
+    ) => {
+        let title = '';
+        switch (mode) {
+            case "create":
+                title = t.dialog_createCategory || 'Create Category';
+                break;
+            case "edit":
+                title = t.dialog_editCategory || 'Edit Category';
+                break;
+            case "view":
+                title = t.dialog_viewCategory || 'Category Detail';
+                break;
+        }
+        const itemToPass = mode === 'create' ? null : selectedItem;
+
+        return (
+            <Dialog open={open} onOpenChange={setOpen}>
+                <DialogContent className="max-w-none w-screen h-screen p-0 border-none rounded-none bg-white gap-0" closeButtonPosition="header-left">
+                    <DialogHeader className='relative py-4 border-b border-outline-variant' closeButtonPosition="header-left" closeButtonClassName='border-none bg-surface hover:bg-surface-variant/60'>
+                        <div className='max-w-lg mx-auto text-center'>
+                            <DialogTitle className='text-transform-primary text-on-surface py-4'>{title}</DialogTitle>
+                        </div>
+                    </DialogHeader>
+                    <DialogBody className="flex-1 flex flex-col p-0 overflow-hidden">
+                        <CateDetail
+                            key={mode === 'create' ? 'create' : selectedItem?.id}
+                            mode={mode}
+                            item={itemToPass}
+                            onCancel={() => setOpen(false)}
+                            onSave={() => {
+                                setOpen(false);
+                                refresh();
+                            }}
+                            t={t}
+                            refresh={refresh}
+                        />
+                    </DialogBody>
+                </DialogContent>
+            </Dialog>
+        );
+    };
+
+    const InspectorPanel = (
+        <CategoryInspector
+            t={t}
+            inspectorState={inspectorState}
+            setInspectorState={setInspectorState}
+            apiFilters={apiFilters}
+            handleFilterChange={handleFilterChange}
+        />
     );
 
     const layoutContent = (
@@ -281,20 +185,20 @@ export default function PageCategoryTemplate() {
                     <div className="w-6 h-6 rounded bg-primary flex items-center justify-center text-primary-foreground">
                         <Icon name="bolt" size={14} />
                     </div>
-                    <span className="font-bold text-sm tracking-widest font-display text-on-surface uppercase">ZAP OS</span>
+                    <span className="font-bold text-sm tracking-widest font-display text-on-surface uppercase">{t.nav_zapOs || 'ZAP OS'}</span>
                 </div>
                 <div className="flex-1 py-4 px-3 space-y-1 overflow-y-auto uppercase font-mono text-[11px] tracking-widest text-on-surface opacity-70">
                     <div className="px-3 py-2.5 rounded-md hover:bg-surface-variant/40 flex items-center gap-3 transition-colors cursor-pointer">
                         <Icon name="dashboard" size={18} />
-                        <span>Overview</span>
+                        <span>{t.nav_overview || 'Overview'}</span>
                     </div>
                     <div className="px-3 py-2.5 rounded-md bg-primary/10 text-primary flex items-center gap-3 border border-primary/20 cursor-pointer">
                         <Icon name="category" size={18} />
-                        <span>Categories</span>
+                        <span>{t.nav_categories || 'Categories'}</span>
                     </div>
                     <div className="px-3 py-2.5 rounded-md hover:bg-surface-variant/40 flex items-center gap-3 transition-colors cursor-pointer">
                         <Icon name="inventory" size={18} />
-                        <span>Products</span>
+                        <span>{t.nav_catalog || 'Products'}</span>
                     </div>
                 </div>
             </div>
@@ -303,9 +207,9 @@ export default function PageCategoryTemplate() {
             <div className="flex-1 flex flex-col min-w-0 bg-layer-base/50 relative">
                 <div className="h-14 border-b border-border bg-layer-base flex items-center px-6 justify-between shrink-0 shadow-sm z-10 relative">
                     <div className="flex items-center text-xs gap-1 font-dev text-transform-tertiary">
-                        <span className="opacity-50 uppercase tracking-widest">Catalog</span>
+                        <span className="opacity-50 uppercase tracking-widest">{t.nav_catalog || 'Catalog'}</span>
                         <Icon name="chevron_right" size={14} className="opacity-30" />
-                        <span className="font-bold text-on-surface uppercase tracking-widest">Categories</span>
+                        <span className="font-bold text-on-surface uppercase tracking-widest">{t.nav_categories || 'Categories'}</span>
                     </div>
                 </div>
 
@@ -315,7 +219,7 @@ export default function PageCategoryTemplate() {
             </div>
 
             {/* Side Drawer Filter */}
-            {rightDrawerContent}
+            {InspectorPanel}
         </div>
     );
 
@@ -324,12 +228,15 @@ export default function PageCategoryTemplate() {
             <div className="flex h-screen w-full bg-layer-canvas overflow-hidden font-sans">
                 <SideNav />
                 <div className="flex-1 flex flex-col min-w-0 bg-transparent relative">
-                    <ThemeHeader title="Categories" badge={null} />
+                    <ThemeHeader title={t.nav_categories || "Categories"} badge={null} />
                     <div className="flex-1 overflow-auto pt-8 px-12 pb-16 flex flex-col relative z-0 bg-layer-base min-w-0">
                         {tableComponent}
                     </div>
                 </div>
-                {rightDrawerContent}
+                {InspectorPanel}
+                {renderCategoryDialog('create', isCreating, setIsCreating)}
+                {renderCategoryDialog('edit', isEditing, setIsEditing)}
+                {renderCategoryDialog('view', isViewing, setIsViewing)}
             </div>
         );
     }
@@ -344,42 +251,22 @@ export default function PageCategoryTemplate() {
             hideDataTerminal={true}
             fullWidth={true}
             inspectorControls={
-                <div className="flex flex-col gap-0 w-full min-w-[320px] px-4 pt-4">
-                    <Accordion
-                        type="single"
-                        collapsible
-                        variant="navigation"
-                        value={inspectorState === 'expanded' ? "item-1" : ""}
-                        onValueChange={(val: string) => { if (val !== "item-1") setInspectorState('collapsed'); }}
-                        className="bg-transparent w-full space-y-2"
-                    >
-                        <AccordionItem value="item-1" className="border-none m-0">
-                            <AccordionTrigger className="px-4 py-3 flex items-center gap-2 rounded-lg bg-surface-variant hover:bg-surface-variant/80 font-mono text-transform-tertiary text-[11px] tracking-widest text-on-surface font-bold transition-colors m-0 w-full min-w-0">
-                                <div className="flex items-center gap-2 overflow-hidden flex-1 text-left min-w-0">
-                                    <Icon name="filter_list" size={16} className="shrink-0 text-on-surface-variant opacity-70 group-data-[state=open]:text-primary transition-colors" />
-                                    <span className="truncate uppercase">FILTERS</span>
-                                </div>
-                            </AccordionTrigger>
-                            <AccordionContent className="bg-transparent px-4 pb-4 pt-2">
-                                <DataFilter
-                                    title=""
-                                    groups={filterGroups}
-                                    onToggle={handleFilterToggle}
-                                />
-                            </AccordionContent>
-                        </AccordionItem>
-                    </Accordion>
+                <div className="flex flex-col gap-0 w-full min-w-[320px]">
+                    {InspectorPanel}
                 </div>
             }
         >
             <div className="w-full flex-1 flex items-center justify-center pt-8">
                 <CanvasDesktop
-                    title="Categories // Collection"
+                    title={t.categories_collection_title || "Categories // Collection"}
                     fullScreenHref={`/design/${activeTheme}/organisms/categories?fullscreen=true`}
                 >
                     {layoutContent}
                 </CanvasDesktop>
             </div>
+            {renderCategoryDialog('create', isCreating, setIsCreating)}
+            {renderCategoryDialog('edit', isEditing, setIsEditing)}
+            {renderCategoryDialog('view', isViewing, setIsViewing)}
         </ComponentSandboxTemplate>
     );
 }

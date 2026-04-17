@@ -38,5 +38,9 @@ export default {
     "alert_save_error": "Lưu đơn vị thất bại",
     "alert_save_error_sub": "Vui lòng kiểm tra lại thông tin và thử lại.",
     "alert_error": "Đã có lỗi xảy ra",
-    "alert_error_sub": "Không thể kết nối đến máy chủ."
+    "alert_error_sub": "Không thể kết nối đến máy chủ.",
+    "section_general": "Thông tin chung",
+    "btn_save": "Lưu",
+    "btn_cancel": "Hủy",
+    "label_saving": "Đang lưu..."
 };

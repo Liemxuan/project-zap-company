@@ -20,8 +20,7 @@ export const MODIFIER_GROUP_LABELS = {
 };
 
 export const getModifierGroupColumns = (
-    onEdit: (item: ModifierGroup) => void,
-    onDelete: (item: ModifierGroup) => void
+    handleAction: (action: string, item: ModifierGroup) => void
 ): ColumnDef<ModifierGroup>[] => [
         {
             id: "select",
@@ -79,17 +78,20 @@ export const getModifierGroupColumns = (
                 </div>
             ),
             cell: ({ row }) => (
-                <div className="w-64 py-2.5 flex items-center gap-3">
+                <div 
+                    className="w-64 py-2.5 flex items-center gap-3 cursor-pointer group/cell"
+                    onClick={() => handleAction('view', row.original)}
+                >
                     <div className="w-10 h-10 flex items-center justify-center shrink-0 overflow-hidden">
                         <Avatar
                             src={""}
                             initials={row.original.acronymn}
                             size="sm"
-                            className="w-full h-full object-cover border-[1px] border-border"
+                            className="w-full h-full object-cover border-[1px] border-border group-hover/cell:border-primary transition-colors"
                         />
                     </div>
                     <div className="flex flex-col min-w-0">
-                        <Text size='label-small' className='font-semibold text-foreground truncate'>
+                        <Text size='label-small' className='font-semibold text-foreground truncate group-hover/cell:text-primary transition-colors'>
                             {row.original.name}
                         </Text>
                     </div>
@@ -191,9 +193,10 @@ export const getModifierGroupColumns = (
                     <div className="flex items-center justify-end">
                         <QuickActionsDropdown
                             actions={[
-                                { label: 'Edit', icon: Pencil, onClick: () => onEdit(row.original) },
-                                { label: 'Duplicate', icon: Copy, onClick: () => { } },
-                                { label: 'Delete', icon: Trash2, onClick: () => onDelete(row.original), variant: 'destructive' },
+                                { label: 'View', onClick: () => handleAction('view', row.original) },
+                                { label: 'Edit', icon: Pencil, onClick: () => handleAction('edit', row.original) },
+                                { label: 'Duplicate', icon: Copy, onClick: () => handleAction('duplicate', row.original) },
+                                { label: 'Delete', icon: Trash2, onClick: () => handleAction('delete', row.original), variant: 'destructive' },
                             ]}
                         />
                     </div>

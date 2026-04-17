@@ -1,0 +1,28 @@
+const vi = {
+    title: "Nhóm tùy chọn",
+    subtitle: "Danh mục",
+    section_basicInfo: "Thông tin cơ bản",
+    section_modifierItems: "Các món tùy chọn",
+    label_name: "Tên",
+    label_displayName: "Tên hiển thị",
+    label_description: "Mô tả",
+    label_displayType: "Loại hiển thị",
+    label_referenceId: "Mã tham chiếu",
+    label_referenceId2: "Mã tham chiếu 2",
+    label_channels: "Kênh bán hàng",
+    label_locations: "Chi nhánh",
+    label_addModifierItem: "Thêm món tùy chọn",
+    label_selectOneOnly: "Khách hàng chỉ có thể chọn một tùy chọn",
+    label_defaultModifierHint: "Tùy chọn đầu tiên sẽ được đặt làm mặc định",
+    label_editColor: "Chỉnh sửa màu",
+    label_saving: "Đang lưu...",
+    btn_cancel: "Hủy",
+    btn_save: "Lưu",
+    btn_create: "Tạo mới",
+    btn_edit: "Sửa",
+    btn_delete: "Xóa",
+    btn_view: "Xem",
+    action_addItems: "Thêm món",
+};
+
+export default vi;

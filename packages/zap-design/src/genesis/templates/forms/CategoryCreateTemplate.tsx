@@ -1,19 +1,15 @@
 'use client';
 
-import { useState, useMemo } from 'react';
-import { Pencil, Image as ImageIcon, Plus, X, Check, Pipette, Hash, Search, ChevronLeft, ChevronRight, CircleCheck, CircleAlert } from 'lucide-react';
+import { useState } from 'react';
 import { Button } from '../../atoms/interactive/button';
 import { Input } from '../../atoms/interactive/inputs';
 import { Textarea } from '../../atoms/interactive/textarea';
-import { SelectField, SelectItem } from '../../atoms/interactive/select';
 import { Heading } from '../../atoms/typography/headings';
 import { Text } from '../../atoms/typography/text';
 import { useTheme } from '../../../components/ThemeContext';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Popover, PopoverContent, PopoverTrigger } from '../../molecules/popover';
-import { Switch } from '../../atoms/interactive/switch';
+import { Checkbox } from '../../atoms/interactive/checkbox';
 import { Tabs } from '../../atoms/interactive/Tabs';
-import { MediaUpload, SelectableCard, ColorPicker } from '../../organisms/media-upload';
+import { MediaUpload, ColorPicker } from '../../organisms/media-upload';
 import { AddItems } from '../../organisms/add-items';
 import { AddLocation } from '../../organisms/add-location';
 
@@ -23,18 +19,6 @@ const LANGUAGES = [
     { id: 'ja', label: '日本語' },
 ] as const;
 
-
-interface CustomMultiSelectOption extends MultiSelectOption {
-    image?: string;
-}
-
-const MOCK_ITEMS: CustomMultiSelectOption[] = [
-    { label: 'Espresso', value: 'espresso', image: 'https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?q=80&w=200&auto=format&fit=crop' },
-    { label: 'Cappuccino', value: 'cappuccino', image: 'https://images.unsplash.com/photo-1534778101976-62847782c213?q=80&w=200&auto=format&fit=crop' },
-    { label: 'Latte', value: 'latte', image: 'https://images.unsplash.com/photo-1570968915860-54d5c301fa9f?q=80&w=200&auto=format&fit=crop' },
-    { label: 'Mocha', value: 'mocha', image: 'https://images.unsplash.com/photo-1596078841242-12f73df69716?q=80&w=200&auto=format&fit=crop' },
-    { label: 'Americano', value: 'americano', image: 'https://images.unsplash.com/photo-1551030173-122adabc44f9?q=80&w=200&auto=format&fit=crop' },
-];
 
 function SectionHeading({ title, description }: { title: string; description?: string }) {
     return (
@@ -47,7 +31,7 @@ function SectionHeading({ title, description }: { title: string; description?: s
     );
 }
 
-export default function GroupCreateTemplate({ onCancel, onSave }: { onCancel?: () => void; onSave?: (data: any) => void }) {
+export default function CategoryCreateTemplate({ onCancel, onSave }: { onCancel?: () => void; onSave?: (data: any) => void }) {
     const { theme } = useTheme();
     const lp = theme === 'metro' ? 'floating' : 'top';
     const [activeLang, setActiveLang] = useState<typeof LANGUAGES[number]['id']>('en');
@@ -59,23 +43,21 @@ export default function GroupCreateTemplate({ onCancel, onSave }: { onCancel?: (
     });
 
     const [selectedColor, setSelectedColor] = useState('var(--color-primary)');
-    const [mediaFiles, setMediaFiles] = useState<(File | string)[]>([]);
-    const [mediaPrimaryIndex, setMediaPrimaryIndex] = useState<number | null>(null);
+    const [mediaFiles, setMediaFiles] = useState<(File | string)[]>([
+        'https://images.unsplash.com/photo-1541167760496-1628856ab772?q=80&w=800&auto=format&fit=crop',
+    ]);
 
-    const [bannerFiles, setBannerFiles] = useState<(File | string)[]>([]);
-    const [bannerPrimaryIndex, setBannerPrimaryIndex] = useState<number | null>(null);
+    const [mediaPrimaryIndex, setMediaPrimaryIndex] = useState<number | null>(0);
 
     const [selectedLocations, setSelectedLocations] = useState([
         { id: 1, name: 'Main Street Coffee' },
         { id: 2, name: 'Airport Kiosk' }
     ]);
-
     const [selectedItems, setSelectedItems] = useState([
         { id: 1, name: 'Tra sen vang' },
         { id: 2, name: 'Tra thanh dao' },
         { id: 3, name: 'Tra thach dao' }
     ]);
-
     const currentFields = langData[activeLang];
     const setField = (field: string, value: string) =>
         setLangData((prev) => ({ ...prev, [activeLang]: { ...prev[activeLang], [field]: value } }));
@@ -94,11 +76,10 @@ export default function GroupCreateTemplate({ onCancel, onSave }: { onCancel?: (
 
             <div className="w-full max-w-5xl mx-auto space-y-12 py-10 px-6">
 
-                {/* ━━ 1. Basic Information ━━ */}
-
+                {/* ━━ 1. General Information ━━ */}
                 <section className="space-y-6">
                     <SectionHeading
-                        title="Basic Information"
+                        title="General Information"
                     />
                     <div className="space-y-4">
                         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 items-stretch">
@@ -106,7 +87,7 @@ export default function GroupCreateTemplate({ onCancel, onSave }: { onCancel?: (
                                 <Input
                                     variant="outlined"
                                     label="Name"
-                                    placeholder="e.g. Signature Coffee"
+                                    placeholder="e.g. Beverages"
                                     position={lp}
                                     value={currentFields.name}
                                     onChange={(e) => setField('name', e.target.value)}
@@ -114,19 +95,20 @@ export default function GroupCreateTemplate({ onCancel, onSave }: { onCancel?: (
 
                                 <Input
                                     variant="outlined"
-                                    label="Short Name"
-                                    placeholder="e.g. SIG-COFFEE"
+                                    label="Reference ID"
+                                    placeholder="e.g. BEV"
                                     position={lp}
                                     value={currentFields.shortName}
                                     onChange={(e) => setField('shortName', e.target.value)}
                                 />
-                                <Input
-                                    variant="outlined"
-                                    label="Printer Name"
-                                    placeholder="e.g. Kitchen Printer 1"
+                                <Textarea
+                                    label="Description"
+                                    placeholder="Provide a detailed description..."
                                     position={lp}
-                                    value={currentFields.printerName}
-                                    onChange={(e) => setField('printerName', e.target.value)}
+                                    rows={4}
+                                    value={currentFields.description}
+                                    onChange={(e) => setField('description', e.target.value)}
+                                    className="bg-white"
                                 />
 
                             </div>
@@ -151,35 +133,60 @@ export default function GroupCreateTemplate({ onCancel, onSave }: { onCancel?: (
                             </div>
                         </div>
 
-                        <Textarea
-                            label="Description"
-                            placeholder="Provide a detailed description..."
-                            position={lp}
-                            rows={4}
-                            value={currentFields.description}
-                            onChange={(e) => setField('description', e.target.value)}
-                            className="bg-white"
-                        />
                     </div>
                 </section>
 
+                {/* ━━ 2. Media ━━ */}
                 <MediaUpload
                     title="Media"
+                    type="view"
                     description=""
                     mediaFiles={mediaFiles}
-                    onMediaFilesChange={(files) => setMediaFiles(files)}
+                    onMediaFilesChange={setMediaFiles}
                     primaryMediaIndex={mediaPrimaryIndex}
                     onPrimaryMediaIndexChange={setMediaPrimaryIndex}
                 />
-                {/* ━━ 3. Banner ━━ */}
-                <MediaUpload
-                    title="Banner"
-                    description=""
-                    mediaFiles={bannerFiles}
-                    onMediaFilesChange={(files) => setBannerFiles(files)}
-                    primaryMediaIndex={bannerPrimaryIndex}
-                    onPrimaryMediaIndexChange={setBannerPrimaryIndex}
-                />
+
+                {/* ━━ 3. Items ━━ */}
+                <section className="space-y-6">
+                    <SectionHeading
+                        title="Items"
+                    />
+                    <div className="space-y-4">
+                        {selectedItems.length > 0 ?
+                            (
+                                <div className="flex items-center justify-between p-4 bg-white border border-outline-variant rounded-xl shadow-sm">
+                                    <div className="space-y-1">
+                                        <Text className="font-bold text-on-surface">{selectedItems.length} Items</Text>
+                                        <Text size="body-small" className="text-muted-foreground line-clamp-1">
+                                            {selectedItems.map(item => item.name).join(' \u2022 ')}
+                                        </Text>
+                                    </div>
+                                    <AddItems
+                                        selectedItems={selectedItems}
+                                        onSelectionChange={setSelectedItems}
+                                        trigger={<button className="text-primary font-bold hover:underline px-2 transition-all">Edit</button>}
+                                    />
+                                </div>
+                            )
+                            :
+                            (
+                                <AddItems
+                                    selectedItems={selectedItems}
+                                    onSelectionChange={setSelectedItems}
+                                    trigger={
+                                        <Button variant="primary" className="px-10 bg-black/40 hover:bg-black/60 text-white tracking-wide border-none rounded-xl h-11 w-full text-[15px] font-bold shadow-md">
+                                            Add Items
+                                        </Button>
+                                    }
+                                />
+                            )
+                        }
+
+
+                    </div>
+                </section>
+
                 {/* ━━ 4. Locations ━━ */}
                 <section className="space-y-6">
                     <SectionHeading
@@ -202,7 +209,8 @@ export default function GroupCreateTemplate({ onCancel, onSave }: { onCancel?: (
                                     />
                                 </div>
                             )
-                            : (
+                            :
+                            (
                                 <AddLocation
                                     selectedLocations={selectedLocations}
                                     onSelectionChange={setSelectedLocations}
@@ -214,44 +222,6 @@ export default function GroupCreateTemplate({ onCancel, onSave }: { onCancel?: (
                                 />
                             )
                         }
-
-
-                    </div>
-                </section>
-                {/* ━━ 5. Items ━━ */}
-                <section className="space-y-6">
-                    <SectionHeading
-                        title="Items"
-                    />
-                    <div className="space-y-4">
-                        {selectedItems.length > 0 ? (
-                            <div className="flex items-center justify-between p-4 bg-white border border-outline-variant rounded-xl shadow-sm">
-                                <div className="space-y-1">
-                                    <Text className="font-bold text-on-surface">{selectedItems.length} Items</Text>
-                                    <Text size="body-small" className="text-muted-foreground line-clamp-1">
-                                        {selectedItems.map(item => item.name).join(' \u2022 ')}
-                                    </Text>
-                                </div>
-                                <AddItems
-                                    selectedItems={selectedItems}
-                                    onSelectionChange={setSelectedItems}
-                                    trigger={<button className="text-primary font-bold hover:underline px-2 transition-all">Edit</button>}
-                                />
-                            </div>
-                        )
-                            : (
-                                <AddItems
-                                    selectedItems={selectedItems}
-                                    onSelectionChange={setSelectedItems}
-                                    trigger={
-                                        <Button variant="primary" className="px-10 bg-black/40 hover:bg-black/60 text-white tracking-wide border-none rounded-xl h-11 w-full text-[15px] font-bold shadow-md">
-                                            Add Items
-                                        </Button>
-                                    }
-                                />
-                            )
-                        }
-
 
 
                     </div>

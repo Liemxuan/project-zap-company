@@ -38,5 +38,9 @@ export default {
     "alert_save_error": "Failed to save unit",
     "alert_save_error_sub": "Please check your information and try again.",
     "alert_error": "An error occurred",
-    "alert_error_sub": "Could not connect to the server."
+    "alert_error_sub": "Could not connect to the server.",
+    "section_general": "General Information",
+    "btn_save": "Save",
+    "btn_cancel": "Cancel",
+    "label_saving": "Saving..."
 };

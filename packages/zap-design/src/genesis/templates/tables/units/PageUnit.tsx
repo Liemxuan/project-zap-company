@@ -186,11 +186,9 @@ export default function PageUnitTemplate() {
                             mode={mode}
                             item={itemToPass}
                             onCancel={() => setOpen(false)}
-                            onSave={() => {
-                                setOpen(false);
-                                refresh();
-                            }}
+                            onSave={() => setOpen(false)}
                             t={t}
+                            refresh={refresh}
                         />
                     </DialogBody>
                 </DialogContent>

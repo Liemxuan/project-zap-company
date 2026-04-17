@@ -1,7 +1,7 @@
 import React from 'react';
 import { ColumnDef } from '@tanstack/react-table';
 import { Pill } from '@/genesis/atoms/status/pills';
-import { Pencil, Copy, Trash2 } from "lucide-react";
+import { Pencil, Copy, Trash2, Eye } from "lucide-react";
 import { QuickActionsDropdown } from '@/genesis/molecules/quick-actions-dropdown';
 import { Avatar } from '@/genesis/atoms/status/avatars';
 import { Checkbox } from '@/genesis/atoms/interactive/checkbox';
@@ -72,7 +72,7 @@ export const getColumns = ({ onAction, t }: GetColumnsProps): ColumnDef<any>[] =
             </div>
         ),
         cell: ({ row }) => (
-            <div className="w-80 py-2.5 text-left" style={{ paddingLeft: row.depth > 0 ? `${row.depth * 1}rem` : undefined }}>
+            <div className="w-80 py-2.5 text-left cursor-pointer group" onClick={() => onAction('view', row.original)}>
                 <div className="flex items-center gap-4">
                     <div className="w-10 h-10 flex items-center justify-center shrink-0 overflow-hidden">
                         <Avatar
@@ -80,11 +80,11 @@ export const getColumns = ({ onAction, t }: GetColumnsProps): ColumnDef<any>[] =
                             initials={row.original.acronymn}
                             size="sm"
                             fallback={row.original.acronymn}
-                            className="w-full h-full object-cover border-[1px] border-border"
+                            className="w-full h-full object-cover border-[1px] border-border group-hover:border-primary transition-colors"
                         />
                     </div>
                     <div className="flex flex-col min-w-0">
-                        <Text size='label-small' className='font-semibold text-foreground truncate'>
+                        <Text size='label-small' className='font-semibold text-foreground truncate group-hover:text-primary transition-colors'>
                             {row.original.name}
                         </Text>
                     </div>
@@ -93,6 +93,25 @@ export const getColumns = ({ onAction, t }: GetColumnsProps): ColumnDef<any>[] =
         ),
         enableSorting: true,
         enableHiding: false,
+    },
+    {
+        id: "ReferenceId",
+        accessorKey: "reference_id",
+        header: ({ column }) => (
+            <div
+                className="w-48 text-left tracking-widest cursor-pointer hover:text-foreground transition-colors"
+                onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            >
+                <Text size='label-small' className='font-semibold'>{t.column_referenceId}</Text>
+            </div>
+        ),
+        cell: ({ row }) => (
+            <div className="w-48 py-2.5 text-left font-dev text-transform-tertiary text-muted-foreground truncate">
+                {row.original.reference_id || '---'}
+            </div>
+        ),
+        enableSorting: true,
+        enableHiding: true,
     },
     {
         id: "ApplyItem",
@@ -147,6 +166,7 @@ export const getColumns = ({ onAction, t }: GetColumnsProps): ColumnDef<any>[] =
             <div className="w-24 pr-4 py-2.5 text-right" onClick={e => e.stopPropagation()}>
                 <QuickActionsDropdown
                     actions={[
+                        { label: t.action_view, icon: Eye, onClick: () => onAction('view', row.original) },
                         { label: t.action_edit, icon: Pencil, onClick: () => onAction('edit', row.original) },
                         { label: t.action_duplicate, icon: Copy, onClick: () => onAction('duplicate', row.original) },
                         { label: t.action_delete, icon: Trash2, onClick: () => onAction('delete', row.original), variant: 'destructive' },

@@ -26,7 +26,7 @@ import {
     PaginationNext,
     PaginationPrevious,
 } from '@/genesis/molecules/pagination';
-import { Alert, AlertContent, AlertDescription, AlertIcon, AlertTitle } from '@/genesis/molecules/alert';
+import { AlertState, ModalAlert } from '@/genesis/templates/modal/modalAlert';
 import { Collection } from '@/services/collection/collection.model';
 
 const LANGUAGES = [
@@ -47,6 +47,8 @@ interface CollectionDetailProps {
     item?: Collection | null;
     onCancel?: () => void;
     onSave?: (data: any) => void;
+    t: any;
+    refresh?: () => void;
 }
 
 function SectionHeading({ title, description }: { title: string; description?: string }) {
@@ -60,16 +62,47 @@ function SectionHeading({ title, description }: { title: string; description?: s
     );
 }
 
-export default function CollectionDetail({ mode = 'create', item, onCancel, onSave }: CollectionDetailProps) {
+export default function CollectionDetail({ mode = 'create', item, onCancel, onSave, t, refresh }: CollectionDetailProps) {
     const { theme } = useTheme();
     const lp = theme === 'metro' ? 'floating' : 'top';
     const [activeLang, setActiveLang] = useState<typeof LANGUAGES[number]['id']>('en');
     const isViewing = mode === 'view';
 
-    const [langData, setLangData] = useState<Record<string, CollectionFields>>({
-        en: { name: item?.name || '', shortName: '', printerName: '', description: '' },
-        vi: { name: item?.name || '', shortName: '', printerName: '', description: '' },
-        ja: { name: '', shortName: '', printerName: '', description: '' },
+    const [langData, setLangData] = useState<Record<string, CollectionFields>>(() => {
+        const initial = {
+            en: { name: '', shortName: '', printerName: '', description: '' },
+            vi: { name: '', shortName: '', printerName: '', description: '' },
+            ja: { name: '', shortName: '', printerName: '', description: '' },
+        };
+        if (item) {
+            // Mapping translations
+            const findTrans = (locale: number | string) =>
+                item.translations?.find((tr: any) => tr.locale_id === locale || tr.language_code === locale || tr.locale === locale);
+
+            const en = findTrans(2) || findTrans('en');
+            const vi = findTrans(1) || findTrans('vi');
+            const ja = findTrans(3) || findTrans('ja');
+
+            initial.en = {
+                name: en?.name || item.name || '',
+                shortName: (en as any)?.short_name || '',
+                printerName: (en as any)?.printer_name || '',
+                description: en?.description || '',
+            };
+            initial.vi = {
+                name: vi?.name || item.name || '',
+                shortName: (vi as any)?.short_name || '',
+                printerName: (vi as any)?.printer_name || '',
+                description: vi?.description || '',
+            };
+            initial.ja = {
+                name: ja?.name || '',
+                shortName: (ja as any)?.short_name || '',
+                printerName: (ja as any)?.printer_name || '',
+                description: ja?.description || '',
+            };
+        }
+        return initial;
     });
 
     const [selectedColor, setSelectedColor] = useState('var(--color-primary)');
@@ -90,15 +123,71 @@ export default function CollectionDetail({ mode = 'create', item, onCancel, onSa
         { id: 3, name: 'Tra thach dao' }
     ]);
 
-    const [alert, setAlert] = useState<{ type: 'success' | 'destructive' | null; message: string | null; subMessage?: string }>({
+    const [alert, setAlert] = useState<AlertState>({
         type: null,
         message: null,
     });
+
+    const [isSaving, setIsSaving] = useState(false);
 
     const currentFields = langData[activeLang];
     const setField = (field: keyof CollectionFields, value: string) => {
         if (isViewing) return;
         setLangData((prev) => ({ ...prev, [activeLang]: { ...prev[activeLang], [field]: value } }));
+    };
+
+    const handleSave = async () => {
+        if (isSaving) return;
+        setIsSaving(true);
+        setAlert({ type: null, message: null });
+
+        try {
+            // Prepare translations payload
+            const translations = [
+                {
+                    locale_id: 2, // en
+                    name: langData.en.name,
+                    short_name: langData.en.shortName,
+                    printer_name: langData.en.printerName,
+                    description: langData.en.description
+                },
+                {
+                    locale_id: 1, // vi
+                    name: langData.vi.name,
+                    short_name: langData.vi.shortName,
+                    printer_name: langData.vi.printerName,
+                    description: langData.vi.description
+                },
+                {
+                    locale_id: 3, // ja
+                    name: langData.ja.name,
+                    short_name: langData.ja.shortName,
+                    printer_name: langData.ja.printerName,
+                    description: langData.ja.description
+                }
+            ];
+
+            const payload = {
+                ...item,
+                name: langData.en.name || langData.vi.name,
+                translations
+            };
+
+            // Simulating API call
+            await new Promise(resolve => setTimeout(resolve, 1500));
+
+            setAlert({ type: 'success', message: t.alert_save_success || 'Collection saved successfully!' });
+
+            setTimeout(() => {
+                if (onSave) onSave(payload);
+                if (refresh) refresh();
+            }, 1000);
+
+        } catch (error) {
+            setAlert({ type: 'destructive', message: t.alert_save_error || 'Failed to save collection. Please try again.' });
+        } finally {
+            setIsSaving(false);
+        }
     };
 
     return (
@@ -114,48 +203,26 @@ export default function CollectionDetail({ mode = 'create', item, onCancel, onSa
             </div>
 
             <div className="w-full max-w-5xl mx-auto space-y-12 py-10 px-6">
-                <AnimatePresence>
-                    {alert.type && (
-                        <motion.div
-                            initial={{ opacity: 0, y: -20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, scale: 0.95 }}
-                            transition={{ duration: 0.2 }}
-                        >
-                            <Alert
-                                variant={alert.type}
-                                close
-                                onClose={() => setAlert({ type: null, message: null })}
-                                className="shadow-sm border-outline-variant/50"
-                            >
-                                <AlertIcon>
-                                    {alert.type === 'success' ? <CircleCheck className="size-5" /> : <CircleAlert className="size-5" />}
-                                </AlertIcon>
-                                <AlertContent>
-                                    <AlertTitle>{alert.type === 'success' ? 'Success' : 'Error'}</AlertTitle>
-                                    <AlertDescription>{alert.message}</AlertDescription>
-                                    {alert.subMessage && (
-                                        <Text size="body-small" className="mt-1 opacity-70 italic">{alert.subMessage}</Text>
-                                    )}
-                                </AlertContent>
-                            </Alert>
-                        </motion.div>
-                    )}
-                </AnimatePresence>
-                
+                <div className="absolute top-4 left-6 right-6 z-50">
+                    <ModalAlert
+                        alert={alert}
+                        onClose={() => setAlert({ type: null, message: null })}
+                    />
+                </div>
+
                 {/* ━━ 1. Basic Information ━━ */}
                 <section className="space-y-6">
                     <SectionHeading
-                        title="Basic Information"
-                        description="Define the essential details for this collection."
+                        title={t.section_basic_info || "Basic Information"}
+                        description={t.section_basic_info_desc || "Define the essential details for this collection."}
                     />
                     <div className="space-y-4">
                         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 items-stretch">
                             <div className="lg:col-span-2 flex flex-col gap-4">
                                 <Input
                                     variant="outlined"
-                                    label="Name"
-                                    placeholder="e.g. Signature Coffee"
+                                    label={t.label_name || "Name"}
+                                    placeholder={t.placeholder_name || "e.g. Signature Coffee"}
                                     position={lp}
                                     value={currentFields.name}
                                     onChange={(e) => setField('name', e.target.value)}
@@ -164,8 +231,8 @@ export default function CollectionDetail({ mode = 'create', item, onCancel, onSa
 
                                 <Input
                                     variant="outlined"
-                                    label="Short Name"
-                                    placeholder="e.g. SIG-COFFEE"
+                                    label={t.label_shortName || "Short Name"}
+                                    placeholder={t.placeholder_shortName || "e.g. SIG-COFFEE"}
                                     position={lp}
                                     value={currentFields.shortName}
                                     onChange={(e) => setField('shortName', e.target.value)}
@@ -173,8 +240,8 @@ export default function CollectionDetail({ mode = 'create', item, onCancel, onSa
                                 />
                                 <Input
                                     variant="outlined"
-                                    label="Printer Name"
-                                    placeholder="e.g. Kitchen Printer 1"
+                                    label={t.label_printerName || "Printer Name"}
+                                    placeholder={t.placeholder_printerName || "e.g. Kitchen Printer 1"}
                                     position={lp}
                                     value={currentFields.printerName}
                                     onChange={(e) => setField('printerName', e.target.value)}
@@ -194,11 +261,11 @@ export default function CollectionDetail({ mode = 'create', item, onCancel, onSa
                                     value={selectedColor}
                                     onChange={setSelectedColor}
                                     triggerNode={
-                                        <button 
+                                        <button
                                             className="w-full border-t border-outline-variant bg-white py-3 text-center cursor-pointer hover:bg-slate-50 transition-colors"
                                             disabled={isViewing}
                                         >
-                                            <Text size="body-small" className="font-bold text-primary text-transform-primary">Edit Color</Text>
+                                            <Text size="body-small" className="font-bold text-primary text-transform-primary">{t.label_editColor || "Edit Color"}</Text>
                                         </button>
                                     }
                                 />
@@ -206,8 +273,8 @@ export default function CollectionDetail({ mode = 'create', item, onCancel, onSa
                         </div>
 
                         <Textarea
-                            label="Description"
-                            placeholder="Provide a detailed description of this collection..."
+                            label={t.label_description || "Description"}
+                            placeholder={t.placeholder_description || "Provide a detailed description of this collection..."}
                             position={lp}
                             rows={4}
                             value={currentFields.description}
@@ -220,18 +287,18 @@ export default function CollectionDetail({ mode = 'create', item, onCancel, onSa
 
                 {/* ━━ 2. Visual Identity ━━ */}
                 <MediaUpload
-                    title="Visual Identity"
-                    description="Upload images and banners representing this collection."
+                    title={t.section_visual_identity || "Visual Identity"}
+                    description={t.section_visual_identity_desc || "Upload images and banners representing this collection."}
                     mediaFiles={mediaFiles}
                     onMediaFilesChange={setMediaFiles}
                     primaryMediaIndex={mediaPrimaryIndex}
                     onPrimaryMediaIndexChange={setMediaPrimaryIndex}
                 />
-                
+
                 {/* ━━ 3. Banner ━━ */}
                 <MediaUpload
-                    title="Banner"
-                    description="Select a banner image for collection promotion."
+                    title={t.section_banner || "Banner"}
+                    description={t.section_banner_desc || "Select a banner image for collection promotion."}
                     mediaFiles={bannerFiles}
                     onMediaFilesChange={setBannerFiles}
                     primaryMediaIndex={bannerPrimaryIndex}
@@ -241,8 +308,8 @@ export default function CollectionDetail({ mode = 'create', item, onCancel, onSa
                 {/* ━━ 4. Locations ━━ */}
                 <section className="space-y-6">
                     <SectionHeading
-                        title="Locations"
-                        description="Select locations where this collection will be available."
+                        title={t.section_locations || "Locations"}
+                        description={t.section_locations_desc || "Select locations where this collection will be available."}
                     />
                     <div className="space-y-4">
                         {selectedLocations.length > 0 && (
@@ -255,11 +322,11 @@ export default function CollectionDetail({ mode = 'create', item, onCancel, onSa
                                 </div>
                                 <Dialog>
                                     <DialogTrigger asChild>
-                                        <button className="text-primary font-bold hover:underline px-2 transition-all" disabled={isViewing}>Edit</button>
+                                        <button className="text-primary font-bold hover:underline px-2 transition-all" disabled={isViewing}>{t.action_edit || "Edit"}</button>
                                     </DialogTrigger>
                                     <DialogContent className="max-w-2xl px-0 pb-0 gap-0 overflow-hidden bg-background" closeButtonPosition="left">
                                         <DialogHeader className="px-6 py-4 border-b border-outline-variant flex-row items-center justify-center relative">
-                                            <DialogTitle className="text-xl">Add Location</DialogTitle>
+                                            <DialogTitle className="text-xl">{t.dialog_addLocation || "Add Location"}</DialogTitle>
                                         </DialogHeader>
                                         <div className="border-b border-outline-variant bg-layer-04 flex justify-center gap-6 px-6 pt-3">
                                             <button className="pb-3 text-sm font-medium text-muted-foreground hover:text-foreground">Locations</button>
@@ -319,61 +386,14 @@ export default function CollectionDetail({ mode = 'create', item, onCancel, onSa
                                 </Dialog>
                             </div>
                         )}
-
-                        <Dialog>
-                            <DialogTrigger asChild>
-                                <div className={`w-full h-14 bg-surface-container rounded-xl flex items-center justify-center cursor-pointer hover:bg-surface-container-high transition-colors ${isViewing ? 'pointer-events-none opacity-50' : ''}`}>
-                                    <Text className="font-bold text-primary">Add Locations</Text>
-                                </div>
-                            </DialogTrigger>
-                            <DialogContent className="max-w-2xl px-0 pb-0 gap-0 overflow-hidden bg-background" closeButtonPosition="left">
-                                <DialogHeader className="px-6 py-4 border-b border-outline-variant flex-row items-center justify-center relative">
-                                    <DialogTitle className="text-xl">Add Location</DialogTitle>
-                                </DialogHeader>
-                                <DialogBody className="p-6 space-y-6 max-h-[60vh] overflow-y-auto bg-[#fafafa]">
-                                    <div className="relative shadow-sm group">
-                                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-muted-foreground" />
-                                        <input className="w-full pl-11 pr-4 h-12 rounded-xl border border-outline-variant bg-white text-[15px] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-body text-on-surface" placeholder="Search Location Group Name, ID" />
-                                    </div>
-                                    <div className="rounded-xl overflow-hidden bg-white border border-outline-variant shadow-sm">
-                                        <div className="flex items-center gap-5 bg-[#f6f6f6] px-5 py-4 border-b border-outline-variant">
-                                            <Checkbox id="select-all-2" />
-                                            <div className="flex-1 grid grid-cols-[60px_1fr] gap-4 text-[13px] font-bold text-on-surface font-display text-muted-foreground text-transform-primary">
-                                                <span>ID</span>
-                                                <span>Name</span>
-                                            </div>
-                                            <div className="text-[13px] font-bold text-muted-foreground font-display text-right pr-2">0 Selected</div>
-                                        </div>
-                                        <div className="divide-y divide-outline-variant">
-                                            {[1, 2, 3, 4, 5, 6].map((id) => (
-                                                <label key={id} className="flex items-center gap-5 px-5 py-[14px] hover:bg-slate-50 transition-colors cursor-pointer group-row">
-                                                    <Checkbox id={`group-2-${id}`} />
-                                                    <div className="flex-1 grid grid-cols-[60px_1fr] gap-4 items-center">
-                                                        <span className="text-[15px] font-bold text-on-surface font-display">{id}</span>
-                                                        <div className="text-[15px] font-bold text-on-surface font-display leading-tight">Group {id}</div>
-                                                    </div>
-                                                </label>
-                                            ))}
-                                        </div>
-                                    </div>
-                                </DialogBody>
-                                <DialogFooter className="px-6 py-4 border-t border-outline-variant bg-white">
-                                    <div className="flex w-full justify-end">
-                                        <DialogClose asChild>
-                                            <Button variant="primary" className="px-10 bg-primary hover:bg-primary/90 text-on-primary tracking-wide border-none rounded-xl h-11 w-full sm:w-auto text-[15px] font-bold shadow-md">Done</Button>
-                                        </DialogClose>
-                                    </div>
-                                </DialogFooter>
-                            </DialogContent>
-                        </Dialog>
                     </div>
                 </section>
 
                 {/* ━━ 5. Items ━━ */}
                 <section className="space-y-6">
                     <SectionHeading
-                        title="Items"
-                        description="Assign products to this collection and manage their visibility."
+                        title={t.section_items || "Items"}
+                        description={t.section_items_desc || "Assign products to this collection and manage their visibility."}
                     />
                     <div className="space-y-4">
                         {selectedItems.length > 0 && (
@@ -386,11 +406,11 @@ export default function CollectionDetail({ mode = 'create', item, onCancel, onSa
                                 </div>
                                 <Dialog>
                                     <DialogTrigger asChild>
-                                        <button className="text-primary font-bold hover:underline px-2 transition-all" disabled={isViewing}>Edit</button>
+                                        <button className="text-primary font-bold hover:underline px-2 transition-all" disabled={isViewing}>{t.action_edit || "Edit"}</button>
                                     </DialogTrigger>
                                     <DialogContent className="max-w-2xl px-0 pb-0 gap-0 overflow-hidden bg-background" closeButtonPosition="left">
                                         <DialogHeader className="px-6 py-4 border-b border-outline-variant flex-row items-center justify-center relative">
-                                            <DialogTitle className="text-xl">Add Item</DialogTitle>
+                                            <DialogTitle className="text-xl">{t.dialog_addItem || "Add Item"}</DialogTitle>
                                         </DialogHeader>
                                         <DialogBody className="p-6 space-y-6 max-h-[60vh] overflow-y-auto bg-[#fafafa]">
                                             <div className="relative shadow-sm group">
@@ -448,56 +468,26 @@ export default function CollectionDetail({ mode = 'create', item, onCancel, onSa
                                 </Dialog>
                             </div>
                         )}
-
-                        <Dialog>
-                            <DialogTrigger asChild>
-                                <div className={`w-full h-14 bg-surface-container rounded-xl flex items-center justify-center cursor-pointer hover:bg-surface-container-high transition-colors ${isViewing ? 'pointer-events-none opacity-50' : ''}`}>
-                                    <Text className="font-bold text-primary">Add Items</Text>
-                                </div>
-                            </DialogTrigger>
-                            <DialogContent className="max-w-2xl px-0 pb-0 gap-0 overflow-hidden bg-background" closeButtonPosition="left">
-                                <DialogHeader className="px-6 py-4 border-b border-outline-variant flex-row items-center justify-center relative">
-                                    <DialogTitle className="text-xl">Add Item</DialogTitle>
-                                </DialogHeader>
-                                <DialogBody className="p-6 space-y-6 max-h-[60vh] overflow-y-auto bg-[#fafafa]">
-                                    <div className="relative shadow-sm group">
-                                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-muted-foreground" />
-                                        <input className="w-full pl-11 pr-4 h-12 rounded-xl border border-outline-variant bg-white text-[15px] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-body text-on-surface" placeholder="Search Item Name, ID" />
-                                    </div>
-                                    <div className="rounded-xl overflow-hidden bg-white border border-outline-variant shadow-sm">
-                                        <div className="flex items-center gap-5 bg-[#f6f6f6] px-5 py-4 border-b border-outline-variant">
-                                            <Checkbox id="select-all-items-2" />
-                                            <div className="flex-1 grid grid-cols-[60px_1fr] gap-4 text-[13px] font-bold text-on-surface font-display text-muted-foreground text-transform-primary">
-                                                <span>ID</span>
-                                                <span>Name</span>
-                                            </div>
-                                            <div className="text-[13px] font-bold text-muted-foreground font-display text-right pr-2">0 Selected</div>
-                                        </div>
-                                        <div className="divide-y divide-outline-variant">
-                                            {[1, 2, 3, 4, 5, 6].map((id) => (
-                                                <label key={id} className="flex items-center gap-5 px-5 py-[14px] hover:bg-slate-50 transition-colors cursor-pointer group-row">
-                                                    <Checkbox id={`item-2-${id}`} />
-                                                    <div className="flex-1 grid grid-cols-[60px_1fr] gap-4 items-center">
-                                                        <span className="text-[15px] font-bold text-on-surface font-display">{id}</span>
-                                                        <div className="text-[15px] font-bold text-on-surface font-display leading-tight">Product {id}</div>
-                                                    </div>
-                                                </label>
-                                            ))}
-                                        </div>
-                                    </div>
-                                </DialogBody>
-                                <DialogFooter className="px-6 py-4 border-t border-outline-variant bg-white">
-                                    <div className="flex w-full justify-end">
-                                        <DialogClose asChild>
-                                            <Button variant="primary" className="px-10 bg-primary hover:bg-primary/90 text-on-primary tracking-wide border-none rounded-xl h-11 w-full sm:w-auto text-[15px] font-bold shadow-md">Done</Button>
-                                        </DialogClose>
-                                    </div>
-                                </DialogFooter>
-                            </DialogContent>
-                        </Dialog>
                     </div>
                 </section>
             </div>
+
+            {/* Footer Actions */}
+            {!isViewing && (
+                <div className="flex justify-end p-6 border-t border-outline-variant bg-white gap-3 sticky bottom-0 z-50 shadow-[0_-4px_12px_rgba(0,0,0,0.05)]">
+                    <Button variant="ghost" onClick={onCancel} disabled={isSaving}>
+                        {t.btn_cancel || 'Cancel'}
+                    </Button>
+                    <Button
+                        variant="primary"
+                        className="min-w-[120px] rounded-lg"
+                        onClick={handleSave}
+                        disabled={isSaving}
+                    >
+                        {isSaving ? (t.label_saving || 'Saving...') : (mode === 'create' ? (t.btn_create || 'Create') : (t.btn_save || 'Save'))}
+                    </Button>
+                </div>
+            )}
         </div>
     );
 }

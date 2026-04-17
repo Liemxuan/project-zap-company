@@ -21,6 +21,7 @@ export interface ModifierGroup {
   total_item?: number;
   locations?: string[];
   acronymn?: string;
+  [key: string]: any;
 }
 
 export interface ModifierGroupFilters {

@@ -5,8 +5,9 @@ import { Icon } from '../icons/Icon';
 import { Eye, EyeOff } from 'lucide-react';
 import { useFormContext } from 'react-hook-form';
 import { cn } from '../../../lib/utils';
+import { Text } from '../typography/text';
 
-export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'prefix' | 'suffix'> {
     variant?: 'outlined' | 'filled';
     leadingIcon?: string;
     trailingIcon?: string;
@@ -14,10 +15,12 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
     errorMessage?: string;
     label?: string;
     position?: 'top' | 'floating' | 'left' | 'right';
+    prefix?: React.ReactNode;
+    suffix?: React.ReactNode;
 }
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
-    ({ className = '', variant = 'filled', leadingIcon, trailingIcon, isError: propIsError, errorMessage: propErrorMessage, disabled, name, type, label, position, ...props }, ref) => {
+    ({ className = '', variant = 'filled', leadingIcon, trailingIcon, isError: propIsError, errorMessage: propErrorMessage, disabled, name, type, label, position, prefix, suffix, ...props }, ref) => {
 
         const formContext = useFormContext();
         const fieldError = name && formContext?.formState?.errors ? formContext.formState.errors[name] : null;
@@ -42,13 +45,14 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         const [passwordVisible, setPasswordVisible] = useState(false);
         const isPassword = type === 'password';
         const currentType = isPassword ? (passwordVisible ? 'text' : 'password') : type;
+        const currentLeadingIcon = leadingIcon || (isPassword ? 'lock' : undefined);
         const isFloating = position === 'floating';
 
         const hasTrailingSpace = trailingIcon || isPassword || isError;
         const paddingClasses = cn(
             'px-3',
-            leadingIcon ? 'pl-10' : '',
-            hasTrailingSpace ? 'pr-10' : '',
+            (currentLeadingIcon || prefix) ? 'pl-10' : '',
+            (hasTrailingSpace || suffix) ? 'pr-10' : '',
             isFloating && label ? 'pt-5 pb-1' : ''
         );
 
@@ -90,13 +94,18 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         } as React.CSSProperties;
 
         /* ── Core input element (with icon wrappers if needed) ── */
-        const needsWrapper = leadingIcon || trailingIcon || isError || isPassword || isFloating;
+        const needsWrapper = leadingIcon || trailingIcon || isError || isPassword || isFloating || prefix || suffix;
 
         const inputEl = needsWrapper ? (
             <div className={cn('relative', className.includes('w-full') || !className ? 'w-full' : '')}>
-                {leadingIcon && (
+                {currentLeadingIcon && (
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">
-                        <Icon name={leadingIcon} size={20} />
+                        <Icon name={currentLeadingIcon} size={20} />
+                    </div>
+                )}
+                {prefix && !currentLeadingIcon && (
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">
+                        {prefix}
                     </div>
                 )}
                 <input
@@ -111,9 +120,9 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
                 />
                 {/* Floating label */}
                 {isFloating && label && (
-                    <label className={cn(
+                    <Text size='label-small' className={cn(
                         "absolute left-3 text-muted-foreground pointer-events-none select-none transition-all duration-200",
-                        leadingIcon ? 'left-10' : 'left-3',
+                        currentLeadingIcon ? 'left-10' : 'left-3',
                         // Floated state: focus or not placeholder-shown
                         "top-1 text-[10px] font-semibold tracking-wide",
                         // Resting state (placeholder shown = no value, no focus)
@@ -124,12 +133,17 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
                         disabled && "opacity-50"
                     )}>
                         {label}
-                    </label>
+                    </Text>
                 )}
-                {(trailingIcon || isPassword || isError) && (
+                {(trailingIcon || isPassword || isError || suffix) && (
                     <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
                         {isError && !isPassword && <Icon name="warning" size={20} className="text-error" />}
                         {!isError && trailingIcon && !isPassword && <Icon name={trailingIcon} size={20} className="text-muted-foreground" />}
+                        {suffix && !isError && !trailingIcon && !isPassword && (
+                            <div className="text-muted-foreground flex items-center justify-center">
+                                {suffix}
+                            </div>
+                        )}
                         {isPassword && (
                             <button
                                 type="button"
@@ -165,13 +179,13 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
 
         /* ── Label element (top / left / right) ── */
         const labelEl = label && position !== 'floating' ? (
-            <label className={cn(
-                "font-display text-transform-primary text-sm font-medium text-foreground shrink-0",
+            <Text size="label-medium" className={cn(
+                "font-display text-transform-primary text-sm font-semibold text-foreground shrink-0",
                 disabled && "opacity-50",
                 position === 'left' || position === 'right' ? 'leading-none' : ''
             )}>
                 {label}
-            </label>
+            </Text>
         ) : null;
 
         /* ── Layout by position ── */

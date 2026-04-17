@@ -19,6 +19,7 @@ export interface MultiSelectProps {
   placeholder?: string
   className?: string
   allowCustom?: boolean
+  disabled?: boolean
 }
 
 export function MultiSelect({
@@ -28,6 +29,7 @@ export function MultiSelect({
   placeholder = "Select options...",
   className,
   allowCustom = false,
+  disabled = false,
 }: MultiSelectProps) {
   const [open, setOpen] = React.useState(false)
   const [inputValue, setInputValue] = React.useState("")
@@ -78,6 +80,7 @@ export function MultiSelect({
           className={cn(
             "flex min-h-[var(--input-height,36px)] w-full items-center justify-between rounded-[var(--input-border-radius,8px)] border-[length:var(--input-border-width,1px)] border-[color:var(--input-border-filled,transparent)] bg-[color:var(--input-bg-filled,var(--color-surface-container-high))] px-3 py-1 shadow-sm ring-offset-[color:var(--input-focus-ring-offset,transparent)] cursor-text font-body text-transform-secondary text-sm font-normal text-transform-primary transition-all",
             open ? "ring-[length:var(--input-focus-width,2px)] ring-[color:var(--input-focus-ring,var(--color-primary-fixed-dim))] border-[color:var(--input-focus-border,var(--color-primary))]" : "",
+            disabled ? "opacity-50 cursor-not-allowed pointer-events-none" : "",
             className
           )}
           onClick={(e) => {
@@ -94,17 +97,19 @@ export function MultiSelect({
                 className="flex items-center gap-1 bg-primary/10 text-primary hover:bg-primary/20 transition-colors border-transparent"
               >
                 {getLabel(item)}
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    handleUnselect(item)
-                  }}
-                  className="rounded-full outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-                >
-                  <X className="h-3 w-3 text-primary hover:text-primary/80" />
-                  <span className="sr-only">Remove {getLabel(item)}</span>
-                </button>
+                {!disabled && (
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      handleUnselect(item)
+                    }}
+                    className="rounded-full outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                  >
+                    <X className="h-3 w-3 text-primary hover:text-primary/80" />
+                    <span className="sr-only">Remove {getLabel(item)}</span>
+                  </button>
+                )}
               </Badge>
             ))}
             <input
@@ -112,6 +117,7 @@ export function MultiSelect({
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               onKeyDown={handleKeyDown}
+              disabled={disabled}
               className="flex-1 bg-transparent py-1 px-1 outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 min-w-[120px] font-body text-transform-secondary text-sm font-normal text-transform-primary"
               placeholder={selected.length === 0 ? placeholder : undefined}
             />

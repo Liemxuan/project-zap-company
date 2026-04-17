@@ -55,7 +55,8 @@ export default function PageCollectionTemplate() {
         handlePageChange,
         handleSearch,
         handleFilterChange,
-        filters: apiFilters
+        filters: apiFilters,
+        refresh
     } = useCollections({
         pageSize: 10
     });
@@ -169,16 +170,6 @@ export default function PageCollectionTemplate() {
                         <div className='max-w-lg mx-auto text-center'>
                             <DialogTitle className='text-transform-primary text-on-surface py-4'>{title}</DialogTitle>
                         </div>
-                        <div className='absolute right-4 top-1/2 -translate-y-1/2 flex gap-2'>
-                            <Button variant="destructive" size="md" className="text-transform-primary px-5 rounded-lg shadow-sm border" onClick={() => setOpen(false)}>
-                                {t.btn_cancel}
-                            </Button>
-                            {mode !== 'view' && (
-                                <Button variant="primary" size="md" className="text-transform-primary px-5 rounded-lg shadow-sm" onClick={() => setOpen(false)}>
-                                    {mode === 'create' ? t.btn_create : t.btn_save}
-                                </Button>
-                            )}
-                        </div>
                     </DialogHeader>
                     <DialogBody className="flex-1 flex flex-col p-0 overflow-hidden">
                         <CollectionDetail
@@ -187,6 +178,8 @@ export default function PageCollectionTemplate() {
                             item={itemToPass}
                             onCancel={() => setOpen(false)}
                             onSave={() => setOpen(false)}
+                            t={t}
+                            refresh={refresh}
                         />
                     </DialogBody>
                 </DialogContent>

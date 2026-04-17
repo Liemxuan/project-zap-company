@@ -1,0 +1,28 @@
+const en = {
+    title: "Modifier Groups",
+    subtitle: "Catalog",
+    section_basicInfo: "Basic Information",
+    section_modifierItems: "Modifier Items",
+    label_name: "Name",
+    label_displayName: "Display Name",
+    label_description: "Description",
+    label_displayType: "Display Type",
+    label_referenceId: "Reference ID",
+    label_referenceId2: "Reference ID 2",
+    label_channels: "Channels",
+    label_locations: "Locations",
+    label_addModifierItem: "Add Modifier Item",
+    label_selectOneOnly: "Customer can only select one modifier",
+    label_defaultModifierHint: "The first modifier in your set will become the default",
+    label_editColor: "Edit Color",
+    label_saving: "Saving...",
+    btn_cancel: "Cancel",
+    btn_save: "Save",
+    btn_create: "Create",
+    btn_edit: "Edit",
+    btn_delete: "Delete",
+    btn_view: "View",
+    action_addItems: "Add Items",
+};
+
+export default en;

@@ -18,6 +18,7 @@ export interface Brand {
   reference_id?: string;
   apply_item_count?: number;
   acronymn?: string;
+  translations?: any[];
 }
 
 export interface BrandFilters {
