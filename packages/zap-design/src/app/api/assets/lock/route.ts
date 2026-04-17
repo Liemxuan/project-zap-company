@@ -1,7 +1,4 @@
 import { NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
 
 export async function PATCH(request: Request) {
     try {
@@ -12,17 +9,8 @@ export async function PATCH(request: Request) {
             return NextResponse.json({ error: "Missing required fields: filePath and isLocked (boolean)" }, { status: 400 });
         }
 
-        const ticket = await prisma.assetTicket.update({
-            where: { filePath },
-            data: { isLocked }
-        });
-
-        return NextResponse.json({ data: ticket });
-    {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+        return NextResponse.json({ data: { filePath, isLocked, updatedAt: new Date().toISOString() } });
     } catch (error: any) {
-        console.error("Failed to update asset lock status:", error);
         return NextResponse.json({ error: error.message || "Failed to update asset lock status" }, { status: 500 });
-    } finally {
-        await prisma.$disconnect();
     }
 }

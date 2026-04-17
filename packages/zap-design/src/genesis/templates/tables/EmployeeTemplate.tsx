@@ -111,9 +111,9 @@ export default function EmployeeTemplate() {
 
                             <Avatar src={row.original.media_url}
                                 className="w-full h-full object-cover border-[1px] border-border"
-                                initials={row.original.variant_name.split(' ').map(n => n[0]).join('')}
+                                initials={(row.original.variant_name || '').split(' ').map(n => n[0]).join('')}
                                 size="sm"
-                                fallback={row.original.variant_name.split(' ').map(n => n[0]).join('')}
+                                fallback={(row.original.variant_name || '').split(' ').map(n => n[0]).join('')}
                             />
 
                         </div>
@@ -203,25 +203,25 @@ export default function EmployeeTemplate() {
         {
             id: 'category',
             title: 'Department',
-            options: Array.from(new Set(MAPPED_DATA.map(e => e.category_id))).map(dept => ({
-                id: dept,
-                label: dept,
+            options: Array.from(new Set(MAPPED_DATA.map(e => e.category_id).filter(Boolean))).map(dept => ({
+                id: dept as string,
+                label: dept as string,
             })),
         },
         {
             id: 'productType',
             title: 'Role',
-            options: Array.from(new Set(MAPPED_DATA.map(e => e.product_type))).map(role => ({
-                id: role,
-                label: role,
+            options: Array.from(new Set(MAPPED_DATA.map(e => e.product_type).filter(Boolean))).map(role => ({
+                id: role as string,
+                label: role as string,
             })),
         },
         {
             id: 'status',
             title: 'Status',
-            options: Array.from(new Set(MAPPED_DATA.map(e => e.status_id))).map(status => ({
-                id: status,
-                label: status,
+            options: Array.from(new Set(MAPPED_DATA.map(e => e.status_id).filter(Boolean))).map(status => ({
+                id: status as string,
+                label: status as string,
             })),
         },
     ];

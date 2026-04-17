@@ -47,7 +47,8 @@ export default function ExecutionTrackerDashboard() {
         setLoading(true);
         try {
             // Re-using the zap-swarm endpoint running locally, or mocking if in isolated Zap Design Engine environment
-            const res = await fetch('http://localhost:3500/api/swarm/jobs');
+            const SWARM_API = process.env.NEXT_PUBLIC_SWARM_API_URL || 'http://localhost:3500';
+            const res = await fetch(`${SWARM_API}/api/swarm/jobs`);
             if (!res.ok) throw new Error('Failed to fetch from Swarm API');
             const data = await res.json();
             setJobs(data.tasks || []);

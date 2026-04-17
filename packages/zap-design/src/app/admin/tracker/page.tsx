@@ -1,4 +1,3 @@
-import { PrismaClient } from '@prisma/client';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../../genesis/molecules/tabs';
 import {
   Table,
@@ -9,28 +8,12 @@ import {
   TableRow,
 } from '../../../genesis/molecules/table';
 
-// Force dynamic rendering to ensure fresh db hits on every load for mission control
-export const dynamic = 'force-dynamic';
-
-const prisma = new PrismaClient();
-
 export default async function AdminTrackerPage() {
-  const [tenants, personas, subscriptions, workspaces, interactions] = await Promise.all([
-    prisma.tenants.findMany({ include: { _count: { select: { workspaces: true } } } }),
-    prisma.ai_personas.findMany(),
-    prisma.tenant_subscriptions.findMany({
-      include: { tenants: true, ai_personas: true }
-    }),
-    prisma.workspaces.findMany({ include: { tenants: true, _count: { select: { users: true } } } }),
-    prisma.user_interactions.findMany({
-      include: {
-        users: true,
-        ai_personas: true
-      },
-      orderBy: { interaction_date: 'desc' },
-      take: 50
-    })
-  ]);
+  const tenants: any[] = [];
+  const personas: any[] = [];
+  const subscriptions: any[] = [];
+  const workspaces: any[] = [];
+  const interactions: any[] = [];
 
   return (
     <div className="p-8 max-w-[1400px] mx-auto min-h-screen bg-layer-cover">

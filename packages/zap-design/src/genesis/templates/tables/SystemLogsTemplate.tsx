@@ -168,25 +168,25 @@ export default function SystemLogsTemplate() {
         {
             id: 'category',
             title: 'Level',
-            options: Array.from(new Set(SAMPLE_LOGS.map(l => l.level))).map(level => ({
-                id: level,
-                label: level,
+            options: Array.from(new Set(SAMPLE_LOGS.map(l => l.level).filter(Boolean))).map(level => ({
+                id: level as string,
+                label: level as string,
             }))
         },
         {
             id: 'productType',
             title: 'Service',
-            options: Array.from(new Set(SAMPLE_LOGS.map(l => l.service))).map(service => ({
-                id: service,
-                label: service,
+            options: Array.from(new Set(SAMPLE_LOGS.map(l => l.service).filter(Boolean))).map(service => ({
+                id: service as string,
+                label: service as string,
             }))
         },
         {
             id: 'status',
             title: 'Status',
-            options: Array.from(new Set(SAMPLE_LOGS.map(l => l.status))).map(status => ({
-                id: status,
-                label: status,
+            options: Array.from(new Set(SAMPLE_LOGS.map(l => l.status).filter(Boolean))).map(status => ({
+                id: status as string,
+                label: status as string,
             }))
         }
     ];

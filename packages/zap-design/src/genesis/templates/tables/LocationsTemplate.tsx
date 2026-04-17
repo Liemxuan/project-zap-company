@@ -337,25 +337,25 @@ export default function LocationsTemplate() {
         {
             id: 'category',
             title: 'Region',
-            options: Array.from(new Set(MAPPED_LOCATIONS.map(p => p.category_id))).map(region => ({
-                id: region,
-                label: region,
+            options: Array.from(new Set(MAPPED_LOCATIONS.map(p => p.category_id).filter(Boolean))).map(region => ({
+                id: region as string,
+                label: region as string,
             }))
         },
         {
             id: 'productType',
             title: 'Location Type',
-            options: Array.from(new Set(MAPPED_LOCATIONS.map(p => p.product_type))).map(type => ({
-                id: type,
-                label: type,
+            options: Array.from(new Set(MAPPED_LOCATIONS.map(p => p.product_type).filter(Boolean))).map(type => ({
+                id: type as string,
+                label: type as string,
             }))
         },
         {
             id: 'status',
             title: 'Status',
-            options: Array.from(new Set(MAPPED_LOCATIONS.map(p => p.status_id))).map(status => ({
-                id: status,
-                label: status,
+            options: Array.from(new Set(MAPPED_LOCATIONS.map(p => p.status_id).filter(Boolean))).map(status => ({
+                id: status as string,
+                label: status as string,
             }))
         }
     ];

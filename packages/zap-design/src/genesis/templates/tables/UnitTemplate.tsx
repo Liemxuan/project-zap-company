@@ -218,25 +218,25 @@ export default function UnitTemplate() {
         {
             id: 'category',
             title: 'Unit Type',
-            options: Array.from(new Set(MAPPED_DATA.map(u => u.category_id))).map(type => ({
-                id: type,
-                label: type,
+            options: Array.from(new Set(MAPPED_DATA.map(u => u.category_id).filter(Boolean))).map(type => ({
+                id: type as string,
+                label: type as string,
             })),
         },
         {
             id: 'productType',
             title: 'Base Unit',
-            options: Array.from(new Set(MAPPED_DATA.map(u => u.product_type))).map(base => ({
-                id: base,
-                label: base,
+            options: Array.from(new Set(MAPPED_DATA.map(u => u.product_type).filter(Boolean))).map(base => ({
+                id: base as string,
+                label: base as string,
             })),
         },
         {
             id: 'status',
             title: 'Visibility',
-            options: Array.from(new Set(MAPPED_DATA.map(u => u.status_id))).map(status => ({
-                id: status,
-                label: status,
+            options: Array.from(new Set(MAPPED_DATA.map(u => u.status_id).filter(Boolean))).map(status => ({
+                id: status as string,
+                label: status as string,
             })),
         },
     ];

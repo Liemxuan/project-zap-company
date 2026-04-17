@@ -281,16 +281,16 @@ export default function PageLocationsTemplate() {
             id: 'productType',
             title: 'Location Type',
             options: Array.from(new Set(MAPPED_LOCATIONS.map(p => p.product_type).filter(Boolean) as string[])).map(type => ({
-                id: type,
-                label: type,
+                id: type as string,
+                label: type as string,
             }))
         },
         {
             id: 'status',
             title: 'Status',
             options: Array.from(new Set(MAPPED_LOCATIONS.map(p => p.status_id).filter(Boolean) as string[])).map(status => ({
-                id: status,
-                label: status,
+                id: status as string,
+                label: status as string,
             }))
         }
     ];

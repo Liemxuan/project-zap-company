@@ -96,7 +96,8 @@ const MasterVerticalShellContent = ({
         setHudReply("Analyzing request and calculating execution path...");
 
         try {
-            const res = await fetch('http://localhost:8000/api/hud/chat', {
+            const HUD_API = process.env.NEXT_PUBLIC_HUD_API_URL || 'http://localhost:8000';
+            const res = await fetch(`${HUD_API}/api/hud/chat`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -106,6 +107,7 @@ const MasterVerticalShellContent = ({
                 })
             });
 
+            if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
             if (!res.body) throw new Error("No response body");
 
             const reader = res.body.getReader();

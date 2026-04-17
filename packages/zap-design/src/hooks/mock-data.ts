@@ -939,11 +939,11 @@ export const MOCK_MEMBERSHIPS: Membership[] = [
 ];
 
 export const MOCK_PROMOTIONS: Promotion[] = [
-    { id: 'PROM-001', name: 'Summer Flash Sale', acronymn: "SF", discount_value: 15, discount_type: 'Percentage', apply_to: 'All products', schedule: 'Daily 14:00 - 16:00', locations: ['All branches'], is_active: true },
-    { id: 'PROM-002', name: 'Grand Opening Discount', acronymn: "GO", discount_value: 50000, discount_type: 'Fixed', apply_to: 'Selected items', schedule: 'Mon, Wed, Fri', locations: ['HQ-01'], is_active: true },
-    { id: 'PROM-003', name: 'Happy Hour Special', acronymn: "HH", discount_value: 20, discount_type: 'Percentage', apply_to: 'Drinks', schedule: 'Daily 17:00 - 19:00', locations: ['All branches'], is_active: true },
-    { id: 'PROM-004', name: 'Weekend Brunch', acronymn: "WB", discount_value: 10, discount_type: 'Percentage', apply_to: 'Food', schedule: 'Sat, Sun 10:00 - 14:00', locations: ['HQ-01', 'WH-EAST'], is_active: false },
-    { id: 'PROM-005', name: 'Member Anniversary', acronymn: "MA", discount_value: 20, discount_type: 'Percentage', apply_to: 'All products', schedule: 'Member Join Date', locations: ['All branches'], is_active: true },
+    { id: 'PROM-001', name: 'Summer Flash Sale', acronymn: "SF", discount_value: 15, discount_type: 'Percentage', apply_to: 'All products', schedule: 'Daily 14:00 - 16:00', locations: ['All branches'], is_active: true, is_automatic: true },
+    { id: 'PROM-002', name: 'Grand Opening Discount', acronymn: "GO", discount_value: 50000, discount_type: 'Fixed', apply_to: 'Selected items', schedule: 'Mon, Wed, Fri', locations: ['HQ-01'], is_active: true, is_automatic: true },
+    { id: 'PROM-003', name: 'Happy Hour Special', acronymn: "HH", discount_value: 20, discount_type: 'Percentage', apply_to: 'Drinks', schedule: 'Daily 17:00 - 19:00', locations: ['All branches'], is_active: true, is_automatic: false },
+    { id: 'PROM-004', name: 'Weekend Brunch', acronymn: "WB", discount_value: 10, discount_type: 'Percentage', apply_to: 'Food', schedule: 'Sat, Sun 10:00 - 14:00', locations: ['HQ-01', 'WH-EAST'], is_active: false, is_automatic: true },
+    { id: 'PROM-005', name: 'Member Anniversary', acronymn: "MA", discount_value: 20, discount_type: 'Percentage', apply_to: 'All products', schedule: 'Member Join Date', locations: ['All branches'], is_active: true, is_automatic: false },
 ];
 
 export const MOCK_COUNTRIES: Country[] = [

@@ -11,6 +11,7 @@ export interface Promotion {
     schedule: string; // E.g., Daytime, Evening, etc.
     locations: string[]; // E.g., ["All branches"], ["HQ-01"]
     is_active: boolean;
+    is_automatic: boolean;
     status?: string; // Metadata status string
   acronymn?: string;
 }
@@ -18,6 +19,7 @@ export interface Promotion {
 export interface PromotionFilters {
     is_active?: boolean | null;
     discount_type?: string;
+    is_automatic?: boolean | null;
     schedule?: string;
 }
 

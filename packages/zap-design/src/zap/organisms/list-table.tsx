@@ -789,7 +789,7 @@ export function ListTable({
         {table.getAllColumns().some(col => col.getCanHide()) && <div className="absolute -right-3 top-2 z-50">
           <Popover>
             <PopoverTrigger asChild>
-              <Button variant="outline" className="h-6 w-6 p-0 bg-surface hover:bg-surface-variant border border-border rounded-full" style={{ '--button-border-radius': '50%' }}>
+              <Button variant="outline" className="h-6 w-6 p-0 bg-surface hover:bg-surface-variant border border-border rounded-full" style={{ '--button-border-radius': '50%' } as React.CSSProperties}>
                 <Plus size={16} />
               </Button>
             </PopoverTrigger>

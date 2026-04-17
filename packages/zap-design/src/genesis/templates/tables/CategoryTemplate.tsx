@@ -128,7 +128,7 @@ export default function CategoryTemplate() {
                         <div className="w-10 h-10 flex items-center justify-center shrink-0 overflow-hidden">
                             <Avatar src={row.original.media_url}
                                 className="w-full h-full object-cover border-[1px] border-border"
-                                initials={row.original.variant_name.split(' ').map(n => n[0]).join('')}
+                                initials={(row.original.variant_name || '').split(' ').map(n => n[0]).join('')}
                                 size="sm"
                             />
                         </div>
@@ -229,25 +229,25 @@ export default function CategoryTemplate() {
         {
             id: 'category',
             title: 'Parent Category',
-            options: Array.from(new Set(MAPPED_DATA.map(p => p.category_id))).map(parent => ({
-                id: parent,
-                label: parent,
+            options: Array.from(new Set(MAPPED_DATA.map(p => p.category_id).filter(Boolean))).map(parent => ({
+                id: parent as string,
+                label: parent as string,
             }))
         },
         {
             id: 'productType',
             title: 'Status',
-            options: Array.from(new Set(MAPPED_DATA.map(p => p.product_type))).map(status => ({
-                id: status,
-                label: status,
+            options: Array.from(new Set(MAPPED_DATA.map(p => p.product_type).filter(Boolean))).map(status => ({
+                id: status as string,
+                label: status as string,
             }))
         },
         {
             id: 'status',
             title: 'Visibility',
-            options: Array.from(new Set(MAPPED_DATA.map(p => p.status_id))).map(status => ({
-                id: status,
-                label: status,
+            options: Array.from(new Set(MAPPED_DATA.map(p => p.status_id).filter(Boolean))).map(status => ({
+                id: status as string,
+                label: status as string,
             }))
         }
     ];

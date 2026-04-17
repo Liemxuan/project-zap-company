@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  output: 'standalone',
   transpilePackages: ['@excalidraw/excalidraw'],
   // experimental: {
   //   turbo: {
@@ -28,14 +29,15 @@ const nextConfig: NextConfig = {
     ],
   },
   async rewrites() {
+    const INVENTORY_API = process.env.NEXT_PUBLIC_INVENTORY_API_URL || 'http://localhost:3300';
     return [
       {
         source: '/api/inventory/:path*',
-        destination: 'http://localhost:3300/api/inventory/:path*',
+        destination: `${INVENTORY_API}/api/inventory/:path*`,
       },
       {
         source: '/webhook/:path*',
-        destination: 'http://localhost:3300/webhook/:path*',
+        destination: `${INVENTORY_API}/webhook/:path*`,
       },
       {
         source: '/api/proxy/crm-gateway/:path*',

@@ -111,7 +111,7 @@ export default function ProductListTemplate() {
             cell: ({ row }) => (
                 <div className="w-20 py-2.5 text-center truncate">
                     {row.depth === 0 && (
-                        row.original.id.split('-')[1] || row.original.id
+                        (row.original.id || '').split('-')[1] || row.original.id
                     )}
                 </div>
             ),
@@ -352,25 +352,25 @@ export default function ProductListTemplate() {
         {
             id: 'category',
             title: 'Category',
-            options: Array.from(new Set(SAMPLE_DATA.map(p => p.category_id))).map(cat => ({
-                id: cat,
-                label: cat,
+            options: Array.from(new Set(SAMPLE_DATA.map(p => p.category_id).filter(Boolean))).map(cat => ({
+                id: cat as string,
+                label: cat as string,
             }))
         },
         {
             id: 'productType',
             title: 'Product Type',
-            options: Array.from(new Set(SAMPLE_DATA.map(p => p.product_type))).map(type => ({
-                id: type,
-                label: type,
+            options: Array.from(new Set(SAMPLE_DATA.map(p => p.product_type).filter(Boolean))).map(type => ({
+                id: type as string,
+                label: type as string,
             }))
         },
         {
             id: 'status',
             title: 'Status',
-            options: Array.from(new Set(SAMPLE_DATA.map(p => p.status_id))).map(status => ({
-                id: status,
-                label: status,
+            options: Array.from(new Set(SAMPLE_DATA.map(p => p.status_id).filter(Boolean))).map(status => ({
+                id: status as string,
+                label: status as string,
             }))
         }
     ];

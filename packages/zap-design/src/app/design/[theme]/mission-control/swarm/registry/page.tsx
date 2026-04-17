@@ -389,7 +389,7 @@ export default function ComponentRegistryDashboard() {
                                                                         {component.pages.length > 0 ? component.pages.map(pagePath => (
                                                                             <a 
                                                                                 key={pagePath} 
-                                                                                href={`http://localhost:3002${pagePath}`}
+                                                                                href={`${process.env.NEXT_PUBLIC_REGISTRY_URL || 'http://localhost:3002'}${pagePath}`}
                                                                                 target="_blank"
                                                                                 className="text-[10px] font-dev text-transform-tertiary text-muted-foreground hover:text-primary hover:bg-muted/50 px-1.5 py-0.5 rounded transition-colors flex items-center justify-between group/page"
                                                                             >

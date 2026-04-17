@@ -26,7 +26,7 @@ function getPageName(urlPath: string): string {
 }
 
 // Core Base demo URL — running locally on 3200
-const METRONIC_BASE = 'http://localhost:3200';
+const METRONIC_BASE = process.env.NEXT_PUBLIC_METRONIC_URL || 'http://localhost:3200';
 
 interface Ticket {
     indexId: string;
