@@ -68,6 +68,18 @@ export const API_ENDPOINTS = {
   COUNTRY: {
     LIST: '/api/proxy/crm-gateway/geocountries/list',
     DETAIL: '/api/proxy/crm-gateway/geocountries',
+  },
+  TAX: {
+    LIST: '/api/proxy/crm-gateway/taxes/list',
+    DETAIL: '/api/proxy/crm-gateway/taxes',
+  },
+  SURCHARGE: {
+    LIST: '/api/proxy/crm-gateway/surcharges/list',
+    DETAIL: '/api/proxy/crm-gateway/surcharges',
+  },
+  SERVICE: {
+    LIST: '/api/proxy/crm-gateway/services/list',
+    DETAIL: '/api/proxy/crm-gateway/services',
   }
 } as const;
 

@@ -61,6 +61,9 @@ const PageMembershipTemplate = dynamic(() => import('../genesis/templates/tables
 const PagePromotionsTemplate = dynamic(() => import('../genesis/templates/tables/promotions/PagePromotion'), { ssr: false });
 const PageCountryTemplate = dynamic(() => import('../genesis/templates/tables/countries/PageCountry'), { ssr: false });
 const PagePolicyTemplate = dynamic(() => import('../genesis/templates/tables/policies/PagePolicy'), { ssr: false });
+const PageTaxTemplate = dynamic(() => import('../genesis/templates/tables/taxes/PageTax'), { ssr: false });
+const PageSurchargesTemplate = dynamic(() => import('../genesis/templates/tables/surcharges/PageSurcharges'), { ssr: false });
+const PageServicesTemplate = dynamic(() => import('../genesis/templates/tables/services/PageServices'), { ssr: false });
 const EmployeeTemplate = dynamic(() => import('../genesis/templates/tables/EmployeeTemplate'), { ssr: false });
 const UserManagementTable = dynamic(() => import('@/genesis/organisms/auth/UserManagementTable').then(m => ({ default: m.UserManagementTable })), { ssr: false });
 const Body = dynamic(() => import('../genesis/templates/body/BodyOrganism').then(m => ({ default: m.BodyOrganism })), { ssr: false });
@@ -100,6 +103,9 @@ export const ORGANISM_REGISTRY: Record<string, OrganismEntry> = {
     'promotions': { id: 'promotions', label: 'Promotions', tier: 'L6 LAYOUT', status: 'Verified', type: 'page', component: PagePromotionsTemplate, icon: 'campaign', category: 'Tables' },
     'countries': { id: 'countries', label: 'Countries', tier: 'L6 LAYOUT', status: 'Verified', type: 'page', component: PageCountryTemplate, icon: 'public', category: 'Tables' },
     'policies': { id: 'policies', label: 'Policies', tier: 'L6 LAYOUT', status: 'Verified', type: 'page', component: PagePolicyTemplate, icon: 'policy', category: 'Tables' },
+    'taxes': { id: 'taxes', label: 'Taxes', tier: 'L6 LAYOUT', status: 'In Progress', type: 'page', component: PageTaxTemplate, icon: 'payments', category: 'Tables' },
+    'surcharges': { id: 'surcharges', label: 'Surcharges', tier: 'L6 LAYOUT', status: 'In Progress', type: 'page', component: PageSurchargesTemplate, icon: 'receipt', category: 'Tables' },
+    'services': { id: 'services', label: 'Services', tier: 'L6 LAYOUT', status: 'In Progress', type: 'page', component: PageServicesTemplate, icon: 'add_task', category: 'Tables' },
     'employees': { id: 'employees', label: 'Employees', tier: 'L6 LAYOUT', status: 'Verified', type: 'page', component: EmployeeTemplate, icon: 'groups', category: 'Tables' },
     'user-management': { id: 'user-management', label: 'User Management', tier: 'L5 ORGANISM', status: 'Verified', type: 'showcase', component: UserManagementTable, icon: 'manage_accounts', category: 'Tables' },
     'body': { id: 'body', label: 'Body', tier: 'L4 ORGANISM', status: 'Verified', type: 'showcase', component: Body, icon: 'grid_view', category: 'Layouts' },

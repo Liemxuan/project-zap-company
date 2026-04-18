@@ -17,17 +17,22 @@ export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElem
     position?: 'top' | 'floating' | 'left' | 'right';
     prefix?: React.ReactNode;
     suffix?: React.ReactNode;
+    useTextTransform?: boolean;
 }
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
-    ({ className = '', variant = 'filled', leadingIcon, trailingIcon, isError: propIsError, errorMessage: propErrorMessage, disabled, name, type, label, position, prefix, suffix, ...props }, ref) => {
+    ({ className = '', variant = 'filled', leadingIcon, trailingIcon, isError: propIsError, errorMessage: propErrorMessage, disabled, name, type, label, position, prefix, suffix, useTextTransform = false, ...props }, ref) => {
 
         const formContext = useFormContext();
         const fieldError = name && formContext?.formState?.errors ? formContext.formState.errors[name] : null;
         const isError = propIsError || !!fieldError;
         const errorMessage = propErrorMessage || (fieldError?.message as string);
 
-        const baseClasses = "w-full transition-all duration-200 focus:outline-none focus:ring-2 text-on-surface font-body text-transform-secondary border-solid";
+        const baseClasses = cn(
+            "w-full transition-all duration-200 focus:outline-none focus:ring-2 text-on-surface border-solid",
+            //useTextTransform && "text-transform-secondary",
+            useTextTransform && "font-body"
+        );
 
         const variantClasses = {
             outlined: "bg-[color:var(--local-bg-outlined)] border-[color:var(--local-border-outlined)] focus:border-[color:var(--local-focus-border)] focus:ring-[color:var(--local-focus-ring)]",

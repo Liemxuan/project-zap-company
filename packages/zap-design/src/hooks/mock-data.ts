@@ -13,6 +13,9 @@ import { Customer } from '../services/customer/customer.model';
 import { Membership } from '../services/membership/membership.model';
 import { Promotion } from '../services/promotion/promotion.model';
 import { Country } from '../services/country/country.model';
+import { Tax } from '../services/tax/tax.model';
+import { Surcharge } from '../services/surcharge/surcharge.model';
+import { Service } from '../services/service/service.model';
 
 export const MOCK_CATEGORIES: Category[] = [
     { id: "1", name: "Iphone 16 Series", acronymn: "I1", slug: "/iphone-16", parent: "Electronics", item_count: 54, media_url: "https://images.unsplash.com/photo-1616348436168-de43ad0db179?q=80&w=256&h=256&auto=format&fit=crop", is_active: true },
@@ -1126,5 +1129,127 @@ export const MOCK_COUNTRIES: Country[] = [
         longitude: 100.9925,
         geometry_data: null,
         acronymn: "TH"
+    }
+];
+
+export const MOCK_TAXES: Tax[] = [
+    {
+        id: "tax-001",
+        serial_id: "VAT-10",
+        acronym: "VT",
+        name: "Value Added Tax (10%)",
+        location: "Vietnam",
+        rate: 10,
+        status_id: "active",
+        status_text: "Active",
+        status_color: "success"
+    },
+    {
+        id: "tax-002",
+        serial_id: "VAT-05",
+        acronym: "VT",
+        name: "Value Added Tax (5%)",
+        location: "Vietnam",
+        rate: 5,
+        status_id: "active",
+        status_text: "Active",
+        status_color: "success"
+    },
+    {
+        id: "tax-003",
+        serial_id: "GST-07",
+        acronym: "GS",
+        name: "Goods and Services Tax",
+        location: "Singapore",
+        rate: 7,
+        status_id: "active",
+        status_text: "Active",
+        status_color: "success"
+    },
+    {
+        id: "tax-004",
+        serial_id: "SVC-05",
+        acronym: "SC",
+        name: "Service Charge",
+        location: "Global",
+        rate: 5,
+        status_id: "inactive",
+        status_text: "Inactive",
+        status_color: "warning"
+    }
+];
+
+export const MOCK_SURCHARGES: any[] = [
+    {
+        id: "sur-001",
+        serial_id: "SHP-001",
+        acronym: "SF",
+        name: "Standard Shipping Fee",
+        value: 15000,
+        value_type: "fixed",
+        type: "Shipping",
+        status_id: "active",
+        status_text: "Active",
+        status_color: "success"
+    },
+    {
+        id: "sur-002",
+        serial_id: "SRV-001",
+        acronym: "SC",
+        name: "Service Charge",
+        value: 5,
+        value_type: "percentage",
+        type: "Service",
+        status_id: "active",
+        status_text: "Active",
+        status_color: "success"
+    },
+    {
+        id: "sur-003",
+        serial_id: "HND-001",
+        acronym: "HF",
+        name: "Handling Fee",
+        value: 10000,
+        value_type: "fixed",
+        type: "Handling",
+        status_id: "inactive",
+        status_text: "Inactive",
+        status_color: "warning"
+    }
+];
+
+export const MOCK_SERVICES: any[] = [
+    {
+        id: "ser-001",
+        serial_id: "CLN-001",
+        acronym: "PC",
+        name: "Professional Cleaning",
+        price: 500000,
+        category: "Cleaning",
+        status_id: "active",
+        status_text: "Active",
+        status_color: "success"
+    },
+    {
+        id: "ser-002",
+        serial_id: "CNS-001",
+        acronym: "CS",
+        name: "Consultation Service",
+        price: 200000,
+        category: "Consulting",
+        status_id: "active",
+        status_text: "Active",
+        status_color: "success"
+    },
+    {
+        id: "ser-003",
+        serial_id: "RPR-001",
+        acronym: "RP",
+        name: "Basic Repair Service",
+        price: 350000,
+        category: "Repair",
+        status_id: "inactive",
+        status_text: "Inactive",
+        status_color: "warning"
     }
 ];
