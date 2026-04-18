@@ -292,7 +292,7 @@ export default function CateDetail({ mode = 'create', item, onCancel, onSave, t,
                         onClick={handleSave}
                         disabled={isSaving}
                     >
-                        {isSaving ? (t.label_saving || 'Saving...') : (mode === 'create' ? (t.btn_create || 'Create') : (t.btn_save || 'Save'))}
+                        {isSaving ? (t.label_saving || 'Saving...') : (t.btn_save || 'Save')}
                     </Button>
                 </div>
             )}

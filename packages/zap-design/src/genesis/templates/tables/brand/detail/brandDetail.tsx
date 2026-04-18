@@ -54,7 +54,7 @@ export function BrandDetail({ mode = 'create', item, onCancel, onSave, t, refres
                 email: item.email || '',
                 address: item.address || '',
             };
-            
+
             // Vietnamese (locale_id: 1)
             const viTrans = item.translations?.find((t: any) => t.locale_id === 1 || t.language_code === 'vi');
             initial.vi = {
@@ -83,7 +83,7 @@ export function BrandDetail({ mode = 'create', item, onCancel, onSave, t, refres
     const handleSave = async () => {
         if (isSaving) return;
         setIsSaving(true);
-        
+
         const payload = {
             name: langData.en.name,
             trading_name: langData.en.tradingName,
@@ -279,7 +279,7 @@ export function BrandDetail({ mode = 'create', item, onCancel, onSave, t, refres
                         onClick={handleSave}
                         disabled={isSaving}
                     >
-                        {isSaving ? (t.label_saving || 'Saving...') : (mode === 'create' ? (t.btn_create || 'Create') : (t.btn_save || 'Save'))}
+                        {isSaving ? (t.label_saving || 'Saving...') : (t.btn_save || 'Save')}
                     </Button>
                 </div>
             )}

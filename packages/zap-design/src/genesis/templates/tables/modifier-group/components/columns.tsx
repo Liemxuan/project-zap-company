@@ -78,7 +78,7 @@ export const getModifierGroupColumns = (
                 </div>
             ),
             cell: ({ row }) => (
-                <div 
+                <div
                     className="w-64 py-2.5 flex items-center gap-3 cursor-pointer group/cell"
                     onClick={() => handleAction('view', row.original)}
                 >
@@ -187,13 +187,12 @@ export const getModifierGroupColumns = (
         },
         {
             id: "actions",
-            header: () => <div className="w-24 pr-7 text-right tracking-widest transition-colors"><Text size='label-small' className='font-semibold'>Action</Text></div>,
+            header: () => <div className="w-24 pr-7 text-right tracking-widest transition-colors"></div>,
             cell: ({ row }) => (
                 <div className="w-24 pr-7 py-2.5 text-right" onClick={e => e.stopPropagation()}>
                     <div className="flex items-center justify-end">
                         <QuickActionsDropdown
                             actions={[
-                                { label: 'View', onClick: () => handleAction('view', row.original) },
                                 { label: 'Edit', icon: Pencil, onClick: () => handleAction('edit', row.original) },
                                 { label: 'Duplicate', icon: Copy, onClick: () => handleAction('duplicate', row.original) },
                                 { label: 'Delete', icon: Trash2, onClick: () => handleAction('delete', row.original), variant: 'destructive' },

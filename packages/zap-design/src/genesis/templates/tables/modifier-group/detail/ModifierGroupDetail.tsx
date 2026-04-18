@@ -581,7 +581,7 @@ export default function ModifierGroupDetail({
                         onClick={handleSave}
                         disabled={isSaving}
                     >
-                        {isSaving ? (t.label_saving || 'Saving...') : (mode === 'create' ? (t.btn_create || 'Create') : (t.btn_save || 'Save'))}
+                        {isSaving ? (t.label_saving || 'Saving...') : (t.btn_save || 'Save')}
                     </Button>
                 </div>
             )}

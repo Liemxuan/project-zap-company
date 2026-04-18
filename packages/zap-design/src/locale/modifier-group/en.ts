@@ -11,7 +11,7 @@ const en = {
     label_referenceId2: "Reference ID 2",
     label_channels: "Channels",
     label_locations: "Locations",
-    label_addModifierItem: "Add Modifier Item",
+    label_addModifierItem: "Add modifier group",
     label_selectOneOnly: "Customer can only select one modifier",
     label_defaultModifierHint: "The first modifier in your set will become the default",
     label_editColor: "Edit Color",
