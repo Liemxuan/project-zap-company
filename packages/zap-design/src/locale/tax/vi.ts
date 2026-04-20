@@ -13,6 +13,8 @@ const vi = {
     label_location: "Địa điểm",
     label_rate: "Tỷ lệ (%)",
     label_status: "Trạng thái",
+    status_active: "Hoạt động",
+    status_inactive: "Ngừng",
     label_action: "Thao tác",
     label_addTax: "Thêm loại thuế",
 
@@ -23,6 +25,15 @@ const vi = {
 
     // Placeholders
     placeholder_search: "Tìm kiếm thuế...",
+    btn_edit: "Sửa",
+    btn_duplicate: "Nhân bản",
+    btn_delete: "Xóa",
+    btn_save: "Lưu",
+    title_taxes: "Thuế",
+    label_inspector: "Kiểm tra",
+    label_filters: "Bộ lọc",
+    msg_selectTax: "Chọn một loại thuế để xem chi tiết",
+    label_filter: "Bộ lọc",
 };
 
 export default vi;

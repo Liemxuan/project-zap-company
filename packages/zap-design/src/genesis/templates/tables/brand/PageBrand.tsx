@@ -126,6 +126,7 @@ export default function PageBrandTemplate() {
             columns={columns as any}
             labels={mappedLabels}
             onAddClick={() => setIsCreating(true)}
+            lang={lang === 'vi' ? 'vi' : 'en'}
         />
     );
 

@@ -10,8 +10,12 @@ import { Text } from '@/genesis/atoms/typography/text';
 /**
  * Get columns definition for Group Product table
  */
-export const getColumns = (handlers: {
+export const getColumns = ({
+    onAction,
+    t
+}: {
     onAction: (type: string, item: any) => void;
+    t: any;
 }): ColumnDef<any>[] => [
         {
             id: "select",
@@ -67,7 +71,7 @@ export const getColumns = (handlers: {
                     className="w-80 text-left tracking-widest cursor-pointer transition-colors"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    <Text size='label-small' className='font-semibold'>Name</Text>
+                    <Text size='label-small' className='font-semibold'>{t.label_groupProductName}</Text>
                 </div>
             ),
             cell: ({ row }) => (
@@ -104,7 +108,7 @@ export const getColumns = (handlers: {
                     className="w-32 text-right pr-4 tracking-widest cursor-pointer hover:text-foreground transition-colors"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    <Text size='label-small' className='font-semibold'>Items</Text>
+                    <Text size='label-small' className='font-semibold'>{t.label_itemsCount}</Text>
                 </div>
             ),
             cell: ({ row }) => (
@@ -141,7 +145,7 @@ export const getColumns = (handlers: {
                     className="w-20 text-left tracking-widest cursor-pointer hover:text-foreground transition-colors"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    <Text size='label-small' className='font-semibold'>Status</Text>
+                    <Text size='label-small' className='font-semibold'>{t.label_status}</Text>
                 </div>
             ),
             cell: ({ row }) => (
@@ -151,7 +155,7 @@ export const getColumns = (handlers: {
                         className="whitespace-nowrap w-fit ml-auto"
                     >
                         <div className="w-1.5 h-1.5 rounded-full bg-current mr-1.5 opacity-80 shrink-0" />
-                        {row.original.is_active ? 'Active' : 'Inactive'}
+                        {row.original.is_active ? t.status_active : t.status_inactive}
                     </Pill>
                 </div>
             ),
@@ -166,9 +170,9 @@ export const getColumns = (handlers: {
                     <div className="flex items-center justify-end">
                         <QuickActionsDropdown
                             actions={[
-                                { label: 'Edit', icon: Pencil, onClick: () => handlers.onAction('edit', row.original) },
-                                { label: 'Duplicate', icon: Copy, onClick: () => handlers.onAction('duplicate', row.original) },
-                                { label: 'Delete', icon: Trash2, onClick: () => handlers.onAction('delete', row.original), variant: 'destructive' },
+                                { label: 'Edit', icon: Pencil, onClick: () => onAction('edit', row.original) },
+                                { label: 'Duplicate', icon: Copy, onClick: () => onAction('duplicate', row.original) },
+                                { label: 'Delete', icon: Trash2, onClick: () => onAction('delete', row.original), variant: 'destructive' },
                             ]}
                         />
                     </div>

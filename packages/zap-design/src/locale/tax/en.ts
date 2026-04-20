@@ -13,6 +13,8 @@ const en = {
     label_location: "Location",
     label_rate: "Rate (%)",
     label_status: "Status",
+    status_active: "Active",
+    status_inactive: "Inactive",
     label_action: "Action",
     label_addTax: "Add Tax",
 
@@ -23,6 +25,15 @@ const en = {
 
     // Placeholders
     placeholder_search: "Search taxes...",
+    btn_edit: "Edit",
+    btn_duplicate: "Duplicate",
+    btn_delete: "Delete",
+    btn_save: "Save",
+    title_taxes: "Taxes",
+    label_inspector: "Inspector",
+    label_filters: "Filters",
+    msg_selectTax: "Select a tax to view details",
+    label_filter: "Filter",
 };
 
 export default en;

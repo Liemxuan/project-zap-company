@@ -47,7 +47,8 @@ const PaginationLink = ({
   <Button
     asChild
     aria-current={isActive ? 'page' : undefined}
-    visualStyle={isActive ? 'tonal' : 'ghost'}
+    visualStyle={isActive ? 'solid' : 'ghost'}
+    color={isActive ? 'primary' : undefined}
     size={size}
     className={className}
   >

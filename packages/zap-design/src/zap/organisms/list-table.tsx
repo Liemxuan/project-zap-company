@@ -3,6 +3,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { Check, ChevronDown, Columns3, Filter, MoreHorizontal, Plus } from "lucide-react";
 import React, { useMemo, useState } from "react";
+import { cn } from '../../lib/utils';
 import {
   ColumnDef,
   flexRender,
@@ -62,6 +63,8 @@ import {
 } from '../../genesis/molecules/pagination';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../genesis/atoms/interactive/select';
 import { ProductImage } from '../../genesis/atoms/data-display/ProductImage';
+import tableEn from '../../locale/common/table/en';
+import tableVi from '../../locale/common/table/vi';
 //import { Avatar, AvatarFallback, AvatarImage } from '../../genesis/atoms/data-display/avatar';
 
 export interface ListItem {
@@ -194,11 +197,14 @@ function FilterPanel({
   filters,
   onChange,
   data,
+  labels,
 }: {
   filters: Filters;
   onChange: (filters: Filters) => void;
   data: ListItem[];
+  labels: any;
 }) {
+  const L = labels || {};
   const categories = Array.from(new Set(data.map((p) => p.category_id).filter(Boolean))) as string[];
   const productTypes = Array.from(new Set(data.map((p) => p.product_type).filter(Boolean))) as string[];
   const statuses = Array.from(new Set(data.map((p) => p.status_id).filter(Boolean))) as string[];
@@ -236,7 +242,7 @@ function FilterPanel({
       className="flex h-full flex-col space-y-6 overflow-y-auto bg-layer-panel p-4"
     >
       <div className="flex items-center justify-between">
-        <h3 className="text-sm font-display text-transform-primary font-semibold text-foreground">Filters</h3>
+        <h3 className="text-sm font-display text-transform-primary font-semibold text-foreground">{L.filtersTitle || "Filters"}</h3>
         {hasActiveFilters && (
           <Button
             variant="ghost"
@@ -244,7 +250,7 @@ function FilterPanel({
             onClick={clearAll}
             className="h-6 text-xs text-primary"
           >
-            Clear
+            {L.clearFilters || "Clear"}
           </Button>
         )}
       </div>
@@ -351,6 +357,21 @@ export interface ListTableProps {
     type?: string;
     inventory?: string;
     price?: string;
+    status?: string;
+    searchPlaceholder?: string;
+    filterButton?: string;
+    show?: string;
+    itemsPerPage?: string;
+    noResults?: string;
+    pageOf?: string; // e.g. "Page {current} of {total}"
+    matchCount?: string; // e.g. "{count} of {total} items matched criteria"
+    filtersTitle?: string;
+    clearFilters?: string;
+    id?: string;
+    actions?: string;
+    columns?: string;
+    loading?: string;
+    search?: string;
   };
   columns?: ColumnDef<ListItem>[];
   onRowClick?: (item: ListItem) => void;
@@ -366,6 +387,7 @@ export interface ListTableProps {
   isLoading?: boolean;
   isDraggable?: boolean;
   onReorder?: (items: ListItem[]) => void;
+  lang?: 'en' | 'vi';
 }
 
 export function ListTable({
@@ -389,7 +411,35 @@ export function ListTable({
   isLoading = false,
   isDraggable = false,
   onReorder,
+  lang = 'en',
 }: ListTableProps) {
+  const tableLocale = (lang === 'vi' ? tableVi : tableEn) || tableEn || {};
+
+  const L = {
+    addItem: labels?.addItem || tableLocale.label_addItem,
+    itemName: labels?.itemName || tableLocale.label_itemName,
+    itemCode: labels?.itemCode || tableLocale.label_itemCode,
+    category: labels?.category || tableLocale.label_category,
+    type: labels?.type || tableLocale.label_type,
+    inventory: labels?.inventory || tableLocale.label_inventory,
+    price: labels?.price || tableLocale.label_price,
+    status: labels?.status || tableLocale.label_status,
+    searchPlaceholder: labels?.searchPlaceholder || tableLocale.label_searchPlaceholder,
+    filterButton: labels?.filterButton || tableLocale.label_filterButton,
+    show: labels?.show || tableLocale.label_show,
+    itemsPerPage: labels?.itemsPerPage || tableLocale.label_itemsPerPage,
+    noResults: labels?.noResults || tableLocale.label_noResults,
+    pageOf: labels?.pageOf || tableLocale.label_pageOf,
+    matchCount: labels?.matchCount || tableLocale.label_matchCount,
+    filtersTitle: labels?.filtersTitle || tableLocale.label_filtersTitle,
+    clearFilters: labels?.clearFilters || tableLocale.label_clearFilters,
+    id: labels?.id || tableLocale.label_id,
+    actions: labels?.actions || tableLocale.label_actions,
+    columns: labels?.columns || tableLocale.label_columns,
+    loading: labels?.loading || tableLocale.label_loading,
+    search: labels?.search || tableLocale.label_search,
+  };
+
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(
@@ -406,16 +456,6 @@ export function ListTable({
 
   const items = useMemo(() => initialItems ?? SAMPLE_DATA, [initialItems]);
 
-  const L = useMemo(() => ({
-    addItem: "Add Item",
-    itemName: "Item Name",
-    itemCode: "Code",
-    category: "Category",
-    type: "Type",
-    inventory: "Inventory",
-    price: "Price",
-    ...labels
-  }), [labels]);
 
   // Keep internal state for fallback
   const [internalFilters, setInternalFilters] = useState<Filters>({
@@ -475,7 +515,7 @@ export function ListTable({
             className="w-16 text-left font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            ID
+            {L.id}
           </div>
         ),
         cell: ({ row }) => (
@@ -597,7 +637,7 @@ export function ListTable({
             className="w-32 text-right font-mono text-[10px] tracking-widest text-muted-foreground cursor-pointer hover:text-foreground transition-colors uppercase"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Status
+            {L.status}
           </div>
         ),
         cell: ({ row }) => (
@@ -615,7 +655,7 @@ export function ListTable({
       {
         id: "actions",
         name: "Actions",
-        header: () => <div className="w-24 pr-7" />,
+        header: () => <div className="w-24 pr-7 text-right font-mono text-[10px] tracking-widest text-muted-foreground uppercase">{L.actions}</div>,
         cell: () => (
           <div className="w-24 pr-7 py-2.5 text-right">
             <div className="flex items-center justify-end text-muted-foreground">
@@ -720,7 +760,7 @@ export function ListTable({
         <div className="flex items-center h-8">
           {isSearchActive && (
             <span className="text-sm font-medium text-muted-foreground font-body text-transform-secondary">
-              {totalFilteredCount} of {items.length} items matched criteria.
+              {L.matchCount ? L.matchCount.replace('{count}', totalFilteredCount.toString()).replace('{total}', items.length.toString()) : `${totalFilteredCount} of ${items.length} items matched criteria.`}
             </span>
           )}
         </div>
@@ -730,7 +770,7 @@ export function ListTable({
             <Input
               variant="filled"
               leadingIcon="search"
-              placeholder="Search..."
+              placeholder={L.searchPlaceholder || "Search..."}
               value={searchQuery}
               onChange={(e) => setInternalSearchQuery(e.target.value)}
               onKeyDown={(e) => {
@@ -748,7 +788,7 @@ export function ListTable({
             className="relative h-[var(--input-height,var(--button-height,48px))] px-6"
           >
             <Filter className="h-4 w-4 mr-2" />
-            <span className="font-display font-medium text-xs text-transform-primary">Filter</span>
+            <span className="font-display font-medium text-xs text-transform-primary">{L.filterButton || "Filter"}</span>
             {totalFiltersCount > 0 && (
               <Badge className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center p-0 text-xs rounded-full bg-error text-on-error border-none z-20">
                 {totalFiltersCount}
@@ -773,7 +813,7 @@ export function ListTable({
             <motion.div
               key="filters"
               initial={{ width: 0, opacity: 0 }}
-              animate={{ width: 288, opacity: 1 }}
+            animate={{ width: 288, opacity: 1 }}
               exit={{ width: 0, opacity: 0 }}
               transition={{ duration: 0.2 }}
               className="overflow-hidden border-r border-border bg-layer-panel w-72 flex-shrink-0 flex"
@@ -782,6 +822,7 @@ export function ListTable({
                 filters={activeFilters}
                 onChange={handleFilterChange}
                 data={items}
+                labels={L}
               />
             </motion.div>
           )}
@@ -795,7 +836,7 @@ export function ListTable({
             </PopoverTrigger>
             <PopoverContent className="w-56 p-0 bg-surface shadow-2xl border border-outline rounded-xl" align="end" sideOffset={8}>
               <div className="p-3">
-                <p className="font-dev text-[10px] text-muted-foreground font-semibold tracking-wide uppercase">Columns</p>
+                <p className="font-dev text-[10px] text-muted-foreground font-semibold tracking-wide uppercase">{L.columns || "Columns"}</p>
               </div>
               <div className="px-3 pb-3 flex flex-col gap-3">
                 {table.getAllColumns()
@@ -857,8 +898,8 @@ export function ListTable({
                     ))
                   ) : (
                     <TableRow>
-                      <TableCell colSpan={columns.length} className="h-48 text-center p-12">
-                        <p className="font-body text-transform-secondary text-muted-foreground">No items match your filters.</p>
+                      <TableCell colSpan={table.getVisibleFlatColumns().length} className="h-32 text-center bg-layer-base">
+                        <p className="font-body text-transform-secondary text-muted-foreground">{L.noResults || "No items match your filters."}</p>
                       </TableCell>
                     </TableRow>
                   )}
@@ -873,7 +914,7 @@ export function ListTable({
       <div className="border-t border-border bg-layer-panel px-7 py-4">
         <div className="flex items-center justify-between text-sm text-muted-foreground font-body text-transform-secondary">
           <div className="flex items-center gap-2">
-            <span className="text-transform-secondary">Show</span>
+            <span className="text-transform-secondary">{L.show || "Show"}</span>
             <Select
               value={pageSize.toString()}
               onValueChange={(val) => {
@@ -894,21 +935,22 @@ export function ListTable({
                 ))}
               </SelectContent>
             </Select>
-            <span className="text-transform-secondary">items per page</span>
+            <span className="text-transform-secondary">{L.itemsPerPage || "items per page"}</span>
           </div>
-
-          <div className="flex items-center gap-6">
-            <span className="text-xs font-mono tracking-widest uppercase opacity-60">
-              Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
-            </span>
-            {table.getPageCount() > 1 && (
+          {table.getPageCount() > 1 && (
+            <div className="flex items-center gap-6">
+              <span className="text-xs font-mono tracking-widest uppercase opacity-60">
+                {L.pageOf ? L.pageOf.replace('{current}', (table.getState().pagination.pageIndex + 1).toString()).replace('{total}', table.getPageCount().toString()) : (
+                  <>Page <span className="text-primary font-bold">{table.getState().pagination.pageIndex + 1}</span> of {table.getPageCount()}</>
+                )}
+              </span>
               <Pagination className="mx-0 w-auto m-0">
                 <PaginationContent>
-                  {table.getPageCount() > 2 && (
+                  {table.getPageCount() > 1 && (
                     <PaginationItem>
                       <PaginationPrevious
                         href="#"
-                        className={(!table.getCanPreviousPage() && controlledPageCount === undefined) ? "font-mono text-[10px] tracking-widest uppercase opacity-50 pointer-events-none" : "font-mono text-[10px] tracking-widest uppercase cursor-pointer"}
+                        className={(onPageChange ? pageIndex === 0 : !table.getCanPreviousPage()) ? "font-mono text-[10px] tracking-widest uppercase opacity-50 pointer-events-none" : "font-mono text-[10px] tracking-widest uppercase cursor-pointer"}
                         onClick={(e) => {
                           e.preventDefault();
                           if (onPageChange) {
@@ -925,7 +967,12 @@ export function ListTable({
                       <PaginationLink
                         href="#"
                         isActive={table.getState().pagination.pageIndex === i}
-                        className="font-mono text-[10px] tracking-widest uppercase cursor-pointer"
+                        className={cn(
+                          "font-mono text-[10px] tracking-widest uppercase cursor-pointer transition-all duration-200",
+                          table.getState().pagination.pageIndex === i 
+                            ? "bg-primary text-primary-foreground shadow-md scale-110 border-primary" 
+                            : "hover:bg-surface-variant"
+                        )}
                         onClick={(e) => {
                           e.preventDefault();
                           if (onPageChange) {
@@ -939,11 +986,11 @@ export function ListTable({
                       </PaginationLink>
                     </PaginationItem>
                   ))}
-                  {table.getPageCount() > 2 && (
+                  {table.getPageCount() > 1 && (
                     <PaginationItem>
                       <PaginationNext
                         href="#"
-                        className={(!table.getCanNextPage() && controlledPageCount === undefined) ? "font-mono text-[10px] tracking-widest uppercase opacity-50 pointer-events-none" : "font-mono text-[10px] tracking-widest uppercase cursor-pointer"}
+                        className={(onPageChange ? pageIndex >= (controlledPageCount ?? table.getPageCount()) - 1 : !table.getCanNextPage()) ? "font-mono text-[10px] tracking-widest uppercase opacity-50 pointer-events-none" : "font-mono text-[10px] tracking-widest uppercase cursor-pointer"}
                         onClick={(e) => {
                           e.preventDefault();
                           if (onPageChange) {
@@ -957,8 +1004,8 @@ export function ListTable({
                   )}
                 </PaginationContent>
               </Pagination>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </div>
 
@@ -973,7 +1020,7 @@ export function ListTable({
           >
             <div className="flex flex-col items-center gap-3">
               <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
-              <span className="text-sm font-medium text-foreground font-body">Loading data...</span>
+              <span className="text-sm font-medium text-foreground font-body">{L.loading || "Loading data..."}</span>
             </div>
           </motion.div>
         )}

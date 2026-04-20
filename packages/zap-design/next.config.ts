@@ -42,6 +42,10 @@ const nextConfig: NextConfig = {
       {
         source: '/api/proxy/crm-gateway/:path*',
         destination: 'https://crm-gateway-v1-9t9or3wt.uc.gateway.dev/api/:path*',
+      },
+      {
+        source: '/api/proxy/zap-gateway/:path*',
+        destination: 'https://zap-ecosystem-gateway-2lz9mfdk.uc.gateway.dev/api/:path*',
       }
     ];
   },

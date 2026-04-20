@@ -55,7 +55,7 @@ export default function PageTaxTemplate() {
 
     const handlePageChange = (index: number) => {
         baseHandlePageChange(index);
-        
+
         // Update URL param 'p'
         const params = new URLSearchParams(searchParams.toString());
         params.set('p', index.toString());
@@ -100,10 +100,13 @@ export default function PageTaxTemplate() {
             onToggleFilters={() => setInspectorState(inspectorState === 'expanded' ? 'collapsed' : 'expanded')}
             isFilterActive={inspectorState === 'expanded'}
             columns={columns as any}
+            lang={lang === 'vi' ? 'vi' : 'en'}
             labels={{
                 addItem: t.label_addTax,
                 itemName: t.label_name,
-                type: t.label_status
+                type: t.label_status,
+                searchPlaceholder: t.placeholder_search,
+                filterButton: t.label_filter,
             }}
             onAddClick={() => console.log('Add clicked')}
         />

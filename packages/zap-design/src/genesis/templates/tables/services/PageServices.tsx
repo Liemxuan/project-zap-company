@@ -12,49 +12,9 @@ import { Service } from '@/services/service/service.model';
 import { getServiceColumns } from './components/columns';
 import { getServiceFilterGroups } from './components/filters';
 import { ServiceInspector } from './components/inspector';
+import serviceEn from '@/locale/service/en';
+import serviceVi from '@/locale/service/vi';
 
-// Locales
-const en = {
-    label_name: "Name",
-    label_price: "Price",
-    label_category: "Category",
-    label_status: "Status",
-    label_addService: "Add Service",
-    label_inspector: "Inspector",
-    label_filters: "Filters",
-    status_active: "Active",
-    status_inactive: "Inactive",
-    category_housekeeping: "Housekeeping",
-    category_dining: "Dining",
-    category_maintenance: "Maintenance",
-    msg_selectService: "Select a service to view details",
-    nav_zapOs: "ZAP OS",
-    nav_overview: "Overview",
-    nav_settings: "Settings",
-    nav_services: "Services",
-    nav_setup: "Setup"
-};
-
-const vi = {
-    label_name: "Tên",
-    label_price: "Giá",
-    label_category: "Danh mục",
-    label_status: "Trạng thái",
-    label_addService: "Thêm dịch vụ",
-    label_inspector: "Kiểm tra",
-    label_filters: "Bộ lọc",
-    status_active: "Hoạt động",
-    status_inactive: "Ngừng",
-    category_housekeeping: "Dọn dẹp",
-    category_dining: "Ăn uống",
-    category_maintenance: "Bảo trì",
-    msg_selectService: "Chọn một dịch vụ để xem chi tiết",
-    nav_zapOs: "ZAP OS",
-    nav_overview: "Tổng quan",
-    nav_settings: "Cài đặt",
-    nav_services: "Dịch vụ",
-    nav_setup: "Thiết lập"
-};
 
 export default function PageServicesTemplate() {
     const { theme: appTheme, inspectorState, setInspectorState } = useTheme();
@@ -68,7 +28,7 @@ export default function PageServicesTemplate() {
     const initialPage = pageParam ? parseInt(pageParam) : 1;
 
     const lang = searchParams.get('lang');
-    const t = lang === 'vi' ? vi : en;
+    const t = lang === 'vi' ? serviceVi : serviceEn;
 
     // --- State ---
     const [selectedItem, setSelectedItem] = useState<Service | null>(null);
@@ -129,10 +89,13 @@ export default function PageServicesTemplate() {
             onToggleFilters={() => setInspectorState(inspectorState === 'expanded' ? 'collapsed' : 'expanded')}
             isFilterActive={inspectorState === 'expanded'}
             columns={columns as any}
+            lang={lang === 'vi' ? 'vi' : 'en'}
             labels={{
                 addItem: t.label_addService,
                 itemName: t.label_name,
-                type: t.label_status
+                type: t.label_status,
+                searchPlaceholder: t.label_search,
+                filterButton: t.label_filter,
             }}
             onAddClick={() => console.log('Add clicked')}
         />
@@ -208,9 +171,9 @@ export default function PageServicesTemplate() {
 
     return (
         <ComponentSandboxTemplate
-            componentName="Service-Management"
+            componentName={t.title_services}
             tier="L6 LAYOUT"
-            status="In Progress"
+            status="Verified"
             filePath="src/genesis/templates/tables/services/PageServices.tsx"
             importPath="@/genesis/templates/tables/services/PageServices"
             hideDataTerminal={true}
@@ -228,7 +191,7 @@ export default function PageServicesTemplate() {
         >
             <div className="w-full flex-1 flex items-center justify-center pt-8">
                 <CanvasDesktop
-                    title="Service Configuration // List View"
+                    title={t.title_services}
                     fullScreenHref={`/design/${activeTheme}/organisms/services?fullscreen=true`}
                 >
                     {layoutContent}

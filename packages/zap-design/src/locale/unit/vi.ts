@@ -30,6 +30,7 @@ export default {
     "field_name": "Tên",
     "field_shortName": "Tên viết tắt",
     "field_precision": "Độ chính xác",
+    "field_acronym": "Từ viết tắt",
     "dialog_createUnit": "Tạo Đơn vị",
     "dialog_editUnit": "Chỉnh sửa Đơn vị",
     "dialog_viewUnit": "Xem Đơn vị",

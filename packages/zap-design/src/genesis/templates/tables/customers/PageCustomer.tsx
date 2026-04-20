@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useMemo } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, usePathname, useRouter } from 'next/navigation';
 import { useTheme } from '@/components/ThemeContext';
 import { ComponentSandboxTemplate } from '@/zap/layout/ComponentSandboxTemplate';
 import { CanvasDesktop } from '@/components/dev/CanvasDesktop';
@@ -17,6 +17,10 @@ import { useCustomers } from '@/hooks/customer/use-customers';
 import { getColumns } from './components/columns';
 import { getFilterGroups, CUSTOMER_LABELS } from './components/filters';
 import { CustomerInspector } from './components/inspector';
+// Locales
+import customerEn from '@/locale/customer/en';
+import customerVi from '@/locale/customer/vi';
+
 
 /**
  * Customer Template
@@ -27,6 +31,10 @@ export default function PageCustomerTemplate() {
     const activeTheme = appTheme === 'core' ? 'core' : 'metro';
     const searchParams = useSearchParams();
     const isFullscreen = searchParams.get('fullscreen') === 'true';
+    const pathname = usePathname();
+    const router = useRouter();
+    const lang = searchParams.get('lang');
+    const t = lang === 'vi' ? customerVi : customerEn;
 
     // --- Data Fetching ---
     const {
@@ -57,8 +65,8 @@ export default function PageCustomerTemplate() {
     };
 
     // --- Memorized Data ---
-    const columns = useMemo(() => getColumns({ onAction: handleAction }), []);
-    const filterGroups = useMemo(() => getFilterGroups(apiFilters), [apiFilters]);
+    const columns = useMemo(() => getColumns({ onAction: handleAction, t }), [t]);
+    const filterGroups = useMemo(() => getFilterGroups(apiFilters, t), [apiFilters, t]);
 
     // --- Shared Components ---
     const TableTable = (
@@ -72,7 +80,18 @@ export default function PageCustomerTemplate() {
             onToggleFilters={() => setInspectorState(inspectorState === 'expanded' ? 'collapsed' : 'expanded')}
             isFilterActive={inspectorState === 'expanded'}
             columns={columns as any}
-            labels={CUSTOMER_LABELS}
+            lang={lang === 'vi' ? 'vi' : 'en'}
+            labels={{
+                addItem: t.label_addCustomer,
+                itemName: t.label_customerName,
+                itemCode: t.label_email,
+                category: t.label_membership,
+                type: t.label_status,
+                inventory: t.label_totalSpend,
+                price: t.label_lastVisit,
+                searchPlaceholder: t.label_search || "Search customers...",
+                filterButton: t.label_filter || "Filter"
+            }}
             onReorder={(newOrder) => console.log('Reordered:', newOrder)}
             isDraggable={true}
         />
@@ -102,11 +121,11 @@ export default function PageCustomerTemplate() {
                 <div className="flex-1 py-4 px-3 space-y-1 uppercase font-mono text-[11px] tracking-widest text-on-surface opacity-70">
                     <div className="px-3 py-2.5 rounded-md hover:bg-surface-variant/40 flex items-center gap-3 transition-colors cursor-pointer">
                         <Icon name="dashboard" size={18} />
-                        <span>Tổng quát</span>
+                        <span>{t.nav_overview}</span>
                     </div>
                     <div className="px-3 py-2.5 rounded-md bg-primary/10 text-primary flex items-center gap-3 border border-primary/20 cursor-pointer">
                         <Icon name="groups" size={18} />
-                        <span>Khách hàng</span>
+                        <span>{t.nav_customers}</span>
                     </div>
                 </div>
             </div>
@@ -115,9 +134,9 @@ export default function PageCustomerTemplate() {
             <div className="flex-1 flex flex-col min-w-0 bg-layer-base/50 relative">
                 <div className="h-14 border-b border-border bg-layer-base flex items-center px-6 justify-between shrink-0 shadow-sm z-10 relative">
                     <div className="flex items-center text-xs gap-1 font-dev text-transform-tertiary">
-                        <span className="opacity-50 uppercase tracking-widest">Quản lý</span>
+                        <span className="opacity-50 uppercase tracking-widest">{t.nav_management}</span>
                         <Icon name="chevron_right" size={14} className="opacity-30" />
-                        <span className="font-bold text-on-surface uppercase tracking-widest">Khách hàng</span>
+                        <span className="font-bold text-on-surface uppercase tracking-widest">{t.nav_customers}</span>
                     </div>
                 </div>
                 <div className="flex-1 overflow-auto pt-11 px-12 pb-16 flex flex-col relative z-0 min-w-0">
@@ -136,7 +155,7 @@ export default function PageCustomerTemplate() {
             <div className="flex h-screen w-full bg-layer-canvas overflow-hidden font-sans">
                 <SideNav />
                 <div className="flex-1 flex flex-col min-w-0 bg-transparent relative">
-                    <ThemeHeader title="Customers" badge={null} />
+                    <ThemeHeader title={t.title_customers} badge={null} />
                     <div className="flex-1 overflow-auto pt-8 px-12 pb-16 flex flex-col relative z-0 bg-layer-base min-w-0">
                         {TableTable}
                     </div>
@@ -148,7 +167,7 @@ export default function PageCustomerTemplate() {
 
     return (
         <ComponentSandboxTemplate
-            componentName="Customers"
+            componentName={t.title_customers}
             tier="L6 LAYOUT"
             status="Verified"
             filePath="src/genesis/templates/tables/customers/PageCustomer.tsx"
@@ -168,7 +187,7 @@ export default function PageCustomerTemplate() {
         >
             <div className="w-full flex-1 flex items-center justify-center pt-8">
                 <CanvasDesktop
-                    title="Customer Management"
+                    title={t.title_customers}
                     fullScreenHref={`/design/${activeTheme}/organisms/customers?fullscreen=true`}
                 >
                     {mockShellLayout}

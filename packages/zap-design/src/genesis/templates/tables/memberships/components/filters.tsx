@@ -1,34 +1,22 @@
 import { FilterGroup } from '@/genesis/molecules/data-filter';
 import { MembershipFilters } from '@/services/membership/membership.model';
 
-/**
- * Labels for the Membership module
- */
-export const MEMBERSHIP_LABELS = {
-    addItem: "New membership",
-    itemName: "Membership",
-    itemCode: "Status", // Mapping to tier name/status for basic ListTable if needed
-    category: "Billing Cycle",
-    type: "Benefits",
-    inventory: "Active Users", // Extra field if needed
-    price: "Tier Price"
-};
 
 /**
  * Get filter groups configuration for Membership
  */
-export const getFilterGroups = (apiFilters: MembershipFilters): FilterGroup[] => [
+export const getFilterGroups = (apiFilters: MembershipFilters, t: any): FilterGroup[] => [
     {
         id: 'is_active',
-        title: 'Status',
+        title: t.label_status,
         options: [
-            { id: 'true', label: 'Active', selected: apiFilters.is_active === true },
-            { id: 'false', label: 'Inactive', selected: apiFilters.is_active === false },
+            { id: 'true', label: t.status_active, selected: apiFilters.is_active === true },
+            { id: 'false', label: t.status_inactive, selected: apiFilters.is_active === false },
         ]
     },
     {
         id: 'billing_cycle',
-        title: 'Billing Cycle',
+        title: t.label_billingCycle,
         options: [
             { id: 'Monthly', label: 'Monthly', selected: apiFilters.billing_cycle === 'Monthly' },
             { id: 'Yearly', label: 'Yearly', selected: apiFilters.billing_cycle === 'Yearly' },

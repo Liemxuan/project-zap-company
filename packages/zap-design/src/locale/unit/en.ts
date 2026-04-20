@@ -30,6 +30,7 @@ export default {
     "field_name": "Name",
     "field_shortName": "Symbol",
     "field_precision": "Precision",
+    "field_acronym": "Acronym",
     "dialog_createUnit": "Create Unit",
     "dialog_editUnit": "Edit Unit",
     "dialog_viewUnit": "View Unit",

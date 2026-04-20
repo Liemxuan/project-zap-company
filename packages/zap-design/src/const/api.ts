@@ -36,8 +36,8 @@ export const API_ENDPOINTS = {
   },
 
   UNIT: {
-    LIST: '/api/proxy/crm-gateway/uom/list',
-    DETAIL: '/api/proxy/crm-gateway/uom',
+    LIST: '/api/proxy/zap-gateway/v1/catalog/units/list',
+    DETAIL: '/api/proxy/zap-gateway/v1/catalog/units',
   },
 
   GROUP_PRODUCT: {

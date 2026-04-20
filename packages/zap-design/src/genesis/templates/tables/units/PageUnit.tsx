@@ -52,6 +52,7 @@ export default function PageUnitTemplate() {
         isLoading,
         pagination,
         handlePageChange: baseHandlePageChange,
+        handlePageSizeChange: baseHandlePageSizeChange,
         handleSearch,
         handleFilterChange,
         filters: apiFilters,
@@ -67,6 +68,15 @@ export default function PageUnitTemplate() {
         // Update URL param 'p'
         const params = new URLSearchParams(searchParams.toString());
         params.set('p', index.toString());
+        router.push(`${pathname}?${params.toString()}`);
+    };
+
+    const handlePageSizeChange = (size: number) => {
+        baseHandlePageSizeChange(size);
+        
+        // Reset URL param 'p' to 1 when page size changes
+        const params = new URLSearchParams(searchParams.toString());
+        params.set('p', '1');
         router.push(`${pathname}?${params.toString()}`);
     };
 
@@ -123,13 +133,18 @@ export default function PageUnitTemplate() {
             pageSize={pagination.page_size}
             pageCount={pagination.total_page}
             onPageChange={(p) => handlePageChange(p + 1)}
+            onPageSizeChange={handlePageSizeChange}
             onToggleFilters={() => setInspectorState(inspectorState === 'expanded' ? 'collapsed' : 'expanded')}
             isFilterActive={inspectorState === 'expanded'}
             columns={columns as any}
+            lang={lang === 'vi' ? 'vi' : 'en'}
             labels={{
                 addItem: t.label_addUnit,
                 itemName: t.label_unitName,
-                type: t.label_status
+                type: t.label_status,
+                filtersTitle: t.inspector_filters,
+                searchPlaceholder: t.label_search,
+                filterButton: t.label_filter,
             }}
             onAddClick={() => setIsCreating(true)}
         />

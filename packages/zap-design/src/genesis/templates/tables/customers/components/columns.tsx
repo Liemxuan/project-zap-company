@@ -12,9 +12,11 @@ import { Avatar } from '@/genesis/atoms/status/avatars';
  * Get columns definition for Customers table
  */
 export const getColumns = ({
-    onAction
+    onAction,
+    t
 }: {
     onAction: (type: string, item: Customer) => void;
+    t: any;
 }): ColumnDef<Customer>[] => [
         {
             id: "select",
@@ -65,7 +67,7 @@ export const getColumns = ({
                     className="w-80 text-left tracking-widest cursor-pointer transition-colors"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    <Text size='label-small' className='font-semibold'>Name</Text>
+                    <Text size='label-small' className='font-semibold'>{t.label_customerName}</Text>
                 </div>
             ),
             cell: ({ row }) => (
@@ -97,7 +99,7 @@ export const getColumns = ({
                     className="w-40 text-left tracking-widest cursor-pointer hover:text-foreground transition-colors"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    <Text size='label-small' className='font-semibold'>Phone</Text>
+                    <Text size='label-small' className='font-semibold'>{t.label_phone}</Text>
                 </div>
             ),
             cell: ({ row }) => (
@@ -116,7 +118,7 @@ export const getColumns = ({
                     className="w-56 text-left tracking-widest cursor-pointer hover:text-foreground transition-colors"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    <Text size='label-small' className='font-semibold'>Email</Text>
+                    <Text size='label-small' className='font-semibold'>{t.label_email}</Text>
                 </div>
             ),
             cell: ({ row }) => (
@@ -172,7 +174,7 @@ export const getColumns = ({
                     className="w-32 text-left tracking-widest cursor-pointer hover:text-foreground transition-colors"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    <Text size='label-small' className='font-semibold'>Membership</Text>
+                    <Text size='label-small' className='font-semibold'>{t.label_membership}</Text>
                 </div>
             ),
             cell: ({ row }) => (
@@ -193,7 +195,7 @@ export const getColumns = ({
                     className="w-32 text-right pr-4 tracking-widest cursor-pointer hover:text-foreground transition-colors"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    <Text size='label-small' className='font-semibold'>Total Spend</Text>
+                    <Text size='label-small' className='font-semibold'>{t.label_totalSpend}</Text>
                 </div>
             ),
             cell: ({ row }) => (
@@ -212,7 +214,7 @@ export const getColumns = ({
                     className="w-32 text-left tracking-widest cursor-pointer hover:text-foreground transition-colors"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    <Text size='label-small' className='font-semibold'>Status</Text>
+                    <Text size='label-small' className='font-semibold'>{t.label_status}</Text>
                 </div>
             ),
             cell: ({ row }) => {
@@ -225,7 +227,7 @@ export const getColumns = ({
                             }`}>
                             <div className={`w-1 h-1 rounded-full ${isActive ? 'bg-emerald-600' : 'bg-rose-600'}`} />
                             <span className="text-[10px] font-bold uppercase tracking-widest">
-                                {isActive ? 'Active' : 'Inactive'}
+                                {isActive ? t.status_active : t.status_inactive}
                             </span>
                         </div>
                     </div>

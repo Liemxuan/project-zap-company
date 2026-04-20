@@ -7,6 +7,7 @@ import { Pencil, Trash2, Copy, Eye } from "lucide-react";
 import { Unit } from '@/services/unit/unit.model';
 import { Avatar } from '@/genesis/atoms/status/avatars';
 import { Text } from '@/genesis/atoms/typography/text';
+import { removeAccents, getInitials } from '@/lib/utils';
 
 export const UNIT_LABELS = {
     id: "ID",
@@ -54,14 +55,14 @@ export const getUnitColumns = (
             id: "id",
             header: ({ column }) => (
                 <div
-                    className="w-24 text-right tracking-widest cursor-pointer hover:text-foreground transition-colors"
+                    className="w-14 text-right tracking-widest cursor-pointer hover:text-foreground transition-colors"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
                     <Text size='label-small' className="font-semibold text-foreground truncate uppercase">{t.column_id}</Text>
                 </div>
             ),
             cell: ({ row }) => (
-                <div className="w-24 truncate font-dev text-transform-tertiary text-muted-foreground text-right py-2.5">
+                <div className="w-14 truncate font-dev text-transform-tertiary text-muted-foreground text-right py-2.5">
                     {row.original.serial_id || row.original.id}
                 </div>
             ),
@@ -85,9 +86,9 @@ export const getUnitColumns = (
                         <div className="w-10 h-10 flex items-center justify-center shrink-0 overflow-hidden">
                             <Avatar
                                 className="w-full h-full object-cover border-[1px] border-border group-hover:border-primary transition-colors"
-                                initials={row.original.acronymn}
+                                initials={row.original.acronymn || getInitials(row.original.name)}
                                 size="sm"
-                                fallback={row.original.acronymn}
+                                fallback={row.original.acronymn || getInitials(row.original.name)}
                             />
                         </div>
                         <div className="flex flex-col min-w-0">
@@ -110,7 +111,7 @@ export const getUnitColumns = (
             ),
             cell: ({ row }) => (
                 <div className="w-32 py-2.5 text-left font-dev text-transform-tertiary text-muted-foreground">
-                    {row.original.symbol}
+                    {row.original.symbol || row.original.abbreviation || ""}
                 </div>
             ),
         },

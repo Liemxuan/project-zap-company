@@ -131,6 +131,7 @@ export default function PageCollectionTemplate() {
                 type: t.label_status
             }}
             onAddClick={() => handleAction('create', null)}
+            lang={lang === 'vi' ? 'vi' : 'en'}
         />
     );
 

@@ -25,11 +25,11 @@
       }
     },
     "typography": {
-      "primaryFont": "var(--font-space-grotesk), sans-serif",
+      "primaryFont": "var(--font-inter), sans-serif",
       "primaryTransform": "capitalize",
-      "secondaryFont": "var(--font-space-grotesk), sans-serif",
+      "secondaryFont": "var(--font-inter), sans-serif",
       "secondaryTransform": "capitalize",
-      "tertiaryFont": "var(--font-space-grotesk), sans-serif",
+      "tertiaryFont": "var(--font-inter), sans-serif",
       "tertiaryTransform": "capitalize"
     }
   },
@@ -110,11 +110,11 @@
     "radioSize": "18px !important",
     "radioBorderWidth": "2px !important",
     "formItemGap": "12px !important",
-    "fontDisplay": "var(--font-space-grotesk), sans-serif !important",
+    "fontDisplay": "var(--font-inter), sans-serif !important",
     "headingTransform": "capitalize !important",
-    "fontBody": "var(--font-space-grotesk), sans-serif !important",
+    "fontBody": "var(--font-inter), sans-serif !important",
     "bodyTransform": "capitalize !important",
-    "fontDev": "var(--font-space-grotesk), sans-serif !important",
+    "fontDev": "var(--font-inter), sans-serif !important",
     "devTransform": "capitalize !important",
     "buttonColor": "primary !important",
     "buttonSize": "default !important",
@@ -216,5 +216,5 @@
     "productImageBorderWidth": "2px !important"
   },
   "name": "METRO",
-  "updatedAt": "2026-04-10T03:06:52.623Z"
+  "updatedAt": "2026-04-20T06:06:02.197Z"
 }

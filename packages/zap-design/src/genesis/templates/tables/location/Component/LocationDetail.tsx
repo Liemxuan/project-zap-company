@@ -53,7 +53,7 @@ function HoursRow({ day, defaultEnabled = false, open, close }: { day: string; d
     );
 }
 
-export default function LocationDetail({ onCancel, location }: { onCancel?: () => void; location?: Partial<Location> }) {
+export default function LocationDetail({ onCancel, location, t }: { onCancel?: () => void; location?: Partial<Location>; t?: any }) {
     const { theme } = useTheme();
     const lp = theme === 'metro' ? 'floating' : 'top';
 
@@ -93,7 +93,7 @@ export default function LocationDetail({ onCancel, location }: { onCancel?: () =
                                 placeholder=""
                                 position={lp}
                                 label="Business description"
-                                className="border border-outline-variant bg-white"
+                                className="border border-outline-variant bg-layer-base"
                                 defaultValue={location?.description || ''}
                             />
                             <div className="flex justify-end mt-1">
@@ -111,8 +111,8 @@ export default function LocationDetail({ onCancel, location }: { onCancel?: () =
                             label="Location type"
                             position={lp}
                             placeholder="Select type"
-                            bgColor="white"
-                            triggerClassName="border border-outline-variant"
+                            bgColor="transparent"
+                            triggerClassName="border border-outline-variant bg-layer-base"
                         >
                             <SelectItem value="1">Physical location</SelectItem>
                             <SelectItem value="2">Virtual / Online</SelectItem>
@@ -140,8 +140,8 @@ export default function LocationDetail({ onCancel, location }: { onCancel?: () =
                                 label="Province"
                                 position={lp}
                                 placeholder="Select province"
-                                bgColor="white"
-                                triggerClassName="border border-outline-variant"
+                                bgColor="transparent"
+                                triggerClassName="border border-outline-variant bg-layer-base"
                                 defaultValue={location?.province_id?.toString() ?? ''}
                             >
                                 <SelectItem value="hcm">Ho Chi Minh</SelectItem>
@@ -248,8 +248,8 @@ export default function LocationDetail({ onCancel, location }: { onCancel?: () =
                             label="Time Zone"
                             position={lp}
                             placeholder="Select time zone"
-                            bgColor="white"
-                            triggerClassName="border border-outline-variant"
+                            bgColor="transparent"
+                            triggerClassName="border border-outline-variant bg-layer-base"
                         >
                             <SelectItem value="utc7">Asia/Ho_Chi_Minh (UTC+07:00)</SelectItem>
                             <SelectItem value="est">(GMT-05:00) Eastern Time</SelectItem>
@@ -281,8 +281,8 @@ export default function LocationDetail({ onCancel, location }: { onCancel?: () =
                         label="Select language"
                         position={lp}
                         placeholder="Select language"
-                        bgColor="white"
-                        triggerClassName="border border-outline-variant"
+                        bgColor="transparent"
+                        triggerClassName="border border-outline-variant bg-layer-base"
                     >
                         <SelectItem value="en">English</SelectItem>
                         <SelectItem value="vi">Vietnamese</SelectItem>
@@ -301,8 +301,8 @@ export default function LocationDetail({ onCancel, location }: { onCancel?: () =
                         position={lp}
                         placeholder="Select a location"
                         defaultValue="loc1"
-                        bgColor="white"
-                        triggerClassName="border border-outline-variant"
+                        bgColor="transparent"
+                        triggerClassName="border border-outline-variant bg-layer-base"
                     >
                         <SelectItem value="loc1">Flagship LA</SelectItem>
                         <SelectItem value="loc2">NYC Hub</SelectItem>

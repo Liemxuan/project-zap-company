@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useMemo } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, usePathname, useRouter } from 'next/navigation';
 import { useTheme } from '@/components/ThemeContext';
 import { ComponentSandboxTemplate } from '@/zap/layout/ComponentSandboxTemplate';
 import { CanvasDesktop } from '@/components/dev/CanvasDesktop';
@@ -17,6 +17,9 @@ import { useGroupProducts } from '@/hooks/group-product/use-group-products';
 import { getColumns } from './components/columns';
 import { getFilterGroups, GROUP_PRODUCT_LABELS } from './components/filters';
 import { GroupProductInspector } from './components/inspector';
+// Locales
+import groupProductEn from '@/locale/group-product/en';
+import groupProductVi from '@/locale/group-product/vi';
 
 /**
  * Group Product Template - Optimized Version
@@ -27,6 +30,10 @@ export default function PageGroupProductTemplate() {
     const activeTheme = appTheme === 'core' ? 'core' : 'metro';
     const searchParams = useSearchParams();
     const isFullscreen = searchParams.get('fullscreen') === 'true';
+    const pathname = usePathname();
+    const router = useRouter();
+    const lang = searchParams.get('lang');
+    const t = lang === 'vi' ? groupProductVi : groupProductEn;
 
     // --- Data Fetching ---
     const {
@@ -55,8 +62,8 @@ export default function PageGroupProductTemplate() {
     };
 
     // --- Memorized Data ---
-    const columns = useMemo(() => getColumns({ onAction: handleAction }), []);
-    const filterGroups = useMemo(() => getFilterGroups(apiFilters), [apiFilters]);
+    const columns = useMemo(() => getColumns({ onAction: handleAction, t }), [t]);
+    const filterGroups = useMemo(() => getFilterGroups(apiFilters, t), [apiFilters, t]);
 
     // --- Shared Components ---
     const TableTable = (
@@ -71,7 +78,16 @@ export default function PageGroupProductTemplate() {
             onToggleFilters={() => setInspectorState(inspectorState === 'expanded' ? 'collapsed' : 'expanded')}
             isFilterActive={inspectorState === 'expanded'}
             columns={columns as any}
-            labels={GROUP_PRODUCT_LABELS}
+            lang={lang === 'vi' ? 'vi' : 'en'}
+            labels={{
+                addItem: t.label_addGroupProduct,
+                itemName: t.label_groupProductName,
+                itemCode: t.label_sku,
+                category: t.label_category,
+                type: t.label_status,
+                inventory: t.label_itemsCount,
+                price: t.label_price
+            }}
             defaultColumnVisibility={{ Location: false }}
         />
     );
@@ -101,15 +117,15 @@ export default function PageGroupProductTemplate() {
                 <div className="flex-1 py-4 px-3 space-y-1 uppercase font-mono text-[11px] tracking-widest text-on-surface opacity-70">
                     <div className="px-3 py-2.5 rounded-md hover:bg-surface-variant/40 flex items-center gap-3 transition-colors cursor-pointer">
                         <Icon name="dashboard" size={18} />
-                        <span>Overview</span>
+                        <span>{t.nav_overview}</span>
                     </div>
                     <div className="px-3 py-2.5 rounded-md hover:bg-surface-variant/40 flex items-center gap-3 transition-colors cursor-pointer">
                         <Icon name="category" size={18} />
-                        <span>Categories</span>
+                        <span>{t.nav_categories}</span>
                     </div>
                     <div className="px-3 py-2.5 rounded-md bg-primary/10 text-primary flex items-center gap-3 border border-primary/20 cursor-pointer">
                         <Icon name="inventory" size={18} />
-                        <span>Group Products</span>
+                        <span>{t.nav_groupProducts}</span>
                     </div>
                 </div>
             </div>
@@ -118,9 +134,9 @@ export default function PageGroupProductTemplate() {
             <div className="flex-1 flex flex-col min-w-0 bg-layer-base/50 relative">
                 <div className="h-14 border-b border-border bg-layer-base flex items-center px-6 justify-between shrink-0 shadow-sm z-10 relative">
                     <div className="flex items-center text-xs gap-1 font-dev text-transform-tertiary">
-                        <span className="opacity-50 uppercase tracking-widest">Catalog</span>
+                        <span className="opacity-50 uppercase tracking-widest">{t.nav_catalog}</span>
                         <Icon name="chevron_right" size={14} className="opacity-30" />
-                        <span className="font-bold text-on-surface uppercase tracking-widest">Group Products</span>
+                        <span className="font-bold text-on-surface uppercase tracking-widest">{t.nav_groupProducts}</span>
                     </div>
                 </div>
                 <div className="flex-1 overflow-auto pt-11 px-12 pb-16 flex flex-col relative z-0 min-w-0">
@@ -139,7 +155,7 @@ export default function PageGroupProductTemplate() {
             <div className="flex h-screen w-full bg-layer-canvas overflow-hidden font-sans">
                 <SideNav />
                 <div className="flex-1 flex flex-col min-w-0 bg-transparent relative">
-                    <ThemeHeader title="Group products" badge={null} />
+                    <ThemeHeader title={t.title_groupProducts} badge={null} />
                     <div className="flex-1 overflow-auto pt-8 px-12 pb-16 flex flex-col relative z-0 bg-layer-base min-w-0">
                         {TableTable}
                     </div>
@@ -151,7 +167,7 @@ export default function PageGroupProductTemplate() {
 
     return (
         <ComponentSandboxTemplate
-            componentName="Group products"
+            componentName={t.title_groupProducts}
             tier="L6 LAYOUT"
             status="Verified"
             filePath="src/genesis/templates/tables/group-product/PageGroupProduct.tsx"
@@ -171,7 +187,7 @@ export default function PageGroupProductTemplate() {
         >
             <div className="w-full flex-1 flex items-center justify-center pt-8">
                 <CanvasDesktop
-                    title="Group Products // Collection"
+                    title={t.title_groupProducts}
                     fullScreenHref={`/design/${activeTheme}/organisms/group-products?fullscreen=true`}
                 >
                     {mockShellLayout}

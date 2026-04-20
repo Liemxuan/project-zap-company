@@ -22,3 +22,16 @@ export function parseCssToNumber(value: string | undefined): number {
     }
     return Math.round(parseFloat(str)) || 0;
 }
+export function removeAccents(str: string): string {
+    return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/đ/g, 'd').replace(/Đ/g, 'D');
+}
+
+export function getInitials(name: string): string {
+    if (!name) return "";
+    const cleanName = removeAccents(name.trim());
+    const words = cleanName.split(/\s+/).filter(w => w.length > 0);
+    if (words.length >= 2) {
+        return (words[0][0] + words[1][0]).toUpperCase();
+    }
+    return words[0][0].toUpperCase();
+}

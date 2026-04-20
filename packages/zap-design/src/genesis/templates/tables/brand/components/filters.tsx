@@ -3,7 +3,9 @@ import { FilterGroup } from '@/genesis/molecules/data-filter';
 export const getBrandLabels = (t: any) => ({
     addItem: t.label_addBrand,
     itemName: t.label_brandName,
-    type: t.label_type
+    type: t.label_type,
+    searchPlaceholder: t.label_search,
+    filterButton: t.label_filter,
 });
 
 export const getFilterGroups = (apiFilters: any, t: any): FilterGroup[] => [

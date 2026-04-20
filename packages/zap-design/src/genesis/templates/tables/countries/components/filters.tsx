@@ -10,13 +10,13 @@ export const COUNTRY_LABELS = {
     price: "Currency",
 };
 
-export const getFilterGroups = (filters: CountryFilters) => [
+export const getFilterGroups = (filters: CountryFilters, t: any) => [
     {
         id: 'is_active',
-        title: 'Status',
+        title: t.label_status,
         options: [
-            { id: 'true', label: 'Active', count: 0, selected: filters.is_active === true },
-            { id: 'false', label: 'Inactive', count: 0, selected: filters.is_active === false },
+            { id: 'true', label: t.status_active, count: 0, selected: filters.is_active === true },
+            { id: 'false', label: t.status_inactive, count: 0, selected: filters.is_active === false },
         ]
     }
 ];

@@ -4,6 +4,7 @@ export interface Unit {
     code: string;
     name: string;
     symbol: string;
+    abbreviation: string;
     precision: number;
     status_id: number;
     status_code?: string;

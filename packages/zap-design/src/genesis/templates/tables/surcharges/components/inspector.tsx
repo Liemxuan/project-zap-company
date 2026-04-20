@@ -21,7 +21,7 @@ export const SurchargeInspector: React.FC<SurchargeInspectorProps> = ({
             <div className="h-14 border-b border-border flex items-center px-4 justify-between shrink-0 bg-layer-panel">
                 <div className="flex items-center gap-2">
                     <Icon name="tune" size={18} className="text-primary" />
-                    <span className="font-bold text-xs uppercase tracking-widest text-on-surface font-display">{t.label_inspector}</span>
+                    <span className="font-bold text-xs text-transform-tertiary tracking-widest text-on-surface font-display">{t.label_inspector}</span>
                 </div>
             </div>
 
@@ -31,20 +31,22 @@ export const SurchargeInspector: React.FC<SurchargeInspectorProps> = ({
                     <div className="space-y-4 animate-in fade-in slide-in-from-right-2 duration-300">
                         <div className="p-4 rounded-xl bg-primary/5 border border-primary/10 space-y-3">
                             <div className="flex justify-between items-start">
-                                <span className="text-[11px] font-mono opacity-50 uppercase tracking-tighter">{selectedSurcharge.serial_id}</span>
-                                <Pill variant={selectedSurcharge.status_color as any || 'success'}>{selectedSurcharge.status_text}</Pill>
+                                <span className="text-[11px] font-dev opacity-50 text-transform-tertiary tracking-tighter">{selectedSurcharge.id}</span>
+                                <Pill variant={selectedSurcharge.status_id === '1' ? 'success' : 'neutral'}>
+                                    {selectedSurcharge.status_id === '1' ? t.status_active : t.status_inactive}
+                                </Pill>
                             </div>
                             <h3 className="font-bold text-lg text-on-surface leading-tight">{selectedSurcharge.name}</h3>
                             <div className="pt-2 border-t border-primary/10 grid grid-cols-2 gap-4">
                                 <div>
-                                    <span className="block text-[10px] uppercase opacity-40 font-bold mb-1">{t.label_value}</span>
-                                    <span className="text-sm font-mono font-bold">
-                                        {selectedSurcharge.value_type === 'percentage' ? `${selectedSurcharge.value}%` : `${selectedSurcharge.value.toLocaleString()} VND`}
+                                    <span className="block text-[10px] text-transform-tertiary opacity-40 font-bold mb-1">{t.label_value}</span>
+                                    <span className="text-sm font-dev font-bold">
+                                        {selectedSurcharge.qty_on_hand}%
                                     </span>
                                 </div>
                                 <div>
-                                    <span className="block text-[10px] uppercase opacity-40 font-bold mb-1">{t.label_type}</span>
-                                    <span className="text-sm font-bold uppercase tracking-widest">{selectedSurcharge.type}</span>
+                                    <span className="block text-[10px] text-transform-tertiary opacity-40 font-bold mb-1">{t.label_type}</span>
+                                    <span className="text-sm font-bold text-transform-tertiary tracking-widest">{selectedSurcharge.category_id}</span>
                                 </div>
                             </div>
                         </div>
@@ -58,7 +60,7 @@ export const SurchargeInspector: React.FC<SurchargeInspectorProps> = ({
 
                 {/* Filters Section */}
                 <div className="space-y-6">
-                    <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-on-surface opacity-40">
+                    <div className="flex items-center gap-2 text-[10px] font-bold text-transform-tertiary tracking-[0.2em] text-on-surface opacity-40">
                         <div className="h-[1px] flex-1 bg-current" />
                         <span>{t.label_filters}</span>
                         <div className="h-[1px] flex-1 bg-current" />
@@ -66,7 +68,7 @@ export const SurchargeInspector: React.FC<SurchargeInspectorProps> = ({
 
                     {filters.map((group) => (
                         <div key={group.id} className="space-y-3">
-                            <h4 className="text-[11px] font-bold text-on-surface/60 uppercase tracking-wider">{group.label}</h4>
+                            <h4 className="text-[11px] font-bold text-on-surface/60 text-transform-tertiary tracking-wider">{group.label}</h4>
                             <div className="flex flex-wrap gap-2">
                                 {group.options.map((option: any) => (
                                     <button
@@ -76,7 +78,7 @@ export const SurchargeInspector: React.FC<SurchargeInspectorProps> = ({
                                             px-3 py-1.5 rounded-full text-[11px] font-bold transition-all border
                                             ${option.isActive 
                                                 ? 'bg-primary border-primary text-primary-foreground shadow-sm' 
-                                                : 'bg-surface border-border text-on-surface/60 hover:border-primary/50'}
+                                                : 'bg-layer-base border-border text-on-surface/60 hover:border-primary/50'}
                                         `}
                                     >
                                         {option.label}

@@ -142,3 +142,46 @@ export function useMemberships(
     refresh,
   };
 }
+
+/**
+ * Hook to manage a single Membership detail
+ */
+export function useMembershipDetail(id: string | null) {
+    const [membership, setMembership] = useState<Membership | null>(null);
+    const [isLoading, setIsLoading] = useState(false);
+
+    const isMock = process.env.NEXT_PUBLIC_IS_MOCK === 'true' || true;
+
+    useEffect(() => {
+        if (!id) {
+            setMembership(null);
+            return;
+        }
+
+        const fetchDetail = async () => {
+            setIsLoading(true);
+            if (isMock) {
+                await new Promise(resolve => setTimeout(resolve, 300));
+                const found = MOCK_MEMBERSHIPS.find(m => m.id === id);
+                setMembership(found ? (found as Membership) : null);
+            } else {
+                try {
+                    const response = await membershipService.getById(id);
+                    if (response.success) {
+                        setMembership(response.data);
+                    }
+                } catch (err) {
+                    console.error('[useMembershipDetail] Error:', err);
+                }
+            }
+            setIsLoading(false);
+        };
+
+        fetchDetail();
+    }, [id, isMock]);
+
+    return {
+        membership,
+        isLoading
+    };
+}

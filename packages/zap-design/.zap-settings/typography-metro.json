@@ -1,11 +1,11 @@
 {
   "theme": "metro",
-  "primaryFont": "var(--font-space-grotesk), sans-serif",
+  "primaryFont": "var(--font-inter), sans-serif",
   "primaryTransform": "capitalize",
-  "secondaryFont": "var(--font-space-grotesk), sans-serif",
+  "secondaryFont": "var(--font-inter), sans-serif",
   "secondaryTransform": "capitalize",
-  "tertiaryFont": "var(--font-space-grotesk), sans-serif",
+  "tertiaryFont": "var(--font-inter), sans-serif",
   "tertiaryTransform": "capitalize",
   "components": {},
-  "updatedAt": "2026-04-10T03:06:52.629Z"
+  "updatedAt": "2026-04-20T06:06:02.204Z"
 }

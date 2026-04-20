@@ -7,6 +7,8 @@ import { Tabs } from '@/genesis/atoms/interactive/Tabs';
 import { Heading } from '@/genesis/atoms/typography/headings';
 import { Text } from '@/genesis/atoms/typography/text';
 
+import { removeAccents, getInitials } from '@/lib/utils';
+
 const LANGUAGES = [
     { id: 'en', label: 'English' },
     { id: 'vi', label: 'Vietnamese' },
@@ -21,6 +23,7 @@ interface UnitFields {
     name: string;
     symbol: string;
     precision: string;
+    acronymn: string;
 }
 
 interface UnitDetailProps {
@@ -40,7 +43,7 @@ export default function UnitDetail({ mode = 'create', item, onCancel, onSave, t,
     const isViewing = mode === 'view';
 
     const [viFields, setViFields] = useState<UnitFields>(() => {
-        const fields = { name: '', symbol: '', precision: '0' };
+        const fields = { name: '', symbol: '', precision: '0', acronymn: '' };
         if (item) {
             // Find Vietnamese translation (locale_id: 1)
             const trans = item.translations?.find((t: any) => t.locale_id === 1 || t.language_code === 'vi' || t.locale === 'vi');
@@ -49,12 +52,13 @@ export default function UnitDetail({ mode = 'create', item, onCancel, onSave, t,
             // Priority: item.symbol (frontend/updated API), item.abbreviation (legacy API), item.code (fallback)
             fields.symbol = item.symbol || (item as any).abbreviation || '';
             fields.precision = item.precision?.toString() || '0';
+            fields.acronymn = item.acronymn || getInitials(fields.name);
         }
         return fields;
     });
 
     const [enFields, setEnFields] = useState<UnitFields>(() => {
-        const fields = { name: '', symbol: '', precision: '0' };
+        const fields = { name: '', symbol: '', precision: '0', acronymn: '' };
         if (item) {
             // Find English translation (locale_id: 2)
             const trans = item.translations?.find((t: any) => t.locale_id === 2 || t.language_code === 'en' || t.locale === 'en');
@@ -62,6 +66,7 @@ export default function UnitDetail({ mode = 'create', item, onCancel, onSave, t,
             fields.name = trans?.name || item.name || '';
             fields.symbol = item.symbol || (item as any).abbreviation || '';
             fields.precision = item.precision?.toString() || '0';
+            fields.acronymn = item.acronymn || getInitials(fields.name);
         }
         return fields;
     });
@@ -72,9 +77,22 @@ export default function UnitDetail({ mode = 'create', item, onCancel, onSave, t,
 
     const updateField = (field: keyof UnitFields, value: string) => {
         if (activeLang === 'en') {
-            setEnFields(prev => ({ ...prev, [field]: value }));
+            setEnFields(prev => {
+                const next = { ...prev, [field]: value };
+                // Auto-generate acronym from name if acronym is empty or matches previous auto-gen
+                if (field === 'name' && (!prev.acronymn || prev.acronymn === getInitials(prev.name))) {
+                    next.acronymn = getInitials(value);
+                }
+                return next;
+            });
         } else {
-            setViFields(prev => ({ ...prev, [field]: value }));
+            setViFields(prev => {
+                const next = { ...prev, [field]: value };
+                if (field === 'name' && (!prev.acronymn || prev.acronymn === getInitials(prev.name))) {
+                    next.acronymn = getInitials(value);
+                }
+                return next;
+            });
         }
     };
 
@@ -88,6 +106,7 @@ export default function UnitDetail({ mode = 'create', item, onCancel, onSave, t,
         const payload = {
             name: enFields.name,
             symbol: enFields.symbol || viFields.symbol,
+            acronymn: enFields.acronymn || viFields.acronymn,
             precision: parseInt(enFields.precision || viFields.precision || '0'),
             translations: [
                 {
@@ -184,6 +203,18 @@ export default function UnitDetail({ mode = 'create', item, onCancel, onSave, t,
                             className="bg-white border-outline-variant h-14"
                             value={currentFields.symbol}
                             onChange={(e) => updateField('symbol', e.target.value)}
+                            disabled={isViewing || isSaving}
+                        />
+
+                        <Input
+                            variant="outlined"
+                            type="text"
+                            placeholder={t.field_acronym || "Acronym"}
+                            position={lp}
+                            label={t.field_acronym || "Acronym"}
+                            className="bg-white border-outline-variant h-14"
+                            value={currentFields.acronymn}
+                            onChange={(e) => updateField('acronymn', e.target.value)}
                             disabled={isViewing || isSaving}
                         />
 

@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, usePathname, useRouter } from 'next/navigation';
 import { useTheme } from '@/components/ThemeContext';
 import { ComponentSandboxTemplate } from '@/zap/layout/ComponentSandboxTemplate';
 import { CanvasDesktop } from '@/components/dev/CanvasDesktop';
@@ -20,6 +20,10 @@ import { useDiningOptions } from '@/hooks/dining-option/use-dining-options';
 
 import { Text } from '@/genesis/atoms/typography/text';
 
+// Locales
+import diningEn from '@/locale/dining-option/en';
+import diningVi from '@/locale/dining-option/vi';
+
 /**
  * Dining Option Template
  */
@@ -28,6 +32,10 @@ export default function PageDiningOptionTemplate() {
     const activeTheme = appTheme === 'core' ? 'core' : 'metro';
     const searchParams = useSearchParams();
     const isFullscreen = searchParams.get('fullscreen') === 'true';
+    const pathname = usePathname();
+    const router = useRouter();
+    const lang = searchParams.get('lang');
+    const t = lang === 'vi' ? diningVi : diningEn;
 
     // --- Data Fetching ---
     const {
@@ -102,7 +110,7 @@ export default function PageDiningOptionTemplate() {
                     className="w-80 text-left tracking-widest cursor-pointer transition-colors"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    <Text size='label-small' className='font-semibold'>Name</Text>
+                    <Text size='label-small' className='font-semibold'>{t.label_optionName}</Text>
                 </div>
             ),
             cell: ({ row }) => (
@@ -135,7 +143,7 @@ export default function PageDiningOptionTemplate() {
                     className="w-32 text-left tracking-widest cursor-pointer hover:text-foreground transition-colors"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    <Text size='label-small' className='font-semibold'>Type</Text>
+                    <Text size='label-small' className='font-semibold'>{t.label_type}</Text>
                 </div>
             ),
             cell: ({ row }) => (
@@ -152,7 +160,7 @@ export default function PageDiningOptionTemplate() {
                     className="w-20 text-left tracking-widest cursor-pointer hover:text-foreground transition-colors"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    <Text size='label-small' className='font-semibold'>Status</Text>
+                    <Text size='label-small' className='font-semibold'>{t.label_status}</Text>
                 </div>
             ),
             cell: ({ row }) => (
@@ -162,7 +170,7 @@ export default function PageDiningOptionTemplate() {
                         className="whitespace-nowrap w-fit ml-auto"
                     >
                         <div className="w-1.5 h-1.5 rounded-full bg-current mr-1.5 opacity-80 shrink-0" />
-                        {row.original.is_active ? 'Active' : 'Inactive'}
+                        {row.original.is_active ? t.status_active : t.status_inactive}
                     </Pill>
                 </div>
             ),
@@ -187,7 +195,7 @@ export default function PageDiningOptionTemplate() {
             enableSorting: false,
             enableHiding: false,
         },
-    ], []);
+    ], [t]);
 
     const labels = {
         addItem: "Add Option",
@@ -195,16 +203,16 @@ export default function PageDiningOptionTemplate() {
         type: "Status"
     };
 
-    const filterGroups: FilterGroup[] = [
+    const filterGroups: FilterGroup[] = useMemo(() => [
         {
             id: 'status',
-            title: 'Status',
+            title: t.label_status,
             options: [
-                { id: 'Active', label: 'Active', selected: apiFilters.status === 'Active' },
-                { id: 'Inactive', label: 'Inactive', selected: apiFilters.status === 'Inactive' },
+                { id: 'Active', label: t.status_active, selected: apiFilters.status === 'Active' },
+                { id: 'Inactive', label: t.status_inactive, selected: apiFilters.status === 'Inactive' },
             ]
         }
-    ];
+    ], [apiFilters.status, t]);
 
     const handleFilterToggle = (groupId: string, optionId: string) => {
         if (groupId === 'status') {
@@ -224,7 +232,12 @@ export default function PageDiningOptionTemplate() {
             onToggleFilters={() => setInspectorState(inspectorState === 'expanded' ? 'collapsed' : 'expanded')}
             isFilterActive={inspectorState === 'expanded'}
             columns={columns as any}
-            labels={labels}
+            lang={lang === 'vi' ? 'vi' : 'en'}
+            labels={{
+                addItem: t.label_addOption,
+                itemName: t.label_optionName,
+                type: t.label_status
+            }}
         />
     );
 
@@ -244,7 +257,7 @@ export default function PageDiningOptionTemplate() {
                             <AccordionTrigger className="px-4 py-3 flex items-center gap-2 rounded-lg bg-surface-variant hover:bg-surface-variant/80 font-mono text-transform-tertiary text-[11px] tracking-widest text-on-surface font-bold transition-colors m-0 w-full min-w-0">
                                 <div className="flex items-center gap-2 overflow-hidden flex-1 text-left min-w-0">
                                     <Icon name="filter_list" size={16} className="shrink-0 text-on-surface-variant opacity-70 group-data-[state=open]:text-primary transition-colors" />
-                                    <span className="truncate uppercase">FILTERS</span>
+                                    <span className="truncate uppercase">{t.nav_filters || 'FILTERS'}</span>
                                 </div>
                             </AccordionTrigger>
                             <AccordionContent className="bg-transparent px-4 pb-4 pt-2">
@@ -273,11 +286,11 @@ export default function PageDiningOptionTemplate() {
                 <div className="flex-1 py-4 px-3 space-y-1 overflow-y-auto uppercase font-mono text-[11px] tracking-widest text-on-surface opacity-70">
                     <div className="px-3 py-2.5 rounded-md hover:bg-surface-variant/40 flex items-center gap-3 transition-colors cursor-pointer">
                         <Icon name="dashboard" size={18} />
-                        <span>Overview</span>
+                        <span>{t.nav_overview}</span>
                     </div>
                     <div className="px-3 py-2.5 rounded-md bg-primary/10 text-primary flex items-center gap-3 border border-primary/20 cursor-pointer">
                         <Icon name="restaurant" size={18} />
-                        <span>Dining Options</span>
+                        <span>{t.nav_diningOptions}</span>
                     </div>
                 </div>
             </div>
@@ -285,9 +298,9 @@ export default function PageDiningOptionTemplate() {
             <div className="flex-1 flex flex-col min-w-0 bg-layer-base/50 relative">
                 <div className="h-14 border-b border-border bg-layer-base flex items-center px-6 justify-between shrink-0 shadow-sm z-10 relative">
                     <div className="flex items-center text-xs gap-1 font-dev text-transform-tertiary">
-                        <span className="opacity-50 uppercase tracking-widest">Setup</span>
+                        <span className="opacity-50 uppercase tracking-widest">{t.nav_setup}</span>
                         <Icon name="chevron_right" size={14} className="opacity-30" />
-                        <span className="font-bold text-on-surface uppercase tracking-widest">Dining Options</span>
+                        <span className="font-bold text-on-surface uppercase tracking-widest">{t.nav_diningOptions}</span>
                     </div>
                 </div>
 
@@ -303,7 +316,7 @@ export default function PageDiningOptionTemplate() {
             <div className="flex h-screen w-full bg-layer-canvas overflow-hidden font-sans">
                 <SideNav />
                 <div className="flex-1 flex flex-col min-w-0 bg-transparent relative">
-                    <ThemeHeader title="Dining options" badge={null} />
+                    <ThemeHeader title={t.title_diningOptions} badge={null} />
                     <div className="flex-1 overflow-auto pt-8 px-12 pb-16 flex flex-col relative z-0 bg-layer-base min-w-0">
                         {tableComponent}
                     </div>
@@ -315,7 +328,7 @@ export default function PageDiningOptionTemplate() {
 
     return (
         <ComponentSandboxTemplate
-            componentName="Dining-options"
+            componentName={t.title_diningOptions}
             tier="L6 LAYOUT"
             status="Verified"
             filePath="src/genesis/templates/tables/dining-option/PageDiningOption.tsx"
@@ -336,7 +349,7 @@ export default function PageDiningOptionTemplate() {
                             <AccordionTrigger className="px-4 py-3 flex items-center gap-2 rounded-lg bg-surface-variant hover:bg-surface-variant/80 font-mono text-transform-tertiary text-[11px] tracking-widest text-on-surface font-bold transition-colors m-0 w-full min-w-0">
                                 <div className="flex items-center gap-2 overflow-hidden flex-1 text-left min-w-0">
                                     <Icon name="filter_list" size={16} className="shrink-0 text-on-surface-variant opacity-70 group-data-[state=open]:text-primary transition-colors" />
-                                    <span className="truncate uppercase">FILTERS</span>
+                                    <span className="truncate uppercase">{t.nav_filters?.toString() || 'FILTERS'}</span>
                                 </div>
                             </AccordionTrigger>
                             <AccordionContent className="bg-transparent px-4 pb-4 pt-2">
@@ -353,7 +366,7 @@ export default function PageDiningOptionTemplate() {
         >
             <div className="w-full flex-1 flex items-center justify-center pt-8">
                 <CanvasDesktop
-                    title="Dining Options // Collection"
+                    title={t.title_diningOptions}
                     fullScreenHref={`/design/${activeTheme}/organisms/dining-options?fullscreen=true`}
                 >
                     {layoutContent}

@@ -16,13 +16,13 @@ export const GROUP_PRODUCT_LABELS = {
 /**
  * Get filter groups configuration
  */
-export const getFilterGroups = (apiFilters: any): FilterGroup[] => [
+export const getFilterGroups = (filters: any, t: any) => [
     {
         id: 'is_active',
-        title: 'Status',
+        title: t.label_status,
         options: [
-            { id: 'true', label: 'Active', selected: apiFilters.is_active === true },
-            { id: 'false', label: 'Inactive', selected: apiFilters.is_active === false },
+            { id: 'true', label: t.status_active, count: 0, selected: filters.is_active === true },
+            { id: 'false', label: t.status_inactive, count: 0, selected: filters.is_active === false },
         ]
     }
 ];

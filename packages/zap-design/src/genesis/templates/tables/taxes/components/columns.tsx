@@ -4,9 +4,9 @@ import { Pill } from '@/genesis/atoms/status/pills';
 import { Checkbox } from '@/genesis/atoms/interactive/checkbox';
 import { QuickActionsDropdown } from '@/genesis/molecules/quick-actions-dropdown';
 import { Pencil, Copy, Trash2 } from "lucide-react";
-import { Tax } from '@/services/tax/tax.model';
-import { Avatar } from '@/genesis/atoms/status/avatars';
 import { Text } from '@/genesis/atoms/typography/text';
+import { Avatar } from '@/genesis/atoms/status/avatars';
+import { Tax } from '@/services/tax/tax.model';
 
 export const getTaxColumns = (
     handleEdit: (item: Tax) => void,
@@ -103,7 +103,7 @@ export const getTaxColumns = (
             cell: ({ row }) => (
                 <div className="w-32 py-2.5 flex text-left">
                     <Pill variant={row.original.status_color as any || 'success'}>
-                        {row.original.status_text}
+                        {row.original.status_id === 'active' ? t.status_active : t.status_inactive}
                     </Pill>
                 </div>
             ),
@@ -118,9 +118,9 @@ export const getTaxColumns = (
                     <div className="flex items-center justify-end">
                         <QuickActionsDropdown
                             actions={[
-                                { label: 'Edit', icon: Pencil, onClick: () => handleEdit(row.original) },
-                                { label: 'Duplicate', icon: Copy, onClick: () => console.log('Duplicate', row.original) },
-                                { label: 'Delete', icon: Trash2, onClick: () => handleDelete(row.original), variant: 'destructive' },
+                                { label: t.btn_edit, icon: Pencil, onClick: () => handleEdit(row.original) },
+                                { label: t.btn_duplicate, icon: Copy, onClick: () => console.log('Duplicate', row.original) },
+                                { label: t.btn_delete, icon: Trash2, onClick: () => handleDelete(row.original), variant: 'destructive' },
                             ]}
                         />
                     </div>

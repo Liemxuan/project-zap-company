@@ -58,6 +58,10 @@ export function useUnits({ pageSize = 10, initialFilters = {}, initialPage = 1 }
         setPagination(prev => ({ ...prev, page_index: index }));
     };
 
+    const handlePageSizeChange = (size: number) => {
+        setPagination(prev => ({ ...prev, page_size: size, page_index: 1 }));
+    };
+
     const handleSearch = (query: string) => {
         setSearch(query);
         setPagination(prev => ({ ...prev, page_index: 1 }));
@@ -74,6 +78,7 @@ export function useUnits({ pageSize = 10, initialFilters = {}, initialPage = 1 }
         pagination,
         filters,
         handlePageChange,
+        handlePageSizeChange,
         handleSearch,
         handleFilterChange,
         refresh: fetchUnits

@@ -101,7 +101,9 @@ export default function PageCategoryTemplate() {
         category: "Parent",
         type: t.label_status || "Status",
         inventory: t.column_itemCount || "Items",
-        price: "Internal ID"
+        price: "Internal ID",
+        searchPlaceholder: t.label_search,
+        filterButton: t.label_filter,
     }), [t]);
 
     const tableComponent = (
@@ -118,6 +120,7 @@ export default function PageCategoryTemplate() {
             columns={columns as any}
             labels={labels}
             onAddClick={() => setIsCreating(true)}
+            lang={lang === 'vi' ? 'vi' : 'en'}
         />
     );
 

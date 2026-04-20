@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useMemo } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, usePathname, useRouter } from 'next/navigation';
 import { useTheme } from '@/components/ThemeContext';
 import { ComponentSandboxTemplate } from '@/zap/layout/ComponentSandboxTemplate';
 import { CanvasDesktop } from '@/components/dev/CanvasDesktop';
@@ -20,9 +20,11 @@ import { Country } from '@/services/country/country.model';
 import { getColumns } from './components/columns';
 import { COUNTRY_LABELS, getFilterGroups } from './components/filters';
 import { CountryInspector, CountryDetailInspector } from './components/inspector';
-
-// Mock Data
 import { MOCK_COUNTRIES } from '@/hooks/mock-data';
+
+// Locales
+import countryEn from '@/locale/country/en';
+import countryVi from '@/locale/country/vi';
 
 /**
  * Country Template
@@ -33,6 +35,10 @@ export default function PageCountryTemplate() {
     const activeTheme = appTheme === 'core' ? 'core' : 'metro';
     const searchParams = useSearchParams();
     const isFullscreen = searchParams.get('fullscreen') === 'true';
+    const pathname = usePathname();
+    const router = useRouter();
+    const lang = searchParams.get('lang');
+    const t = lang === 'vi' ? countryVi : countryEn;
 
     // --- Data Fetching ---
     const {
@@ -66,8 +72,8 @@ export default function PageCountryTemplate() {
     };
 
     // --- Memorized Data ---
-    const columns = useMemo(() => getColumns({ onAction: handleAction }), []);
-    const filterGroups = useMemo(() => getFilterGroups(apiFilters), [apiFilters]);
+    const columns = useMemo(() => getColumns({ onAction: handleAction, t }), [t]);
+    const filterGroups = useMemo(() => getFilterGroups(apiFilters, t), [apiFilters, t]);
 
     // --- Shared Components ---
     const TableTable = (
@@ -85,7 +91,18 @@ export default function PageCountryTemplate() {
                 setInspectorState('expanded');
             }}
             columns={columns as any}
-            labels={COUNTRY_LABELS}
+            lang={lang === 'vi' ? 'vi' : 'en'}
+            labels={{
+                addItem: t.label_newCountry,
+                itemName: t.label_countryName,
+                itemCode: t.label_isoCode,
+                category: t.label_region,
+                type: t.label_status,
+                inventory: t.label_phoneCode,
+                price: t.label_currency,
+                searchPlaceholder: t.label_search,
+                filterButton: t.label_filter,
+            }}
             isDraggable={true}
             onReorder={(newOrder) => console.log('Reordered:', newOrder)}
         />
@@ -115,20 +132,20 @@ export default function PageCountryTemplate() {
                     <div className="w-6 h-6 rounded bg-primary flex items-center justify-center text-primary-foreground">
                         <Icon name="bolt" size={14} />
                     </div>
-                    <span className="font-bold text-sm tracking-widest font-display text-on-surface uppercase text-transform-none">ZAP OS</span>
+                    <span className="font-bold text-sm tracking-widest font-display text-on-surface uppercase text-transform-none">{t.nav_zapOs}</span>
                 </div>
                 <div className="flex-1 py-4 px-3 space-y-1 font-mono text-[11px] tracking-widest text-on-surface opacity-70 text-transform-tertiary">
                     <div className="px-3 py-2.5 rounded-md hover:bg-surface-variant/40 flex items-center gap-3 transition-colors cursor-pointer">
                         <Icon name="dashboard" size={18} />
-                        <span>Overview</span>
+                        <span>{t.nav_overview}</span>
                     </div>
                     <div className="px-3 py-2.5 rounded-md hover:bg-surface-variant/40 flex items-center gap-3 transition-colors cursor-pointer">
                         <Icon name="settings" size={18} />
-                        <span>Settings</span>
+                        <span>{t.nav_settings}</span>
                     </div>
                     <div className="px-3 py-2.5 rounded-md bg-primary/10 text-primary flex items-center gap-3 border border-primary/20 cursor-pointer">
                         <Icon name="public" size={18} />
-                        <span>Countries</span>
+                        <span>{t.nav_countries}</span>
                     </div>
                 </div>
             </div>
@@ -137,9 +154,9 @@ export default function PageCountryTemplate() {
             <div className="flex-1 flex flex-col min-w-0 bg-layer-base/50 relative">
                 <div className="h-14 border-b border-border bg-layer-base flex items-center px-6 justify-between shrink-0 shadow-sm z-10 relative">
                     <div className="flex items-center text-xs gap-1 font-dev text-transform-tertiary">
-                        <span className="opacity-50 tracking-widest text-transform-tertiary">Settings</span>
+                        <span className="opacity-50 uppercase tracking-widest">{t.nav_setup}</span>
                         <Icon name="chevron_right" size={14} className="opacity-30" />
-                        <span className="font-bold text-on-surface tracking-widest text-transform-tertiary">Countries & Dialing code</span>
+                        <span className="font-bold text-on-surface uppercase tracking-widest">{t.title_countries}</span>
                     </div>
                 </div>
                 <div className="flex-1 overflow-auto pt-11 px-12 pb-16 flex flex-col relative z-0 min-w-0">
@@ -158,7 +175,7 @@ export default function PageCountryTemplate() {
             <div className="flex h-screen w-full bg-layer-canvas overflow-hidden font-sans">
                 <SideNav />
                 <div className="flex-1 flex flex-col min-w-0 bg-transparent relative">
-                    <ThemeHeader title="Countries & Dialing code" badge={null} />
+                    <ThemeHeader title={t.title_countries} badge={null} />
                     <div className="flex-1 overflow-auto pt-8 px-12 pb-16 flex flex-col relative z-0 bg-layer-base min-w-0">
                         {TableTable}
                     </div>
@@ -170,7 +187,7 @@ export default function PageCountryTemplate() {
 
     return (
         <ComponentSandboxTemplate
-            componentName="Countries & Dialing code"
+            componentName={t.title_countries}
             tier="L6 LAYOUT"
             status="Verified"
             filePath="src/genesis/templates/tables/countries/PageCountry.tsx"
@@ -181,7 +198,7 @@ export default function PageCountryTemplate() {
         >
             <div className="w-full flex-1 flex items-center justify-center pt-8">
                 <CanvasDesktop
-                    title="Countries & Dialing code"
+                    title={t.title_countries}
                     fullScreenHref={`/design/${activeTheme}/organisms/countries?fullscreen=true`}
                 >
                     {mockShellLayout}
